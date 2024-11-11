@@ -1,0 +1,80 @@
+---
+import Layout from '../layouts/Layout.astro';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import CardCarousel from '../components/CardCarousel.astro';
+import { projects } from '../config/projects.json';
+import { articles } from '../config/articles.json';
+---
+
+<Layout title="Professional Portfolio">
+  <Navigation />
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4">
+
+      <!-- Hero Section -->
+      <section class="pt-32 pb-16 bg-gradient-to-br from-primary-50 to-white dark:from-zinc-900 dark:to-zinc-800">
+        <div class="container mx-auto px-4">
+          <div class="max-w-3xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+              Transforming Ideas into Digital Reality
+            </h1>
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+              Expert consulting services in software development, architecture, and digital transformation
+            </p>
+            <div class="flex justify-center gap-4">
+              <a
+                href="/projects"
+                class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+              >
+                View Projects
+              </a>
+              <a
+                href="/contact"
+                class="px-6 py-3 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+              >
+                Get in Touch
+              </a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+    <!-- Featured Projects -->
+    <section class="py-16 bg-white dark:bg-zinc-900">
+      <div class="container mx-auto px-4">
+        <CardCarousel title="Featured Projects" items={projects} />
+      </div>
+    </section>
+
+    <!-- Latest Articles -->
+    <section class="py-16 bg-gray-50 dark:bg-zinc-800">
+      <div class="container mx-auto px-4">
+        <CardCarousel title="Latest Articles" items={articles} />
+      </div>
+    </section>
+
+      <!-- Skills Overview -->
+      <section class="py-16 bg-white dark:bg-zinc-900">
+        <div class="container mx-auto px-4">
+          <h2 class="text-3xl font-bold text-center mb-12 dark:text-white">Technical Expertise</h2>
+          <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">25+</div>
+              <div class="text-gray-600 dark:text-gray-300">Years Experience</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">30+</div>
+              <div class="text-gray-600 dark:text-gray-300">Projects Completed</div>
+            </div>
+            <div class="text-center">
+              <div class="text-4xl font-bold text-primary-600 dark:text-primary-400 mb-2">10+</div>
+              <div class="text-gray-600 dark:text-gray-300">Technologies</div>
+            </div>
+          </div>
+        </div>
+      </section>
+      </div>
+      </main>
+  <Footer />
+</Layout>

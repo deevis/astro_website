@@ -1,0 +1,46 @@
+{
+    "showcases":  [
+        {
+          "title": "3D Interactive PhotoCube",
+          "description": "A WebGL-powered 3D photoube with interactive controls and animations.",
+          "href": "html_showcase/webgl_photocube/index.html",
+          "image": "html_showcase/webgl_photocube/thumb.png"
+        },
+        {
+          "title": "Multi 3D Interactive PhotoCubes",
+          "description": "A WebGL-powered Array of 3D photocubes with interactive controls and animations.",
+          "href": "html_showcase/webgl_photocube_multi/index.html",
+          "image": "html_showcase/webgl_photocube_multi/thumb.png"
+        },
+        {
+            "title": "FPS Photo Realm",
+            "description": "Walk around through a WebGL rendered world built of your own Photos and Art",
+            "href": "html_showcase/fps/index.html",
+            "image": "html_showcase/fps/thumb.png"
+        },
+        {
+            "title": "GL Shaders",
+            "description": "WebGL Shader Demonstration with lots of configurable tweaks to play with.",
+            "href": "html_showcase/gl_shaders/index.html",
+            "image": "html_showcase/gl_shaders/thumb.png"
+        },
+        {
+            "title": "Massive Tree Viewer",
+            "description": "Interactive particle system with physics simulation using Canvas API.",
+            "href": "html_showcase/tree_viewer/index.html",
+            "image": "html_showcase/tree_viewer/thumb.png"
+          },
+          {
+          "title": "Particle System",
+          "description": "Interactive particle system with physics simulation using Canvas API.",
+          "href": "html_showcase/interactive_particles/index.html",
+          "image": "html_showcase/interactive_particles/thumb.png"
+        },
+        {
+          "title": "SVG Animation",
+          "description": "Complex SVG animations with morphing and path animations.",
+          "href": "html_showcase/svg_animations/index.html",
+          "image": "html_showcase/svg_animations/thumb.png"
+        }
+        ]
+}

@@ -1,0 +1,23 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import Card from '../../components/Card.astro';
+import { articles } from '../../config/articles.json';
+
+---
+
+<Layout title="Articles | Professional Portfolio">
+  <Navigation />
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">Articles</h1>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {articles.map((article) => (
+          <Card {...article} />
+        ))}
+      </div>
+    </div>
+  </main>
+  <Footer />
+</Layout>

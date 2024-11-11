@@ -1,0 +1,134 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+
+const skills = {
+  languages: [
+    { name: 'Ruby', level: 95 },
+    { name: 'Python', level: 90 },
+    { name: 'Javascript', level: 85 },
+    { name: 'Java', level: 80 },
+    { name: 'HTML', level: 75 }
+  ],
+  frameworks: [
+    { name: 'Rails', level: 95 },
+    { name: 'Ollama', level: 90 },
+    { name: 'Astro', level: 85 },
+    { name: 'Pandas', level: 80 },
+    { name: 'Spring', level: 75 }
+  ]
+};
+
+const experience = [
+  {
+    year: '2023',
+    company: 'Kipu Health',
+    role: 'Senior Software Architect',
+    achievements: [
+      'Led architecture design for enterprise applications',
+      'Implemented microservices architecture',
+      'Mentored junior developers'
+    ]
+  },
+  {
+    year: '2020',
+    company: 'Verisys',
+    role: 'Lead Developer',
+    achievements: [
+      'Managed team of 10 developers',
+      'Delivered critical projects on time',
+      'Introduced CI/CD practices'
+    ]
+  },
+  {
+    year: '2018',
+    company: 'DevGarden',
+    role: 'Full Stack Developer',
+    achievements: [
+      'Built scalable web applications',
+      'Implemented payment processing system',
+      'Optimized database performance'
+    ]
+  }
+];
+---
+
+<Layout title="About Me | Professional Portfolio">
+  <Navigation />
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">About Me</h1>
+      
+      <!-- Skills Section -->
+      <section class="mb-16">
+        <h2 class="text-2xl font-semibold mb-6">Technical Skills</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <!-- Programming Languages -->
+          <div>
+            <h3 class="text-xl font-medium mb-4">Programming Languages</h3>
+            <div class="space-y-4">
+              {skills.languages.map((skill) => (
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span>{skill.name}</span>
+                    <span>{skill.level}%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      class="bg-primary-600 h-2 rounded-full"
+                      style={`width: ${skill.level}%`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+          
+          <!-- Frameworks -->
+          <div>
+            <h3 class="text-xl font-medium mb-4">Frameworks & Technologies</h3>
+            <div class="space-y-4">
+              {skills.frameworks.map((skill) => (
+                <div>
+                  <div class="flex justify-between mb-1">
+                    <span>{skill.name}</span>
+                    <span>{skill.level}%</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2">
+                    <div
+                      class="bg-primary-600 h-2 rounded-full"
+                      style={`width: ${skill.level}%`}
+                    />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </div>
+      </section>
+      
+      <!-- Experience Timeline -->
+      <section>
+        <h2 class="text-2xl font-semibold mb-6">Professional Experience</h2>
+        <div class="space-y-8">
+          {experience.map((item, index) => (
+            <div class="relative pl-8 border-l-2 border-primary-200">
+              <div class="absolute w-4 h-4 bg-primary-600 rounded-full -left-[9px] top-0" />
+              <div class="mb-1 text-sm text-primary-600 font-medium">{item.year}</div>
+              <h3 class="text-xl font-medium">{item.company}</h3>
+              <div class="text-lg text-gray-600 mb-2">{item.role}</div>
+              <ul class="list-disc list-inside text-gray-600">
+                {item.achievements.map((achievement) => (
+                  <li>{achievement}</li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </section>
+    </div>
+  </main>
+  <Footer />
+</Layout>

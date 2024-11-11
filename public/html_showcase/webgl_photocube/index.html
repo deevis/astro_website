@@ -1,0 +1,313 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>WebGL Cube with Smoke</title>
+    <style>
+        body { margin: 0; }
+        canvas { display: block; }
+        .controls {
+            position: fixed;
+            top: 10px;
+            left: 10px;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            border-radius: 5px;
+            font-family: Arial, sans-serif;
+        }
+        .control-btn {
+            background: #324468;
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+        .control-btn:hover {
+            background: #333756;
+        }
+    </style>
+</head>
+<body>
+    <div class="controls">
+        Controls:<br>
+        Mouse Drag - Rotate<br>
+        WASD - Move<br>
+        QE - (Zoom In/Out)<br>
+        <button id="randomizeBtn" class="control-btn">Randomize Images</button>
+    </div>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script>
+        // Scene setup
+        const scene = new THREE.Scene();
+        const camera = new THREE.PerspectiveCamera(75, window.innerWidth / window.innerHeight, 0.1, 1000);
+        const renderer = new THREE.WebGLRenderer();
+        renderer.setSize(window.innerWidth, window.innerHeight);
+        document.body.appendChild(renderer.domElement);
+
+        // Array of possible image paths (add as many as you want)
+        const imagePaths = [
+            '/images/zebra_boy.png',
+            '/images/shark_girl.png',
+            '/images/rainbow_unicorn.png',
+            '/images/shark_man.png',
+            '/images/zebra_girl.png',
+            '/images/frog_girl_cat.png',
+            '/images/cat_man.png',
+            '/images/zebra_dog_1.png',
+            '/images/zebra_dog_2.png',
+            '/images/consciousness.png',
+            '/images/frog_astronaut.png',
+            '/images/trump_dragon.png',
+            '/images/mushrooms.png',
+            '/images/bitcoin.png',
+            '/images/cat_donkey_dog.png',
+            '/images/frog_girl.png',
+            '/images/pizza_cat.jpg',
+            '/images/pizza_frog.jpg',
+            '/images/vader_cats.png',
+            '/images/skull_gems.png',
+            '/images/trump_hillary.png',
+            '/images/mickey_christ.png',
+            '/images/mickeyzilla.png',
+            '/images/pumpkin_skeleton.png',
+            '/images/skull_scream.png',
+            '/images/skull.png',
+            '/images/darren_rules.png',
+            '/images/nerf_skydiver.png',
+            '/images/kitty_video_game.png'
+
+            // Add more image paths as needed
+        ];
+        
+        // Cube creation
+        const geometry = new THREE.BoxGeometry(1, 1, 1);
+        const textureLoader = new THREE.TextureLoader();
+        const materials = getRandomImages().map(path => 
+            new THREE.MeshBasicMaterial({ map: textureLoader.load(path) })
+        );        
+        const cube = new THREE.Mesh(geometry, materials);
+        cube.scale.set(3, 3, 3);
+        scene.add(cube);
+
+        // Smoke particles
+        const particleCount = 1000;
+        const particles = new THREE.BufferGeometry();
+        const positions = new Float32Array(particleCount * 3);
+        const velocities = [];
+
+        for (let i = 0; i < particleCount * 3; i += 3) {
+            positions[i] = Math.random() * 10 - 5;
+            positions[i + 1] = Math.random() * 10 - 5;
+            positions[i + 2] = Math.random() * 10 - 5;
+            velocities.push({
+                x: (Math.random() - 0.5) * 0.01,
+                y: Math.random() * 0.02,
+                z: (Math.random() - 0.5) * 0.01
+            });
+        }
+
+        particles.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+        const particleMaterial = new THREE.PointsMaterial({
+            size: 0.05,
+            color: 0x888888,
+            transparent: true,
+            opacity: 0.5
+        });
+        const particleSystem = new THREE.Points(particles, particleMaterial);
+        scene.add(particleSystem);
+
+        // Camera position
+        camera.position.z = 5;
+
+        // Controls
+        let isDragging = false;
+        let previousMousePosition = {
+            x: 0,
+            y: 0
+        };
+        const moveSpeed = 0.1;
+        const rotateSpeed = 0.01;
+        const keys = {};
+
+        let lastInteractionTime = Date.now();
+        const autoRotationDelay = 10; // ms to wait after interaction before auto-rotating
+        const autoRotationSpeed = 0.005; // speed of automatic rotation
+        let rotationMomentum = {
+            x: 0,
+            y: 0
+        };
+        const momentumDecay = 0.98; // How quickly momentum dies off
+        const momentumThreshold = 0.0001; // When to switch back to auto-rotation
+        const maxMomentum = 0.15; // Maximum rotation speed from flinging
+        const momentumMultiplier = 0.005; // How much mouse movement affects momentum
+
+        // Event listeners
+        document.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            lastInteractionTime = Date.now();
+            previousMousePosition = {
+                x: e.clientX,
+                y: e.clientY
+            };
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (isDragging) {
+                const deltaMove = {
+                    x: e.clientX - previousMousePosition.x,
+                    y: e.clientY - previousMousePosition.y
+                };
+
+                // Store momentum from this movement
+                rotationMomentum = {
+                    x: Math.max(-maxMomentum, Math.min(maxMomentum, deltaMove.y * momentumMultiplier)),
+                    y: Math.max(-maxMomentum, Math.min(maxMomentum, deltaMove.x * momentumMultiplier))
+                };
+
+                // Immediate rotation during drag
+                cube.rotation.y += deltaMove.x * rotateSpeed;
+                cube.rotation.x += deltaMove.y * rotateSpeed;
+
+                previousMousePosition = {
+                    x: e.clientX,
+                    y: e.clientY
+                };
+            }
+        });
+
+        document.addEventListener('mouseup', () => {
+            isDragging = false;
+        });
+
+        document.addEventListener('keydown', (e) => {
+            lastInteractionTime = Date.now();
+            keys[e.key.toLowerCase()] = true;
+        });
+
+        document.addEventListener('keyup', (e) => {
+            keys[e.key.toLowerCase()] = false;
+        });
+
+        window.addEventListener('resize', () => {
+            camera.aspect = window.innerWidth / window.innerHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(window.innerWidth, window.innerHeight);
+        });
+
+        document.getElementById('randomizeBtn').addEventListener('click', updateCubeMaterials);
+        
+        // Function to get 6 random unique images
+        function getRandomImages() {
+            const shuffled = [...imagePaths].sort(() => 0.5 - Math.random());
+            return shuffled.slice(0, 6);
+        }
+
+        // Function to update cube materials
+        function updateCubeMaterials() {
+            const selectedImages = getRandomImages();
+            const newMaterials = selectedImages.map(path => 
+                new THREE.MeshBasicMaterial({ 
+                    map: textureLoader.load(path),
+                    transparent: true,
+                    opacity: 0 // Start fully transparent
+                })
+            );
+            
+            // Fade out current materials
+            const oldMaterials = cube.material;
+            if (Array.isArray(oldMaterials)) {
+                oldMaterials.forEach(mat => {
+                    if (mat.opacity === undefined) mat.opacity = 1;
+                    mat.transparent = true;
+                    fadeOut(mat);
+                });
+            }
+            
+            // Apply new materials
+            cube.material = newMaterials;
+            
+            // Fade in new materials
+            newMaterials.forEach(mat => fadeIn(mat));
+        }
+
+        // Fade helpers
+        function fadeOut(material) {
+            material.opacity = Math.max(0, material.opacity - 0.1);
+            if (material.opacity > 0) {
+                requestAnimationFrame(() => fadeOut(material));
+            }
+        }
+
+        function fadeIn(material) {
+            material.opacity = Math.min(1, material.opacity + 0.1);
+            if (material.opacity < 1) {
+                requestAnimationFrame(() => fadeIn(material));
+            }
+        }
+        // Animation loop
+        function animate() {
+            requestAnimationFrame(animate);
+
+            // Handle keyboard input
+            if (keys['w']) cube.position.y += moveSpeed;
+            if (keys['s']) cube.position.y -= moveSpeed;
+            if (keys['a']) cube.position.x -= moveSpeed;
+            if (keys['d']) cube.position.x += moveSpeed;
+            if (keys['q']) {
+                cube.scale.x *= 0.99;
+                cube.scale.y *= 0.99;
+                cube.scale.z *= 0.99;
+            }
+            if (keys['e']) {
+                cube.scale.x *= 1.01;
+                cube.scale.y *= 1.01;
+                cube.scale.z *= 1.01;
+            }
+
+            // Update smoke particles
+            const positions = particleSystem.geometry.attributes.position.array;
+            for (let i = 0; i < particleCount; i++) {
+                const i3 = i * 3;
+                positions[i3] += velocities[i].x;
+                positions[i3 + 1] += velocities[i].y;
+                positions[i3 + 2] += velocities[i].z;
+
+                // Reset particles that move too far
+                if (positions[i3 + 1] > 5) {
+                    positions[i3] = Math.random() * 10 - 5;
+                    positions[i3 + 1] = -5;
+                    positions[i3 + 2] = Math.random() * 10 - 5;
+                }
+            }
+            particleSystem.geometry.attributes.position.needsUpdate = true;
+
+            // Auto-rotation when not interacting
+            if (Date.now() - lastInteractionTime > autoRotationDelay) {
+                if (Math.abs(rotationMomentum.x) > momentumThreshold || 
+                    Math.abs(rotationMomentum.y) > momentumThreshold) {
+                    // Apply momentum-based rotation
+                    cube.rotation.x += rotationMomentum.x;
+                    cube.rotation.y += rotationMomentum.y;
+                    
+                    // Decay the momentum
+                    rotationMomentum.x *= momentumDecay;
+                    rotationMomentum.y *= momentumDecay;
+                } else {
+                    // Reset momentum and apply default auto-rotation
+                    rotationMomentum = { x: 0, y: 0 };
+                    cube.rotation.x += autoRotationSpeed;
+                    cube.rotation.y += autoRotationSpeed * 0.7;
+                    cube.rotation.z += autoRotationSpeed * 0.5;
+                }
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        animate();
+    </script>
+</body>
+</html>

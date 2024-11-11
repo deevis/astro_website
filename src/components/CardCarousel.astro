@@ -1,0 +1,70 @@
+---
+import Card from './Card.astro';
+
+interface CardItem {
+  title: string;
+  description: string;
+  href: string;
+  image?: string;
+}
+
+interface Props {
+  items: CardItem[];
+  title?: string;
+}
+
+const { items, title } = Astro.props;
+const carouselId = `card-carousel-${Math.random().toString(36).substr(2, 9)}`;
+---
+
+<div class="card-carousel relative px-8" id={carouselId}>
+  {title && <h2 class="text-2xl font-semibold mb-6">{title}</h2>}
+  
+  <div class="swiper">
+    <div class="swiper-wrapper">
+      {items.map((item) => (
+        <div class="swiper-slide">
+          <Card {...item} />
+        </div>
+      ))}
+    </div>
+    
+    <button
+      class="swiper-button-prev absolute left-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      aria-label="Previous slide"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" />
+      </svg>
+    </button>
+    
+    <button
+      class="swiper-button-next absolute right-0 top-1/2 -translate-y-1/2 z-10 bg-white/80 dark:bg-gray-800/80 hover:bg-white dark:hover:bg-gray-800 text-gray-800 dark:text-gray-200 p-2 rounded-full shadow-md transition-all disabled:opacity-50 disabled:cursor-not-allowed"
+      aria-label="Next slide"
+    >
+      <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" />
+      </svg>
+    </button>
+  </div>
+</div>
+
+<style>
+  .swiper {
+    width: 100%;
+    padding: 1rem 0;
+  }
+  
+  .swiper-slide {
+    height: auto;
+  }
+
+  .swiper-button-prev::after,
+  .swiper-button-next::after {
+    display: none;
+  }
+</style>
+
+<script>
+  import '../scripts/carousel.js';
+</script>

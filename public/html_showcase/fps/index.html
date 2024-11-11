@@ -1,0 +1,779 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<title>Image Viewer</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel=stylesheet href="../assets/css/base.css"/>
+
+		<style>
+			html, body {
+				width: 100%;
+				height: 100%;
+			}
+
+			body {
+				background-color: #ffffff;
+				margin: 0;
+				overflow: hidden;
+				font-family: arial;
+			}
+
+			#blocker {
+
+				position: absolute;
+
+				width: 100%;
+				height: 100%;
+
+				background-color: rgba(0,0,0,0.5);
+
+			}
+
+			#instructions {
+
+				width: 100%;
+				height: 100%;
+
+				display: -webkit-box;
+				display: -moz-box;
+				display: box;
+
+				-webkit-box-orient: horizontal;
+				-moz-box-orient: horizontal;
+				box-orient: horizontal;
+
+				-webkit-box-pack: center;
+				-moz-box-pack: center;
+				box-pack: center;
+
+				-webkit-box-align: center;
+				-moz-box-align: center;
+				box-align: center;
+
+				color: #ffffff;
+				text-align: center;
+
+				cursor: pointer;
+
+			}
+
+		</style>
+</head>
+<body>
+
+<script src="../assets/js/Three.js"></script>
+<script src="../assets/js/Detector.js"></script>
+<script src="../assets/js/Stats.js"></script>
+<script src="../assets/js/PointerLockControls.js"></script>
+<script src="../assets/js/dat.gui.min.js"></script>
+<script src="../assets/js/THREEx.KeyboardState.js"></script>
+<script src="../assets/js/THREEx.FullScreen.js"></script>
+<script src="../assets/js/THREEx.WindowResize.js"></script>
+
+<!--
+<script src="js/OrbitControls.js"></script>
+<script src="js/FirstPersonControls.js"></script>
+<script src="fonts/helvetiker_regular.typeface.js"></script>
+-->
+
+<!-- Custom shaders for particle effects -->
+<!--
+<script type="x-shader/x-vertex" id="vertexshader">
+uniform float time;
+attribute float customFrequency;
+attribute vec3 customColor;
+varying vec3 vColor;
+void main()
+{
+	vColor = customColor; // set color associated to vertex; use later in fragment shader
+	vec4 mvPosition = modelViewMatrix * vec4( position, 1.0 );
+
+	// option (1): draw particles at constant size on screen
+	// gl_PointSize = size;
+    // option (2): scale particles as objects in 3D space
+	gl_PointSize = (1.0 + sin( customFrequency * time )) * 8.0 * ( 300.0 / length( mvPosition.xyz ) );
+	gl_Position = projectionMatrix * mvPosition;
+}
+</script>
+-->
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+uniform sampler2D texture;
+varying vec3 vColor; // colors associated to vertices; assigned by vertex shader
+void main()
+{
+	// calculates a color for the particle
+	gl_FragColor = vec4( vColor, 1.0 );
+	// sets particle texture to desired color
+	gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+}
+</script>
+<!-- -->
+<!-- end of custom shaders -->
+
+<!-- jQuery code to display an information button and box when clicked. -->
+<script src="js/jquery-1.9.1.js"></script>
+
+<!-- ------------------------------------------------------------ -->
+
+
+
+
+
+		<div id="blocker">
+
+			<div id="instructions">
+				<span style="font-size:55px">Click to Navigate</span>
+				<br />
+				(W, A, S, D = Move, SPACE = Jump, MOUSE = Look around)
+			</div>
+
+		</div>
+
+<script>
+			var blocker = document.getElementById( 'blocker' );
+			var instructions = document.getElementById( 'instructions' );
+
+			// http://www.html5rocks.com/en/tutorials/pointerlock/intro/
+
+			var havePointerLock = 'pointerLockElement' in document || 'mozPointerLockElement' in document || 'webkitPointerLockElement' in document;
+
+			if ( havePointerLock ) {
+
+				var element = document.body;
+
+				var pointerlockchange = function ( event ) {
+
+					if ( document.pointerLockElement === element || document.mozPointerLockElement === element || document.webkitPointerLockElement === element ) {
+
+						controls.enabled = true;
+
+						blocker.style.display = 'none';
+
+
+					} else {
+						controls.enabled = false;
+
+						blocker.style.display = '-webkit-box';
+						blocker.style.display = '-moz-box';
+						blocker.style.display = 'box';
+
+						instructions.style.display = '';
+
+					}
+
+				}
+
+				var pointerlockerror = function ( event ) {
+
+					instructions.style.display = 'ERROR';
+
+				}
+
+				// Hook pointer lock state change events
+				document.addEventListener( 'pointerlockchange', pointerlockchange, false );
+				document.addEventListener( 'mozpointerlockchange', pointerlockchange, false );
+				document.addEventListener( 'webkitpointerlockchange', pointerlockchange, false );
+
+				document.addEventListener( 'pointerlockerror', pointerlockerror, false );
+				document.addEventListener( 'mozpointerlockerror', pointerlockerror, false );
+				document.addEventListener( 'webkitpointerlockerror', pointerlockerror, false );
+
+				instructions.addEventListener( 'click', function ( event ) {
+
+					instructions.style.display = 'none';
+
+					// Ask the browser to lock the pointer
+					element.requestPointerLock = element.requestPointerLock || element.mozRequestPointerLock || element.webkitRequestPointerLock;
+
+					if ( /Firefox/i.test( navigator.userAgent ) ) {
+
+						var fullscreenchange = function ( event ) {
+
+							if ( document.fullscreenElement === element || document.mozFullscreenElement === element || document.mozFullScreenElement === element ) {
+
+								document.removeEventListener( 'fullscreenchange', fullscreenchange );
+								document.removeEventListener( 'mozfullscreenchange', fullscreenchange );
+
+								element.requestPointerLock();
+							}
+
+						}
+
+						document.addEventListener( 'fullscreenchange', fullscreenchange, false );
+						document.addEventListener( 'mozfullscreenchange', fullscreenchange, false );
+
+						element.requestFullscreen = element.requestFullscreen || element.mozRequestFullscreen || element.mozRequestFullScreen || element.webkitRequestFullscreen;
+
+						element.requestFullscreen();
+
+					} else {
+
+						element.requestPointerLock();
+
+					}
+
+
+				}, false );
+
+			} else {
+
+				instructions.innerHTML = 'Your browser doesn\'t seem to support Pointer Lock API';
+
+			}
+</script>
+
+
+<script>
+
+//	var controller = {
+//	  effectAmount: 0
+//	};
+//
+//	// I'm using DAT.GUI to do a quick & easy GUI for the demo.
+//	var gui = new dat.GUI();
+//	gui.add(controller, 'effectAmount', 0, 100);
+
+
+// standard global variables
+var container, scene, camera, renderer, projector, controls, stats;
+var time = Date.now();
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+var particles;
+var objects = [];
+var movieGeometry, movieMaterial;
+
+// FUNCTIONS
+function init()
+{
+	// SCENE
+	scene = new THREE.Scene();
+	// CAMERA
+	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+	var VIEW_ANGLE = 80, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 0.01, FAR = 11000;
+
+	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+	
+	// RENDERER
+	if ( Detector.webgl ) {
+		renderer = new THREE.WebGLRenderer( {antialias:true} );
+	} else {
+		alert("Falling back to CanvasRenderer, WebGLRenderer not available");
+		renderer = new THREE.CanvasRenderer();
+	}
+
+	renderer.setSize( window.innerWidth, window.innerHeight);
+
+	document.body.appendChild( renderer.domElement );
+
+
+	// CONTROLS
+	controls = new THREE.PointerLockControls( camera );
+	scene.add(controls.getObject());
+
+
+
+	// LIGHT
+	var light = new THREE.PointLight(0xffffff);
+	light.position.set(250,250,250);
+	scene.add(light);
+
+
+	ray = new THREE.Raycaster();
+	ray.ray.direction.set( 0, -1, 0 );
+
+ 	// SKYBOX/FOG
+ 	// var skyBoxGeometry = new THREE.CubeGeometry( 10000, 10000, 10000 );
+ 	// var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.BackSide } );
+ 	// var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+ 	// skyBox.flipSided = true; // render faces from inside of the cube, instead of from outside (default).
+ 	// scene.add(skyBox);
+ 	scene.fog = new THREE.FogExp2( 0x888888, 0.00080 );
+
+
+	// SKYBOX
+	var imagePrefix = "images/dawnmountain-";
+	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+	var imageSuffix = ".png";
+	var skyGeometry = new THREE.CubeGeometry( 3000, 3000, 3000 );
+
+	var urls = [];
+	for (var i = 0; i < 6; i++) {
+		var imageUrl = imagePrefix + directions[i] + imageSuffix;
+		console.log("Skybox: " + imageUrl);
+		urls.push( imageUrl );
+	}
+	var materialArray = [];
+	for (var i = 0; i < 6; i++)
+		materialArray.push( new THREE.MeshBasicMaterial({
+			map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+			side: THREE.BackSide
+		}));
+	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+	skyBox.flipSided = true;
+	scene.add( skyBox );
+
+
+ 	// FLOOR
+ 	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
+ 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+ 	floorTexture.repeat.set( 10, 10 );
+ 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+ 	var floorGeometry = new THREE.PlaneGeometry(2000, 2000, 10, 10);
+ 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+ 	floor.position.y = -20;
+ 	floor.rotation.x = Math.PI / 2;
+ 	scene.add(floor);
+
+
+
+
+	projector = new THREE.Projector();
+	document.addEventListener( 'click', onDocumentMouseClick, false );
+
+	//renderer.setSize( window.innerWidth, window.innerHeight );
+
+
+	//window.addEventListener( 'resize', onWindowResize, false );
+}
+
+
+function initObjects() {
+
+	// STATS
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.bottom = '0px';
+	stats.domElement.style.zIndex = 100;
+	document.body.appendChild( stats.domElement );
+
+
+	var images = {"cats":[
+						"b216c5e87374840c6224t.jpg",
+						"02d79cf4f266c06fda1et.jpg",
+						"3a5ac77d3f37c045f278t.jpg",
+						"2cba79eb76d294c045a1t.jpg",
+						"2c28900c7210dbcfa9e9t.jpg",
+						"2be8b22f4f19ebdfc452t.jpg",
+						"b32d215630bb0161d873t.jpg",
+						"ec80be37fa07b31cf221t.jpg",
+						"3ebd6e6a7482175b9e2ct.jpg",
+						"602fa2037fbd636c1278t.jpg",
+						"354260101b56d2a1e2det.jpg",
+						"1cf1c45b32de27cf835dt.jpg",
+						"117cde36993f2ed2fdf6t.jpg",
+						"bdd039cf3210aa5e1a34t.jpg",
+						"aaff47d643551fb4ce45t.jpg",
+						"a3dbaf690a0713067465t.jpg",
+						"51f27a76d0871a05fd68t.jpg",
+						"344feb30a16411b94427t.jpg",
+						"14a94f5b3a923a949af6t.jpg"
+						],
+					"photography":[
+
+
+											"e6e105a43af92b0bebf1t.jpg",
+											"1e42f0078f21b2a95aeat.jpg",
+											"1b784b095e8510e38c7at.jpg",
+											"9f27f7d70499a88beca8t.jpg",
+											"b2cf717616c18781b6fbt.jpg",
+											"de1313ab7fcdf2d171c3t.jpg",
+											"48653700933dccae1492t.jpg",
+											"64e7bb9962eab4750b0ct.jpg",
+											"4948eaf27a6aeb747065t.jpg"
+						],
+					"drawing" : [
+									"8e0bddcf07a10b930687t.jpg",
+									"416c242fef2ab483d47ft.jpg",
+									"b626c36a1088d90e60c2t.jpg",
+									"ad2f3d57b1efb9912d8ct.jpg",
+									"4a0ff5cd8d9d5fdeca13t.jpg",
+									"55993052d9f2edd68edft.jpg",
+									"6a3b7c88ed78e08aa37ct.jpg",
+									"e8752109ebba41dc5b5ct.jpg",
+									"7c6a9c0ef3d129bb3242t.jpg",
+									"42cbeecf4b4eb34515a8t.jpg",
+									"1a49cfb7c6385a3ae41et.jpg",
+									"55a1df3335426d43b077t.jpg",
+									"08d7b458f7a5aa915d54t.jpg"
+					],
+				
+					"ai_images": [
+						'/images/zebra_boy.png',
+						'/images/shark_girl.png',
+						'/images/rainbow_unicorn.png',
+						'/images/shark_man.png',
+						'/images/zebra_girl.png',
+						'/images/frog_girl_cat.png',
+						'/images/cat_man.png',
+						'/images/zebra_dog_1.png',
+						'/images/zebra_dog_2.png',
+						'/images/consciousness.png',
+						'/images/frog_astronaut.png',
+						'/images/trump_dragon.png',
+						'/images/mushrooms.png',
+						'/images/bitcoin.png',
+						'/images/cat_donkey_dog.png',
+						'/images/frog_girl.png',
+						'/images/pizza_cat.jpg',
+						'/images/pizza_frog.jpg',
+						'/images/vader_cats.png',
+						'/images/skull_gems.png',
+						'/images/trump_hillary.png',
+						'/images/mickey_christ.png',
+						'/images/mickeyzilla.png',
+						'/images/pumpkin_skeleton.png',
+						'/images/skull_scream.png',
+						'/images/skull.png',
+						'/images/darren_rules.png',
+						'/images/nerf_skydiver.png',
+						'/images/kitty_video_game.png'
+					]
+				
+				};
+	///////////
+	// VIDEO //
+	///////////
+
+	video = document.getElementById( 'webcamVideo' );
+
+	webcamCanvas = document.getElementById( 'webcamCanvas' );
+	videoImageContext = webcamCanvas.getContext( '2d' );
+	// background color if no video present
+	videoImageContext.fillStyle = '#000000';
+	videoImageContext.fillRect( 0, 0, webcamCanvas.width, webcamCanvas.height );
+
+	videoTexture = new THREE.Texture( webcamCanvas );
+	// Filter will specify how to scale image
+	// NearestFilter - very pixelated when enlarged
+	// NearestMipMapNearestFilter - jagged staircase artifacts when enlarged
+	// NearestMipMapLinearFilter - 'blurred' jagged staircase 
+	// LinearFilter - smooth without much pixelation, but blurry
+	// LinearMipMapNearestFilter - looks like LinearFilter
+	// LinearMipMapLinearFilter - looks about the same as LinearFilter
+	videoTexture.minFilter = THREE.LinearMipMapLinearFilter;
+	videoTexture.magFilter = THREE.LinearMipMapLinearFilter;
+
+	movieMaterial = new THREE.MeshBasicMaterial( { map: videoTexture, 
+		overdraw: true, 
+		side:THREE.DoubleSide } );
+	// the geometry on which the movie will be displayed;
+	// 		movie image will be scaled to fit these dimensions.
+	movieGeometry = new THREE.PlaneGeometry( 80, 60, 1, 1 );
+
+
+	buildImageHut( images["ai_images"], 0, 0);
+	buildImageHut( images["photography"], 200, 200);
+	buildImageHut( images["drawing"], -200, 200);
+	buildImageHut( images["cats"], -200, -200);
+
+	var allImages = images["cats"].concat(images["photography"]).concat(images["drawing"].concat(images["ai_images"]));
+	allImages = allImages.sort(() => Math.random() - 0.5);
+	buildImageHut( allImages, 0, 400);
+	// buildImageHut( images["photography"] + images["drawing"], 200, 0);
+	// buildImageHut( images["drawing"] , -200, 0);
+}
+
+function buildImageHut(images, xOffset, zOffset) {
+	var count = 10;
+	var radius = 600;
+	var width = radius/count;
+	var height = 60;
+	var phi_delta = 6.28/count;
+	for (var i=1; i <= images.length; i++ ) {
+		var phi = phi_delta * i;
+		if (images[i-1].startsWith("/images/")) {
+			var imageUrl = "../.." + images[i-1];
+		} else {
+			var imageUrl = "images/" + images[i-1];
+		}
+		// var imageUrl = "https://github.com/deevis/html_fun/tree/master/HTML5/images/" + image_urls[i-1];
+		var imageMaterial = new THREE.MeshBasicMaterial( { fog: true, size: 60, 
+			overdraw: true, 
+			side:THREE.DoubleSide, 
+			map: THREE.ImageUtils.loadTexture(imageUrl)});
+		var imageGeometry = new THREE.PlaneGeometry( width, height, 4, 4 );
+		var image = new THREE.Mesh( imageGeometry, imageMaterial );
+		var x = xOffset + Math.cos(phi)*95;
+		var y= 10 + Math.sin(phi) * 5 + Math.floor(i/count) * (height + 2);
+		var z = zOffset + Math.sin(phi)*95;
+		image.position.set(x,y,z);
+		image.rotation.set(0,1.57-phi,0);
+		scene.add(image);
+		objects.push(image);
+	}
+
+	var movieScreen = new THREE.Mesh( movieGeometry, movieMaterial );
+	movieScreen.position.set(60 + xOffset,-18,zOffset);
+	movieScreen.rotation.set(4.71, 0, 1.57);
+	scene.add(movieScreen);
+
+}
+
+
+function onWindowResize() {
+	camera.aspect = window.innerWidth / window.innerHeight;
+	camera.updateProjectionMatrix();
+
+	renderer.setSize( window.innerWidth, window.innerHeight);
+
+}
+
+function onDocumentMouseClick( event ) {
+
+	event.preventDefault();
+	event.stopImmediatePropagation();
+	var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+	projector.unprojectVector( vector, controls.getObject() );
+
+	var raycaster = new THREE.Raycaster( controls.getObject().position, vector.sub( controls.getObject().position ).normalize() );
+
+	var intersects = raycaster.intersectObject( objects );
+
+	if ( intersects.length > 0 ) {
+		alert("intersected");
+		colors[intersects[ 0 ].vertex].setHex( Math.random() * 0xffffff );
+
+		// TWEEN?!??!?
+		//camera.position.set(intersects[ 0 ].point.x +10,intersects[ 0 ].point.y +10,intersects[ 0 ].point.z+10);
+		//camera.lookAt(intersects[ 0 ].point.x-10,intersects[ 0 ].point.y,intersects[ 0 ].point.z);
+
+	}
+
+
+}
+
+
+
+function animate()
+{
+    requestAnimationFrame( animate );
+	render();
+	update();
+}
+
+function update()
+{
+//	controls.isOnObject( false );
+
+	ray.ray.origin.copy( controls.getObject().position );
+	ray.ray.origin.y -= 10;
+
+	var intersections = ray.intersectObjects( objects );
+
+	if ( intersections.length > 0 ) {
+
+		var distance = intersections[ 0 ].distance;
+
+		if ( distance > 0 && distance < 10 ) {
+
+			controls.isOnObject( true );
+
+		}
+
+	}
+
+	controls.update( Date.now() - time );
+	stats.update();
+	time = Date.now();
+}
+
+function render()
+{
+	if ( video.readyState === video.HAVE_ENOUGH_DATA )
+	{
+		videoImageContext.drawImage( video, 0, 0, webcamCanvas.width, webcamCanvas.height );
+		if ( videoTexture )
+			videoTexture.needsUpdate = true;
+	}
+
+	renderer.render( scene, camera );
+}
+
+init();
+
+</script>
+
+<!-- Putting these elements (webcamVideo, webcamCanvas) in prior to calling init() cause empty space at the top of the page when document.body. -->
+<video id="webcamVideo" autoplay width="140" height="120" style="visibility: hidden; float:left;">
+</video>
+<canvas id="webcamCanvas" width="140" height="120" style="visibility: hidden; float:left;">
+</canvas>
+
+<script>
+navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia || navigator.mozGetUserMedia;
+window.URL = window.URL || window.webkitURL;
+
+var camvideo = document.getElementById('webcamVideo');
+
+	navigator.getUserMedia_ = (   navigator.getUserMedia
+                           || navigator.webkitGetUserMedia 
+                           || navigator.mozGetUserMedia 
+                           || navigator.msGetUserMedia);
+	if (!navigator.getUserMedia_)
+	{
+		document.getElementById('errorMessage').innerHTML =
+			'Sorry. <code>navigator.getUserMedia()</code> is not available.';
+	} else {
+		navigator.getUserMedia_({video: true}, gotStream, noStream);
+	}
+
+function gotStream(stream)
+{
+	console.log("gotStream");
+	if (window.URL)
+	{   
+		try {
+			console.log("Setting camVideo.srcObject");
+			camvideo.srcObject = stream;
+		} catch (error) {
+			console.log(error);
+			console.log("oops = setting camVideo.src");
+			camvideo.src = window.URL.createObjectURL(stream);
+		}
+	} else // Opera
+	{   camvideo.src = stream;   }
+
+	camvideo.onerror = function(e)
+	{   stream.stop(); alert("Webcam error"); alert(e)  };
+
+	stream.onended = noStream;
+}
+
+function noStream(e)
+{
+	var msg = 'No camera available.';
+	if (e.code == 1)
+	{   msg = 'User denied access to use camera.';   }
+	alert(msg);
+	//document.getElementById('errorMessage').textContent = msg;
+}
+
+
+initObjects();
+animate();
+
+
+// 	// FLOOR
+// 	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
+// 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+// 	floorTexture.repeat.set( 10, 10 );
+// 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+// 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+// 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+// 	floor.position.y = -0.5;
+// 	floor.rotation.x = Math.PI / 2;
+// 	scene.add(floor);
+//
+
+// SKYBOX
+//	var imagePrefix = "images/dawnmountain-";
+//	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+//	var imageSuffix = ".png";
+//	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+
+//	var urls = [];
+//	for (var i = 0; i < 6; i++)
+//		urls.push( imagePrefix + directions[i] + imageSuffix );
+
+//	var materialArray = [];
+//	for (var i = 0; i < 6; i++)
+//		materialArray.push( new THREE.MeshBasicMaterial({
+//			map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+//			side: THREE.BackSide
+//		}));
+//	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+//	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+//	scene.add( skyBox );
+
+
+	////////////
+	// CUSTOM //
+	////////////
+
+// 	var cubeGeometry = new THREE.CubeGeometry( 50, 50, 50, 20, 20, 20 );
+// 	var discTexture = THREE.ImageUtils.loadTexture( 'images/disc.png' );
+//
+// 	// values that are constant for all particles during a draw call
+// 	this.customUniforms =
+// 	{
+// 		time:	 { type: "f", value: 1.0 },
+// 		texture: { type: "t", value: discTexture },
+// 	};
+//
+// 	// properties that may vary from particle to particle. only accessible in vertex shaders!
+// 	//	(can pass color info to fragment shader via vColor.)
+// 	var customAttributes =
+// 	{
+// 		customColor:	 { type: "c", value: [] },
+// 		customFrequency: { type: 'f', value: [] },
+// 	};
+//
+// 	// assign values to attributes, one for each vertex of the geometry
+// 	for( var v = 0; v < cubeGeometry.vertices.length; v++ )
+// 	{
+// 		customAttributes.customColor.value[ v ] = new THREE.Color( 0xffffff * Math.random() );
+// 		customAttributes.customFrequency.value[ v ] = 5 * Math.random() + 0.5;
+// 	}
+//
+// 	var shaderMaterial = new THREE.ShaderMaterial(
+// 	{
+// 		uniforms: 		customUniforms,
+// 		attributes:		customAttributes,
+// 		vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+// 		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+// 		transparent: true, alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5,
+// 		// blending: THREE.AdditiveBlending, depthTest: false,
+// 	});
+//
+// 	var particleCube = new THREE.ParticleSystem( cubeGeometry, shaderMaterial );
+// 	particleCube.position.set(0, 50, 0);
+// 	particleCube.dynamic = true;
+// 	particleCube.sortParticles = true;
+// 	scene.add( particleCube );
+
+
+// 	this.refractSphereCamera = new THREE.CubeCamera( 0.1, 5000, 512 );
+// 	scene.add( refractSphereCamera );
+//
+// 	var fShader = THREE.FresnelShader;
+//
+// 	var fresnelUniforms =
+// 	{
+// 		"mRefractionRatio": { type: "f", value: 1.02 },
+// 		"mFresnelBias": 	{ type: "f", value: 0.1 },
+// 		"mFresnelPower": 	{ type: "f", value: 2.0 },
+// 		"mFresnelScale": 	{ type: "f", value: 1.0 },
+// 		"tCube": 			{ type: "t", value: refractSphereCamera.renderTarget } //  textureCube }
+// 	};
+
+// 	var shaderMaterial = new THREE.ShaderMaterial(
+// 	{
+// // 		uniforms: 		customUniforms,
+// // 		attributes:		customAttributes,
+// 		vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+// 		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+// 		transparent: true, alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5,
+// 		// blending: THREE.AdditiveBlending, depthTest: false,
+// 	});
+
+// 	// create custom material for the shader
+// 	var customMaterial = new THREE.ShaderMaterial(
+// 	{
+// 	    uniforms: 		fresnelUniforms,
+// 		vertexShader:   fShader.vertexShader,
+// 		fragmentShader: fShader.fragmentShader
+// 	}   );
+
+// 	var nodeTexture = THREE.ImageUtils.loadTexture( 'images/disc.png' );
+// 	var nodeMaterial = new THREE.SpriteMaterial( { map: nodeTexture, useScreenCoordinates: false, alignment: THREE.SpriteAlignment.topLeft  } );
+// 	var sphereGeometry = new THREE.SphereGeometry( 10, 20, 100 );
+
+</script>
+
+</body>
+</html>

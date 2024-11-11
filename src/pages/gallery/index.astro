@@ -1,0 +1,53 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import VideoCarousel from '../../components/VideoCarousel.astro';
+import { galleries } from '../../config/galleries.json';
+---
+
+<Layout title="Gallery | Professional Portfolio">
+  <Navigation />
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4">
+      <h1 class="text-4xl font-bold mb-8">Gallery</h1>
+      
+      {galleries.map((gallery) => (
+        <section class="mb-12">
+          <h2 class="text-2xl font-semibold mb-6">{gallery.title}</h2>
+          {gallery.type === 'youtube' ? (
+            <VideoCarousel videos={gallery.items} />
+          ) : (
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              {gallery.items.map((item) => (
+                <div class="rounded-lg bg-gray-100 overflow-hidden">
+                  {gallery.type === 'video' ? (
+                    <div class="aspect-video">
+                      <video 
+                        class="w-full h-full object-cover"
+                        controls
+                        poster={item.poster}
+                      >
+                        <source src={item.src} type="video/mp4" />
+                        Your browser does not support the video tag.
+                      </video>
+                    </div>
+                  ) : (
+                    <div class="aspect-square">
+                      <img 
+                        src={item.src} 
+                        alt={item.alt}
+                        class="w-full h-full object-cover"
+                      />
+                    </div>
+                  )}
+                </div>
+              ))}
+            </div>
+          )}
+        </section>
+      ))}
+    </div>
+  </main>
+  <Footer />
+</Layout>

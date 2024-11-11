@@ -1,0 +1,525 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+	<title>BigTree View</title>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+	<link rel=stylesheet href="css/base.css"/>
+</head>
+<body>
+
+<script src="../assets/js/Three.js"></script>
+<script src="../assets/js/Detector.js"></script>
+<script src="../assets/js/Stats.js"></script>
+<script src="../assets/js/OrbitControls.js"></script>
+<script src="../assets/js/dat.gui.min.js"></script>
+<script src="../assets/js/THREEx.KeyboardState.js"></script>
+<script src="../assets/js/THREEx.FullScreen.js"></script>
+<script src="../assets/js/THREEx.WindowResize.js"></script>
+
+<script src="../assets/fonts/helvetiker_regular.typeface.js"></script>
+
+
+<script type="x-shader/x-fragment" id="fragmentshader">
+uniform sampler2D texture;
+varying vec3 vColor; // colors associated to vertices; assigned by vertex shader
+void main()
+{
+	// calculates a color for the particle
+	gl_FragColor = vec4( vColor, 1.0 );
+	// sets particle texture to desired color
+	gl_FragColor = gl_FragColor * texture2D( texture, gl_PointCoord );
+}
+</script>
+
+
+<!-- jQuery code to display an information button and box when clicked. -->
+<script src="../assets/js/jquery-1.9.1.js"></script>
+<script src="../assets/js/jquery-ui.js"></script>
+<link rel=stylesheet href="../assets/css/jquery-ui.css" />
+<link rel=stylesheet href="../assets/css/info.css"/>
+<script src="../assets/js/info.js"></script>
+
+<!-- ------------------------------------------------------------ -->
+
+
+
+<div id="ThreeJS" style="position: absolute; left:0px; top:0px; width: 100%; height: 100%;">
+</div>
+<div id="wookie-love-aardvark" style="position: absolute; left:0px; top:0px; color: white; font-size: 20px; font-weight: 700;">
+	Hold left mouse button to rotate<br>
+	Hold right mouse button to drag<br>
+	Scroll wheel to zoom in/out
+</div>	
+<script src="../assets/js/tree.json.js"></script>
+
+
+<script>
+	var Settings = function() {
+		this.maxLevelToRender = 10;
+		this.showEdges = true;
+		this.filter = function() {
+			do_filter();
+		};
+		this.showAll = function() {
+			do_showAll();
+		};
+	};
+
+	var settings = new Settings();
+
+	var totalNodes = 0;
+
+	var Node = function(parent, user_login_id, level) {
+		this.p = parent;			// Another node
+		this.u = user_login_id;		// A String
+		this.l = level;
+		this.c = []; 				// An array of nodes
+		this.x = -1;
+		this.y=  -1;
+		this.z = -1;
+		this.hide = false;			// If hidden, so is it's subtree
+		if (this.p != null)
+		  this.p.c.push(this);		// Add the new node as a child to the parent
+	}
+
+        var node, tree;
+
+
+	var nodeStack = [];
+	var maxLevelFoundInTree = 0;
+	var maxLevelToRender = 0;
+	//
+	// buildTree from a depth-first [level,id] list of node data
+	//
+	//
+	function buildTree() {
+	  tree = new Node(null, data[0][1], 0);
+	  var currentNode = tree;
+	  for (var i = 1; i < data.length; i++ ) {
+	      var level = data[i][0];
+	      var id = data[i][1];
+	      if ( level > maxLevelFoundInTree ) {
+	      	maxLevelFoundInTree = level;
+	      	maxLevelToRender = level;
+	      }
+	      if (level > currentNode.l) {
+			// This is a child
+			nodeStack.push(currentNode);	// We are going deeper, push the currentNode onto the stack
+			currentNode = new Node(currentNode, id, level);
+	      } else if (level == currentNode.l) {
+			// This is a sibling, add it as a child to the last item in nodeStack
+			currentNode = new Node(nodeStack[nodeStack.length-1], id, level);
+	      } else {
+			// This is an ancestor, pop some off the stack
+			var popCount = 1 + nodeStack[nodeStack.length-1].l - level;
+			for ( var x = 0; x < popCount; x++ ) {
+			  nodeStack.pop();
+			}
+			currentNode = new Node(nodeStack[nodeStack.length-1], id, level);
+	    }
+	  }
+	}
+
+
+	function buildDemoTree(node, level) {
+		if ( level >= (1.99 + Math.random() * 12 ))
+			return;
+		var childCount = Math.sqrt(Math.sqrt(Math.random() * 10000)) - 5;
+		if ( childCount < 1) return;
+		for (var i = 0; i < childCount; i++) {
+		  node.c.push(new Node(node, node.u + i));
+		}
+		for ( var i =0; i<node.c.length;i++) {
+			buildDemoTree(node.c[i], level+1);
+		}
+	}
+
+	buildTree();
+
+
+// standard global variables
+var container, scene, camera, renderer, projector, controls, stats;
+var keyboard = new THREEx.KeyboardState();
+var clock = new THREE.Clock();
+var particles, line;
+
+var geometry = new THREE.Geometry();
+var colors = [];
+var node_geometry, line_geometry;
+
+init();
+animate();
+
+// FUNCTIONS
+function init()
+{
+	// SCENE
+	scene = new THREE.Scene();
+	// CAMERA
+	var SCREEN_WIDTH = window.innerWidth, SCREEN_HEIGHT = window.innerHeight;
+	var VIEW_ANGLE = 70, ASPECT = SCREEN_WIDTH / SCREEN_HEIGHT, NEAR = 1, FAR = 45000;
+	camera = new THREE.PerspectiveCamera( VIEW_ANGLE, ASPECT, NEAR, FAR);
+	scene.add(camera);
+	camera.position.set(1500,0,0);
+	camera.lookAt(0,0,0);
+
+	// RENDERER
+	if ( Detector.webgl ) {
+		renderer = new THREE.WebGLRenderer( {antialias:true} );
+	} else {
+		alert("Falling back to CanvasRenderer, WebGLRenderer not available");
+		renderer = new THREE.CanvasRenderer();
+	}
+
+	renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+	container = document.getElementById( 'ThreeJS' );
+	container.appendChild( renderer.domElement );
+	// EVENTS
+	THREEx.WindowResize(renderer, camera);
+	THREEx.FullScreen.bindKey({ charCode : 'm'.charCodeAt(0) });
+	// CONTROLS
+	controls = new THREE.OrbitControls( camera, renderer.domElement );
+	// STATS
+	stats = new Stats();
+	stats.domElement.style.position = 'absolute';
+	stats.domElement.style.bottom = '0px';
+	stats.domElement.style.zIndex = 100;
+	container.appendChild( stats.domElement );
+	// LIGHT
+	var light = new THREE.PointLight(0xffffff);
+	light.position.set(0,250,0);
+	scene.add(light);
+
+
+
+// 	// SKYBOX/FOG
+ 	var skyBoxGeometry = new THREE.CubeGeometry( 30000, 30000, 30000 );
+ 	var skyBoxMaterial = new THREE.MeshBasicMaterial( { color: 0x000000, side: THREE.BackSide } );
+ 	var skyBox = new THREE.Mesh( skyBoxGeometry, skyBoxMaterial );
+ 	skyBox.flipSided = true; // render faces from inside of the cube, instead of from outside (default).
+ 	scene.add(skyBox);
+
+ 	scene.fog = new THREE.FogExp2( 0x000000, 0.00010 );
+
+
+	projector = new THREE.Projector();
+
+	settings.maxLevelToRender = 20;
+	drawTree();
+
+	var gui = new dat.GUI();
+	var levels_controller = gui.add(settings, 'maxLevelToRender',1,maxLevelFoundInTree);
+	var edges_controller = gui.add(settings, 'showEdges');
+	gui.add(settings, 'filter');
+	gui.add(settings, 'showAll');
+
+	levels_controller.onFinishChange(function(value) {
+		drawTree();
+	});
+	edges_controller.onFinishChange(function(value) {
+		drawTree();
+	});
+
+	document.addEventListener( 'click', onDocumentMouseClick, false );
+}
+
+
+function do_filter() {
+	// randomly hide some nodes
+	_filterSome(tree, 1);
+	drawTree();
+}
+
+
+function _filterSome(node, totalToFilter) {
+	if ( node.hide || totalToFilter < 1 ) return totalToFilter;
+
+	if ( Math.random() < .05 / settings.maxLevelToRender ) {
+		node.hide = true;
+		return totalToFilter - 1;
+	}
+	for ( var i = 0; i < node.c.length; i++ ) {
+		totalToFilter = _filterSome(node.c[i], totalToFilter);
+	}
+
+}
+
+var showAll = false;
+function do_showAll() {
+	showAll = true;
+	drawTree();
+	showAll = false;
+}
+
+
+function drawTree() {
+	var node_material = [
+							new THREE.ParticleBasicMaterial( {
+    																size: 50,
+																	blending: THREE.NormalBlending,
+																	transparent: false,
+																	opacity: 0.7,
+																	vertexColors: true
+																} )
+						];
+
+	var line_material = [
+							new THREE.LineBasicMaterial( { color: 0xaaaaaa, linewidth: 2, transparent: true, opacity: 0.5 }),
+							new THREE.LineBasicMaterial( { color: 0x0000bb, linewidth: 2 })
+						];
+
+	scene.remove(particles);
+	scene.remove(line);
+	node_geometry = [new THREE.Geometry()];
+	line_geometry = [new THREE.Geometry()];
+	colors=[];
+	renderNode(tree, 0, 0, 0)
+	for (var i=0;i < node_geometry.length;i++) {
+		node_geometry[i].colors = colors;
+		particles = new THREE.ParticleSystem( node_geometry[i], node_material[i] );
+		particles.sortParticles = true;
+		scene.add( particles );
+
+		if (settings.showEdges) {
+			line = new THREE.Line( line_geometry[i], line_material[i] );
+			scene.add( line );
+		}
+	}
+}
+
+
+function onDocumentMouseClick( event ) {
+
+	event.preventDefault();
+	event.stopImmediatePropagation();
+
+	var vector = new THREE.Vector3( ( event.clientX / window.innerWidth ) * 2 - 1, - ( event.clientY / window.innerHeight ) * 2 + 1, 0.5 );
+	projector.unprojectVector( vector, camera );
+
+	var raycaster = new THREE.Raycaster( camera.position, vector.sub( camera.position ).normalize() );
+
+	var intersects = raycaster.intersectObject( particles );
+
+	if ( intersects.length > 0 ) {
+		colors[intersects[ 0 ].vertex].setHex( Math.random() * 0xffffff );
+		//camera.position.set(intersects[ 0 ].point.x +10,intersects[ 0 ].point.y +10,intersects[ 0 ].point.z+10);
+		//camera.lookAt(intersects[ 0 ].point.x-10,intersects[ 0 ].point.y,intersects[ 0 ].point.z);
+
+	}
+
+
+}
+
+
+
+function renderNode(node, phi, level, childOffset) {
+	if (level > settings.maxLevelToRender ) return;
+	if ( !showAll && node.hide ) return;
+	node.hide = false;
+	var geometryTypeCount = node_geometry.length;
+	var levelMod = 0; //Math.floor(level) % geometryTypeCount;
+	totalNodes++;
+
+	// Start at the center of our parent for rendering
+	var by = (node.p == null) ? 70 * (settings.maxLevelToRender/2) : node.p.y;
+	var bx = (node.p == null) ? 0 : node.p.x;
+	var bz = (node.p == null) ? 0 : node.p.z;
+
+	// Apply rotation and childOffset ordinal
+	node.x = bx + Math.sin(phi + level/4) * (55 + level); // * Math.max(1,30-level); // - childOffset * 50;
+	node.y = by - Math.max(1,3-level) * 100; // + level * 50);
+	node.z = bz + Math.cos(phi +level/4) * (55 + level); // * Math.max(1,30-level); // - childOffset * 50;
+
+	var vector = new THREE.Vector3( node.x, node.y, node.z );
+	node_geometry[levelMod].vertices.push( vector );
+	index = colors.length;
+	colors[index] = new THREE.Color();
+    var colorComponent = .29 + Math.random()/2;
+    if (level % 6 == 0) {
+    	colors[index].setRGB( colorComponent, 0, 0 );
+    } else if (level % 6 == 1) {
+    	colors[index].setRGB( colorComponent, colorComponent, 0 );
+    } else if (level % 6 == 2) {
+    	colors[index].setRGB( 0, colorComponent, colorComponent );
+    } else if (level % 6 == 3) {
+    	colors[index].setRGB( colorComponent, 0, colorComponent );
+    } else if (level % 6 == 4) {
+    	colors[index].setRGB( 0, colorComponent, 0 );
+    } else {
+    	colors[index].setRGB( 0, 0, colorComponent );
+    }
+	line_geometry[levelMod].vertices.push( vector );
+
+	if ( node.c.length > 0 ) {
+		var phi_delta = 6.28 / node.c.length;
+		for (var t = 0; t < node.c.length; t++) {
+			//renderNode(node.c[t], phi_delta * t, level + 1 + t / node.c.length);
+			if (node.c.length%2==1) {
+				newChildOffset = (t - (node.c.length-1)/2)
+			} else {
+				var mid = node.c.length/2;
+				if (t>=mid) {
+					newChildOffset = t - mid + 1;
+				} else {
+					newChildOffset = t - mid;
+				}
+			}
+			//alert(t + ":" + node.c.length + " :: " + newChildOffset);
+			renderNode(node.c[t], phi + phi_delta * t, level +1, newChildOffset);
+		}
+	}
+	if ( node.p != null ) {
+		vector = new THREE.Vector3( node.p.x, node.p.y, node.p.z );
+		line_geometry[levelMod].vertices.push( vector );
+	}
+}
+
+function animate()
+{
+    requestAnimationFrame( animate );
+	render();
+	update();
+}
+
+function update()
+{
+	if ( keyboard.pressed("z") )
+	{
+		// do something
+	}
+
+	controls.update();
+	stats.update();
+
+	var t = clock.getElapsedTime();
+	//customUniforms.time.value = t;
+}
+
+function render()
+{
+	renderer.render( scene, camera );
+}
+
+
+
+// 	// FLOOR
+// 	var floorTexture = new THREE.ImageUtils.loadTexture( 'images/checkerboard.jpg' );
+// 	floorTexture.wrapS = floorTexture.wrapT = THREE.RepeatWrapping;
+// 	floorTexture.repeat.set( 10, 10 );
+// 	var floorMaterial = new THREE.MeshBasicMaterial( { map: floorTexture, side: THREE.DoubleSide } );
+// 	var floorGeometry = new THREE.PlaneGeometry(1000, 1000, 10, 10);
+// 	var floor = new THREE.Mesh(floorGeometry, floorMaterial);
+// 	floor.position.y = -0.5;
+// 	floor.rotation.x = Math.PI / 2;
+// 	scene.add(floor);
+//
+
+// SKYBOX
+//	var imagePrefix = "images/dawnmountain-";
+//	var directions  = ["xpos", "xneg", "ypos", "yneg", "zpos", "zneg"];
+//	var imageSuffix = ".png";
+//	var skyGeometry = new THREE.CubeGeometry( 5000, 5000, 5000 );
+
+//	var urls = [];
+//	for (var i = 0; i < 6; i++)
+//		urls.push( imagePrefix + directions[i] + imageSuffix );
+
+//	var materialArray = [];
+//	for (var i = 0; i < 6; i++)
+//		materialArray.push( new THREE.MeshBasicMaterial({
+//			map: THREE.ImageUtils.loadTexture( imagePrefix + directions[i] + imageSuffix ),
+//			side: THREE.BackSide
+//		}));
+//	var skyMaterial = new THREE.MeshFaceMaterial( materialArray );
+//	var skyBox = new THREE.Mesh( skyGeometry, skyMaterial );
+//	scene.add( skyBox );
+
+
+	////////////
+	// CUSTOM //
+	////////////
+
+// 	var cubeGeometry = new THREE.CubeGeometry( 50, 50, 50, 20, 20, 20 );
+// 	var discTexture = THREE.ImageUtils.loadTexture( 'images/disc.png' );
+//
+// 	// values that are constant for all particles during a draw call
+// 	this.customUniforms =
+// 	{
+// 		time:	 { type: "f", value: 1.0 },
+// 		texture: { type: "t", value: discTexture },
+// 	};
+//
+// 	// properties that may vary from particle to particle. only accessible in vertex shaders!
+// 	//	(can pass color info to fragment shader via vColor.)
+// 	var customAttributes =
+// 	{
+// 		customColor:	 { type: "c", value: [] },
+// 		customFrequency: { type: 'f', value: [] },
+// 	};
+//
+// 	// assign values to attributes, one for each vertex of the geometry
+// 	for( var v = 0; v < cubeGeometry.vertices.length; v++ )
+// 	{
+// 		customAttributes.customColor.value[ v ] = new THREE.Color( 0xffffff * Math.random() );
+// 		customAttributes.customFrequency.value[ v ] = 5 * Math.random() + 0.5;
+// 	}
+//
+// 	var shaderMaterial = new THREE.ShaderMaterial(
+// 	{
+// 		uniforms: 		customUniforms,
+// 		attributes:		customAttributes,
+// 		vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+// 		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+// 		transparent: true, alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5,
+// 		// blending: THREE.AdditiveBlending, depthTest: false,
+// 	});
+//
+// 	var particleCube = new THREE.ParticleSystem( cubeGeometry, shaderMaterial );
+// 	particleCube.position.set(0, 50, 0);
+// 	particleCube.dynamic = true;
+// 	particleCube.sortParticles = true;
+// 	scene.add( particleCube );
+
+
+// 	this.refractSphereCamera = new THREE.CubeCamera( 0.1, 5000, 512 );
+// 	scene.add( refractSphereCamera );
+//
+// 	var fShader = THREE.FresnelShader;
+//
+// 	var fresnelUniforms =
+// 	{
+// 		"mRefractionRatio": { type: "f", value: 1.02 },
+// 		"mFresnelBias": 	{ type: "f", value: 0.1 },
+// 		"mFresnelPower": 	{ type: "f", value: 2.0 },
+// 		"mFresnelScale": 	{ type: "f", value: 1.0 },
+// 		"tCube": 			{ type: "t", value: refractSphereCamera.renderTarget } //  textureCube }
+// 	};
+
+// 	var shaderMaterial = new THREE.ShaderMaterial(
+// 	{
+// // 		uniforms: 		customUniforms,
+// // 		attributes:		customAttributes,
+// 		vertexShader:   document.getElementById( 'vertexshader' ).textContent,
+// 		fragmentShader: document.getElementById( 'fragmentshader' ).textContent,
+// 		transparent: true, alphaTest: 0.5,  // if having transparency issues, try including: alphaTest: 0.5,
+// 		// blending: THREE.AdditiveBlending, depthTest: false,
+// 	});
+
+// 	// create custom material for the shader
+// 	var customMaterial = new THREE.ShaderMaterial(
+// 	{
+// 	    uniforms: 		fresnelUniforms,
+// 		vertexShader:   fShader.vertexShader,
+// 		fragmentShader: fShader.fragmentShader
+// 	}   );
+
+// 	var nodeTexture = THREE.ImageUtils.loadTexture( 'images/disc.png' );
+// 	var nodeMaterial = new THREE.SpriteMaterial( { map: nodeTexture, useScreenCoordinates: false, alignment: THREE.SpriteAlignment.topLeft  } );
+// 	var sphereGeometry = new THREE.SphereGeometry( 10, 20, 100 );
+
+</script>
+
+</body>
+</html>

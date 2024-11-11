@@ -1,0 +1,40 @@
+---
+const currentYear = new Date().getFullYear();
+---
+
+<footer class="bg-gray-900 text-white py-12">
+  <div class="container mx-auto px-4">
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 class="text-xl font-bold mb-4">Contact</h3>
+        <p class="mb-2">Email: darren.hicks@gmail.com</p>
+        <p>Location: Salt Lake City, Utah</p>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold mb-4">Connect</h3>
+        <div class="space-y-2">
+          <a href="https://www.linkedin.com/in/darrenhicks/" target="_blank" class="block hover:text-primary-300">LinkedIn</a>
+          <a href="https://github.com/deevis" target="_blank" class="block hover:text-primary-300">GitHub</a>
+          <a href="https://stackoverflow.com/users/59075/darren-hicks" class="block hover:text-primary-300">Stack Overflow</a>
+          <a href="https://x.com/deevis" target="_blank" class="block hover:text-primary-300">Twitter</a>
+          <a href="https://www.instagram.com/deepdream_inception/" target="_blank" class="block hover:text-primary-300">Instagram</a>
+        </div>
+      </div>
+      
+      <div>
+        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+        <div class="space-y-2">
+          <a href="/articles" class="block hover:text-primary-300">Articles</a>
+          <a href="/projects" class="block hover:text-primary-300">Projects</a>
+          <a href="/about" class="block hover:text-primary-300">About Me</a>
+          <a href="https://www.redbubble.com/people/ai-depot/shop" class="block hover:text-primary-300">Shop</a>
+        </div>
+      </div>
+    </div>
+    
+    <div class="mt-8 pt-8 border-t border-gray-800 text-center">
+      <p>&copy; {currentYear} Darren Hicks. All rights reserved.</p>
+    </div>
+  </div>
+</footer>

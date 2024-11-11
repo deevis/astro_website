@@ -1,0 +1,22 @@
+{
+    "projects": [
+      {
+        "title": "E-commerce Platform",
+        "description": "A modern e-commerce solution built with Next.js and Stripe integration.",
+        "href": "/projects/e-commerce",
+        "image": "/images/projects/e-commerce.jpg"
+      },
+      {
+        "title": "Healthcare Dashboard",
+        "description": "Real-time analytics dashboard for healthcare providers with data visualization.",
+        "href": "/projects/healthcare",
+        "image": "/images/projects/healthcare.jpg"
+      },
+      {
+        "title": "Mobile Banking App",
+        "description": "Secure and intuitive mobile banking application with biometric authentication.",
+        "href": "/projects/banking",
+        "image": "/images/projects/banking.jpg"
+      }
+    ]
+  }

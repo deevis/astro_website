@@ -1,0 +1,536 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>SVG Animation Gallery</title>
+    <style>
+        body {
+            margin: 0;
+            min-height: 100vh;
+            background: #0f0f2d;
+            color: white;
+            font-family: 'Arial', sans-serif;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1400px;
+            margin: 20px auto;
+            padding: 20px;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+        }
+        .header {
+            grid-column: 1 / -1;
+            text-align: center;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4, #45B7D1, #96C93D);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+            padding: 20px;
+            margin-bottom: 30px;
+        }
+        .demo-section {
+            background: rgba(255,255,255,0.05);
+            border-radius: 20px;
+            padding: 25px;
+            backdrop-filter: blur(10px);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.2);
+            transition: all 0.3s;
+        }
+        .demo-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 12px 48px rgba(0,0,0,0.3);
+        }
+        .demo-section h2 {
+            margin: 0 0 20px 0;
+            font-size: 1.8em;
+            background: linear-gradient(45deg, #FF6B6B, #4ECDC4);
+            -webkit-background-clip: text;
+            background-clip: text;
+            color: transparent;
+        }
+        .svg-container {
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            border: 1px solid #4ECDC4;
+            margin: 15px 0;
+            min-height: 400px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+        .controls-panel {
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+        }
+        .slider-control {
+            margin: 10px 0;
+        }
+        .slider-control label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4ECDC4;
+        }
+        .slider-control input {
+            width: 100%;
+            margin: 5px 0;
+        }
+        .button-group {
+            display: flex;
+            gap: 10px;
+            margin: 10px 0;
+        }
+        .control-btn {
+            background: #2a2a4a;
+            border: none;
+            color: #4ECDC4;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        .control-btn:hover {
+            background: #3a3a6a;
+            transform: translateY(-2px);
+        }
+        .control-btn.active {
+            background: #4ECDC4;
+            color: #2a2a4a;
+        }
+
+        .color-picker {
+            margin: 10px 0;
+        }
+
+        .color-picker label {
+            display: block;
+            margin-bottom: 5px;
+            color: #4ECDC4;
+        }
+
+        .color-buttons {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+
+        .color-btn {
+            padding: 15px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            transition: all 0.3s;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .color-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            opacity: 0.7;
+        }
+
+        .color-btn.active {
+            outline: 2px solid #4ECDC4;
+            transform: scale(1.05);
+        }
+
+        .color-btn:hover {
+            transform: scale(1.05);
+        }
+
+        /* Add specific gradients for each button */
+        .color-btn:nth-child(1)::before {
+            background: linear-gradient(45deg, #00ff87, #60efff);
+        }
+
+        .color-btn:nth-child(2)::before {
+            background: linear-gradient(45deg, #ff1f7a, #ff6b6b);
+        }
+
+        .color-btn:nth-child(3)::before {
+            background: linear-gradient(45deg, #aa77ff, #ff77aa);
+        }
+
+        .color-btn:nth-child(4)::before {
+            background: linear-gradient(45deg, #FFD700, #FFA500);
+        }
+
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1 class="header">SVG Animation Gallery</h1>
+
+        <!-- Aurora Borealis -->
+        <div class="demo-section">
+            <h2>Aurora Borealis</h2>
+        <div class="svg-container">
+<!-- Replace the existing Aurora SVG with this version -->
+<svg width="100%" height="400" viewBox="0 0 600 400">
+    <defs>
+        <linearGradient id="auroraGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#00ff87">
+                <animate attributeName="stop-color" 
+                        values="#00ff87;#60efff;#00ff87"
+                        dur="3s" repeatCount="indefinite"/>
+            </stop>
+            <stop offset="100%" stop-color="#60efff">
+                <animate attributeName="stop-color"
+                        values="#60efff;#00ff87;#60efff"
+                        dur="3s" repeatCount="indefinite"/>
+            </stop>
+        </linearGradient>
+        <filter id="auroraBlur" x="-50%" y="-50%" width="200%" height="200%">
+            <feGaussianBlur in="SourceGraphic" stdDeviation="5"/>
+        </filter>
+    </defs>
+    
+    <!-- Nested SVG with much more vertical space -->
+    <svg x="0" y="0" width="600" height="400" viewBox="-100 100 800 300">
+        <g id="auroraLayers" filter="url(#auroraBlur)">
+            <path class="aurora-wave" 
+                  d="M-50,150 Q150,50 300,150 Q450,250 650,150" 
+                  stroke="url(#auroraGradient)" 
+                  fill="none" 
+                  stroke-width="40">
+                <animate attributeName="d" 
+                        dur="3s"
+                        begin="0s"
+                        repeatCount="indefinite"
+                        values="M-50,150 Q150,50 300,150 Q450,250 650,150;
+                               M-50,150 Q150,250 300,150 Q450,50 650,150;
+                               M-50,150 Q150,50 300,150 Q450,250 650,150"/>
+            </path>
+            <path class="aurora-wave" 
+                  d="M-50,350 Q150,250 300,350 Q450,450 650,350" 
+                  stroke="url(#auroraGradient)" 
+                  fill="none" 
+                  stroke-width="40"
+                  opacity="0.7">
+                <animate attributeName="d" 
+                        dur="3s"
+                        begin="1s"
+                        repeatCount="indefinite"
+                        values="M-50,350 Q150,250 300,350 Q450,450 650,350;
+                               M-50,350 Q150,450 300,350 Q450,250 650,350;
+                               M-50,350 Q150,250 300,350 Q450,450 650,350"/>
+            </path>
+        </g>
+    </svg>
+
+    <g id="particleSystem"></g>
+</svg>
+        </div>
+            <div class="controls-panel">
+                <div class="slider-control">
+                    <label>Wave Speed</label>
+                    <input type="range" min="0.5" max="5" step="0.5" value="3" id="aurora-speed">
+                </div>
+                <div class="slider-control">
+                    <label>Blur Intensity</label>
+                    <input type="range" min="1" max="10" step="1" value="5" id="aurora-blur">
+                </div>
+                <div class="color-picker">
+                    <label>Color Scheme</label>
+                    <div class="color-buttons">
+                        <button class="color-btn active" data-colors='["#00ff87", "#60efff"]'>Green-Blue</button>
+                        <button class="color-btn" data-colors='["#ff1f7a", "#ff6b6b"]'>Pink-Red</button>
+                        <button class="color-btn" data-colors='["#aa77ff", "#ff77aa"]'>Purple-Pink</button>
+                        <button class="color-btn" data-colors='["#FFD700", "#FFA500"]'>Gold-Orange</button>
+                    </div>
+                </div>
+                <div class="button-group">
+                    <button class="control-btn" onclick="toggleAuroraAnimation()">Pause</button>
+                    <button class="control-btn" onclick="toggleParticles()">Toggle Particles</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Neural Network -->
+        <div class="demo-section">
+            <h2>Neural Network</h2>
+            <div class="svg-container">
+                <svg width="100%" height="400" viewBox="0 0 600 400">
+                    <defs>
+                        <radialGradient id="neuronGradient">
+                            <stop offset="0%" stop-color="#00fff2"/>
+                            <stop offset="100%" stop-color="#0066ff"/>
+                        </radialGradient>
+                        <filter id="neuronGlow">
+                            <feGaussianBlur stdDeviation="2"/>
+                            <feComposite in2="SourceGraphic" operator="over"/>
+                        </filter>
+                    </defs>
+                    <g id="connections"></g>
+                    <g id="neurons"></g>
+                    <g id="pulses"></g>
+                </svg>
+            </div>
+            <div class="controls-panel">
+                <div class="slider-control">
+                    <label>Neuron Count</label>
+                    <input type="range" min="10" max="50" value="20" id="neuron-count">
+                </div>
+                <div class="slider-control">
+                    <label>Connection Distance</label>
+                    <input type="range" min="50" max="200" value="100" id="connection-distance">
+                </div>
+                <div class="slider-control">
+                    <label>Speed</label>
+                    <input type="range" min="0.5" max="3" value="1" id="neural-speed">
+                </div>
+                <div class="button-group">
+                    <button class="control-btn" onclick="toggleNeuralAnimation()">Pause</button>
+                    <button class="control-btn" onclick="randomizeNeurons()">Randomize</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Aurora Borealis
+        let auroraAnimationsPaused = false;
+        let particlesEnabled = true;
+        const particles = [];
+
+        function toggleAuroraAnimation() {
+            auroraAnimationsPaused = !auroraAnimationsPaused;
+            const animations = document.querySelectorAll('.aurora-wave animate');
+            animations.forEach(anim => {
+                if (auroraAnimationsPaused) {
+                    anim.setAttribute('dur', '0s');
+                } else {
+                    anim.setAttribute('dur', '3s');
+                }
+            });
+        }
+
+        function createParticle() {
+            const particle = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+            particle.setAttribute("r", "2");
+            particle.setAttribute("fill", "white");
+            particle.setAttribute("filter", "url(#auroraBlur)");
+            particle.style.opacity = "0.5";
+            
+            const x = Math.random() * 600;
+            const y = Math.random() * 500;
+            particle.setAttribute("cx", x);
+            particle.setAttribute("cy", y);
+            
+            document.getElementById("particleSystem").appendChild(particle);
+            
+            return {
+                element: particle,
+                x: x,
+                y: y,
+                vx: (Math.random() - 0.5) * 2,
+                vy: (Math.random() - 0.5) * 2
+            };
+        }
+
+        function updateParticles() {
+            if (!particlesEnabled) return;
+
+            particles.forEach(particle => {
+                particle.x += particle.vx;
+                particle.y += particle.vy;
+                
+                if (particle.x < 0 || particle.x > 600) particle.vx *= -1;
+                if (particle.y < 0 || particle.y > 400) particle.vy *= -1;
+                
+                particle.element.setAttribute("cx", particle.x);
+                particle.element.setAttribute("cy", particle.y);
+            });
+            
+            requestAnimationFrame(updateParticles);
+        }
+
+        function toggleParticles() {
+            particlesEnabled = !particlesEnabled;
+            if (particlesEnabled) {
+                updateParticles();
+            }
+        }
+
+        // Neural Network
+        class Neuron {
+            constructor(x, y) {
+                this.x = x || Math.random() * 600;
+                this.y = y || Math.random() * 400;
+                this.vx = (Math.random() - 0.5) * 0.5;
+                this.vy = (Math.random() - 0.5) * 0.5;
+                this.element = this.createElement();
+            }
+
+            createElement() {
+                const neuron = document.createElementNS("http://www.w3.org/2000/svg", "circle");
+                neuron.setAttribute("r", "6");
+                neuron.setAttribute("fill", "url(#neuronGradient)");
+                neuron.setAttribute("filter", "url(#neuronGlow)");
+                neuron.setAttribute("cx", this.x);
+                neuron.setAttribute("cy", this.y);
+                document.getElementById("neurons").appendChild(neuron);
+                return neuron;
+            }
+
+            update(speed = 1) {
+                this.x += this.vx * speed;
+                this.y += this.vy * speed;
+
+                if (this.x < 50 || this.x > 550) this.vx *= -1;
+                if (this.y < 50 || this.y > 350) this.vy *= -1;
+
+                this.element.setAttribute("cx", this.x);
+                this.element.setAttribute("cy", this.y);
+            }
+        }
+
+        let neurons = [];
+        let neuralAnimationEnabled = true;
+        let neuralAnimationId = null;
+
+        function initNeuralNetwork() {
+            const container = document.getElementById("neurons");
+            const connectionContainer = document.getElementById("connections");
+            container.innerHTML = '';
+            connectionContainer.innerHTML = '';
+            neurons = [];
+
+            const neuronCount = parseInt(document.getElementById("neuron-count").value);
+            for (let i = 0; i < neuronCount; i++) {
+                neurons.push(new Neuron());
+            }
+        }
+
+        function updateNeuralNetwork() {
+            if (!neuralAnimationEnabled) return;
+
+            const speed = parseFloat(document.getElementById("neural-speed").value);
+            const connectionThreshold = parseInt(document.getElementById("connection-distance").value);
+
+            neurons.forEach(neuron => neuron.update(speed));
+
+            const connectionContainer = document.getElementById("connections");
+            connectionContainer.innerHTML = '';
+
+            for (let i = 0; i < neurons.length; i++) {
+                for (let j = i + 1; j < neurons.length; j++) {
+                    const n1 = neurons[i];
+                    const n2 = neurons[j];
+                    const dx = n1.x - n2.x;
+                    const dy = n1.y - n2.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+
+                    if (distance < connectionThreshold) {
+                        const line = document.createElementNS("http://www.w3.org/2000/svg", "line");
+                        line.setAttribute("x1", n1.x);
+                        line.setAttribute("y1", n1.y);
+                        line.setAttribute("x2", n2.x);
+                        line.setAttribute("y2", n2.y);
+                        line.setAttribute("stroke", "rgba(0, 255, 242, 0.2)");
+                        line.setAttribute("stroke-width", "1");
+                        connectionContainer.appendChild(line);
+                    }
+                }
+            }
+
+            neuralAnimationId = requestAnimationFrame(updateNeuralNetwork);
+        }
+
+        function toggleNeuralAnimation() {
+            neuralAnimationEnabled = !neuralAnimationEnabled;
+            if (neuralAnimationEnabled) {
+                updateNeuralNetwork();
+            } else if (neuralAnimationId) {
+                cancelAnimationFrame(neuralAnimationId);
+            }
+        }
+
+        function randomizeNeurons() {
+            initNeuralNetwork();
+        }
+
+        function updateAuroraColors(startColor, endColor) {
+            const gradient = document.getElementById('auroraGradient');
+            const stops = gradient.getElementsByTagName('stop');
+            
+            // Update first stop
+            stops[0].setAttribute('stop-color', startColor);
+            stops[0].getElementsByTagName('animate')[0].setAttribute('values', 
+                `${startColor};${endColor};${startColor}`);
+            
+            // Update second stop
+            stops[1].setAttribute('stop-color', endColor);
+            stops[1].getElementsByTagName('animate')[0].setAttribute('values',
+                `${endColor};${startColor};${endColor}`);
+        }
+
+        // Add this to the DOMContentLoaded event listener:
+
+        document.querySelectorAll('.color-btn').forEach(button => {
+            button.addEventListener('click', (e) => {
+                // Remove active class from all buttons
+                document.querySelectorAll('.color-btn').forEach(btn => 
+                    btn.classList.remove('active'));
+                
+                // Add active class to clicked button
+                e.target.classList.add('active');
+                
+                // Get and apply colors
+                const colors = JSON.parse(e.target.dataset.colors);
+                updateAuroraColors(colors[0], colors[1]);
+            });
+        });
+
+        // Initialize everything
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize Aurora particles
+            for (let i = 0; i < 50; i++) {
+                particles.push(createParticle());
+            }
+            updateParticles();
+
+            // Initialize Neural Network
+            initNeuralNetwork();
+            updateNeuralNetwork();
+
+            // Add event listeners for Aurora controls
+            document.getElementById('aurora-speed').addEventListener('input', (e) => {
+                const speed = e.target.value;
+                document.querySelectorAll('.aurora-wave animate').forEach(anim => {
+                    if (!auroraAnimationsPaused) {
+                        anim.setAttribute('dur', `${3/speed}s`);
+                    }
+                });
+            });
+
+            document.getElementById('aurora-blur').addEventListener('input', (e) => {
+                const blur = e.target.value;
+                document.getElementById('auroraBlur').firstElementChild.setAttribute('stdDeviation', blur);
+            });
+
+            // Add event listeners for Neural Network controls
+            document.getElementById('neuron-count').addEventListener('input', () => {
+                initNeuralNetwork();
+            });
+
+            document.getElementById('neural-speed').addEventListener('input', (e) => {
+                // Speed is automatically picked up in the update loop
+            });
+
+            document.getElementById('connection-distance').addEventListener('input', (e) => {
+                // Distance is automatically picked up in the update loop
+            });
+        });
+    </script>
+</body>
+</html>            

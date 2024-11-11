@@ -1,0 +1,303 @@
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<title>GL Shaders Example - Three.js</title>
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+		<style>
+			body {
+				color: #ffffff;
+				font-family:Monospace;
+				font-size:13px;
+				text-align:center;
+				font-weight: bold;
+
+				background-color: #000000;
+				margin: 0px;
+				overflow: hidden;
+			}
+
+			#info {
+				position: absolute;
+				top: 0px; width: 100%;
+				padding: 5px;
+			}
+
+			a {
+
+				color: #ffffff;
+			}
+
+			#oldie a { color:#da0 }
+		</style>
+	</head>
+	<body>
+
+		<div id="container"></div>
+		<div id="info"><a href="http://github.com/mrdoob/three.js" target="_blank">three.js</a> - WebGL - Darren's GL Shader Demo</div>
+
+		<script src="../assets/js/Three.js"></script>
+
+		<script src="../assets/js/Detector.js"></script>
+		<!-- <script src="js/Stats.js"></script>  -->
+		<script src="../assets/js/dat.gui.min.js"></script>
+
+		<script id="vertexShader" type="x-shader/x-vertex">
+
+			void main()	{
+
+				gl_Position = vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+		<script id="fragmentShader" type="x-shader/x-fragment">
+
+			uniform vec2 resolution;
+			uniform float time;
+			uniform float var1;
+			uniform float var2;
+			uniform float col1;
+			uniform float col2;
+			uniform float zoom;
+			uniform int symmetric;
+			uniform int colormode;
+			uniform int generator;
+
+			float rand(vec2 co){
+				return fract(sin(time+dot(co.xy ,vec2(12.9898,78.233))) * (43758.5453));
+			}
+
+			vec3 cos_sin(float time, float x, float y, float ar,float var1, float var2, float col1, float col2) {
+				float b = mod( time + 3.0 * sin( var1/2.0 * x ) + 2.0 * cos( var2/2.0 * y), ar);
+				float r = mod( b + time/3.0 + col1*x, ar);
+				float g = mod( b + time/3.0 + col2*y, ar);
+				return vec3(r,g,b);
+			}
+
+			void main()	{
+				float _zoom = zoom / 50.0;
+				float ar = 1.3 * _zoom;
+				float ar_2 = ar/2.0;
+				vec2 p = gl_FragCoord.xy / resolution.xy;
+				float cx, cy;
+				float r,g,b;
+				// x and y will range from [0,1.25] and (0,0) is the lower left corner
+				float x = p.x * _zoom;
+				float y = p.y * _zoom;
+
+				if (symmetric > 0) {
+					// Make this a mirror symmetry at the center point
+					if ( x > ar_2 ) {
+						x = ar - x;
+					}
+					if ( y > ar_2 ) {
+						y = ar - y;
+					}
+					
+					// move (0,0) point to be in the center
+					x = ar_2 - x;
+					y = ar_2 - y;
+					cx = 0.0;
+					cy = 0.0;
+				} else {
+					x = x - ar_2;
+					y = y - ar_2;
+					cx = ar_2;
+					cy = ar_2;
+				}
+
+				//col = cos_sin(time,x,y,ar,var1,var2,col1,col2);
+				//r = col.x;
+				//g = col.y;
+				//b = col.z;
+
+				if (generator == 0) {
+					b = mod( time + 3.0 * sin( var1/2.0 * x ) + 2.0 * cos( var2/2.0 * y), ar);
+					r = mod( b + time/3.0 + col1*x, ar);
+					g = mod( b + time/3.0 + col2*y, ar);
+				} else if (generator == 1) {
+					b = mod(time + x* cos(var1 * x + time) + y * sin(var2 * y + time) + log(var1*(x-cx)*(x-cx) + var2*(y-cy)*(y-cy)), ar);
+					r = mod( time/3.0 + (col1 * (x-cx) / (y + 2.0)), ar);
+					g = mod( time/3.0 + (col2 *(y-cy)/(x+2.0)), ar);
+				}
+
+				
+				if (colormode == 0) {
+					gl_FragColor=vec4(r ,g , b, 1.0);
+				} else if (colormode == 1 ) {
+					float c = mod(r * g + b, 1.0);
+					gl_FragColor=vec4(c ,c , c, 1.0);
+				} else if (colormode == 2 ) {
+					gl_FragColor=vec4(0 ,0 , b, 1.0);
+				} else if (colormode == 3 ) {					
+					r = abs(r-b);
+					g = abs(g-b);
+					gl_FragColor=vec4(r, g , b, 1.0);
+				} else if (colormode == 4 ) {	
+					float c = (r+b+g)/3.0;			
+					gl_FragColor=vec4(c,c,c, 1.0);
+				} else if (colormode == 5 ) {	
+					r = min(r,b);
+					g = min(g,b);				
+					gl_FragColor=vec4(r, g , b, 1.0);
+				} else if (colormode == 6 ) {					
+					r = max(r,b);
+					g = max(g,b);				
+					gl_FragColor=vec4(r, g , b, 1.0);
+				} else if (colormode == 7 ) {					
+					float avg = (r+b+g)/3.0;
+					float min = min(min(r,b),g);
+					float max = max(max(r,b),g);
+					gl_FragColor=vec4(min, avg, max, 1.0);
+				} else if (colormode == 8 ) {
+					float c = mod(r * g + b, 1.0);
+					gl_FragColor=vec4(c ,0 , 0, 1.0);
+				} else if (colormode == 9 ) {
+					float c = mod(r * g + b, 1.0);
+					gl_FragColor=vec4(0 ,c , 0, 1.0);
+				} else if (colormode == 10 ) {
+					float c = mod(r * g + b, 1.0);
+					gl_FragColor=vec4(0 ,0 , c, 1.0);
+				}
+			}
+
+		</script>
+
+		<script>
+
+			if ( ! Detector.webgl ) Detector.addGetWebGLMessage();
+
+			var container, stats;
+
+			var camera, scene, renderer;
+
+			var uniforms, material, mesh;
+
+			var mouseX = 0, mouseY = 0,
+			lat = 0, lon = 0, phy = 0, theta = 0;
+
+			var windowHalfX = window.innerWidth / 2;
+			var windowHalfY = window.innerHeight / 2;
+
+			let config = { var1: 17.0, 
+				var2: 19.0,
+				col1: 2.0,
+				col2: 3.0,
+				speed: 50.0,
+				zoom: 50.0,
+				symmetric: false,
+				colormode: 3,
+				generator: 0
+			};
+			var gui = new dat.GUI();
+			gui.add(config, 'var1', 0, 90.0).name('var1');
+			gui.add(config, 'var2', 0, 90.0).name('var2');
+			gui.add(config, 'col1', 0, 90.0).name('col1');
+			gui.add(config, 'col2', 0, 90.0).name('col2');
+			gui.add(config, 'speed',1.0, 100.0).name('speed');
+			gui.add(config, 'zoom',25.0, 200.0).name('zoom');
+			gui.add(config, 'symmetric').name('symmetric');
+			gui.add(config, 'colormode', {'Colors': 0, 
+				'Multiplier': 1, 
+				'Blue': 2,
+				'Absolute Diff': 3,
+				'Avg Grayscale': 4,
+				'Min RG': 5,
+				'Max RG': 6,
+				'MinAvgMax': 7,
+				'Multiplier - Red': 8, 
+				'Multiplier - Green': 9, 
+				'Multiplier - Blue': 10, 
+			}).name('colormode');
+			gui.add(config, 'generator', {'Sin/Cos': 0, 'Hybrid': 1}).name('generator');
+			keys = ['var1', 'var2', 'col1', 'col2', 'zoom', 'symmetric', 'colormode', 'generator'];
+
+			init();
+			animate();
+
+			function init() {
+
+				container = document.getElementById( 'container' );
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.Camera();
+				camera.position.z = 1;
+				scene.add( camera );
+
+				uniforms = {
+					time: { type: "f", value: 1.0 },
+					resolution: { type: "v2", value: new THREE.Vector2() },
+					var1: { type: "f", value: config.var1},
+					var2: { type: "f", value: config.var2},
+					col1: { type: "f", value: config.col1},
+					col2: { type: "f", value: config.col2},
+					zoom: { type: "f", value: config.zoom},
+					symmetric: { type: "i", value: config.symmetric },
+					colormode: { type: "i", value: config.colormode },
+					generator: { type: "i", value: config.generator },
+				};
+
+				material = new THREE.ShaderMaterial( {
+
+					uniforms: uniforms,
+					vertexShader: document.getElementById( 'vertexShader' ).textContent,
+					fragmentShader: document.getElementById( 'fragmentShader' ).textContent
+
+					} );
+
+				mesh = new THREE.Mesh( new THREE.PlaneGeometry( 2, 2), material );
+				scene.add( mesh );
+
+				renderer = new THREE.WebGLRenderer();
+				container.appendChild( renderer.domElement );
+
+				//stats = new Stats();
+				//stats.domElement.style.position = 'absolute';
+				//stats.domElement.style.top = '0px';
+				//container.appendChild( stats.domElement );
+
+				onWindowResize();
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function onWindowResize( event ) {
+
+				uniforms.resolution.value.x = window.innerWidth;
+				uniforms.resolution.value.y = window.innerHeight;
+				renderer.setSize( window.innerWidth, window.innerHeight );
+
+			}
+
+			//
+
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				render();
+				//stats.update();
+
+			}
+
+
+			function render() {
+
+				uniforms.time.value += config.speed/1000.0;
+				for (var i in keys) {
+					uniforms[keys[i]].value = config[keys[i]];
+				}
+				
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+	</body>
+</html>
