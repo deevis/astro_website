@@ -49,6 +49,19 @@ All commands are run from the root of the project, from a terminal:
 | `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
 | `npm run astro -- --help` | Get help using the Astro CLI                     |
 
+
+## 
+```
+docker build -t astro-website .
+docker save -o astro-website.tar astro-website
+scp .\astro-website.tar user@domain:astro-website.tar
+```
+
+```
+docker load -i ~/astro-website.tar
+docker run -d --name astro-website --network my_shared_network -p 4321:4321 astro-website:latest
+```
+
 ## 👀 Want to learn more?
 
 Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
