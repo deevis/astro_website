@@ -13,10 +13,10 @@
         "image": "/images/articles/ai-enterprise.jpg"
       },
       {
-        "title": "Cloud Migration Strategies",
-        "description": "A comprehensive guide to successful cloud migration for enterprise applications.",
-        "href": "/articles/cloud-migration",
-        "image": "/images/articles/cloud.jpg"
+        "title": "JSON Schema - Finally Becoming a Thing",
+        "description": "JSON was the everything savior to the XML prisoner.  But they forgot one little detail...",
+        "href": "/articles/json-schema-overlooked",
+        "image": "/images/articles/json-schema-overlooked.jpg"
       },
       {
         "title": "Another Cloud Migration Strategies",

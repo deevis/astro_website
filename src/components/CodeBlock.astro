@@ -1,0 +1,63 @@
+---
+interface Props {
+  language?: string;
+  title?: string;
+  class?: string;
+}
+
+const { 
+  language = 'plaintext',
+  title,
+  class: className = '' 
+} = Astro.props;
+
+// Map of languages to their display names
+const languageNames = {
+  js: 'JavaScript',
+  ts: 'TypeScript',
+  jsx: 'React',
+  tsx: 'React TypeScript',
+  python: 'Python',
+  ruby: 'Ruby',
+  java: 'Java',
+  cpp: 'C++',
+  cs: 'C#',
+  go: 'Go',
+  rust: 'Rust',
+  swift: 'Swift',
+  kotlin: 'Kotlin',
+  php: 'PHP',
+  sql: 'SQL',
+  html: 'HTML',
+  css: 'CSS',
+  scss: 'SCSS',
+  shell: 'Shell',
+  bash: 'Bash',
+  plaintext: 'Plain Text'
+};
+---
+
+<div class:list={[
+  'rounded-lg overflow-hidden mb-4',
+  'bg-gray-50 dark:bg-gray-900',
+  'border border-gray-200 dark:border-gray-700',
+  className
+]}>
+  {(title || language) && (
+    <div class="flex items-center justify-between px-4 py-2 border-b border-gray-200 dark:border-gray-700">
+      {title && (
+        <span class="text-sm font-medium text-gray-600 dark:text-gray-300">
+          {title}
+        </span>
+      )}
+      {language && (
+        <span class="text-xs font-medium text-gray-500 dark:text-gray-400">
+          {languageNames[language] || language}
+        </span>
+      )}
+    </div>
+  )}
+  <div class="p-4 overflow-x-auto">
+    <pre class="language-{language}"><code class="language-{language}"><slot /></code></pre>
+  </div>
+</div> 

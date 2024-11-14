@@ -1,0 +1,70 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
+import { getCollection } from 'astro:content';
+
+// Generate static paths for all articles
+export async function getStaticPaths() {
+  const articles = await getCollection('articles');
+  return articles.map(article => ({
+    params: { slug: article.slug },
+    props: { article },
+  }));
+}
+
+// Get the article data from props
+const { article } = Astro.props;
+// Render the MDX content
+const { Content } = await article.render();
+
+// Format the date
+const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric'
+});
+---
+
+<Layout title={`${article.data.title} | Professional Portfolio`}>
+  <Navigation />
+  <main class="pt-16 pb-16">
+    <div class="container mx-auto px-4">
+      <article class="prose prose-sm max-w-3xl mx-auto 
+        [&>h1]:text-xl
+        [&>h2]:text-lg
+        [&>h3]:text-base
+        [&>p]:text-sm
+        [&>ul]:text-sm
+        [&>ol]:text-sm
+        prose-headings:font-bold 
+        prose-a:text-primary-600 
+        prose-img:rounded-xl
+        prose-code:text-primary-600
+        dark:prose-invert 
+        dark:prose-a:text-primary-400
+        dark:prose-code:text-primary-400">
+        <img 
+          src={article.data.image.src} 
+          alt={article.data.image.alt}
+          class="w-full aspect-video object-cover mb-4"
+        />
+        <h1 class="!text-2xl mb-2">{article.data.title}</h1>
+        <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 -mt-2">
+          <span>{article.data.author}</span>
+          <span>•</span>
+          <time datetime={article.data.publishDate}>{formattedDate}</time>
+        </div>
+        <div class="flex gap-1 flex-wrap mt-2 mb-4">
+          {article.data.tags.map(tag => (
+            <span class="bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full text-xs">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <Content />
+      </article>
+    </div>
+  </main>
+  <Footer />
+</Layout> 

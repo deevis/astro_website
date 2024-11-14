@@ -3,6 +3,7 @@ import '@fontsource/inter/400.css';
 import '@fontsource/inter/500.css';
 import '@fontsource/inter/600.css';
 import '@fontsource/inter/700.css';
+import 'prismjs/themes/prism-tomorrow.css';
 
 interface Props {
   title: string;
@@ -36,9 +37,16 @@ const {
         document.documentElement.classList.remove('dark');
       }
     </script>
+    <link 
+      rel="stylesheet" 
+      href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-tomorrow.min.css"
+    />
   </head>
   <body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white transition-colors duration-200">
     <slot />
+    <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
+    <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>
   </body>
 </html>
 
