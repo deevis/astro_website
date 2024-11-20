@@ -3,12 +3,14 @@ interface Props {
   language?: string;
   title?: string;
   class?: string;
+  code?: string;
 }
 
 const { 
   language = 'plaintext',
   title,
-  class: className = '' 
+  class: className = '',
+  code
 } = Astro.props;
 
 // Map of languages to their display names
@@ -60,4 +62,26 @@ const languageNames = {
   <div class="p-4 overflow-x-auto">
     <pre class="language-{language}"><code class="language-{language}"><slot /></code></pre>
   </div>
-</div> 
+</div>
+
+<style is:global>
+  pre {
+    margin: 0 !important;
+    padding: 0 !important;
+  }
+  pre code {
+    white-space: pre !important;
+    word-spacing: normal !important;
+    word-break: normal !important;
+    word-wrap: normal !important;
+    tab-size: 4 !important;
+    hyphens: none !important;
+  }
+  .token.comment {
+    display: inline !important;
+    color: #6a9955 !important;
+  }
+  .token.string {
+    color: #ce9178 !important;
+  }
+</style> 

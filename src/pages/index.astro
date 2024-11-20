@@ -3,8 +3,16 @@ import Layout from '../layouts/Layout.astro';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import CardCarousel from '../components/CardCarousel.astro';
+import Card from '../components/Card.astro';
 import { projects } from '../config/projects.json';
-import { articles } from '../config/articles.json';
+import { getCollection } from 'astro:content';
+
+// Get all articles from the content collection and sort by date
+const articles = await getCollection('articles');
+const sortedArticles = articles.sort((a, b) => 
+  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
+);
+
 ---
 
 <Layout title="Professional Portfolio">
@@ -40,6 +48,27 @@ import { articles } from '../config/articles.json';
         </div>
       </section>
 
+    <!-- Latest Articles -->
+    <section class="py-16 bg-gray-50 dark:bg-zinc-800">
+      <div class="container mx-auto px-4">
+        <h1 class="text-2xl font-bold mb-8">Articles</h1>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {sortedArticles.map((article) => (
+            <Card 
+              title={article.data.title}
+              description={article.data.description}
+              image={article.data.image.src}
+              imageAlt={article.data.image.alt}
+              href={`/articles/${article.slug}`}
+              date={article.data.publishDate}
+              author={article.data.author}
+              tags={article.data.tags}
+            />
+          ))}
+        </div>
+        </div>
+    </section>
+
     <!-- Featured Projects -->
     <section class="py-16 bg-white dark:bg-zinc-900">
       <div class="container mx-auto px-4">
@@ -47,13 +76,7 @@ import { articles } from '../config/articles.json';
       </div>
     </section>
 
-    <!-- Latest Articles -->
-    <section class="py-16 bg-gray-50 dark:bg-zinc-800">
-      <div class="container mx-auto px-4">
-        <CardCarousel title="Latest Articles" items={articles} />
-      </div>
-    </section>
-
+    
       <!-- Skills Overview -->
       <section class="py-16 bg-white dark:bg-zinc-900">
         <div class="container mx-auto px-4">

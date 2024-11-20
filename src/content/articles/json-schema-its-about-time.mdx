@@ -1,0 +1,102 @@
+---
+title: "JSON Schema - It's About Time"
+publishDate: "2024-01-27"
+author: "Darren Hicks"
+image: {
+  src: "/images/articles/json-schema-its-about-time.webp",
+  alt: "JSON Schema - It's About Time"
+}
+description: "Turns out having provably valid data might be important.  JSON Schema - took you long enough."
+tags: ["json", "json schema", "data integrity", "api"]
+---
+
+import { Image } from 'astro:assets';
+import Alert from '/src/components/Alert.astro';
+import CodeBlock from '/src/components/CodeBlock.astro';
+import Mermaid from '/src/components/Mermaid.astro';
+
+# The Tragic Tale of JSON Schema: A Cautionary Tale from the JSON-verse
+
+Ah, JSON, the darling of data serialization formats. Lightweight, human-readable, and fast to parse—JSON came into our lives like a breath of fresh air in the early 2000s, sweeping aside XML with all its verbose `<tags>` and angle-bracket drama. JSON was the cool kid, the rebel, the one you’d want to take to a hackathon. But let’s be honest: JSON grew up too fast, and it had to learn some hard lessons along the way. One of the most tragic lessons? The painfully slow adoption of JSON Schema as a first-class concern.
+
+---
+
+## **The Rise of JSON and the Fall of XML**
+
+Let’s rewind to 2001. XML was ruling the roost. If you wanted to describe, validate, and enforce the structure of your data, you had the venerable **XML Schema Definition (XSD)**—a verbose, overly complicated, yet undeniably powerful mechanism for defining XML documents. It wasn’t pretty, but it got the job done.
+
+Then along came **Douglas Crockford**, who in 2002 gave us JSON—a lightweight, syntax-sane alternative to XML. It was simple, elegant, and easy to parse. Developers embraced JSON with open arms, tossing out their `<xs:complexType>`s and `<xs:sequence>`s like yesterday’s news.
+
+But in our giddy rush to adopt JSON, we collectively forgot something important: **how do we validate this stuff?**
+
+---
+
+## **The Early Dark Ages of JSON Validation**
+
+For years, the JSON world coasted on vibes alone. Need to validate JSON? Write some custom code. Maybe use a library if you’re feeling fancy. Want to enforce a schema? Schema? What’s that?
+
+Meanwhile, XML developers were sitting smugly with their XSDs, silently judging JSON devs for their reckless lack of validation. (To be fair, they deserved it. Validation is not optional in the grown-up world of data exchange.)
+
+The JSON community had opportunities to learn from XML's mistakes. We saw how bloated and convoluted XSD was, how it caused endless headaches with its Byzantine syntax and excessive complexity. Yet instead of taking notes and improving upon the idea, we just… ignored it.
+
+---
+
+## **JSON Schema: The Long Road to Recognition**
+
+JSON Schema first appeared as a draft proposal back in **2010**, but adoption was glacial. It wasn’t until **2016**, with the release of Draft-06, that JSON Schema really started to gain traction. For reference, XML Schema had been a W3C recommendation since **2001**. That’s 15 years of procrastination in JSON-land.
+
+### **Why Did It Take So Long?**
+1. **Hubris**: JSON developers thought they didn’t need validation because JSON was “so simple.” Spoiler: simplicity doesn’t eliminate complexity; it just hides it until it explodes in production.
+2. **Fragmentation**: Everyone rolled their own validation tools and libraries, leading to an ecosystem as fractured as a plate dropped in a JSON-encoded restaurant review.
+3. **Indifference**: JSON Schema drafts existed, but the community just didn’t care. “It’s not sexy,” they said. Well, neither is debugging malformed data at 3 AM, but here we are.
+
+---
+
+## **The JSON Schema Renaissance**
+
+By the late 2010s, the industry finally got its act together. **OpenAPI 3.0**, released in 2017, adopted JSON Schema as a core component, legitimizing its place in the JSON ecosystem. Frameworks like **Ajv** made schema validation performant and easy to integrate. At last, JSON Schema was living up to its potential.
+
+<Mermaid
+  chart={`
+    graph TD
+      A[2010: JSON Schema Draft-01] --> B[2016: Draft-06]
+      B --> C[2017: OpenAPI 3.0]
+      C --> D[2020: JSON Schema Draft 2020-12]
+      D --> E[Now: JSON Schema is Awesome!]
+  `}
+/>
+
+But let’s not pretend we’re off the hook. It shouldn’t have taken **15 years** to establish something so fundamental. The XML community, for all its flaws, gave us a roadmap. We just refused to read the map because we were too busy patting ourselves on the back for escaping the `<xs:hell>`.
+
+---
+
+## **Lessons Learned (Hopefully)**
+
+### **1. Don’t Ignore History**
+The XML world made mistakes—lots of them. But JSON devs could have avoided years of validation chaos by studying what worked (and what didn’t) in XSD. 
+
+### **2. Simplicity Isn’t a Substitute for Structure**
+JSON’s simplicity is a double-edged sword. Without schemas, simplicity quickly devolves into chaos. A simple format deserves a simple, standard way to validate it. JSON Schema is that standard.
+
+### **3. Community Matters**
+The JSON community’s fragmented approach to validation delayed the adoption of JSON Schema. A unified effort from the start would have saved us years of trouble.
+
+---
+
+## **Conclusion: The Redemption of JSON Schema**
+
+Today, JSON Schema is a first-class citizen in the JSON ecosystem, and all is right with the world. But let’s not forget the painful years of neglect and missed opportunities. It’s a cautionary tale for developers everywhere: don’t let hubris and complacency keep you from solving fundamental problems.
+
+XML devs, we owe you an apology. You went through the growing pains so we wouldn’t have to, and we ignored your warnings. To the JSON Schema team and its advocates: thank you for your patience and persistence. You deserve a medal—or at least a really good PR.
+
+Now, let us never speak of `<xs:complexType>` again.
+
+<Mermaid
+  chart={`
+    graph TD
+      A[XML Community] -->|2001: XSD| B[Lessons Learned]
+      B -->|Ignored| C[JSON Community]
+      C -->|2010: Draft-01| D[JSON Schema Emerges]
+      D -->|2017: OpenAPI 3.0| E[Finally Adopted]
+  `}
+/>

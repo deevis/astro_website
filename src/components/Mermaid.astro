@@ -1,0 +1,48 @@
+---
+interface Props {
+  chart: string;
+  class?: string;
+}
+
+const { chart, class: className = '' } = Astro.props;
+---
+
+<div class:list={["mermaid", className]}>
+  {chart}
+</div>
+
+<script>
+  import mermaid from 'mermaid';
+
+  // Initialize mermaid with custom theme
+  mermaid.initialize({
+    startOnLoad: true,
+    theme: 'default',
+    themeVariables: {
+      darkMode: document.documentElement.classList.contains('dark'),
+    },
+    htmlLabels: true,
+    securityLevel: 'loose',
+  });
+
+  // Re-render diagrams when dark mode changes
+  const observer = new MutationObserver((mutations) => {
+    mutations.forEach((mutation) => {
+      if (mutation.attributeName === 'class') {
+        const isDark = document.documentElement.classList.contains('dark');
+        mermaid.initialize({
+          theme: 'default',
+          themeVariables: {
+            darkMode: isDark,
+          },
+        });
+        mermaid.init();
+      }
+    });
+  });
+
+  observer.observe(document.documentElement, {
+    attributes: true,
+    attributeFilter: ['class'],
+  });
+</script> 
