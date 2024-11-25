@@ -17,29 +17,29 @@ const sortedArticles = articles.sort((a, b) =>
 
 <Layout title="Professional Portfolio">
   <Navigation />
-  <main class="pt-24 pb-16">
+  <main class="pt-16 pb-8">
     <div class="container mx-auto px-4">
 
       <!-- Hero Section -->
-      <section class="pt-32 pb-16 bg-gradient-to-br from-primary-50 to-white dark:from-zinc-900 dark:to-zinc-800">
+      <section class="pt-16 pb-8 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900">
         <div class="container mx-auto px-4">
-          <div class="max-w-3xl mx-auto text-center">
-            <h1 class="text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+          <div class="max-w-4xl mx-auto text-center">
+            <h1 class="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Transforming Ideas into Digital Reality
             </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+            <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
               Expert consulting services in software development, architecture, and digital transformation
             </p>
-            <div class="flex justify-center gap-4">
+            <div class="flex justify-center gap-3">
               <a
                 href="/projects"
-                class="px-6 py-3 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
               >
                 View Projects
               </a>
               <a
                 href="/contact"
-                class="px-6 py-3 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
+                class="px-4 py-2 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
               >
                 Get in Touch
               </a>
@@ -49,10 +49,10 @@ const sortedArticles = articles.sort((a, b) =>
       </section>
 
     <!-- Latest Articles -->
-    <section class="py-16 bg-gray-50 dark:bg-zinc-800">
+    <section class="py-8 bg-gray-50 dark:bg-dark-900">
       <div class="container mx-auto px-4">
-        <h1 class="text-2xl font-bold mb-8">Articles</h1>
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        <h1 class="text-2xl font-bold mb-4">Articles</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
           {sortedArticles.map((article) => (
             <Card 
               title={article.data.title}
@@ -66,38 +66,37 @@ const sortedArticles = articles.sort((a, b) =>
             />
           ))}
         </div>
-        </div>
+      </div>
     </section>
 
     <!-- Featured Projects -->
-    <section class="py-16 bg-white dark:bg-zinc-900">
+    <section class="py-8 bg-white dark:bg-dark-800">
       <div class="container mx-auto px-4">
         <CardCarousel title="Featured Projects" items={projects} />
       </div>
     </section>
 
-    
-      <!-- Skills Overview -->
-      <section class="py-16 bg-white dark:bg-zinc-900">
-        <div class="container mx-auto px-4">
-          <h2 class="text-3xl font-bold text-center mb-12 dark:text-white">Technical Expertise</h2>
-          <div class="grid grid-cols-2 md:grid-cols-3 gap-8">
-            <div class="text-center">
-              <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-2">25+</div>
-              <div class="text-gray-600 dark:text-gray-300">Years Experience</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-2">30+</div>
-              <div class="text-gray-600 dark:text-gray-300">Projects Completed</div>
-            </div>
-            <div class="text-center">
-              <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-2">10+</div>
-              <div class="text-gray-600 dark:text-gray-300">Technologies</div>
-            </div>
+    <!-- Skills Overview -->
+    <section class="py-8 bg-white dark:bg-dark-800">
+      <div class="container mx-auto px-4">
+        <h2 class="text-3xl font-bold text-center mb-6 dark:text-white">Technical Expertise</h2>
+        <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
+          <div class="text-center">
+            <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">25+</div>
+            <div class="text-gray-600 dark:text-gray-300">Years Experience</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">30+</div>
+            <div class="text-gray-600 dark:text-gray-300">Projects Completed</div>
+          </div>
+          <div class="text-center">
+            <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">10+</div>
+            <div class="text-gray-600 dark:text-gray-300">Technologies</div>
           </div>
         </div>
-      </section>
       </div>
-      </main>
+    </section>
+    </div>
+    </main>
   <Footer />
 </Layout>
