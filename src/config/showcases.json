@@ -1,6 +1,12 @@
 {
     "showcases":  [
-        {
+      {
+        "title": "Retirement Planner",
+        "description": "Discover How Your Future Earnings Impact Your Social Security Benefits",
+        "href": "html_showcase/social_security_calculator/index.html",
+        "image": "html_showcase/social_security_calculator/thumb.png"
+      },
+       {
           "title": "3D Interactive PhotoCube",
           "description": "A WebGL-powered 3D photoube with interactive controls and animations.",
           "href": "html_showcase/webgl_photocube/index.html",
@@ -19,22 +25,22 @@
             "image": "html_showcase/fps/thumb.png"
         },
         {
-            "title": "GL Shaders",
-            "description": "WebGL Shader Demonstration with lots of configurable tweaks to play with.",
-            "href": "html_showcase/gl_shaders/index.html",
-            "image": "html_showcase/gl_shaders/thumb.png"
+          "title": "Massive Tree Viewer",
+          "description": "Interactive particle system with physics simulation using Canvas API.",
+          "href": "html_showcase/tree_viewer/index.html",
+          "image": "html_showcase/tree_viewer/thumb.png"
         },
         {
-            "title": "Massive Tree Viewer",
-            "description": "Interactive particle system with physics simulation using Canvas API.",
-            "href": "html_showcase/tree_viewer/index.html",
-            "image": "html_showcase/tree_viewer/thumb.png"
-          },
-          {
           "title": "Particle System",
           "description": "Interactive particle system with physics simulation using Canvas API.",
           "href": "html_showcase/interactive_particles/index.html",
           "image": "html_showcase/interactive_particles/thumb.png"
+        },
+       {
+            "title": "GL Shaders",
+            "description": "WebGL Shader Demonstration with lots of configurable tweaks to play with.",
+            "href": "html_showcase/gl_shaders/index.html",
+            "image": "html_showcase/gl_shaders/thumb.png"
         },
         {
           "title": "SVG Animation",
