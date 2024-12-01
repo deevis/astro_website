@@ -2,15 +2,27 @@
     "showcases":  [
       {
         "title": "Retirement Planner",
-        "description": "Discover How Your Future Earnings Impact Your Social Security Benefits",
+        "description": "Learn how your future earnings (or lack thereof) impact your social security benefits",
         "href": "html_showcase/social_security_calculator/index.html",
         "image": "html_showcase/social_security_calculator/thumb.png"
       },
        {
           "title": "3D Interactive PhotoCube",
-          "description": "A WebGL-powered 3D photoube with interactive controls and animations.",
+          "description": "A WebGL-powered 3D photocube with interactive controls and animations.",
           "href": "html_showcase/webgl_photocube/index.html",
           "image": "html_showcase/webgl_photocube/thumb.png"
+        },
+        {
+          "title": "FPS Photo Realm",
+          "description": "Walk around through a WebGL rendered world built of your own Photos and Art",
+          "href": "html_showcase/fps/index.html",
+          "image": "html_showcase/fps/thumb.png"
+      },        
+        {
+          "title": "Sierpinski Generator",
+          "description": "Learn how a series of random outcomes can generate a fractal pattern.",
+          "href": "html_showcase/sierpinski_generator/index.html",
+          "image": "html_showcase/sierpinski_generator/thumb.png"
         },
         {
           "title": "Multi 3D Interactive PhotoCubes",
@@ -19,10 +31,10 @@
           "image": "html_showcase/webgl_photocube_multi/thumb.png"
         },
         {
-            "title": "FPS Photo Realm",
-            "description": "Walk around through a WebGL rendered world built of your own Photos and Art",
-            "href": "html_showcase/fps/index.html",
-            "image": "html_showcase/fps/thumb.png"
+          "title": "CryptoQuote Generator",
+          "description": "Create your own CryptoQuote puzzles",
+          "href": "html_showcase/cryptoquote_generator/index.html",
+          "image": "html_showcase/cryptoquote_generator/thumb.png"
         },
         {
           "title": "Massive Tree Viewer",

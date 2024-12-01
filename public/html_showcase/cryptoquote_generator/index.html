@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cryptoquote Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 800px;
+            margin: 20px auto;
+            padding: 0 20px;
+            line-height: 1.6;
+        }
+        textarea {
+            width: 100%;
+            height: 100px;
+            margin: 10px 0;
+            padding: 10px;
+            font-size: 16px;
+        }
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #45a049;
+        }
+        #result {
+            margin-top: 20px;
+            padding: 20px;
+            background-color: #f9f9f9;
+            border-radius: 4px;
+        }
+        .cryptoquote {
+            font-family: monospace;
+            font-size: 18px;
+            white-space: pre-wrap;
+            margin: 10px 0;
+        }
+        .key {
+            margin-top: 20px;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <h1>Cryptoquote Generator</h1>
+    
+    <p>A cryptoquote is a type of puzzle where a short piece of encrypted text is given, and the goal is to decode it. 
+    Each letter in the original text is consistently replaced with a different letter throughout the quote. 
+    For example, if 'A' is encrypted as 'X', every 'A' in the original text will be replaced with 'X' in the encrypted text.
+    Learn more about cryptoquotes on <a href="https://en.wikipedia.org/wiki/Cryptogram" target="_blank">Wikipedia</a>.</p>
+    
+    <textarea id="inputText" placeholder="Enter the text to cryptoquot-ify"></textarea>
+    <button onclick="generateCryptoquote()">Go!</button>
+    
+    <div id="result"></div>
+    <script src="/js/dbh-dev-console.js"></script>
+
+    <script>
+        function generateCryptoquote() {
+            const input = document.getElementById('inputText').value.toUpperCase();
+            const alphabet = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+            let shuffled = [...alphabet];
+            
+            // Shuffle and ensure no letter maps to itself
+            for (let i = shuffled.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffled[i], shuffled[j]] = [shuffled[j], shuffled[i]];
+            }
+            
+            // Check and fix any self-mappings
+            for (let i = 0; i < alphabet.length; i++) {
+                if (shuffled[i] === alphabet[i]) {
+                    const nextIndex = (i + 1) % alphabet.length;
+                    [shuffled[i], shuffled[nextIndex]] = [shuffled[nextIndex], shuffled[i]];
+                }
+            }
+            
+            // Create encryption mapping
+            const cipher = Object.fromEntries(alphabet.map((c, i) => [c, shuffled[i]]));
+            
+            // Create decryption mapping (for solving)
+            const decipher = Object.fromEntries(shuffled.map((c, i) => [c, alphabet[i]]));
+            
+            // Generate encrypted text
+            let encrypted = '';
+            for (let char of input) {
+                if (cipher[char]) {
+                    encrypted += cipher[char];
+                } else {
+                    encrypted += char;
+                }
+            }
+            
+            // Generate cipher key display in three columns
+            const columnLength = Math.ceil(alphabet.length / 5);
+            let keyDisplay = '<div style="display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px;">';
+            
+            // Create five columns
+            for (let col = 0; col < 5; col++) {
+                keyDisplay += '<div>';
+                const start = col * columnLength;
+                const end = Math.min(start + columnLength, alphabet.length);
+                
+                // Get the slice of alphabet for this column and sort it
+                const columnLetters = alphabet.slice(start, end).sort();
+                
+                // Create entries for each letter in the column
+                for (let letter of columnLetters) {
+                    keyDisplay += `${letter}→${decipher[letter]}<br>`;
+                }
+                keyDisplay += '</div>';
+            }
+            keyDisplay += '</div>';
+            
+            // Display results
+            const resultDiv = document.getElementById('result');
+            resultDiv.innerHTML = `
+                <h3>CryptoQuote:</h3>
+                <div class="cryptoquote">${encrypted}</div>
+                <h3>Cipher:</h3>
+                <div class="key">${keyDisplay}</div>
+            `;
+        }
+    </script>
+
+</body>
+</html>
