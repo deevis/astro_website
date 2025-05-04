@@ -1,0 +1,820 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo-Economic Simulator (Multi-Region, Force Vis)</title>
+    <script src="https://d3js.org/d3.v7.min.js"></script>
+    <style>
+        /* Basic Styling & Layout (Adjusted for new vis) */
+        body { font-family: sans-serif; display: flex; flex-direction: column; height: 100vh; margin: 0; background-color: #f0f0f0; }
+        header { background-color: #333; color: white; padding: 10px 20px; text-align: center; }
+        #main-container { display: flex; flex-grow: 1; overflow: hidden; }
+
+        #controls-panel { width: 280px; /* Slightly wider */ background-color: #e0e0e0; padding: 15px; overflow-y: auto; border-right: 1px solid #ccc; display: flex; flex-direction: column; }
+
+        #simulation-area { flex-grow: 1; display: flex; flex-direction: column; overflow: hidden; }
+
+        #visualization-panel {
+            flex-grow: 1;
+            background-color: #ffffff;
+            position: relative; /* Needed for absolute positioning within if any */
+            border-bottom: 1px solid #ccc;
+            min-height: 300px; /* More space for graph */
+            overflow: hidden; /* Hide parts of graph extending */
+        }
+
+        #chart-svg { display: block; width: 100%; height: 100%; cursor: grab; /* Indicate draggable */ }
+        #chart-svg:active { cursor: grabbing; }
+
+        #data-and-timeline { height: 200px; /* Reduced height */ display: flex; background-color: #f9f9f9; }
+
+        #data-panel { width: 50%; padding: 15px; overflow-y: auto; border-right: 1px solid #ccc; }
+        #timeline-panel { flex-grow: 1; padding: 15px; overflow-y: auto; }
+
+        /* Controls Styling */
+        #controls-panel h3 { margin-top: 0; margin-bottom: 15px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        #controls-panel h4 { margin-top: 15px; margin-bottom: 5px; }
+        #controls-panel label { display: block; margin-bottom: 3px; font-size: 0.9em; }
+        #controls-panel input[type="number"],
+        #controls-panel input[type="text"],
+        #controls-panel select { width: calc(100% - 12px); padding: 5px; margin-bottom: 10px; border: 1px solid #ccc; border-radius: 3px; }
+        #controls-panel button { display: block; width: 100%; padding: 10px; margin-top: 10px; background-color: #4CAF50; color: white; border: none; border-radius: 3px; cursor: pointer; font-size: 1em; }
+        #controls-panel button:hover { background-color: #45a049; }
+        #controls-panel button:disabled { background-color: #cccccc; cursor: not-allowed; }
+
+        /* Data & Timeline Styling */
+        #data-panel h4, #timeline-panel h4 { margin-top: 0; margin-bottom: 10px; border-bottom: 1px solid #ccc; padding-bottom: 5px; }
+        #data-panel p { margin: 5px 0; font-size: 0.9em; } /* Reduced font slightly */
+        #data-panel span { font-weight: bold; min-width: 90px; display: inline-block; } /* Wider label */
+         #data-panel ul { padding-left: 20px; margin: 5px 0; }
+         #data-panel li { font-size: 0.85em; }
+
+        #event-log { list-style-type: none; padding: 0; margin: 0; }
+        #event-log li { padding: 5px; border-bottom: 1px dotted #eee; font-size: 0.9em; }
+        #event-log li:last-child { border-bottom: none; }
+        .event-time { font-weight: bold; color: #555; margin-right: 8px; }
+        .event-location { font-style: italic; color: #777; margin-right: 8px; }
+
+        /* Placeholders */
+        #video-controls { margin-top: auto; padding-top: 15px; border-top: 1px solid #ccc; }
+        #video-controls button { background-color: #007bff; }
+        #video-controls button:hover { background-color: #0056b3; }
+
+        /* D3 Force Graph Specific Styling */
+        .link { stroke: #999; stroke-opacity: 0.6; }
+        .link.trade { stroke: steelblue; stroke-width: 2px; }
+        .link.conflict { stroke: firebrick; stroke-width: 2.5px; stroke-dasharray: 4 2; }
+        .link.sanction { stroke: orange; stroke-width: 1.5px; stroke-dasharray: 2 2; }
+
+        .node circle { stroke: #fff; stroke-width: 1.5px; }
+        .node text { font-size: 10px; font-family: sans-serif; fill: #333; pointer-events: none; /* Don't interfere with dragging node */ }
+        .node .resource-text { font-size: 8px; fill: #555; }
+
+         .tooltip {
+             position: absolute;
+             text-align: center;
+             padding: 6px;
+             font-size: 12px;
+             background: lightsteelblue;
+             border: 0px;
+             border-radius: 8px;
+             pointer-events: none; /* Don't block mouse events */
+             opacity: 0; /* Hidden by default */
+             z-index: 10;
+         }
+
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Geo-Economic Simulator (Multi-Region)</h1>
+    </header>
+
+    <div id="main-container">
+        <div id="controls-panel">
+            <h3>Simulation Setup</h3>
+
+            <label for="param-num-regions">Number of Regions:</label>
+            <input type="number" id="param-num-regions" value="5" min="2" max="20" step="1">
+
+            <label for="param-money-type">Monetary System:</label>
+            <select id="param-money-type">
+                <option value="fiat">Fiat (Simplified)</option>
+                <option value="hard">Hard Money (Bitcoin-like)</option>
+            </select>
+
+            <label for="param-sim-years">Simulation Length (Years):</label>
+            <input type="number" id="param-sim-years" value="100" step="1">
+
+            <h4>Initial Averages (Per Region)</h4>
+             <label for="param-avg-pop">Avg. Starting Pop:</label>
+            <input type="number" id="param-avg-pop" value="1000000" step="10000">
+             <label for="param-avg-gdp">Avg. Starting GDP (M):</label>
+            <input type="number" id="param-avg-gdp" value="50000" step="1000">
+             <label for="param-avg-food">Avg. Food Resource:</label>
+            <input type="number" id="param-avg-food" value="1000" step="100">
+             <label for="param-avg-energy">Avg. Energy Resource:</label>
+            <input type="number" id="param-avg-energy" value="500" step="100">
+
+            <h4>Simulation Parameters</h4>
+             <label for="param-base-growth">Base Annual GDP Growth (%):</label>
+            <input type="number" id="param-base-growth" value="1.5" step="0.1">
+             <label for="param-pop-growth">Base Annual Pop Growth (%):</label>
+            <input type="number" id="param-pop-growth" value="0.3" step="0.1">
+            <h4>Actions</h4>
+            <button id="btn-start">Start Simulation</button>
+            <button id="btn-pause" disabled>Pause Simulation</button>
+            <button id="btn-reset">Reset Simulation</button>
+
+            <div id="video-controls">
+                <h4>Output (Placeholder)</h4>
+                 <button id="btn-record" disabled>Record Video</button>
+                 <button id="btn-export-data" disabled>Export Data (JSON)</button>
+            </div>
+        </div>
+
+        <div id="simulation-area">
+            <div id="visualization-panel">
+                 <svg id="chart-svg"></svg>
+                 <div id="tooltip" class="tooltip"></div>
+            </div>
+            <div id="data-and-timeline">
+                <div id="data-panel">
+                    <h4>Global / Selected Region Data</h4>
+                    <p><span>Current Year:</span> <span id="data-current-year">0</span></p>
+                    <p><span>Total Population:</span> <span id="data-total-pop">0</span></p>
+                    <p><span>Total GDP (M):</span> <span id="data-total-gdp">0</span></p>
+                    <p><span>Money Supply:</span> <span id="data-money-supply">-</span></p>
+                    <hr>
+                    <p><b>Selected:</b> <span id="selected-region-name">None</span></p>
+                    <p><span>Population:</span> <span id="selected-region-pop">-</span></p>
+                    <p><span>GDP (M):</span> <span id="selected-region-gdp">-</span></p>
+                    <p><span>GDP p.c.:</span> <span id="selected-region-gdp-pc">-</span></p>
+                    <p><span>Resources:</span></p>
+                    <ul id="selected-region-resources"><li>-</li></ul>
+                    <p><span>Relations:</span></p>
+                    <ul id="selected-region-relations"><li>-</li></ul>
+                </div>
+                <div id="timeline-panel">
+                    <h4>Event Timeline</h4>
+                    <ul id="event-log">
+                        <li><span class="event-time">Year 0:</span> Simulation Initialized.</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // --- DOM Elements ---
+        const numRegionsInput = document.getElementById('param-num-regions');
+        const moneyTypeSelect = document.getElementById('param-money-type');
+        const simYearsInput = document.getElementById('param-sim-years');
+        const avgPopInput = document.getElementById('param-avg-pop');
+        const avgGdpInput = document.getElementById('param-avg-gdp');
+        const avgFoodInput = document.getElementById('param-avg-food');
+        const avgEnergyInput = document.getElementById('param-avg-energy');
+        const baseGrowthInput = document.getElementById('param-base-growth');
+        const popGrowthInput = document.getElementById('param-pop-growth');
+
+        const btnStart = document.getElementById('btn-start');
+        const btnPause = document.getElementById('btn-pause');
+        const btnReset = document.getElementById('btn-reset');
+
+        const dataCurrentYear = document.getElementById('data-current-year');
+        const dataTotalPop = document.getElementById('data-total-pop');
+        const dataTotalGdp = document.getElementById('data-total-gdp');
+        const dataMoneySupply = document.getElementById('data-money-supply');
+
+        const selectedRegionName = document.getElementById('selected-region-name');
+        const selectedRegionPop = document.getElementById('selected-region-pop');
+        const selectedRegionGdp = document.getElementById('selected-region-gdp');
+        const selectedRegionGdpPc = document.getElementById('selected-region-gdp-pc');
+        const selectedRegionResources = document.getElementById('selected-region-resources');
+        const selectedRegionRelations = document.getElementById('selected-region-relations');
+
+        const eventLog = document.getElementById('event-log');
+        const timelinePanel = document.getElementById('timeline-panel');
+        const svg = d3.select("#chart-svg");
+        const tooltip = d3.select("#tooltip");
+
+        // --- D3 Force Simulation Elements ---
+        let simulation;
+        let linkElements, nodeElements, textElements, resourceTextElements;
+        let width, height; // SVG dimensions
+
+        // --- Simulation State ---
+        let simulationState = {
+            running: false,
+            paused: false,
+            currentYear: 0,
+            maxYears: 100,
+            moneyType: 'fiat', // 'fiat' or 'hard'
+            hardMoneySupply: 0, // Only used if moneyType is 'hard'
+            hardMoneyIssuanceRate: 1000, // Arbitrary units issued per year initially
+            hardMoneyHalvingInterval: 4, // Years between issuance reduction
+            baseGdpGrowthRate: 0.015,
+            basePopGrowthRate: 0.003,
+            regions: [], // Array of region objects
+            links: [], // Array of link objects {source: id, target: id, status: 'neutral'/'trade'/'conflict'}
+            events: [],
+            selectedRegionId: null
+        };
+
+        let simulationInterval = null;
+        const SIMULATION_SPEED_MS = 300; // ms per year
+
+        // --- D3 Visualization Setup ---
+        function setupVisualization() {
+            width = svg.node().clientWidth || svg.node().parentElement.clientWidth;
+            height = svg.node().clientHeight || svg.node().parentElement.clientHeight;
+
+            if (!width || !height) {
+                 console.warn("SVG container has no dimensions yet. Retrying setup.");
+                 setTimeout(setupVisualization, 100);
+                 return;
+             }
+
+            svg.selectAll("*").remove(); // Clear previous elements
+
+             // Create the force simulation
+             simulation = d3.forceSimulation()
+                 .force("link", d3.forceLink().id(d => d.id).distance(100).strength(0.1)) // Link force
+                 .force("charge", d3.forceManyBody().strength(-150)) // Node repulsion
+                 .force("center", d3.forceCenter(width / 2, height / 2)) // Center force
+                 .force("collision", d3.forceCollide().radius(d => calculateNodeRadius(d.population) + 5)); // Prevent overlap
+
+             // Add encompassing group for zooming/panning
+             const g = svg.append("g").attr("class", "everything");
+
+             // Create containers for links and nodes (order matters for draw)
+             linkElements = g.append("g")
+                 .attr("class", "links")
+                 .selectAll("line");
+
+             nodeElements = g.append("g")
+                 .attr("class", "nodes")
+                 .selectAll("g.node"); // Select group containing circle and text
+
+             // Define drag behavior
+             const drag = d3.drag()
+                 .on("start", dragstarted)
+                 .on("drag", dragged)
+                 .on("end", dragended);
+
+             nodeElements.call(drag); // Apply drag to nodes
+
+             // Define zoom/pan behavior
+             const zoom = d3.zoom()
+                 .scaleExtent([0.1, 4]) // Zoom limits
+                 .on("zoom", (event) => {
+                     g.attr("transform", event.transform); // Apply zoom transform to the group
+                 });
+
+             svg.call(zoom); // Apply zoom listener to the SVG
+
+             // Tooltip setup moved to node update
+
+             // Simulation tick function (updates positions)
+             simulation.on("tick", () => {
+                 linkElements
+                     .attr("x1", d => d.source.x)
+                     .attr("y1", d => d.source.y)
+                     .attr("x2", d => d.target.x)
+                     .attr("y2", d => d.target.y);
+
+                 nodeElements
+                     .attr("transform", d => `translate(${d.x},${d.y})`);
+             });
+
+             console.log("Visualization setup complete.");
+        }
+
+        // --- D3 Visualization Update ---
+        function updateVisualization() {
+            if (!simulation) return; // Don't run if setup failed
+
+             // === Node Update ===
+             nodeElements = nodeElements.data(simulationState.regions, d => d.id); // Bind data
+
+             // Exit - Remove old nodes
+             nodeElements.exit().remove();
+
+             // Enter - Create new node groups for new data
+             const nodeEnter = nodeElements.enter().append("g")
+                 .attr("class", "node")
+                 .on("click", (event, d) => {
+                     simulationState.selectedRegionId = d.id;
+                     updateDataPanel();
+                     // Highlight selected node (optional)
+                      nodeElements.selectAll('circle').attr('stroke', '#fff').attr('stroke-width', 1.5);
+                      d3.select(event.currentTarget).select('circle').attr('stroke', 'black').attr('stroke-width', 3);
+                 })
+                 .on("mouseover", (event, d) => {
+                    tooltip.transition().duration(200).style("opacity", .9);
+                    tooltip.html(`<b>${d.name}</b><br>Pop: ${formatNumber(d.population)}<br>GDP: ${formatNumber(d.gdp)}M`)
+                        .style("left", (event.pageX + 15) + "px") // Position tooltip near cursor
+                        .style("top", (event.pageY - 28) + "px");
+                 })
+                 .on("mouseout", () => {
+                    tooltip.transition().duration(500).style("opacity", 0);
+                 })
+                 .call(d3.drag() // Apply drag handlers
+                    .on("start", dragstarted)
+                    .on("drag", dragged)
+                    .on("end", dragended));
+
+
+             // Append circle to new node groups
+             nodeEnter.append("circle")
+                 .attr("r", d => calculateNodeRadius(d.population))
+                 .attr("fill", d => calculateNodeColor(d.gdp, d.population));
+
+            // Append text label (region name) to new node groups
+            nodeEnter.append("text")
+                .attr("dy", 4) // Vertical offset
+                .attr("text-anchor", "middle")
+                .text(d => d.name);
+
+             // Append text for resources to new node groups
+             nodeEnter.append("text")
+                .attr("class", "resource-text")
+                .attr("dy", 16) // Offset below name
+                .attr("text-anchor", "middle")
+                .text(d => `F:${formatNumber(d.resources.food,0)} E:${formatNumber(d.resources.energy,0)}`); // Simple resource display
+
+             // Merge enter and update selections
+             nodeElements = nodeEnter.merge(nodeElements);
+
+             // Update existing nodes (size, color, text if needed)
+             nodeElements.select("circle")
+                 .transition().duration(SIMULATION_SPEED_MS / 2)
+                 .attr("r", d => calculateNodeRadius(d.population))
+                 .attr("fill", d => calculateNodeColor(d.gdp, d.population));
+
+             nodeElements.select(".resource-text")
+                  .text(d => `F:${formatNumber(d.resources.food,0)} E:${formatNumber(d.resources.energy,0)}`);
+
+
+             // === Link Update ===
+             linkElements = linkElements.data(simulationState.links, d => `${d.source.id}-${d.target.id}`); // Bind link data
+
+             // Exit - Remove old links
+             linkElements.exit().remove();
+
+             // Enter + Merge - Create new links and update existing ones
+             linkElements = linkElements.enter().append("line")
+                 .attr("class", d => `link ${d.status}`) // Add status class for styling
+                 .merge(linkElements);
+
+            // Update existing links (potentially change class/style based on status)
+            linkElements.attr("class", d => `link ${d.status}`); // Ensure class is up-to-date
+
+             // Update simulation nodes and links
+             simulation.nodes(simulationState.regions);
+             simulation.force("link").links(simulationState.links);
+
+             // Restart simulation gently after updates
+             simulation.alpha(0.3).restart();
+        }
+
+        // --- Drag Handlers ---
+        function dragstarted(event, d) {
+            if (!event.active) simulation.alphaTarget(0.3).restart(); // Heat up simulation during drag
+            d.fx = d.x; // Fix node position during drag
+            d.fy = d.y;
+        }
+        function dragged(event, d) {
+            d.fx = event.x;
+            d.fy = event.y;
+        }
+        function dragended(event, d) {
+            if (!event.active) simulation.alphaTarget(0); // Cool down simulation
+            d.fx = null; // Unfix node position
+            d.fy = null;
+        }
+
+        // --- Node Appearance Helpers ---
+        function calculateNodeRadius(population) {
+            return Math.max(5, Math.sqrt(population) / 300); // Scale radius based on population (adjust divisor as needed)
+        }
+         function calculateNodeColor(gdp, population) {
+             const gdpPerCapita = population > 0 ? (gdp * 1000000) / population : 0;
+             // Use a D3 color scale (e.g., sequential)
+             const colorScale = d3.scaleSequential(d3.interpolateYlGnBu) // Yellow -> Green -> Blue
+                                 .domain([5000, 80000]); // Adjust domain based on expected GDP per capita range
+             return colorScale(gdpPerCapita);
+         }
+
+        // --- Simulation Logic ---
+
+        function simulationStep() {
+            if (!simulationState.running || simulationState.paused) return;
+
+            simulationState.currentYear++;
+
+            // --- Hard Money Issuance (if applicable) ---
+            if (simulationState.moneyType === 'hard') {
+                 // Halving logic (very simplified)
+                if (simulationState.currentYear > 0 && simulationState.currentYear % simulationState.hardMoneyHalvingInterval === 0) {
+                     simulationState.hardMoneyIssuanceRate /= 2;
+                     addEvent(simulationState.currentYear, 'Global', `Hard money issuance rate halved to ${formatNumber(simulationState.hardMoneyIssuanceRate)} units/year.`);
+                 }
+                const newMoney = simulationState.hardMoneyIssuanceRate;
+                simulationState.hardMoneySupply += newMoney;
+                 // Distribute new money (simplistic: proportional to current GDP)
+                 let currentTotalGdp = simulationState.regions.reduce((sum, r) => sum + r.gdp, 0);
+                 if (currentTotalGdp > 0) {
+                     simulationState.regions.forEach(region => {
+                         // This doesn't directly add to GDP, just represents allocation
+                         // In a real model, this money would facilitate transactions/investment
+                         region.newlyAllocatedHardMoney = (region.gdp / currentTotalGdp) * newMoney;
+                     });
+                 }
+                 dataMoneySupply.textContent = formatNumber(simulationState.hardMoneySupply);
+            } else {
+                dataMoneySupply.textContent = "Fiat (N/A)";
+            }
+
+             // --- Per-Region Update ---
+            simulationState.regions.forEach(region => {
+                 // Basic Growth (potentially modified by money type)
+                 let gdpGrowthFactor = 1 + simulationState.baseGdpGrowthRate;
+                 let popGrowthFactor = 1 + simulationState.basePopGrowthRate;
+
+                 if (simulationState.moneyType === 'hard') {
+                     // Simplistic effect: slightly slower base growth under hard money?
+                     gdpGrowthFactor *= 0.98;
+                 }
+
+                 // Resource dependency (Example: low food reduces pop growth)
+                 const foodPerCapita = region.population > 0 ? region.resources.food / region.population : 0;
+                 if (foodPerCapita < 0.0005) { // Arbitrary threshold
+                     popGrowthFactor *= 0.95; // Lower growth if starving
+                     addEvent(simulationState.currentYear, region.name, `Faces food shortages, population growth slowed.`);
+                 }
+                 // Example: low energy reduces GDP growth
+                 const energyNeed = region.gdp * 0.01; // Need energy proportional to GDP (arbitrary)
+                 if (region.resources.energy < energyNeed) {
+                     gdpGrowthFactor *= 0.97; // Lower growth if energy constrained
+                      addEvent(simulationState.currentYear, region.name, `Faces energy constraints, GDP growth slowed.`);
+                 }
+
+
+                 region.population *= popGrowthFactor;
+                 region.gdp *= gdpGrowthFactor;
+
+                 // Resource Consumption/Regeneration (Very Simple)
+                 region.resources.food -= region.population * 0.001; // People consume food
+                 region.resources.energy -= region.gdp * 0.005; // Economy consumes energy
+                 region.resources.food = Math.max(0, region.resources.food + region.gdp * 0.01); // Food production tied to GDP (capped at 0)
+                 region.resources.energy = Math.max(0, region.resources.energy + 10); // Fixed small energy regeneration (e.g., renewables)
+
+                // Floor values
+                region.population = Math.max(100, region.population); // Prevent dying out completely
+                region.gdp = Math.max(1, region.gdp);
+
+             });
+
+            // --- Interaction Logic (Placeholder / Very Simple) ---
+            updateRelationships(); // Check for trade/conflict triggers
+
+            // --- Update Displays ---
+            updateDataPanel();
+            updateVisualization();
+
+            // --- Check End Condition ---
+            if (simulationState.currentYear >= simulationState.maxYears) {
+                addEvent(simulationState.currentYear, 'System', 'Simulation reached maximum duration.');
+                pauseSimulation();
+                btnStart.disabled = true;
+                btnPause.disabled = true;
+            }
+        }
+
+        // --- Simplified Interaction Logic ---
+        function updateRelationships() {
+            simulationState.links.forEach(link => {
+                const sourceRegion = simulationState.regions.find(r => r.id === link.source.id);
+                const targetRegion = simulationState.regions.find(r => r.id === link.target.id);
+                if (!sourceRegion || !targetRegion) return;
+
+                 // Basic Trade Trigger (e.g., if one has surplus food and other needs it)
+                 let startTrade = false;
+                 const sourceFoodSurplus = sourceRegion.resources.food - sourceRegion.population * 0.0015; // Has more than 1.5x consumption
+                 const targetFoodDeficit = targetRegion.population * 0.0008 - targetRegion.resources.food; // Has less than 0.8x consumption
+
+                 if (sourceFoodSurplus > 100 && targetFoodDeficit > 50) startTrade = true;
+                 // Symmetrical check
+                 const targetFoodSurplus = targetRegion.resources.food - targetRegion.population * 0.0015;
+                 const sourceFoodDeficit = sourceRegion.population * 0.0008 - sourceRegion.resources.food;
+                  if (targetFoodSurplus > 100 && sourceFoodDeficit > 50) startTrade = true;
+
+
+                // Basic Conflict Trigger (random chance increases if one region is much stronger)
+                 let startConflict = false;
+                 const gdpRatio = sourceRegion.gdp / (targetRegion.gdp + 1); // Avoid div by zero
+                 if (Math.random() < 0.005) { // Low base random chance
+                     if (gdpRatio > 5 || gdpRatio < 0.2) { // Higher chance if disparity is large
+                        if (Math.random() < 0.1) startConflict = true;
+                     } else {
+                         if (Math.random() < 0.02) startConflict = true;
+                     }
+                 }
+
+                 // State Transitions
+                 if (link.status === 'conflict') {
+                     // Conflict might end randomly
+                     if (Math.random() < 0.1) {
+                          link.status = 'neutral';
+                          addEvent(simulationState.currentYear, `${sourceRegion.name}-${targetRegion.name}`, `Conflict resolved.`);
+                     } else {
+                        // Apply conflict effects (simple: damage GDP/pop)
+                        sourceRegion.gdp *= 0.995; sourceRegion.population *= 0.998;
+                        targetRegion.gdp *= 0.995; targetRegion.population *= 0.998;
+                     }
+                 } else if (startConflict) {
+                     link.status = 'conflict';
+                      addEvent(simulationState.currentYear, `${sourceRegion.name}-${targetRegion.name}`, `Conflict erupted!`);
+                     // Initial conflict damage
+                     sourceRegion.gdp *= 0.98; sourceRegion.population *= 0.99;
+                     targetRegion.gdp *= 0.98; targetRegion.population *= 0.99;
+                 } else if (startTrade && link.status !== 'trade') {
+                      link.status = 'trade';
+                       addEvent(simulationState.currentYear, `${sourceRegion.name}-${targetRegion.name}`, `Trade relationship established.`);
+                      // Simplistic trade effect: small boost to both GDPs
+                      sourceRegion.gdp *= 1.001;
+                      targetRegion.gdp *= 1.001;
+                 } else if (link.status === 'trade') {
+                     // Trade might stop if conditions change (or randomly)
+                     if (!startTrade && Math.random() < 0.05) {
+                         link.status = 'neutral';
+                         addEvent(simulationState.currentYear, `${sourceRegion.name}-${targetRegion.name}`, `Trade relationship ended.`);
+                     } else {
+                         // Simulate resource exchange during trade (very basic)
+                         // Example: Region with surplus food gives some to deficit region
+                         if(sourceFoodSurplus > 50 && targetFoodDeficit > 20) {
+                             const tradeAmount = Math.min(sourceFoodSurplus * 0.1, targetFoodDeficit * 0.5, 50); // Trade a fraction, capped
+                             sourceRegion.resources.food -= tradeAmount;
+                             targetRegion.resources.food += tradeAmount;
+                             // Assume some GDP gain from trade activity itself
+                             sourceRegion.gdp += tradeAmount * 0.05; // GDP gain proportional to resource value
+                             targetRegion.gdp += tradeAmount * 0.05;
+                         } // Add symmetrical check and energy trade etc. for more complexity
+                     }
+                 }
+                 // Sanctions could be another state based on political factors (not implemented)
+
+             });
+        }
+
+
+        // --- UI Update Logic ---
+
+        function updateDataPanel() {
+             const totalPop = simulationState.regions.reduce((sum, r) => sum + r.population, 0);
+             const totalGdp = simulationState.regions.reduce((sum, r) => sum + r.gdp, 0);
+
+             dataCurrentYear.textContent = simulationState.currentYear;
+             dataTotalPop.textContent = formatNumber(totalPop);
+             dataTotalGdp.textContent = formatNumber(totalGdp);
+             // Money supply updated in simulation step
+
+             const selectedRegion = simulationState.regions.find(r => r.id === simulationState.selectedRegionId);
+             if (selectedRegion) {
+                 selectedRegionName.textContent = selectedRegion.name;
+                 selectedRegionPop.textContent = formatNumber(selectedRegion.population);
+                 selectedRegionGdp.textContent = formatNumber(selectedRegion.gdp);
+                 const gdpPc = selectedRegion.population > 0 ? (selectedRegion.gdp * 1000000) / selectedRegion.population : 0;
+                 selectedRegionGdpPc.textContent = formatNumber(gdpPc, 0);
+
+                 // Display resources
+                 selectedRegionResources.innerHTML = ''; // Clear previous
+                 for (const [key, value] of Object.entries(selectedRegion.resources)) {
+                     const li = document.createElement('li');
+                     li.textContent = `${key.charAt(0).toUpperCase() + key.slice(1)}: ${formatNumber(value, 0)}`;
+                     selectedRegionResources.appendChild(li);
+                 }
+
+                 // Display relationships
+                 selectedRegionRelations.innerHTML = ''; // Clear previous
+                 simulationState.links.forEach(link => {
+                     let otherRegionId = null;
+                     if (link.source.id === selectedRegion.id) otherRegionId = link.target.id;
+                     else if (link.target.id === selectedRegion.id) otherRegionId = link.source.id;
+
+                     if (otherRegionId) {
+                          const otherRegion = simulationState.regions.find(r => r.id === otherRegionId);
+                          if (otherRegion) {
+                              const li = document.createElement('li');
+                              li.textContent = `${otherRegion.name}: ${link.status}`;
+                              if (link.status === 'trade') li.style.color = 'steelblue';
+                              if (link.status === 'conflict') li.style.color = 'firebrick';
+                              selectedRegionRelations.appendChild(li);
+                          }
+                     }
+                 });
+                  if (selectedRegionRelations.innerHTML === '') {
+                     selectedRegionRelations.innerHTML = '<li>None</li>';
+                  }
+
+             } else {
+                 selectedRegionName.textContent = 'None';
+                 selectedRegionPop.textContent = '-';
+                 selectedRegionGdp.textContent = '-';
+                 selectedRegionGdpPc.textContent = '-';
+                 selectedRegionResources.innerHTML = '<li>-</li>';
+                  selectedRegionRelations.innerHTML = '<li>-</li>';
+             }
+        }
+
+        function addEvent(year, location, description) {
+            const eventItem = document.createElement('li');
+            // Truncate long descriptions slightly for display
+            const displayDesc = description.length > 100 ? description.substring(0, 97) + '...' : description;
+            eventItem.innerHTML = `<span class="event-time">Y${year}:</span> <span class="event-location">[${location}]</span> ${displayDesc}`;
+            eventItem.title = description; // Full description on hover
+            // Prepend new events to the top
+            eventLog.insertBefore(eventItem, eventLog.firstChild);
+             // Limit log length (e.g., keep last 100 entries)
+             while (eventLog.children.length > 100) {
+                 eventLog.removeChild(eventLog.lastChild);
+             }
+            simulationState.events.push({ year, location, description });
+        }
+
+
+        // --- Control Logic ---
+
+        function initializeSimulationState() {
+             simulationState.currentYear = 0;
+             simulationState.moneyType = moneyTypeSelect.value;
+             simulationState.maxYears = parseInt(simYearsInput.value) || 100;
+             simulationState.baseGdpGrowthRate = parseFloat(baseGrowthInput.value) / 100 || 0.015;
+             simulationState.basePopGrowthRate = parseFloat(popGrowthInput.value) / 100 || 0.003;
+             simulationState.regions = [];
+             simulationState.links = [];
+             simulationState.events = [];
+             simulationState.selectedRegionId = null;
+             simulationState.hardMoneySupply = 0;
+             simulationState.hardMoneyIssuanceRate = 1000; // Reset issuance rate
+
+             const numRegions = parseInt(numRegionsInput.value) || 5;
+             const avgPop = parseFloat(avgPopInput.value) || 1000000;
+             const avgGdp = parseFloat(avgGdpInput.value) || 50000;
+             const avgFood = parseFloat(avgFoodInput.value) || 1000;
+             const avgEnergy = parseFloat(avgEnergyInput.value) || 500;
+
+             // Create Regions with some variation
+             const regionNames = ["Aethel", "Borgia", "Carth", "Daxos", "Eridan", "Faelan", "Gondor", "Hark", "Ithil", "Juno", "Krypt", "Loran", "Myr", "Naboo", "Orion", "Pellaeon", "Quasar", "Rhen Var", "Solaria", "Tatooine"]; // More names
+             for (let i = 0; i < numRegions; i++) {
+                 const variation = () => 0.7 + Math.random() * 0.6; // Variation factor (0.7 to 1.3)
+                 simulationState.regions.push({
+                     id: `R${i}`,
+                     name: regionNames[i % regionNames.length] + (Math.floor(i / regionNames.length) > 0 ? Math.floor(i / regionNames.length) + 1 : ''), // Cycle through names
+                     population: avgPop * variation(),
+                     gdp: avgGdp * variation(),
+                     resources: {
+                         food: avgFood * variation(),
+                         energy: avgEnergy * variation(),
+                     },
+                     // D3 simulation manages x, y, vx, vy
+                 });
+             }
+
+             // Create Links between all regions initially (or use a different topology)
+             for (let i = 0; i < simulationState.regions.length; i++) {
+                 for (let j = i + 1; j < simulationState.regions.length; j++) {
+                     simulationState.links.push({
+                         source: simulationState.regions[i].id,
+                         target: simulationState.regions[j].id,
+                         status: 'neutral' // Initial status
+                     });
+                 }
+             }
+             addEvent(0, 'System', 'Simulation Initialized.');
+        }
+
+
+        function startSimulation() {
+            if (!simulationState.running) {
+                 initializeSimulationState(); // Setup regions, links based on current controls
+                 setupVisualization(); // Setup D3 simulation
+                 simulationState.running = true;
+                 simulationState.paused = false;
+                 addEvent(simulationState.currentYear, 'System', `Simulation started (${simulationState.moneyType} money).`);
+            } else if (simulationState.paused) {
+                 simulationState.paused = false;
+                 simulation.alphaTarget(0).restart(); // Resume simulation physics
+                 addEvent(simulationState.currentYear, 'System', 'Simulation resumed.');
+            } else {
+                return;
+            }
+
+            btnStart.disabled = true;
+            btnPause.disabled = false;
+            btnReset.disabled = true;
+            disableInputs();
+
+            simulationInterval = setInterval(simulationStep, SIMULATION_SPEED_MS);
+        }
+
+        function pauseSimulation() {
+            if (!simulationState.running || simulationState.paused) return;
+
+            simulationState.paused = true;
+            clearInterval(simulationInterval);
+            simulationInterval = null;
+            simulation.stop(); // Stop D3 simulation ticks
+
+            btnStart.disabled = false;
+            btnStart.textContent = "Resume Simulation";
+            btnPause.disabled = true;
+            btnReset.disabled = false;
+             addEvent(simulationState.currentYear, 'System', 'Simulation paused.');
+        }
+
+        function resetSimulation() {
+            pauseSimulation(); // Ensure interval is cleared & sim stopped
+
+            initializeSimulationState(); // Re-create initial state from inputs
+            setupVisualization(); // Re-setup D3 with new data structure
+            updateDataPanel(); // Update text panels with reset values
+            updateVisualization(); // Draw the initial state
+
+             btnStart.disabled = false;
+             btnStart.textContent = "Start Simulation";
+             btnPause.disabled = true;
+             btnReset.disabled = false;
+             enableInputs();
+
+             eventLog.innerHTML = '<li><span class="event-time">Year 0:</span> Simulation Reset. Ready to start.</li>';
+        }
+
+         function disableInputs() {
+             numRegionsInput.disabled = true;
+             moneyTypeSelect.disabled = true;
+             simYearsInput.disabled = true;
+             avgPopInput.disabled = true;
+             avgGdpInput.disabled = true;
+              avgFoodInput.disabled = true;
+              avgEnergyInput.disabled = true;
+             baseGrowthInput.disabled = true;
+             popGrowthInput.disabled = true;
+         }
+
+          function enableInputs() {
+             numRegionsInput.disabled = false;
+             moneyTypeSelect.disabled = false;
+             simYearsInput.disabled = false;
+             avgPopInput.disabled = false;
+             avgGdpInput.disabled = false;
+              avgFoodInput.disabled = false;
+              avgEnergyInput.disabled = false;
+             baseGrowthInput.disabled = false;
+             popGrowthInput.disabled = false;
+         }
+
+        // --- Helper Functions ---
+        function formatNumber(num, decimalPlaces = 0) {
+             if (num === undefined || num === null) return '-';
+             // Simple suffix formatting for large numbers in some cases
+             if (num >= 1e9) { return (num / 1e9).toFixed(1) + 'B'; }
+             if (num >= 1e6) { return (num / 1e6).toFixed(1) + 'M'; }
+             if (num >= 1e3) { return (num / 1e3).toFixed(1) + 'k'; }
+             // Default comma formatting for smaller numbers or specific cases
+            return parseFloat(num).toFixed(decimalPlaces).replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
+        // --- Initialization ---
+        document.addEventListener('DOMContentLoaded', () => {
+            // Initialize state and visualization placeholder
+            initializeSimulationState();
+            setupVisualization();
+            updateDataPanel();
+            updateVisualization(); // Draw initial state
+
+            // Attach button listeners
+            btnStart.addEventListener('click', startSimulation);
+            btnPause.addEventListener('click', pauseSimulation);
+            btnReset.addEventListener('click', resetSimulation);
+        });
+
+        // Optional: Handle resize
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                console.log("Resizing visualization...");
+                setupVisualization(); // Re-run setup to get new dimensions & restart sim
+                updateVisualization(); // Redraw with current data
+                 if (simulationState.running && !simulationState.paused) {
+                    simulation.alphaTarget(0).restart(); // Ensure simulation continues if running
+                 }
+            }, 250);
+        });
+
+    </script>
+</body>
+</html>

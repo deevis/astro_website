@@ -1,0 +1,2210 @@
+<!DOCTYPE html>
+<!-- saved from url=(0063)file:///D:/projects/cursor-ai/geo-economic-simulator/index.html -->
+<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Geo-Economic Simulator - Proof of Concept</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --tertiary-color: #e74c3c;
+            --background-color: #f5f5f5;
+            --card-color: #ffffff;
+            --text-color: #333333;
+            --border-color: #dddddd;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            line-height: 1.6;
+            padding: 20px;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        header h1 {
+            font-size: 1.6rem;
+            margin: 0;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 10px;
+        }
+
+        .container {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .controls {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .control-group {
+            margin-bottom: 20px;
+        }
+
+        .control-group h3 {
+            margin-bottom: 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px solid var(--border-color);
+            color: var(--primary-color);
+        }
+
+        .control-item {
+            margin-bottom: 12px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        input[type="range"] {
+            width: 100%;
+        }
+
+        input[type="number"],
+        select,
+        button {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid var(--border-color);
+            border-radius: 4px;
+        }
+
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: background-color 0.3s;
+        }
+
+        button:hover {
+            background-color: #2980b9;
+        }
+
+        button#resetSimulation {
+            background-color: var(--tertiary-color);
+        }
+
+        button#resetSimulation:hover {
+            background-color: #c0392b;
+        }
+
+        .simulation-area {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .map-container {
+            background-color: var(--card-color);
+            padding: 10px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            height: 500px;
+            position: relative;
+        }
+
+        #mapCanvas {
+            width: 100%;
+            height: 100%;
+            border-radius: 4px;
+            background-color: #e6f7ff;
+        }
+
+        .stats-container {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+        }
+
+        .stat-card {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border-radius: 6px;
+            border-left: 4px solid var(--secondary-color);
+        }
+
+        .stat-card h4 {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .event-feed {
+            background-color: var(--card-color);
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            max-height: 250px;
+            overflow-y: auto;
+        }
+
+        .event-item {
+            padding: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .event-item:last-child {
+            border-bottom: none;
+        }
+
+        .event-year {
+            font-weight: bold;
+            color: var(--primary-color);
+            margin-right: 5px;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+        }
+
+        .modal-content {
+            background-color: var(--card-color);
+            margin: 5% auto;
+            padding: 20px;
+            border-radius: 8px;
+            width: 80%;
+            max-width: 800px;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid var(--border-color);
+        }
+
+        .modal-header h2 {
+            color: var(--primary-color);
+        }
+
+        .close-button {
+            color: var(--text-color);
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+        }
+
+        #regionDetails {
+            margin-top: 15px;
+        }
+
+        .region-info-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .region-metric {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+        }
+
+        .region-metric h4 {
+            margin-bottom: 5px;
+            color: var(--primary-color);
+        }
+
+        .currency-info {
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #f39c12;
+        }
+
+        .resource-list {
+            margin-top: 15px;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 10px;
+        }
+
+        .resource-item {
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 4px;
+            border-left: 4px solid #27ae60;
+        }
+
+        .tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            z-index: 100;
+            pointer-events: none;
+            display: none;
+        }
+
+        .legend {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 10px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+            font-size: 0.8rem;
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 5px;
+        }
+
+        .legend-color {
+            width: 20px;
+            height: 10px;
+            margin-right: 5px;
+        }
+
+        .tab-container {
+            margin-top: 15px;
+        }
+
+        .tab-header {
+            display: flex;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 15px;
+        }
+
+        .tab-button {
+            padding: 8px 15px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 3px solid transparent;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: all 0.3s;
+            width: auto;
+        }
+
+        .tab-button.active {
+            border-bottom-color: var(--secondary-color);
+            opacity: 1;
+            font-weight: bold;
+        }
+
+        .tab-content {
+            display: none;
+        }
+
+        .tab-content.active {
+            display: block;
+        }
+
+        .time-controls {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-top: 15px;
+        }
+
+        #playPause {
+            background-color: #27ae60;
+            width: auto;
+            padding: 8px 15px;
+        }
+
+        #playPause:hover {
+            background-color: #219653;
+        }
+
+        #playPause.playing {
+            background-color: #e67e22;
+        }
+
+        #simulationTime {
+            font-weight: bold;
+            color: var(--primary-color);
+        }
+
+        #speedControl {
+            width: 100px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        .view-controls {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            display: flex;
+            gap: 5px;
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 5px;
+            border-radius: 4px;
+            border: 1px solid var(--border-color);
+        }
+
+        .view-toggle {
+            padding: 4px 8px;
+            font-size: 0.8rem;
+            background-color: transparent;
+            border: 1px solid var(--border-color);
+            color: var(--text-color);
+            cursor: pointer;
+            border-radius: 3px;
+            transition: all 0.3s;
+        }
+
+        .view-toggle.active {
+            background-color: var(--secondary-color);
+            color: white;
+            border-color: var(--secondary-color);
+        }
+
+        .edge-tooltip {
+            position: absolute;
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 5px 10px;
+            border-radius: 4px;
+            font-size: 0.85rem;
+            z-index: 100;
+            pointer-events: none;
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Geo-Economic Simulator</h1>
+        <div class="header-controls">
+            <button id="saveResults">Export Results</button>
+            <button id="showHelp">Help</button>
+        </div>
+    </header>
+
+    <div class="container">
+        <div class="controls">
+            <div class="control-group">
+                <h3>Initial Conditions</h3>
+                <div class="control-item">
+                    <label for="reserveCurrencyType">Global Reserve Currency Type:</label>
+                    <select id="reserveCurrencyType">
+                        <option value="fiat">Fiat Currency</option>
+                        <option value="gold">Gold-Backed Currency</option>
+                        <option value="bitcoin">Bitcoin</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label for="economicSystem">Economic System of Reserve Currency Region:</label>
+                    <select id="economicSystem">
+                        <option value="capitalism">Capitalism</option>
+                        <option value="socialism">Socialism</option>
+                        <option value="mixed">Mixed Economy</option>
+                    </select>
+                </div>
+                <div class="control-item">
+                    <label for="resourceDiscoveryRate">Resource Discovery Rate:</label>
+                    <input type="range" id="resourceDiscoveryRate" min="0" max="100" value="50">
+                    <span id="resourceDiscoveryValue">50%</span>
+                </div>
+                <div class="control-item">
+                    <label for="conflictFrequency">Conflict Frequency:</label>
+                    <input type="range" id="conflictFrequency" min="0" max="100" value="25">
+                    <span id="conflictFrequencyValue">25%</span>
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Region Configuration</h3>
+                <div class="control-item">
+                    <label for="regionCount">Number of Regions:</label>
+                    <input type="number" id="regionCount" min="3" max="10" value="5">
+                </div>
+                <div class="control-item">
+                    <label for="localitiesPerRegion">Localities per Region:</label>
+                    <input type="number" id="localitiesPerRegion" min="3" max="10" value="5">
+                </div>
+                <div class="control-item">
+                    <label for="bitcoinAdoptingRegions">Regions Adopting Bitcoin:</label>
+                    <input type="number" id="bitcoinAdoptingRegions" min="0" max="10" value="1">
+                </div>
+            </div>
+
+            <div class="control-group">
+                <h3>Simulation Settings</h3>
+                <div class="control-item">
+                    <label for="simulationLength">Simulation Length (years):</label>
+                    <input type="number" id="simulationLength" min="10" max="100" value="30">
+                </div>
+                <div class="control-item">
+                    <label for="monteCarloCycles">Monte Carlo Cycles:</label>
+                    <input type="number" id="monteCarloCycles" min="1" max="100" value="10">
+                </div>
+            </div>
+
+            <button id="startSimulation">Start Simulation</button>
+            <button id="resetSimulation" disabled="">Reset</button>
+        </div>
+
+        <div class="simulation-area">
+            <div class="map-container">
+                <canvas id="mapCanvas" width="1060" height="480" style="cursor: default;"></canvas>
+                <div class="tooltip" id="tooltip" style="display: none; left: 795px; top: 245px;"></div>
+                <div class="legend">
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(39, 174, 96, 0.7);"></div>
+                        <span>High Wealth</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(241, 196, 15, 0.7);"></div>
+                        <span>Medium Wealth</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(231, 76, 60, 0.7);"></div>
+                        <span>Low Wealth</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(52, 152, 219, 0.7);"></div>
+                        <span>Reserve Currency Region</span>
+                    </div>
+                </div>
+                <div class="view-controls">
+                    <button class="view-toggle active" data-view="wealth">Wealth</button>
+                    <button class="view-toggle" data-view="happiness">Happiness</button>
+                    <button class="view-toggle" data-view="freedom">Economic Freedom</button>
+                </div>
+            </div>
+
+            <div class="time-controls">
+                <button id="playPause" disabled="">▶ Play</button>
+                <span>Speed: </span>
+                <input type="range" id="speedControl" min="1" max="10" value="5">
+                <span id="simulationTime">Year: 2025 Q1</span>
+            </div>
+
+            <div class="stats-container">
+                <h3>Global Statistics</h3>
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <h4>Global GDP</h4>
+                        <p id="globalGDP">245.0 T</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Average Inflation</h4>
+                        <p id="avgInflation">3.3%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Reserve Currency</h4>
+                        <p id="reserveCurrency">Region$ (Fiat)</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Bitcoin Price</h4>
+                        <p id="bitcoinPrice">284,920</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Average Happiness</h4>
+                        <p id="avgHappiness">62.1%</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Active Conflicts</h4>
+                        <p id="activeConflicts">0</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Trade Volume</h4>
+                        <p id="tradeVolume">42.3 T</p>
+                    </div>
+                    <div class="stat-card">
+                        <h4>Current Cycle</h4>
+                        <p id="currentCycle">1 / 10</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="event-feed">
+                <h3>Event Feed</h3>
+                <div id="eventList"><div class="event-item"><span class="event-year">2025 Q1:</span><span> Welcome to the Geo-Economic Simulator. Configure parameters and click "Start Simulation" to begin.</span></div><div class="event-item"><span class="event-year">2025 Q1:</span><span> Global Reserve Currency set to Region$ (Fiat)</span></div><div class="event-item"><span class="event-year">2025 Q1:</span><span> Simulation initialized with 5 regions</span></div><div class="event-item"><span class="event-year">2025 Q1:</span><span> Region B adopts Bitcoin as regional currency</span></div>
+                    <!-- Events will be added here dynamically -->
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Region Detail Modal -->
+    <div id="regionModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="regionName">Region A</h2>
+                <span class="close-button" id="closeRegionModal">×</span>
+            </div>
+            <div id="regionDetails">
+                <div class="tab-container">
+                    <div class="tab-header">
+                        <button class="tab-button active" data-tab="overview">Overview</button>
+                        <button class="tab-button" data-tab="economy">Economy</button>
+                        <button class="tab-button" data-tab="resources">Resources</button>
+                        <button class="tab-button" data-tab="localities">Localities</button>
+                    </div>
+
+                    <div id="overview" class="tab-content active">
+                        <div class="region-info-grid">
+                            <div class="region-metric">
+                                <h4>Population</h4>
+                                <p id="regionPopulation">24.5 Million</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>GDP</h4>
+                                <p id="regionGDP">$1.2 Trillion</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Average Wealth</h4>
+                                <p id="regionWealth">$48,980</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Happiness Index</h4>
+                                <p id="regionHappiness">72%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Government Type</h4>
+                                <p id="regionGovernment">Democratic Republic</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Economic Freedom</h4>
+                                <p id="regionEconomicFreedom">76/100</p>
+                            </div>
+                        </div>
+
+                        <div class="currency-info">
+                            <h4>Currency Information</h4>
+                            <p id="regionCurrency">Regional Dollar (Fiat)</p>
+                            <p id="currencyStrength">Strength: +2.3% against global reserve</p>
+                        </div>
+                    </div>
+
+                    <div id="economy" class="tab-content">
+                        <div class="region-info-grid">
+                            <div class="region-metric">
+                                <h4>Inflation Rate</h4>
+                                <p id="regionInflation">2.7%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Tax Rate</h4>
+                                <p id="regionTaxRate">27%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Interest Rate</h4>
+                                <p id="regionInterestRate">3.5%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Unemployment</h4>
+                                <p id="regionUnemployment">4.2%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Sector Balance</h4>
+                                <p id="regionSectorBalance">Manufacturing: 35%, Services: 55%, Primary: 10%</p>
+                            </div>
+                            <div class="region-metric">
+                                <h4>Trade Balance</h4>
+                                <p id="regionTradeBalance">+$45 Billion</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id="resources" class="tab-content">
+                        <h4>Available Resources</h4>
+                        <div class="resource-list" id="resourceList">
+                            <!-- Resources will be populated dynamically -->
+                        </div>
+                    </div>
+
+                    <div id="localities" class="tab-content">
+                        <h4>Major Localities</h4>
+                        <div id="localityList">
+                            <!-- Localities will be populated dynamically -->
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log("DOM fully loaded");
+            
+            // Constants
+            const START_YEAR = 2025;
+            const BITCOIN_INITIAL_PRICE = 80000;
+            
+            // Simulation state
+            let simulationRunning = false;
+            let isPaused = true;
+            let currentYear = START_YEAR;
+            let currentQuarter = 1;
+            let simulationSpeed = 5;
+            let currentCycle = 1;
+            let simulationInterval;
+            let regions = [];
+            let events = [];
+            let currentView = 'wealth'; // Add current view state
+
+            // Map transformation state
+            let scale = 1;
+            let offsetX = 0;
+            let offsetY = 0;
+            let isDragging = false;
+            let lastX = 0;
+            let lastY = 0;
+            let minScale = 0.5;
+            let maxScale = 3;
+
+            let globalStats = {
+                gdp: 84.7,
+                inflation: 3.2,
+                reserveCurrency: "USD (Fiat)",
+                bitcoinPrice: BITCOIN_INITIAL_PRICE,
+                happiness: 68,
+                conflicts: 0,
+                tradeVolume: 15.3
+            };
+            
+            // UI Elements
+            const mapCanvas = document.getElementById('mapCanvas');
+            const ctx = mapCanvas.getContext('2d');
+            const tooltip = document.getElementById('tooltip');
+            
+            // Initialize canvas
+            function resizeCanvas() {
+                console.log("Resizing canvas");
+                const container = mapCanvas.parentElement;
+                mapCanvas.width = container.clientWidth - 20;
+                mapCanvas.height = container.clientHeight - 20;
+                drawMap(); // Redraw when resized
+            }
+            
+            window.addEventListener('resize', resizeCanvas);
+            
+            // Region class
+            class Region {
+                constructor(id, name, x, y, size, color) {
+                    this.id = id;
+                    this.name = name;
+                    this.x = x;
+                    this.y = y;
+                    this.size = size;
+                    this.color = color;
+                    this.population = Math.random() * 50 + 10; // 10-60 million
+                    this.gdp = (Math.random() * 2 + 0.5) * this.population; // 0.5-2.5 trillion
+                    this.wealth = (this.gdp * 1000) / this.population; // Per capita GDP
+                    this.happiness = Math.random() * 30 + 50; // 50-80%
+                    this.resources = this.generateResources();
+                    this.government = this.generateGovernment();
+                    this.economicFreedom = Math.random() * 40 + 40; // 40-80 out of 100
+                    this.currency = this.generateCurrency();
+                    this.localities = this.generateLocalities();
+                    this.inflation = Math.random() * 5 + 1; // 1-6%
+                    this.taxRate = Math.random() * 30 + 15; // 15-45%
+                    this.interestRate = Math.random() * 5 + 1; // 1-6%
+                    this.unemployment = Math.random() * 8 + 2; // 2-10%
+                    this.sectors = this.generateSectors();
+                    this.tradeBalance = (Math.random() * 200 - 100); // -100 to +100 billion
+                    this.isReserveCurrency = false;
+                    this.usesBitcoin = false;
+                    this.tradeRelations = new Map(); // Store trade relations with other regions
+                    this.conflicts = new Set(); // Store active conflicts with other regions
+                }
+                
+                generateResources() {
+                    const resourceTypes = ['Oil', 'Gold', 'Diamonds', 'Copper', 'Iron', 'Farmland', 'Forests', 'Natural Gas', 'Coal', 'Uranium'];
+                    const resources = [];
+                    
+                    const resourceCount = Math.floor(Math.random() * 4) + 2; // 2-5 resources per region
+                    
+                    const selectedTypes = new Set();
+                    while (selectedTypes.size < resourceCount) {
+                        const type = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
+                        selectedTypes.add(type);
+                    }
+                    
+                    selectedTypes.forEach(type => {
+                        const abundanceLevels = ['Low', 'Medium', 'High', 'Very High'];
+                        const abundance = abundanceLevels[Math.floor(Math.random() * abundanceLevels.length)];
+                        
+                        let extraction;
+                        if (type === 'Oil') {
+                            extraction = (Math.random() * 3 + 0.1).toFixed(1) + 'M bbl/day';
+                        } else if (type === 'Gold' || type === 'Diamonds') {
+                            extraction = Math.floor(Math.random() * 200 + 10) + ' tons/year';
+                        } else {
+                            extraction = Math.floor(Math.random() * 90 + 10) + '% utilization';
+                        }
+                        
+                        resources.push({ type, abundance, extraction });
+                    });
+                    
+                    return resources;
+                }
+                
+                generateGovernment() {
+                    const governments = [
+                        'Democracy', 
+                        'Republic', 
+                        'Federal Republic', 
+                        'Constitutional Monarchy', 
+                        'Socialist Republic', 
+                        'Authoritarian Regime'
+                    ];
+                    
+                    return governments[Math.floor(Math.random() * governments.length)];
+                }
+                
+                generateCurrency() {
+                    const name = `${this.name.split(' ')[0]} Dollar`;
+                    const strength = (Math.random() * 8 - 4).toFixed(1); // -4% to +4%
+                    
+                    return {
+                        name,
+                        type: 'Fiat',
+                        strength: strength > 0 ? `+${strength}%` : `${strength}%`
+                    };
+                }
+                
+                generateLocalities() {
+                    const localityCount = Math.floor(Math.random() * 3) + 3; // 3-5 localities
+                    const localities = [];
+                    
+                    const totalPop = this.population;
+                    let remainingPop = totalPop;
+                    
+                    for (let i = 0; i < localityCount; i++) {
+                        const isLast = i === localityCount - 1;
+                        
+                        // Generate locality types
+                        const types = ['City', 'District', 'Province', 'State', 'Area', 'Territory'];
+                        const directions = ['Central', 'Northern', 'Southern', 'Eastern', 'Western', 'Coastal', 'Mountain', 'Delta', 'River'];
+                        const name = `${directions[Math.floor(Math.random() * directions.length)]} ${types[Math.floor(Math.random() * types.length)]}`;
+                        
+                        // Population distribution
+                        let population;
+                        if (isLast) {
+                            population = remainingPop;
+                        } else {
+                            const popShare = Math.random() * 0.4 + 0.1; // 10-50% of remaining
+                            population = remainingPop * popShare;
+                            remainingPop -= population;
+                        }
+                        
+                        // GDP based on population but with variance
+                        const popShare = population / totalPop;
+                        const gdpMultiplier = Math.random() * 0.5 + 0.75; // 0.75-1.25
+                        const gdp = this.gdp * popShare * gdpMultiplier;
+                        
+                        // Happiness with some variance from regional average
+                        const happinessVariance = Math.random() * 10 - 5; // -5 to +5 from regional
+                        const happiness = Math.max(0, Math.min(100, this.happiness + happinessVariance));
+                        
+                        localities.push({
+                            name,
+                            population,
+                            gdp,
+                            happiness
+                        });
+                    }
+                    
+                    return localities;
+                }
+                
+                generateSectors() {
+                    // Generate economic sector distribution (manufacturing, services, primary)
+                    const manufacturing = Math.floor(Math.random() * 40) + 20; // 20-60%
+                    const primary = Math.floor(Math.random() * 30) + 5; // 5-35%
+                    const services = 100 - manufacturing - primary;
+                    
+                    return {
+                        manufacturing,
+                        services,
+                        primary
+                    };
+                }
+                
+                draw() {
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+                    ctx.fillStyle = this.color;
+                    ctx.fill();
+                    
+                    // Draw region name and government type
+                    ctx.fillStyle = 'black';
+                    ctx.font = '14px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(this.name, this.x, this.y - this.size - 15);
+                    ctx.font = '12px Arial';
+                    ctx.fillText(this.government, this.x, this.y - this.size - 5);
+                    
+                    // Draw localities as smaller circles within the region
+                    const localityCount = this.localities.length;
+                    const angleStep = (Math.PI * 2) / localityCount;
+                    
+                    this.localities.forEach((locality, index) => {
+                        const angle = angleStep * index;
+                        const distanceFromCenter = this.size * 0.6;
+                        
+                        const localX = this.x + Math.cos(angle) * distanceFromCenter;
+                        const localY = this.y + Math.sin(angle) * distanceFromCenter;
+                        
+                        const localSize = (locality.population / this.population) * this.size * 0.8;
+                        
+                        // Map happiness to color (red = unhappy, green = happy)
+                        const happiness = locality.happiness;
+                        const r = Math.floor(255 * (1 - happiness / 100));
+                        const g = Math.floor(255 * (happiness / 100));
+                        const b = 0;
+                        
+                        ctx.beginPath();
+                        ctx.arc(localX, localY, localSize, 0, Math.PI * 2);
+                        ctx.fillStyle = `rgba(${r}, ${g}, ${b}, 0.7)`;
+                        ctx.fill();
+                        
+                        // Store locality position for tooltip
+                        locality.x = localX;
+                        locality.y = localY;
+                        locality.size = localSize;
+                    });
+                    
+                    // Add special indicator if this region is the reserve currency
+                    if (this.isReserveCurrency) {
+                        ctx.strokeStyle = 'rgba(52, 152, 219, 0.8)';
+                        ctx.lineWidth = 4;
+                        ctx.beginPath();
+                        ctx.arc(this.x, this.y, this.size + 10, 0, Math.PI * 2);
+                        ctx.stroke();
+                        
+                        ctx.fillStyle = 'rgba(52, 152, 219, 0.8)';
+                        ctx.font = 'bold 16px Arial';
+                        ctx.fillText('🌐', this.x, this.y - this.size - 25);
+                    }
+                    
+                    // Add bitcoin indicator if using bitcoin
+                    if (this.usesBitcoin) {
+                        ctx.fillStyle = 'rgba(255, 165, 0, 0.9)';
+                        ctx.font = 'bold 16px Arial';
+                        ctx.fillText('₿', this.x + this.size + 15, this.y);
+                    }
+                }
+                
+                update(deltaTime) {
+                    // Basic economic model update
+                    // Get simulation parameters
+                    const resourceDiscoveryRate = parseInt(document.getElementById('resourceDiscoveryRate').value) / 100;
+                    const conflictFrequency = parseInt(document.getElementById('conflictFrequency').value) / 100;
+                    
+                    // GDP growth affected by wealth, happiness, and economic freedom
+                    const baseGrowthRate = 0.02; // 2% base growth
+                    const wealthFactor = Math.min(1.5, this.wealth / 50000) * 0.01; // Wealthier regions grow faster up to a point
+                    const happinessFactor = (this.happiness / 100) * 0.02; // Happier regions grow faster
+                    const freedomFactor = (this.economicFreedom / 100) * 0.02; // More economic freedom = faster growth
+                    
+                    // Negative factors
+                    const taxDrag = (this.taxRate / 100) * 0.02; // Higher taxes slow growth
+                    const randomShocks = Math.random() * 0.02 - 0.01; // Random -1% to +1%
+                    
+                    // Bitcoin adoption boost if applicable
+                    const bitcoinBoost = this.usesBitcoin ? 0.01 : 0; // 1% growth boost for Bitcoin adopters
+                    
+                    // Calculate quarterly growth rate
+                    const quarterlyGrowthRate = (baseGrowthRate + wealthFactor + happinessFactor + freedomFactor - taxDrag + randomShocks + bitcoinBoost) / 4;
+                    
+                    // Apply growth to GDP
+                    this.gdp *= (1 + quarterlyGrowthRate);
+                    
+                    // Update inflation based on monetary policy
+                    if (this.usesBitcoin) {
+                        // Bitcoin regions have lower inflation
+                        this.inflation = Math.max(0, this.inflation * 0.9 - 0.1);
+                    } else {
+                        // Fiat currency inflation
+                        const inflationChange = Math.random() * 0.8 - 0.3; // -0.3% to +0.5%
+                        this.inflation += inflationChange;
+                        this.inflation = Math.max(0, Math.min(20, this.inflation)); // Cap inflation
+                    }
+                    
+                    // Update wealth based on GDP and population growth
+                    // Simple population growth model
+                    const populationGrowthRate = 0.01 * (1 - this.wealth / 100000); // Wealthier regions grow slower
+                    this.population *= (1 + populationGrowthRate / 4); // Quarterly population growth
+                    
+                    // Recalculate wealth
+                    this.wealth = (this.gdp * 1000) / this.population;
+                    
+                    // Happiness affected by wealth growth and inflation
+                    const wealthChangeEffect = (quarterlyGrowthRate > 0 ? 0.5 : -1) * Math.abs(quarterlyGrowthRate) * 100;
+                    const inflationEffect = -this.inflation * 0.1;
+                    this.happiness += wealthChangeEffect + inflationEffect;
+                    this.happiness = Math.max(0, Math.min(100, this.happiness)); // Cap happiness
+                    
+                    // Resource discoveries
+                    if (Math.random() < resourceDiscoveryRate * 0.05) { // 5% chance per quarter * discovery rate
+                        this.discoverResource();
+                    }
+                    
+                    // Update localities
+                    this.updateLocalities(quarterlyGrowthRate, this.inflation);
+                    
+                    // Random events
+                    this.generateRandomEvents(conflictFrequency);
+
+                    // Update trade relations and conflicts
+                    regions.forEach(otherRegion => {
+                        if (otherRegion.id !== this.id) {
+                            // Simulate trade volume changes
+                            const baseTrade = Math.random() * 100 + 20; // 20-120 billion
+                            const tradeMultiplier = (1 + this.happiness / 100) * (1 + otherRegion.happiness / 100);
+                            const tradeVolume = baseTrade * tradeMultiplier;
+                            
+                            // Update trade relation
+                            this.tradeRelations.set(otherRegion.id, tradeVolume);
+                            otherRegion.tradeRelations.set(this.id, tradeVolume);
+                            
+                            // Simulate conflict resolution or escalation
+                            if (this.conflicts.has(otherRegion.id)) {
+                                if (Math.random() < 0.1) { // 10% chance to resolve conflict
+                                    this.conflicts.delete(otherRegion.id);
+                                    otherRegion.conflicts.delete(this.id);
+                                    globalStats.conflicts = Math.max(0, globalStats.conflicts - 1);
+                                }
+                            } else if (Math.random() < 0.05) { // 5% chance to start conflict
+                                this.conflicts.add(otherRegion.id);
+                                otherRegion.conflicts.add(this.id);
+                                globalStats.conflicts++;
+                            }
+                        }
+                    });
+                }
+                
+                discoverResource() {
+                    const resourceTypes = ['Oil', 'Gold', 'Diamonds', 'Copper', 'Iron', 'Natural Gas', 'Coal', 'Uranium'];
+                    const newResource = resourceTypes[Math.floor(Math.random() * resourceTypes.length)];
+                    
+                    // Check if the region already has this resource
+                    const hasResource = this.resources.some(r => r.type === newResource);
+                    
+                    if (!hasResource) {
+                        const abundanceLevels = ['Low', 'Medium', 'High'];
+                        const abundance = abundanceLevels[Math.floor(Math.random() * abundanceLevels.length)];
+                        
+                        let extraction;
+                        if (newResource === 'Oil') {
+                            extraction = (Math.random() * 1 + 0.1).toFixed(1) + 'M bbl/day';
+                        } else if (newResource === 'Gold' || newResource === 'Diamonds') {
+                            extraction = Math.floor(Math.random() * 100 + 10) + ' tons/year';
+                        } else {
+                            extraction = Math.floor(Math.random() * 70 + 30) + '% utilization';
+                        }
+                        
+                        this.resources.push({ type: newResource, abundance, extraction });
+                        
+                        // Add event
+                        const event = {
+                            year: currentYear,
+                            quarter: currentQuarter,
+                            text: `New ${newResource} deposits discovered in ${this.name}`
+                        };
+                        events.push(event);
+                        addEventToFeed(event);
+                        
+                        // GDP boost from discovery
+                        this.gdp *= 1.05;
+                    }
+                }
+                
+                updateLocalities(regionalGrowthRate, regionalInflation) {
+                    this.localities.forEach(locality => {
+                        // Each locality grows at a slightly different rate
+                        const localVariance = Math.random() * 0.02 - 0.01; // -1% to +1% variance
+                        locality.gdp *= (1 + regionalGrowthRate + localVariance);
+                        
+                        // Update happiness
+                        const happinessChange = (regionalGrowthRate > 0 ? 0.5 : -1) * Math.abs(regionalGrowthRate) * 100 - regionalInflation * 0.1;
+                        locality.happiness += happinessChange;
+                        locality.happiness = Math.max(0, Math.min(100, locality.happiness)); // Cap happiness
+                    });
+                }
+                
+                generateRandomEvents(conflictFrequency) {
+                    // Potential random events (trade agreements, conflicts, policy changes, etc.)
+                    if (Math.random() < 0.03) { // 3% chance per quarter for any event
+                        const eventTypes = [
+                            { type: 'trade', chance: 0.4 },
+                            { type: 'policy', chance: 0.3 },
+                            { type: 'conflict', chance: conflictFrequency * 0.3 }
+                        ];
+                        
+                        let totalChance = 0;
+                        for (const event of eventTypes) {
+                            totalChance += event.chance;
+                        }
+                        
+                        let randomValue = Math.random() * totalChance;
+                        let selectedType = null;
+                        
+                        for (const event of eventTypes) {
+                            if (randomValue < event.chance) {
+                                selectedType = event.type;
+                                break;
+                            }
+                            randomValue -= event.chance;
+                        }
+                        
+                        // Generate event based on type
+                        let eventText = '';
+                        
+                        switch (selectedType) {
+                            case 'trade':
+                                const tradePartner = getRandomRegionExcept(this.id);
+                                if (tradePartner) {
+                                    eventText = `Trade agreement established between ${this.name} and ${tradePartner.name}`;
+                                    // Boost both regions' economies
+                                    this.gdp *= 1.02;
+                                    tradePartner.gdp *= 1.02;
+                                    // Initialize or update trade volume
+                                    const tradeVolume = Math.random() * 100 + 20; // 20-120 billion
+                                    this.tradeRelations.set(tradePartner.id, tradeVolume);
+                                    tradePartner.tradeRelations.set(this.id, tradeVolume);
+                                }
+                                break;
+                            case 'policy':
+                                const policies = [
+                                    'tax reform',
+                                    'monetary policy adjustment',
+                                    'new trade regulations',
+                                    'infrastructure investment program'
+                                ];
+                                const policy = policies[Math.floor(Math.random() * policies.length)];
+                                eventText = `${this.name} implements ${policy}`;
+                                break;
+                            case 'conflict':
+                                const conflictPartner = getRandomRegionExcept(this.id);
+                                if (conflictPartner) {
+                                    eventText = `Diplomatic tensions rise between ${this.name} and ${conflictPartner.name}`;
+                                    // Negative impact on both regions
+                                    this.happiness -= 5;
+                                    conflictPartner.happiness -= 5;
+                                    // Add conflict if not already in conflict
+                                    if (!this.conflicts.has(conflictPartner.id)) {
+                                        this.conflicts.add(conflictPartner.id);
+                                        conflictPartner.conflicts.add(this.id);
+                                        globalStats.conflicts++;
+                                    }
+                                }
+                                break;
+                        }
+                        
+                        if (eventText) {
+                            const event = {
+                                year: currentYear,
+                                quarter: currentQuarter,
+                                text: eventText
+                            };
+                            events.push(event);
+                            addEventToFeed(event);
+                        }
+                    }
+                }
+            }
+            
+            // Helper functions
+            function getRandomRegionExcept(excludeId) {
+                const availableRegions = regions.filter(r => r.id !== excludeId);
+                if (availableRegions.length === 0) return null;
+                return availableRegions[Math.floor(Math.random() * availableRegions.length)];
+            }
+            
+            function getColorForWealth(wealth) {
+                // Green for high wealth, red for low wealth
+                if (wealth > 60000) {
+                    return 'rgba(39, 174, 96, 0.7)'; // Green
+                } else if (wealth > 30000) {
+                    return 'rgba(241, 196, 15, 0.7)'; // Yellow
+                } else {
+                    return 'rgba(231, 76, 60, 0.7)'; // Red
+                }
+            }
+            
+            function addEventToFeed(event) {
+                const eventList = document.getElementById('eventList');
+                const eventItem = document.createElement('div');
+                eventItem.className = 'event-item';
+                
+                const eventYear = document.createElement('span');
+                eventYear.className = 'event-year';
+                eventYear.textContent = `${event.year} Q${event.quarter}:`;
+                
+                const eventText = document.createElement('span');
+                eventText.textContent = ` ${event.text}`;
+                
+                eventItem.appendChild(eventYear);
+                eventItem.appendChild(eventText);
+                
+                eventList.prepend(eventItem);
+                
+                // Limit event feed to last 50 events
+                if (eventList.children.length > 50) {
+                    eventList.removeChild(eventList.lastChild);
+                }
+            }
+            
+            function updateBitcoinPrice() {
+                // Simplified Bitcoin price model combining stock-to-flow and regional adoption
+                const baseYearlyGrowth = 0.25; // 25% base yearly growth from START_YEAR
+                const yearsSinceStart = currentYear - START_YEAR + (currentQuarter - 1) / 4;
+                
+                // Halving event effects (roughly every 4 years)
+                const halvingCycles = Math.floor(yearsSinceStart / 4);
+                const halvingMultiplier = 1 + (halvingCycles * 0.2); // Each halving adds 20% to the multiplier
+                
+                // Adoption effects
+                const adoptingRegions = regions.filter(r => r.usesBitcoin).length;
+                const adoptionMultiplier = 1 + (adoptingRegions / regions.length);
+                
+                // Global economic conditions effect
+                const economicMultiplier = globalStats.gdp / 84.7; // Relative to starting global GDP
+                
+                // Calculate new price with some randomness
+                const randomVariance = 0.95 + Math.random() * 0.1; // 0.95-1.05 random factor
+                
+                const quartersPerYear = 4;
+                const quarterlyGrowthRate = Math.pow(1 + baseYearlyGrowth, 1/quartersPerYear) - 1;
+                const growthFactor = Math.pow(1 + quarterlyGrowthRate, yearsSinceStart * quartersPerYear);
+                
+                const newPrice = BITCOIN_INITIAL_PRICE * growthFactor * halvingMultiplier * adoptionMultiplier * economicMultiplier * randomVariance;
+                
+                return Math.round(newPrice);
+            }
+            
+            function calculateGlobalStats() {
+                // Calculate global GDP
+                globalStats.gdp = regions.reduce((sum, region) => sum + region.gdp, 0);
+                
+                // Calculate average inflation
+                globalStats.inflation = regions.reduce((sum, region) => sum + region.inflation, 0) / regions.length;
+                
+                // Update Bitcoin price
+                globalStats.bitcoinPrice = updateBitcoinPrice();
+                
+                // Calculate average happiness
+                globalStats.happiness = regions.reduce((sum, region) => sum + region.happiness, 0) / regions.length;
+                
+                // Calculate global trade volume (simplified)
+                globalStats.tradeVolume = globalStats.gdp * 0.18 * (1 + Math.random() * 0.1 - 0.05); // ~18% of global GDP with slight variance
+                
+                // Update UI
+                document.getElementById('globalGDP').textContent = `${globalStats.gdp.toFixed(1)} T`;
+                document.getElementById('avgInflation').textContent = `${globalStats.inflation.toFixed(1)}%`;
+                document.getElementById('bitcoinPrice').textContent = `${globalStats.bitcoinPrice.toLocaleString()}`;
+                document.getElementById('avgHappiness').textContent = `${globalStats.happiness.toFixed(1)}%`;
+                document.getElementById('activeConflicts').textContent = globalStats.conflicts;
+                document.getElementById('tradeVolume').textContent = `${globalStats.tradeVolume.toFixed(1)} T`;
+                document.getElementById('currentCycle').textContent = `${currentCycle} / ${document.getElementById('monteCarloCycles').value}`;
+                document.getElementById('simulationTime').textContent = `Year: ${currentYear} Q${currentQuarter}`;
+            }
+            
+            // Initialize simulation
+            function initializeSimulation() {
+                console.log("Initializing simulation");
+                
+                // Reset state
+                regions = [];
+                events = [];
+                currentYear = START_YEAR;
+                currentQuarter = 1;
+                globalStats.conflicts = 0;
+                
+                // Get configuration
+                const regionCount = parseInt(document.getElementById('regionCount').value);
+                const bitcoinAdoptingRegions = parseInt(document.getElementById('bitcoinAdoptingRegions').value);
+                
+                // Generate regions
+                for (let i = 0; i < regionCount; i++) {
+                    const regionName = `Region ${String.fromCharCode(65 + i)}`; // A, B, C, etc.
+                    
+                    // Position in a circle
+                    const angle = (i / regionCount) * Math.PI * 2;
+                    const distance = mapCanvas.width * 0.35;
+                    const x = mapCanvas.width / 2 + Math.cos(angle) * distance;
+                    const y = mapCanvas.height / 2 + Math.sin(angle) * distance;
+                    
+                    const size = Math.random() * 20 + 40; // 40-60px
+                    const wealth = Math.random() * 70000 + 20000; // $20k-$90k
+                    const color = getColorForWealth(wealth);
+                    
+                    const region = new Region(i, regionName, x, y, size, color);
+                    regions.push(region);
+                }
+                
+                // Set reserve currency region
+                const reserveType = document.getElementById('reserveCurrencyType').value;
+                const reserveIndex = Math.floor(Math.random() * regionCount);
+                const reserveRegion = regions[reserveIndex];
+                reserveRegion.isReserveCurrency = true;
+                
+                // Update reserve currency name and type
+                if (reserveType === 'fiat') {
+                    reserveRegion.currency.type = 'Fiat';
+                    globalStats.reserveCurrency = `${reserveRegion.name.split(' ')[0]}$ (Fiat)`;
+                } else if (reserveType === 'gold') {
+                    reserveRegion.currency.type = 'Gold-Backed';
+                    globalStats.reserveCurrency = `${reserveRegion.name.split(' ')[0]}$ (Gold)`;
+                } else if (reserveType === 'bitcoin') {
+                    reserveRegion.currency.type = 'Bitcoin';
+                    reserveRegion.usesBitcoin = true;
+                    globalStats.reserveCurrency = 'Bitcoin (BTC)';
+                }
+                
+                // Set economic system for reserve currency region
+                const economicSystem = document.getElementById('economicSystem').value;
+                if (economicSystem === 'capitalism') {
+                    reserveRegion.economicFreedom = 80 + Math.random() * 20; // 80-100
+                    reserveRegion.taxRate = 10 + Math.random() * 15; // 10-25%
+                } else if (economicSystem === 'socialism') {
+                    reserveRegion.economicFreedom = 30 + Math.random() * 30; // 30-60
+                    reserveRegion.taxRate = 40 + Math.random() * 30; // 40-70%
+                } else {
+                    reserveRegion.economicFreedom = 50 + Math.random() * 30; // 50-80
+                    reserveRegion.taxRate = 25 + Math.random() * 25; // 25-50%
+                }
+                
+                // Set Bitcoin adopting regions
+                let remainingBitcoinRegions = bitcoinAdoptingRegions;
+                if (reserveType === 'bitcoin') remainingBitcoinRegions--;
+                
+                for (let i = 0; i < remainingBitcoinRegions && i < regions.length; i++) {
+                    // Skip the reserve currency region if it's already using Bitcoin
+                    if (i === reserveIndex && reserveType === 'bitcoin') continue;
+                    
+                    const candidateIndex = (reserveIndex + i + 1) % regions.length;
+                    regions[candidateIndex].usesBitcoin = true;
+                    regions[candidateIndex].inflation *= 0.7; // Lower inflation for Bitcoin regions
+                    
+                    // Add event
+                    const event = {
+                        year: START_YEAR,
+                        quarter: 1,
+                        text: `${regions[candidateIndex].name} adopts Bitcoin as regional currency`
+                    };
+                    events.push(event);
+                    addEventToFeed(event);
+                }
+                
+                // Add initialization events
+                const initEvent = {
+                    year: START_YEAR,
+                    quarter: 1,
+                    text: `Simulation initialized with ${regionCount} regions`
+                };
+                events.push(initEvent);
+                addEventToFeed(initEvent);
+                
+                const reserveEvent = {
+                    year: START_YEAR,
+                    quarter: 1,
+                    text: `Global Reserve Currency set to ${globalStats.reserveCurrency}`
+                };
+                events.push(reserveEvent);
+                addEventToFeed(reserveEvent);
+                
+                // Update reserve currency UI
+                document.getElementById('reserveCurrency').textContent = globalStats.reserveCurrency;
+                
+                // Calculate initial global stats
+                calculateGlobalStats();
+                
+                // Initial draw
+                drawMap();
+            }
+            
+            function drawMap() {
+                console.log("Drawing map");
+                
+                // Clear canvas
+                ctx.clearRect(0, 0, mapCanvas.width, mapCanvas.height);
+                
+                // Save the current context state
+                ctx.save();
+                
+                // Apply transformations
+                ctx.translate(offsetX, offsetY);
+                ctx.scale(scale, scale);
+                
+                // Calculate average trade volume for relative thickness
+                let totalTradeVolume = 0;
+                let tradeVolumeCount = 0;
+                regions.forEach(region => {
+                    region.tradeRelations.forEach((volume, otherId) => {
+                        if (region.id < otherId) { // Count each edge only once
+                            totalTradeVolume += volume;
+                            tradeVolumeCount++;
+                        }
+                    });
+                });
+                const averageTradeVolume = tradeVolumeCount > 0 ? totalTradeVolume / tradeVolumeCount : 0;
+                
+                // Draw connecting lines between regions with trade/conflict information
+                for (let i = 0; i < regions.length; i++) {
+                    const region = regions[i];
+                    region.edges = []; // Clear edges array for this region
+                    
+                    for (let j = i + 1; j < regions.length; j++) {
+                        const otherRegion = regions[j];
+                        const tradeVolume = region.tradeRelations.get(otherRegion.id) || 0;
+                        const hasConflict = region.conflicts.has(otherRegion.id);
+                        
+                        ctx.strokeStyle = getEdgeColor(tradeVolume, hasConflict);
+                        ctx.lineWidth = getEdgeWidth(tradeVolume, averageTradeVolume);
+                        
+                        ctx.beginPath();
+                        ctx.moveTo(region.x, region.y);
+                        ctx.lineTo(otherRegion.x, otherRegion.y);
+                        ctx.stroke();
+                        
+                        // Store edge information for tooltip
+                        const edge = {
+                            x1: region.x,
+                            y1: region.y,
+                            x2: otherRegion.x,
+                            y2: otherRegion.y,
+                            tradeVolume,
+                            hasConflict,
+                            region1: region,
+                            region2: otherRegion
+                        };
+                        
+                        // Store edge reference for hover detection
+                        region.edges.push(edge);
+                    }
+                }
+                
+                // Update region colors based on current view
+                regions.forEach(region => {
+                    switch (currentView) {
+                        case 'wealth':
+                            region.color = getColorForMetric(region.wealth, 'wealth');
+                            break;
+                        case 'happiness':
+                            region.color = getColorForMetric(region.happiness, 'happiness');
+                            break;
+                        case 'freedom':
+                            region.color = getColorForMetric(region.economicFreedom, 'freedom');
+                            break;
+                    }
+                });
+                
+                // Draw regions
+                regions.forEach(region => region.draw());
+                
+                // Restore the context state
+                ctx.restore();
+                
+                // Draw year/quarter (always on top, not transformed)
+                ctx.fillStyle = 'black';
+                ctx.font = 'bold 16px Arial';
+                ctx.textAlign = 'left';
+                ctx.fillText(`Year: ${currentYear} Q${currentQuarter}`, 20, 30);
+            }
+            
+            function runSimulationStep() {
+                console.log(`Running simulation step: Year ${currentYear} Q${currentQuarter}`);
+                
+                // Update each region
+                regions.forEach(region => region.update(1));
+                
+                // Update global stats
+                calculateGlobalStats();
+                
+                // Advance time
+                currentQuarter++;
+                if (currentQuarter > 4) {
+                    currentQuarter = 1;
+                    currentYear++;
+                }
+                
+                // Check if simulation is complete
+                const simulationLength = parseInt(document.getElementById('simulationLength').value);
+                if (currentYear >= START_YEAR + simulationLength) {
+                    if (currentCycle < parseInt(document.getElementById('monteCarloCycles').value)) {
+                        // Start next cycle
+                        currentCycle++;
+                        initializeSimulation();
+                    } else {
+                        // All cycles complete
+                        stopSimulation();
+                        
+                        // Add final event
+                        const finalEvent = {
+                            year: currentYear,
+                            quarter: currentQuarter,
+                            text: `Simulation complete after ${currentCycle} Monte Carlo cycles`
+                        };
+                        events.push(finalEvent);
+                        addEventToFeed(finalEvent);
+                    }
+                }
+                
+                // Redraw
+                drawMap();
+            }
+            
+            function startSimulation() {
+                console.log("Start simulation button clicked");
+                
+                if (simulationRunning) {
+                    console.log("Simulation already running, ignoring click");
+                    return;
+                }
+                
+                // Initialize
+                initializeSimulation();
+                
+                // Update UI
+                document.getElementById('startSimulation').disabled = true;
+                document.getElementById('resetSimulation').disabled = false;
+                document.getElementById('playPause').disabled = false;
+                
+                simulationRunning = true;
+                isPaused = true; // Start paused
+                
+                // Add event
+                const startEvent = {
+                    year: currentYear,
+                    quarter: currentQuarter,
+                    text: 'Simulation started'
+                };
+                events.push(startEvent);
+                addEventToFeed(startEvent);
+                
+                console.log("Simulation started successfully");
+            }
+            
+            function togglePlayPause() {
+                console.log("Play/Pause button clicked");
+                
+                if (!simulationRunning) {
+                    console.log("Simulation not running, ignoring play/pause click");
+                    return;
+                }
+                
+                isPaused = !isPaused;
+                const playPauseButton = document.getElementById('playPause');
+                
+                if (isPaused) {
+                    console.log("Simulation paused");
+                    clearInterval(simulationInterval);
+                    playPauseButton.textContent = '▶ Play';
+                    playPauseButton.classList.remove('playing');
+                } else {
+                    console.log("Simulation playing");
+                    const speed = parseInt(document.getElementById('speedControl').value);
+                    simulationInterval = setInterval(runSimulationStep, 1000 / speed);
+                    playPauseButton.textContent = '⏸ Pause';
+                    playPauseButton.classList.add('playing');
+                }
+            }
+            
+            function stopSimulation() {
+                console.log("Stopping simulation");
+                
+                if (!simulationRunning) return;
+                
+                clearInterval(simulationInterval);
+                simulationRunning = false;
+                isPaused = true;
+                
+                // Update UI
+                document.getElementById('startSimulation').disabled = false;
+                document.getElementById('resetSimulation').disabled = true;
+                document.getElementById('playPause').disabled = true;
+                document.getElementById('playPause').textContent = '▶ Play';
+                document.getElementById('playPause').classList.remove('playing');
+            }
+            
+            function resetSimulation() {
+                console.log("Reset simulation button clicked");
+                
+                stopSimulation();
+                
+                // Clear event feed
+                document.getElementById('eventList').innerHTML = '';
+                
+                // Reset stats
+                currentYear = START_YEAR;
+                currentQuarter = 1;
+                currentCycle = 1;
+                
+                // Update UI
+                document.getElementById('simulationTime').textContent = `Year: ${currentYear} Q${currentQuarter}`;
+                document.getElementById('currentCycle').textContent = `${currentCycle} / ${document.getElementById('monteCarloCycles').value}`;
+                
+                // Create simulation startup message
+                const welcomeEvent = {
+                    year: START_YEAR,
+                    quarter: 1,
+                    text: 'Welcome to the Geo-Economic Simulator. Configure parameters and click "Start Simulation" to begin.'
+                };
+                addEventToFeed(welcomeEvent);
+            }
+            
+            function updateSpeedControl() {
+                const speed = parseInt(document.getElementById('speedControl').value);
+                console.log(`Updating simulation speed to ${speed}`);
+                
+                if (simulationRunning && !isPaused) {
+                    clearInterval(simulationInterval);
+                    simulationInterval = setInterval(runSimulationStep, 1000 / speed);
+                }
+            }
+            
+            function showRegionDetails(region) {
+                console.log(`Showing details for ${region.name}`);
+                
+                const modal = document.getElementById('regionModal');
+                const nameElement = document.getElementById('regionName');
+                
+                // Set region name
+                nameElement.textContent = region.name;
+                
+                // Update region details
+                document.getElementById('regionPopulation').textContent = `${region.population.toFixed(1)} Million`;
+                document.getElementById('regionGDP').textContent = `${region.gdp.toFixed(2)} Trillion`;
+                document.getElementById('regionWealth').textContent = `${Math.round(region.wealth).toLocaleString()}`;
+                document.getElementById('regionHappiness').textContent = `${region.happiness.toFixed(1)}%`;
+                document.getElementById('regionGovernment').textContent = region.government;
+                document.getElementById('regionEconomicFreedom').textContent = `${region.economicFreedom.toFixed(1)}/100`;
+                
+                // Currency info
+                const currencyType = region.usesBitcoin ? 'Bitcoin (BTC)' : `${region.currency.name} (${region.currency.type})`;
+                document.getElementById('regionCurrency').textContent = currencyType;
+                
+                const strengthText = region.isReserveCurrency ? 
+                    'Global Reserve Currency' : 
+                    `Strength: ${region.currency.strength} against global reserve`;
+                document.getElementById('currencyStrength').textContent = strengthText;
+                
+                // Economy tab
+                document.getElementById('regionInflation').textContent = `${region.inflation.toFixed(1)}%`;
+                document.getElementById('regionTaxRate').textContent = `${region.taxRate.toFixed(1)}%`;
+                document.getElementById('regionInterestRate').textContent = `${region.interestRate.toFixed(1)}%`;
+                document.getElementById('regionUnemployment').textContent = `${(Math.random() * 5 + 3).toFixed(1)}%`; // Random for demo
+                
+                const sectors = region.sectors;
+                document.getElementById('regionSectorBalance').textContent = 
+                    `Manufacturing: ${sectors.manufacturing}%, Services: ${sectors.services}%, Primary: ${sectors.primary}%`;
+                
+                document.getElementById('regionTradeBalance').textContent = 
+                    region.tradeBalance > 0 ? `+${region.tradeBalance.toFixed(1)} Billion` : `-${Math.abs(region.tradeBalance).toFixed(1)} Billion`;
+                
+                // Resources tab
+                const resourceList = document.getElementById('resourceList');
+                resourceList.innerHTML = '';
+                
+                region.resources.forEach(resource => {
+                    const resourceItem = document.createElement('div');
+                    resourceItem.className = 'resource-item';
+                    
+                    const resourceName = document.createElement('h4');
+                    resourceName.textContent = resource.type;
+                    
+                    const abundance = document.createElement('p');
+                    abundance.textContent = `Abundance: ${resource.abundance}`;
+                    
+                    const extraction = document.createElement('p');
+                    extraction.textContent = `Extraction: ${resource.extraction}`;
+                    
+                    resourceItem.appendChild(resourceName);
+                    resourceItem.appendChild(abundance);
+                    resourceItem.appendChild(extraction);
+                    
+                    resourceList.appendChild(resourceItem);
+                });
+                
+                // Localities tab
+                const localityList = document.getElementById('localityList');
+                localityList.innerHTML = '';
+                
+                region.localities.forEach(locality => {
+                    const localityItem = document.createElement('div');
+                    localityItem.className = 'region-metric';
+                    
+                    const localityName = document.createElement('h4');
+                    localityName.textContent = locality.name;
+                    
+                    const population = document.createElement('p');
+                    population.textContent = `Population: ${locality.population.toFixed(1)} Million`;
+                    
+                    const gdp = document.createElement('p');
+                    gdp.textContent = `GDP: ${locality.gdp.toFixed(2)} Trillion`;
+                    
+                    const happiness = document.createElement('p');
+                    happiness.textContent = `Happiness: ${locality.happiness.toFixed(1)}%`;
+                    
+                    localityItem.appendChild(localityName);
+                    localityItem.appendChild(population);
+                    localityItem.appendChild(gdp);
+                    localityItem.appendChild(happiness);
+                    
+                    localityList.appendChild(localityItem);
+                });
+                
+                // Switch to the overview tab
+                document.querySelectorAll('.tab-button').forEach(button => button.classList.remove('active'));
+                document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                document.querySelector('[data-tab="overview"]').classList.add('active');
+                document.getElementById('overview').classList.add('active');
+                
+                // Show the modal
+                modal.style.display = 'block';
+            }
+            
+            function exportResults() {
+                console.log("Exporting simulation results");
+                
+                // Create a report object
+                const report = {
+                    simulationParams: {
+                        reserveCurrency: document.getElementById('reserveCurrencyType').value,
+                        economicSystem: document.getElementById('economicSystem').value,
+                        resourceDiscoveryRate: document.getElementById('resourceDiscoveryRate').value,
+                        conflictFrequency: document.getElementById('conflictFrequency').value,
+                        regionCount: document.getElementById('regionCount').value,
+                        bitcoinAdoptingRegions: document.getElementById('bitcoinAdoptingRegions').value,
+                        simulationLength: document.getElementById('simulationLength').value,
+                        monteCarloCycles: document.getElementById('monteCarloCycles').value
+                    },
+                    finalStats: {
+                        year: currentYear,
+                        quarter: currentQuarter,
+                        globalGDP: globalStats.gdp,
+                        avgInflation: globalStats.inflation,
+                        bitcoinPrice: globalStats.bitcoinPrice,
+                        avgHappiness: globalStats.happiness,
+                        conflicts: globalStats.conflicts,
+                        tradeVolume: globalStats.tradeVolume
+                    },
+                    regions: regions.map(region => ({
+                        name: region.name,
+                        gdp: region.gdp,
+                        population: region.population,
+                        wealth: region.wealth,
+                        happiness: region.happiness,
+                        inflation: region.inflation,
+                        isReserveCurrency: region.isReserveCurrency,
+                        usesBitcoin: region.usesBitcoin
+                    })),
+                    events: events
+                };
+                
+                // Convert to JSON string
+                const jsonString = JSON.stringify(report, null, 2);
+                
+                // Create a blob
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                
+                // Create download link
+                const a = document.createElement('a');
+                a.href = URL.createObjectURL(blob);
+                a.download = `geo-economic-sim-${new Date().toISOString().slice(0, 10)}.json`;
+                
+                // Trigger download
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                
+                console.log("Export complete");
+            }
+            
+            // Set up event listeners
+            console.log("Setting up event listeners");
+            
+            document.getElementById('startSimulation').addEventListener('click', function() {
+                console.log("Start button clicked");
+                startSimulation();
+            });
+            
+            document.getElementById('resetSimulation').addEventListener('click', function() {
+                console.log("Reset button clicked");
+                resetSimulation();
+            });
+            
+            document.getElementById('playPause').addEventListener('click', function() {
+                console.log("Play/Pause button clicked");
+                togglePlayPause();
+            });
+            
+            document.getElementById('speedControl').addEventListener('input', function() {
+                updateSpeedControl();
+            });
+            
+            document.getElementById('saveResults').addEventListener('click', function() {
+                exportResults();
+            });
+            
+            document.getElementById('resourceDiscoveryRate').addEventListener('input', function() {
+                document.getElementById('resourceDiscoveryValue').textContent = `${this.value}%`;
+            });
+            
+            document.getElementById('conflictFrequency').addEventListener('input', function() {
+                document.getElementById('conflictFrequencyValue').textContent = `${this.value}%`;
+            });
+            
+            // Close the modal when the close button is clicked
+            document.getElementById('closeRegionModal').addEventListener('click', function() {
+                document.getElementById('regionModal').style.display = 'none';
+            });
+            
+            // Close the modal when clicking outside the content
+            window.addEventListener('click', function(event) {
+                const modal = document.getElementById('regionModal');
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Tab switching in modal
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.addEventListener('click', function() {
+                    const tabId = this.getAttribute('data-tab');
+                    
+                    // Hide all tabs and remove active class
+                    document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+                    
+                    // Show selected tab and add active class
+                    this.classList.add('active');
+                    document.getElementById(tabId).classList.add('active');
+                });
+            });
+            
+            // Tooltip and region interaction on canvas
+            let hoveredRegion = null;
+            
+            mapCanvas.addEventListener('wheel', function(e) {
+                e.preventDefault();
+                
+                // Get mouse position relative to canvas
+                const rect = mapCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Calculate new scale
+                const delta = e.deltaY > 0 ? 0.9 : 1.1;
+                const newScale = Math.min(Math.max(scale * delta, minScale), maxScale);
+                
+                // Calculate new offset to zoom towards mouse position
+                const scaleFactor = newScale / scale;
+                const newOffsetX = mouseX - (mouseX - offsetX) * scaleFactor;
+                const newOffsetY = mouseY - (mouseY - offsetY) * scaleFactor;
+                
+                scale = newScale;
+                offsetX = newOffsetX;
+                offsetY = newOffsetY;
+                
+                drawMap();
+            });
+            
+            mapCanvas.addEventListener('mousedown', function(e) {
+                isDragging = true;
+                lastX = e.clientX;
+                lastY = e.clientY;
+                mapCanvas.style.cursor = 'grabbing';
+            });
+            
+            mapCanvas.addEventListener('mousemove', function(e) {
+                if (!isDragging) return;
+                
+                const deltaX = e.clientX - lastX;
+                const deltaY = e.clientY - lastY;
+                
+                offsetX += deltaX;
+                offsetY += deltaY;
+                
+                lastX = e.clientX;
+                lastY = e.clientY;
+                
+                drawMap();
+            });
+            
+            mapCanvas.addEventListener('mouseup', function() {
+                isDragging = false;
+                mapCanvas.style.cursor = 'default';
+            });
+            
+            mapCanvas.addEventListener('mouseleave', function() {
+                isDragging = false;
+                mapCanvas.style.cursor = 'default';
+            });
+
+            // Modify the region click handler to account for transformations
+            mapCanvas.addEventListener('click', function(e) {
+                if (!hoveredRegion) return;
+                
+                // Get mouse position relative to canvas
+                const rect = mapCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Transform mouse coordinates to match the transformed canvas
+                const transformedX = (mouseX - offsetX) / scale;
+                const transformedY = (mouseY - offsetY) / scale;
+                
+                // Check if click is within the region
+                const region = hoveredRegion;
+                const distance = Math.sqrt(
+                    Math.pow(transformedX - region.x, 2) + 
+                    Math.pow(transformedY - region.y, 2)
+                );
+                
+                if (distance <= region.size) {
+                    showRegionDetails(region);
+                }
+            });
+
+            // Modify the mousemove handler for tooltips to account for transformations
+            mapCanvas.addEventListener('mousemove', function(e) {
+                const rect = mapCanvas.getBoundingClientRect();
+                const mouseX = e.clientX - rect.left;
+                const mouseY = e.clientY - rect.top;
+                
+                // Transform mouse coordinates to match the transformed canvas
+                const transformedX = (mouseX - offsetX) / scale;
+                const transformedY = (mouseY - offsetY) / scale;
+                
+                // Check if mouse is over an edge
+                let hoveredEdge = null;
+                for (const region of regions) {
+                    if (region.edges) {
+                        for (const edge of region.edges) {
+                            const distance = distanceToLine(
+                                transformedX, transformedY,
+                                edge.x1, edge.y1,
+                                edge.x2, edge.y2
+                            );
+                            if (distance < 5) { // 5px threshold
+                                hoveredEdge = edge;
+                                break;
+                            }
+                        }
+                    }
+                    if (hoveredEdge) break;
+                }
+                
+                if (hoveredEdge) {
+                    const tooltip = document.getElementById('tooltip');
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = (e.clientX + 10) + 'px';
+                    tooltip.style.top = (e.clientY + 10) + 'px';
+                    
+                    const relativeVolume = hoveredEdge.tradeVolume / averageTradeVolume;
+                    const volumeStatus = relativeVolume > 1.5 ? 'High' : relativeVolume > 0.75 ? 'Medium' : 'Low';
+                    
+                    tooltip.innerHTML = `
+                        <strong>Trade Relation</strong><br>
+                        ${hoveredEdge.region1.name} ↔ ${hoveredEdge.region2.name}<br>
+                        Trade Volume: $${Math.round(hoveredEdge.tradeVolume)}B (${volumeStatus})<br>
+                        Status: ${hoveredEdge.hasConflict ? '⚠️ Active Conflict' : '✅ Peaceful'}
+                    `;
+                    
+                    mapCanvas.style.cursor = 'pointer';
+                    return;
+                }
+                
+                // Check if mouse is over a region
+                let isOverRegion = false;
+                let isOverLocality = false;
+                let hoverInfo = null;
+                
+                for (const region of regions) {
+                    // Check region circle
+                    const distance = Math.sqrt(
+                        Math.pow(transformedX - region.x, 2) + 
+                        Math.pow(transformedY - region.y, 2)
+                    );
+                    if (distance <= region.size) {
+                        isOverRegion = true;
+                        hoveredRegion = region;
+                        hoverInfo = {
+                            title: region.name,
+                            gdp: `GDP: ${region.gdp.toFixed(2)} T`,
+                            population: `Population: ${region.population.toFixed(1)} M`,
+                            wealth: `Wealth: ${Math.round(region.wealth).toLocaleString()}`,
+                            type: region.isReserveCurrency ? '🌐 Reserve Currency Region' : ''
+                        };
+                        break;
+                    }
+                    
+                    // Check localities
+                    for (const locality of region.localities) {
+                        if (locality.x && locality.y) {
+                            const localDistance = Math.sqrt(
+                                Math.pow(transformedX - locality.x, 2) + 
+                                Math.pow(transformedY - locality.y, 2)
+                            );
+                            if (localDistance <= locality.size) {
+                                isOverLocality = true;
+                                hoveredRegion = region;
+                                hoverInfo = {
+                                    title: `${locality.name} (${region.name})`,
+                                    gdp: `GDP: ${locality.gdp.toFixed(2)} T`,
+                                    population: `Population: ${locality.population.toFixed(1)} M`,
+                                    happiness: `Happiness: ${locality.happiness.toFixed(1)}%`
+                                };
+                                break;
+                            }
+                        }
+                    }
+                    
+                    if (isOverLocality) break;
+                }
+                
+                if (isOverRegion || isOverLocality) {
+                    tooltip.style.display = 'block';
+                    tooltip.style.left = (e.clientX + 10) + 'px';
+                    tooltip.style.top = (e.clientY + 10) + 'px';
+                    
+                    tooltip.innerHTML = `
+                        <strong>${hoverInfo.title}</strong><br>
+                        ${hoverInfo.gdp}<br>
+                        ${hoverInfo.population}<br>
+                        ${isOverRegion ? hoverInfo.wealth : hoverInfo.happiness}<br>
+                        ${isOverRegion && hoverInfo.type ? hoverInfo.type : ''}
+                    `;
+                    
+                    mapCanvas.style.cursor = isDragging ? 'grabbing' : 'pointer';
+                } else {
+                    tooltip.style.display = 'none';
+                    hoveredRegion = null;
+                    mapCanvas.style.cursor = isDragging ? 'grabbing' : 'default';
+                }
+            });
+            
+            // Help button
+            document.getElementById('showHelp').addEventListener('click', function() {
+                alert(
+                    'Geo-Economic Simulator - Proof of Concept\n\n' +
+                    'This simulator demonstrates key concepts from the geo-economic requirements document.\n\n' +
+                    'Instructions:\n' +
+                    '1. Configure the initial conditions in the left panel\n' +
+                    '2. Click "Start Simulation" to begin\n' +
+                    '3. Use the Play/Pause button to control simulation speed\n' +
+                    '4. Click on regions or localities to view detailed information\n' +
+                    '5. Monitor the event feed for significant developments\n' +
+                    '6. Export results for further analysis\n\n' +
+                    'This proof-of-concept shows regional interactions, resource discovery, Bitcoin adoption effects, and other key elements of the full simulation.'
+                );
+            });
+            
+            // Add view toggle event listeners
+            document.querySelectorAll('.view-toggle').forEach(button => {
+                button.addEventListener('click', function() {
+                    // Update active state
+                    document.querySelectorAll('.view-toggle').forEach(btn => btn.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Update current view
+                    currentView = this.getAttribute('data-view');
+                    
+                    // Update legend
+                    updateLegend();
+                    
+                    // Redraw map
+                    drawMap();
+                });
+            });
+
+            function updateLegend() {
+                const legend = document.querySelector('.legend');
+                legend.innerHTML = `
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(39, 174, 96, 0.7);"></div>
+                        <span>High ${currentView === 'wealth' ? 'Wealth' : currentView === 'happiness' ? 'Happiness' : 'Economic Freedom'}</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(241, 196, 15, 0.7);"></div>
+                        <span>Medium ${currentView === 'wealth' ? 'Wealth' : currentView === 'happiness' ? 'Happiness' : 'Economic Freedom'}</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(231, 76, 60, 0.7);"></div>
+                        <span>Low ${currentView === 'wealth' ? 'Wealth' : currentView === 'happiness' ? 'Happiness' : 'Economic Freedom'}</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(52, 152, 219, 0.7);"></div>
+                        <span>Reserve Currency Region</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(231, 76, 60, 0.5);"></div>
+                        <span>Active Conflict</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(39, 174, 96, 0.5);"></div>
+                        <span>High Trade Volume</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(241, 196, 15, 0.5);"></div>
+                        <span>Medium Trade Volume</span>
+                    </div>
+                    <div class="legend-item">
+                        <div class="legend-color" style="background-color: rgba(52, 152, 219, 0.3);"></div>
+                        <span>Low Trade Volume</span>
+                    </div>
+                `;
+            }
+
+            function distanceToLine(x, y, x1, y1, x2, y2) {
+                const A = x - x1;
+                const B = y - y1;
+                const C = x2 - x1;
+                const D = y2 - y1;
+                
+                const dot = A * C + B * D;
+                const lenSq = C * C + D * D;
+                let param = -1;
+                
+                if (lenSq !== 0) {
+                    param = dot / lenSq;
+                }
+                
+                let xx, yy;
+                
+                if (param < 0) {
+                    xx = x1;
+                    yy = y1;
+                } else if (param > 1) {
+                    xx = x2;
+                    yy = y2;
+                } else {
+                    xx = x1 + param * C;
+                    yy = y1 + param * D;
+                }
+                
+                const dx = x - xx;
+                const dy = y - yy;
+                
+                return Math.sqrt(dx * dx + dy * dy);
+            }
+            
+            // Initial setup
+            console.log("Running initial setup");
+            resizeCanvas();
+            initializeSimulation();
+            
+            // Disable simulation controls initially
+            document.getElementById('resetSimulation').disabled = true;
+            document.getElementById('playPause').disabled = true;
+            
+            // Create simulation startup message
+            const welcomeEvent = {
+                year: START_YEAR,
+                quarter: 1,
+                text: 'Welcome to the Geo-Economic Simulator. Configure parameters and click "Start Simulation" to begin.'
+            };
+            addEventToFeed(welcomeEvent);
+            
+            console.log("Initialization complete");
+
+            function getColorForMetric(value, metric) {
+                switch (metric) {
+                    case 'wealth':
+                        if (value > 60000) return 'rgba(39, 174, 96, 0.7)'; // Green
+                        if (value > 30000) return 'rgba(241, 196, 15, 0.7)'; // Yellow
+                        return 'rgba(231, 76, 60, 0.7)'; // Red
+                    case 'happiness':
+                        if (value > 70) return 'rgba(39, 174, 96, 0.7)'; // Green
+                        if (value > 50) return 'rgba(241, 196, 15, 0.7)'; // Yellow
+                        return 'rgba(231, 76, 60, 0.7)'; // Red
+                    case 'freedom':
+                        if (value > 70) return 'rgba(39, 174, 96, 0.7)'; // Green
+                        if (value > 50) return 'rgba(241, 196, 15, 0.7)'; // Yellow
+                        return 'rgba(231, 76, 60, 0.7)'; // Red
+                    default:
+                        return 'rgba(231, 76, 60, 0.7)'; // Default to red
+                }
+            }
+
+            function getEdgeColor(tradeVolume, hasConflict) {
+                if (hasConflict) {
+                    return 'rgba(231, 76, 60, 0.5)'; // Red for conflicts
+                }
+                
+                // Color based on trade volume
+                if (tradeVolume > 80) {
+                    return 'rgba(39, 174, 96, 0.5)'; // Green for high trade
+                } else if (tradeVolume > 40) {
+                    return 'rgba(241, 196, 15, 0.5)'; // Yellow for medium trade
+                } else {
+                    return 'rgba(52, 152, 219, 0.3)'; // Blue for low trade
+                }
+            }
+
+            function getEdgeWidth(tradeVolume, averageTradeVolume) {
+                if (averageTradeVolume === 0) return 1;
+                
+                // Calculate relative thickness (1-10) based on trade volume compared to average
+                const relativeVolume = tradeVolume / averageTradeVolume;
+                const thickness = Math.min(10, Math.max(1, Math.round(relativeVolume * 5)));
+                return thickness;
+            }
+        });
+    </script>
+
+
+</body></html>

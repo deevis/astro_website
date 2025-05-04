@@ -1,11 +1,11 @@
 {
     "showcases":  [
       { 
-        "title": "Geo Economic Simulator",
+        "title": "Geo Economic Simulator - Claude 3.5 Sonnet   Created",
         "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
-        "href": "html_showcase/geo_economic_simulator/index.html",
-        "image": "html_showcase/geo_economic_simulator/thumb.png",
-        "tags": ["simulation", "economics", "data visualization"]
+        "href": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/index.html",
+        "image": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/thumb.png",
+        "tags": ["Claude 3.5 Sonnet", "simulation", "economics", "data visualization"]
       },
       {
         "title": "Retirement Planner",
@@ -13,6 +13,12 @@
         "href": "html_showcase/social_security_calculator/index.html",
         "image": "html_showcase/social_security_calculator/thumb.png",
         "tags": ["calculator", "finance", "retirement", "economics"]
+      },
+      { "title": "Water Cycle Simulation - Claude 3.5 Sonnet",
+        "description": "A simulation of rainfall and evaporation across various altitudes.",
+        "href": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/index.html",
+        "image": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/thumb.png",
+        "tags": ["Claude 3.5 Sonnet", "simulation", "weather", "rainfall"]
       },
        {
           "title": "3D Interactive PhotoCube",
@@ -42,7 +48,21 @@
           "image": "html_showcase/webgl_photocube_multi/thumb.png",
           "tags": ["3D", "WebGL", "interactive", "photos"]
         },
-        {
+        { 
+          "title": "Geo Economic Simulator - Gemini Pro Created",
+          "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
+          "href": "html_showcase/geo_economic_simulator_gemini_pro/index.html",
+          "image": "html_showcase/geo_economic_simulator_gemini_pro/thumb.png",
+          "tags": ["Gemini Pro", "simulation", "economics", "data visualization"]
+        },
+        { 
+          "title": "Geo Economic Simulator - Manus Created",
+          "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
+          "href": "html_showcase/geo_economic_simulator_manus/index.html",
+          "image": "html_showcase/geo_economic_simulator_manus/thumb.png",
+          "tags": ["Manus", "simulation", "economics", "data visualization"]
+        },
+          {
           "title": "CryptoQuote Generator",
           "description": "Create your own CryptoQuote puzzles",
           "href": "html_showcase/cryptoquote_generator/index.html",
