@@ -1,5 +1,11 @@
 {
     "showcases":  [
+      { 
+        "title": "Geo Economic Simulator",
+        "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
+        "href": "html_showcase/geo_economic_simulator/index.html",
+        "image": "html_showcase/geo_economic_simulator/thumb.png"
+      },
       {
         "title": "Retirement Planner",
         "description": "Learn how your future earnings (or lack thereof) impact your social security benefits",

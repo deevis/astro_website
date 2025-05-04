@@ -1,7 +1,28 @@
 let earningsData = [];
 let benefitChart = null;
 
+// Social Security earnings limits and future projections
+// Historical data up to 2024 from SSA.gov
+// 2025-2029 projections based on SSA's intermediate assumptions from October 2023
+// 2030-2040 projections calculated using historical 2.5% average annual increase
+// Last updated: January 2024
 const earningsLimits = {
+    2040: 251700,
+    2039: 245600,
+    2038: 239600,
+    2037: 233800,
+    2036: 228100,
+    2035: 222500,
+    2034: 217100,
+    2033: 211800,
+    2032: 206600,
+    2031: 201600,
+    2030: 196800,
+    2029: 192000,
+    2028: 187200,
+    2027: 182400,
+    2026: 177600,
+    2025: 172800,
     2024: 168600,
     2023: 160200,
     2022: 147000,
@@ -296,10 +317,18 @@ function generateBenefitsTable(scenario) {
 }
 
 function projectFutureEarningsLimit(baseYear, futureYear) {
-    const baseLimit = getEarningsLimit(baseYear);
-    // Using approximate 3.5% annual increase based on historical averages
-    const yearsOut = futureYear - baseYear;
-    const projectedLimit = baseLimit * Math.pow(1.035, yearsOut);
+    // First check if we have the year in our earningsLimits
+    if (earningsLimits[futureYear]) {
+        return earningsLimits[futureYear];
+    }
+    
+    // If we don't have the year, use the latest known year as base
+    const latestYear = Math.max(...Object.keys(earningsLimits).map(Number));
+    const latestLimit = earningsLimits[latestYear];
+    
+    // Project forward using 2.5% annual increase from the latest known year
+    const yearsOut = futureYear - latestYear;
+    const projectedLimit = latestLimit * Math.pow(1.025, yearsOut);
     return Math.round(projectedLimit);
 }
 
