@@ -4,19 +4,157 @@ import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
 import Card from '../../components/Card.astro';
 import { showcases } from '../../config/showcases.json';
+
+// Extract all unique tags
+const allTags = [...new Set(showcases.flatMap(showcase => showcase.tags || []))].sort();
 ---
 
 <Layout title="HTML Showcase | Professional Portfolio">
   <Navigation />
   <main class="pt-24 pb-16">
     <div class="container mx-auto px-4">
-      <h1 class="text-2xl font-bold mb-4">HTML Showcase</h1>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <h1 class="text-2xl font-bold mb-6">HTML Showcase</h1>
+      
+      <!-- Search and filter section -->
+      <div class="mb-8 p-4 bg-gray-50 dark:bg-dark-900 rounded-lg">
+        <div class="mb-4">
+          <label for="search" class="block text-sm font-medium mb-1">Search</label>
+          <input 
+            type="text" 
+            id="search" 
+            placeholder="Search by title or description..."
+            class="w-full p-2 border border-gray-300 dark:border-dark-700 rounded-md dark:bg-dark-800"
+          />
+        </div>
+        
+        <div>
+          <label class="block text-sm font-medium mb-1">Filter by Tags</label>
+          <div class="flex flex-wrap gap-2 mb-3" id="tag-filters">
+            {allTags.map(tag => (
+              <button
+                class="tag-filter px-3 py-1 text-sm rounded-full bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors"
+                data-tag={tag}
+              >
+                {tag}
+              </button>
+            ))}
+          </div>
+          <button 
+            id="clear-filters" 
+            class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+            Clear filters
+          </button>
+        </div>
+      </div>
+      
+      <div id="showcase-grid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         {showcases.map((showcase) => (
-          <Card {...showcase} />
+          <div class="showcase-card" data-tags={showcase.tags?.join(',')}>
+            <Card 
+              title={showcase.title} 
+              description={showcase.description} 
+              href={showcase.href} 
+              image={showcase.image} 
+              imageAlt={showcase.title} 
+              tags={showcase.tags}
+            />
+          </div>
         ))}
+      </div>
+      
+      <div id="no-results" class="hidden text-center py-10">
+        <p class="text-lg">No showcases match your search criteria.</p>
       </div>
     </div>
   </main>
   <Footer />
 </Layout>
+
+<script>
+  // Client-side filtering logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const showcaseCards = document.querySelectorAll('.showcase-card');
+    const tagButtons = document.querySelectorAll('.tag-filter');
+    const searchInput = document.getElementById('search') as HTMLInputElement;
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const showcaseGrid = document.getElementById('showcase-grid');
+    const noResults = document.getElementById('no-results');
+    
+    let activeFilters = new Set();
+    
+    // Function to filter showcases
+    function filterShowcases() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+      
+      showcaseCards.forEach(card => {
+        const cardEl = card as HTMLElement;
+        const title = cardEl.querySelector('h2')?.textContent?.toLowerCase() || '';
+        const description = cardEl.querySelector('p')?.textContent?.toLowerCase() || '';
+        const tags = (cardEl.dataset.tags || '').split(',');
+        
+        // Check if card passes the search filter
+        const matchesSearch = searchTerm === '' || 
+          title.includes(searchTerm) || 
+          description.includes(searchTerm);
+        
+        // Check if card passes the tag filters
+        const matchesTags = activeFilters.size === 0 || 
+          tags.some(tag => activeFilters.has(tag));
+        
+        // Show or hide the card
+        if (matchesSearch && matchesTags) {
+          cardEl.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          cardEl.classList.add('hidden');
+        }
+      });
+      
+      // Show "no results" message if needed
+      if (visibleCount === 0) {
+        showcaseGrid.classList.add('hidden');
+        noResults.classList.remove('hidden');
+      } else {
+        showcaseGrid.classList.remove('hidden');
+        noResults.classList.add('hidden');
+      }
+    }
+    
+    // Set up tag filter buttons
+    tagButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const btn = button as HTMLElement;
+        const tag = btn.dataset.tag || '';
+        
+        if (activeFilters.has(tag)) {
+          activeFilters.delete(tag);
+          btn.classList.remove('bg-blue-500', 'text-white');
+          btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+        } else {
+          activeFilters.add(tag);
+          btn.classList.remove('bg-gray-200', 'dark:bg-dark-700');
+          btn.classList.add('bg-blue-500', 'text-white');
+        }
+        
+        filterShowcases();
+      });
+    });
+    
+    // Set up search input
+    searchInput.addEventListener('input', filterShowcases);
+    
+    // Set up clear filters button
+    clearFiltersBtn.addEventListener('click', () => {
+      activeFilters.clear();
+      searchInput.value = '';
+      
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+      });
+      
+      filterShowcases();
+    });
+  });
+</script>
