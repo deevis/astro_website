@@ -2,52 +2,316 @@
 import Layout from '../../layouts/Layout.astro';
 import Navigation from '../../components/Navigation.astro';
 import Footer from '../../components/Footer.astro';
-import VideoCarousel from '../../components/VideoCarousel.astro';
-import { galleries } from '../../config/galleries.json';
+import MediaCard from '../../components/MediaCard.astro';
+import MediaModal from '../../components/MediaModal.astro';
+import { mediaItems } from '../../config/media.json';
+
+// Extract all unique tags
+const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort();
 ---
 
-<Layout title="Gallery | Professional Portfolio">
+<Layout title="Media Gallery | Professional Portfolio">
   <Navigation />
   <main class="pt-24 pb-16">
     <div class="container mx-auto px-4">
-      <h1 class="text-2xl font-bold mb-4">Gallery</h1>
+      <h1 class="text-2xl font-bold mb-6">Media Gallery</h1>
       
-      {galleries.map((gallery) => (
-        <section class="mb-12">
-          <h2 class="text-2xl font-semibold mb-6">{gallery.title}</h2>
-          {gallery.type === 'youtube' ? (
-            <VideoCarousel videos={gallery.items} />
-          ) : (
-            <div class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
-              {gallery.items.map((item) => (
-                <div class="rounded-lg bg-gray-100 overflow-hidden">
-                  {gallery.type === 'video' ? (
-                    <div class="aspect-video">
-                      <video 
-                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                        controls
-                        poster={item.poster}
-                      >
-                        <source src={item.src} type="video/mp4" />
-                        Your browser does not support the video tag.
-                      </video>
-                    </div>
-                  ) : (
-                    <div class="aspect-square">
-                      <img 
-                        src={item.src} 
-                        alt={item.alt}
-                        class="w-full h-full object-cover transition-transform duration-300 hover:scale-105"
-                      />
-                    </div>
-                  )}
-                </div>
-              ))}
+      <!-- Collapsible search and filter section -->
+      <div class="mb-8 bg-gray-50 dark:bg-dark-900 rounded-lg overflow-hidden">
+        <!-- Toggle button -->
+        <button id="filter-toggle" class="w-full p-4 text-left flex justify-between items-center">
+          <span class="font-medium">Search & Filters</span>
+          <svg id="filter-chevron-down" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          <svg id="filter-chevron-up" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        
+        <!-- Collapsible content -->
+        <div id="filter-content" class="hidden p-4 border-t border-gray-200 dark:border-dark-700">
+          <div class="mb-4">
+            <label for="gallery-search" class="block text-sm font-medium mb-1">Search</label>
+            <input 
+              type="text" 
+              id="gallery-search" 
+              placeholder="Search by title or description..."
+              class="w-full p-2 border border-gray-300 dark:border-dark-700 rounded-md dark:bg-dark-800"
+            />
+          </div>
+          
+          <div class="flex flex-col md:flex-row gap-4 mb-4">
+            <!-- Filter by Type - narrow column on the left -->
+            <div class="md:w-[120px] shrink-0">
+              <label class="block text-sm font-medium mb-1">Filter by Type</label>
+              <div class="flex flex-col gap-2">
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="type-filter form-checkbox" value="image" checked />
+                  <span class="ml-2">Images</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="type-filter form-checkbox" value="video" checked />
+                  <span class="ml-2">Videos</span>
+                </label>
+                <label class="inline-flex items-center">
+                  <input type="checkbox" class="type-filter form-checkbox" value="youtube" checked />
+                  <span class="ml-2">YouTube</span>
+                </label>
+              </div>
             </div>
-          )}
-        </section>
-      ))}
+            
+            <!-- Filter by Tags - expanded width -->
+            <div class="flex-1">
+              <label class="block text-sm font-medium mb-1">Filter by Tags</label>
+              <div class="flex flex-wrap gap-2 mb-3" id="gallery-tag-filters">
+                {allTags.map(tag => (
+                  <button
+                    class="tag-filter px-3 py-1 text-sm rounded-full bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors"
+                    data-tag={tag}
+                  >
+                    {tag}
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+          
+          <button 
+            id="clear-gallery-filters" 
+            class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+            Clear all filters
+          </button>
+        </div>
+      </div>
+      
+      <div id="gallery-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4">
+        {mediaItems.map((item) => (
+          <div class="media-item" data-tags={item.tags.join(',')} data-type={item.type}>
+            <MediaCard 
+              id={item.id}
+              title={item.title} 
+              description={item.description} 
+              type={item.type}
+              src={item.src}
+              videoId={item.videoId}
+              thumb={item.thumb}
+              tags={item.tags}
+            />
+          </div>
+        ))}
+      </div>
+      
+      <div id="no-gallery-results" class="hidden text-center py-10">
+        <p class="text-lg">No media items match your search criteria.</p>
+      </div>
     </div>
   </main>
+  
+  <MediaModal />
+  
   <Footer />
 </Layout>
+
+<script>
+  // Client-side filtering logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const mediaItems = document.querySelectorAll('.media-item');
+    const tagButtons = document.querySelectorAll('.tag-filter');
+    const typeFilters = document.querySelectorAll('.type-filter');
+    const searchInput = document.getElementById('gallery-search') as HTMLInputElement;
+    const clearFiltersBtn = document.getElementById('clear-gallery-filters');
+    const galleryGrid = document.getElementById('gallery-grid');
+    const noResults = document.getElementById('no-gallery-results');
+    const tagFiltersContainer = document.getElementById('gallery-tag-filters');
+    
+    // Collapsible filter section elements
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterContent = document.getElementById('filter-content');
+    const filterChevronDown = document.getElementById('filter-chevron-down');
+    const filterChevronUp = document.getElementById('filter-chevron-up');
+    
+    // Toggle filter section visibility
+    filterToggle?.addEventListener('click', () => {
+      filterContent?.classList.toggle('hidden');
+      filterChevronDown?.classList.toggle('hidden');
+      filterChevronUp?.classList.toggle('hidden');
+    });
+    
+    // Create a map to track which tags belong to which media types
+    const tagsByType = new Map();
+    const allMediaItems = Array.from(mediaItems);
+    
+    // Initialize tag-type mapping
+    initializeTagTypeMapping();
+    
+    let activeTagFilters = new Set();
+    let activeTypeFilters = new Set(['image', 'video', 'youtube']); // Default: show all
+    
+    // Initialize type filters
+    typeFilters.forEach(filter => {
+      const inputEl = filter as HTMLInputElement;
+      if (inputEl.checked) {
+        activeTypeFilters.add(inputEl.value);
+      }
+      
+      // Add change event that updates both type filters and available tags
+      inputEl.addEventListener('change', () => {
+        if (inputEl.checked) {
+          activeTypeFilters.add(inputEl.value);
+        } else {
+          activeTypeFilters.delete(inputEl.value);
+        }
+        
+        updateAvailableTags();
+        filterMediaItems();
+      });
+    });
+    
+    // Function to initialize the tag-type mapping
+    function initializeTagTypeMapping() {
+      // Initialize with empty Sets for each media type
+      tagsByType.set('image', new Set());
+      tagsByType.set('video', new Set());
+      tagsByType.set('youtube', new Set());
+      
+      // Populate the tag sets for each media type
+      allMediaItems.forEach(item => {
+        const itemEl = item as HTMLElement;
+        const type = itemEl.dataset.type || '';
+        const tags = (itemEl.dataset.tags || '').split(',');
+        
+        if (type && tagsByType.has(type)) {
+          tags.forEach(tag => {
+            if (tag) tagsByType.get(type).add(tag);
+          });
+        }
+      });
+      
+      console.log('Tags by media type:', Object.fromEntries([...tagsByType.entries()].map(
+        ([type, tags]) => [type, [...tags]]
+      )));
+    }
+    
+    // Function to update the available tags based on active type filters
+    function updateAvailableTags() {
+      // Get a union of all tags from the active media types
+      const availableTags = new Set();
+      activeTypeFilters.forEach(type => {
+        if (tagsByType.has(type)) {
+          tagsByType.get(type).forEach(tag => availableTags.add(tag));
+        }
+      });
+      
+      // Update the visibility of tag buttons
+      tagButtons.forEach(button => {
+        const btn = button as HTMLElement;
+        const tag = btn.dataset.tag || '';
+        
+        if (availableTags.has(tag)) {
+          btn.classList.remove('hidden');
+          
+          // If a tag is no longer available but was active, remove it from active filters
+          if (!availableTags.has(tag) && activeTagFilters.has(tag)) {
+            activeTagFilters.delete(tag);
+            btn.classList.remove('bg-blue-500', 'text-white');
+            btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+          }
+        } else {
+          btn.classList.add('hidden');
+        }
+      });
+    }
+    
+    // Function to filter media items
+    function filterMediaItems() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+      
+      mediaItems.forEach(item => {
+        const itemEl = item as HTMLElement;
+        const title = itemEl.querySelector('h2')?.textContent?.toLowerCase() || '';
+        const description = itemEl.querySelector('p')?.textContent?.toLowerCase() || '';
+        const tags = (itemEl.dataset.tags || '').split(',');
+        const type = itemEl.dataset.type;
+        
+        // Check if item passes the search filter
+        const matchesSearch = searchTerm === '' || 
+          title.includes(searchTerm) || 
+          description.includes(searchTerm);
+        
+        // Check if item passes the tag filters
+        const matchesTags = activeTagFilters.size === 0 || 
+          tags.some(tag => activeTagFilters.has(tag));
+        
+        // Check if item passes the type filter
+        const matchesType = type && activeTypeFilters.has(type);
+        
+        // Show or hide the item
+        if (matchesSearch && matchesTags && matchesType) {
+          itemEl.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          itemEl.classList.add('hidden');
+        }
+      });
+      
+      // Show "no results" message if needed
+      if (visibleCount === 0) {
+        galleryGrid?.classList.add('hidden');
+        noResults?.classList.remove('hidden');
+      } else {
+        galleryGrid?.classList.remove('hidden');
+        noResults?.classList.add('hidden');
+      }
+    }
+    
+    // Set up tag filter buttons
+    tagButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const btn = button as HTMLElement;
+        const tag = btn.dataset.tag || '';
+        
+        if (activeTagFilters.has(tag)) {
+          activeTagFilters.delete(tag);
+          btn.classList.remove('bg-blue-500', 'text-white');
+          btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+        } else {
+          activeTagFilters.add(tag);
+          btn.classList.remove('bg-gray-200', 'dark:bg-dark-700');
+          btn.classList.add('bg-blue-500', 'text-white');
+        }
+        
+        filterMediaItems();
+      });
+    });
+    
+    // Set up search input
+    searchInput.addEventListener('input', filterMediaItems);
+    
+    // Set up clear filters button
+    clearFiltersBtn?.addEventListener('click', () => {
+      activeTagFilters.clear();
+      activeTypeFilters = new Set(['image', 'video', 'youtube']);
+      searchInput.value = '';
+      
+      // Reset tag buttons
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+        btn.classList.remove('hidden'); // Make all tags visible again
+      });
+      
+      // Reset type filters
+      typeFilters.forEach(filter => {
+        const inputEl = filter as HTMLInputElement;
+        inputEl.checked = true;
+      });
+      
+      filterMediaItems();
+    });
+    
+    // Initialize the tags display
+    updateAvailableTags();
+  });
+</script>

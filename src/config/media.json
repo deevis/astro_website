@@ -1,0 +1,462 @@
+{
+    "mediaItems": [
+        {
+            "id": "image-11",
+            "title": "Human-Powered Companies of the Future",
+            "description": "Concept illustration of human-powered companies in the future",
+            "type": "image",
+            "src": "/images/gallery/human-powered companies of the future.png",
+            "thumb": "/images/gallery/human-powered companies of the future.png",
+            "tags": ["future", "companies", "AI generated", "concept"]
+        },
+        {
+            "id": "image-7",
+            "title": "Legacy Software Development Technical Debt 4",
+            "description": "Fourth visualization of technical debt in legacy software",
+            "type": "image",
+            "src": "/images/gallery/legacy software development technical debt 4.png",
+            "thumb": "/images/gallery/legacy software development technical debt 4.png",
+            "tags": ["software development", "technical debt", "AI generated"]
+        },
+        {
+            "id": "video-4",
+            "title": "Monkey Hacker Programming",
+            "description": "Monkey hacker programming like a mad genius with scrolling information on screens",
+            "type": "video",
+            "src": "/images/gallery/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.mp4",
+            "thumb": "/images/gallery/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.mp4",
+            "tags": ["AI generated", "monkey", "hacker", "programming", "humor"]
+        },
+        {
+            "id": "video-1",
+            "title": "The Smiths - How Soon Is Now (AI Filtered)",
+            "description": "The Smiths music video with AI visual filters",
+            "type": "video",
+            "src": "/mp4/TheSmiths-HowSoonIsNow-Deforum.mp4",
+            "thumb": "/mp4/TheSmiths-HowSoonIsNow-Deforum.png",
+            "tags": ["music", "AI filtered", "The Smiths"]
+        },
+        {
+            "id": "video-6",
+            "title": "Commando Cat in Battle",
+            "description": "Commando cat walks dramatically forward in slow motion as the raging battle ensues behind him",
+            "type": "video",
+            "src": "/images/gallery/commando_cat_walks_dramatically_forward_in_slow_motion_as_the_raging_battle_ensues_behind_him_hjo4h9g0dxad23r1cus0_1.mp4",
+            "thumb": "/images/gallery/commando_cat_walks_dramatically_forward_in_slow_motion_as_the_raging_battle_ensues_behind_him_hjo4h9g0dxad23r1cus0_1.mp4",
+            "tags": ["AI generated", "cat", "battle", "commando", "slow motion"]
+        },
+        {
+            "id": "video-7",
+            "title": "Stormy Lightning Anomaly",
+            "description": "Visualization of a stormy lightning anomaly",
+            "type": "video",
+            "src": "/images/gallery/stormy lightning anomaly.mp4",
+            "thumb": "/images/gallery/stormy lightning anomaly.mp4",
+            "tags": ["AI generated", "storm", "lightning", "anomaly", "weather"]
+        },
+        {
+            "id": "video-8",
+            "title": "Guitar Gods Celestial Jam 2",
+            "description": "Second visualization of cosmic entities playing guitars in space",
+            "type": "video",
+            "src": "/images/gallery/guitar gods celestial jam 2.mp4",
+            "thumb": "/images/gallery/guitar gods celestial jam 2.mp4",
+            "tags": ["AI generated", "music", "guitar", "celestial", "cosmic"]
+        },
+        {
+            "id": "youtube-1",
+            "title": "Stable Diffusion - TV on the Radio",
+            "description": "AI generated video using Stable Diffusion",
+            "type": "youtube",
+            "videoId": "Qb_tdP3unEQ",
+            "thumb": "https://img.youtube.com/vi/Qb_tdP3unEQ/mqdefault.jpg",
+            "tags": ["AI", "Stable Diffusion", "generated"]
+        },
+        {
+            "id": "youtube-9",
+            "title": "Valley Sunset",
+            "description": "Beautiful valley sunset timelapse",
+            "type": "youtube",
+            "videoId": "kd_TTYEk8Gg",
+            "thumb": "https://img.youtube.com/vi/kd_TTYEk8Gg/mqdefault.jpg",
+            "tags": ["timelapse", "sunset", "valley", "nature"]
+        },
+        {
+            "id": "photo-2",
+            "title": "Coolest Kids Ever",
+            "description": "Portrait photography of cool kids posing",
+            "type": "image",
+            "src": "/images/gallery/photography/coolest kids ever.jpg",
+            "thumb": "/images/gallery/photography/coolest kids ever.jpg",
+            "tags": ["photography", "portrait", "kids", "people"]
+        },
+        {
+            "id": "photo-4",
+            "title": "Salt Lake City Utah Fence Sign",
+            "description": "Urban photography of a fence sign in Salt Lake City, Utah",
+            "type": "image",
+            "src": "/images/gallery/photography/salt lake city utah fence sign.jpg",
+            "thumb": "/images/gallery/photography/salt lake city utah fence sign.jpg",
+            "tags": ["photography", "urban", "Salt Lake City", "sign"]
+        },        
+        {
+            "id": "video-9",
+            "title": "Donald Trump Dragon Lord",
+            "description": "Fantastical visualization of Donald Trump as a dragon lord",
+            "type": "video",
+            "src": "/images/gallery/donald trump dragon lord.mp4",
+            "thumb": "/images/gallery/donald trump dragon lord.mp4",
+            "tags": ["AI generated", "fantasy", "dragon", "political", "humor"]
+        },        
+        {
+            "id": "image-12",
+            "title": "Coffee Cup Galaxy",
+            "description": "An old-fashioned diner counter with a cup of coffee, where the milk swirling inside forms the Milky Way galaxy",
+            "type": "image",
+            "src": "/images/gallery/DALL·E 2023-11-09 00.28.47 - An old-fashioned diner counter with a cup of coffee, where the milk swirling inside forms the Milky Way galaxy. Existence itself seems to be emanating.png",
+            "thumb": "/images/gallery/DALL·E 2023-11-09 00.28.47 - An old-fashioned diner counter with a cup of coffee, where the milk swirling inside forms the Milky Way galaxy. Existence itself seems to be emanating.png",
+            "tags": ["DALL-E", "galaxy", "coffee", "cosmic", "AI generated"]
+        },
+        {
+            "id": "video-2",
+            "title": "Aha - Take on Me (AI Filtered)",
+            "description": "Aha music video with AI visual filters",
+            "type": "video",
+            "src": "/mp4/Aha-TakeOnMe-Deforum.mp4",
+            "thumb": "/mp4/Aha-TakeOnMe-Deforum.png",
+            "tags": ["music", "AI filtered", "Aha"]
+        },
+
+        {
+            "id": "photo-3",
+            "title": "Sunflower Against Cloudy Sky",
+            "description": "Close-up photography of a sunflower against a cloudy sky",
+            "type": "image",
+            "src": "/images/gallery/photography/sunflower cloudy sky.jpeg",
+            "thumb": "/images/gallery/photography/sunflower cloudy sky.jpeg",
+            "tags": ["photography", "nature", "flower", "sunflower", "sky"]
+        },
+        
+        {
+            "id": "youtube-2",
+            "title": "Stable Diffusion - Deforum Zoom",
+            "description": "AI generated zoom effect using Stable Diffusion",
+            "type": "youtube",
+            "videoId": "rIX3YHz2OfE",
+            "thumb": "https://img.youtube.com/vi/rIX3YHz2OfE/mqdefault.jpg",
+            "tags": ["AI", "Stable Diffusion", "zoom", "Deforum"]
+        },
+        {
+            "id": "youtube-3",
+            "title": "Stable Diffusion - Deforum Zoom 2",
+            "description": "Second AI generated zoom effect using Stable Diffusion",
+            "type": "youtube",
+            "videoId": "cCdIR5ANsZ4",
+            "thumb": "https://img.youtube.com/vi/cCdIR5ANsZ4/mqdefault.jpg",
+            "tags": ["AI", "Stable Diffusion", "zoom", "Deforum"]
+        },
+        {
+            "id": "youtube-4",
+            "title": "Disco Diffusion - Original Zoom",
+            "description": "AI generated zoom effect using Disco Diffusion",
+            "type": "youtube",
+            "videoId": "cJQVml12UE4",
+            "thumb": "https://img.youtube.com/vi/cJQVml12UE4/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "zoom"]
+        },
+        {
+            "id": "youtube-5",
+            "title": "Cloudlapse over Salt Lake Valley",
+            "description": "Beautiful timelapse of clouds moving over Salt Lake Valley",
+            "type": "youtube",
+            "videoId": "AwP2ORHGVT0",
+            "thumb": "https://img.youtube.com/vi/AwP2ORHGVT0/mqdefault.jpg",
+            "tags": ["timelapse", "clouds", "Salt Lake", "nature"]
+        },
+        {
+            "id": "youtube-6",
+            "title": "Mountain Cloudlapse",
+            "description": "Timelapse of clouds moving over mountains",
+            "type": "youtube",
+            "videoId": "sNWNOsmLz6I",
+            "thumb": "https://img.youtube.com/vi/sNWNOsmLz6I/mqdefault.jpg",
+            "tags": ["timelapse", "clouds", "mountains", "nature"]
+        },
+        {
+            "id": "youtube-7",
+            "title": "Grandeur Peak Base Trail Timelapse",
+            "description": "Timelapse of the Grandeur Peak Base Trail",
+            "type": "youtube",
+            "videoId": "44xOi365Pjs",
+            "thumb": "https://img.youtube.com/vi/44xOi365Pjs/mqdefault.jpg",
+            "tags": ["timelapse", "hiking", "trail", "nature"]
+        },
+        {
+            "id": "youtube-8",
+            "title": "Winter Valley Cloudlapse",
+            "description": "Timelapse of clouds over a winter valley",
+            "type": "youtube",
+            "videoId": "xpxVsV2YjVA",
+            "thumb": "https://img.youtube.com/vi/xpxVsV2YjVA/mqdefault.jpg",
+            "tags": ["timelapse", "clouds", "winter", "nature"]
+        },
+        
+        {
+            "id": "youtube-10",
+            "title": "Disco Diffusion - Pikachu In a Lush Forest - In the style of Lisa Frank",
+            "description": "AI generated artwork of Pikachu in Lisa Frank style",
+            "type": "youtube",
+            "videoId": "SGMHQ5-KIk4",
+            "thumb": "https://img.youtube.com/vi/SGMHQ5-KIk4/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Pikachu", "Lisa Frank"]
+        },
+        {
+            "id": "youtube-11",
+            "title": "Stairway to Heaven 04 - In the style of M.C. Escher and Salvadore Dali",
+            "description": "AI generated artwork combining styles of M.C. Escher and Salvadore Dali",
+            "type": "youtube",
+            "videoId": "lIx-No0Acbc",
+            "thumb": "https://img.youtube.com/vi/lIx-No0Acbc/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Escher", "Dali", "stairway"]
+        },
+        {
+            "id": "youtube-12",
+            "title": "River playground in the style of Tim White and Andreas Rocha",
+            "description": "AI generated river playground artwork",
+            "type": "youtube",
+            "videoId": "1cqvMWOvetY",
+            "thumb": "https://img.youtube.com/vi/1cqvMWOvetY/mqdefault.jpg",
+            "tags": ["AI", "art", "river", "playground"]
+        },
+        {
+            "id": "youtube-13",
+            "title": "Disco Diffusion - Cloud City - In the style of Federico Pelat and Thomas Kinkade",
+            "description": "AI generated Cloud City artwork",
+            "type": "youtube",
+            "videoId": "IQq7MYm6Spk",
+            "thumb": "https://img.youtube.com/vi/IQq7MYm6Spk/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Cloud City", "Kinkade"]
+        },
+        {
+            "id": "youtube-14",
+            "title": "Stairway to Heaven 01 - In the style of Frida Kahlo and Jeff Koons",
+            "description": "AI generated artwork combining styles of Frida Kahlo and Jeff Koons",
+            "type": "youtube",
+            "videoId": "FTJ0uU1jWA8",
+            "thumb": "https://img.youtube.com/vi/FTJ0uU1jWA8/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Kahlo", "Koons", "stairway"]
+        },
+        {
+            "id": "youtube-15",
+            "title": "Disco Diffusion - Cloud City 2 - In the style of Federico Pelat and Thomas Kinkade",
+            "description": "Second AI generated Cloud City artwork",
+            "type": "youtube",
+            "videoId": "R391M5fssnM",
+            "thumb": "https://img.youtube.com/vi/R391M5fssnM/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Cloud City", "Kinkade"]
+        },
+        {
+            "id": "youtube-16",
+            "title": "Stairway to Heaven 02 - In the style of Frida Kahlo and Jeff Koons",
+            "description": "Second AI generated artwork combining styles of Frida Kahlo and Jeff Koons",
+            "type": "youtube",
+            "videoId": "RGZAYaDad3U",
+            "thumb": "https://img.youtube.com/vi/RGZAYaDad3U/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Kahlo", "Koons", "stairway"]
+        },
+        {
+            "id": "youtube-17",
+            "title": "Disco Diffusion - Cloud City 3 - In the style of Federico Pelat and Thomas Kinkade",
+            "description": "Third AI generated Cloud City artwork",
+            "type": "youtube",
+            "videoId": "rn4eQeMbCxM",
+            "thumb": "https://img.youtube.com/vi/rn4eQeMbCxM/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Cloud City", "Kinkade"]
+        },
+        {
+            "id": "youtube-18",
+            "title": "Stairway to Heaven 03 - In the style of Rene Magritte and Jeff Koons",
+            "description": "AI generated artwork combining styles of Rene Magritte and Jeff Koons",
+            "type": "youtube",
+            "videoId": "6tyPzTHI-9c",
+            "thumb": "https://img.youtube.com/vi/6tyPzTHI-9c/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Magritte", "Koons", "stairway"]
+        },
+        {
+            "id": "youtube-19",
+            "title": "Disco Diffusion - Cloud City 4 - In the style of Federico Pelat and Thomas Kinkade",
+            "description": "Fourth AI generated Cloud City artwork",
+            "type": "youtube",
+            "videoId": "w9_4ZJJcwWI",
+            "thumb": "https://img.youtube.com/vi/w9_4ZJJcwWI/mqdefault.jpg",
+            "tags": ["AI", "Disco Diffusion", "Cloud City", "Kinkade"]
+        },
+        
+        {
+            "id": "video-3",
+            "title": "Black Sabbath - Paranoid (AI Filtered)",
+            "description": "Black Sabbath music video with AI visual filters",
+            "type": "video",
+            "src": "/mp4/BlackSabbath-Paranoid-Deforum.mp4",
+            "thumb": "/mp4/BlackSabbath-Paranoid-Deforum.png",
+            "tags": ["music", "AI filtered", "Black Sabbath"]
+        },
+                
+        {
+            "id": "image-4",
+            "title": "Legacy Software Development Technical Debt",
+            "description": "Visualization of technical debt in legacy software development",
+            "type": "image",
+            "src": "/images/gallery/legacy software development technical debt.png",
+            "thumb": "/images/gallery/legacy software development technical debt.png",
+            "tags": ["software development", "technical debt", "AI generated"]
+        },
+        {
+            "id": "image-5",
+            "title": "Legacy Software Development Technical Debt 2",
+            "description": "Second visualization of technical debt in legacy software",
+            "type": "image",
+            "src": "/images/gallery/legacy software development technical debt 2.png",
+            "thumb": "/images/gallery/legacy software development technical debt 2.png",
+            "tags": ["software development", "technical debt", "AI generated"]
+        },
+        {
+            "id": "image-6",
+            "title": "Legacy Software Development Technical Debt 3",
+            "description": "Third visualization of technical debt in legacy software",
+            "type": "image",
+            "src": "/images/gallery/legacy software development technical debt 3.png",
+            "thumb": "/images/gallery/legacy software development technical debt 3.png",
+            "tags": ["software development", "technical debt", "AI generated"]
+        },
+        {
+            "id": "image-8",
+            "title": "Legacy Software Development Technical Debt 5",
+            "description": "Fifth visualization of technical debt in legacy software",
+            "type": "image",
+            "src": "/images/gallery/legacy software development technical debt 5.png",
+            "thumb": "/images/gallery/legacy software development technical debt 5.png",
+            "tags": ["software development", "technical debt", "AI generated"]
+        },
+        {
+            "id": "image-9",
+            "title": "Legacy Software Development Panels",
+            "description": "Panel visualization of legacy software development",
+            "type": "image",
+            "src": "/images/gallery/legacy software development panels.png",
+            "thumb": "/images/gallery/legacy software development panels.png",
+            "tags": ["software development", "legacy", "panels", "AI generated"]
+        },
+        {
+            "id": "image-10",
+            "title": "Legacy Software Development",
+            "description": "Visualization of legacy software development",
+            "type": "image",
+            "src": "/images/gallery/legacy software development.png",
+            "thumb": "/images/gallery/legacy software development.png",
+            "tags": ["software development", "legacy", "AI generated"]
+        },
+        {
+            "id": "video-5",
+            "title": "Monkey Hacker Mining Bitcoin",
+            "description": "Monkey hacker mining bitcoin in his cyberpunk server farm with information scrolling on screens",
+            "type": "video",
+            "src": "/images/gallery/monkey_hacker_is_mining_bitcoin_in_his_cyberpunk_server_farm_the_screens_have_information_scrolling_zyrbindjaem8cw89gha5_1.mp4",
+            "thumb": "/images/gallery/monkey_hacker_is_mining_bitcoin_in_his_cyberpunk_server_farm_the_screens_have_information_scrolling_zyrbindjaem8cw89gha5_1.mp4",
+            "tags": ["AI generated", "monkey", "hacker", "bitcoin", "cyberpunk", "mining"]
+        },
+
+        {
+            "id": "video-10",
+            "title": "Joe Biden and His Donors",
+            "description": "Artistic visualization of Joe Biden and his donors",
+            "type": "video",
+            "src": "/images/gallery/joe biden and his donors.mp4",
+            "thumb": "/images/gallery/joe biden and his donors.mp4",
+            "tags": ["AI generated", "political", "donors", "humor"]
+        },
+        {
+            "id": "video-11",
+            "title": "Guitar Gods Celestial Jam",
+            "description": "Visualization of cosmic entities playing guitars in space",
+            "type": "video",
+            "src": "/images/gallery/guitar gods celestial jam.mp4",
+            "thumb": "/images/gallery/guitar gods celestial jam.mp4",
+            "tags": ["AI generated", "music", "guitar", "celestial", "cosmic"]
+        },
+        {
+            "id": "video-12",
+            "title": "Dragon Guards Fantasy Realm",
+            "description": "Majestic dragon guarding a fantasy realm",
+            "type": "video",
+            "src": "/images/gallery/dragon guards fantasy realm.mp4",
+            "thumb": "/images/gallery/dragon guards fantasy realm.mp4",
+            "tags": ["AI generated", "fantasy", "dragon", "realm", "guardian"]
+        },
+        {
+            "id": "video-13",
+            "title": "Cats Playing Card Game in Nebula",
+            "description": "Cats playing a card game within a cosmic nebula",
+            "type": "video",
+            "src": "/images/gallery/cats playing card game in nebula.mp4",
+            "thumb": "/images/gallery/cats playing card game in nebula.mp4",
+            "tags": ["AI generated", "cats", "space", "cards", "nebula", "cosmic"]
+        },
+        {
+            "id": "video-14",
+            "title": "Bitcoin Satoshi is the Hand of God",
+            "description": "Symbolic visualization of Bitcoin's creator Satoshi as a divine entity",
+            "type": "video",
+            "src": "/images/gallery/bitcoin satoshi is the hand of god.mp4",
+            "thumb": "/images/gallery/bitcoin satoshi is the hand of god.mp4",
+            "tags": ["AI generated", "bitcoin", "satoshi", "divine", "cryptocurrency"]
+        },
+        {
+            "id": "video-15",
+            "title": "Bitcoin is Salvation",
+            "description": "Symbolic visualization portraying Bitcoin as salvation",
+            "type": "video",
+            "src": "/images/gallery/bitcoin is salvation.mp4",
+            "thumb": "/images/gallery/bitcoin is salvation.mp4",
+            "tags": ["AI generated", "bitcoin", "salvation", "cryptocurrency", "symbolic"]
+        },
+        
+        {
+            "id": "photo-1",
+            "title": "Speed Limit and No Parking Signs",
+            "description": "Urban photography of speed limit and no parking signs",
+            "type": "image",
+            "src": "/images/gallery/photography/speed limit sign and no parking sign.jpg",
+            "thumb": "/images/gallery/photography/speed limit sign and no parking sign.jpg",
+            "tags": ["photography", "urban", "signs"]
+        },
+
+        {
+            "id": "photo-5",
+            "title": "Great Salt Lake Sunset",
+            "description": "Landscape photography of a sunset over the Great Salt Lake",
+            "type": "image",
+            "src": "/images/gallery/photography/great salt lake sunset.jpg",
+            "thumb": "/images/gallery/photography/great salt lake sunset.jpg",
+            "tags": ["photography", "landscape", "sunset", "Great Salt Lake", "nature"]
+        },
+        {
+            "id": "photo-6",
+            "title": "Sunflowers with Depth of Field",
+            "description": "Nature photography of sunflowers with beautiful depth of field effect",
+            "type": "image",
+            "src": "/images/gallery/photography/sunflowers field of depth.jpg",
+            "thumb": "/images/gallery/photography/sunflowers field of depth.jpg",
+            "tags": ["photography", "nature", "sunflower", "depth of field", "flower"]
+        },
+        {
+            "id": "photo-7",
+            "title": "Sunflower in Mountain Meadow",
+            "description": "Nature photography of a sunflower in a mountain meadow landscape",
+            "type": "image",
+            "src": "/images/gallery/photography/sunflower mountain meadow.jpg",
+            "thumb": "/images/gallery/photography/sunflower mountain meadow.jpg",
+            "tags": ["photography", "nature", "sunflower", "mountain", "meadow", "landscape"]
+        }
+    ]
+} 

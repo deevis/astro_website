@@ -1,0 +1,129 @@
+---
+interface Props {
+  id: string;
+  title: string;
+  description: string;
+  type: string;
+  src?: string;
+  videoId?: string;
+  thumb: string;
+  tags: string[];
+}
+
+const { id, title, description, type, src, videoId, thumb, tags } = Astro.props;
+
+// Determine what data to store in the card element
+const dataAttributes = {
+  'data-media-id': id,
+  'data-type': type,
+  'data-tags': tags.join(','),
+  ...(type === 'youtube' ? { 'data-video-id': videoId } : { 'data-src': src })
+};
+
+// Check if thumbnail is the same as the video source (which won't work in img tags)
+const isVideoWithSameThumb = type === 'video' && thumb === src;
+---
+
+<div class="media-card bg-white dark:bg-dark-800 rounded-lg shadow-sm overflow-hidden" {...dataAttributes}>
+  <div class="relative overflow-hidden group cursor-pointer">
+    {isVideoWithSameThumb ? (
+      <div class="w-full aspect-video bg-gray-800 flex items-center justify-center video-thumb-container" data-video-src={src}>
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 text-gray-400 loading-icon" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+        </svg>
+        <canvas class="video-thumbnail hidden w-full h-full absolute inset-0 object-cover"></canvas>
+      </div>
+    ) : (
+      <img 
+        src={thumb} 
+        alt={title} 
+        class="w-full aspect-video object-cover transition-transform duration-300 group-hover:scale-105"
+      />
+    )}
+    {(type === 'video' || type === 'youtube') && (
+      <div class="absolute inset-0 flex items-center justify-center">
+        <div class={`${type === 'youtube' ? 'bg-red-600' : 'bg-black bg-opacity-50'} rounded-full p-3`}>
+          <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8 text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14.752 11.168l-3.197-2.132A1 1 0 0010 9.87v4.263a1 1 0 001.555.832l3.197-2.132a1 1 0 000-1.664z" />
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+          </svg>
+        </div>
+      </div>
+    )}
+    {type === 'youtube' && (
+      <div class="absolute top-2 right-2 bg-red-600 text-white text-xs font-medium px-2 py-0.5 rounded">
+        YouTube
+      </div>
+    )}
+  </div>
+  <div class="p-3">
+    <h2 class="font-semibold text-lg mb-1 truncate">{title}</h2>
+    <p class="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{description}</p>
+    <div class="flex flex-wrap gap-1">
+      {tags.map(tag => (
+        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full">
+          {tag}
+        </span>
+      ))}
+    </div>
+  </div>
+</div>
+
+<script>
+  // Function to generate thumbnails for videos that don't have dedicated thumbnails
+  document.addEventListener('DOMContentLoaded', () => {
+    const videoContainers = document.querySelectorAll('.video-thumb-container');
+    
+    videoContainers.forEach(container => {
+      const containerEl = container as HTMLElement;
+      const videoSrc = containerEl.dataset.videoSrc;
+      const canvas = containerEl.querySelector('canvas') as HTMLCanvasElement;
+      const loadingIcon = containerEl.querySelector('.loading-icon') as HTMLElement;
+      
+      if (!videoSrc || !canvas) return;
+      
+      // Create a video element to load the video
+      const video = document.createElement('video');
+      video.crossOrigin = 'anonymous';
+      video.src = videoSrc;
+      video.muted = true;
+      video.preload = 'metadata';
+      
+      // When the metadata is loaded, seek to a frame in the video
+      video.addEventListener('loadedmetadata', () => {
+        // Seek to 25% of the video duration to avoid black frames at the beginning
+        video.currentTime = video.duration * 0.25;
+      });
+      
+      // Once the frame is loaded, draw it to the canvas
+      video.addEventListener('seeked', () => {
+        const ctx = canvas.getContext('2d');
+        if (!ctx) return;
+        
+        // Set canvas size to match video dimensions
+        canvas.width = video.videoWidth;
+        canvas.height = video.videoHeight;
+        
+        // Draw the current frame to the canvas
+        ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+        
+        // Show the canvas and hide the loading icon
+        canvas.classList.remove('hidden');
+        loadingIcon.classList.add('hidden');
+        
+        // Clean up the video element
+        video.remove();
+      });
+      
+      // Handle errors
+      video.addEventListener('error', () => {
+        console.error('Error loading video for thumbnail:', videoSrc);
+        // Leave the loading icon visible as a fallback
+      });
+      
+      // Start loading the video
+      video.load();
+    });
+  });
+</script> 

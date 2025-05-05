@@ -15,35 +15,49 @@ const allTags = [...new Set(showcases.flatMap(showcase => showcase.tags || []))]
     <div class="container mx-auto px-4">
       <h1 class="text-2xl font-bold mb-6">HTML Showcase</h1>
       
-      <!-- Search and filter section -->
-      <div class="mb-8 p-4 bg-gray-50 dark:bg-dark-900 rounded-lg">
-        <div class="mb-4">
-          <label for="search" class="block text-sm font-medium mb-1">Search</label>
-          <input 
-            type="text" 
-            id="search" 
-            placeholder="Search by title or description..."
-            class="w-full p-2 border border-gray-300 dark:border-dark-700 rounded-md dark:bg-dark-800"
-          />
-        </div>
+      <!-- Collapsible search and filter section -->
+      <div class="mb-8 bg-gray-50 dark:bg-dark-900 rounded-lg overflow-hidden">
+        <!-- Toggle button -->
+        <button id="filter-toggle" class="w-full p-4 text-left flex justify-between items-center">
+          <span class="font-medium">Search & Filters</span>
+          <svg id="filter-chevron-down" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          <svg id="filter-chevron-up" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
         
-        <div>
-          <label class="block text-sm font-medium mb-1">Filter by Tags</label>
-          <div class="flex flex-wrap gap-2 mb-3" id="tag-filters">
-            {allTags.map(tag => (
-              <button
-                class="tag-filter px-3 py-1 text-sm rounded-full bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors"
-                data-tag={tag}
-              >
-                {tag}
-              </button>
-            ))}
+        <!-- Collapsible content -->
+        <div id="filter-content" class="hidden p-4 border-t border-gray-200 dark:border-dark-700">
+          <div class="mb-4">
+            <label for="search" class="block text-sm font-medium mb-1">Search</label>
+            <input 
+              type="text" 
+              id="search" 
+              placeholder="Search by title or description..."
+              class="w-full p-2 border border-gray-300 dark:border-dark-700 rounded-md dark:bg-dark-800"
+            />
           </div>
-          <button 
-            id="clear-filters" 
-            class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
-            Clear filters
-          </button>
+          
+          <div>
+            <label class="block text-sm font-medium mb-1">Filter by Tags</label>
+            <div class="flex flex-wrap gap-2 mb-3" id="tag-filters">
+              {allTags.map(tag => (
+                <button
+                  class="tag-filter px-3 py-1 text-sm rounded-full bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors"
+                  data-tag={tag}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+            <button 
+              id="clear-filters" 
+              class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              Clear filters
+            </button>
+          </div>
         </div>
       </div>
       
@@ -79,6 +93,19 @@ const allTags = [...new Set(showcases.flatMap(showcase => showcase.tags || []))]
     const clearFiltersBtn = document.getElementById('clear-filters');
     const showcaseGrid = document.getElementById('showcase-grid');
     const noResults = document.getElementById('no-results');
+    
+    // Collapsible filter section elements
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterContent = document.getElementById('filter-content');
+    const filterChevronDown = document.getElementById('filter-chevron-down');
+    const filterChevronUp = document.getElementById('filter-chevron-up');
+    
+    // Toggle filter section visibility
+    filterToggle?.addEventListener('click', () => {
+      filterContent?.classList.toggle('hidden');
+      filterChevronDown?.classList.toggle('hidden');
+      filterChevronUp?.classList.toggle('hidden');
+    });
     
     let activeFilters = new Set();
     
