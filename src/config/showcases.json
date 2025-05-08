@@ -1,7 +1,13 @@
 {
     "showcases":  [
+      { "title": "Bitcoin Strategic Reserve - US States Progress",
+        "description": "The current progress of the Bitcoin Strategic Reserve in the United States (as of May 7, 2025)",
+        "href": "html_showcase/bitcoin_strategic_reserve_us_states_progress/index.html",
+        "image": "html_showcase/bitcoin_strategic_reserve_us_states_progress/thumb.png",
+        "tags": ["Bitcoin", "strategic reserve", "US states", "interactive", "infographic"]
+      },
       { 
-        "title": "Geo Economic Simulator - Claude 3.5 Sonnet   Created",
+        "title": "Geo Economic Simulator - Claude 3.5 Sonnet",
         "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
         "href": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/index.html",
         "image": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/thumb.png",

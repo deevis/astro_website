@@ -28,6 +28,15 @@
             "tags": ["AI generated", "monkey", "hacker", "programming", "humor"]
         },
         {
+            "id": "video-15",
+            "title": "Bitcoin is Salvation",
+            "description": "Symbolic visualization portraying Bitcoin as salvation",
+            "type": "video",
+            "src": "/images/gallery/bitcoin is salvation.mp4",
+            "thumb": "/images/gallery/bitcoin is salvation.mp4",
+            "tags": ["AI generated", "bitcoin", "salvation", "cryptocurrency", "symbolic"]
+        },
+        {
             "id": "video-1",
             "title": "The Smiths - How Soon Is Now (AI Filtered)",
             "description": "The Smiths music video with AI visual filters",
@@ -410,15 +419,6 @@
             "src": "/images/gallery/bitcoin satoshi is the hand of god.mp4",
             "thumb": "/images/gallery/bitcoin satoshi is the hand of god.mp4",
             "tags": ["AI generated", "bitcoin", "satoshi", "divine", "cryptocurrency"]
-        },
-        {
-            "id": "video-15",
-            "title": "Bitcoin is Salvation",
-            "description": "Symbolic visualization portraying Bitcoin as salvation",
-            "type": "video",
-            "src": "/images/gallery/bitcoin is salvation.mp4",
-            "thumb": "/images/gallery/bitcoin is salvation.mp4",
-            "tags": ["AI generated", "bitcoin", "salvation", "cryptocurrency", "symbolic"]
         },
         
         {

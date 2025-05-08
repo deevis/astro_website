@@ -16,6 +16,9 @@ const sortedArticles = articles.sort((a, b) =>
   new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
 
+// Get first 3 articles
+const firstThreeArticles = sortedArticles.slice(0, 3);
+
 // Get first 3 HTML showcases
 const firstThreeShowcases = showcases.slice(0, 3);
 
@@ -59,9 +62,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
     <!-- Latest Articles -->
     <section class="py-8 bg-gray-50 dark:bg-dark-900">
       <div class="container mx-auto px-4">
-        <h1 class="text-2xl font-bold mb-4">Articles</h1>
-        <div class="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4">
-          {sortedArticles.map((article) => (
+        <h1 class="text-2xl font-bold mb-4">Latest Articles</h1>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {firstThreeArticles.map((article) => (
             <Card 
               title={article.data.title}
               description={article.data.description}
@@ -73,6 +76,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
               tags={article.data.tags}
             />
           ))}
+        </div>
+        <div class="mt-4 text-center">
+          <a href="/articles" class="text-primary-600 dark:text-primary-400 hover:underline">View All Articles →</a>
         </div>
       </div>
     </section>
