@@ -1,0 +1,320 @@
+<div id="chart-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 flex items-center justify-center p-4">
+  <div class="relative max-w-7xl w-full h-[80vh] mx-auto">
+    <!-- Close button -->
+    <button id="chart-modal-close" class="absolute top-0 right-0 m-4 z-10 text-white hover:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <!-- Chart container -->
+    <div class="bg-white dark:bg-gray-800 rounded-lg overflow-hidden h-full flex flex-col">
+      <h2 id="chart-title" class="text-xl font-bold p-4 text-center"></h2>
+      <div class="flex-grow p-4">
+        <canvas id="modal-chart" class="w-full h-full"></canvas>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Track chart instance
+    let modalChart: any = null;
+    
+    // Get modal elements
+    const modal = document.getElementById('chart-modal');
+    const chartTitle = document.getElementById('chart-title');
+    const chartCanvas = document.getElementById('modal-chart') as HTMLCanvasElement;
+    const closeButton = document.getElementById('chart-modal-close');
+    
+    // Listen for custom event to open chart modal
+    document.addEventListener('open-chart-modal', (e) => {
+      if (!modal || !chartCanvas || !chartTitle) return;
+      
+      // Get chart data from localStorage
+      const chartData = JSON.parse(localStorage.getItem('chart-data') || '{}');
+      
+      // Open the modal
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      document.body.style.overflow = 'hidden'; // Prevent scrolling
+      
+      // Dynamically load Chart.js if needed
+      const script = document.createElement('script');
+      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+      script.onload = () => renderChart(chartData);
+      document.head.appendChild(script);
+    });
+    
+    // Function to render the chart
+    function renderChart(chartData) {
+      if (!chartCanvas) return;
+      
+      // Clear any existing chart
+      if (modalChart) {
+        modalChart.destroy();
+      }
+      
+      // Set chart title
+      if (chartTitle) {
+        chartTitle.textContent = chartData.type === 'performance' 
+          ? 'CPU Performance Across Tuning Steps' 
+          : 'CPU Temperature Across Tuning Steps';
+      }
+      
+      // Create the chart based on type
+      if (chartData.type === 'performance') {
+        createPerformanceChart(chartData);
+      } else if (chartData.type === 'temperature') {
+        createTemperatureChart(chartData);
+      }
+    }
+    
+    // Create performance chart
+    function createPerformanceChart(chartData) {
+      const ctx = chartCanvas.getContext('2d');
+      
+      // By the time this executes, Chart.js will be loaded by the script
+      // @ts-ignore - Chart is loaded dynamically
+      modalChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: chartData.labels,
+          datasets: [{
+            label: 'Cinebench Score',
+            data: chartData.data,
+            backgroundColor: function(context) {
+              const chart = context.chart;
+              const {ctx, chartArea} = chart;
+              if (!chartArea) {
+                return null;
+              }
+              const gradient = ctx.createLinearGradient(0, chartArea.bottom, 0, chartArea.top);
+              gradient.addColorStop(0, '#3B82F6');  // Blue
+              gradient.addColorStop(1, '#10B981');  // Green
+              return gradient;
+            },
+            borderWidth: 1,
+            borderRadius: 6,
+          }]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 1500,
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)'
+              },
+              title: {
+                display: true,
+                text: 'Cinebench Score',
+                font: {
+                  size: 16,
+                  family: 'Inter'
+                }
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                boxWidth: 15,
+                usePointStyle: true,
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              callbacks: {
+                label: function(context) {
+                  return `Score: ${context.parsed.y}`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Create temperature chart
+    function createTemperatureChart(chartData) {
+      const ctx = chartCanvas.getContext('2d');
+      
+      // By the time this executes, Chart.js will be loaded by the script
+      // @ts-ignore - Chart is loaded dynamically
+      modalChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: chartData.labels,
+          datasets: [
+            {
+              label: 'P-Core Max',
+              data: chartData.pCoreMax,
+              borderColor: '#EF4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'P-Core Min',
+              data: chartData.pCoreMin,
+              borderColor: '#F97316',
+              backgroundColor: 'rgba(249, 115, 22, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'P-Core Avg',
+              data: chartData.pCoreAvg,
+              borderColor: '#F59E0B',
+              backgroundColor: 'rgba(245, 158, 11, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              fill: true
+            },
+            {
+              label: 'E-Core Max',
+              data: chartData.eCoreMax,
+              borderColor: '#3B82F6',
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'E-Core Min',
+              data: chartData.eCoreMin,
+              borderColor: '#06B6D4',
+              backgroundColor: 'rgba(6, 182, 212, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'E-Core Avg',
+              data: chartData.eCoreAvg,
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 65,
+              max: 105,
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)'
+              },
+              ticks: {
+                callback: function(value) {
+                  return value + '°C';
+                }
+              },
+              title: {
+                display: true,
+                text: 'Temperature (°C)',
+                font: {
+                  size: 16,
+                  family: 'Inter'
+                }
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                boxWidth: 15,
+                usePointStyle: true
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.parsed.y}°C`;
+                }
+              }
+            }
+          }
+        }
+      });
+    }
+    
+    // Add close button functionality
+    if (closeButton) {
+      closeButton.addEventListener('click', function() {
+        closeModal();
+      });
+    }
+    
+    // Close on click outside chart
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
+    function closeModal() {
+      if (!modal) return;
+      
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      document.body.style.overflow = ''; // Restore scrolling
+      
+      // Clean up chart
+      if (modalChart) {
+        modalChart.destroy();
+        modalChart = null;
+      }
+    }
+  });
+</script>
+
+<script>
+  interface Window {
+    Chart: any;
+  }
+</script> 

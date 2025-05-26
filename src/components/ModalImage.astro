@@ -1,0 +1,39 @@
+import { Image } from 'astro:assets';
+import ImageModal from './ImageModal.astro';
+
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  class?: string;
+}
+
+const { src, alt, width, height, class: className = '' } = Astro.props;
+
+<div class="relative inline-block modal-image-container">
+  <img 
+    src={src} 
+    alt={alt} 
+    width={width} 
+    height={height}
+    class={`cursor-pointer ${className}`}
+    data-modal="true"
+  />
+</div>
+
+<ImageModal />
+
+<style>
+  .modal-image-container {
+    display: inline-block;
+  }
+  
+  .modal-image-container img {
+    transition: transform 0.2s ease-in-out;
+  }
+  
+  .modal-image-container img:hover {
+    transform: scale(1.02);
+  }
+</style> 

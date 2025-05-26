@@ -1,0 +1,395 @@
+<div id="image-modal" class="fixed inset-0 z-50 hidden bg-black bg-opacity-90 flex items-center justify-center p-4">
+  <div class="relative max-w-6xl w-full mx-auto">
+    <!-- Close button -->
+    <button id="modal-close" class="absolute top-0 right-0 m-4 z-10 text-white hover:text-gray-300">
+      <svg xmlns="http://www.w3.org/2000/svg" class="h-8 w-8" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+    
+    <!-- Zoom controls -->
+    <div class="absolute top-0 left-0 m-4 z-10 flex items-center space-x-2">
+      <button id="zoom-out" class="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20 12H4" />
+        </svg>
+      </button>
+      <button id="zoom-reset" class="bg-gray-800 text-white px-3 py-2 rounded-full hover:bg-gray-700 text-sm">
+        100%
+      </button>
+      <button id="zoom-in" class="bg-gray-800 text-white p-2 rounded-full hover:bg-gray-700">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+        </svg>
+      </button>
+    </div>
+    
+    <!-- Content container -->
+    <div id="modal-content" class="flex items-center justify-center overflow-hidden">
+      <!-- Image tag (hidden for SVGs) -->
+      <img id="modal-image" src="" alt="" class="max-h-[85vh] max-w-full object-contain hidden" />
+      
+      <!-- SVG container (hidden for non-SVGs) with zoom/pan capability -->
+      <div id="svg-container" class="relative overflow-hidden hidden touch-none" style="width: 100%; height: 85vh;">
+        <object id="modal-svg" data="" type="image/svg+xml" class="absolute top-0 left-0 w-full h-full pointer-events-none"></object>
+      </div>
+    </div>
+    
+    <!-- Image caption -->
+    <div class="mt-4 text-white text-center">
+      <p id="modal-caption" class="text-sm"></p>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Add TypeScript interfaces to the window object
+  interface CustomWindow extends Window {
+    openImageModal: (imageSrc: string, altText?: string) => void;
+    closeModal: () => void;
+  }
+  
+  declare const window: CustomWindow;
+  
+  // Global variables for zoom and pan
+  let currentScale = 1;
+  let translateX = 0;
+  let translateY = 0;
+  let isDragging = false;
+  let lastX = 0;
+  let lastY = 0;
+  
+  // Check if a file is an SVG based on extension
+  function isSvgFile(path: string): boolean {
+    return path.toLowerCase().endsWith('.svg');
+  }
+  
+  // Function to update the zoom reset button text
+  function updateZoomReset(): void {
+    const zoomResetButton = document.getElementById('zoom-reset');
+    if (zoomResetButton) {
+      zoomResetButton.textContent = `${Math.round(currentScale * 100)}%`;
+    }
+  }
+  
+  // Function to apply transform to SVG container
+  function applyTransform(): void {
+    const svgContainer = document.getElementById('svg-container');
+    if (svgContainer) {
+      svgContainer.style.transform = `scale(${currentScale}) translate(${translateX}px, ${translateY}px)`;
+    }
+  }
+  
+  // Function to reset zoom
+  function resetZoom(): void {
+    currentScale = 1;
+    translateX = 0;
+    translateY = 0;
+    updateZoomReset();
+    applyTransform();
+  }
+  
+  // Function to open image modal that can be called globally
+  function openImageModal(imageSrc: string, altText?: string): void {
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image') as HTMLImageElement;
+    const svgContainer = document.getElementById('svg-container');
+    const modalSvg = document.getElementById('modal-svg') as HTMLObjectElement;
+    const modalCaption = document.getElementById('modal-caption');
+    
+    if (!modal || !modalImage || !svgContainer || !modalSvg || !modalCaption) return;
+    
+    // Reset zoom and position
+    resetZoom();
+    
+    // Check if the file is an SVG
+    const isSvg = isSvgFile(imageSrc);
+    
+    // Set caption
+    modalCaption.textContent = altText || '';
+    
+    // Handle SVG or regular image
+    if (isSvg) {
+      // Use object tag for SVGs
+      modalSvg.data = imageSrc;
+      svgContainer.classList.remove('hidden');
+      modalImage.classList.add('hidden');
+      svgContainer.style.cursor = 'move';
+    } else {
+      // Use img tag for non-SVGs
+      modalImage.src = imageSrc;
+      modalImage.alt = altText || '';
+      modalImage.classList.remove('hidden');
+      svgContainer.classList.add('hidden');
+    }
+    
+    // Show modal
+    modal.classList.remove('hidden');
+    modal.classList.add('flex');
+    document.body.style.overflow = 'hidden'; // Prevent scrolling
+  }
+  
+  // Make the function available globally
+  window.openImageModal = openImageModal;
+  
+  function closeModal(): void {
+    const modal = document.getElementById('image-modal');
+    if (!modal) return;
+    modal.classList.add('hidden');
+    modal.classList.remove('flex');
+    document.body.style.overflow = ''; // Restore scrolling
+  }
+
+  document.addEventListener('DOMContentLoaded', () => {
+    const modal = document.getElementById('image-modal');
+    const modalImage = document.getElementById('modal-image') as HTMLImageElement;
+    const svgContainer = document.getElementById('svg-container');
+    const modalSvg = document.getElementById('modal-svg') as HTMLObjectElement;
+    const modalCaption = document.getElementById('modal-caption');
+    const closeButton = document.getElementById('modal-close');
+    const zoomInButton = document.getElementById('zoom-in');
+    const zoomOutButton = document.getElementById('zoom-out');
+    const zoomResetButton = document.getElementById('zoom-reset');
+    
+    // Zoom in event
+    zoomInButton?.addEventListener('click', () => {
+      currentScale += 0.25;
+      if (currentScale > 5) currentScale = 5; // Max zoom 500%
+      updateZoomReset();
+      applyTransform();
+    });
+    
+    // Zoom out event
+    zoomOutButton?.addEventListener('click', () => {
+      currentScale -= 0.25;
+      if (currentScale < 0.25) currentScale = 0.25; // Min zoom 25%
+      updateZoomReset();
+      applyTransform();
+    });
+    
+    // Reset zoom
+    zoomResetButton?.addEventListener('click', resetZoom);
+    
+    // Mouse wheel zoom
+    svgContainer?.addEventListener('wheel', (e) => {
+      e.preventDefault();
+      
+      const rect = svgContainer.getBoundingClientRect();
+      const mouseX = e.clientX - rect.left;
+      const mouseY = e.clientY - rect.top;
+      
+      // Calculate position before zoom
+      const beforeX = mouseX / currentScale - translateX;
+      const beforeY = mouseY / currentScale - translateY;
+      
+      // Adjust scale
+      if (e.deltaY < 0) {
+        // Zoom in
+        currentScale += 0.1;
+        if (currentScale > 5) currentScale = 5;
+      } else {
+        // Zoom out
+        currentScale -= 0.1;
+        if (currentScale < 0.25) currentScale = 0.25;
+      }
+      
+      // Calculate position after zoom to keep mouse position fixed
+      translateX = mouseX / currentScale - beforeX;
+      translateY = mouseY / currentScale - beforeY;
+      
+      updateZoomReset();
+      applyTransform();
+    });
+    
+    // Dragging - use the container not the SVG object
+    if (svgContainer) {
+      // Start dragging
+      svgContainer.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        isDragging = true;
+        lastX = e.clientX;
+        lastY = e.clientY;
+        svgContainer.style.cursor = 'grabbing';
+      });
+      
+      // Keyboard navigation for accessibility
+      svgContainer.addEventListener('keydown', (e) => {
+        const step = 10 / currentScale;
+        
+        switch (e.key) {
+          case 'ArrowLeft':
+            translateX += step;
+            break;
+          case 'ArrowRight':
+            translateX -= step;
+            break;
+          case 'ArrowUp':
+            translateY += step;
+            break;
+          case 'ArrowDown':
+            translateY -= step;
+            break;
+        }
+        
+        applyTransform();
+      });
+      
+      // Add tabindex to make the container focusable for keyboard navigation
+      svgContainer.setAttribute('tabindex', '0');
+    }
+    
+    // Dragging
+    document.addEventListener('mousemove', (e) => {
+      if (!isDragging) return;
+      
+      const deltaX = e.clientX - lastX;
+      const deltaY = e.clientY - lastY;
+      
+      translateX += deltaX / currentScale;
+      translateY += deltaY / currentScale;
+      
+      lastX = e.clientX;
+      lastY = e.clientY;
+      
+      applyTransform();
+    });
+    
+    // Stop dragging
+    document.addEventListener('mouseup', () => {
+      if (!isDragging) return;
+      
+      isDragging = false;
+      if (svgContainer) {
+        svgContainer.style.cursor = 'move';
+      }
+    });
+    
+    // Touch events for mobile devices
+    if (svgContainer) {
+      // Touch start
+      svgContainer.addEventListener('touchstart', (e) => {
+        if (e.touches.length === 1) {
+          isDragging = true;
+          lastX = e.touches[0].clientX;
+          lastY = e.touches[0].clientY;
+        }
+      });
+    }
+    
+    // Touch move
+    document.addEventListener('touchmove', (e) => {
+      if (!isDragging || e.touches.length !== 1) return;
+      
+      const deltaX = e.touches[0].clientX - lastX;
+      const deltaY = e.touches[0].clientY - lastY;
+      
+      translateX += deltaX / currentScale;
+      translateY += deltaY / currentScale;
+      
+      lastX = e.touches[0].clientX;
+      lastY = e.touches[0].clientY;
+      
+      applyTransform();
+    }, { passive: false });
+    
+    // Touch end
+    document.addEventListener('touchend', () => {
+      isDragging = false;
+    });
+    
+    // Prevent context menu on svg container to improve usability
+    svgContainer?.addEventListener('contextmenu', (e) => e.preventDefault());
+    
+    // Add click handler to all article images with data-modal attribute
+    const articleImages = document.querySelectorAll('img[data-modal="true"], [data-modal="true"]');
+    articleImages.forEach(img => {
+      if (img instanceof HTMLElement) {
+        img.style.cursor = 'pointer';
+        img.addEventListener('click', (e) => {
+          if (!modalImage || !svgContainer || !modalSvg || !modalCaption || !modal) return;
+          
+          // Check if the element has data-src attribute
+          const dataSrc = img.getAttribute('data-src');
+          const dataAlt = img.getAttribute('data-alt');
+          
+          if (dataSrc) {
+            // Use data attributes if available
+            const isSvg = isSvgFile(dataSrc);
+            
+            // Reset zoom and position
+            resetZoom();
+            
+            // Set caption
+            modalCaption.textContent = dataAlt || '';
+            
+            // Handle SVG or regular image
+            if (isSvg) {
+              // Use object tag for SVGs
+              modalSvg.data = dataSrc;
+              svgContainer.classList.remove('hidden');
+              modalImage.classList.add('hidden');
+              svgContainer.style.cursor = 'move';
+            } else {
+              // Use img tag for non-SVGs
+              modalImage.src = dataSrc;
+              modalImage.alt = dataAlt || '';
+              modalImage.classList.remove('hidden');
+              svgContainer.classList.add('hidden');
+            }
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+          }
+          // Otherwise, if it's an image, use the image src/alt
+          else if (img instanceof HTMLImageElement) {
+            const isSvg = isSvgFile(img.src);
+            
+            // Reset zoom and position
+            resetZoom();
+            
+            // Set caption
+            modalCaption.textContent = img.alt;
+            
+            // Handle SVG or regular image
+            if (isSvg) {
+              // Use object tag for SVGs
+              modalSvg.data = img.src;
+              svgContainer.classList.remove('hidden');
+              modalImage.classList.add('hidden');
+              svgContainer.style.cursor = 'move';
+            } else {
+              // Use img tag for non-SVGs
+              modalImage.src = img.src;
+              modalImage.alt = img.alt;
+              modalImage.classList.remove('hidden');
+              svgContainer.classList.add('hidden');
+            }
+            
+            // Show modal
+            modal.classList.remove('hidden');
+            modal.classList.add('flex');
+            document.body.style.overflow = 'hidden'; // Prevent scrolling
+          }
+        });
+      }
+    });
+    
+    // Close modal
+    closeButton?.addEventListener('click', closeModal);
+    
+    // Close on click outside image
+    modal?.addEventListener('click', (e) => {
+      if (e.target === modal) closeModal();
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeModal();
+    });
+    
+    // Expose closeModal function globally
+    window.closeModal = closeModal;
+  });
+</script> 

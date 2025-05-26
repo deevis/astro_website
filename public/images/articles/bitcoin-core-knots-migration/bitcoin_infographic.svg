@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 1200 800" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="1200" height="800" fill="#ffffff"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="1200" height="120" fill="#f7931a"/>
+    <text x="600" y="65" font-family="Arial, sans-serif" font-size="42" font-weight="bold" text-anchor="middle" fill="#ffffff">
+        Bitcoin Protocol Debate
+    </text>
+    <text x="600" y="100" font-family="Arial, sans-serif" font-size="24" text-anchor="middle" fill="#ffffff">
+        Money vs Database: Key Players &amp; Arguments
+    </text>
+    
+    <!-- Two Main Camps -->
+    <g transform="translate(100, 150)">
+        <!-- Money Camp -->
+        <rect x="0" y="0" width="450" height="80" fill="#2ecc71" rx="10"/>
+        <text x="225" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Bitcoin as Money
+        </text>
+        <text x="225" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">
+            "Digital Gold" Perspective
+        </text>
+        
+        <!-- Anti-Money Camp -->
+        <rect x="550" y="0" width="450" height="80" fill="#e74c3c" rx="10"/>
+        <text x="775" y="45" font-family="Arial, sans-serif" font-size="28" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Anti-Money Actions
+        </text>
+        <text x="775" y="70" font-family="Arial, sans-serif" font-size="16" text-anchor="middle" fill="#ffffff">
+            "Database/Data Storage" Usage
+        </text>
+    </g>
+    
+    <!-- Key Players Section -->
+    <text x="600" y="280" font-family="Arial, sans-serif" font-size="32" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+        Key Players in the Debate
+    </text>
+    
+    <!-- Pro-Bitcoin-as-Money Advocates -->
+    <g transform="translate(100, 320)">
+        <rect x="0" y="0" width="450" height="380" fill="#f0fff4" stroke="#2ecc71" stroke-width="3" rx="10"/>
+        <text x="225" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2ecc71">
+            Pro-Bitcoin-as-Money Advocates
+        </text>
+        
+        <!-- Individual boxes -->
+        <rect x="20" y="70" width="190" height="45" fill="#2ecc71" rx="5"/>
+        <text x="115" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Luke Dashjr
+        </text>
+        
+        <rect x="240" y="70" width="190" height="45" fill="#2ecc71" rx="5"/>
+        <text x="335" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Bitcoin Mechanic
+        </text>
+        
+        <rect x="20" y="125" width="190" height="45" fill="#2ecc71" rx="5"/>
+        <text x="115" y="150" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Ocean Mining Pool
+        </text>
+        
+        <rect x="240" y="125" width="190" height="45" fill="#2ecc71" rx="5"/>
+        <text x="335" y="150" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Jack Dorsey
+        </text>
+    </g>
+    
+    <!-- Actors Undermining Bitcoin's Monetary Purpose -->
+    <g transform="translate(650, 320)">
+        <rect x="0" y="0" width="450" height="380" fill="#fff5f5" stroke="#e74c3c" stroke-width="3" rx="10"/>
+        <text x="225" y="30" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+            Actors Undermining Bitcoin
+        </text>
+        
+        <!-- Individual boxes -->
+        <rect x="20" y="70" width="190" height="45" fill="#e74c3c" rx="5"/>
+        <text x="115" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Casey Rodarmor
+        </text>
+        
+        <rect x="240" y="70" width="190" height="45" fill="#e74c3c" rx="5"/>
+        <text x="335" y="95" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            "Domo" (BRC-20)
+        </text>
+        
+        <rect x="20" y="125" width="190" height="45" fill="#e74c3c" rx="5"/>
+        <text x="115" y="150" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Peter Todd
+        </text>
+        
+        <rect x="240" y="125" width="190" height="45" fill="#e74c3c" rx="5"/>
+        <text x="335" y="150" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Chaincode Labs
+        </text>
+    </g>
+</svg> 

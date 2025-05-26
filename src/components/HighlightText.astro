@@ -1,0 +1,14 @@
+---
+interface Props {
+  type: 'danger' | 'success';
+  text: string;
+}
+
+const { type, text } = Astro.props;
+
+const colorClass = type === 'danger' 
+  ? 'text-red-500 font-bold' 
+  : 'text-emerald-600 font-bold';
+---
+
+<span class={colorClass}>{text}</span> 

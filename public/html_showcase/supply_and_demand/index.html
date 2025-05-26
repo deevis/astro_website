@@ -1,0 +1,2748 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Supply & Demand Economic Simulator</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            overflow-x: hidden;
+            min-height: 100vh;
+        }
+
+        .container {
+            width: 100vw;
+            height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .main-layout {
+            display: grid;
+            grid-template-columns: 350px 1fr 400px;
+            gap: 20px;
+            flex: 1;
+            overflow: hidden;
+            padding: 20px;
+        }
+
+        .left-panel {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .main-panel {
+            overflow-y: auto;
+        }
+
+        .right-panel {
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            padding: 20px;
+            overflow-y: auto;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .panel-section {
+            margin-bottom: 20px;
+        }
+
+        .panel-section:last-child {
+            margin-bottom: 0;
+        }
+
+        .panel-section h3 {
+            font-size: 1.1em;
+            margin-bottom: 15px;
+            color: #ffd700;
+            border-bottom: 1px solid rgba(255,255,255,0.2);
+            padding-bottom: 8px;
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px 0;
+            background: rgba(255,255,255,0.05);
+            border-radius: 15px;
+            border: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 5px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+
+
+        .btn {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 25px;
+            background: linear-gradient(45deg, #ff6b6b, #ee5a24);
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        .btn.secondary {
+            background: linear-gradient(45deg, #4834d4, #686de0);
+        }
+
+        .btn.icon-btn {
+            padding: 10px;
+            width: auto;
+            height: 40px;
+            min-width: 40px;
+            font-size: 16px;
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .btn.icon-btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.25);
+        }
+
+        input[type="range"]:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+        }
+
+        input[type="range"]:disabled::-webkit-slider-thumb {
+            cursor: not-allowed;
+        }
+
+        input[type="range"]:disabled::-moz-range-thumb {
+            cursor: not-allowed;
+        }
+
+        .dashboard {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .card h3 {
+            margin-bottom: 15px;
+            color: #ffd700;
+        }
+
+        .metric {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+
+        .metric:last-child {
+            border-bottom: none;
+        }
+
+        .metric-value {
+            font-weight: bold;
+            color: #00ff88;
+        }
+
+        .charts-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            height: 100%;
+        }
+
+        .chart-card {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 20px;
+            border: 1px solid rgba(255,255,255,0.2);
+            flex: 1;
+            min-height: 300px;
+        }
+
+        .chart {
+            width: 100%;
+            height: 250px;
+            position: relative;
+        }
+
+        .population-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
+            gap: 5px;
+            padding: 20px;
+            background: rgba(0,0,0,0.2);
+            border-radius: 15px;
+            margin-bottom: 20px;
+        }
+
+        .agent {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            position: relative;
+            border: 3px solid rgba(255,255,255,0.3);
+        }
+
+        .agent:hover {
+            transform: scale(1.1);
+            z-index: 10;
+        }
+
+        .agent.money-printer {
+            border: 3px solid #ffd700;
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+            animation: golden-glow 2s infinite alternate;
+        }
+
+        .agent.dead {
+            border: 3px solid #000;
+            opacity: 0.7;
+            font-size: 24px;
+            color: #fff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.8);
+        }
+
+        .agent.dead:hover {
+            transform: scale(1.05); /* Less dramatic hover for dead agents */
+        }
+
+        @keyframes golden-glow {
+            0% { box-shadow: 0 0 20px rgba(255, 215, 0, 0.5); }
+            100% { box-shadow: 0 0 30px rgba(255, 215, 0, 0.8); }
+        }
+
+        .agent-tooltip {
+            position: absolute;
+            top: -60px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: rgba(0,0,0,0.9);
+            padding: 8px 12px;
+            border-radius: 8px;
+            font-size: 11px;
+            white-space: nowrap;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+            z-index: 1000;
+        }
+
+        .agent:hover .agent-tooltip {
+            opacity: 1;
+        }
+
+
+
+        .money-printer-controls {
+            background: rgba(255, 215, 0, 0.1);
+            border: 1px solid #ffd700;
+            border-radius: 10px;
+        }
+
+        .money-printer-controls.active {
+            display: block !important;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .settings-modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 10000;
+            backdrop-filter: blur(10px);
+        }
+
+        .settings-modal.active {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            animation: fadeIn 0.3s ease;
+        }
+
+        .settings-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            padding: 30px;
+            border-radius: 20px;
+            max-width: 700px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .settings-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .setting-group {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 15px;
+            border-radius: 10px;
+        }
+
+        .setting-group h4 {
+            color: #ffd700;
+            margin-bottom: 15px;
+            text-align: center;
+        }
+
+        .setting-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 12px;
+        }
+
+        .setting-item label {
+            flex: 1;
+            margin-right: 10px;
+            font-size: 14px;
+        }
+
+        .setting-item input {
+            width: 80px;
+            padding: 6px;
+            border: none;
+            border-radius: 5px;
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            text-align: center;
+            font-size: 14px;
+        }
+
+        .setting-item input::placeholder {
+            color: rgba(255, 255, 255, 0.7);
+        }
+
+        select {
+            background: rgba(255, 255, 255, 0.2);
+            color: white;
+            border: none;
+            border-radius: 5px;
+        }
+
+        select option {
+            background: #764ba2;
+            color: white;
+        }
+
+        .modal-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .simulation-stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+
+        .stat-card {
+            background: rgba(255,255,255,0.1);
+            padding: 15px;
+            border-radius: 10px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #ffd700;
+        }
+
+        canvas {
+            border-radius: 10px;
+            background: rgba(255,255,255,0.05);
+        }
+
+        @media (max-width: 1200px) {
+            .main-layout {
+                grid-template-columns: 300px 1fr 350px;
+            }
+            
+            .population-grid {
+                grid-template-columns: repeat(auto-fill, minmax(70px, 1fr));
+            }
+            
+            .agent {
+                width: 70px;
+                height: 70px;
+                font-size: 11px;
+            }
+        }
+
+        @media (max-width: 1000px) {
+            .main-layout {
+                grid-template-columns: 1fr;
+                grid-template-rows: auto 1fr auto;
+            }
+            
+            .left-panel, .right-panel {
+                background: rgba(255,255,255,0.08);
+            }
+            
+            .right-panel .charts-container {
+                flex-direction: row;
+                height: auto;
+            }
+            
+            .dashboard {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .settings-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .population-grid {
+                grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+            }
+            
+            .agent {
+                width: 60px;
+                height: 60px;
+                font-size: 10px;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🏦 Economic Supply & Demand Simulator</h1>
+            <p>Watch a closed economy evolve in real-time</p>
+        </div>
+
+        <div class="main-layout">
+            <!-- Left Panel: Controls and Settings -->
+            <div class="left-panel">
+                <div class="panel-section">
+                    <h3>🎮 Simulation Controls</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                        <button class="btn icon-btn" onclick="startSimulation()" title="Start Simulation">▶️</button>
+                        <button class="btn icon-btn" onclick="pauseSimulation()" title="Pause Simulation">⏸️</button>
+                        <button class="btn icon-btn" onclick="resetSimulation()" title="Reset Simulation">🔄</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px; margin-top: 8px;">
+                        <button class="btn secondary icon-btn" onclick="toggleMoneyPrinter()" title="Enable Money Printer">💰</button>
+                        <button class="btn secondary icon-btn" onclick="showSettings()" title="Open Settings">⚙️</button>
+                        <button class="btn secondary icon-btn" onclick="exportSimulationState()" title="Export Simulation State to JSON">📋</button>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>🎯 Economic Scenarios</h3>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 8px;">
+                        <button class="btn icon-btn" onclick="setScenario('normal')" 
+                                title="Normal Market: Baseline market conditions with no special effects">🏠</button>
+                        <button class="btn icon-btn" onclick="setScenario('scarcity')" 
+                                title="Resource Scarcity: Reduces producer resources by 10% each tick, creating supply shortages">⚠️</button>
+                        <button class="btn icon-btn" onclick="setScenario('abundance')" 
+                                title="Abundance: Increases producer output by 50% each tick, creating resource abundance">🌿</button>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 8px;">
+                        <button class="btn icon-btn" onclick="setScenario('tech-boom')" 
+                                title="Tech Boom: Gradually increases producer productivity by 1% each tick (max 2x)">🚀</button>
+                        <button class="btn icon-btn" onclick="setScenario('demand-surge')" 
+                                title="Demand Surge: Gradually increases consumer resource requirements over time">📈</button>
+                    </div>
+                </div>
+
+                <div class="panel-section" id="scenarioEffectsPanel">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                        <h3 style="margin: 0;">🔬 Scenario Effects</h3>
+                        <div id="scenarioStatusIndicator" style="padding: 3px 8px; border-radius: 10px; background: rgba(255,255,255,0.1); font-size: 10px; font-weight: bold;">NORMAL</div>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 15px; font-size: 12px;">
+                        <div>
+                            <strong>Producer/Consumer:</strong>
+                            <div id="producerConsumerRatio" style="color: #4834d4; font-weight: bold;">25/25</div>
+                        </div>
+                        <div>
+                            <strong>Avg Productivity:</strong>
+                            <div id="avgProductivity" style="color: #00ff88; font-weight: bold;">1.00x</div>
+                        </div>
+                        <div>
+                            <strong>Resource Req:</strong>
+                            <div id="currentResourceReq" style="color: #ffd700; font-weight: bold;">8 units</div>
+                        </div>
+                        <div>
+                            <strong>Active Effect:</strong>
+                            <div id="activeScenarioEffect" style="color: #ff6b6b; font-weight: bold;">None</div>
+                        </div>
+                    </div>
+                    <div style="padding: 8px; background: rgba(0,0,0,0.2); border-radius: 6px; font-size: 11px;">
+                        <div id="scenarioDescription">Select a scenario above to see its effects on the market dynamics.</div>
+                    </div>
+                </div>
+
+                <div class="panel-section">
+                    <h3>🏛️ Market Interventions</h3>
+                    <div style="display: flex; flex-direction: column; gap: 12px;">
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px;">Price Floor: <span id="priceFloorValue">None</span></label>
+                            <input type="range" id="priceFloor" min="0" max="5" step="0.1" value="0" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px;">Price Ceiling: <span id="priceCeilingValue">None</span></label>
+                            <input type="range" id="priceCeiling" min="0" max="10" step="0.1" value="0" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px;">Transaction Tax: <span id="transactionTaxValue">0%</span></label>
+                            <input type="range" id="transactionTax" min="0" max="0.5" step="0.01" value="0" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px;">Producer Subsidy: <span id="producerSubsidyValue">$0</span></label>
+                            <input type="range" id="producerSubsidy" min="0" max="2" step="0.1" value="0" style="width: 100%;">
+                        </div>
+                        <div>
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px;">Agent Processing Order:</label>
+                            <select id="processingOrder" style="width: 100%; padding: 6px; border: none; border-radius: 5px; background: rgba(255,255,255,0.2); color: white; font-size: 12px;">
+                                <option value="ordered">Sequential (1→50)</option>
+                                <option value="random">Random Each Tick</option>
+                                <option value="wealthiest-first">Wealthiest First</option>
+                                <option value="producers-first">Producers First</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="panel-section money-printer-controls" id="moneyPrinterControls" style="display: none;">
+                    <h3>💰 Money Printer Controls</h3>
+                    <p style="font-size: 12px; margin-bottom: 15px;">
+                        Agent <span id="printerAgentId"></span> has the power to create money!<br>
+                        Status: <span id="printerStatus" style="color: #ff6b6b;">INACTIVE</span>
+                    </p>
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; margin-bottom: 5px; font-size: 12px;">Print Amount per Tick: <span id="printAmountValue">10</span></label>
+                        <input type="range" id="printAmount" min="1" max="100" value="10" style="width: 100%;">
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                        <button class="btn icon-btn" onclick="activateMoneyPrinter()" title="Activate Money Printer">🖨️</button>
+                        <button class="btn secondary icon-btn" onclick="deactivateMoneyPrinter()" title="Deactivate Money Printer">❌</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Panel: Dashboard and Population -->
+            <div class="main-panel">
+                <div class="dashboard">
+            <div class="card">
+                <h3>📊 Market Overview</h3>
+                <div class="metric">
+                    <span>Current Price:</span>
+                    <span class="metric-value" id="resourcePrice">$1.00</span>
+                </div>
+                <div class="metric">
+                    <span>Equilibrium Price:</span>
+                    <span class="metric-value" id="equilibriumPrice">$1.00</span>
+                </div>
+                <div class="metric">
+                    <span>Market Efficiency:</span>
+                    <span class="metric-value" id="marketEfficiency">100%</span>
+                </div>
+                <div class="metric">
+                    <span>Trading Volume:</span>
+                    <span class="metric-value" id="tradingVolume">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>📈 Supply & Demand</h3>
+                <div class="metric">
+                    <span>Total Supply:</span>
+                    <span class="metric-value" id="totalSupply">0</span>
+                </div>
+                <div class="metric">
+                    <span>Total Demand:</span>
+                    <span class="metric-value" id="totalDemand">0</span>
+                </div>
+                <div class="metric">
+                    <span>Buy Orders:</span>
+                    <span class="metric-value" id="buyOrders">0</span>
+                </div>
+                <div class="metric">
+                    <span>Sell Orders:</span>
+                    <span class="metric-value" id="sellOrders">0</span>
+                </div>
+            </div>
+
+            <div class="card">
+                <h3>💰 Economic Welfare</h3>
+                <div class="metric">
+                    <span>Consumer Surplus:</span>
+                    <span class="metric-value" id="consumerSurplus">$0</span>
+                </div>
+                <div class="metric">
+                    <span>Producer Surplus:</span>
+                    <span class="metric-value" id="producerSurplus">$0</span>
+                </div>
+                <div class="metric">
+                    <span>Total Production:</span>
+                    <span class="metric-value" id="totalProduction">0</span>
+                </div>
+                <div class="metric">
+                    <span>Total Consumption:</span>
+                    <span class="metric-value" id="consumedResources">0</span>
+                </div>
+            </div>
+                </div>
+
+                <div class="card">
+                    <h3>👥 Market Participants</h3>
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
+                                                <div style="font-size: 14px">
+                            <span style="color: #66ff66;">🟢 Producers</span> create resources | 
+                            <span style="color: #6666ff;">🔵 Consumers</span> buy resources | 
+                            <span style="color: #bb66ff;">🟣 Traders</span> resell stockpiles
+            </div>
+                        <div style="text-align: right; min-width: 200p">
+                            <label style="display: block; margin-bottom: 5px; font-size: 12px; color: #ffd700;">
+                                Number of Producers: <span id="producerCountValue">5 (10%)</span>
+                            </label>
+                            <input type="range" id="producerCount" min="1" max="49" step="1" value="5" 
+                                   style="width: 180px;" 
+                                   title="Controls how many agents are producers vs consumers. Disabled during simulation.">
+                        </div>
+                    </div>
+                    <div class="population-grid" id="populationGrid"></div>
+                </div>
+
+        <div class="simulation-stats">
+            <div class="stat-card">
+                <div class="stat-value" id="tickCounter">0</div>
+                <div>Market Ticks</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="equilibriumStatus">Seeking</div>
+                <div>Market Status</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="wealthInequality">0.00</div>
+                <div>Wealth Inequality (Gini)</div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-value" id="currentScenario">Normal</div>
+                <div>Active Scenario</div>
+            </div>
+        </div>
+            </div>
+
+            <!-- Right Panel: Charts -->
+            <div class="right-panel">
+                <div class="charts-container">
+                    <div class="chart-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h3 style="margin: 0;">📊 Supply & Demand Curves</h3>
+                            <div style="display: flex; gap: 15px; font-size: 12px;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 12px; height: 3px; background: #ff6b6b; border-radius: 2px;"></div>
+                                    <span>Demand</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 12px; height: 3px; background: #00ff88; border-radius: 2px;"></div>
+                                    <span>Supply</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 8px; height: 8px; background: #ffd700; border-radius: 50%;"></div>
+                                    <span>Equilibrium</span>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas class="chart" id="supplyDemandChart" width="350" height="250"></canvas>
+                    </div>
+                    <div class="chart-card">
+                        <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                            <h3 style="margin: 0;" id="marketTrendsTitle">📈 Market Trends</h3>
+                            <div style="display: flex; gap: 15px; font-size: 12px;">
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 12px; height: 3px; background: #4834d4; border-radius: 2px;"></div>
+                                    <span>Price History</span>
+                                </div>
+                                <div style="display: flex; align-items: center; gap: 5px;">
+                                    <div style="width: 12px; height: 3px; background: #ff9500; border-radius: 2px;"></div>
+                                    <span>Trading Volume</span>
+                                </div>
+                            </div>
+                        </div>
+                        <canvas class="chart" id="marketTrendsChart" width="350" height="250"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Settings Modal -->
+    <div class="settings-modal" id="settingsModal">
+        <div class="settings-content">
+            <h2 style="text-align: center; margin-bottom: 20px; color: #ffd700;">⚙️ Simulation Settings</h2>
+            
+            <div class="settings-grid">
+                <div class="setting-group">
+                    <h4>👥 Population</h4>
+                    <div class="setting-item">
+                        <label>Population Size:</label>
+                        <input type="number" id="setting-population" min="10" max="200" value="50" 
+                               title="Number of agents in the simulation. More agents create more complex market dynamics but slower performance.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Initial Health:</label>
+                        <input type="number" id="setting-health" min="1" max="100" value="100"
+                               title="Starting health level for all agents. Health decreases when agents don't get enough resources.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Initial Happiness:</label>
+                        <input type="number" id="setting-happiness" min="1" max="100" value="100"
+                               title="Baseline happiness level. Agents become less happy when working more or being sick.">
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h4>🌾 Resources</h4>
+                    <div class="setting-item">
+                        <label>Total Resources:</label>
+                        <input type="number" id="setting-total-resources" min="100" max="10000" value="1000"
+                               title="Initial amount of resources available in the market. Higher values create abundance, lower values create scarcity.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Resource Requirement:</label>
+                        <input type="number" id="setting-resource-req" min="1" max="50" value="1"
+                               title="How many resource units each agent needs per tick to maintain health. Higher values increase survival pressure.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Base Price:</label>
+                        <input type="number" id="setting-base-price" min="0.1" max="10" step="0.1" value="1.0"
+                               title="Starting price per resource unit. Market forces will adjust this price up or down based on supply and demand.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Max Trader Stockpile:</label>
+                        <input type="number" id="setting-max-stockpile" min="50" max="2000" value="500"
+                               title="Maximum resources traders can hoard before becoming eager to sell. Higher values allow more speculation and price manipulation.">
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h4>💰 Economics</h4>
+                    <div class="setting-item">
+                        <label>Money Supply:</label>
+                        <input type="number" id="setting-money-supply" min="1000" max="100000" value="10000"
+                               title="Total amount of money distributed among all agents at start. Higher values reduce economic pressure.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Work Rate:</label>
+                        <input type="number" id="setting-work-rate" min="0.1" max="10" step="0.1" value="5"
+                               title="How much money agents earn per hour of work. Higher values make it easier to afford resources.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Price Volatility:</label>
+                        <input type="number" id="setting-volatility" min="0.01" max="1" step="0.01" value="0.05"
+                               title="How quickly prices respond to supply/demand changes. Higher values create more dramatic price swings.">
+                    </div>
+                </div>
+
+                <div class="setting-group">
+                    <h4>❤️ Health & Happiness</h4>
+                    <div class="setting-item">
+                        <label>Health Decay Rate:</label>
+                        <input type="number" id="setting-decay-rate" min="1" max="20" value="1"
+                               title="How much health agents lose per tick when they don't get enough resources. Higher values make starvation deadlier.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Health Recovery Rate:</label>
+                        <input type="number" id="setting-recovery-rate" min="1" max="20" value="2"
+                               title="How much health agents gain per tick when they have enough resources. Higher values make recovery faster.">
+                    </div>
+                    <div class="setting-item">
+                        <label>Work Unhappiness:</label>
+                        <input type="number" id="setting-unhappiness" min="1" max="20" value="5"
+                               title="How much happiness agents lose per hour of work. Higher values make work more psychologically taxing.">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-buttons">
+                <button class="btn" onclick="applySettings()">✅ Apply Settings</button>
+                <button class="btn secondary" onclick="resetToDefaults()">🔄 Reset Defaults</button>
+                <button class="btn secondary" onclick="closeSettings()">❌ Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Configuration
+        const CONFIG = {
+            POPULATION_SIZE: 50,
+            TOTAL_RESOURCES: 500,
+            TOTAL_MONEY_SUPPLY: 5000,
+            RESOURCE_REQUIREMENT: 1,
+            HEALTH_DECAY_RATE: 1,
+            HEALTH_RECOVERY_RATE: 2,
+            BASELINE_HAPPINESS: 100,
+            WORK_UNHAPPINESS_MULTIPLIER: 5,
+            WORK_RATE: 5,
+            PRICE_VOLATILITY: 0.05,
+            SUPPLY_DEMAND_SENSITIVITY: 1.0,
+            MAX_TRADER_STOCKPILE: 500  // Maximum resources traders can hoard before selling
+        };
+
+        // Global simulation state
+        let simulation = {
+            running: false,
+            tick: 0,
+            agents: [],
+            resourcePrice: 1.0,
+            equilibriumPrice: 1.0,
+            availableResources: 0,
+            consumedResources: 0,
+            totalProduction: 0,
+            resourceRegenRate: 50,
+            agentProcessingOrder: 'ordered',
+            producerCount: 5, // Number of producers out of total population
+            
+            // Market data
+            orderBook: { buyOrders: [], sellOrders: [] },
+            tradeHistory: [],
+            marketEfficiency: 100,
+            consumerSurplus: 0,
+            producerSurplus: 0,
+            
+            // Economic indicators
+            priceHistory: [],
+            supplyHistory: [],
+            demandHistory: [],
+            tradingVolumeHistory: [],
+            
+            // Market interventions
+            priceFloor: null,
+            priceCeiling: null,
+            transactionTax: 0,
+            producerSubsidy: 0,
+            
+            // Scenarios
+            currentScenario: 'normal',
+            baseResourceRequirement: 8, // Store original value
+            baseAvgProductivity: 1.0, // Store baseline for comparison
+            
+            moneyPrinterAgent: null,
+            moneyPrinterActive: false,
+            printAmount: 10,
+            totalWork: 0
+        };
+
+        // Agent class - Redesigned for economic demonstration
+        class Agent {
+            constructor(id) {
+                this.id = id;
+                this.role = id < simulation.producerCount ? 'producer' : 'consumer';
+                this.money = this.role === 'producer' ? 
+                    Math.random() * 200 + 100 : Math.random() * 500 + 300; // Consumers start with more money
+                this.resources = this.role === 'producer' ? 
+                    Math.random() * 5 + 10 : Math.random() * 3 + 1; // Producers start with more resources
+                
+                // Survival mechanics
+                this.health = 100; // Start with full health
+                this.happiness = CONFIG.BASELINE_HAPPINESS;
+                this.isDead = false; // Track if agent has died
+                
+                // Economic characteristics
+                this.productivity = Math.random() * 0.5 + 0.75; // 0.75-1.25x productivity
+                this.riskTolerance = Math.random(); // 0-1, affects hoarding behavior
+                
+                // Market behavior
+                this.maxWillingnessToPay = Math.random() * 3 + 1; // How much they value resources (1-4x base price)
+                this.reservePrice = Math.random() * 0.5 + 0.5; // Minimum price producers will accept (0.5-1x base price)
+                
+                // Trading behavior
+                this.buyOrders = [];
+                this.sellOrders = [];
+                this.displayBuyOrders = [];
+                this.displaySellOrders = [];
+                this.lastTradePrice = 1.0;
+                
+                // Lifetime statistics
+                this.lifetimeResourcesPurchased = 0; // Units
+                this.lifetimePurchaseSpending = 0;   // Dollars spent
+                this.lifetimeResourcesSold = 0;      // Units
+                this.lifetimeSalesIncome = 0;        // Dollars earned
+                this.lifetimeHoursWorked = 0;        // Hours
+                this.lifetimeLaborIncome = 0;        // Dollars earned from work
+                
+                // Competition tracking for producers
+                this.ticksSinceLastSale = 0;         // How long since last successful sale
+                this.consecutiveFailedSales = 0;     // How many ticks in a row without sales
+                this.competitivenessAdjustment = 1.0; // Multiplier for pricing aggressiveness
+                
+                this.isMoneyPrinter = false;
+            }
+
+            getColor() {
+                // Dead agents get a dark gray color
+                if (this.isDead) {
+                    return '#2a2a2a'; // Dark gray for dead agents
+                }
+                
+                if (this.isMoneyPrinter) {
+                    const glow = Math.sin(simulation.tick * 0.1) * 30 + 45;
+                    return 'hsl(' + glow + ', 100%, 70%)';
+                }
+                
+                // Color based on role and wealth
+                if (this.role === 'producer') {
+                    // Producers: Green shades based on productivity
+                    const greenIntensity = this.productivity * 100;
+                    return `hsl(120, 70%, ${Math.min(80, 40 + greenIntensity)}%)`;
+                } else {
+                    // Consumers: Special coloring for traders vs regular consumers
+                    if (this.resources > 50 && this.sellOrders.length > 0) {
+                        // Consumer-traders: Purple shades (acting as intermediaries)
+                        const stockpileLevel = Math.min(1.0, this.resources / 100);
+                        const purpleIntensity = Math.min(80, 40 + stockpileLevel * 30);
+                        return `hsl(280, 70%, ${purpleIntensity}%)`;
+                    } else if (this.health < 20) {
+                        // Critical health: Red
+                        return `hsl(0, 80%, ${30 + this.health}%)`;
+                    } else if (this.health < 50) {
+                        // Poor health: Orange
+                        return `hsl(30, 80%, ${40 + this.health * 0.6}%)`;
+                    } else {
+                        // Good health: Blue shades based on wealth
+                        const averageWealth = simulation.agents.reduce((sum, agent) => sum + agent.money, 0) / simulation.agents.length;
+                        const relativeWealth = Math.min(3, this.money / Math.max(averageWealth, 1));
+                        const blueIntensity = Math.min(80, 30 + relativeWealth * 25);
+                        return `hsl(220, 70%, ${blueIntensity}%)`;
+                    }
+                }
+            }
+
+            tick() {
+                // Clear previous orders
+                this.buyOrders = [];
+                this.sellOrders = [];
+                this.displayBuyOrders = [];
+                this.displaySellOrders = [];
+                
+                // Dead agents don't participate in the economy
+                if (this.isDead) {
+                    return 0;
+                }
+                
+                if (this.role === 'producer') {
+                    this.producerTick();
+                } else {
+                    this.consumerTick();
+                }
+
+                // Money printer effect (only if alive)
+                if (this.isMoneyPrinter && simulation.moneyPrinterActive) {
+                    console.log(`Tick ${simulation.tick}: 💰 Money Printer Agent ${this.id}: Adding $${simulation.printAmount} (was $${this.money.toFixed(0)})`);
+                    this.money += simulation.printAmount;
+                    CONFIG.TOTAL_MONEY_SUPPLY += simulation.printAmount;
+                    console.log(`Tick ${simulation.tick}: 💰 Money Printer Agent ${this.id}: Now has $${this.money.toFixed(0)}`);
+                }
+
+                return 0; // Work concept simplified
+            }
+
+            producerTick() {
+                // Producers create resources and want to sell them
+                const baseHours = 1; // Standard work day
+                const production = this.productivity * CONFIG.WORK_RATE;
+                this.resources += production;
+                simulation.totalProduction += production;
+                
+                // Track baseline work hours
+                this.lifetimeHoursWorked += baseHours;
+                
+                // Update sales performance tracking
+                this.ticksSinceLastSale++;
+                if (this.sellOrders.length > 0) {
+                    // We had orders last tick but didn't sell - increase failed sales counter
+                    this.consecutiveFailedSales++;
+                    
+                    // Become more aggressive if consistently failing to sell
+                    if (this.consecutiveFailedSales > 3) {
+                        this.competitivenessAdjustment = Math.max(0.3, this.competitivenessAdjustment - 0.05); // More aggressive reduction
+                    }
+                    
+                    // Extra aggressive for very poor performers
+                    if (this.ticksSinceLastSale > 50) {
+                        this.competitivenessAdjustment = Math.max(0.2, this.competitivenessAdjustment - 0.1);
+                    }
+                }
+                
+                // Producers work extra hours to increase production when market demand is high
+                const totalDemand = simulation.orderBook ? simulation.orderBook.buyOrders.length : 0;
+                const totalSupply = simulation.orderBook ? simulation.orderBook.sellOrders.length : 0;
+                
+                if (totalDemand > totalSupply * 2) {
+                    // High demand - work extra hours for bonus production
+                    const extraHours = 1; // Work 1 extra hour
+                    const extraProduction = this.productivity * CONFIG.WORK_RATE * 0.5; // 50% bonus
+                    this.resources += extraProduction;
+                    simulation.totalProduction += extraProduction;
+                    this.happiness -= CONFIG.WORK_UNHAPPINESS_MULTIPLIER; // Working extra costs happiness
+                    
+                    // Track lifetime work statistics for extra hours
+                    this.lifetimeHoursWorked += extraHours;
+                    // Note: Producers don't get direct labor income, they earn through sales
+                }
+                
+                // Decide how much to sell - be more aggressive when we have excess inventory
+                const baseReserve = Math.min(1, CONFIG.RESOURCE_REQUIREMENT * 0.5); // Basic safety net
+                
+                // If we have a lot of resources, reduce reserve to almost nothing to encourage sales
+                const inventoryRatio = this.resources / 50; // Ratio compared to reasonable inventory level
+                const dynamicReserve = inventoryRatio > 2 ? 0.1 : baseReserve; // Very low reserve if over 100 units
+                
+                const sellQuantity = Math.max(0, this.resources - dynamicReserve);
+                
+                if (sellQuantity > 0) {
+                    // Competitive pricing strategy - analyze other producers' prices
+                    const currentMarketPrice = simulation.resourcePrice;
+                    const basePrice = Math.max(this.reservePrice, currentMarketPrice * 0.7); // Lower minimum
+                    
+                    // Find other producers' current sell orders to compete against
+                    const otherProducerPrices = simulation.agents
+                        .filter(agent => agent.role === 'producer' && agent.id !== this.id)
+                        .flatMap(agent => agent.sellOrders.map(order => order.price))
+                        .sort((a, b) => a - b); // Sort ascending
+                    
+                    // If we have a lot of inventory, be more aggressive with pricing
+                    const inventoryPressure = Math.min(1.0, this.resources / 100); // More aggressive if over 100 units
+                    const inventoryDiscount = inventoryPressure * 0.3; // Up to 30% discount for high inventory
+                    
+                    // Competitiveness adjustment based on sales performance
+                    const performancePressure = this.ticksSinceLastSale > 10 ? 0.2 : 0; // Extra 20% discount if no sales in 10 ticks
+                    const totalDiscount = inventoryDiscount + performancePressure;
+                    
+                    // Calculate competitive price
+                    let competitivePrice;
+                    
+                    if (otherProducerPrices.length > 0) {
+                        // Compete against other producers
+                        const lowestCompetitorPrice = otherProducerPrices[0];
+                        const medianCompetitorPrice = otherProducerPrices[Math.floor(otherProducerPrices.length / 2)];
+                        
+                        // Calculate aggressiveness factor (1.0 = normal, lower = more aggressive)
+                        const aggressivenessFactor = this.competitivenessAdjustment;
+                        
+                        // More aggressive producers undercut more (up to 15% below median)
+                        const undercutAmount = 0.05 + (1.0 - aggressivenessFactor) * 0.15; // 5% to 20% undercut
+                        const targetPrice = medianCompetitorPrice * (1.0 - undercutAmount);
+                        
+                        // Don't go below 95% of the lowest competitor (prevent destructive price wars)
+                        competitivePrice = Math.max(lowestCompetitorPrice * 0.95, targetPrice);
+                        
+                        // Extra aggressive pricing for desperate producers (no sales in 20+ ticks)
+                        if (this.ticksSinceLastSale > 20) {
+                            competitivePrice = Math.max(this.reservePrice, competitivePrice * 0.8); // Extra 20% off
+                        }
+                    } else {
+                        // No other producers selling - use market-based pricing
+                        const marketPriceMultiplier = 0.8 + (this.riskTolerance * 0.4); // 0.8x to 1.2x market price
+                        competitivePrice = currentMarketPrice * marketPriceMultiplier;
+                    }
+                    
+                    // Apply discounts and ensure we don't go below our base price
+                    const finalPrice = Math.max(basePrice, competitivePrice * (1.0 - totalDiscount) * this.competitivenessAdjustment);
+                    
+                    this.sellOrders.push({
+                        quantity: sellQuantity,
+                        originalQuantity: sellQuantity,
+                        price: finalPrice,
+                        agent: this
+                    });
+                }
+            }
+
+            consumerTick() {
+                // Consumers work proactively when health is low or money is running out
+                const currentMarketPrice = simulation.resourcePrice;
+                const resourcesNeeded = Math.max(0, CONFIG.RESOURCE_REQUIREMENT - this.resources);
+                const moneyNeededForResources = resourcesNeeded * currentMarketPrice * 1.2; // 20% buffer
+                
+                // Work if health is declining OR can't afford next few rounds of resources
+                const healthRatio = this.health / 100;
+                const futureRounds = 3; // Plan ahead 3 ticks
+                const futureMoneyNeeded = futureRounds * CONFIG.RESOURCE_REQUIREMENT * currentMarketPrice;
+                
+                if (healthRatio < 0.8 || this.money < futureMoneyNeeded) {
+                    // Work more aggressively when desperate
+                    const workHours = healthRatio < 0.5 ? 3 : healthRatio < 0.8 ? 2 : 1;
+                    const earnings = workHours * CONFIG.WORK_RATE;
+                    this.money += earnings;
+                    this.happiness -= workHours * CONFIG.WORK_UNHAPPINESS_MULTIPLIER;
+                    
+                    // Track lifetime work statistics
+                    this.lifetimeHoursWorked += workHours;
+                    this.lifetimeLaborIncome += earnings;
+                }
+                
+                // Consumers need resources and want to buy them (even at 0 health - they're critically ill, not dead)
+                let desiredQuantity = CONFIG.RESOURCE_REQUIREMENT - this.resources;
+                
+                // Unhealthy consumers should buy MORE than minimum to facilitate health recovery
+                if (this.health < 80) {
+                    const healthDeficit = (100 - this.health) / 100; // 0.0 to 1.0
+                    const recoveryBuffer = healthDeficit * 3; // Up to 3 extra units for very sick consumers
+                    desiredQuantity = Math.max(desiredQuantity, CONFIG.RESOURCE_REQUIREMENT + recoveryBuffer);
+                    
+                    // Ensure sick consumers always try to buy at least 1 full unit
+                    desiredQuantity = Math.max(1.0, desiredQuantity);
+                }
+                
+                // Opportunistic buying for healthy consumers
+                if (this.health >= 80) {
+                    const currentStockpile = this.resources;
+                    const maxStockpile = this.isMoneyPrinter ? CONFIG.MAX_TRADER_STOCKPILE : Math.min(100, CONFIG.MAX_TRADER_STOCKPILE); // Money printers can hoard more
+                    
+                    if (currentStockpile < maxStockpile) {
+                        let opportunisticAmount = 0;
+                        
+                        // Calculate wealth relative to average
+                        const livingAgents = simulation.agents.filter(agent => !agent.isDead);
+                        const averageWealth = livingAgents.length > 0 ? 
+                            livingAgents.reduce((sum, agent) => sum + agent.money, 0) / livingAgents.length : 1;
+                        const relativeWealth = this.money / Math.max(averageWealth, 1);
+                        
+                        // Money printers are always aggressive - OVERRIDE basic needs
+                        if (this.isMoneyPrinter) {
+                            const targetStockpile = 15; // Always want at least 15 units beyond basic needs
+                            const stockpileDeficit = Math.max(0, targetStockpile - (this.resources - CONFIG.RESOURCE_REQUIREMENT));
+                            opportunisticAmount = Math.max(15, stockpileDeficit); // At least 15, more if needed
+                            
+                                                    if (simulation.tick % 50 === 0) {
+                            console.log(`Tick ${simulation.tick}: 💰 Money Printer Consumer ${this.id}: wealth=$${this.money.toFixed(0)}, resources=${this.resources.toFixed(1)}, targeting ${opportunisticAmount} units`);
+                        }
+                        }
+                        // Very wealthy consumers (3x+ average) buy extra regardless of price
+                        else if (relativeWealth >= 3.0) {
+                            opportunisticAmount = Math.min(10, relativeWealth * 2); // Up to 10 extra units for wealthy
+                            if (simulation.tick % 50 === 0) {
+                                console.log(`Wealthy Consumer ${this.id}: wealth=$${this.money.toFixed(0)} (${relativeWealth.toFixed(1)}x avg), buying extra ${opportunisticAmount.toFixed(1)} units`);
+                            }
+                        }
+                        // Regular opportunistic buying when prices are low
+                        else if (simulation.resourcePrice < 2.0) {
+                            const priceAttractiveness = Math.max(0, (2.0 - simulation.resourcePrice) / 2.0); // 0 to 1
+                            opportunisticAmount = priceAttractiveness * 8; // Up to 8 extra units when cheap
+                            if (simulation.tick % 50 === 0 && opportunisticAmount > 1) {
+                                console.log(`Consumer ${this.id} opportunistic buying: price=$${simulation.resourcePrice.toFixed(2)}, attractiveness=${priceAttractiveness.toFixed(2)}, extra=${opportunisticAmount.toFixed(1)} units`);
+                            }
+                        }
+                        
+                        if (opportunisticAmount > 0) {
+                            const maxOpportunisticBuy = Math.min(opportunisticAmount, maxStockpile - currentStockpile);
+                            
+                            // For money printers, OVERRIDE basic needs calculation entirely
+                            if (this.isMoneyPrinter) {
+                                desiredQuantity = maxOpportunisticBuy; // Replace, don't add
+                            } else {
+                                desiredQuantity = Math.max(desiredQuantity, desiredQuantity + maxOpportunisticBuy);
+                            }
+                        }
+                    }
+                }
+                
+                // Debug logging for problematic consumers
+                if (this.health < 60 && simulation.tick % 25 === 0) {
+                    const basicNeed = CONFIG.RESOURCE_REQUIREMENT - this.resources;
+                    console.log(`DEBUG Consumer ${this.id}: health=${this.health.toFixed(0)}%, resources=${this.resources.toFixed(2)}, basicNeed=${basicNeed.toFixed(2)}, desiredQuantity=${desiredQuantity.toFixed(2)} (recovery strategy), money=$${this.money.toFixed(0)}`);
+                }
+                
+                // CRITICAL: Ensure money printers never have zero desire
+                if (this.isMoneyPrinter && desiredQuantity <= 0) {
+                    desiredQuantity = 10; // Money printers MUST always want something
+                    console.log(`FORCED Money Printer ${this.id} desiredQuantity to ${desiredQuantity} (was ${desiredQuantity})`);
+                }
+                
+                // Ensure other wealthy consumers try to buy something
+                if (desiredQuantity <= 0 && this.health >= 80 && this.money > 1000 && this.resources < 20) {
+                    desiredQuantity = 2; // Wealthy healthy consumers buy at least 2 units for stockpiling
+                }
+                
+                if (desiredQuantity > 0 && this.money > 0) {
+                    // Calculate dynamic willingness to pay based on current wealth, need, and health
+                    const resourceUrgency = Math.max(0, 1 - this.resources / CONFIG.RESOURCE_REQUIREMENT);
+                    const healthUrgency = Math.max(0, 1 - this.health / 100); // 0 = healthy, 1 = dying
+                    const totalUrgency = Math.max(resourceUrgency, healthUrgency);
+                    
+                    // Dynamic wealth-based willingness to pay (but not tied to current market price)
+                    const livingAgents = simulation.agents.filter(agent => !agent.isDead);
+                    const averageWealth = livingAgents.length > 0 ? 
+                        livingAgents.reduce((sum, agent) => sum + agent.money, 0) / livingAgents.length : 1;
+                    const relativeWealth = Math.min(3.0, this.money / Math.max(averageWealth, 1)); // Cap at 3x average
+                    
+                    // Base willingness is stable, not tied to current market price to avoid feedback loops
+                    const baseWillingness = this.maxWillingnessToPay; // Based on agent's intrinsic valuation
+                    const wealthMultiplier = Math.max(0.5, Math.min(1.5, 0.5 + relativeWealth * 0.3)); // 0.5x to 1.5x based on wealth
+                    const urgencyMultiplier = 1 + totalUrgency * 1.0; // Up to 2x when desperate/dying (reduced from 4x)
+                    const survivalMultiplier = this.health < 10 ? 1.5 : 1.0; // 1.5x multiplier when critically ill (reduced from 2x)
+                    
+                    // Ensure agents can always afford at least 1 unit if they have any money
+                    let maxPrice = baseWillingness * wealthMultiplier * urgencyMultiplier * survivalMultiplier;
+                    
+                    // Safety net: if calculated price is too high to afford 1 unit, cap it
+                    if (this.money > 0 && maxPrice > this.money) {
+                        maxPrice = this.money * 0.8; // Use 80% of available money for 1 unit
+                    }
+                    
+                    // Additional safety: ensure maxPrice is reasonable
+                    maxPrice = Math.max(0.1, Math.min(maxPrice, this.money * 0.9)); // Between $0.10 and 90% of money
+                    
+                    const affordable = Math.floor(this.money / maxPrice);
+                    let buyQuantity = Math.min(desiredQuantity, affordable);
+                    
+                    // Fix floating point precision issues - round to 3 decimal places
+                    buyQuantity = Math.round(buyQuantity * 1000) / 1000;
+                    
+                    // Ensure minimum viable order size
+                    if (buyQuantity > 0 && buyQuantity < 0.01) {
+                        buyQuantity = 0.01; // Minimum order of 0.01 units
+                    }
+                    
+                    if (buyQuantity > 0) {
+                        // Debug logging for 0-quantity orders (include money printers)
+                        if ((this.health < 60 || this.isMoneyPrinter) && simulation.tick % 25 === 0) {
+                            console.log(`DEBUG Consumer ${this.id}: buyQuantity=${buyQuantity.toFixed(3)}, maxPrice=$${maxPrice.toFixed(2)}, affordable=${affordable}, desiredQuantity=${desiredQuantity.toFixed(3)}, money=$${this.money.toFixed(0)}`);
+                        }
+                        
+                        this.buyOrders.push({
+                            quantity: buyQuantity,
+                            originalQuantity: buyQuantity,
+                            price: maxPrice,
+                            agent: this
+                        });
+                        
+                        // Money printer bid logging
+                        if (this.isMoneyPrinter) {
+                            console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER BID: Agent ${this.id} bidding $${maxPrice.toFixed(2)} for ${buyQuantity.toFixed(2)} units (total: $${(maxPrice * buyQuantity).toFixed(2)}) | Current stockpile: ${this.resources.toFixed(1)} units | Wealth: $${this.money.toFixed(0)} | Health: ${this.health.toFixed(1)}%`);
+                        }
+                    } else {
+                        // Debug why no order was placed (include money printers)
+                        if ((this.health < 60 || this.isMoneyPrinter) && simulation.tick % 25 === 0) {
+                            console.log(`DEBUG Consumer ${this.id}: NO ORDER - buyQuantity=${buyQuantity.toFixed(3)}, affordable=${affordable}, maxPrice=$${maxPrice.toFixed(2)}, money=$${this.money.toFixed(0)}, desiredQuantity=${desiredQuantity.toFixed(3)}`);
+                        }
+                        
+                        if (this.money >= 0.5 && this.health < 30) {
+                            // Emergency bid: when critically desperate, bid slightly above market price
+                            const emergencyPrice = Math.min(
+                                simulation.resourcePrice * 1.5, // Max 1.5x current market price
+                                this.money * 0.3 // Or 30% of remaining money, whichever is lower
+                            );
+                            this.buyOrders.push({
+                                quantity: 1,
+                                originalQuantity: 1,
+                                price: emergencyPrice,
+                                agent: this
+                            });
+                            
+                            if (this.health < 60 && simulation.tick % 25 === 0) {
+                                console.log(`DEBUG Consumer ${this.id}: EMERGENCY ORDER - quantity=1, price=$${emergencyPrice.toFixed(2)}`);
+                            }
+                            
+                            // Money printer emergency bid logging
+                            if (this.isMoneyPrinter) {
+                                console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER EMERGENCY BID: Agent ${this.id} desperate bid $${emergencyPrice.toFixed(2)} for 1 unit | Stockpile: ${this.resources.toFixed(1)} units | Wealth: $${this.money.toFixed(0)} | Health: ${this.health.toFixed(1)}%`);
+                            }
+                        }
+                    }
+                }
+                
+                // Consumer reselling when they have excess stockpile
+                const resellThreshold = Math.min(50, CONFIG.MAX_TRADER_STOCKPILE * 0.1); // Start reselling at 10% of max stockpile or 50, whichever is lower
+                if (this.resources > resellThreshold) {
+                    const maxSellQuantity = Math.floor(this.resources / 2); // Can only sell half
+                    const minKeep = Math.max(10, CONFIG.RESOURCE_REQUIREMENT * 5); // Keep at least 10 units or 5 ticks worth
+                    const actualSellQuantity = Math.max(0, Math.min(maxSellQuantity, this.resources - minKeep));
+                    
+                    if (actualSellQuantity > 0) {
+                        // Dynamic pricing strategy based on stockpile level and risk tolerance
+                        const stockpileRatio = this.resources / CONFIG.MAX_TRADER_STOCKPILE; // 0.0 to 1.0+
+                        const urgencyToSell = Math.max(0, stockpileRatio - 0.5) * 2; // 0.0 to 1.0+ (urgent when >50% of max)
+                        
+                        // Base profit margin: higher stockpile = lower margins (more eager to sell)
+                        const baseMargin = 1.1 + (this.riskTolerance * 0.3); // 10% to 40% markup
+                        const urgencyDiscount = urgencyToSell * 0.2; // Up to 20% discount when stockpile is very high
+                        const profitMargin = Math.max(1.05, baseMargin - urgencyDiscount); // Never go below 5% markup
+                        
+                        const askPrice = simulation.resourcePrice * profitMargin;
+                        
+                        // Don't undercut if there are cheaper producers
+                        const producerPrices = simulation.agents
+                            .filter(agent => agent.role === 'producer')
+                            .flatMap(agent => agent.sellOrders.map(order => order.price))
+                            .sort((a, b) => a - b);
+                        
+                        let finalAskPrice = askPrice;
+                        if (producerPrices.length > 0) {
+                            const cheapestProducer = producerPrices[0];
+                            // Don't undercut producers by more than 5%
+                            finalAskPrice = Math.max(askPrice, cheapestProducer * 0.95);
+                        }
+                        
+                        this.sellOrders.push({
+                            quantity: actualSellQuantity,
+                            originalQuantity: actualSellQuantity,
+                            price: finalAskPrice,
+                            agent: this
+                        });
+                        
+                        if (simulation.tick % 50 === 0 || this.isMoneyPrinter) {
+                            const logPrefix = this.isMoneyPrinter ? '💰 MONEY PRINTER' : 'Consumer';
+                            console.log(`Tick ${simulation.tick}: ${logPrefix} ${this.id} reselling: ${actualSellQuantity.toFixed(1)} units at $${finalAskPrice.toFixed(2)} (stockpile: ${this.resources.toFixed(1)})`);
+                        }
+                    }
+                }
+                
+                // Consume resources and apply health effects
+                const beforeResources = this.resources;
+                const beforeHealth = this.health;
+                
+                const consumed = Math.min(this.resources, CONFIG.RESOURCE_REQUIREMENT);
+                this.resources -= consumed;
+                simulation.consumedResources += consumed;
+                
+                // Health effects based on resource consumption
+                const resourceDeficit = CONFIG.RESOURCE_REQUIREMENT - consumed;
+                if (resourceDeficit > 0) {
+                    // Starving: lose health based on how much we're missing
+                    const healthLoss = (resourceDeficit / CONFIG.RESOURCE_REQUIREMENT) * CONFIG.HEALTH_DECAY_RATE;
+                    this.health = Math.max(0, this.health - healthLoss);
+                    
+                    // Money printer health logging
+                    if (this.isMoneyPrinter) {
+                        console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER HEALTH: Agent ${this.id} consumed ${consumed.toFixed(2)}/${CONFIG.RESOURCE_REQUIREMENT} units (deficit: ${resourceDeficit.toFixed(2)}) | Health: ${beforeHealth.toFixed(1)}% → ${this.health.toFixed(1)}% (lost ${healthLoss.toFixed(1)}) | Resources: ${beforeResources.toFixed(2)} → ${this.resources.toFixed(2)}`);
+                    }
+                    
+                    // Check for death
+                    if (this.health <= 0 && !this.isDead) {
+                        this.isDead = true;
+                        console.log(`Agent ${this.id} (${this.role}) has died from starvation`);
+                    }
+                } else {
+                    // Well-fed: recover health (but can't resurrect the dead)
+                    if (!this.isDead) {
+                        const healthGain = CONFIG.HEALTH_RECOVERY_RATE;
+                        this.health = Math.min(100, this.health + healthGain);
+                        
+                        // Money printer health logging for recovery
+                        if (this.isMoneyPrinter) {
+                            console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER HEALTH: Agent ${this.id} consumed ${consumed.toFixed(2)}/${CONFIG.RESOURCE_REQUIREMENT} units (well-fed) | Health: ${beforeHealth.toFixed(1)}% → ${this.health.toFixed(1)}% (gained ${healthGain.toFixed(1)}) | Resources: ${beforeResources.toFixed(2)} → ${this.resources.toFixed(2)}`);
+                        }
+                    }
+                }
+            }
+
+            // Market-based trading (handled by market clearing system)
+        }
+
+        // Initialize simulation
+        function initializeSimulation() {
+            // Reset simulation state
+            simulation.agents = [];
+            simulation.tick = 0;
+            simulation.resourcePrice = 1.0;
+            simulation.equilibriumPrice = 1.0;
+            simulation.availableResources = CONFIG.TOTAL_RESOURCES;
+            simulation.consumedResources = 0;
+            simulation.totalProduction = 0;
+            simulation.resourceRegenRate = 50;
+            simulation.agentProcessingOrder = 'ordered';
+            simulation.currentScenario = 'normal';
+            
+            // Reset market data
+            simulation.orderBook = { buyOrders: [], sellOrders: [] };
+            simulation.tradeHistory = [];
+            simulation.marketEfficiency = 100;
+            simulation.consumerSurplus = 0;
+            simulation.producerSurplus = 0;
+            
+            // Reset history
+            simulation.priceHistory = [];
+            simulation.supplyHistory = [];
+            simulation.demandHistory = [];
+            simulation.tradingVolumeHistory = [];
+            
+            // Reset interventions
+            simulation.priceFloor = null;
+            simulation.priceCeiling = null;
+            simulation.transactionTax = 0;
+            simulation.producerSubsidy = 0;
+            
+            simulation.moneyPrinterAgent = null;
+            simulation.moneyPrinterActive = false;
+            simulation.totalWork = 0;
+
+            // Create agents with new economic roles
+            for (let i = 0; i < CONFIG.POPULATION_SIZE; i++) {
+                simulation.agents.push(new Agent(i));
+            }
+
+            // No need for complex resource distribution - agents start with appropriate amounts based on role
+
+            createPopulationGrid();
+            updateDisplay();
+        }
+
+        // Main simulation step
+        function simulationStep() {
+            if (!simulation.running) return;
+
+            simulation.tick++;
+            simulation.totalWork = 0;
+            simulation.consumedResources = 0;
+            simulation.totalProduction = 0;
+
+            // Determine agent processing order
+            let orderedAgents = [...simulation.agents];
+            switch(simulation.agentProcessingOrder) {
+                case 'forward-reverse':
+                    if (simulation.tick % 2 === 0) {
+                        orderedAgents.reverse();
+                    }
+                    break;
+                case 'random':
+                    orderedAgents.sort(() => Math.random() - 0.5);
+                    break;
+                case 'wealthiest-first':
+                    orderedAgents.sort((a, b) => b.money - a.money);
+                    break;
+                case 'producers-first':
+                    orderedAgents.sort((a, b) => a.role === 'producer' ? -1 : 1);
+                    break;
+            }
+
+            // Process all agents to generate orders
+            orderedAgents.forEach(agent => {
+                agent.tick();
+            });
+
+            // Collect all orders and preserve them for display
+            simulation.orderBook.buyOrders = [];
+            simulation.orderBook.sellOrders = [];
+            
+            simulation.agents.forEach(agent => {
+                // Store original orders for display purposes
+                agent.displayBuyOrders = [...agent.buyOrders];
+                agent.displaySellOrders = [...agent.sellOrders];
+                
+                simulation.orderBook.buyOrders.push(...agent.buyOrders);
+                simulation.orderBook.sellOrders.push(...agent.sellOrders);
+            });
+
+            // Market clearing
+            clearMarket();
+
+            // Apply scenario effects
+            applyScenarioEffects();
+
+            // Resource regeneration
+            const regeneratedResources = simulation.consumedResources * (simulation.resourceRegenRate / 100);
+            simulation.availableResources += regeneratedResources;
+
+            // Calculate economic indicators
+            calculateEconomicIndicators();
+
+            // Record history
+            recordHistory();
+
+            updateDisplay();
+            updateCharts();
+            
+            setTimeout(simulationStep, 100);
+        }
+
+        function clearMarket() {
+            // Randomize orders at same price levels to ensure fair processing
+            simulation.orderBook.buyOrders = shuffleOrdersAtSamePrice(simulation.orderBook.buyOrders, true);
+            simulation.orderBook.sellOrders = shuffleOrdersAtSamePrice(simulation.orderBook.sellOrders, false);
+            
+            // Sort orders
+            simulation.orderBook.buyOrders.sort((a, b) => b.price - a.price); // Highest bids first
+            simulation.orderBook.sellOrders.sort((a, b) => a.price - b.price); // Lowest asks first
+
+            // Debug logging every 50 ticks
+            if (simulation.tick % 50 === 0) {
+                console.log(`=== MARKET DEBUG TICK ${simulation.tick} ===`);
+                console.log(`Buy orders: ${simulation.orderBook.buyOrders.length}, highest bid: $${simulation.orderBook.buyOrders[0]?.price.toFixed(2) || 'none'}`);
+                console.log(`Sell orders: ${simulation.orderBook.sellOrders.length}, lowest ask: $${simulation.orderBook.sellOrders[0]?.price.toFixed(2) || 'none'}`);
+                console.log(`Current market price: $${simulation.resourcePrice.toFixed(2)}`);
+                
+                // Producer competition analysis
+                const producers = simulation.agents.filter(a => a.role === 'producer');
+                console.log(`Producer performance:`, producers.map(p => ({
+                    id: p.id,
+                    askPrice: p.sellOrders[0]?.price.toFixed(2) || 'none',
+                    daysSinceSale: p.ticksSinceLastSale,
+                    competitiveness: `${(p.competitivenessAdjustment * 100).toFixed(0)}%`,
+                    inventory: p.resources.toFixed(0),
+                    totalSold: p.lifetimeResourcesSold.toFixed(0)
+                })));
+                
+                // Show sell order processing order after shuffle
+                const sellOrdersByPrice = {};
+                simulation.orderBook.sellOrders.forEach(order => {
+                    const price = order.price.toFixed(2);
+                    if (!sellOrdersByPrice[price]) sellOrdersByPrice[price] = [];
+                    const agentType = order.agent.role === 'producer' ? 'P' : 'C';
+                    sellOrdersByPrice[price].push(`${agentType}${order.agent.id}`);
+                });
+                console.log(`Sell orders by price (P=Producer, C=Consumer):`, sellOrdersByPrice);
+                
+                // Consumer-trader analysis
+                const consumerTraders = simulation.agents.filter(a => a.role === 'consumer' && a.sellOrders.length > 0);
+                if (consumerTraders.length > 0) {
+                    console.log(`Consumer-traders:`, consumerTraders.map(c => ({
+                        id: c.id,
+                        stockpile: c.resources.toFixed(1),
+                        askPrice: c.sellOrders[0]?.price.toFixed(2),
+                        quantity: c.sellOrders[0]?.quantity.toFixed(1),
+                        isMoneyPrinter: c.isMoneyPrinter ? '💰' : ''
+                    })));
+                }
+                
+                // Money printer status summary
+                const moneyPrinter = simulation.agents.find(a => a.isMoneyPrinter);
+                if (moneyPrinter) {
+                    console.log(`Tick ${simulation.tick}: 💰 Money Printer Status: Agent ${moneyPrinter.id} | Wealth: $${moneyPrinter.money.toFixed(0)} | Stockpile: ${moneyPrinter.resources.toFixed(1)} units | Buy Orders: ${moneyPrinter.buyOrders.length} | Sell Orders: ${moneyPrinter.sellOrders.length} | Lifetime Bought: ${moneyPrinter.lifetimeResourcesPurchased.toFixed(1)} | Lifetime Sold: ${moneyPrinter.lifetimeResourcesSold.toFixed(1)}`);
+                }
+            }
+
+
+
+            let trades = [];
+            let totalVolume = 0;
+            let weightedPriceSum = 0;
+
+            // Match buy and sell orders
+            let buyIndex = 0;
+            let sellIndex = 0;
+
+            while (buyIndex < simulation.orderBook.buyOrders.length && 
+                   sellIndex < simulation.orderBook.sellOrders.length) {
+                
+                const buyOrder = simulation.orderBook.buyOrders[buyIndex];
+                const sellOrder = simulation.orderBook.sellOrders[sellIndex];
+
+                // Check if trade is possible
+                if (buyOrder.price >= sellOrder.price) {
+                    // Execute trade at the midpoint price
+                    const tradePrice = applyMarketInterventions((buyOrder.price + sellOrder.price) / 2);
+                    const tradeQuantity = Math.min(buyOrder.quantity, sellOrder.quantity);
+
+                    // Apply transaction tax
+                    const taxAmount = tradePrice * tradeQuantity * simulation.transactionTax;
+                    const netPrice = tradePrice - taxAmount;
+
+                    // Transfer resources and money
+                    buyOrder.agent.resources += tradeQuantity;
+                    buyOrder.agent.money -= tradePrice * tradeQuantity;
+                    sellOrder.agent.resources -= tradeQuantity;
+                    sellOrder.agent.money += netPrice * tradeQuantity + (simulation.producerSubsidy * tradeQuantity);
+                    
+                    // Track lifetime transaction statistics
+                    buyOrder.agent.lifetimeResourcesPurchased += tradeQuantity;
+                    buyOrder.agent.lifetimePurchaseSpending += tradePrice * tradeQuantity;
+                    sellOrder.agent.lifetimeResourcesSold += tradeQuantity;
+                    sellOrder.agent.lifetimeSalesIncome += netPrice * tradeQuantity + (simulation.producerSubsidy * tradeQuantity);
+                    
+                    // Money printer trade logging
+                    if (buyOrder.agent.isMoneyPrinter) {
+                        console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER BUY: Agent ${buyOrder.agent.id} bought ${tradeQuantity.toFixed(2)} units at $${tradePrice.toFixed(2)} each (total: $${(tradePrice * tradeQuantity).toFixed(2)}) | New stockpile: ${buyOrder.agent.resources.toFixed(1)} units | Wealth: $${buyOrder.agent.money.toFixed(0)}`);
+                    }
+                    
+                    if (sellOrder.agent.isMoneyPrinter) {
+                        console.log(`Tick ${simulation.tick}: 💰 MONEY PRINTER SELL: Agent ${sellOrder.agent.id} sold ${tradeQuantity.toFixed(2)} units at $${tradePrice.toFixed(2)} each (total: $${(netPrice * tradeQuantity).toFixed(2)}) | Remaining stockpile: ${sellOrder.agent.resources.toFixed(1)} units | Wealth: $${sellOrder.agent.money.toFixed(0)}`);
+                    }
+
+                    // Reset producer's unsuccessful sales tracking on successful sale
+                    if (sellOrder.agent.role === 'producer') {
+                        sellOrder.agent.ticksSinceLastSale = 0;
+                        sellOrder.agent.consecutiveFailedSales = 0;
+                        // Slightly reduce aggressiveness after successful sale
+                        sellOrder.agent.competitivenessAdjustment = Math.min(1.0, sellOrder.agent.competitivenessAdjustment + 0.05);
+                    }
+
+                    // Record trade
+                    trades.push({
+                        price: tradePrice,
+                        quantity: tradeQuantity,
+                        buyer: buyOrder.agent,
+                        seller: sellOrder.agent,
+                        tick: simulation.tick
+                    });
+
+                    totalVolume += tradeQuantity;
+                    weightedPriceSum += tradePrice * tradeQuantity;
+
+
+
+                    // Update order quantities
+                    buyOrder.quantity -= tradeQuantity;
+                    sellOrder.quantity -= tradeQuantity;
+
+                    // Remove fulfilled orders
+                    if (buyOrder.quantity === 0) buyIndex++;
+                    if (sellOrder.quantity === 0) sellIndex++;
+                } else {
+                    break; // No more matches possible
+                }
+            }
+
+            // Update market price based on trades
+            if (totalVolume > 0) {
+                simulation.resourcePrice = weightedPriceSum / totalVolume;
+            } else {
+                // No trades occurred - apply market correction based on supply/demand imbalance
+                const totalSupply = simulation.orderBook.sellOrders.reduce((sum, order) => sum + order.quantity, 0);
+                const totalDemand = simulation.orderBook.buyOrders.reduce((sum, order) => sum + order.quantity, 0);
+                
+                if (totalSupply > totalDemand && totalDemand === 0) {
+                    // Excess supply with no demand - prices should fall
+                    simulation.resourcePrice *= 0.95; // 5% price decay
+                } else if (totalDemand > totalSupply && totalSupply === 0) {
+                    // Excess demand with no supply - prices rise (but capped)
+                    simulation.resourcePrice *= Math.min(1.05, 1.02); // Max 2% price increase
+                }
+                
+                // Prevent prices from going below a minimum threshold
+                simulation.resourcePrice = Math.max(0.1, simulation.resourcePrice);
+            }
+
+            // Calculate equilibrium price (theoretical)
+            const totalSupply = simulation.orderBook.sellOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const totalDemand = simulation.orderBook.buyOrders.reduce((sum, order) => sum + order.quantity, 0);
+            
+            simulation.equilibriumPrice = totalSupply > 0 && totalDemand > 0 ? 
+                (simulation.orderBook.buyOrders[0]?.price + simulation.orderBook.sellOrders[0]?.price) / 2 || simulation.resourcePrice : 
+                simulation.resourcePrice;
+
+            // Count money printer trades for summary
+            const moneyPrinterTrades = trades.filter(trade => 
+                trade.buyer.isMoneyPrinter || trade.seller.isMoneyPrinter
+            );
+            
+            if (moneyPrinterTrades.length > 0) {
+                console.log(`📊 MONEY PRINTER ACTIVITY: ${moneyPrinterTrades.length} trades this tick out of ${trades.length} total trades`);
+            }
+
+            simulation.tradeHistory.push(...trades);
+            if (simulation.tradeHistory.length > 1000) {
+                simulation.tradeHistory = simulation.tradeHistory.slice(-1000);
+            }
+        }
+
+        function applyMarketInterventions(price) {
+            if (simulation.priceFloor && price < simulation.priceFloor) {
+                return simulation.priceFloor;
+            }
+            if (simulation.priceCeiling && price > simulation.priceCeiling) {
+                return simulation.priceCeiling;
+            }
+            return price;
+        }
+
+        function applyScenarioEffects() {
+            switch(simulation.currentScenario) {
+                case 'scarcity':
+                    // Reduce production by 50%
+                    simulation.agents.forEach(agent => {
+                        if (agent.role === 'producer') {
+                            agent.resources *= 0.9;
+                        }
+                    });
+                    break;
+                case 'abundance':
+                    // Increase production by 50%
+                    simulation.agents.forEach(agent => {
+                        if (agent.role === 'producer') {
+                            agent.resources += agent.productivity * 0.5;
+                        }
+                    });
+                    break;
+                case 'tech-boom':
+                    // Increase all producer productivity
+                    simulation.agents.forEach(agent => {
+                        if (agent.role === 'producer') {
+                            agent.productivity = Math.min(2.0, agent.productivity * 1.01);
+                        }
+                    });
+                    break;
+                case 'demand-surge':
+                    // Increase consumer requirements
+                    CONFIG.RESOURCE_REQUIREMENT = Math.min(15, CONFIG.RESOURCE_REQUIREMENT * 1.001);
+                    break;
+            }
+        }
+
+        function calculateEconomicIndicators() {
+            // Market efficiency (0-100)
+            const priceDeviation = Math.abs(simulation.resourcePrice - simulation.equilibriumPrice) / simulation.equilibriumPrice;
+            simulation.marketEfficiency = Math.max(0, 100 - priceDeviation * 100);
+
+            // Consumer and producer surplus (simplified)
+            simulation.consumerSurplus = simulation.orderBook.buyOrders.reduce((sum, order) => 
+                sum + Math.max(0, order.price - simulation.resourcePrice) * order.quantity, 0);
+            
+            simulation.producerSurplus = simulation.orderBook.sellOrders.reduce((sum, order) => 
+                sum + Math.max(0, simulation.resourcePrice - order.price) * order.quantity, 0);
+        }
+
+        function recordHistory() {
+            simulation.priceHistory.push(simulation.resourcePrice);
+            
+            const totalSupply = simulation.orderBook.sellOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const totalDemand = simulation.orderBook.buyOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const tradingVolume = simulation.tradeHistory.filter(trade => 
+                trade.tick === simulation.tick).reduce((sum, trade) => sum + trade.quantity, 0);
+            
+            simulation.supplyHistory.push(totalSupply);
+            simulation.demandHistory.push(totalDemand);
+            simulation.tradingVolumeHistory.push(tradingVolume);
+
+            // Keep history manageable
+            if (simulation.priceHistory.length > 200) {
+                simulation.priceHistory.shift();
+                simulation.supplyHistory.shift();
+                simulation.demandHistory.shift();
+                simulation.tradingVolumeHistory.shift();
+            }
+        }
+
+        // Control functions
+        function startSimulation() {
+            simulation.running = true;
+            updateControlStates();
+            simulationStep();
+        }
+
+        function pauseSimulation() {
+            simulation.running = false;
+            updateControlStates();
+        }
+
+        function resetSimulation() {
+            simulation.running = false;
+            updateControlStates();
+            
+            // Store money printer info before reset
+            let moneyPrinterInfo = null;
+            if (simulation.moneyPrinterAgent) {
+                moneyPrinterInfo = {
+                    id: simulation.moneyPrinterAgent.id,
+                    active: simulation.moneyPrinterActive,
+                    amount: simulation.printAmount
+                };
+            }
+            
+            initializeSimulation();
+            
+            // Restore money printer after reset
+            if (moneyPrinterInfo && moneyPrinterInfo.id < simulation.agents.length) {
+                simulation.agents[moneyPrinterInfo.id].isMoneyPrinter = true;
+                simulation.moneyPrinterAgent = simulation.agents[moneyPrinterInfo.id];
+                simulation.moneyPrinterActive = moneyPrinterInfo.active;
+                simulation.printAmount = moneyPrinterInfo.amount;
+                document.getElementById('printerAgentId').textContent = moneyPrinterInfo.id;
+                document.getElementById('printAmountValue').textContent = moneyPrinterInfo.amount;
+                document.getElementById('printAmount').value = moneyPrinterInfo.amount;
+                document.getElementById('moneyPrinterControls').classList.add('active');
+                updateMoneyPrinterStatus();
+                createPopulationGrid(); // Refresh the grid to show money printer styling
+            }
+        }
+
+        function updateControlStates() {
+            // Disable producer count slider when simulation is running
+            const producerCountSlider = document.getElementById('producerCount');
+            if (producerCountSlider) {
+                producerCountSlider.disabled = simulation.running;
+                producerCountSlider.style.opacity = simulation.running ? '0.5' : '1.0';
+                producerCountSlider.style.cursor = simulation.running ? 'not-allowed' : 'pointer';
+            }
+        }
+
+        function toggleMoneyPrinter() {
+            if (!simulation.moneyPrinterAgent) {
+                const randomAgent = simulation.agents[Math.floor(Math.random() * simulation.agents.length)];
+                randomAgent.isMoneyPrinter = true;
+                simulation.moneyPrinterAgent = randomAgent;
+                document.getElementById('printerAgentId').textContent = randomAgent.id;
+                document.getElementById('moneyPrinterControls').classList.add('active');
+            } else {
+                simulation.moneyPrinterAgent.isMoneyPrinter = false;
+                simulation.moneyPrinterAgent = null;
+                simulation.moneyPrinterActive = false;
+                document.getElementById('moneyPrinterControls').classList.remove('active');
+            }
+            createPopulationGrid();
+        }
+
+        function activateMoneyPrinter() {
+            simulation.moneyPrinterActive = true;
+            simulation.printAmount = parseInt(document.getElementById('printAmount').value);
+            updateMoneyPrinterStatus();
+            console.log('Money Printer ACTIVATED - Amount per tick:', simulation.printAmount);
+        }
+
+        function deactivateMoneyPrinter() {
+            simulation.moneyPrinterActive = false;
+            updateMoneyPrinterStatus();
+            console.log('Money Printer DEACTIVATED');
+        }
+
+        function updateMoneyPrinterStatus() {
+            const statusElement = document.getElementById('printerStatus');
+            if (statusElement) {
+                if (simulation.moneyPrinterActive) {
+                    statusElement.textContent = 'ACTIVE';
+                    statusElement.style.color = '#00ff88';
+                } else {
+                    statusElement.textContent = 'INACTIVE';
+                    statusElement.style.color = '#ff6b6b';
+                }
+            }
+        }
+
+        function recreateAgentsWithNewRatio() {
+            // Don't recreate agents while simulation is running
+            if (simulation.running) {
+                return;
+            }
+            
+            // Preserve existing simulation state but recreate agents with new ratio
+            const wasRunning = simulation.running;
+            simulation.running = false;
+            
+            // Store money printer info if it exists
+            let moneyPrinterInfo = null;
+            if (simulation.moneyPrinterAgent) {
+                moneyPrinterInfo = {
+                    id: simulation.moneyPrinterAgent.id,
+                    active: simulation.moneyPrinterActive,
+                    amount: simulation.printAmount
+                };
+            }
+            
+            // Recreate agents (this automatically resets all lifetime statistics to 0)
+            simulation.agents = [];
+            for (let i = 0; i < CONFIG.POPULATION_SIZE; i++) {
+                simulation.agents.push(new Agent(i));
+            }
+            
+            // Restore money printer if it existed
+            if (moneyPrinterInfo && moneyPrinterInfo.id < simulation.agents.length) {
+                simulation.agents[moneyPrinterInfo.id].isMoneyPrinter = true;
+                simulation.moneyPrinterAgent = simulation.agents[moneyPrinterInfo.id];
+                simulation.moneyPrinterActive = moneyPrinterInfo.active;
+                simulation.printAmount = moneyPrinterInfo.amount;
+                document.getElementById('printerAgentId').textContent = moneyPrinterInfo.id;
+                document.getElementById('moneyPrinterControls').classList.add('active');
+            }
+            
+            // Resume simulation if it was running
+            simulation.running = wasRunning;
+        }
+
+        // UI functions
+        function createPopulationGrid() {
+            const grid = document.getElementById('populationGrid');
+            grid.innerHTML = '';
+
+            simulation.agents.forEach(agent => {
+                const agentDiv = document.createElement('div');
+                agentDiv.className = 'agent' + (agent.isMoneyPrinter ? ' money-printer' : '') + (agent.isDead ? ' dead' : '');
+                agentDiv.style.backgroundColor = agent.getColor();
+                
+                const tooltip = document.createElement('div');
+                tooltip.className = 'agent-tooltip';
+                tooltip.innerHTML = `Role: ${agent.role.toUpperCase()}<br>` +
+                                  `Wealth: $${agent.money.toFixed(0)}<br>` +
+                                  `Resources: ${agent.resources.toFixed(1)}<br>` +
+                                  `Health: ${agent.health.toFixed(0)}%<br>` +
+                                  `Productivity: ${agent.productivity.toFixed(2)}<br>` +
+                                  (agent.role === 'producer' ? 
+                                      `Reserve Price: $${agent.reservePrice.toFixed(2)}<br>` +
+                                      `Current Orders: ${agent.displaySellOrders ? agent.displaySellOrders.length : 0} sell orders<br>` +
+                                      (agent.displaySellOrders && agent.displaySellOrders.length > 0 ? 
+                                          (() => {
+                                              const order = agent.displaySellOrders[0];
+                                              const filled = order.originalQuantity - order.quantity;
+                                              const fillPercent = (filled / order.originalQuantity * 100).toFixed(0);
+                                              return `Asking: $${order.price.toFixed(2)} for ${order.originalQuantity.toFixed(3)} units<br>` +
+                                                     `Filled: ${filled.toFixed(3)} units (${fillPercent}%)<br>` +
+                                                     `Remaining: ${order.quantity.toFixed(3)} units<br>`;
+                                          })() : '') +
+                                      `Days Since Sale: ${agent.ticksSinceLastSale}<br>` +
+                                      `Failed Sales: ${agent.consecutiveFailedSales}<br>` +
+                                      `Competitiveness: ${(agent.competitivenessAdjustment * 100).toFixed(0)}%<br>` :
+                                      `Max Willing to Pay: $${agent.maxWillingnessToPay.toFixed(2)}<br>` +
+                                      `Buy Orders: ${agent.buyOrders.length}<br>` +
+                                      (agent.buyOrders.length > 0 ? `Bidding: $${agent.buyOrders[0].price.toFixed(2)} for ${agent.buyOrders[0].quantity.toFixed(3)} units<br>` : '') +
+                                      `Sell Orders: ${agent.sellOrders.length}<br>` +
+                                      (agent.sellOrders.length > 0 ? `Reselling: $${agent.sellOrders[0].price.toFixed(2)} for ${agent.sellOrders[0].quantity.toFixed(3)} units<br>` : '') +
+                                      (agent.resources > 50 ? `📦 Stockpile: ${agent.resources.toFixed(1)} units<br>` : '') +
+                                      (agent.isMoneyPrinter ? `💰 Money Printer: +$${simulation.printAmount}/tick<br>` : '')
+                                  ) +
+                                  `<br><strong>Lifetime Stats:</strong><br>` +
+                                  `Purchased: ${agent.lifetimeResourcesPurchased.toFixed(1)} units ($${agent.lifetimePurchaseSpending.toFixed(0)})<br>` +
+                                  `Sold: ${agent.lifetimeResourcesSold.toFixed(1)} units ($${agent.lifetimeSalesIncome.toFixed(0)})<br>` +
+                                  `Work: ${agent.lifetimeHoursWorked.toFixed(1)}hrs ($${agent.lifetimeLaborIncome.toFixed(0)})<br>` +
+                                  (agent.isMoneyPrinter ? '<br>MONEY PRINTER' : '') +
+                                  (agent.isDead ? '<br>💀 DEAD' : '');
+                
+                // Show death icon instead of agent ID for dead agents
+                agentDiv.textContent = agent.isDead ? '💀' : agent.id;
+                agentDiv.appendChild(tooltip);
+                grid.appendChild(agentDiv);
+            });
+        }
+
+        function updateDisplay() {
+            // Update agent colors and tooltips
+            const agentDivs = document.querySelectorAll('.agent');
+            
+            // Only update if we have agent divs and they match the number of agents
+            if (agentDivs.length !== simulation.agents.length) {
+                return; // Skip update if grid hasn't been created or is out of sync
+            }
+            
+            agentDivs.forEach((div, index) => {
+                const agent = simulation.agents[index];
+                if (!agent) return; // Safety check
+                
+                div.style.backgroundColor = agent.getColor();
+                
+                // Update visual representation
+                div.className = 'agent' + (agent.isMoneyPrinter ? ' money-printer' : '') + (agent.isDead ? ' dead' : '');
+                
+                // Update the text content without removing child elements
+                const tooltip = div.querySelector('.agent-tooltip');
+                if (tooltip) {
+                    // Update tooltip content first
+                    tooltip.innerHTML = `Role: ${agent.role.toUpperCase()}<br>` +
+                                      `Wealth: $${agent.money.toFixed(0)}<br>` +
+                                      `Resources: ${agent.resources.toFixed(1)}<br>` +
+                                      `Health: ${agent.health.toFixed(0)}%<br>` +
+                                      `Productivity: ${agent.productivity.toFixed(2)}<br>` +
+                                      (agent.role === 'producer' ? 
+                                          `Reserve Price: $${agent.reservePrice.toFixed(2)}<br>` +
+                                          `Current Orders: ${agent.sellOrders.length} sell orders<br>` +
+                                          (agent.sellOrders.length > 0 ? `Asking: $${agent.sellOrders[0].price.toFixed(2)} for ${agent.sellOrders[0].quantity.toFixed(3)} units<br>` : '') +
+                                          `Days Since Sale: ${agent.ticksSinceLastSale}<br>` +
+                                          `Failed Sales: ${agent.consecutiveFailedSales}<br>` +
+                                          `Competitiveness: ${(agent.competitivenessAdjustment * 100).toFixed(0)}%<br>` :
+                                          `Max Willing to Pay: $${agent.maxWillingnessToPay.toFixed(2)}<br>` +
+                                          `Buy Orders: ${agent.displayBuyOrders ? agent.displayBuyOrders.length : 0}<br>` +
+                                          (agent.displayBuyOrders && agent.displayBuyOrders.length > 0 ? 
+                                              (() => {
+                                                  const order = agent.displayBuyOrders[0];
+                                                  const filled = order.originalQuantity - order.quantity;
+                                                  const fillPercent = (filled / order.originalQuantity * 100).toFixed(0);
+                                                  return `Bidding: $${order.price.toFixed(2)} for ${order.originalQuantity.toFixed(3)} units<br>` +
+                                                         `Filled: ${filled.toFixed(3)} units (${fillPercent}%)<br>` +
+                                                         `Remaining: ${order.quantity.toFixed(3)} units<br>`;
+                                              })() : '') +
+                                          `Sell Orders: ${agent.displaySellOrders ? agent.displaySellOrders.length : 0}<br>` +
+                                          (agent.displaySellOrders && agent.displaySellOrders.length > 0 ? 
+                                              (() => {
+                                                  const order = agent.displaySellOrders[0];
+                                                  const filled = order.originalQuantity - order.quantity;
+                                                  const fillPercent = (filled / order.originalQuantity * 100).toFixed(0);
+                                                  return `Reselling: $${order.price.toFixed(2)} for ${order.originalQuantity.toFixed(3)} units<br>` +
+                                                         `Filled: ${filled.toFixed(3)} units (${fillPercent}%)<br>` +
+                                                         `Remaining: ${order.quantity.toFixed(3)} units<br>`;
+                                              })() : '') +
+                                          (agent.resources > 50 ? `📦 Stockpile: ${agent.resources.toFixed(1)} units<br>` : '') +
+                                          (agent.isMoneyPrinter ? `💰 Money Printer: +$${simulation.printAmount}/tick<br>` : '')
+                                      ) +
+                                      `<br><strong>Lifetime Stats:</strong><br>` +
+                                      `Purchased: ${agent.lifetimeResourcesPurchased.toFixed(1)} units ($${agent.lifetimePurchaseSpending.toFixed(0)})<br>` +
+                                      `Sold: ${agent.lifetimeResourcesSold.toFixed(1)} units ($${agent.lifetimeSalesIncome.toFixed(0)})<br>` +
+                                      `Work: ${agent.lifetimeHoursWorked.toFixed(1)}hrs ($${agent.lifetimeLaborIncome.toFixed(0)})<br>` +
+                                      (agent.isMoneyPrinter ? '<br>MONEY PRINTER' : '') +
+                                      (agent.isDead ? '<br>💀 DEAD' : '');
+                    
+                    // Update the display text without removing the tooltip
+                    const textNodes = Array.from(div.childNodes).filter(node => node.nodeType === Node.TEXT_NODE);
+                    if (textNodes.length > 0) {
+                        textNodes[0].textContent = agent.isDead ? '💀' : agent.id;
+                    } else {
+                        // If no text node exists, create one and insert it before the tooltip
+                        const textNode = document.createTextNode(agent.isDead ? '💀' : agent.id);
+                        div.insertBefore(textNode, tooltip);
+                    }
+                }
+            });
+
+            // Update market metrics
+            const totalSupply = simulation.orderBook.sellOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const totalDemand = simulation.orderBook.buyOrders.reduce((sum, order) => sum + order.quantity, 0);
+            const tradingVolume = simulation.tradeHistory.filter(trade => 
+                trade.tick === simulation.tick).reduce((sum, trade) => sum + trade.quantity, 0);
+
+            // Market Overview
+            document.getElementById('resourcePrice').textContent = `$${simulation.resourcePrice.toFixed(2)}`;
+            document.getElementById('equilibriumPrice').textContent = `$${simulation.equilibriumPrice.toFixed(2)}`;
+            document.getElementById('marketEfficiency').textContent = `${simulation.marketEfficiency.toFixed(1)}%`;
+            document.getElementById('tradingVolume').textContent = tradingVolume.toFixed(1);
+
+            // Supply & Demand
+            document.getElementById('totalSupply').textContent = totalSupply.toFixed(1);
+            document.getElementById('totalDemand').textContent = totalDemand.toFixed(1);
+            document.getElementById('buyOrders').textContent = simulation.orderBook.buyOrders.length;
+            document.getElementById('sellOrders').textContent = simulation.orderBook.sellOrders.length;
+
+            // Economic Welfare
+            document.getElementById('consumerSurplus').textContent = `$${simulation.consumerSurplus.toFixed(0)}`;
+            document.getElementById('producerSurplus').textContent = `$${simulation.producerSurplus.toFixed(0)}`;
+            document.getElementById('totalProduction').textContent = simulation.totalProduction.toFixed(1);
+            document.getElementById('consumedResources').textContent = simulation.consumedResources.toFixed(1);
+
+            // Update Market Trends title with price and change
+            const marketTrendsTitle = document.getElementById('marketTrendsTitle');
+            if (simulation.priceHistory.length > 1) {
+                const lastPrice = simulation.priceHistory[simulation.priceHistory.length - 2];
+                const currentPrice = simulation.resourcePrice;
+                const change = ((currentPrice - lastPrice) / lastPrice * 100);
+                
+                let changeText = '';
+                let changeColor = '#ffffff';
+                
+                if (Math.abs(change) < 0.1) {
+                    changeText = ' (stable)';
+                } else if (change > 0) {
+                    changeText = ` (up +${change.toFixed(2)}%)`;
+                    changeColor = '#ff6b6b';
+                } else {
+                    changeText = ` (down ${change.toFixed(2)}%)`;
+                    changeColor = '#00ff88';
+                }
+                
+                marketTrendsTitle.innerHTML = `📈 Market Trends <span style="color: ${changeColor};">$${currentPrice.toFixed(2)}${changeText}</span>`;
+            } else {
+                marketTrendsTitle.innerHTML = `📈 Market Trends <span style="color: #ffffff;">$${simulation.resourcePrice.toFixed(2)}</span>`;
+            }
+
+            // Simulation stats
+            document.getElementById('tickCounter').textContent = simulation.tick;
+            document.getElementById('currentScenario').textContent = simulation.currentScenario.charAt(0).toUpperCase() + simulation.currentScenario.slice(1).replace('-', ' ');
+
+            // Update scenario effects display
+            updateScenarioEffectsDisplay();
+            
+            // Wealth inequality (only among living agents)
+            const livingAgents = simulation.agents.filter(agent => !agent.isDead);
+            const moneyValues = livingAgents.map(a => a.money).sort((a, b) => a - b);
+            const gini = moneyValues.length > 0 ? calculateGini(moneyValues) : 0;
+            document.getElementById('wealthInequality').textContent = gini.toFixed(3);
+
+            // Market status
+            const priceStability = simulation.priceHistory.length > 20 ? 
+                Math.abs(simulation.priceHistory.slice(-20).reduce((a, b, i, arr) => 
+                    i > 0 ? a + Math.abs(b - arr[i-1]) : 0, 0)) / 19 : Infinity;
+            
+            document.getElementById('equilibriumStatus').textContent = 
+                priceStability < 0.01 ? 'Equilibrium' : 
+                priceStability < 0.1 ? 'Stabilizing' : 'Volatile';
+        }
+
+        function updateCharts() {
+            drawSupplyDemandChart();
+            drawMarketTrendsChart();
+        }
+
+        // Economic scenario and intervention functions
+        function setScenario(scenario) {
+            simulation.currentScenario = scenario;
+            // Visual feedback
+            document.querySelectorAll('.btn').forEach(btn => btn.style.background = 'linear-gradient(45deg, #ff6b6b, #ee5a24)');
+            event.target.style.background = 'linear-gradient(45deg, #4834d4, #686de0)';
+            
+            // Update scenario description
+            updateScenarioDescription(scenario);
+        }
+
+        function updateScenarioEffectsDisplay() {
+            // Update producer/consumer ratio (living agents only)
+            const livingProducers = simulation.agents.filter(agent => agent.role === 'producer' && !agent.isDead);
+            const livingConsumers = simulation.agents.filter(agent => agent.role === 'consumer' && !agent.isDead);
+            const deadAgents = simulation.agents.filter(agent => agent.isDead);
+            document.getElementById('producerConsumerRatio').textContent = `${livingProducers.length}/${livingConsumers.length} (💀${deadAgents.length})`;
+            
+            // Calculate average producer productivity (living only)
+            const avgProductivity = livingProducers.length > 0 ? 
+                livingProducers.reduce((sum, agent) => sum + agent.productivity, 0) / livingProducers.length : 1.0;
+            
+            // Show productivity with percentage change from baseline
+            const productivityChange = ((avgProductivity - simulation.baseAvgProductivity) / simulation.baseAvgProductivity * 100);
+            let productivityDisplay = `${avgProductivity.toFixed(2)}x`;
+            if (productivityChange > 0.1) {
+                productivityDisplay += ` (+${productivityChange.toFixed(1)}%)`;
+            } else if (productivityChange < -0.1) {
+                productivityDisplay += ` (${productivityChange.toFixed(1)}%)`;
+            }
+            document.getElementById('avgProductivity').textContent = productivityDisplay;
+            
+            // Show resource requirement with change from baseline
+            const reqChange = ((CONFIG.RESOURCE_REQUIREMENT - simulation.baseResourceRequirement) / simulation.baseResourceRequirement * 100);
+            let reqDisplay = `${CONFIG.RESOURCE_REQUIREMENT.toFixed(1)} units`;
+            if (reqChange > 0.1) {
+                reqDisplay += ` (+${reqChange.toFixed(1)}%)`;
+            } else if (reqChange < -0.1) {
+                reqDisplay += ` (${reqChange.toFixed(1)}%)`;
+            }
+            document.getElementById('currentResourceReq').textContent = reqDisplay;
+            
+            // Show active scenario effect with more detail
+            let effectText = 'None';
+            let effectColor = '#ffffff';
+            switch(simulation.currentScenario) {
+                case 'scarcity':
+                    effectText = '📉 Reducing producer resources by 10% per tick';
+                    effectColor = '#ff6b6b';
+                    break;
+                case 'abundance':
+                    effectText = '📈 Boosting producer output by 50% per tick';
+                    effectColor = '#00ff88';
+                    break;
+                case 'tech-boom':
+                    const maxReached = avgProductivity >= 1.95;
+                    effectText = maxReached ? '🚀 Max productivity reached (2x)' : '🚀 Increasing productivity by 1% per tick';
+                    effectColor = maxReached ? '#ffd700' : '#4834d4';
+                    break;
+                case 'demand-surge':
+                    const maxDemandReached = CONFIG.RESOURCE_REQUIREMENT >= 14.9;
+                    effectText = maxDemandReached ? '📊 Max demand reached' : '📊 Gradually increasing resource requirements';
+                    effectColor = maxDemandReached ? '#ffd700' : '#ff9500';
+                    break;
+                default:
+                    effectText = '🏠 Normal market conditions';
+                    effectColor = '#ffffff';
+            }
+            const effectElement = document.getElementById('activeScenarioEffect');
+            effectElement.textContent = effectText;
+            effectElement.style.color = effectColor;
+            
+            // Update status indicator
+            const statusIndicator = document.getElementById('scenarioStatusIndicator');
+            const scenarioNames = {
+                'normal': 'NORMAL',
+                'scarcity': 'SCARCITY',
+                'abundance': 'ABUNDANCE',
+                'tech-boom': 'TECH BOOM',
+                'demand-surge': 'DEMAND SURGE'
+            };
+            const scenarioColors = {
+                'normal': 'rgba(255,255,255,0.1)',
+                'scarcity': 'rgba(255,107,107,0.3)',
+                'abundance': 'rgba(0,255,136,0.3)',
+                'tech-boom': 'rgba(72,52,212,0.3)',
+                'demand-surge': 'rgba(255,149,0,0.3)'
+            };
+            statusIndicator.textContent = scenarioNames[simulation.currentScenario] || 'NORMAL';
+            statusIndicator.style.background = scenarioColors[simulation.currentScenario] || scenarioColors['normal'];
+        }
+
+        function updateScenarioDescription(scenario) {
+            const descriptions = {
+                'normal': '🏠 <strong>Normal Market:</strong> Baseline conditions with natural supply and demand dynamics. No artificial market interventions are active.',
+                'scarcity': '⚠️ <strong>Resource Scarcity:</strong> Simulates supply shocks by reducing producer resources by 10% each market tick. Watch how prices rise as supply becomes limited.',
+                'abundance': '🌿 <strong>Abundance:</strong> Simulates resource boom by increasing producer output by 50% each tick. Observe how excess supply drives prices down.',
+                'tech-boom': '🚀 <strong>Tech Boom:</strong> Simulates technological advancement by gradually increasing producer productivity by 1% per tick (capped at 2x baseline). See how innovation affects market dynamics.',
+                'demand-surge': '📈 <strong>Demand Surge:</strong> Simulates increased consumer needs by gradually raising resource requirements over time. Watch how growing demand impacts prices and market behavior.'
+            };
+            
+            document.getElementById('scenarioDescription').innerHTML = descriptions[scenario] || descriptions['normal'];
+        }
+
+        function drawSupplyDemandChart() {
+            const canvas = document.getElementById('supplyDemandChart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            // Create supply and demand curves from current orders
+            const buyOrders = [...simulation.orderBook.buyOrders].sort((a, b) => b.price - a.price);
+            const sellOrders = [...simulation.orderBook.sellOrders].sort((a, b) => a.price - b.price);
+
+            if (buyOrders.length === 0 && sellOrders.length === 0) return;
+
+            const maxPrice = Math.max(
+                ...buyOrders.map(o => o.price),
+                ...sellOrders.map(o => o.price),
+                simulation.resourcePrice * 1.5
+            );
+            const minPrice = Math.min(
+                ...buyOrders.map(o => o.price),
+                ...sellOrders.map(o => o.price),
+                simulation.resourcePrice * 0.5
+            );
+            const priceRange = maxPrice - minPrice || 1;
+
+            // Draw demand curve (buy orders)
+            if (buyOrders.length > 0) {
+                ctx.strokeStyle = '#ff6b6b';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+
+                let cumQuantity = 0;
+                buyOrders.forEach((order, index) => {
+                    const x = (cumQuantity / (cumQuantity + order.quantity + 50)) * width;
+                    const y = height - ((order.price - minPrice) / priceRange) * height;
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    
+                    cumQuantity += order.quantity;
+                    const nextX = (cumQuantity / (cumQuantity + 50)) * width;
+                    ctx.lineTo(nextX, y);
+                });
+
+                ctx.stroke();
+            }
+
+            // Draw supply curve (sell orders)
+            if (sellOrders.length > 0) {
+                ctx.strokeStyle = '#00ff88';
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+
+                let cumQuantity = 0;
+                sellOrders.forEach((order, index) => {
+                    const x = (cumQuantity / (cumQuantity + order.quantity + 50)) * width;
+                    const y = height - ((order.price - minPrice) / priceRange) * height;
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                    
+                    cumQuantity += order.quantity;
+                    const nextX = (cumQuantity / (cumQuantity + 50)) * width;
+                    ctx.lineTo(nextX, y);
+                });
+
+                ctx.stroke();
+            }
+
+            // Draw equilibrium point
+            const equilibriumY = height - ((simulation.equilibriumPrice - minPrice) / priceRange) * height;
+            ctx.fillStyle = '#ffd700';
+            ctx.beginPath();
+            ctx.arc(width * 0.5, equilibriumY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+
+            // Draw current price line
+            const currentPriceY = height - ((simulation.resourcePrice - minPrice) / priceRange) * height;
+            ctx.strokeStyle = '#ffffff';
+            ctx.lineWidth = 1;
+            ctx.setLineDash([5, 5]);
+            ctx.beginPath();
+            ctx.moveTo(0, currentPriceY);
+            ctx.lineTo(width, currentPriceY);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+
+        function drawMarketTrendsChart() {
+            const canvas = document.getElementById('marketTrendsChart');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+
+            ctx.clearRect(0, 0, width, height);
+
+            if (simulation.priceHistory.length < 2) return;
+
+            // Draw price history
+            const maxPrice = Math.max(...simulation.priceHistory);
+            const minPrice = Math.min(...simulation.priceHistory);
+            const priceRange = maxPrice - minPrice || 1;
+
+            ctx.strokeStyle = '#4834d4';
+            ctx.lineWidth = 2;
+            ctx.beginPath();
+
+            simulation.priceHistory.forEach((price, index) => {
+                const x = (index / (simulation.priceHistory.length - 1)) * width;
+                const y = height - ((price - minPrice) / priceRange) * height;
+                
+                if (index === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            });
+
+            ctx.stroke();
+
+            // Draw trading volume (scaled to fit)
+            if (simulation.tradingVolumeHistory.length > 0) {
+                const maxVolume = Math.max(...simulation.tradingVolumeHistory, 1);
+                
+                ctx.strokeStyle = '#ff9500';
+                ctx.lineWidth = 2;
+                ctx.beginPath();
+
+                simulation.tradingVolumeHistory.forEach((volume, index) => {
+                    const x = (index / (simulation.tradingVolumeHistory.length - 1)) * width;
+                    const y = height - (volume / maxVolume) * height * 0.7; // Scale to 70% of chart height
+                    
+                    if (index === 0) {
+                        ctx.moveTo(x, y);
+                    } else {
+                        ctx.lineTo(x, y);
+                    }
+                });
+
+                ctx.stroke();
+            }
+        }
+
+        // Helper functions
+        function shuffleOrdersAtSamePrice(orders, isDescending) {
+            // Group orders by price (rounded to 2 decimal places to handle floating point issues)
+            const priceGroups = {};
+            orders.forEach(order => {
+                const priceKey = Math.round(order.price * 100) / 100;
+                if (!priceGroups[priceKey]) {
+                    priceGroups[priceKey] = [];
+                }
+                priceGroups[priceKey].push(order);
+            });
+            
+            // Shuffle orders within each price group
+            Object.keys(priceGroups).forEach(priceKey => {
+                const group = priceGroups[priceKey];
+                for (let i = group.length - 1; i > 0; i--) {
+                    const j = Math.floor(Math.random() * (i + 1));
+                    [group[i], group[j]] = [group[j], group[i]];
+                }
+            });
+            
+            // Reconstruct the orders array
+            const sortedPrices = Object.keys(priceGroups)
+                .map(p => parseFloat(p))
+                .sort(isDescending ? (a, b) => b - a : (a, b) => a - b);
+            
+            return sortedPrices.flatMap(price => priceGroups[price]);
+        }
+
+        function getAverageWealth() {
+            return simulation.agents.reduce((sum, agent) => sum + agent.money, 0) / simulation.agents.length;
+        }
+
+        function getProducerCount() {
+            return simulation.agents.filter(agent => agent.role === 'producer').length;
+        }
+
+        function getConsumerCount() {
+            return simulation.agents.filter(agent => agent.role === 'consumer').length;
+        }
+
+        function getTotalTradingVolume() {
+            return simulation.tradeHistory.filter(trade => trade.tick === simulation.tick)
+                .reduce((sum, trade) => sum + trade.quantity, 0);
+        }
+
+        function calculateGini(values) {
+            const n = values.length;
+            let sum = 0;
+            
+            for (let i = 0; i < n; i++) {
+                for (let j = 0; j < n; j++) {
+                    sum += Math.abs(values[i] - values[j]);
+                }
+            }
+            
+            const mean = values.reduce((a, b) => a + b, 0) / n;
+            return sum / (2 * n * n * mean);
+        }
+
+        // Settings functions
+        function showSettings() {
+            document.getElementById('setting-population').value = CONFIG.POPULATION_SIZE;
+            document.getElementById('setting-health').value = 100;
+            document.getElementById('setting-happiness').value = CONFIG.BASELINE_HAPPINESS;
+            document.getElementById('setting-total-resources').value = CONFIG.TOTAL_RESOURCES;
+            document.getElementById('setting-resource-req').value = CONFIG.RESOURCE_REQUIREMENT;
+            document.getElementById('setting-base-price').value = 1.0;
+            document.getElementById('setting-max-stockpile').value = CONFIG.MAX_TRADER_STOCKPILE;
+            document.getElementById('setting-money-supply').value = CONFIG.TOTAL_MONEY_SUPPLY;
+            document.getElementById('setting-work-rate').value = CONFIG.WORK_RATE;
+            document.getElementById('setting-volatility').value = CONFIG.PRICE_VOLATILITY;
+            document.getElementById('setting-decay-rate').value = CONFIG.HEALTH_DECAY_RATE;
+            document.getElementById('setting-recovery-rate').value = CONFIG.HEALTH_RECOVERY_RATE;
+            document.getElementById('setting-unhappiness').value = CONFIG.WORK_UNHAPPINESS_MULTIPLIER;
+            
+            document.getElementById('settingsModal').classList.add('active');
+        }
+
+        function closeSettings() {
+            document.getElementById('settingsModal').classList.remove('active');
+        }
+
+        function applySettings() {
+            CONFIG.POPULATION_SIZE = parseInt(document.getElementById('setting-population').value);
+            CONFIG.TOTAL_RESOURCES = parseInt(document.getElementById('setting-total-resources').value);
+            CONFIG.RESOURCE_REQUIREMENT = parseInt(document.getElementById('setting-resource-req').value);
+            CONFIG.MAX_TRADER_STOCKPILE = parseInt(document.getElementById('setting-max-stockpile').value);
+            CONFIG.TOTAL_MONEY_SUPPLY = parseInt(document.getElementById('setting-money-supply').value);
+            CONFIG.WORK_RATE = parseFloat(document.getElementById('setting-work-rate').value);
+            CONFIG.PRICE_VOLATILITY = parseFloat(document.getElementById('setting-volatility').value);
+            CONFIG.HEALTH_DECAY_RATE = parseInt(document.getElementById('setting-decay-rate').value);
+            CONFIG.HEALTH_RECOVERY_RATE = parseInt(document.getElementById('setting-recovery-rate').value);
+            CONFIG.BASELINE_HAPPINESS = parseInt(document.getElementById('setting-happiness').value);
+            CONFIG.WORK_UNHAPPINESS_MULTIPLIER = parseInt(document.getElementById('setting-unhappiness').value);
+            
+            closeSettings();
+            resetSimulation();
+        }
+
+        function resetToDefaults() {
+            document.getElementById('setting-population').value = 50;
+            document.getElementById('setting-health').value = 100;
+            document.getElementById('setting-happiness').value = 100;
+            document.getElementById('setting-total-resources').value = 500;
+            document.getElementById('setting-resource-req').value = 1;
+            document.getElementById('setting-base-price').value = 1.0;
+            document.getElementById('setting-max-stockpile').value = 500;
+            document.getElementById('setting-money-supply').value = 5000;
+            document.getElementById('setting-work-rate').value = 5;
+            document.getElementById('setting-volatility').value = 0.05;
+            document.getElementById('setting-decay-rate').value = 1;
+            document.getElementById('setting-recovery-rate').value = 2;
+            document.getElementById('setting-unhappiness').value = 5;
+        }
+
+        function exportSimulationState() {
+            try {
+                // Gather all simulation state data
+                const exportData = {
+                    metadata: {
+                        exportTime: new Date().toISOString(),
+                        simulationTick: simulation.tick,
+                        isRunning: simulation.running
+                    },
+                    
+                    config: {
+                        POPULATION_SIZE: CONFIG.POPULATION_SIZE,
+                        TOTAL_RESOURCES: CONFIG.TOTAL_RESOURCES,
+                        TOTAL_MONEY_SUPPLY: CONFIG.TOTAL_MONEY_SUPPLY,
+                        RESOURCE_REQUIREMENT: CONFIG.RESOURCE_REQUIREMENT,
+                        HEALTH_DECAY_RATE: CONFIG.HEALTH_DECAY_RATE,
+                        HEALTH_RECOVERY_RATE: CONFIG.HEALTH_RECOVERY_RATE,
+                        BASELINE_HAPPINESS: CONFIG.BASELINE_HAPPINESS,
+                        WORK_UNHAPPINESS_MULTIPLIER: CONFIG.WORK_UNHAPPINESS_MULTIPLIER,
+                        WORK_RATE: CONFIG.WORK_RATE,
+                        PRICE_VOLATILITY: CONFIG.PRICE_VOLATILITY,
+                        SUPPLY_DEMAND_SENSITIVITY: CONFIG.SUPPLY_DEMAND_SENSITIVITY
+                    },
+                    
+                    simulation: {
+                        tick: simulation.tick,
+                        running: simulation.running,
+                        resourcePrice: simulation.resourcePrice,
+                        equilibriumPrice: simulation.equilibriumPrice,
+                        availableResources: simulation.availableResources,
+                        consumedResources: simulation.consumedResources,
+                        totalProduction: simulation.totalProduction,
+                        resourceRegenRate: simulation.resourceRegenRate,
+                        agentProcessingOrder: simulation.agentProcessingOrder,
+                        producerCount: simulation.producerCount,
+                        currentScenario: simulation.currentScenario,
+                        baseResourceRequirement: simulation.baseResourceRequirement,
+                        baseAvgProductivity: simulation.baseAvgProductivity,
+                        marketEfficiency: simulation.marketEfficiency,
+                        consumerSurplus: simulation.consumerSurplus,
+                        producerSurplus: simulation.producerSurplus,
+                        totalWork: simulation.totalWork
+                    },
+                    
+                    marketData: {
+                        buyOrders: simulation.orderBook.buyOrders.map(order => ({
+                            quantity: order.quantity,
+                            price: order.price,
+                            agentId: order.agent.id,
+                            agentRole: order.agent.role
+                        })),
+                        sellOrders: simulation.orderBook.sellOrders.map(order => ({
+                            quantity: order.quantity,
+                            price: order.price,
+                            agentId: order.agent.id,
+                            agentRole: order.agent.role
+                        })),
+                        recentTrades: simulation.tradeHistory.slice(-20).map(trade => ({
+                            price: trade.price,
+                            quantity: trade.quantity,
+                            buyerId: trade.buyer.id,
+                            sellerId: trade.seller.id,
+                            tick: trade.tick
+                        }))
+                    },
+                    
+                    marketInterventions: {
+                        priceFloor: simulation.priceFloor,
+                        priceCeiling: simulation.priceCeiling,
+                        transactionTax: simulation.transactionTax,
+                        producerSubsidy: simulation.producerSubsidy
+                    },
+                    
+                    moneyPrinter: {
+                        agentId: simulation.moneyPrinterAgent?.id || null,
+                        active: simulation.moneyPrinterActive,
+                        printAmount: simulation.printAmount
+                    },
+                    
+                    marketHistory: {
+                        priceHistory: simulation.priceHistory.slice(-50), // Last 50 ticks
+                        supplyHistory: simulation.supplyHistory.slice(-50),
+                        demandHistory: simulation.demandHistory.slice(-50),
+                        tradingVolumeHistory: simulation.tradingVolumeHistory.slice(-50)
+                    },
+                    
+                    population: simulation.agents.map(agent => ({
+                        agent_number: agent.id,
+                        role: agent.role,
+                        money: Math.round(agent.money * 100) / 100,
+                        resources: Math.round(agent.resources * 100) / 100,
+                        health: Math.round(agent.health * 100) / 100,
+                        happiness: Math.round(agent.happiness * 100) / 100,
+                        isDead: agent.isDead,
+                        productivity: Math.round(agent.productivity * 1000) / 1000,
+                        riskTolerance: Math.round(agent.riskTolerance * 1000) / 1000,
+                        maxWillingnessToPay: Math.round(agent.maxWillingnessToPay * 100) / 100,
+                        reservePrice: Math.round(agent.reservePrice * 100) / 100,
+                        lastTradePrice: Math.round(agent.lastTradePrice * 100) / 100,
+                        isMoneyPrinter: agent.isMoneyPrinter,
+                        
+                        // Current orders
+                        activeBuyOrders: agent.buyOrders.length,
+                        activeSellOrders: agent.sellOrders.length,
+                        
+                        // Lifetime statistics
+                        lifetimeResourcesPurchased: Math.round(agent.lifetimeResourcesPurchased * 100) / 100,
+                        lifetimePurchaseSpending: Math.round(agent.lifetimePurchaseSpending * 100) / 100,
+                        lifetimeResourcesSold: Math.round(agent.lifetimeResourcesSold * 100) / 100,
+                        lifetimeSalesIncome: Math.round(agent.lifetimeSalesIncome * 100) / 100,
+                        lifetimeHoursWorked: Math.round(agent.lifetimeHoursWorked * 100) / 100,
+                        lifetimeLaborIncome: Math.round(agent.lifetimeLaborIncome * 100) / 100
+                    })),
+                    
+                    aggregateStats: {
+                        totalLivingAgents: simulation.agents.filter(a => !a.isDead).length,
+                        totalDeadAgents: simulation.agents.filter(a => a.isDead).length,
+                        totalProducers: simulation.agents.filter(a => a.role === 'producer').length,
+                        totalConsumers: simulation.agents.filter(a => a.role === 'consumer').length,
+                        totalWealth: simulation.agents.reduce((sum, a) => sum + a.money, 0),
+                        totalResources: simulation.agents.reduce((sum, a) => sum + a.resources, 0),
+                        averageHealth: simulation.agents.reduce((sum, a) => sum + a.health, 0) / simulation.agents.length,
+                        totalLifetimeTrades: simulation.agents.reduce((sum, a) => sum + a.lifetimeResourcesPurchased + a.lifetimeResourcesSold, 0),
+                        totalLifetimeWork: simulation.agents.reduce((sum, a) => sum + a.lifetimeHoursWorked, 0),
+                        wealthInequality: (() => {
+                            const livingAgents = simulation.agents.filter(agent => !agent.isDead);
+                            const moneyValues = livingAgents.map(a => a.money).sort((a, b) => a - b);
+                            return moneyValues.length > 0 ? calculateGini(moneyValues) : 0;
+                        })()
+                    }
+                };
+
+                // Create filename with timestamp
+                const timestamp = new Date().toISOString().replace(/[:.]/g, '-').slice(0, -5);
+                const filename = `simulation_state_tick_${simulation.tick}_${timestamp}.json`;
+
+                // Create and download the file
+                const jsonString = JSON.stringify(exportData, null, 2);
+                const blob = new Blob([jsonString], { type: 'application/json' });
+                const url = URL.createObjectURL(blob);
+                
+                const a = document.createElement('a');
+                a.href = url;
+                a.download = filename;
+                document.body.appendChild(a);
+                a.click();
+                document.body.removeChild(a);
+                URL.revokeObjectURL(url);
+
+                console.log('Simulation state exported successfully:', filename);
+                alert(`Simulation state exported as ${filename}`);
+
+            } catch (error) {
+                console.error('Error exporting simulation state:', error);
+                alert('Error exporting simulation state. Check console for details.');
+            }
+        }
+
+        // Initialize everything
+        window.onload = function() {
+            initializeSimulation();
+            updateScenarioDescription('normal');
+            updateControlStates();
+            
+            // Money printer slider
+            document.getElementById('printAmount').oninput = function() {
+                document.getElementById('printAmountValue').textContent = this.value;
+                simulation.printAmount = parseInt(this.value);
+            };
+            
+            // Market intervention controls
+            document.getElementById('priceFloor').oninput = function() {
+                const value = parseFloat(this.value);
+                simulation.priceFloor = value > 0 ? value : null;
+                document.getElementById('priceFloorValue').textContent = value > 0 ? `$${value.toFixed(1)}` : 'None';
+            };
+            
+            document.getElementById('priceCeiling').oninput = function() {
+                const value = parseFloat(this.value);
+                simulation.priceCeiling = value > 0 ? value : null;
+                document.getElementById('priceCeilingValue').textContent = value > 0 ? `$${value.toFixed(1)}` : 'None';
+            };
+            
+            document.getElementById('transactionTax').oninput = function() {
+                simulation.transactionTax = parseFloat(this.value);
+                document.getElementById('transactionTaxValue').textContent = `${(this.value * 100).toFixed(1)}%`;
+            };
+            
+            document.getElementById('producerSubsidy').oninput = function() {
+                simulation.producerSubsidy = parseFloat(this.value);
+                document.getElementById('producerSubsidyValue').textContent = `$${this.value}`;
+            };
+            
+            // Producer count slider
+            document.getElementById('producerCount').oninput = function() {
+                const count = parseInt(this.value);
+                const percentage = Math.round((count / CONFIG.POPULATION_SIZE) * 100);
+                simulation.producerCount = count;
+                document.getElementById('producerCountValue').textContent = `${count} (${percentage}%)`;
+                
+                // Recreate agents with new ratio
+                recreateAgentsWithNewRatio();
+                createPopulationGrid();
+            };
+            
+            // Agent processing order dropdown
+            document.getElementById('processingOrder').onchange = function() {
+                simulation.agentProcessingOrder = this.value;
+            };
+            
+            // Visual update loop
+            setInterval(() => {
+                if (simulation.running) {
+                    const agentDivs = document.querySelectorAll('.agent');
+                    agentDivs.forEach((div, index) => {
+                        const agent = simulation.agents[index];
+                        div.style.backgroundColor = agent.getColor();
+                    });
+                }
+            }, 50);
+        };
+
+        // Keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            switch(e.key) {
+                case ' ':
+                    e.preventDefault();
+                    if (simulation.running) {
+                        pauseSimulation();
+                    } else {
+                        startSimulation();
+                    }
+                    break;
+                case 'r':
+                    resetSimulation();
+                    break;
+                case 'm':
+                    toggleMoneyPrinter();
+                    break;
+                case 'e':
+                    exportSimulationState();
+                    break;
+                case 'Escape':
+                    closeSettings();
+                    break;
+            }
+        });
+
+        // Modal click outside to close
+        document.getElementById('settingsModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+                closeSettings();
+            }
+        });
+    </script>
+</body>
+</html>

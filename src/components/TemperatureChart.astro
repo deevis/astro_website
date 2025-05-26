@@ -1,0 +1,242 @@
+<div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg mb-6">
+  <canvas id="temperatureChart" class="w-full h-[400px] cursor-pointer" data-chart="true"></canvas>
+</div>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    // Dynamically import Chart.js
+    const script = document.createElement('script');
+    script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+    script.onload = initChart;
+    document.head.appendChild(script);
+    
+    function initChart() {
+      const ctx = document.getElementById('temperatureChart');
+      
+      // Data from the article
+      const labels = [
+        'Factory Settings', 
+        'Undervolt -0.05V', 
+        'Undervolt -0.075V', 
+        'Undervolt -0.10V', 
+        'LLC 4, -0.075V', 
+        'LLC 3, -0.075V', 
+        'Memory Tuning, LLC 3, -0.075V'
+      ];
+      
+      // P-Core temperatures
+      const pCoreMax = [100, 96, 91, 89, 93, 92, 84];
+      const pCoreMin = [91, 86, 83, 81, 86, 83, 77];
+      const pCoreAvg = [95.5, 91.875, 87.625, 86.375, 90.875, 88.75, 80.5];
+      
+      // E-Core temperatures
+      const eCoreMax = [83, 80, 76, 74, 80, 78, 73];
+      const eCoreMin = [81, 76, 74, 72, 76, 74, 70];
+      const eCoreAvg = [82, 79, 75, 73, 78.125, 76, 71.5];
+      
+      // Create the chart
+      // @ts-ignore - Chart will be available after script loads
+      const tempChart = new Chart(ctx, {
+        type: 'line',
+        data: {
+          labels: labels,
+          datasets: [
+            {
+              label: 'P-Core Max',
+              data: pCoreMax,
+              borderColor: '#EF4444',
+              backgroundColor: 'rgba(239, 68, 68, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'P-Core Min',
+              data: pCoreMin,
+              borderColor: '#F97316',
+              backgroundColor: 'rgba(249, 115, 22, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'P-Core Avg',
+              data: pCoreAvg,
+              borderColor: '#F59E0B',
+              backgroundColor: 'rgba(245, 158, 11, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'circle',
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              fill: true
+            },
+            {
+              label: 'E-Core Max',
+              data: eCoreMax,
+              borderColor: '#3B82F6',
+              backgroundColor: 'rgba(59, 130, 246, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'E-Core Min',
+              data: eCoreMin,
+              borderColor: '#06B6D4',
+              backgroundColor: 'rgba(6, 182, 212, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8
+            },
+            {
+              label: 'E-Core Avg',
+              data: eCoreAvg,
+              borderColor: '#10B981',
+              backgroundColor: 'rgba(16, 185, 129, 0.2)',
+              borderWidth: 2,
+              tension: 0.3,
+              pointStyle: 'triangle',
+              pointRadius: 5,
+              pointHoverRadius: 8,
+              fill: true
+            }
+          ]
+        },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          animation: {
+            duration: 2000,
+            easing: 'easeOutQuart'
+          },
+          scales: {
+            y: {
+              beginAtZero: false,
+              min: 65,
+              max: 105,
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)'
+              },
+              ticks: {
+                font: {
+                  family: 'Inter'
+                },
+                callback: function(value) {
+                  return value + '°C';
+                }
+              },
+              title: {
+                display: true,
+                text: 'Temperature (°C)',
+                font: {
+                  size: 14,
+                  family: 'Inter'
+                }
+              }
+            },
+            x: {
+              grid: {
+                display: false
+              },
+              ticks: {
+                maxRotation: 45,
+                minRotation: 45,
+                font: {
+                  family: 'Inter'
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: {
+              display: true,
+              position: 'top',
+              labels: {
+                font: {
+                  family: 'Inter'
+                },
+                boxWidth: 15,
+                usePointStyle: true
+              }
+            },
+            tooltip: {
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              titleFont: {
+                family: 'Inter'
+              },
+              bodyFont: {
+                family: 'Inter'
+              },
+              callbacks: {
+                label: function(context) {
+                  return `${context.dataset.label}: ${context.parsed.y}°C`;
+                }
+              }
+            },
+            title: {
+              display: true,
+              text: 'CPU Temperature Across Tuning Steps',
+              font: {
+                size: 18,
+                family: 'Inter',
+                weight: 'bold'
+              },
+              padding: {
+                top: 10,
+                bottom: 20
+              }
+            }
+          }
+        }
+      });
+      
+      // Make chart clickable to open in full screen modal
+      ctx.addEventListener('click', () => {
+        // Store chart data in localStorage to be read by modal
+        localStorage.setItem('chart-data', JSON.stringify({
+          type: 'temperature',
+          labels: labels,
+          pCoreMax: pCoreMax,
+          pCoreMin: pCoreMin,
+          pCoreAvg: pCoreAvg,
+          eCoreMax: eCoreMax,
+          eCoreMin: eCoreMin,
+          eCoreAvg: eCoreAvg
+        }));
+        
+        // Trigger the chart modal
+        const event = new CustomEvent('open-chart-modal', { 
+          detail: { chartType: 'temperature' }
+        });
+        document.dispatchEvent(event);
+      });
+      
+      // Handle theme changes
+      const darkModeObserver = new MutationObserver((mutations) => {
+        mutations.forEach((mutation) => {
+          if (mutation.attributeName === 'class') {
+            const isDarkMode = document.documentElement.classList.contains('dark');
+            
+            tempChart.options.plugins.title.color = isDarkMode ? '#fff' : '#000';
+            tempChart.options.scales.y.ticks.color = isDarkMode ? '#ccc' : '#666';
+            tempChart.options.scales.x.ticks.color = isDarkMode ? '#ccc' : '#666';
+            tempChart.options.plugins.legend.labels.color = isDarkMode ? '#fff' : '#000';
+            
+            tempChart.update();
+          }
+        });
+      });
+      
+      darkModeObserver.observe(document.documentElement, { attributes: true });
+    }
+  });
+</script> 

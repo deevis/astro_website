@@ -2,41 +2,94 @@
 interface Props {
   chart: string;
   class?: string;
+  width?: string;
 }
 
-const { chart, class: className = '' } = Astro.props;
+const { chart, class: className = '', width = '100%' } = Astro.props;
 ---
 
-<div class:list={["mermaid", className]}>
-  {chart}
+<div class:list={["mermaid-container", className]}>
+  <div class="mermaid" style={`width: ${width};`}>
+    {chart}
+  </div>
 </div>
 
 <script>
   import mermaid from 'mermaid';
 
-  // Initialize mermaid with custom theme
-  mermaid.initialize({
-    startOnLoad: true,
-    theme: 'default',
-    themeVariables: {
-      darkMode: document.documentElement.classList.contains('dark'),
-    },
-    htmlLabels: true,
-    securityLevel: 'loose',
-  });
+  // Function to initialize mermaid with appropriate theme settings
+  function initMermaid() {
+    const isDark = document.documentElement.classList.contains('dark');
+    
+    mermaid.initialize({
+      startOnLoad: true,
+      theme: isDark ? 'dark' : 'default',
+      themeVariables: {
+        darkMode: isDark,
+        // Base colors
+        primaryColor: isDark ? '#1e88e5' : '#1e88e5',
+        primaryTextColor: isDark ? '#fff' : '#000',
+        primaryBorderColor: isDark ? '#1e88e5' : '#1e88e5',
+        
+        // Pie chart specific colors for dark mode
+        pieSectionTextColor: isDark ? '#fff' : '#000',
+        pieTitleTextColor: isDark ? '#fff' : '#000',
+        pieSectionTextSize: '1.2rem',
+        pieTitleTextSize: '1.5rem',
+        
+        // Background colors
+        backgroundColor: isDark ? 'transparent' : '#f8f9fa',
+        
+        // General text and line colors
+        lineColor: isDark ? '#d3d3d3' : '#666',
+        textColor: isDark ? '#fff' : '#333',
+        
+        // Make labels more visible in dark mode
+        labelColor: isDark ? '#ffffff' : '#333333',
+        labelTextColor: isDark ? '#ffffff' : '#333333',
+        
+        // Node colors
+        nodeBorder: isDark ? '#aaa' : '#333',
+        nodeTextColor: isDark ? '#fff' : '#333',
+        
+        // Font sizes for better readability
+        fontSize: 16,
+        ganttFontSize: 16,
+        ganttLeftPadding: 75,
+      },
+      htmlLabels: true,
+      securityLevel: 'loose',
+      flowchart: {
+        useMaxWidth: false,
+        htmlLabels: true
+      },
+      gantt: {
+        useMaxWidth: false,
+        fontSize: 16
+      },
+      sequence: {
+        useMaxWidth: false
+      },
+      timeline: {
+        useMaxWidth: false
+      },
+      pie: {
+        useMaxWidth: false
+      }
+    });
+    
+    // Re-render all diagrams
+    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+  }
+
+  // Initialize on load
+  initMermaid();
 
   // Re-render diagrams when dark mode changes
   const observer = new MutationObserver((mutations) => {
     mutations.forEach((mutation) => {
       if (mutation.attributeName === 'class') {
-        const isDark = document.documentElement.classList.contains('dark');
-        mermaid.initialize({
-          theme: 'default',
-          themeVariables: {
-            darkMode: isDark,
-          },
-        });
-        mermaid.init();
+        initMermaid();
       }
     });
   });
@@ -45,4 +98,73 @@ const { chart, class: className = '' } = Astro.props;
     attributes: true,
     attributeFilter: ['class'],
   });
-</script> 
+</script>
+
+<style>
+  /* Container to handle centering and spacing */
+  .mermaid-container {
+    display: flex;
+    justify-content: center;
+    width: 100%;
+    padding: 1.5rem 0;
+    margin: 1rem 0;
+    overflow-x: auto;
+  }
+  
+  /* Chart styles */
+  .mermaid {
+    min-width: 60%;
+    margin: 0 auto;
+  }
+  
+  /* Adding some global styles for mermaid in dark mode */
+  :global(.dark .mermaid text) {
+    fill: #ffffff !important;
+  }
+  
+  :global(.dark .mermaid .pieOuterCircle) {
+    stroke: #555 !important;
+  }
+  
+  :global(.dark .mermaid .pieTitleText) {
+    fill: #ffffff !important;
+  }
+  
+  /* Fix for chart titles */
+  :global(.mermaid .pieTitleText) {
+    dominant-baseline: hanging;
+    text-anchor: middle;
+    font-size: 1.2rem;
+    font-weight: bold;
+  }
+  
+  /* Ensure chart has enough space for title */
+  :global(.mermaid svg) {
+    padding-top: 2rem;
+    margin: 0 auto;
+    min-width: 600px;
+    width: 100% !important;
+    height: auto !important;
+  }
+  
+  /* Timeline specific fixes */
+  :global(.mermaid .timeline text) {
+    font-size: 16px !important;
+  }
+  
+  :global(.mermaid .section) {
+    font-size: 16px !important;
+  }
+  
+  /* Make sure the mermaid diagram doesn't get too small on mobile */
+  @media (max-width: 768px) {
+    .mermaid-container {
+      overflow-x: auto;
+      justify-content: flex-start;
+    }
+    
+    .mermaid {
+      min-width: 600px;
+    }
+  }
+</style> 

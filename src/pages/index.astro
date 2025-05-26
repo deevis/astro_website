@@ -29,13 +29,13 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
 <Layout title="Professional Portfolio">
   <Navigation />
   <main class="pt-16 pb-8">
-    <div class="container mx-auto px-4">
+    <div class="container mx-auto px-4 md:px-6 lg:px-8">
 
       <!-- Hero Section -->
       <section class="pt-16 pb-8 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900">
-        <div class="container mx-auto px-4">
-          <div class="max-w-4xl mx-auto text-center">
-            <h1 class="text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+        <div class="container mx-auto px-4 md:px-6 lg:px-8">
+          <div class="max-w-4xl lg:max-w-5xl mx-auto text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
               Transforming Ideas into Digital Reality
             </h1>
             <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
@@ -61,9 +61,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
 
     <!-- Latest Articles -->
     <section class="py-8 bg-gray-50 dark:bg-dark-900">
-      <div class="container mx-auto px-4">
-        <h1 class="text-2xl font-bold mb-4">Latest Articles</h1>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <h1 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Latest Articles</h1>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {firstThreeArticles.map((article) => (
             <Card 
               title={article.data.title}
@@ -85,9 +85,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
 
     <!-- Featured HTML Showcases -->
     <section class="py-8 bg-white dark:bg-dark-800">
-      <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-4">Featured HTML Showcases</h2>
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Featured HTML Showcases</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
           {firstThreeShowcases.map((showcase) => (
             <Card 
               title={showcase.title}
@@ -107,9 +107,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
 
     <!-- Featured Gallery Items -->
     <section class="py-8 bg-gray-50 dark:bg-dark-900">
-      <div class="container mx-auto px-4">
-        <h2 class="text-2xl font-bold mb-4">Media Gallery</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Media Gallery</h2>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
           {firstSixGalleryItems.map((item) => (
             <MediaCard
               id={item.id}
@@ -131,9 +131,9 @@ const firstSixGalleryItems = mediaItems.slice(0, 6);
 
     <!-- Skills Overview -->
     <section class="py-8 bg-white dark:bg-dark-800">
-      <div class="container mx-auto px-4">
-        <h2 class="text-3xl font-bold text-center mb-6 dark:text-white">Technical Expertise</h2>
-        <div class="grid grid-cols-3 md:grid-cols-4 gap-4">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 dark:text-white">Technical Expertise</h2>
+        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4 md:gap-6">
           <div class="text-center">
             <div class="text-2xl font-bold text-primary-600 dark:text-primary-400 mb-1">25+</div>
             <div class="text-gray-600 dark:text-gray-300">Years Experience</div>

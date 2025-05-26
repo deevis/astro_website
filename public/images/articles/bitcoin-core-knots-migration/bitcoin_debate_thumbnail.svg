@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg viewBox="0 0 600 400" xmlns="http://www.w3.org/2000/svg">
+    <!-- Background -->
+    <rect width="600" height="400" fill="#ffffff"/>
+    
+    <!-- Header -->
+    <rect x="0" y="0" width="600" height="60" fill="#f7931a"/>
+    <text x="300" y="38" font-family="Arial, sans-serif" font-size="24" font-weight="bold" text-anchor="middle" fill="#ffffff">
+        Bitcoin Protocol Debate
+    </text>
+    
+    <!-- Two Main Camps -->
+    <g transform="translate(50, 80)">
+        <!-- Money Camp -->
+        <rect x="0" y="0" width="225" height="60" fill="#2ecc71" rx="10"/>
+        <text x="112" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Bitcoin as Money
+        </text>
+        
+        <!-- Anti-Money Camp -->
+        <rect x="275" y="0" width="225" height="60" fill="#e74c3c" rx="10"/>
+        <text x="387" y="35" font-family="Arial, sans-serif" font-size="18" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Anti-Money Actions
+        </text>
+    </g>
+    
+    <!-- Key Players Section -->
+    <text x="300" y="180" font-family="Arial, sans-serif" font-size="20" font-weight="bold" text-anchor="middle" fill="#2c3e50">
+        Key Players in the Debate
+    </text>
+    
+    <!-- Simplified player boxes -->
+    <g transform="translate(50, 200)">
+        <!-- Pro-Money -->
+        <rect x="0" y="0" width="225" height="150" fill="#f0fff4" stroke="#2ecc71" stroke-width="3" rx="10"/>
+        <text x="112" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#2ecc71">
+            Pro-Bitcoin-as-Money
+        </text>
+        
+        <rect x="20" y="50" width="185" height="30" fill="#2ecc71" rx="5"/>
+        <text x="112" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Luke Dashjr
+        </text>
+        
+        <rect x="20" y="90" width="185" height="30" fill="#2ecc71" rx="5"/>
+        <text x="112" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Ocean Mining Pool
+        </text>
+        
+        <!-- Anti-Money -->
+        <rect x="275" y="0" width="225" height="150" fill="#fff5f5" stroke="#e74c3c" stroke-width="3" rx="10"/>
+        <text x="387" y="30" font-family="Arial, sans-serif" font-size="16" font-weight="bold" text-anchor="middle" fill="#e74c3c">
+            Actors Undermining
+        </text>
+        
+        <rect x="295" y="50" width="185" height="30" fill="#e74c3c" rx="5"/>
+        <text x="387" y="70" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            Casey Rodarmor
+        </text>
+        
+        <rect x="295" y="90" width="185" height="30" fill="#e74c3c" rx="5"/>
+        <text x="387" y="110" font-family="Arial, sans-serif" font-size="14" font-weight="bold" text-anchor="middle" fill="#ffffff">
+            "Domo" (BRC-20)
+        </text>
+    </g>
+</svg> 

@@ -29,14 +29,14 @@ const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-
 <Layout title={`${article.data.title} | Professional Portfolio`}>
   <Navigation />
   <main class="pt-16 pb-16">
-    <div class="container mx-auto px-4">
-      <article class="prose prose-sm max-w-3xl mx-auto 
-        [&>h1]:text-xl
-        [&>h2]:text-lg
-        [&>h3]:text-base
-        [&>p]:text-sm
-        [&>ul]:text-sm
-        [&>ol]:text-sm
+    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <article class="prose prose-sm md:prose-base lg:prose-lg max-w-4xl lg:max-w-5xl mx-auto 
+        [&>h1]:text-xl md:[&>h1]:text-2xl lg:[&>h1]:text-3xl
+        [&>h2]:text-lg md:[&>h2]:text-xl lg:[&>h2]:text-2xl
+        [&>h3]:text-base md:[&>h3]:text-lg lg:[&>h3]:text-xl
+        [&>p]:text-sm md:[&>p]:text-base lg:[&>p]:text-lg
+        [&>ul]:text-sm md:[&>ul]:text-base lg:[&>ul]:text-lg
+        [&>ol]:text-sm md:[&>ol]:text-base lg:[&>ol]:text-lg
         prose-headings:font-bold 
         prose-a:text-primary-600 
         prose-img:rounded-xl
