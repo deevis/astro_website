@@ -4,10 +4,14 @@ import ThemeToggle from './ThemeToggle.astro';
 const links = [
   { href: '/', text: 'Home' },
   { href: '/articles', text: 'Articles' },
-  // { href: '/projects', text: 'Projects' }, // Temporarily commented out
+  // Bitcoin dropdown will be handled separately
   { href: '/gallery', text: 'Gallery' },
   { href: '/showcase', text: 'HTML Showcase' },
   { href: '/about', text: 'About Me' },
+];
+
+const bitcoinDropdown = [
+  { href: '/bitcoin-tutorial', text: 'Bitcoin Tutorial' },
 ];
 ---
 
@@ -17,7 +21,38 @@ const links = [
       <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400">darrenhicks.dev</a>
       
       <div class="hidden md:flex items-center space-x-8">
-        {links.map(link => (
+        <a
+          href="/articles"
+          class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          Articles
+        </a>
+        
+        <!-- Bitcoin Dropdown -->
+        <div class="relative group">
+          <button
+            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          >
+            Bitcoin
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+            {bitcoinDropdown.map(item => (
+              <a
+                href={item.href}
+                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
+              >
+                {item.text}
+              </a>
+            ))}
+          </div>
+        </div>
+        
+        {links.slice(2).map(link => (
           <a
             href={link.href}
             class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -56,7 +91,38 @@ const links = [
       id="mobile-menu"
       class="hidden md:hidden mt-4 space-y-4"
     >
-      {links.map(link => (
+      <a
+        href="/articles"
+        class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+      >
+        Articles
+      </a>
+      
+      <!-- Bitcoin Mobile Dropdown -->
+      <div class="space-y-2">
+        <button
+          id="mobile-bitcoin-toggle"
+          class="flex items-center justify-between w-full py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+        >
+          Bitcoin
+          <svg id="mobile-bitcoin-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div id="mobile-bitcoin-menu" class="hidden pl-4 space-y-2">
+          {bitcoinDropdown.map(item => (
+            <a
+              href={item.href}
+              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              {item.text}
+            </a>
+          ))}
+        </div>
+      </div>
+      
+      {links.slice(2).map(link => (
         <a
           href={link.href}
           class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
@@ -71,8 +137,16 @@ const links = [
 <script>
   const button = document.getElementById('mobile-menu-button');
   const menu = document.getElementById('mobile-menu');
+  const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
+  const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
+  const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
 
   button?.addEventListener('click', () => {
     menu?.classList.toggle('hidden');
+  });
+
+  bitcoinToggle?.addEventListener('click', () => {
+    bitcoinMenu?.classList.toggle('hidden');
+    bitcoinArrow?.classList.toggle('rotate-180');
   });
 </script>

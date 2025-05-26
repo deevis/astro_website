@@ -1,0 +1,194 @@
+---
+import Layout from '../../layouts/bitcoin-tutorial/Layout.astro';
+---
+
+<Layout title="Bitcoin Certified | Certificate of Completion">
+  <div class="certificate-container p-8 flex flex-col items-center">
+    <!-- Name Input Form (only shown before printing) -->
+    <div id="name-input-container" class="mb-8 w-full max-w-md">
+      <div class="bg-blue-50 dark:bg-blue-900/20 p-6 rounded-lg border border-blue-200 dark:border-blue-800 mb-4">
+        <h3 class="text-lg font-semibold text-blue-800 dark:text-blue-200 mb-2">Enter Your Name for the Certificate</h3>
+        <p class="text-sm text-gray-600 dark:text-gray-400 mb-4">Your name is stored locally on your device only and is not sent to any server.</p>
+        <div class="flex flex-col">
+          <label for="user-name" class="text-gray-700 dark:text-gray-300 mb-2">Your Full Name:</label>
+          <input 
+            type="text" 
+            id="user-name" 
+            class="border border-gray-300 dark:border-gray-600 rounded-md px-4 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white dark:bg-gray-800 text-gray-900 dark:text-gray-100" 
+            placeholder="Enter your name as you'd like it to appear"
+          >
+          <button 
+            id="update-certificate" 
+            class="mt-4 bg-blue-600 text-white py-2 px-4 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Update Certificate
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <div id="certificate" class="certificate bg-white border-8 border-double border-yellow-600 p-8 max-w-4xl w-full mx-auto my-8 shadow-lg">
+      <div class="certificate-content text-center">
+        <div class="certificate-header mb-8">
+          <h1 class="text-4xl font-bold text-yellow-700 mb-2">Certificate of Completion</h1>
+          <h2 class="text-2xl text-gray-700">Interactive Bitcoin Education Series</h2>
+        </div>
+        
+        <div class="certificate-body mb-12">
+          <div class="certificate-icon mb-6">
+            <svg class="w-24 h-24 mx-auto text-yellow-600" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512" fill="currentColor">
+              <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zm-141.651-35.33c4.937-32.999-20.191-50.739-54.55-62.573l11.146-44.702-27.213-6.781-10.851 43.524c-7.154-1.783-14.502-3.464-21.803-5.13l10.929-43.81-27.198-6.781-11.153 44.686c-5.922-1.349-11.735-2.682-17.377-4.084l.031-.14-37.53-9.37-7.239 29.062s20.191 4.627 19.765 4.913c11.022 2.751 13.014 10.044 12.68 15.825l-12.696 50.925c.76.194 1.744.473 2.829.907-.907-.225-1.876-.473-2.876-.713l-17.796 71.338c-1.349 3.348-4.767 8.37-12.471 6.464.271.395-19.78-4.937-19.78-4.937l-13.51 31.147 35.414 8.827c6.588 1.651 13.045 3.379 19.4 5.006l-11.262 45.213 27.182 6.781 11.153-44.733a1038.209 1038.209 0 0 0 21.687 5.627l-11.115 44.523 27.213 6.781 11.262-45.128c46.404 8.781 81.299 5.239 95.986-36.727 11.836-33.79-.589-53.281-25.004-65.991 17.78-4.098 31.174-15.792 34.747-39.949zm-62.177 87.179c-8.41 33.79-65.308 15.523-83.755 10.943l14.944-59.899c18.446 4.603 77.6 13.717 68.811 48.956zm8.417-87.667c-7.673 30.736-55.031 15.12-70.393 11.292l13.548-54.327c15.363 3.828 64.836 10.973 56.845 43.035z"></path>
+            </svg>
+          </div>
+          
+          <p class="text-xl mb-8">This certifies that</p>
+          
+          <div class="certificate-name mb-8">
+            <p id="certificate-user-name" class="text-3xl font-bold border-b-2 border-gray-300 pb-2 inline-block px-8">Bitcoin Enthusiast</p>
+          </div>
+          
+          <p class="text-xl mb-12">has successfully completed all 9 modules of the</p>
+          <p class="text-2xl font-bold mb-8">Interactive Bitcoin Education Series</p>
+          
+          <p class="text-lg mb-2">Demonstrating proficiency in:</p>
+          <ul class="text-md mb-8 inline-block text-left">
+            <li>• Understanding the fundamental properties of money</li>
+            <li>• Analyzing monetary systems and their vulnerabilities</li>
+            <li>• Comprehending Bitcoin's technological innovations</li>
+            <li>• Comparing economic systems and their implications</li>
+            <li>• Evaluating Bitcoin's potential future impact</li>
+          </ul>
+        </div>
+        
+        <div class="certificate-footer flex justify-between items-end">
+          <div class="certificate-date text-left">
+            <p class="text-sm text-gray-600">Date of Completion</p>
+            <p id="completion-date" class="text-lg font-semibold"></p>
+          </div>
+          
+          <div class="certificate-signature text-right">
+            <div class="signature mb-2">
+              <svg class="w-40 h-16" viewBox="0 0 200 50" xmlns="http://www.w3.org/2000/svg">
+                <path d="M10,25 C20,10 30,40 40,25 C50,10 60,40 70,25 C80,10 90,40 100,25 C110,10 120,40 130,25 C140,10 150,40 160,25 C170,10 180,40 190,25" stroke="#333" fill="none" stroke-width="2" />
+              </svg>
+            </div>
+            <p class="text-md font-semibold">Bitcoin Education Team</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+    <div class="certificate-actions mt-4 mb-12">
+      <button id="print-certificate" class="bg-blue-600 text-white py-3 px-8 rounded-lg text-lg font-semibold hover:bg-blue-700 transition-colors">
+        Print Certificate
+      </button>
+    </div>
+  </div>
+</Layout>
+
+<script>
+  // Import the progress state utilities
+  	import { getProgressState, getCertificateName, updateCertificateName } from '../../utils/bitcoin-tutorial/progress-state.js';
+  
+  document.addEventListener('DOMContentLoaded', () => {
+    const state = getProgressState();
+    
+    // Check if user has completed the course
+    if (!state.course.completed) {
+      // Redirect to home if course not completed
+      window.location.href = '/';
+    } else {
+      // Display completion date
+      const dateElement = document.getElementById('completion-date');
+      
+      if (dateElement && state.course.completionDate) {
+        const formattedDate = new Date(state.course.completionDate).toLocaleDateString('en-US', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric'
+        });
+        dateElement.textContent = formattedDate;
+      }
+      
+      // Load saved name if exists
+      const savedName = getCertificateName();
+      const nameInput = document.getElementById('user-name') as HTMLInputElement;
+      const certificateName = document.getElementById('certificate-user-name');
+      
+      if (savedName && nameInput && certificateName) {
+        nameInput.value = savedName;
+        certificateName.textContent = savedName;
+      }
+      
+      // Set up name update button
+      const updateButton = document.getElementById('update-certificate');
+      if (updateButton && nameInput && certificateName) {
+        updateButton.addEventListener('click', () => {
+          const name = nameInput.value.trim();
+          if (name) {
+            certificateName.textContent = name;
+            updateCertificateName(name);
+          }
+        });
+      }
+      
+      // Set up print button
+      const printButton = document.getElementById('print-certificate');
+      if (printButton) {
+        printButton.addEventListener('click', () => {
+          window.print();
+        });
+      }
+    }
+  });
+</script>
+
+<style>
+  @media print {
+    /* Hide everything by default */
+    body * {
+      visibility: hidden;
+    }
+    
+    /* Hide the sidebar completely */
+    aside {
+      display: none !important;
+    }
+    
+    /* Hide the main navigation */
+    header {
+      display: none !important;
+    }
+    
+    /* Only show the certificate */
+    #certificate, #certificate * {
+      visibility: visible;
+    }
+    
+    /* Hide the name input and actions */
+    #name-input-container, .certificate-actions {
+      display: none !important;
+    }
+    
+    /* Position the certificate for printing */
+    #certificate {
+      position: absolute;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      margin: 0;
+      padding: 2cm;
+      border: 12px double #ca8a04 !important;
+      box-shadow: none !important;
+    }
+    
+    /* Ensure the certificate is centered */
+    .certificate-content {
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+    }
+  }
+</style>

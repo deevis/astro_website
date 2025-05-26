@@ -1,0 +1,1097 @@
+---
+import ModuleLayout from '../../../components/bitcoin-tutorial/ModuleLayout.astro';
+import MoneyScorer from '../../../components/bitcoin-tutorial/interactive/MoneyScorer.svelte';
+import WealthRace from '../../../components/bitcoin-tutorial/interactive/WealthRace.svelte';
+import Timeline from '../../../components/bitcoin-tutorial/interactive/Timeline.svelte';
+import DebasementSim from '../../../components/bitcoin-tutorial/interactive/DebasementSim.svelte';
+import ProofReserves from '../../../components/bitcoin-tutorial/interactive/ProofReserves.svelte';
+import BitcoinProps from '../../../components/bitcoin-tutorial/interactive/BitcoinProps.svelte';
+import FiatEconomy from '../../../components/bitcoin-tutorial/interactive/FiatEconomy.svelte';
+import BitcoinEconomy from '../../../components/bitcoin-tutorial/interactive/BitcoinEconomy.svelte';
+import FutureModel from '../../../components/bitcoin-tutorial/interactive/FutureModel.svelte';
+
+export function getStaticPaths() {
+  return [
+    {params: {id: '1'}},
+    {params: {id: '2'}},
+    {params: {id: '3'}},
+    {params: {id: '4'}},
+    {params: {id: '5'}},
+    {params: {id: '6'}},
+    {params: {id: '7'}},
+    {params: {id: '8'}},
+    {params: {id: '9'}},
+  ];
+}
+
+const { id } = Astro.params;
+const moduleId = parseInt(id);
+
+// Module-specific content and components
+const modules = {
+  1: {
+    title: "What is Money?",
+    component: Timeline,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Money is one of humanity's most important inventions, evolving over thousands of years to solve specific problems in trade and value storage.
+          In this module, we'll explore the history and evolution of money from primitive barter systems to modern digital currencies.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">The Problem with Barter</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Before money, people traded goods and services directly through barter. While simple in concept, barter has a fundamental flaw:
+          it requires a "double coincidence of wants." This means both parties must want exactly what the other has to offer, at the exact
+          same time and place.
+        </p>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Imagine you're a fisherman wanting to trade fish for pottery. You must find not just any potter, but one who:
+        </p>
+        
+        <ul class="list-disc pl-6 mb-4 text-gray-700 dark:text-gray-300">
+          <li class="mb-2">Wants fish at that moment</li>
+          <li class="mb-2">Has pottery to trade</li>
+          <li class="mb-2">Values your fish at a rate you find acceptable</li>
+        </ul>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          This inefficiency led to the development of commodity money - items with intrinsic value that were widely accepted for trade.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">The Evolution of Money</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive timeline below to explore how money evolved through different forms, each solving specific problems
+          of the previous system while introducing new capabilities and challenges.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Key Transitions in Monetary History</h2>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">From Barter to Commodity Money</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The first major transition was from direct barter to using commodities like shells, beads, and cattle as intermediary goods.
+            These items had intrinsic value and were generally accepted, solving the double coincidence of wants problem.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">From Commodities to Precious Metals</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Precious metals, particularly gold and silver, emerged as superior forms of money due to their durability, portability,
+            divisibility, and relative scarcity. They maintained value across cultures and time periods.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">From Metals to Paper</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            As trade expanded, carrying large amounts of gold became impractical. Paper money emerged as receipts for gold stored
+            with goldsmiths, introducing the concept of representative money backed by physical reserves.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">From Backed to Fiat Currency</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The final major transition occurred when governments removed the backing of paper money by gold or silver,
+            creating fiat currencies that derive value solely from government decree and public trust.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Digital Revolution</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Today, we're witnessing another transition as digital currencies emerge. Bitcoin represents the first
+            successful attempt to create digital scarcity without requiring trust in a central authority.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  2: {
+    title: "Properties of Good Money",
+    component: MoneyScorer,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Throughout history, many items have been used as money - from shells and beads to precious metals and paper notes. 
+          But what makes some forms of money succeed while others fail? In this module, we'll explore the key properties 
+          that determine the effectiveness of money.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Key Properties of Money</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Money serves three primary functions: as a medium of exchange, a store of value, and a unit of account. 
+          To fulfill these functions effectively, money should possess several important properties:
+        </p>
+        
+        <ul class="list-disc pl-6 mb-4 text-gray-700 dark:text-gray-300">
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Durability:</strong> Money must withstand physical deterioration and remain usable over time.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Portability:</strong> Money should be easy to transport and transfer between parties.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Divisibility:</strong> Money must be divisible into smaller units for various transaction sizes.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Recognizability:</strong> Money should be easily identifiable and difficult to counterfeit.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Scarcity:</strong> Money must have limited supply to maintain value over time.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Fungibility:</strong> Each unit should be interchangeable with any other unit of the same value.
+          </li>
+        </ul>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive dashboard below to compare different forms of money based on these properties. 
+          Adjust the sliders to see how each form of money scores and which one might be most effective overall.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Historical Context</h2>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Gold: The Historical Standard</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Throughout history, gold emerged as the dominant form of money because it scored highly on most of these properties. 
+            It's extremely durable, universally recognizable, naturally scarce, and perfectly fungible. Its main weaknesses were 
+            in portability (it's heavy) and divisibility (difficult to make small payments).
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Paper Money: Solving Portability</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Paper money was introduced as a solution to gold's portability and divisibility problems. Initially, paper money 
+            was backed by gold reserves, maintaining its value through convertibility. However, when this backing was removed, 
+            paper money's scarcity property was compromised, leading to inflation and loss of purchasing power over time.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Bitcoin: Digital Gold</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin was designed to combine the best properties of both gold and digital money. It's perfectly durable (digital), 
+            highly portable (can be sent anywhere instantly), infinitely divisible (down to 8 decimal places), increasingly 
+            recognizable, absolutely scarce (21 million cap), and fungible (each bitcoin is identical).
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Importance of Monetary Properties</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Understanding these properties helps explain why certain forms of money have succeeded or failed throughout history.
+            It also provides a framework for evaluating new forms of money, including cryptocurrencies and central bank digital currencies.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  3: {
+    title: "How Good Money Gets Corrupted",
+    component: DebasementSim,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Throughout history, even the best forms of money have been subject to corruption and debasement.
+          In this module, we'll explore how and why money gets corrupted, and the consequences of this corruption
+          for individuals and societies.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">The Temptation to Debase</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Debasement occurs when the value of money is deliberately reduced by those who control its supply.
+          This has happened repeatedly throughout history, from ancient civilizations to modern economies.
+        </p>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-lg mb-4 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Historical Example: The Roman Empire</h3>
+          <p class="text-gray-700 dark:text-gray-300">
+            The Roman Empire provides one of the most famous examples. Roman rulers gradually reduced the silver
+            content in their coins, allowing them to mint more coins from the same amount of silver. This enabled
+            them to pay for wars and public works in the short term, but led to inflation and economic instability
+            in the long term.
+          </p>
+        </div>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">From Gold Standard to Fiat</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          In modern times, the abandonment of the gold standard represents perhaps the most significant debasement
+          of money. Until 1971, major currencies were backed by gold, limiting how much money could be created.
+          When this constraint was removed, it became possible to create unlimited amounts of currency.
+        </p>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive debasement simulator below to see how this process works and its effects on
+          purchasing power over time.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">The Consequences of Debasement</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Money debasement has several important consequences:
+        </p>
+        
+        <ul class="list-disc pl-6 mb-6 text-gray-700 dark:text-gray-300">
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Inflation:</strong> As more money chases the same amount of goods and services, prices rise.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Wealth Transfer:</strong> Those closest to the money creation (typically financial institutions and governments)
+            benefit at the expense of ordinary savers.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Distorted Price Signals:</strong> Inflation makes economic calculation more difficult, leading to malinvestment.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Asset Bubbles:</strong> Excess money often flows into assets like real estate and stocks, creating bubbles.
+          </li>
+          <li class="mb-2">
+            <strong class="text-gray-900 dark:text-gray-100">Increased Debt:</strong> Inflation incentivizes borrowing and discourages saving.
+          </li>
+        </ul>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Cantillon Effect</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Named after 18th-century economist Richard Cantillon, this effect describes how the uneven distribution of new money
+            creates winners and losers. Those who receive the new money first (banks, financial institutions, and wealthy investors)
+            can spend it before prices rise, while those who receive it last (typically wage earners) find that prices have already
+            increased by the time they get it.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Importance of Sound Money</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            These effects explain why sound money is so important for a healthy economy and society. When money is debased,
+            it distorts incentives, misallocates resources, and ultimately leads to economic instability.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  4: {
+    title: "The Proof of Reserves Problem",
+    component: ProofReserves,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          One of the most fundamental challenges in monetary systems is verifying that the money supply is what it
+          claims to be. This is known as the "proof of reserves" problem, and it's a critical issue for maintaining trust in
+          any monetary system.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">The Challenge of Verification</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Throughout history, gold has been valued partly because it's difficult to counterfeit. However, when gold
+          began to be stored in centralized vaults and paper claims were issued against it, a new problem emerged:
+          how could people verify that the gold backing their paper money actually existed?
+        </p>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          This verification problem has persisted and evolved with modern financial systems. Today, we largely trust
+          central banks and financial institutions to maintain appropriate reserves, but this trust has been broken
+          numerous times throughout history.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Common Verification Problems</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Several issues make verification of reserves difficult:
+        </p>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Fractional Reserve Banking</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Banks are only required to keep a small fraction of deposits on hand.
+            The rest is loaned out, creating multiple claims on the same underlying assets.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Rehypothecation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The same assets can be pledged as collateral multiple times,
+            creating a complex web of overlapping claims that's difficult to untangle.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Audit Limitations</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Traditional audits are periodic, potentially manipulable, and require trusting the auditor.
+            They provide only a snapshot in time rather than continuous verification.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Counterfeiting</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Gold bars can be filled with tungsten, and paper money can be forged.
+            Even digital records can be falsified if they're controlled by a central authority.
+          </p>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive verification game below to experience these challenges firsthand and see how difficult it
+          can be to verify reserves in traditional systems.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Bitcoin's Solution to the Proof of Reserves Problem</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Bitcoin was designed specifically to address the proof of reserves problem through several innovative features:
+        </p>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Public Blockchain</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin's entire transaction history and current state are publicly visible on the blockchain.
+            Anyone can verify the total supply and the balance of any address without requiring permission or trust.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Cryptographic Verification</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin uses cryptographic proofs that allow users to verify the validity of transactions and the state of the network
+            without trusting any third party. This is a fundamental shift from traditional systems that require trusted intermediaries.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Merkle Trees</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin uses a data structure called a Merkle tree that allows efficient and secure verification of large datasets.
+            This enables even users with limited resources to verify that their transactions are included in the blockchain.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Self-Custody</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin allows users to hold their own keys and directly control their funds without intermediaries.
+            This eliminates the need to trust third parties to maintain appropriate reserves.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Implications for Financial Systems</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin's approach to the proof of reserves problem represents a paradigm shift in how monetary systems can operate.
+            By making verification transparent, continuous, and trustless, it addresses one of the fundamental weaknesses
+            of traditional financial systems.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  5: {
+    title: "How Bitcoin Fixes Money",
+    component: BitcoinProps,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          After exploring the problems with traditional monetary systems, we now turn to how Bitcoin was specifically
+          designed to address these issues. Bitcoin represents a fundamental innovation in money, combining the best
+          properties of previous forms while eliminating many of their weaknesses.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Bitcoin's Key Innovations</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Bitcoin introduced several revolutionary concepts that together create a new kind of money:
+        </p>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Digital Scarcity</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            For the first time, Bitcoin created true scarcity in the digital realm.
+            With a hard cap of 21 million coins, Bitcoin cannot be inflated beyond this limit.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Decentralization</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            No single entity controls Bitcoin. It operates through a distributed
+            network of nodes, making it resistant to censorship and shutdown.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Trustless Verification</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin's blockchain allows anyone to verify transactions and
+            the total supply without trusting any third party.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Programmable Money</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin enables conditional transfers and time-locked transactions,
+            creating new possibilities for how money can function.
+          </p>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive explorer below to examine Bitcoin's properties and see how they compare to
+          traditional forms of money.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Addressing Traditional Money's Weaknesses</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Bitcoin was designed to address specific weaknesses in traditional monetary systems:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Inflation</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Problem:</strong> Fiat currencies can be created at will, leading to inflation and loss of purchasing power.
+            </p>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Bitcoin's Solution:</strong> Fixed supply cap of 21 million coins makes it immune to debasement through inflation.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Centralized Control</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Problem:</strong> Central authorities can freeze assets, block transactions, or change monetary policy.
+            </p>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Bitcoin's Solution:</strong> Decentralized nature prevents any single entity from controlling or manipulating the system.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Verification Problems</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Problem:</strong> Difficult to verify that claimed reserves actually exist or that money isn't being counterfeited.
+            </p>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Bitcoin's Solution:</strong> Public blockchain allows for transparent verification of the entire supply and all transactions.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Physical Limitations</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Problem:</strong> Physical money is difficult to transport across borders and can be seized or stolen.
+            </p>
+            <p class="mt-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">Bitcoin's Solution:</strong> Digital asset can be transferred instantly across the globe and secured with cryptography.
+            </p>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">A Fundamental Transformation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            These innovations don't just incrementally improve money - they fundamentally transform what money can be
+            and how it can function in a digital, global economy. Bitcoin represents not just a new form of money,
+            but a new monetary paradigm that addresses the core weaknesses of previous systems.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  6: {
+    title: "Fiat Economic System Simulation",
+    component: FiatEconomy,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          To understand why Bitcoin represents such a significant innovation, we need to understand the mechanics
+          and incentives of the current fiat monetary system. In this module, we'll explore how central banks
+          operate and the effects of their policies on the broader economy.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Central Banking Fundamentals</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Modern monetary systems are based on fiat currency - money that has value because the government says it does,
+          not because it's backed by a physical commodity. Central banks, like the Federal Reserve in the US, control
+          the supply of this money through various mechanisms:
+        </p>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Interest Rate Setting</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Controlling the cost of borrowing money throughout the economy.
+            When rates are lowered, borrowing increases; when raised, borrowing decreases.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Open Market Operations</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Buying and selling government securities to inject or remove money from the system.
+            When the central bank buys securities, it creates new money; when it sells, it removes money.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Reserve Requirements</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Mandating how much money banks must keep on hand versus what they can lend out.
+            Lower requirements allow banks to create more money through lending.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Quantitative Easing</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Large-scale asset purchases to increase the money supply during crises.
+            This extraordinary measure has become increasingly common since 2008.
+          </p>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive central bank simulator below to see how these tools affect the economy and experience
+          the challenges of managing a fiat monetary system.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Systemic Effects of Fiat Money</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          The fiat monetary system creates several systemic effects that shape our economy and society:
+        </p>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Business Cycles</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The expansion and contraction of credit leads to boom and bust cycles. When central banks lower interest rates,
+            they encourage borrowing and investment, creating a boom. However, this often leads to malinvestment and eventually
+            a bust when rates rise or the economy can no longer sustain the debt load.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Asset Inflation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            New money often flows into assets like stocks and real estate before affecting consumer prices.
+            This creates asset bubbles and increases wealth inequality, as those who own assets see their wealth increase
+            while those who don't fall further behind.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Cantillon Effect</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Those closest to the money creation benefit most, increasing wealth inequality.
+            Banks, financial institutions, and large corporations receive the new money first and can use it
+            before prices rise, while ordinary citizens experience the inflation without the benefits.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Short-Term Thinking</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Inflation encourages consumption over saving, leading to lower investment and capital formation.
+            When money loses value over time, the incentive is to spend it quickly rather than save for the future,
+            creating a society focused on immediate gratification rather than long-term planning.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Debt Accumulation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The system incentivizes taking on debt, leading to ever-increasing leverage throughout the economy.
+            With inflation eroding the value of money, borrowing becomes attractive as debts can be repaid with
+            less valuable currency in the future.
+          </p>
+        </div>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Key Insight</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            These effects aren't bugs but features of the fiat system. They reflect the fundamental incentives created
+            by a monetary system where the supply can be expanded at will and where short-term stability is often
+            prioritized over long-term sustainability.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  7: {
+    title: "Bitcoin Economic System Simulation",
+    component: BitcoinEconomy,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Having explored the fiat economic system, we now turn to how a Bitcoin-based economy might function.
+          The fixed supply nature of Bitcoin creates fundamentally different incentives and outcomes compared
+          to the elastic supply of fiat currencies.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Fixed Supply Economics</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Bitcoin's supply is capped at 21 million coins, with new coins being created at a predetermined and
+          ever-decreasing rate. This creates several important economic properties:
+        </p>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Deflationary Tendency</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            As economic output grows while the money supply remains fixed,
+            the purchasing power of each unit tends to increase over time.
+            This means that goods and services become less expensive in Bitcoin terms.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Long-Term Orientation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            When money appreciates over time, it encourages saving and
+            long-term thinking rather than immediate consumption.
+            This creates a natural incentive to delay gratification and plan for the future.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Capital Formation</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Higher savings rates lead to more capital available for investment
+            in productive enterprises. This can potentially increase economic growth
+            and technological advancement over the long term.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Reduced Malinvestment</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Without artificially low interest rates, fewer resources are
+            directed toward unsustainable projects. This may lead to more
+            stable economic cycles with less severe booms and busts.
+          </p>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive Bitcoin economy simulator below to explore how these dynamics might play out
+          in a Bitcoin standard economy.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Addressing Common Misconceptions</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Several misconceptions about fixed-supply money systems are worth addressing:
+        </p>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Deflationary Spiral Myth</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Critics argue that a deflationary currency would cause people to hoard money indefinitely, leading to economic collapse.
+            However, historical evidence doesn't support this. People always have time preferences and needs that require spending.
+            Even during periods of deflation, people continue to buy what they need and invest in productive assets.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Money Supply Must Grow Myth</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Another common claim is that the money supply must grow with the economy. However, this confuses price with value.
+            In a fixed-supply system, economic growth is reflected in falling prices rather than an expanding money supply.
+            This is actually more efficient as it doesn't require constant recalibration of the monetary unit.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">The Debt-Based Economy Requirement</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Some argue that modern economies require debt-based money to function. While debt would still exist in a Bitcoin economy,
+            it would likely be more conservative and based on genuine savings rather than money created out of thin air.
+            This would lead to more sustainable growth patterns.
+          </p>
+        </div>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Historical Perspective</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            It's worth noting that for most of human history, money had a relatively fixed supply (gold, silver).
+            Many periods of significant economic growth and innovation occurred under these monetary systems.
+            The modern fiat experiment is actually the historical anomaly, not the fixed-supply approach.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Transition Challenges</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            While a Bitcoin-based economy offers many theoretical advantages, the transition from our current system
+            would involve significant challenges and adjustments. Debt denominated in fiat currencies would need to be
+            addressed, and new financial instruments would need to develop.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  8: {
+    title: "USD vs. BTC - Past 10 Years",
+    component: WealthRace,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Moving from theory to practice, this module examines the actual performance of Bitcoin compared to the
+          US Dollar over the past decade. We'll look at how each has functioned as a store of value and what this
+          might tell us about their future prospects.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Purchasing Power Comparison</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          The primary function of money as a store of value is to preserve purchasing power over time.
+          Let's examine how the USD and BTC have performed in this regard:
+        </p>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">US Dollar Performance</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            The US Dollar has experienced consistent inflation, losing purchasing power every year.
+            According to official CPI data, the dollar has lost approximately 30-40% of its purchasing
+            power over the past decade, though many argue that real-world inflation has been higher.
+          </p>
+        </div>
+        
+        <div class="mb-4">
+          <h3 class="text-xl font-semibold mb-2 text-gray-900 dark:text-gray-100">Bitcoin Performance</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Despite significant volatility, Bitcoin has appreciated dramatically against the US Dollar
+            over the past decade. $1 worth of Bitcoin in 2013 would be worth hundreds or thousands of
+            dollars today, representing an enormous increase in purchasing power.
+          </p>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive wealth preservation simulator below to compare how an investment in USD versus BTC
+          would have performed over different time periods. You can adjust the starting date, time horizon,
+          and investment amount to explore different scenarios.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Real-World Comparisons</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          To put these numbers in perspective, let's consider some real-world examples:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Housing</h3>
+            <p class="mb-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">USD:</strong> The median US home price has increased from approximately $220,000 in 2014 to over $350,000 in 2024.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">BTC:</strong> That same house would have cost about 350 BTC in 2014, but less than 5 BTC in 2024.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Education</h3>
+            <p class="mb-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">USD:</strong> The average cost of a 4-year college degree has risen from about $100,000 to $140,000 in the same period.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">BTC:</strong> In Bitcoin, this would have decreased from approximately 160 BTC to less than 2 BTC.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Vehicles</h3>
+            <p class="mb-2 text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">USD:</strong> The average new car price has increased from $32,000 to over $48,000.
+            </p>
+            <p class="text-gray-700 dark:text-gray-300">
+              <strong class="text-gray-900 dark:text-gray-100">BTC:</strong> In Bitcoin, this represents a decrease from 50 BTC to less than 1 BTC.
+            </p>
+          </div>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Volatility vs. Long-Term Trend</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            These examples illustrate how Bitcoin has outperformed not just the US Dollar, but also traditional inflation hedges
+            like real estate, despite its volatility. While Bitcoin experiences significant price swings in the short term,
+            its long-term trend has been strongly upward as adoption increases and the supply remains capped.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Dollar-Cost Averaging</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Many Bitcoin investors use a strategy called dollar-cost averaging (DCA), where they invest a fixed amount
+            at regular intervals regardless of price. This approach helps mitigate the impact of volatility and has
+            historically produced strong returns over multi-year periods.
+          </p>
+        </div>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Looking Forward</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Past performance does not guarantee future results, and Bitcoin remains a relatively new and experimental asset.
+            However, its mathematical scarcity and growing adoption suggest that it may continue to serve as an effective
+            store of value in the long term.
+          </p>
+          <p class="text-gray-700 dark:text-gray-300">
+            In the next module, we'll explore potential future scenarios for Bitcoin adoption and what they might mean
+            for its value and role in the global financial system.
+          </p>
+        </div>
+      </div>
+    `
+  },
+  9: {
+    title: "Future Projections - Next 10 Years",
+    component: FutureModel,
+    content: `
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Introduction</h2>
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Having examined Bitcoin's history and properties, we now turn to its potential future. In this module,
+          we'll explore different adoption scenarios and their implications for Bitcoin's role in the global
+          financial system over the next decade.
+        </p>
+      </div>
+      
+      <div class="mb-8">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Adoption Dynamics</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Bitcoin adoption follows network effects similar to other technologies like the internet, mobile phones,
+          and social media. As more people use Bitcoin, its utility and value increase, potentially attracting
+          even more users in a self-reinforcing cycle.
+        </p>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Several factors could influence Bitcoin's adoption trajectory:
+        </p>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Institutional Adoption</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              Major companies, funds, and even governments adding Bitcoin to their treasuries.
+              This trend has accelerated in recent years with companies like MicroStrategy, Tesla,
+              and Square making significant Bitcoin purchases.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Regulatory Clarity</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              Clearer rules around Bitcoin ownership, taxation, and use.
+              As regulatory frameworks mature, institutional participation becomes easier
+              and retail investors gain more confidence.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Technical Improvements</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              Advances in scaling, privacy, and user experience.
+              Developments like the Lightning Network for faster payments and
+              Taproot for enhanced privacy and smart contract capabilities continue to improve Bitcoin.
+            </p>
+          </div>
+          
+          <div class="bg-gray-50 dark:bg-gray-800 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+            <h3 class="text-lg font-semibold mb-2 text-gray-900 dark:text-gray-100">Macroeconomic Factors</h3>
+            <p class="text-gray-700 dark:text-gray-300">
+              Inflation, currency crises, and global instability.
+              As traditional currencies face challenges, Bitcoin's fixed supply
+              and censorship resistance become increasingly attractive.
+            </p>
+          </div>
+        </div>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Use the interactive scenario modeling tool below to explore different adoption paths and their potential implications.
+        </p>
+      </div>
+    `,
+    additionalContent: `
+      <div class="mt-12">
+        <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Potential Scenarios</h2>
+        
+        <p class="mb-4 text-gray-700 dark:text-gray-300">
+          Several possible scenarios could unfold for Bitcoin over the next decade:
+        </p>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Digital Gold</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            In this scenario, Bitcoin continues to be primarily used as "digital gold" - a hedge against
+            inflation and currency debasement. It would compete with gold as a store of value, potentially
+            capturing a significant portion of gold's market cap (currently around $12 trillion).
+          </p>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            <strong class="text-gray-900 dark:text-gray-100">Implications:</strong> Bitcoin would become a standard part of investment portfolios,
+            similar to gold today. Its price would stabilize at a higher level, with less volatility as
+            the market matures.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Global Settlement Layer</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Bitcoin becomes the foundation for international settlements between
+            banks, companies, and eventually countries. In this scenario, Bitcoin would be used
+            for large-value transfers and as a neutral reserve asset for international trade.
+          </p>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            <strong class="text-gray-900 dark:text-gray-100">Implications:</strong> Bitcoin would become integrated into the global financial
+            infrastructure, with central banks and sovereign wealth funds holding it as a reserve asset.
+            This would significantly increase demand and likely value.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Medium of Exchange</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Improvements in scaling solutions like the Lightning Network enable
+            Bitcoin to be used for everyday transactions. In this scenario, Bitcoin would
+            function as both a store of value and a medium of exchange for regular commerce.
+          </p>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            <strong class="text-gray-900 dark:text-gray-100">Implications:</strong> Bitcoin would compete directly with payment networks
+            like Visa and PayPal, as well as with traditional currencies for everyday use.
+            This would require significant advances in user experience and scaling technology.
+          </p>
+        </div>
+        
+        <div class="mb-6">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">World Reserve Currency</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            In the most transformative scenario, Bitcoin could eventually
+            challenge the US Dollar as the global reserve currency. This would represent
+            a fundamental shift in the international monetary order.
+          </p>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            <strong class="text-gray-900 dark:text-gray-100">Implications:</strong> Countries would hold Bitcoin instead of US Dollars
+            for international reserves. This would dramatically reduce the ability of any single
+            country to exert monetary influence globally and could lead to more stable economic cycles.
+          </p>
+        </div>
+        
+        <div class="bg-gray-100 dark:bg-gray-800 p-6 rounded-lg mb-6 border border-gray-200 dark:border-gray-700">
+          <h3 class="text-xl font-semibold mb-3 text-gray-900 dark:text-gray-100">Conclusion</h3>
+          <p class="mb-4 text-gray-700 dark:text-gray-300">
+            Each of these scenarios would have profound implications for Bitcoin's value, global finance, and even
+            geopolitics. While it's impossible to predict exactly how Bitcoin will evolve, understanding these
+            potential paths can help us prepare for a range of possible futures.
+          </p>
+          <p class="text-gray-700 dark:text-gray-300">
+            What's clear is that Bitcoin represents a fundamental innovation in money - one that combines the best
+            properties of previous forms of money with new capabilities made possible by digital technology. Whether
+            it ultimately serves as digital gold, a settlement layer, a medium of exchange, or a reserve currency,
+            Bitcoin has already demonstrated that it offers a compelling alternative to traditional monetary systems.
+          </p>
+        </div>
+      </div>
+    `
+  }
+};
+
+// Get the module data for the current ID
+const moduleData = modules[moduleId] || modules[1];
+---
+
+<ModuleLayout 
+  title={`Module ${moduleId}: ${moduleData.title}`} 
+  moduleNumber={moduleId} 
+  moduleTitle={moduleData.title}
+>
+  <div class="prose max-w-none">
+    <Fragment set:html={moduleData.content} />
+  </div>
+  
+  <div class="my-8">
+    {moduleId === 1 && <Timeline client:load />}
+    {moduleId === 2 && <MoneyScorer client:load />}
+    {moduleId === 3 && <DebasementSim client:load />}
+    {moduleId === 4 && <ProofReserves client:load />}
+    {moduleId === 5 && <BitcoinProps client:load />}
+    {moduleId === 6 && <FiatEconomy client:load />}
+    {moduleId === 7 && <BitcoinEconomy client:load />}
+    {moduleId === 8 && <WealthRace client:load />}
+    {moduleId === 9 && <FutureModel client:load />}
+  </div>
+  
+  <div class="prose max-w-none mt-8">
+    <Fragment set:html={moduleData.additionalContent} />
+  </div>
+  
+  <div slot="quiz">
+    <div class="space-y-6">
+      <Fragment set:html={moduleData.quiz} />
+    </div>
+  </div>
+</ModuleLayout>

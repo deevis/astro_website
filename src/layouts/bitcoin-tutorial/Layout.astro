@@ -1,0 +1,269 @@
+---
+import '../../styles/bitcoin-tutorial/global.css';
+import Navigation from '../../components/Navigation.astro';
+
+interface Props {
+	title: string;
+}
+
+const { title } = Astro.props;
+
+// Get the current URL path to determine active page
+const currentPath = Astro.url.pathname;
+
+// Get module completion data from localStorage (will be updated via client-side JS)
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta name="viewport" content="width=device-width" />
+		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+		<meta name="generator" content={Astro.generator} />
+		<title>{title}</title>
+	</head>
+	<body class="min-h-screen bg-slate-50 dark:bg-gray-950">
+		<!-- Main Site Navigation -->
+		<Navigation />
+		
+		<!-- Bitcoin Tutorial Layout -->
+		<div class="flex flex-col md:flex-row min-h-screen pt-20">
+			<!-- Fixed Left Navigation Panel -->
+			<aside class="w-full md:w-64 bg-slate-800 dark:bg-gray-900 text-white fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto z-10 border-r border-slate-700 dark:border-gray-800">
+				<div class="p-4">
+					<div class="text-xl font-bold mb-2 text-white">Bitcoin Education Series</div>
+					<div id="modules-progress" class="text-sm text-gray-400 mb-6">0 out of 9 modules completed</div>
+					<nav>
+						<ul class="space-y-2">
+							<li>
+								<a href="/bitcoin-tutorial/" 
+								   class={`block py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/' || currentPath === '/bitcoin-tutorial'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`}>
+								   Home
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/1" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/1'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="1">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 1: What is Money?</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/2" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/2'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="2">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 2: Properties of Good Money</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/3" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/3'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="3">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 3: How Good Money Gets Corrupted</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/4" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/4'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="4">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 4: The Proof of Reserves Problem</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/5" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/5'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="5">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 5: How Bitcoin Fixes Money</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/6" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/6'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="6">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 6: Fiat Economic System</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/7" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/7'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="7">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 7: Bitcoin Economic System</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/8" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/8'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="8">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 8: USD vs. BTC - Past 10 Years</span>
+								</a>
+							</li>
+							<li>
+								<a href="/bitcoin-tutorial/module/9" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/module/9'
+								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
+								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   }`} 
+								   data-module="9">
+									<span class="module-check mr-2 opacity-0">✓</span>
+									<span>Module 9: Future Projections</span>
+								</a>
+							</li>
+							<!-- Bitcoin Certified link (hidden by default) -->
+							<li id="certificate-link" class="mt-8 hidden">
+								<a href="/bitcoin-tutorial/certificate" 
+								   class={`flex items-center py-2 px-4 rounded transition-colors ${
+								   	currentPath === '/bitcoin-tutorial/certificate'
+								   		? 'bg-yellow-700 text-white'
+								   		: 'bg-yellow-600 hover:bg-yellow-700 text-white'
+								   }`}>
+									<span class="mr-2">🏆</span>
+									<span>Bitcoin Certified</span>
+								</a>
+							</li>
+						</ul>
+					</nav>
+				</div>
+			</aside>
+			
+			<!-- Main Content Area (with left margin for sidebar and top margin for main nav) -->
+			<main class="flex-1 md:ml-64 bg-white dark:bg-gray-950">
+				<slot />
+			</main>
+		</div>
+	</body>
+</html>
+
+<script>
+	// Import the progress state utilities
+	import { getProgressState, getCompletedModulesCount } from '../../utils/bitcoin-tutorial/progress-state.js';
+	
+	document.addEventListener('DOMContentLoaded', () => {
+		updateModuleProgress();
+		checkCertificateEligibility();
+		
+		// Listen for quiz completion events
+		document.addEventListener('quiz-completed', ((event: CustomEvent) => {
+			if (event.detail.completed) {
+				updateModuleProgress();
+				checkCertificateEligibility();
+			}
+		}) as EventListener);
+		
+		// Listen for course completion events
+		document.addEventListener('course-completed', () => {
+			checkCertificateEligibility();
+		});
+		
+		// Listen for progress reset events
+		document.addEventListener('progress-reset', () => {
+			updateModuleProgress();
+			checkCertificateEligibility();
+		});
+	});
+	
+	function updateModuleProgress() {
+		const state = getProgressState();
+		const completedCount = getCompletedModulesCount();
+		const totalModules = 9;
+		
+		// Update sidebar check marks for completed modules
+		for (let i = 1; i <= totalModules; i++) {
+			const moduleProgress = state.modules[i];
+			const moduleLink = document.querySelector(`a[data-module="${i}"]`);
+			if (moduleLink) {
+				const checkMark = moduleLink.querySelector('.module-check');
+				if (checkMark) {
+					if (moduleProgress.progress === 'completed') {
+						checkMark.classList.add('text-green-500');
+						checkMark.classList.remove('opacity-0');
+					} else {
+						checkMark.classList.remove('text-green-500');
+						checkMark.classList.add('opacity-0');
+					}
+				}
+			}
+		}
+		
+		// Update progress counter
+		const progressCounter = document.getElementById('modules-progress');
+		if (progressCounter) {
+			progressCounter.textContent = `${completedCount} out of ${totalModules} modules completed`;
+		}
+	}
+	
+	function checkCertificateEligibility() {
+		const certificateLink = document.getElementById('certificate-link');
+		const state = getProgressState();
+		
+		if (certificateLink && state.course.completed) {
+			certificateLink.classList.remove('hidden');
+		} else if (certificateLink) {
+			certificateLink.classList.add('hidden');
+		}
+	}
+</script>
+
+<style>
+	/* Make sure the layout works on mobile too */
+	@media (max-width: 768px) {
+		aside {
+			position: static;
+			height: auto;
+			top: 5rem;
+		}
+		
+		main {
+			margin-left: 0;
+		}
+		
+		.pt-20 {
+			padding-top: 5rem;
+		}
+	}
+</style>

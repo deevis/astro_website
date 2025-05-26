@@ -1,0 +1,155 @@
+{
+  "1": [
+    {
+      "text": "What was the earliest form of money?",
+      "answers": ["Shells", "Gold coins", "Barter exchange", "Paper notes"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "Which of these is NOT a function of money?",
+      "answers": ["Medium of exchange", "Store of value", "Unit of account", "Source of taxation"],
+      "correctAnswer": 3
+    },
+    {
+      "text": "When did the first gold coins appear?",
+      "answers": ["Around 600 BCE", "Around 1200 CE", "Around 1800 CE", "Around 3000 BCE"],
+      "correctAnswer": 0
+    }
+  ],
+  "2": [
+    {
+      "text": "Which property of money refers to its ability to be divided into smaller units?",
+      "answers": ["Durability", "Portability", "Divisibility", "Fungibility"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "Which form of money has the highest scarcity?",
+      "answers": ["Shells", "Gold", "Fiat currency", "Bitcoin"],
+      "correctAnswer": 3
+    },
+    {
+      "text": "What does fungibility mean?",
+      "answers": ["Ability to grow in value", "Each unit is interchangeable with any other unit", "Resistance to counterfeiting", "Ability to be carried easily"],
+      "correctAnswer": 1
+    }
+  ],
+  "3": [
+    {
+      "text": "What is debasement?",
+      "answers": ["Reducing the precious metal content in coins", "Increasing interest rates", "Creating digital currencies", "Removing money from circulation"],
+      "correctAnswer": 0
+    },
+    {
+      "text": "Which empire famously debased its currency leading to economic crisis?",
+      "answers": ["British Empire", "Mongol Empire", "Roman Empire", "Ottoman Empire"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What typically happens to purchasing power during currency debasement?",
+      "answers": ["It increases", "It remains stable", "It decreases", "It fluctuates randomly"],
+      "correctAnswer": 2
+    }
+  ],
+  "4": [
+    {
+      "text": "What is the 'proof of reserves' problem primarily concerned with?",
+      "answers": ["Proving mining efficiency", "Verifying that claimed monetary reserves actually exist", "Calculating interest rates", "Measuring inflation"],
+      "correctAnswer": 1
+    },
+    {
+      "text": "Which of these is NOT a method for proving reserves?",
+      "answers": ["Merkle tree verification", "Third-party audits", "Public blockchain records", "Central bank guarantees"],
+      "correctAnswer": 3
+    },
+    {
+      "text": "Why is proof of reserves important for cryptocurrency exchanges?",
+      "answers": ["To increase trading volume", "To prevent fractional reserve practices", "To reduce transaction fees", "To increase mining rewards"],
+      "correctAnswer": 1
+    }
+  ],
+  "5": [
+    {
+      "text": "Which of these is NOT a key feature of Bitcoin?",
+      "answers": ["Decentralization", "Limited supply", "Reversible transactions", "Cryptographic security"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What is the maximum number of bitcoins that will ever exist?",
+      "answers": ["1 million", "21 million", "100 million", "Unlimited"],
+      "correctAnswer": 1
+    },
+    {
+      "text": "How does Bitcoin prevent double-spending?",
+      "answers": ["Through central bank oversight", "Using the blockchain to record all transactions", "By requiring ID verification", "By limiting daily transactions"],
+      "correctAnswer": 1
+    }
+  ],
+  "6": [
+    {
+      "text": "What typically happens to a fiat currency's purchasing power over time?",
+      "answers": ["It increases", "It remains stable", "It decreases", "It follows a predictable cycle"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "Which of these is a characteristic of fiat monetary systems?",
+      "answers": ["Fixed money supply", "Gold backing", "Central bank control", "Decentralized issuance"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What is the primary tool central banks use to control inflation?",
+      "answers": ["Interest rates", "Gold reserves", "Foreign exchange", "Tax policy"],
+      "correctAnswer": 0
+    }
+  ],
+  "7": [
+    {
+      "text": "In a Bitcoin-based economy, what would likely happen to savings rates?",
+      "answers": ["Decrease significantly", "Remain unchanged", "Increase", "Become negative"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "How would prices tend to behave in a Bitcoin standard?",
+      "answers": ["Steadily increase", "Remain stable", "Steadily decrease", "Fluctuate wildly"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What effect would a fixed money supply likely have on economic cycles?",
+      "answers": ["Amplify boom-bust cycles", "Eliminate economic cycles entirely", "Reduce severity of boom-bust cycles", "Create hyperinflation"],
+      "correctAnswer": 2
+    }
+  ],
+  "8": [
+    {
+      "text": "Over the past decade, how has Bitcoin performed compared to USD as a store of value?",
+      "answers": ["Worse than USD", "About the same as USD", "Better than USD", "Impossible to compare"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What happens to USD purchasing power during periods of high inflation?",
+      "answers": ["It increases", "It remains stable", "It decreases", "It becomes more volatile"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "Which factor has contributed most to Bitcoin's value appreciation?",
+      "answers": ["Government backing", "Increasing adoption and limited supply", "Decreasing transaction fees", "Central bank purchases"],
+      "correctAnswer": 1
+    }
+  ],
+  "9": [
+    {
+      "text": "In the 'Digital Gold' scenario, Bitcoin primarily serves as:",
+      "answers": ["A medium of exchange", "A store of value", "A unit of account", "A payment processor"],
+      "correctAnswer": 1
+    },
+    {
+      "text": "Which adoption scenario would most disrupt traditional payment processors?",
+      "answers": ["Digital Gold", "Global Settlement Layer", "Medium of Exchange", "World Reserve Currency"],
+      "correctAnswer": 2
+    },
+    {
+      "text": "What would be a likely consequence if Bitcoin became a world reserve currency?",
+      "answers": ["Increased ability for countries to finance deficits", "Reduced boom-bust cycles", "Higher inflation globally", "Strengthened central bank authority"],
+      "correctAnswer": 1
+    }
+  ]
+} 

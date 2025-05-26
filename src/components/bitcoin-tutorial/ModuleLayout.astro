@@ -1,0 +1,85 @@
+---
+import Layout from '../../layouts/bitcoin-tutorial/Layout.astro';
+import QuizColumn from './QuizColumn.svelte';
+import quizQuestionsData from '../../data/bitcoin-tutorial/quiz-questions.json';
+
+interface Props {
+    title: string;
+    moduleNumber: number;
+    moduleTitle: string;
+}
+
+interface QuizQuestion {
+    text: string;
+    answers: string[];
+    correctAnswer: number;
+}
+
+interface QuizData {
+    [key: string]: QuizQuestion[];
+}
+
+const { title, moduleNumber, moduleTitle } = Astro.props;
+
+// Get quiz questions for current module
+const typedQuizData = quizQuestionsData as QuizData;
+const quizQuestions = typedQuizData[moduleNumber.toString()] || [];
+---
+
+<Layout title={title}>
+  <div class="flex flex-col lg:flex-row min-h-[calc(100vh-5rem)]">
+    <!-- Main Content Column (Scrollable) -->
+    <div id="content-column" class="flex-1 p-4 overflow-y-auto h-[calc(100vh-5rem)]">
+      <div class="max-w-3xl mx-auto">
+        <h1 class="text-3xl font-bold mb-2 text-gray-900 dark:text-gray-100">Module {moduleNumber}: {moduleTitle}</h1>
+        <div class="mb-8 pb-4 border-b border-gray-200 dark:border-gray-700">
+          <div class="text-sm text-gray-500 dark:text-gray-400">Progress: <span id="module-progress">Not Started</span></div>
+        </div>
+        
+        <div class="prose prose-gray dark:prose-invert max-w-none mb-12 text-gray-900 dark:text-gray-100">
+          <slot />
+        </div>
+        
+        <!-- Hidden marker for scroll detection -->
+        <div id="content-end-marker" class="h-4"></div>
+      </div>
+    </div>
+    
+    <!-- Quiz Column (Fixed) -->
+    <div class="lg:w-96 border-l border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800 shadow-lg fixed top-20 right-0 h-[calc(100vh-5rem)] overflow-y-auto z-20">
+      <QuizColumn client:load moduleNumber={moduleNumber} questions={quizQuestions} isActive={false} />
+    </div>
+  </div>
+</Layout>
+
+<script type="module" define:vars={{ moduleNumber }}>
+  import { initializeModuleLayout } from '/scripts/module-layout.js';
+  initializeModuleLayout(moduleNumber);
+</script>
+
+<style>
+  /* Adjust main content area to account for fixed panels */
+  @media (min-width: 1024px) {
+    #content-column {
+      margin-right: 24rem; /* w-96 = 24rem */
+      margin-left: 16rem; /* w-64 = 16rem */
+    }
+  }
+  
+  /* Mobile adjustments */
+  @media (max-width: 1023px) {
+    .lg\:w-96 {
+      position: static !important;
+      width: 100% !important;
+      height: auto !important;
+      top: auto !important;
+      right: auto !important;
+    }
+    
+    #content-column {
+      margin-right: 0 !important;
+      margin-left: 0 !important;
+      height: auto !important;
+    }
+  }
+</style>
