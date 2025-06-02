@@ -1,0 +1,678 @@
+---
+// Privacy Tools component for Bitcoin Resources page
+
+interface PrivacyTool {
+  title: string;
+  developer?: string;
+  type: string; // "Mixing Service", "Browser", "VPN", "OS", "Exchange", etc.
+  description?: string;
+  synopsis: string;
+  platforms: string[]; // ["Windows", "macOS", "Linux", "iOS", "Android", "Web"]
+  yearLaunched?: number;
+  lastUpdated?: string;
+  keyFeatures: string[];
+  whoShouldUse: string[];
+  links: {
+    official?: string;
+    github?: string;
+    download?: string;
+    documentation?: string;
+    tor?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  rating?: number;
+  openSource?: boolean;
+  freeToUse?: boolean;
+}
+
+const privacyTools: PrivacyTool[] = [
+  {
+    title: "Whirlpool",
+    developer: "Samourai Wallet",
+    type: "CoinJoin Service",
+    description: "Bitcoin mixing service providing strong privacy through collaborative transactions.",
+    synopsis: "Whirlpool is a sophisticated Bitcoin privacy solution that uses CoinJoin transactions to break the link between Bitcoin addresses. Developed by Samourai Wallet, Whirlpool implements the ZeroLink protocol to provide strong forward-looking anonymity. Users contribute their Bitcoin to shared pools where transactions are mixed with other users' funds, making it extremely difficult to trace the original source. The service operates with fixed denomination pools and provides ongoing mixing to maintain privacy over time. Whirlpool has been extensively tested and provides some of the strongest Bitcoin privacy available, though users should understand the legal and technical considerations involved.",
+    platforms: ["Android", "Desktop"],
+    yearLaunched: 2019,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "ZeroLink protocol implementation for strong privacy",
+      "Fixed denomination pools for optimal mixing",
+      "Continuous post-mix transactions for ongoing privacy",
+      "Integration with Samourai and Sparrow wallets",
+      "Tor-only operation for network-level privacy",
+      "Detailed mixing statistics and entropy calculations"
+    ],
+    whoShouldUse: [
+      "Privacy-conscious Bitcoin users",
+      "Those needing strong transaction privacy",
+      "Users in high-surveillance environments",
+      "People protecting financial privacy",
+      "Advanced Bitcoin users comfortable with mixing"
+    ],
+    links: {
+      official: "https://samouraiwallet.com/whirlpool",
+      documentation: "https://docs.samourai.io/whirlpool",
+      other: [
+        { name: "Sparrow Integration", url: "https://sparrowwallet.com/docs/mixing-whirlpool.html" }
+      ]
+    },
+    tags: ["CoinJoin", "Mixing", "Strong Privacy", "Advanced"],
+    difficulty: "Advanced",
+    rating: 4.6,
+    openSource: true,
+    freeToUse: false
+  },
+  {
+    title: "JoinMarket",
+    developer: "JoinMarket Contributors",
+    type: "Trustless Mixing",
+    description: "Decentralized Bitcoin mixing marketplace with economic incentives.",
+    synopsis: "JoinMarket is a decentralized Bitcoin privacy solution that creates a marketplace for CoinJoin transactions. Unlike centralized mixing services, JoinMarket allows users to either pay for privacy (takers) or earn fees by providing liquidity (makers). This economic model creates incentives for a robust mixing ecosystem while maintaining trustless operation. The system uses smart contracts and cryptographic protocols to ensure that participants cannot steal funds or compromise privacy. JoinMarket provides strong privacy guarantees while allowing users to earn income by participating in the network. It represents a innovative approach to Bitcoin privacy that aligns economic incentives with privacy goals.",
+    platforms: ["Linux", "Windows", "macOS"],
+    yearLaunched: 2015,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Trustless peer-to-peer mixing marketplace",
+      "Economic incentives for liquidity providers",
+      "Smart contract-based fund protection",
+      "Customizable privacy and fee parameters",
+      "PayJoin support for improved privacy",
+      "Command-line and GUI interfaces"
+    ],
+    whoShouldUse: [
+      "Advanced Bitcoin users seeking privacy",
+      "Those interested in earning mixing fees",
+      "Users wanting trustless mixing solutions",
+      "Privacy advocates and researchers",
+      "People comfortable with technical software"
+    ],
+    links: {
+      official: "https://joinmarket.me/",
+      github: "https://github.com/JoinMarket-Org/joinmarket-clientserver",
+      documentation: "https://joinmarket.me/ob/"
+    },
+    tags: ["Trustless", "Marketplace", "Economic Incentives", "Advanced"],
+    difficulty: "Advanced",
+    rating: 4.5,
+    openSource: true,
+    freeToUse: true
+  },
+  {
+    title: "Bisq",
+    developer: "Bisq Network",
+    type: "Decentralized Exchange",
+    description: "Peer-to-peer Bitcoin exchange preserving privacy and avoiding KYC.",
+    synopsis: "Bisq is a decentralized, peer-to-peer Bitcoin exchange that allows users to buy and sell Bitcoin without creating accounts or providing personal information. Built on Bitcoin and Tor technologies, Bisq enables private Bitcoin trading without the surveillance and control typical of centralized exchanges. The platform supports multiple payment methods and currencies while maintaining user privacy and security. Bisq uses a unique dispute resolution system and security deposits to ensure fair trading without requiring trust in third parties. For users seeking to acquire or sell Bitcoin while maintaining privacy, Bisq provides an essential service that aligns with Bitcoin's decentralized principles.",
+    platforms: ["Windows", "macOS", "Linux"],
+    yearLaunched: 2016,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Peer-to-peer Bitcoin trading without KYC",
+      "Multiple payment methods and currencies",
+      "Built-in Tor support for network privacy",
+      "Decentralized dispute resolution system",
+      "No personal data collection or storage",
+      "Global trading with local payment methods"
+    ],
+    whoShouldUse: [
+      "Users wanting to buy/sell Bitcoin privately",
+      "Those avoiding KYC requirements",
+      "Privacy-conscious traders",
+      "People in restrictive jurisdictions",
+      "Users supporting decentralized principles"
+    ],
+    links: {
+      official: "https://bisq.network/",
+      github: "https://github.com/bisq-network/bisq",
+      download: "https://bisq.network/downloads/",
+      documentation: "https://docs.bisq.network/"
+    },
+    tags: ["DEX", "P2P Trading", "No KYC", "Decentralized"],
+    difficulty: "Intermediate",
+    rating: 4.4,
+    openSource: true,
+    freeToUse: true
+  },
+  {
+    title: "Tor Browser",
+    developer: "The Tor Project",
+    type: "Privacy Browser",
+    description: "Anonymous web browsing protecting against surveillance and tracking.",
+    synopsis: "Tor Browser is a privacy-focused web browser that routes internet traffic through the Tor network to protect user privacy and anonymity. Essential for Bitcoin users concerned about network-level surveillance, Tor Browser prevents websites, internet service providers, and network monitors from tracking browsing activity. The browser includes built-in protections against fingerprinting, tracking, and surveillance. For Bitcoin users, Tor Browser is crucial for accessing wallets, exchanges, and Bitcoin services without revealing IP addresses or browsing patterns. Many Bitcoin privacy tools require or strongly recommend using Tor Browser for optimal security and privacy protection.",
+    platforms: ["Windows", "macOS", "Linux", "Android"],
+    yearLaunched: 2008,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Anonymous web browsing through Tor network",
+      "Built-in tracking and fingerprint protection",
+      "Automatic HTTPS and security upgrades",
+      "No browsing history or cookie persistence",
+      "Circumvention of censorship and surveillance",
+      "Integration with privacy-focused services"
+    ],
+    whoShouldUse: [
+      "Bitcoin users prioritizing network privacy",
+      "Those in surveillance or censorship environments",
+      "Privacy advocates and journalists",
+      "Users accessing sensitive financial services",
+      "Anyone wanting anonymous web browsing"
+    ],
+    links: {
+      official: "https://www.torproject.org/",
+      download: "https://www.torproject.org/download/",
+      documentation: "https://tb-manual.torproject.org/"
+    },
+    tags: ["Anonymity", "Web Browsing", "Essential", "Network Privacy"],
+    difficulty: "Beginner",
+    rating: 4.7,
+    openSource: true,
+    freeToUse: true
+  },
+  {
+    title: "Tails OS",
+    developer: "Tails Project",
+    type: "Privacy Operating System",
+    description: "Amnesic live operating system for maximum privacy and security.",
+    synopsis: "Tails (The Amnesic Incognito Live System) is a privacy-focused operating system designed to leave no traces on the computer being used. Running from a USB drive or DVD, Tails provides a complete desktop environment with built-in privacy tools including Tor Browser, encrypted communications, and secure file handling. When the session ends, all traces of activity are automatically erased. For Bitcoin users requiring maximum privacy and security, Tails provides an isolated, secure environment for managing Bitcoin wallets and conducting sensitive transactions. The system is particularly valuable for users in high-risk environments or those requiring the highest levels of operational security.",
+    platforms: ["Live USB/DVD"],
+    yearLaunched: 2009,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Complete amnesic operating system",
+      "All traffic routed through Tor network",
+      "Built-in encrypted communication tools",
+      "Secure file handling and encryption",
+      "No persistent traces on host computer",
+      "Comprehensive privacy and security toolkit"
+    ],
+    whoShouldUse: [
+      "Users requiring maximum operational security",
+      "High-risk individuals needing privacy protection",
+      "Journalists and activists",
+      "Bitcoin users in hostile environments",
+      "Those needing completely clean computing environments"
+    ],
+    links: {
+      official: "https://tails.boum.org/",
+      download: "https://tails.boum.org/install/",
+      documentation: "https://tails.boum.org/doc/"
+    },
+    tags: ["Operating System", "Maximum Privacy", "Amnesic", "High Security"],
+    difficulty: "Intermediate",
+    rating: 4.8,
+    openSource: true,
+    freeToUse: true
+  },
+  {
+    title: "Mullvad VPN",
+    developer: "Mullvad AB",
+    type: "Privacy VPN",
+    description: "Privacy-focused VPN service with anonymous account creation and Bitcoin payments.",
+    synopsis: "Mullvad VPN is a privacy-focused VPN service that prioritizes user anonymity and security. Unlike most VPN providers, Mullvad allows anonymous account creation without personal information and accepts Bitcoin payments for true anonymity. The service maintains a strict no-logs policy and has been independently audited for security. Mullvad's infrastructure is designed to protect user privacy, with features like anonymous account numbers, WireGuard protocol support, and the ability to pay with Bitcoin. For Bitcoin users concerned about network-level privacy and surveillance, Mullvad provides a trusted VPN solution that aligns with privacy principles and supports anonymous payment methods.",
+    platforms: ["Windows", "macOS", "Linux", "iOS", "Android"],
+    yearLaunched: 2009,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Anonymous account creation without personal data",
+      "Bitcoin payment support for true anonymity",
+      "Strict no-logs policy with independent audits",
+      "WireGuard and OpenVPN protocol support",
+      "Owned server infrastructure in privacy-friendly jurisdictions",
+      "Advanced privacy features and leak protection"
+    ],
+    whoShouldUse: [
+      "Bitcoin users needing network privacy",
+      "Those in censorship or surveillance regions",
+      "Privacy-conscious individuals and businesses",
+      "Users wanting anonymous VPN service",
+      "People requiring reliable privacy protection"
+    ],
+    links: {
+      official: "https://mullvad.net/",
+      documentation: "https://mullvad.net/en/help/"
+    },
+    tags: ["VPN", "Anonymous Payments", "No Logs", "Audited"],
+    difficulty: "Beginner",
+    rating: 4.6,
+    openSource: false,
+    freeToUse: false
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    🔒 Privacy Tools
+  </h3>
+  <div class="space-y-6">
+    {privacyTools.map((tool, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {tool.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-privacy-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {tool.freeToUse && (
+                <span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                  Free
+                </span>
+              )}
+              {tool.openSource && (
+                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                  Open Source
+                </span>
+              )}
+              {tool.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(tool.difficulty)}`}>
+                  {tool.difficulty}
+                </span>
+              )}
+              {tool.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${tool.rating}/5`}>
+                  {renderStars(tool.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{tool.type}</span>
+            {tool.developer && (
+              <>
+                <span>•</span>
+                <span>by {tool.developer}</span>
+              </>
+            )}
+            <span>•</span>
+            <span>{tool.platforms.join(", ")}</span>
+          </div>
+          {tool.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {tool.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {tool.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="privacy-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="privacy-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-red-50 to-pink-50 dark:from-red-900/20 dark:to-pink-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-red-100 dark:bg-red-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-red-600 dark:text-red-400 text-xl font-bold">🔒</span>
+          </div>
+          <div>
+            <h2 id="privacy-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="privacy-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="privacy-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Privacy Tool Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="privacy-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="privacy-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="privacy-modal-platforms" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="privacy-modal-free" class="text-sm"></div>
+            <div id="privacy-modal-opensource" class="text-sm"></div>
+            <div id="privacy-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Privacy Tool
+            </h3>
+            <div id="privacy-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">🛡️</span>
+              </span>
+              Privacy Features
+            </h3>
+            <ul id="privacy-modal-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Use -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Use This
+            </h3>
+            <ul id="privacy-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="privacy-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Access Links -->
+          <div id="privacy-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Access & Resources
+            </h3>
+            <div id="privacy-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              🛡️ Always verify software authenticity and understand privacy tool limitations before use.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ privacyToolsData: privacyTools }}>
+  // Modal functionality - data is injected from server-side
+  const privacyTools = privacyToolsData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showPrivacyModal(privacyIndex) {
+    const tool = privacyTools[privacyIndex];
+    const modal = document.getElementById('privacy-modal-overlay');
+    const modalContent = document.getElementById('privacy-modal');
+    
+    // Populate modal content
+    document.getElementById('privacy-modal-title').textContent = tool.title;
+    document.getElementById('privacy-modal-meta').textContent = tool.developer ? `by ${tool.developer}` : tool.type;
+    document.getElementById('privacy-modal-synopsis').textContent = tool.synopsis;
+    
+    // Rating and details
+    const ratingElement = document.getElementById('privacy-modal-rating');
+    if (tool.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(tool.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${tool.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Tool details
+    document.getElementById('privacy-modal-type').textContent = tool.type;
+    document.getElementById('privacy-modal-platforms').textContent = `Platforms: ${tool.platforms.join(", ")}`;
+    
+    const freeElement = document.getElementById('privacy-modal-free');
+    if (tool.freeToUse) {
+      freeElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">Free to Use</span>';
+    } else {
+      freeElement.innerHTML = '';
+    }
+    
+    const openSourceElement = document.getElementById('privacy-modal-opensource');
+    if (tool.openSource) {
+      openSourceElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">Open Source</span>';
+    } else {
+      openSourceElement.innerHTML = '';
+    }
+    
+    const difficultyElement = document.getElementById('privacy-modal-difficulty');
+    if (tool.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(tool.difficulty)}">${tool.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key features
+    const featuresElement = document.getElementById('privacy-modal-features');
+    featuresElement.innerHTML = tool.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">🛡️</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('privacy-modal-audience');
+    audienceElement.innerHTML = tool.whoShouldUse.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('privacy-modal-tags');
+    tagsElement.innerHTML = tool.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('privacy-modal-links');
+    const linkButtons = [];
+    
+    if (tool.links.official) {
+      linkButtons.push(`
+        <a href="${tool.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official Site</span>
+        </a>
+      `);
+    }
+    
+    if (tool.links.download) {
+      linkButtons.push(`
+        <a href="${tool.links.download}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>⬇️</span>
+          <span>Download</span>
+        </a>
+      `);
+    }
+    
+    if (tool.links.github) {
+      linkButtons.push(`
+        <a href="${tool.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (tool.links.documentation) {
+      linkButtons.push(`
+        <a href="${tool.links.documentation}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>Documentation</span>
+        </a>
+      `);
+    }
+    
+    if (tool.links.tor) {
+      linkButtons.push(`
+        <a href="${tool.links.tor}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+          <span>🧅</span>
+          <span>Tor Site</span>
+        </a>
+      `);
+    }
+    
+    if (tool.links.other) {
+      tool.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePrivacyModal() {
+    const modal = document.getElementById('privacy-modal-overlay');
+    const modalContent = document.getElementById('privacy-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const privacyIndex = parseInt(this.getAttribute('data-privacy-index'));
+        if (!isNaN(privacyIndex)) {
+          showPrivacyModal(privacyIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('privacy-close-modal').addEventListener('click', hidePrivacyModal);
+    
+    // Close on overlay click
+    document.getElementById('privacy-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('privacy-modal').contains(e.target)) {
+        hidePrivacyModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('privacy-modal-overlay').classList.contains('hidden')) {
+        hidePrivacyModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #privacy-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #privacy-modal-overlay:not(.hidden) #privacy-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

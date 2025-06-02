@@ -1,0 +1,591 @@
+---
+// Research Papers component for Bitcoin Resources page
+
+interface ResearchPaper {
+  title: string;
+  authors: string[];
+  year: number;
+  type: string; // "Whitepaper", "Academic Paper", "Technical Paper", etc.
+  description?: string;
+  abstract: string;
+  keyContributions: string[];
+  whoShouldRead: string[];
+  links: {
+    pdf?: string;
+    official?: string;
+    arxiv?: string;
+    github?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  citationCount?: number;
+  significance?: "Foundational" | "Important" | "Influential";
+  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+}
+
+const researchPapers: ResearchPaper[] = [
+  {
+    title: "Bitcoin: A Peer-to-Peer Electronic Cash System",
+    authors: ["Satoshi Nakamoto"],
+    year: 2008,
+    type: "Whitepaper",
+    description: "The original Bitcoin whitepaper that introduced the concept of decentralized digital currency.",
+    abstract: "A purely peer-to-peer version of electronic cash would allow online payments to be sent directly from one party to another without going through a financial institution. Digital signatures provide part of the solution, but the main benefits are lost if a trusted third party is still required to prevent double-spending. We propose a solution to the double-spending problem using a peer-to-peer network. The network timestamps transactions by hashing them into an ongoing chain of hash-based proof-of-work, forming a record that cannot be changed without redoing the proof-of-work. The longest chain not only serves as proof of the sequence of events witnessed, but proof that it came from the largest pool of CPU power.",
+    keyContributions: [
+      "Introduction of blockchain technology and distributed consensus",
+      "Solution to the double-spending problem without trusted third parties",
+      "Proof-of-work consensus mechanism design",
+      "Peer-to-peer electronic cash system architecture",
+      "Cryptographic foundations for digital currency",
+      "Economic incentive structure for network participants"
+    ],
+    whoShouldRead: [
+      "Anyone new to Bitcoin wanting to understand its foundations",
+      "Computer scientists and cryptographers",
+      "Economists studying digital currencies",
+      "Blockchain developers and researchers",
+      "Anyone interested in decentralized systems"
+    ],
+    links: {
+      pdf: "https://bitcoin.org/bitcoin.pdf",
+      official: "https://bitcoin.org/en/bitcoin-paper"
+    },
+    tags: ["Foundational", "Blockchain", "Consensus", "Cryptography", "Original"],
+    significance: "Foundational",
+    difficulty: "Intermediate",
+    citationCount: 15000
+  },
+  {
+    title: "The Bitcoin Lightning Network: Scalable Off-Chain Instant Payments",
+    authors: ["Joseph Poon", "Thaddeus Dryja"],
+    year: 2016,
+    type: "Technical Paper",
+    description: "Foundational paper describing the Lightning Network layer-2 scaling solution for Bitcoin.",
+    abstract: "The bitcoin protocol can encompass the global financial transaction volume in all electronic payment systems today, without a single custodial third party holding funds or requiring participants to have anything more than a computer using a broadband connection. A decentralized system is proposed which allows for millions to billions of transactions per second across the network. A network of these micropayment channels may provide a path to replace all financial institutions. The Bitcoin blockchain is used as a dispute mediation system which ensures that payments can be made without trusting any third parties, including the operators of micropayment channels.",
+    keyContributions: [
+      "Payment channel concept and bi-directional channels",
+      "Hash Time-Locked Contracts (HTLCs) for secure routing",
+      "Multi-hop payment routing through network topology",
+      "Instant, low-cost Bitcoin transactions solution",
+      "Scalability improvements for Bitcoin network",
+      "Smart contract applications on Bitcoin"
+    ],
+    whoShouldRead: [
+      "Bitcoin developers working on scaling solutions",
+      "Lightning Network implementers and users",
+      "Researchers studying layer-2 blockchain technologies",
+      "Payment system designers and architects",
+      "Anyone interested in Bitcoin's scalability"
+    ],
+    links: {
+      pdf: "https://lightning.network/lightning-network-paper.pdf",
+      official: "https://lightning.network/",
+      github: "https://github.com/lightning/bolts"
+    },
+    tags: ["Layer 2", "Scaling", "Payment Channels", "Smart Contracts", "Innovation"],
+    significance: "Foundational",
+    difficulty: "Advanced",
+    citationCount: 800
+  },
+  {
+    title: "Schnorr Signatures for secp256k1",
+    authors: ["Pieter Wuille", "Jonas Nick", "Tim Ruffing"],
+    year: 2020,
+    type: "Technical Specification",
+    description: "BIP 340 specification introducing Schnorr signatures to Bitcoin for improved efficiency and privacy.",
+    abstract: "This document proposes a standard for 64-byte Schnorr signatures over the elliptic curve secp256k1. Schnorr signatures have been known for a long time and are provably secure under standard assumptions. They also have a number of advantages compared to ECDSA signatures that make them more suitable for use in Bitcoin. Most importantly, they enable very efficient threshold signatures through algorithms like MuSig that allow multiple parties to collaboratively sign transactions. This makes possible more advanced Bitcoin applications while improving privacy and reducing transaction sizes.",
+    keyContributions: [
+      "Standardized Schnorr signature scheme for Bitcoin",
+      "Improved signature aggregation and batch verification",
+      "Enhanced privacy through signature indistinguishability",
+      "Foundation for advanced multi-signature schemes",
+      "Reduced transaction sizes and verification costs",
+      "Mathematical security proofs and implementation guidelines"
+    ],
+    whoShouldRead: [
+      "Cryptographers and security researchers",
+      "Bitcoin Core developers and contributors",
+      "Wallet developers implementing Schnorr signatures",
+      "Privacy-focused Bitcoin application developers",
+      "Anyone studying modern cryptographic protocols"
+    ],
+    links: {
+      official: "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      github: "https://github.com/bitcoin/bips/blob/master/bip-0340.mediawiki",
+      other: [
+        { name: "Reference Implementation", url: "https://github.com/bitcoin-core/secp256k1" }
+      ]
+    },
+    tags: ["Cryptography", "Protocol Upgrade", "Privacy", "Efficiency", "BIP"],
+    significance: "Important",
+    difficulty: "Advanced",
+    citationCount: 200
+  },
+  {
+    title: "Taproot: Privacy preserving switchable scripting",
+    authors: ["Pieter Wuille", "Jonas Nick", "Anthony Towns"],
+    year: 2021,
+    type: "Technical Specification",
+    description: "BIP 341 specification for Taproot, enabling more private and flexible Bitcoin smart contracts.",
+    abstract: "This document specifies the semantics of the initial version of the script system used in witness programs with version 1. These witness programs are also referred to as Taproot outputs. The design is based on the Taproot/Graftroot constructions by Greg Maxwell, and enables a number of improvements and simplifications compared to previous Bitcoin script versions. Most importantly, it allows the conditions under which a transaction output can be spent to be hidden until spending time, improving privacy. It also reduces the size of complex scripts and enables more advanced applications.",
+    keyContributions: [
+      "MAST (Merkelized Abstract Syntax Trees) implementation",
+      "Privacy improvements through script path hiding",
+      "More efficient complex smart contract execution",
+      "Schnorr signature integration with script commitments",
+      "Reduced transaction sizes for complex scripts",
+      "Enhanced scripting capabilities and flexibility"
+    ],
+    whoShouldRead: [
+      "Bitcoin developers building advanced applications",
+      "Smart contract designers and implementers",
+      "Privacy researchers and advocates",
+      "Bitcoin Core contributors and reviewers",
+      "Anyone interested in Bitcoin's scripting evolution"
+    ],
+    links: {
+      official: "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      github: "https://github.com/bitcoin/bips/blob/master/bip-0341.mediawiki",
+      other: [
+        { name: "Taproot Activation", url: "https://taproot.watch/" }
+      ]
+    },
+    tags: ["Smart Contracts", "Privacy", "Protocol Upgrade", "MAST", "BIP"],
+    significance: "Important",
+    difficulty: "Advanced",
+    citationCount: 150
+  },
+  {
+    title: "Mimblewimble",
+    authors: ["Tom Elvis Jedusor"],
+    year: 2016,
+    type: "Technical Paper",
+    description: "Innovative blockchain design focusing on privacy and scalability improvements.",
+    abstract: "Mimblewimble is a blockchain format and protocol that provides extremely good scalability, privacy and fungibility by relying on strong cryptographic primitives. It addresses gaps existing in almost all current blockchain implementations. Mimblewimble's transactions can be trivially aggregated. To hide the origin and destination of transactions, all values are encrypted with Pedersen commitments. A transaction is a pure function that takes some inputs and returns some outputs. The difference between outputs and inputs is either zero, for a valid transaction that moves funds, or the public key for a valid transaction that creates new funds.",
+    keyContributions: [
+      "Confidential transactions with Pedersen commitments",
+      "Transaction cut-through and blockchain compression",
+      "Enhanced privacy through confidential amounts",
+      "Scalable blockchain design with reduced storage requirements",
+      "Elimination of transaction graph analysis",
+      "Novel approach to UTXO set management"
+    ],
+    whoShouldRead: [
+      "Privacy researchers and cryptocurrency developers",
+      "Blockchain scalability researchers",
+      "Cryptographers studying zero-knowledge proofs",
+      "Developers of privacy-focused cryptocurrencies",
+      "Anyone interested in advanced blockchain designs"
+    ],
+    links: {
+      other: [
+        { name: "Original Document", url: "https://download.wpsoftware.net/bitcoin/wizardry/mimblewimble.txt" },
+        { name: "Grin Implementation", url: "https://grin.mw/" },
+        { name: "Beam Implementation", url: "https://beam.mw/" }
+      ]
+    },
+    tags: ["Privacy", "Scalability", "Confidential Transactions", "Innovation", "Research"],
+    significance: "Influential",
+    difficulty: "Advanced",
+    citationCount: 300
+  }
+];
+
+// Helper function to get significance badge color
+function getSignificanceColor(significance?: string): string {
+  switch (significance) {
+    case 'Foundational': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300';
+    case 'Important': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300';
+    case 'Influential': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    📄 Research Papers
+  </h3>
+  <div class="space-y-6">
+    {researchPapers.map((paper, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {paper.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-paper-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {paper.significance && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getSignificanceColor(paper.significance)}`}>
+                  {paper.significance}
+                </span>
+              )}
+              {paper.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(paper.difficulty)}`}>
+                  {paper.difficulty}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{paper.type}</span>
+            <span>•</span>
+            <span>by {paper.authors.join(", ")}</span>
+            <span>•</span>
+            <span>{paper.year}</span>
+            {paper.citationCount && (
+              <>
+                <span>•</span>
+                <span>{paper.citationCount.toLocaleString()} citations</span>
+              </>
+            )}
+          </div>
+          {paper.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {paper.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {paper.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="paper-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="paper-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-indigo-50 to-blue-50 dark:from-indigo-900/20 dark:to-blue-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-indigo-100 dark:bg-indigo-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-indigo-600 dark:text-indigo-400 text-xl font-bold">📄</span>
+          </div>
+          <div>
+            <h2 id="paper-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="paper-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="paper-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Paper Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="paper-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="paper-modal-year" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="paper-modal-citations" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="paper-modal-significance" class="text-sm"></div>
+            <div id="paper-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Abstract -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              Abstract
+            </h3>
+            <div id="paper-modal-abstract" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Contributions -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">💡</span>
+              </span>
+              Key Contributions
+            </h3>
+            <ul id="paper-modal-contributions" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Read -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Read This
+            </h3>
+            <ul id="paper-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Topics & Keywords
+            </h3>
+            <div id="paper-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Access Links -->
+          <div id="paper-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">📖</span>
+              </span>
+              Read & Access
+            </h3>
+            <div id="paper-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              📚 Most research papers are freely available for academic and educational use.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ researchPapersData: researchPapers }}>
+  // Modal functionality - data is injected from server-side
+  const researchPapers = researchPapersData;
+
+  function getSignificanceColor(significance) {
+    switch (significance) {
+      case 'Foundational': return 'bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300';
+      case 'Important': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300';
+      case 'Influential': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showPaperModal(paperIndex) {
+    const paper = researchPapers[paperIndex];
+    const modal = document.getElementById('paper-modal-overlay');
+    const modalContent = document.getElementById('paper-modal');
+    
+    // Populate modal content
+    document.getElementById('paper-modal-title').textContent = paper.title;
+    document.getElementById('paper-modal-meta').textContent = `by ${paper.authors.join(", ")}`;
+    document.getElementById('paper-modal-abstract').textContent = paper.abstract;
+    
+    // Paper details
+    document.getElementById('paper-modal-type').textContent = paper.type;
+    document.getElementById('paper-modal-year').textContent = `Published ${paper.year}`;
+    document.getElementById('paper-modal-citations').textContent = paper.citationCount ? `${paper.citationCount.toLocaleString()} citations` : '';
+    
+    const significanceElement = document.getElementById('paper-modal-significance');
+    if (paper.significance) {
+      significanceElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getSignificanceColor(paper.significance)}">${paper.significance}</span>`;
+    } else {
+      significanceElement.innerHTML = '';
+    }
+    
+    const difficultyElement = document.getElementById('paper-modal-difficulty');
+    if (paper.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(paper.difficulty)}">${paper.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key contributions
+    const contributionsElement = document.getElementById('paper-modal-contributions');
+    contributionsElement.innerHTML = paper.keyContributions.map(contribution => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">💡</span>
+        <span class="text-gray-700 dark:text-gray-300">${contribution}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('paper-modal-audience');
+    audienceElement.innerHTML = paper.whoShouldRead.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('paper-modal-tags');
+    tagsElement.innerHTML = paper.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('paper-modal-links');
+    const linkButtons = [];
+    
+    if (paper.links.pdf) {
+      linkButtons.push(`
+        <a href="${paper.links.pdf}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+          <span>📄</span>
+          <span>PDF</span>
+        </a>
+      `);
+    }
+    
+    if (paper.links.official) {
+      linkButtons.push(`
+        <a href="${paper.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official</span>
+        </a>
+      `);
+    }
+    
+    if (paper.links.arxiv) {
+      linkButtons.push(`
+        <a href="${paper.links.arxiv}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>arXiv</span>
+        </a>
+      `);
+    }
+    
+    if (paper.links.github) {
+      linkButtons.push(`
+        <a href="${paper.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (paper.links.other) {
+      paper.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePaperModal() {
+    const modal = document.getElementById('paper-modal-overlay');
+    const modalContent = document.getElementById('paper-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const paperIndex = parseInt(this.getAttribute('data-paper-index'));
+        if (!isNaN(paperIndex)) {
+          showPaperModal(paperIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('paper-close-modal').addEventListener('click', hidePaperModal);
+    
+    // Close on overlay click
+    document.getElementById('paper-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('paper-modal').contains(e.target)) {
+        hidePaperModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('paper-modal-overlay').classList.contains('hidden')) {
+        hidePaperModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #paper-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #paper-modal-overlay:not(.hidden) #paper-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

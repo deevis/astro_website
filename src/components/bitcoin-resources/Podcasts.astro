@@ -1,0 +1,612 @@
+---
+// Podcasts component for Bitcoin Resources page
+
+interface Podcast {
+  title: string;
+  host: string;
+  description?: string;
+  synopsis: string;
+  yearStarted?: number;
+  frequency?: string; // Weekly, Daily, etc.
+  episodeCount?: string; // "500+" or specific number
+  keyTopics: string[];
+  whoShouldListen: string[];
+  platforms: {
+    apple?: string;
+    spotify?: string;
+    google?: string;
+    youtube?: string;
+    website?: string;
+    rss?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  rating?: number;
+}
+
+const podcasts: Podcast[] = [
+  {
+    title: "What Bitcoin Did",
+    host: "Peter McCormack",
+    description: "Conversations with industry experts, exploring Bitcoin's impact on society and economics.",
+    synopsis: "What Bitcoin Did is one of the most popular Bitcoin podcasts, hosted by Peter McCormack. The show features in-depth conversations with Bitcoin experts, entrepreneurs, developers, and thought leaders from around the world. McCormack explores Bitcoin's technical aspects, economic implications, and cultural impact through engaging interviews. The podcast covers everything from Bitcoin fundamentals and market analysis to regulatory developments and technological innovations. With a focus on education and accessibility, What Bitcoin Did serves as an excellent entry point for newcomers while providing valuable insights for experienced Bitcoiners.",
+    yearStarted: 2017,
+    frequency: "3x per week",
+    episodeCount: "600+",
+    keyTopics: [
+      "Bitcoin economics and monetary theory",
+      "Industry interviews with key figures",
+      "Regulatory developments and policy discussions",
+      "Market analysis and investment strategies",
+      "Technical developments and protocol upgrades",
+      "Cultural and social impact of Bitcoin"
+    ],
+    whoShouldListen: [
+      "Bitcoin newcomers seeking comprehensive education",
+      "Anyone interested in industry insider perspectives",
+      "Investors wanting market insights and analysis",
+      "People curious about Bitcoin's broader implications",
+      "Those who enjoy interview-style content"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/what-bitcoin-did/id1317356120",
+      spotify: "https://open.spotify.com/show/0mWUJuONiilW5JSBBFZ0s7",
+      google: "https://podcasts.google.com/feed/aHR0cHM6Ly9mZWVkcy5idXp6c3Byb3V0LmNvbS8yNDM2NDQucnNz",
+      youtube: "https://www.youtube.com/@WhatBitcoinDid",
+      website: "https://www.whatbitcoindid.com/"
+    },
+    tags: ["Popular", "Interviews", "Beginner-Friendly", "Market Analysis"],
+    rating: 4.7
+  },
+  {
+    title: "The Bitcoin Standard Podcast",
+    host: "Saifedean Ammous",
+    description: "Deep dives into Bitcoin economics, Austrian school theory, and sound money principles.",
+    synopsis: "The Bitcoin Standard Podcast is hosted by economist Saifedean Ammous, author of 'The Bitcoin Standard' and 'The Fiat Standard'. The podcast explores Bitcoin through the lens of Austrian economics, offering deep analysis of monetary theory, economic history, and Bitcoin's role as sound money. Ammous combines academic rigor with practical insights, examining how Bitcoin relates to broader economic principles and historical monetary systems. The show features both solo episodes where Ammous shares his economic analysis and interviews with experts in economics, finance, and Bitcoin. It's essential listening for those interested in the theoretical foundations of Bitcoin and its economic implications.",
+    yearStarted: 2019,
+    frequency: "Weekly",
+    episodeCount: "200+",
+    keyTopics: [
+      "Austrian economics and monetary theory",
+      "Bitcoin as sound money and store of value",
+      "Economic history and fiat money critique",
+      "Time preference and capital formation",
+      "Bitcoin's role in economic freedom",
+      "Academic perspectives on cryptocurrency"
+    ],
+    whoShouldListen: [
+      "Students of economics and monetary theory",
+      "Readers of 'The Bitcoin Standard' book",
+      "Anyone interested in Austrian school economics",
+      "People seeking academic-level Bitcoin analysis",
+      "Those curious about Bitcoin's economic foundations"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/the-bitcoin-standard-podcast/id1488200711",
+      spotify: "https://open.spotify.com/show/1LOhSURlcOqZdB8G5xYXP8",
+      youtube: "https://www.youtube.com/@saifedean",
+      website: "https://saifedean.com/podcast/"
+    },
+    tags: ["Economics", "Academic", "Monetary Theory", "Austrian School"],
+    rating: 4.6
+  },
+  {
+    title: "Tales From The Crypt",
+    host: "Marty Bent",
+    description: "Bitcoin culture, technology, and philosophical discussions with a unique perspective.",
+    synopsis: "Tales From The Crypt, hosted by Marty Bent, offers a unique blend of Bitcoin technical analysis, cultural commentary, and philosophical exploration. Bent brings a distinctive voice to Bitcoin podcasting, combining deep technical knowledge with cultural insights and often irreverent humor. The show covers Bitcoin development, market dynamics, and the broader implications of decentralized money. Bent frequently discusses Bitcoin through the lens of freedom, self-sovereignty, and resistance to centralized control. The podcast features both solo episodes with Bent's commentary and interviews with Bitcoin developers, entrepreneurs, and thinkers. It's known for its authentic, unfiltered approach to Bitcoin discussion.",
+    yearStarted: 2018,
+    frequency: "Multiple per week",
+    episodeCount: "400+",
+    keyTopics: [
+      "Bitcoin technical development and protocol updates",
+      "Freedom and self-sovereignty themes",
+      "Bitcoin culture and community dynamics",
+      "Market analysis with philosophical context",
+      "Decentralization and censorship resistance",
+      "Bitcoin's role in preserving human freedom"
+    ],
+    whoShouldListen: [
+      "Bitcoin enthusiasts interested in culture and philosophy",
+      "People who appreciate unfiltered, authentic content",
+      "Those interested in Bitcoin's technical development",
+      "Anyone seeking a unique perspective on Bitcoin",
+      "Listeners who enjoy passionate, engaging hosts"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/tales-from-the-crypt/id1292381204",
+      spotify: "https://open.spotify.com/show/7fSoXkmGdoUpqP5SgtgX3p",
+      youtube: "https://www.youtube.com/@TFTC21",
+      website: "https://tftc.io/"
+    },
+    tags: ["Culture", "Philosophy", "Technical", "Freedom"],
+    rating: 4.5
+  },
+  {
+    title: "Stephan Livera Podcast",
+    host: "Stephan Livera",
+    description: "Technical Bitcoin education with focus on self-custody, privacy, and practical usage.",
+    synopsis: "The Stephan Livera Podcast focuses on practical Bitcoin education, emphasizing self-custody, privacy, and technical implementation. Stephan Livera, a Bitcoin educator and consultant, conducts detailed interviews with Bitcoin developers, educators, and industry experts. The show is particularly valuable for listeners wanting to understand the technical aspects of Bitcoin usage, including wallet management, privacy techniques, and security best practices. Livera's background in economics and his passion for Bitcoin education shine through in every episode. The podcast covers topics ranging from Lightning Network development to privacy technologies and practical Bitcoin adoption strategies.",
+    yearStarted: 2018,
+    frequency: "Weekly",
+    episodeCount: "500+",
+    keyTopics: [
+      "Self-custody and Bitcoin security practices",
+      "Privacy techniques and technologies",
+      "Lightning Network development and usage",
+      "Bitcoin wallet technology and best practices",
+      "Technical Bitcoin education and tutorials",
+      "Practical Bitcoin adoption strategies"
+    ],
+    whoShouldListen: [
+      "Bitcoin users wanting to improve their technical skills",
+      "Anyone interested in self-custody and security",
+      "Developers working with Bitcoin technology",
+      "Privacy-conscious Bitcoin users",
+      "People seeking practical Bitcoin education"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/stephan-livera-podcast/id1415720320",
+      spotify: "https://open.spotify.com/show/7dBuUrj5IsfBZB3P0XNSM5",
+      google: "https://podcasts.google.com/feed/aHR0cHM6Ly9zdGVwaGFubGl2ZXJhLmNvbS9mZWVkL3BvZGNhc3Qv",
+      youtube: "https://www.youtube.com/@StephanLivera",
+      website: "https://stephanlivera.com/"
+    },
+    tags: ["Technical", "Education", "Privacy", "Self-Custody"],
+    rating: 4.8
+  },
+  {
+    title: "Bitcoin Rapid-Fire",
+    host: "John Vallis",
+    description: "Deep philosophical and psychological exploration of Bitcoin's impact on human behavior.",
+    synopsis: "Bitcoin Rapid-Fire, hosted by John Vallis, offers some of the most thoughtful and philosophical Bitcoin content available. Vallis approaches Bitcoin from psychological, philosophical, and cultural perspectives, exploring how this technology affects human behavior, social structures, and individual psychology. The podcast features long-form conversations that dive deep into the implications of Bitcoin beyond just technology and economics. Vallis's background in psychology brings a unique lens to Bitcoin discussion, examining topics like time preference, delayed gratification, and the psychological effects of sound money. The show is known for its intellectual depth and nuanced exploration of complex topics.",
+    yearStarted: 2019,
+    frequency: "Monthly",
+    episodeCount: "100+",
+    keyTopics: [
+      "Psychology of money and human behavior",
+      "Philosophical implications of Bitcoin",
+      "Cultural and social impact of sound money",
+      "Time preference and delayed gratification",
+      "Bitcoin's effect on individual psychology",
+      "Deep exploration of complex societal topics"
+    ],
+    whoShouldListen: [
+      "People interested in Bitcoin's psychological aspects",
+      "Those who enjoy philosophical discussions",
+      "Anyone curious about Bitcoin's cultural impact",
+      "Listeners seeking intellectual, long-form content",
+      "Students of psychology and human behavior"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/bitcoin-rapid-fire/id1473484415",
+      spotify: "https://open.spotify.com/show/3ClBn0WzJEAPrVjOGNrP8m",
+      youtube: "https://www.youtube.com/@BitcoinRapidFire",
+      website: "https://johnvallis.com/"
+    },
+    tags: ["Philosophy", "Psychology", "Deep-Thinking", "Cultural"],
+    rating: 4.9
+  },
+  {
+    title: "The Breakdown",
+    host: "Nathaniel Whittemore (NLW)",
+    description: "Daily Bitcoin and crypto market analysis with macro-economic context.",
+    synopsis: "The Breakdown, hosted by Nathaniel Whittemore (known as NLW), provides daily analysis of Bitcoin and cryptocurrency markets within the broader context of macro-economics and global finance. NLW combines traditional financial analysis with deep Bitcoin knowledge to provide listeners with comprehensive market insights. The show covers daily market movements, regulatory developments, institutional adoption, and macro-economic trends that affect Bitcoin. NLW's background in traditional finance and his evolution into Bitcoin maximalism provides a unique perspective on how Bitcoin fits into the broader financial landscape. The podcast is essential for anyone wanting to understand Bitcoin's place in global markets.",
+    yearStarted: 2019,
+    frequency: "Daily",
+    episodeCount: "1000+",
+    keyTopics: [
+      "Daily Bitcoin and crypto market analysis",
+      "Macro-economic trends and Bitcoin correlation",
+      "Institutional Bitcoin adoption news",
+      "Regulatory developments and policy impacts",
+      "Traditional finance perspective on Bitcoin",
+      "Global economic trends affecting cryptocurrency"
+    ],
+    whoShouldListen: [
+      "Active Bitcoin traders and investors",
+      "Anyone interested in macro-economic analysis",
+      "People following institutional Bitcoin adoption",
+      "Traditional finance professionals exploring Bitcoin",
+      "Listeners wanting daily market updates"
+    ],
+    platforms: {
+      apple: "https://podcasts.apple.com/podcast/the-breakdown/id1438693620",
+      spotify: "https://open.spotify.com/show/5LwyPslJGFkG9VZ0Pt8PnD",
+      youtube: "https://www.youtube.com/@Breakdown_NLW",
+      website: "https://nlw.substack.com/"
+    },
+    tags: ["Daily", "Market Analysis", "Macro-Economics", "Trading"],
+    rating: 4.4
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    🎧 Podcasts
+  </h3>
+  <div class="space-y-6">
+    {podcasts.map((podcast, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {podcast.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-podcast-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {podcast.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${podcast.rating}/5`}>
+                  {renderStars(podcast.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>by {podcast.host}</span>
+            {podcast.frequency && (
+              <>
+                <span>•</span>
+                <span>{podcast.frequency}</span>
+              </>
+            )}
+            {podcast.episodeCount && (
+              <>
+                <span>•</span>
+                <span>{podcast.episodeCount} episodes</span>
+              </>
+            )}
+          </div>
+          {podcast.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {podcast.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {podcast.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="podcast-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="podcast-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-teal-50 dark:from-green-900/20 dark:to-teal-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-green-600 dark:text-green-400 text-xl font-bold">🎧</span>
+          </div>
+          <div>
+            <h2 id="podcast-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="podcast-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="podcast-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Podcast Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="podcast-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="podcast-modal-started" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="podcast-modal-frequency" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="podcast-modal-episodes" class="text-sm text-gray-600 dark:text-gray-400"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Podcast
+            </h3>
+            <div id="podcast-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Topics -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">💡</span>
+              </span>
+              Key Topics Covered
+            </h3>
+            <ul id="podcast-modal-topics" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Listen -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Listen
+            </h3>
+            <ul id="podcast-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="podcast-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Platform Links -->
+          <div id="podcast-modal-platform-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">📱</span>
+              </span>
+              Listen On
+            </h3>
+            <div id="podcast-modal-platform-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              📢 Choose your preferred podcast platform to start listening.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ podcastsData: podcasts }}>
+  // Modal functionality - data is injected from server-side
+  const podcasts = podcastsData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function showPodcastModal(podcastIndex) {
+    const podcast = podcasts[podcastIndex];
+    const modal = document.getElementById('podcast-modal-overlay');
+    const modalContent = document.getElementById('podcast-modal');
+    
+    // Populate modal content
+    document.getElementById('podcast-modal-title').textContent = podcast.title;
+    document.getElementById('podcast-modal-meta').textContent = `Hosted by ${podcast.host}`;
+    document.getElementById('podcast-modal-synopsis').textContent = podcast.synopsis;
+    
+    // Rating and details
+    const ratingElement = document.getElementById('podcast-modal-rating');
+    if (podcast.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(podcast.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${podcast.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Podcast details
+    document.getElementById('podcast-modal-started').textContent = podcast.yearStarted ? `Started ${podcast.yearStarted}` : '';
+    document.getElementById('podcast-modal-frequency').textContent = podcast.frequency ? `${podcast.frequency}` : '';
+    document.getElementById('podcast-modal-episodes').textContent = podcast.episodeCount ? `${podcast.episodeCount} episodes` : '';
+    
+    // Key topics
+    const topicsElement = document.getElementById('podcast-modal-topics');
+    topicsElement.innerHTML = podcast.keyTopics.map(topic => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">✓</span>
+        <span class="text-gray-700 dark:text-gray-300">${topic}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('podcast-modal-audience');
+    audienceElement.innerHTML = podcast.whoShouldListen.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('podcast-modal-tags');
+    tagsElement.innerHTML = podcast.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Platform links
+    const platformElement = document.getElementById('podcast-modal-platform-links');
+    const linkButtons = [];
+    
+    if (podcast.platforms.apple) {
+      linkButtons.push(`
+        <a href="${podcast.platforms.apple}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>🍎</span>
+          <span>Apple Podcasts</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.spotify) {
+      linkButtons.push(`
+        <a href="${podcast.platforms.spotify}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>🎵</span>
+          <span>Spotify</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.google) {
+      linkButtons.push(`
+        <a href="${podcast.platforms.google}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🎧</span>
+          <span>Google Podcasts</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.youtube) {
+      linkButtons.push(`
+        <a href="${podcast.platforms.youtube}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+          <span>📺</span>
+          <span>YouTube</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.website) {
+      linkButtons.push(`        <a href="${podcast.platforms.website}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Website</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.rss) {
+      linkButtons.push(`
+        <a href="${podcast.platforms.rss}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>📡</span>
+          <span>RSS Feed</span>
+        </a>
+      `);
+    }
+    
+    if (podcast.platforms.other) {
+      podcast.platforms.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+            <span>🌐</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    platformElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePodcastModal() {
+    const modal = document.getElementById('podcast-modal-overlay');
+    const modalContent = document.getElementById('podcast-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const podcastIndex = parseInt(this.getAttribute('data-podcast-index'));
+        showPodcastModal(podcastIndex);
+      });
+    });
+    
+    // Close modal
+    document.getElementById('podcast-close-modal').addEventListener('click', hidePodcastModal);
+    
+    // Close on overlay click
+    document.getElementById('podcast-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('podcast-modal').contains(e.target)) {
+        hidePodcastModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('podcast-modal-overlay').classList.contains('hidden')) {
+        hidePodcastModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #podcast-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #podcast-modal-overlay:not(.hidden) #podcast-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

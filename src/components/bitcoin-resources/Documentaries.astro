@@ -1,0 +1,603 @@
+---
+// Documentaries component for Bitcoin Resources page
+import YouTubeEmbed from '../YouTubeEmbed.astro';
+
+interface Documentary {
+  title: string;
+  director?: string;
+  year: number;
+  description?: string;
+  synopsis: string;
+  duration?: number; // in minutes
+  youtubeId?: string;
+  trailerYoutubeId?: string;
+  keyTakeaways: string[];
+  whoShouldWatch: string[];
+  watchLinks: {
+    youtube?: string;
+    amazon?: string;
+    netflix?: string;
+    hulu?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  rating?: number;
+}
+
+const documentaries: Documentary[] = [
+  {
+    title: "The Rise and Rise of Bitcoin",
+    director: "Nicholas Mross",
+    year: 2014,
+    description: "A compelling documentary following Bitcoin's early adoption and the people behind it.",
+    synopsis: "The Rise and Rise of Bitcoin is a documentary that traces the meteoric rise of Bitcoin, the world's first cryptocurrency. Following computer programmer and Bitcoin enthusiast Daniel Mross (the filmmaker's brother), the film explores the early days of Bitcoin from 2011 to 2013. Through interviews with key figures in the Bitcoin community including entrepreneurs, investors, and early adopters, the documentary provides an intimate look at the people building this revolutionary technology. It captures the excitement, uncertainty, and potential of Bitcoin during its formative years, showing both the promise and the challenges faced by this emerging digital currency.",
+    duration: 96,
+    youtubeId: "zMOmykPXsmU",
+    keyTakeaways: [
+      "Bitcoin's early community and culture of innovation",
+      "The challenges and opportunities in early cryptocurrency adoption",
+      "Personal stories of Bitcoin pioneers and entrepreneurs",
+      "The intersection of technology and finance in the digital age",
+      "How Bitcoin began disrupting traditional financial systems"
+    ],
+    whoShouldWatch: [
+      "Anyone new to Bitcoin wanting historical context",
+      "People interested in technology entrepreneurship",
+      "Those curious about early cryptocurrency culture",
+      "Viewers who enjoy personal stories behind innovations",
+      "Anyone wanting to understand Bitcoin's origins"
+    ],
+    watchLinks: {
+      youtube: "https://www.youtube.com/watch?v=zMOmykPXsmU",
+      amazon: "https://amazon.com/dp/B00MZ9LXFS?tag=darrenhicksde-20"
+    },
+    tags: ["Historical", "Beginner-Friendly", "Personal Stories", "Early Bitcoin"],
+    rating: 4.2
+  },
+  {
+    title: "Banking on Bitcoin",
+    director: "Christopher Cannucciari",
+    year: 2016,
+    description: "Explores the controversy and potential of Bitcoin as it challenges traditional banking.",
+    synopsis: "Banking on Bitcoin takes viewers on a journey through the wild early years of Bitcoin's development and adoption. The documentary examines the cryptocurrency's potential to revolutionize the global financial system while also exploring the controversies and challenges it faces. Featuring interviews with Bitcoin pioneers, financial experts, and regulators, the film presents multiple perspectives on Bitcoin's impact. From its mysterious origins with Satoshi Nakamoto to its potential to bank the unbanked globally, the documentary explores both the promise and the perils of this groundbreaking technology. It delves into the technical aspects of blockchain technology while making it accessible to general audiences.",
+    duration: 83,
+    youtubeId: "yW0TzIUYmEQ",
+    keyTakeaways: [
+      "How Bitcoin challenges traditional banking systems",
+      "The potential for financial inclusion globally",
+      "Regulatory challenges and government responses",
+      "Technical explanation of blockchain technology",
+      "Different perspectives on Bitcoin's future impact"
+    ],
+    whoShouldWatch: [
+      "People interested in financial technology disruption",
+      "Those wanting to understand regulatory perspectives",
+      "Viewers curious about global financial inclusion",
+      "Anyone seeking balanced views on Bitcoin",
+      "Students of economics and finance"
+    ],
+    watchLinks: {
+      youtube: "https://www.youtube.com/watch?v=yW0TzIUYmEQ",
+      amazon: "https://amazon.com/dp/B01MA65QKV?tag=darrenhicksde-20",
+      netflix: "https://netflix.com/title/80154500"
+    },
+    tags: ["Financial Technology", "Regulation", "Balanced View", "Accessible"],
+    rating: 4.1
+  },
+  {
+    title: "The Bitcoin Phenomenon",
+    director: "Torsten Hoffmann",
+    year: 2014,
+    description: "German documentary examining Bitcoin's potential to reshape the global economy.",
+    synopsis: "The Bitcoin Phenomenon is a comprehensive German documentary that examines Bitcoin from multiple angles - technological, economic, and social. Director Torsten Hoffmann presents Bitcoin as more than just a digital currency, exploring its potential to fundamentally reshape how we think about money and economic systems. The film features interviews with leading Bitcoin developers, economists, and entrepreneurs who explain the technology's implications for society. Through careful analysis and expert commentary, the documentary explores both the revolutionary potential and the challenges facing Bitcoin adoption. It presents a thoughtful examination of how this technology might transform not just finance, but our entire economic paradigm.",
+    duration: 95,
+    youtubeId: "6pWblf8COH4",
+    keyTakeaways: [
+      "Bitcoin's potential to reshape global economic systems",
+      "Technical foundations explained for general audiences",
+      "European perspective on cryptocurrency adoption",
+      "Social and economic implications of decentralized money",
+      "Expert analysis from developers and economists"
+    ],
+    whoShouldWatch: [
+      "Viewers interested in economic theory and Bitcoin",
+      "Those seeking international perspectives on crypto",
+      "People wanting technical explanations made accessible",
+      "Anyone interested in systemic economic change",
+      "Students of monetary systems and innovation"
+    ],
+    watchLinks: {
+      youtube: "https://www.youtube.com/watch?v=6pWblf8COH4",
+      other: [
+        { name: "Vimeo", url: "https://vimeo.com/ondemand/bitcoinphenomenon" }
+      ]
+    },
+    tags: ["Economic Theory", "Technical", "International", "Comprehensive"],
+    rating: 4.3
+  },
+  {
+    title: "Magic Money: The Bitcoin Revolution",
+    director: "Tim Delmastro",
+    year: 2017,
+    description: "Explores Bitcoin's revolutionary potential through expert interviews and analysis.",
+    synopsis: "Magic Money: The Bitcoin Revolution presents Bitcoin as a paradigm shift that could fundamentally change the global financial system. Through interviews with leading figures in the cryptocurrency space, including developers, entrepreneurs, and financial experts, the documentary explores how Bitcoin's underlying blockchain technology enables peer-to-peer transactions without intermediaries. The film examines Bitcoin's potential to provide financial services to the unbanked, reduce transaction costs, and create a more equitable global financial system. It also addresses common criticisms and concerns about Bitcoin, providing a balanced view of both its potential benefits and challenges. The documentary aims to educate viewers about the revolutionary aspects of this technology.",
+    duration: 58,
+    youtubeId: "PVo5wCSnmSs",
+    keyTakeaways: [
+      "Understanding Bitcoin as a revolutionary technology",
+      "How blockchain enables trustless peer-to-peer transactions",
+      "Potential for financial inclusion and reduced costs",
+      "Expert perspectives on Bitcoin's future development",
+      "Balanced examination of benefits and challenges"
+    ],
+    whoShouldWatch: [
+      "Those new to Bitcoin seeking comprehensive overview",
+      "People interested in financial innovation",
+      "Viewers wanting expert perspectives on blockchain",
+      "Anyone curious about cryptocurrency's revolutionary potential",
+      "Students learning about digital currencies"
+    ],
+    watchLinks: {
+      youtube: "https://www.youtube.com/watch?v=PVo5wCSnmSs",
+      amazon: "https://amazon.com/dp/B06XW2XLJQ?tag=darrenhicksde-20"
+    },
+    tags: ["Revolutionary", "Expert Interviews", "Educational", "Comprehensive"],
+    rating: 4.0
+  },
+  {
+    title: "Human B",
+    director: "Elena Gaby & Antonio Santini",
+    year: 2021,
+    description: "A personal journey exploring Bitcoin's impact on individuals and communities.",
+    synopsis: "Human B is an intimate documentary that explores Bitcoin through personal stories and human experiences rather than technical explanations. Directors Elena Gaby and Antonio Santini follow individuals whose lives have been touched by Bitcoin in various ways - from early adopters and entrepreneurs to people in developing countries using Bitcoin for financial inclusion. The film examines how Bitcoin affects real people's lives, showing both successes and struggles. Rather than focusing on price movements or technical details, Human B explores the human side of the Bitcoin revolution, including stories of hope, innovation, and the search for financial freedom. It presents Bitcoin as a tool that can empower individuals and communities.",
+    duration: 88,
+    youtubeId: "RFSBWrAllzw",
+    keyTakeaways: [
+      "Personal stories of Bitcoin adoption and impact",
+      "How Bitcoin affects individuals in different circumstances",
+      "The human side of financial technology innovation",
+      "Stories of empowerment and financial inclusion",
+      "Real-world applications beyond speculation"
+    ],
+    whoShouldWatch: [
+      "Anyone interested in human stories behind technology",
+      "People curious about Bitcoin's real-world impact",
+      "Viewers who prefer personal narratives to technical content",
+      "Those interested in financial inclusion stories",
+      "Anyone seeking emotional connection to Bitcoin's purpose"
+    ],
+    watchLinks: {
+      youtube: "https://www.youtube.com/watch?v=RFSBWrAllzw",
+      other: [
+        { name: "Official Website", url: "https://humanb.film/" }
+      ]
+    },
+    tags: ["Personal Stories", "Human Impact", "Financial Inclusion", "Emotional"],
+    rating: 4.4
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    🎬 Documentaries
+  </h3>
+  <div class="space-y-6">
+    {documentaries.map((doc, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-doc-index={index}
+                  title="Click to view details">
+                {doc.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-doc-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {doc.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${doc.rating}/5`}>
+                  {renderStars(doc.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>({doc.year})</span>
+            {doc.director && (
+              <>
+                <span>•</span>
+                <span>by {doc.director}</span>
+              </>
+            )}
+            {doc.duration && (
+              <>
+                <span>•</span>
+                <span>{doc.duration} min</span>
+              </>
+            )}
+          </div>
+          {doc.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {doc.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {doc.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="doc-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="doc-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-purple-50 to-pink-50 dark:from-purple-900/20 dark:to-pink-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-purple-100 dark:bg-purple-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-purple-600 dark:text-purple-400 text-xl font-bold">🎬</span>
+          </div>
+          <div>
+            <h2 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <a id="doc-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="doc-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Video Player -->
+          <div id="modal-video-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-red-100 dark:bg-red-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-red-600 dark:text-red-400 text-sm">▶️</span>
+              </span>
+              Watch Documentary
+            </h3>
+            <div id="modal-video" class="mb-4"></div>
+          </div>
+
+          <!-- Documentary Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="modal-rating" class="flex items-center space-x-2"></div>
+            <div id="modal-year" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="modal-duration" class="text-sm text-gray-600 dark:text-gray-400"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              Synopsis
+            </h3>
+            <div id="modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Takeaways -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">💡</span>
+              </span>
+              Key Takeaways
+            </h3>
+            <ul id="modal-takeaways" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Watch -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Watch This
+            </h3>
+            <ul id="modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Topics
+            </h3>
+            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Watch Links -->
+          <div id="modal-watch-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">📺</span>
+              </span>
+              Where to Watch
+            </h3>
+            <div id="modal-watch-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              📢 Disclosure: Some links may contain affiliate codes that help support this site at no extra cost to you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ documentariesData: documentaries }}>
+  // Modal functionality - data is injected from server-side
+  const documentaries = documentariesData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function showDocModal(docIndex) {
+    const doc = documentaries[docIndex];
+    const modal = document.getElementById('doc-modal-overlay');
+    const modalContent = document.getElementById('doc-modal');
+    
+    // Populate modal content
+    document.getElementById('modal-title').textContent = doc.title;
+    document.getElementById('modal-meta').textContent = `${doc.year}${doc.director ? ' • by ' + doc.director : ''}`;
+    document.getElementById('modal-synopsis').textContent = doc.synopsis;
+    
+    // Set external link
+    const externalLink = document.getElementById('doc-external-link');
+    const mainLink = doc.watchLinks.youtube || doc.watchLinks.netflix || doc.watchLinks.amazon || (doc.watchLinks.other && doc.watchLinks.other[0]?.url);
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
+    
+    // Video section
+    const videoElement = document.getElementById('modal-video');
+    if (doc.youtubeId) {
+      videoElement.innerHTML = `
+        <div class="aspect-video rounded-lg overflow-hidden">
+          <iframe
+            src="https://www.youtube.com/embed/${doc.youtubeId}"
+            title="${doc.title}"
+            allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+            allowfullscreen
+            class="w-full h-full"
+          ></iframe>
+        </div>
+      `;
+    } else {
+      document.getElementById('modal-video-section').style.display = 'none';
+    }
+    
+    // Rating and details
+    const ratingElement = document.getElementById('modal-rating');
+    if (doc.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(doc.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${doc.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Year and duration
+    document.getElementById('modal-year').textContent = `Released ${doc.year}`;
+    document.getElementById('modal-duration').textContent = doc.duration ? `${doc.duration} minutes` : '';
+    
+    // Key takeaways
+    const takeawaysElement = document.getElementById('modal-takeaways');
+    takeawaysElement.innerHTML = doc.keyTakeaways.map(takeaway => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">✓</span>
+        <span class="text-gray-700 dark:text-gray-300">${takeaway}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('modal-audience');
+    audienceElement.innerHTML = doc.whoShouldWatch.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('modal-tags');
+    tagsElement.innerHTML = doc.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Watch links
+    const watchElement = document.getElementById('modal-watch-links');
+    const linkButtons = [];
+    
+    if (doc.watchLinks.youtube) {
+      linkButtons.push(`
+        <a href="${doc.watchLinks.youtube}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+          <span>📺</span>
+          <span>YouTube</span>
+        </a>
+      `);
+    }
+    
+    if (doc.watchLinks.netflix) {
+      linkButtons.push(`
+        <a href="${doc.watchLinks.netflix}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-600 hover:bg-red-700 text-white rounded-lg transition-colors">
+          <span>🎬</span>
+          <span>Netflix</span>
+        </a>
+      `);
+    }
+    
+    if (doc.watchLinks.amazon) {
+      linkButtons.push(`
+        <a href="${doc.watchLinks.amazon}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>📦</span>
+          <span>Amazon</span>
+        </a>
+      `);
+    }
+    
+    if (doc.watchLinks['hulu']) {
+      linkButtons.push(`
+        <a href="${doc.watchLinks['hulu']}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📡</span>
+          <span>Hulu</span>
+        </a>
+      `);
+    }
+    
+    if (doc.watchLinks.other) {
+      doc.watchLinks.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+            <span>🌐</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    watchElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideDocModal() {
+    const modal = document.getElementById('doc-modal-overlay');
+    const modalContent = document.getElementById('doc-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const docIndex = parseInt(this.getAttribute('data-doc-index'));
+        showDocModal(docIndex);
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-doc-index]').forEach(title => {
+      title.addEventListener('click', function() {
+        const docIndex = parseInt(this.getAttribute('data-doc-index'));
+        showDocModal(docIndex);
+      });
+    });
+    
+    // Close modal
+    document.getElementById('doc-close-modal').addEventListener('click', hideDocModal);
+    
+    // Close on overlay click
+    document.getElementById('doc-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('doc-modal').contains(e.target)) {
+        hideDocModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('doc-modal-overlay').classList.contains('hidden')) {
+        hideDocModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #doc-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #doc-modal-overlay:not(.hidden) #doc-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

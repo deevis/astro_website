@@ -1,0 +1,783 @@
+---
+// Educational Platforms component for Bitcoin Resources page
+
+interface EducationalPlatform {
+  title: string;
+  provider?: string;
+  type: string; // "Course Platform", "Interactive Tool", "Community", "Tutorial Series", etc.
+  description?: string;
+  synopsis: string;
+  platforms: string[]; // ["Web", "Mobile App", "Video", "Interactive"]
+  yearLaunched?: number;
+  lastUpdated?: string;
+  keyFeatures: string[];
+  whoShouldUse: string[];
+  links: {
+    official?: string;
+    courses?: string;
+    community?: string;
+    mobile?: string;
+    youtube?: string;
+    github?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  difficulty?: "Beginner" | "Intermediate" | "Advanced" | "All Levels";
+  rating?: number;
+  freeToUse?: boolean;
+  requiresRegistration?: boolean;
+}
+
+const educationalPlatforms: EducationalPlatform[] = [
+  {
+    title: "Bitcoin Tutorial (Our Guide)",
+    provider: "This Website",
+    type: "Tutorial Series",
+    description: "Comprehensive Bitcoin tutorial covering fundamentals to advanced concepts.",
+    synopsis: "Our comprehensive Bitcoin tutorial series is designed to take complete beginners through advanced Bitcoin concepts in a structured, easy-to-understand format. Starting with basic questions like 'What is Bitcoin?' and progressing through technical topics like mining, transactions, and the Lightning Network, our tutorial provides a complete educational journey. Each section builds upon previous knowledge and includes practical examples, real-world applications, and hands-on exercises. The tutorial is regularly updated to reflect the latest developments in Bitcoin technology and includes interactive elements to help reinforce learning. Perfect for anyone wanting a thorough understanding of Bitcoin from the ground up.",
+    platforms: ["Web"],
+    yearLaunched: 2023,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Progressive learning from basics to advanced topics",
+      "Practical examples and real-world applications",
+      "Regular updates with latest Bitcoin developments",
+      "Interactive elements and exercises",
+      "Comprehensive coverage of all Bitcoin aspects",
+      "Easy-to-understand explanations for technical concepts"
+    ],
+    whoShouldUse: [
+      "Complete Bitcoin beginners",
+      "Anyone wanting comprehensive Bitcoin knowledge",
+      "Students studying cryptocurrency",
+      "Professionals entering the Bitcoin space",
+      "Those seeking structured learning progression"
+    ],
+    links: {
+      official: "/bitcoin-tutorial"
+    },
+    tags: ["Comprehensive", "Beginner-Friendly", "Progressive", "Updated"],
+    difficulty: "All Levels",
+    rating: 4.8,
+    freeToUse: true,
+    requiresRegistration: false
+  },
+  {
+    title: "Saylor Academy - Bitcoin for Everyone",
+    provider: "Saylor Academy",
+    type: "Free Course Platform",
+    description: "Free Bitcoin education courses supported by Michael Saylor and MicroStrategy.",
+    synopsis: "Saylor Academy's Bitcoin for Everyone course provides comprehensive Bitcoin education supported by Michael Saylor and MicroStrategy. The course covers Bitcoin's monetary properties, technological foundations, and economic implications through high-quality video content and structured curriculum. Featuring expert instructors and industry leaders, the course explores topics from basic Bitcoin concepts to advanced economic theory. The platform includes interactive elements, quizzes, and supplementary materials to enhance learning. As a completely free resource backed by one of Bitcoin's most prominent corporate advocates, Saylor Academy provides institutional-quality Bitcoin education accessible to everyone worldwide.",
+    platforms: ["Web", "Mobile App"],
+    yearLaunched: 2021,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "High-quality video content with expert instructors",
+      "Comprehensive curriculum from basics to advanced topics",
+      "Interactive quizzes and assessments",
+      "Mobile app for learning on-the-go",
+      "Corporate backing ensuring long-term availability",
+      "Industry expert guest lectures and insights"
+    ],
+    whoShouldUse: [
+      "Students seeking structured Bitcoin education",
+      "Professionals wanting comprehensive understanding",
+      "Anyone interested in Bitcoin's economic aspects",
+      "Those preferring video-based learning",
+      "People wanting institutional-quality free education"
+    ],
+    links: {
+      official: "https://learn.saylor.org/",
+      courses: "https://learn.saylor.org/course/PRDV151",
+      mobile: "https://www.saylor.org/mobile/"
+    },
+    tags: ["Free", "Video Courses", "Comprehensive", "Mobile App"],
+    difficulty: "All Levels",
+    rating: 4.7,
+    freeToUse: true,
+    requiresRegistration: true
+  },
+  {
+    title: "MIT OpenCourseWare - Blockchain",
+    provider: "MIT",
+    type: "Academic Courses",
+    description: "University-level blockchain and cryptocurrency courses from MIT.",
+    synopsis: "MIT OpenCourseWare provides university-level courses on blockchain technology and cryptocurrencies, offering the same high-quality education available to MIT students. The courses, taught by renowned professors like Gary Gensler, cover blockchain fundamentals, cryptocurrency economics, smart contracts, and regulatory considerations. Materials include lecture videos, reading lists, assignments, and exams from actual MIT classes. The content approaches Bitcoin and blockchain from academic and regulatory perspectives, providing deep theoretical understanding alongside practical applications. These courses are ideal for students, professionals, and researchers seeking rigorous, academic-quality blockchain education from one of the world's leading technology institutions.",
+    platforms: ["Web", "Video"],
+    yearLaunched: 2018,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "University-level academic rigor and quality",
+      "Lectures from renowned MIT professors",
+      "Complete course materials including assignments",
+      "Academic and regulatory perspectives on blockchain",
+      "Deep theoretical and practical understanding",
+      "Free access to premium educational content"
+    ],
+    whoShouldUse: [
+      "Students and academics studying blockchain",
+      "Professionals wanting rigorous technical education",
+      "Researchers in blockchain and cryptocurrency",
+      "Those seeking academic-quality free education",
+      "Anyone interested in regulatory perspectives"
+    ],
+    links: {
+      official: "https://ocw.mit.edu/",
+      courses: "https://ocw.mit.edu/courses/15-s12-blockchain-and-money-fall-2018/",
+      youtube: "https://www.youtube.com/playlist?list=PLUl4u3cNGP63UUkfL0onkxF6MYgVa04Fn"
+    },
+    tags: ["Academic", "University Level", "Technical", "Free"],
+    difficulty: "Advanced",
+    rating: 4.9,
+    freeToUse: true,
+    requiresRegistration: false
+  },
+  {
+    title: "Khan Academy - Bitcoin Basics",
+    provider: "Khan Academy",
+    type: "Educational Platform",
+    description: "Free, accessible Bitcoin education integrated into Khan Academy's learning platform.",
+    synopsis: "Khan Academy's Bitcoin course provides clear, accessible education about Bitcoin fundamentals integrated into their proven educational platform. Known for making complex topics understandable, Khan Academy breaks down Bitcoin concepts into digestible lessons with visual explanations, interactive exercises, and progress tracking. The course covers cryptographic basics, how Bitcoin transactions work, mining concepts, and the economic implications of digital currency. Built with Khan Academy's pedagogical expertise, the course uses their signature teaching methods including visual demonstrations and step-by-step explanations. Perfect for learners who prefer Khan Academy's structured, visual approach to education.",
+    platforms: ["Web", "Mobile App"],
+    yearLaunched: 2013,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Clear, visual explanations of complex concepts",
+      "Interactive exercises and progress tracking",
+      "Khan Academy's proven pedagogical approach",
+      "Integration with broader economics curriculum",
+      "Mobile app for convenient learning",
+      "Visual demonstrations and animations"
+    ],
+    whoShouldUse: [
+      "Visual learners preferring clear explanations",
+      "Students already familiar with Khan Academy",
+      "Those wanting basic Bitcoin understanding",
+      "People preferring structured, guided learning",
+      "Anyone seeking free, quality educational content"
+    ],
+    links: {
+      official: "https://www.khanacademy.org/",
+      courses: "https://www.khanacademy.org/economics-finance-domain/core-finance/money-and-banking/bitcoin/v/bitcoin-what-is-it",
+      mobile: "https://www.khanacademy.org/downloads"
+    },
+    tags: ["Visual Learning", "Interactive", "Beginner-Friendly", "Mobile"],
+    difficulty: "Beginner",
+    rating: 4.5,
+    freeToUse: true,
+    requiresRegistration: true
+  },
+  {
+    title: "Bitcoin Wiki",
+    provider: "Bitcoin Community",
+    type: "Knowledge Base",
+    description: "Comprehensive community-maintained Bitcoin knowledge repository.",
+    synopsis: "The Bitcoin Wiki serves as the most comprehensive, community-maintained repository of Bitcoin knowledge available online. Covering everything from basic concepts to highly technical implementation details, the wiki provides detailed explanations, tutorials, and reference materials for all aspects of Bitcoin. Maintained by the Bitcoin community and regularly updated by contributors worldwide, it offers authoritative information on Bitcoin protocol, development, mining, security, and much more. The wiki format allows for detailed exploration of topics with extensive cross-referencing and links to additional resources. It's an invaluable reference for developers, researchers, and anyone seeking deep, technical understanding of Bitcoin.",
+    platforms: ["Web"],
+    yearLaunched: 2010,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Comprehensive coverage of all Bitcoin topics",
+      "Community-maintained and regularly updated",
+      "Technical depth and implementation details",
+      "Extensive cross-referencing and links",
+      "Historical documentation and development",
+      "Multiple languages and international perspectives"
+    ],
+    whoShouldUse: [
+      "Developers working with Bitcoin",
+      "Researchers studying Bitcoin technology",
+      "Advanced users seeking technical details",
+      "Anyone needing comprehensive reference material",
+      "Contributors to Bitcoin ecosystem"
+    ],
+    links: {
+      official: "https://en.bitcoin.it/",
+      other: [
+        { name: "Developer Documentation", url: "https://en.bitcoin.it/wiki/Developer_Documentation" },
+        { name: "Technical Standards", url: "https://en.bitcoin.it/wiki/Protocol_documentation" }
+      ]
+    },
+    tags: ["Technical", "Reference", "Community", "Comprehensive"],
+    difficulty: "Advanced",
+    rating: 4.6,
+    freeToUse: true,
+    requiresRegistration: false
+  },
+  {
+    title: "Blockchain Demo",
+    provider: "Anders Brownworth",
+    type: "Interactive Tool",
+    description: "Visual, interactive demonstration of blockchain concepts.",
+    synopsis: "Blockchain Demo is an innovative, interactive educational tool created by Anders Brownworth that visually demonstrates how blockchain technology works. Through hands-on interaction with hash functions, blocks, and chains, users can directly observe how changes affect the blockchain structure. The tool starts with basic hash concepts and progressively builds to show how blocks are linked, how mining works, and how the blockchain maintains integrity. By allowing users to modify values and immediately see the results, it provides intuitive understanding of abstract concepts. This visual, experimental approach makes complex cryptographic and blockchain concepts accessible to learners who benefit from hands-on exploration.",
+    platforms: ["Web", "Interactive"],
+    yearLaunched: 2016,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Interactive visualization of blockchain concepts",
+      "Hands-on experimentation with hash functions",
+      "Progressive learning from basics to complex topics",
+      "Immediate visual feedback on changes",
+      "No registration required for immediate use",
+      "Open source and publicly available"
+    ],
+    whoShouldUse: [
+      "Visual and kinesthetic learners",
+      "Those struggling with abstract blockchain concepts",
+      "Educators teaching blockchain technology",
+      "Students needing hands-on learning tools",
+      "Anyone preferring experimental learning"
+    ],
+    links: {
+      official: "https://andersbrownworth.com/blockchain/",
+      github: "https://github.com/anders94/blockchain-demo"
+    },
+    tags: ["Interactive", "Visual", "Hands-on", "Experimental"],
+    difficulty: "Beginner",
+    rating: 4.8,
+    freeToUse: true,
+    requiresRegistration: false
+  },
+  {
+    title: "Bitcoin Talk Forum",
+    provider: "Bitcoin Community",
+    type: "Community Forum",
+    description: "The original Bitcoin community forum for discussion and learning.",
+    synopsis: "Bitcoin Talk is the original and most established Bitcoin community forum, founded by Satoshi Nakamoto in 2009. As the birthplace of Bitcoin discussion, it hosts the most comprehensive archive of Bitcoin development, philosophy, and community discourse. The forum covers every aspect of Bitcoin from technical development and mining to economics and speculation. With sections for beginners, developers, altcoins, and marketplace discussions, Bitcoin Talk provides a complete Bitcoin community experience. While the forum can be overwhelming for newcomers due to its size and history, it remains the definitive source for Bitcoin community knowledge, development discussions, and historical context.",
+    platforms: ["Web"],
+    yearLaunched: 2009,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Original Bitcoin community founded by Satoshi",
+      "Comprehensive archive of Bitcoin history",
+      "Active development and technical discussions",
+      "Beginner-friendly sections and tutorials",
+      "Marketplace and services sections",
+      "Global community with diverse perspectives"
+    ],
+    whoShouldUse: [
+      "Those seeking historical Bitcoin context",
+      "Developers participating in Bitcoin development",
+      "Community members wanting deep engagement",
+      "Researchers studying Bitcoin evolution",
+      "Anyone interested in comprehensive Bitcoin discourse"
+    ],
+    links: {
+      official: "https://bitcointalk.org/",
+      other: [
+        { name: "Beginner Section", url: "https://bitcointalk.org/index.php?board=39.0" },
+        { name: "Development Discussion", url: "https://bitcointalk.org/index.php?board=6.0" }
+      ]
+    },
+    tags: ["Original Community", "Historical", "Technical", "Comprehensive"],
+    difficulty: "All Levels",
+    rating: 4.4,
+    freeToUse: true,
+    requiresRegistration: true
+  },
+  {
+    title: "Bitcoin Stack Exchange",
+    provider: "Stack Exchange Network",
+    type: "Q&A Platform",
+    description: "Professional question and answer platform for Bitcoin technical questions.",
+    synopsis: "Bitcoin Stack Exchange is the premier question and answer platform for Bitcoin technical questions, part of the Stack Exchange network known for high-quality, expertly answered technical content. The platform focuses on providing accurate, detailed answers to specific Bitcoin questions from basic concepts to advanced technical challenges. With a robust reputation system and expert moderation, Bitcoin Stack Exchange maintains high standards for both questions and answers. The searchable format makes it an excellent resource for finding solutions to specific Bitcoin problems. Whether you're debugging a technical issue, understanding a protocol detail, or seeking clarification on Bitcoin concepts, Bitcoin Stack Exchange provides reliable, expert answers.",
+    platforms: ["Web", "Mobile App"],
+    yearLaunched: 2011,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "High-quality, expert-verified answers",
+      "Robust reputation and moderation system",
+      "Searchable database of Bitcoin Q&A",
+      "Technical focus with detailed explanations",
+      "Integration with Stack Exchange network",
+      "Mobile app for convenient access"
+    ],
+    whoShouldUse: [
+      "Developers with specific technical questions",
+      "Anyone needing expert answers to Bitcoin questions",
+      "Those preferring structured Q&A format",
+      "People seeking reliable, verified information",
+      "Users familiar with Stack Exchange platforms"
+    ],
+    links: {
+      official: "https://bitcoin.stackexchange.com/",
+      mobile: "https://stackexchange.com/mobile"
+    },
+    tags: ["Q&A", "Technical", "Expert Answers", "Searchable"],
+    difficulty: "Intermediate",
+    rating: 4.7,
+    freeToUse: true,
+    requiresRegistration: true
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    case 'All Levels': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    🎓 Educational Platforms
+  </h3>
+  <div class="space-y-6">
+    {educationalPlatforms.map((platform, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-platform-index={index}
+                  title="Click to view details">
+                {platform.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-platform-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {platform.freeToUse && (
+                <span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                  Free
+                </span>
+              )}
+              {platform.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(platform.difficulty)}`}>
+                  {platform.difficulty}
+                </span>
+              )}
+              {platform.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${platform.rating}/5`}>
+                  {renderStars(platform.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{platform.type}</span>
+            {platform.provider && (
+              <>
+                <span>•</span>
+                <span>by {platform.provider}</span>
+              </>
+            )}
+            <span>•</span>
+            <span>{platform.platforms.join(", ")}</span>
+          </div>
+          {platform.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {platform.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {platform.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="platform-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="platform-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-blue-600 dark:text-blue-400 text-xl font-bold">🎓</span>
+          </div>
+          <div>
+            <h2 id="platform-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="platform-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <a id="platform-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="platform-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Platform Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="platform-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="platform-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="platform-modal-platforms" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="platform-modal-free" class="text-sm"></div>
+            <div id="platform-modal-registration" class="text-sm"></div>
+            <div id="platform-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Platform
+            </h3>
+            <div id="platform-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">⭐</span>
+              </span>
+              Key Features
+            </h3>
+            <ul id="platform-modal-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Use -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Use This
+            </h3>
+            <ul id="platform-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="platform-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Access Links -->
+          <div id="platform-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Access Platform
+            </h3>
+            <div id="platform-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              📚 Continuous learning is key to understanding Bitcoin's evolving ecosystem.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ educationalPlatformsData: educationalPlatforms }}>
+  // Modal functionality - data is injected from server-side
+  const educationalPlatforms = educationalPlatformsData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      case 'All Levels': return 'bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showPlatformModal(platformIndex) {
+    const platform = educationalPlatforms[platformIndex];
+    const modal = document.getElementById('platform-modal-overlay');
+    const modalContent = document.getElementById('platform-modal');
+    
+    // Populate modal content
+    document.getElementById('platform-modal-title').textContent = platform.title;
+    document.getElementById('platform-modal-meta').textContent = platform.provider ? `by ${platform.provider}` : platform.type;
+    document.getElementById('platform-modal-synopsis').textContent = platform.synopsis;
+    
+    // Set external link
+    const externalLink = document.getElementById('platform-external-link');
+    const mainLink = platform.links.official || platform.links.courses || (platform.links.other && platform.links.other[0]?.url);
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
+    
+    // Rating and details
+    const ratingElement = document.getElementById('platform-modal-rating');
+    if (platform.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(platform.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${platform.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Platform details
+    document.getElementById('platform-modal-type').textContent = platform.type;
+    document.getElementById('platform-modal-platforms').textContent = `Available on: ${platform.platforms.join(", ")}`;
+    
+    const freeElement = document.getElementById('platform-modal-free');
+    if (platform.freeToUse) {
+      freeElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">Free to Use</span>';
+    } else {
+      freeElement.innerHTML = '';
+    }
+    
+    const registrationElement = document.getElementById('platform-modal-registration');
+    if (platform.requiresRegistration) {
+      registrationElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-orange-100 dark:bg-orange-900/30 text-orange-700 dark:text-orange-300">Registration Required</span>';
+    } else {
+      registrationElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">No Registration</span>';
+    }
+    
+    const difficultyElement = document.getElementById('platform-modal-difficulty');
+    if (platform.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(platform.difficulty)}">${platform.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key features
+    const featuresElement = document.getElementById('platform-modal-features');
+    featuresElement.innerHTML = platform.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">⭐</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('platform-modal-audience');
+    audienceElement.innerHTML = platform.whoShouldUse.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('platform-modal-tags');
+    tagsElement.innerHTML = platform.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('platform-modal-links');
+    const linkButtons = [];
+    
+    if (platform.links.official) {
+      linkButtons.push(`
+        <a href="${platform.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Visit Platform</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.courses) {
+      linkButtons.push(`
+        <a href="${platform.links.courses}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>View Courses</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.mobile) {
+      linkButtons.push(`
+        <a href="${platform.links.mobile}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>📱</span>
+          <span>Mobile App</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.youtube) {
+      linkButtons.push(`
+        <a href="${platform.links.youtube}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-colors">
+          <span>📺</span>
+          <span>YouTube</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.community) {
+      linkButtons.push(`
+        <a href="${platform.links.community}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>👥</span>
+          <span>Community</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.github) {
+      linkButtons.push(`
+        <a href="${platform.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (platform.links.other) {
+      platform.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hidePlatformModal() {
+    const modal = document.getElementById('platform-modal-overlay');
+    const modalContent = document.getElementById('platform-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const platformIndex = parseInt(this.getAttribute('data-platform-index'));
+        if (!isNaN(platformIndex)) {
+          showPlatformModal(platformIndex);
+        }
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-platform-index]').forEach(title => {
+      title.addEventListener('click', function() {
+        const platformIndex = parseInt(this.getAttribute('data-platform-index'));
+        if (!isNaN(platformIndex)) {
+          showPlatformModal(platformIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('platform-close-modal').addEventListener('click', hidePlatformModal);
+    
+    // Close on overlay click
+    document.getElementById('platform-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('platform-modal').contains(e.target)) {
+        hidePlatformModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('platform-modal-overlay').classList.contains('hidden')) {
+        hidePlatformModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #platform-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #platform-modal-overlay:not(.hidden) #platform-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

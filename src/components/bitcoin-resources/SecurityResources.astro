@@ -1,0 +1,745 @@
+---
+// Security Resources component for Bitcoin Resources page
+
+interface SecurityResource {
+  title: string;
+  category: 'Storage' | 'Privacy' | 'OpSec' | 'Advanced';
+  difficulty: 'Beginner' | 'Intermediate' | 'Advanced';
+  description: string;
+  synopsis: string;
+  author?: string;
+  url?: string;
+  keyPoints: string[];
+  whatYoullLearn: string[];
+  prerequisites: string[];
+  links: {
+    official?: string;
+    guide?: string;
+    tutorial?: string;
+    tools?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  importance: number; // 1-5 scale
+}
+
+const securityResources: SecurityResource[] = [
+  {
+    title: "Glacier Protocol",
+    category: "Storage",
+    difficulty: "Advanced",
+    description: "Comprehensive cold storage protocol for maximum Bitcoin security.",
+    synopsis: "The Glacier Protocol is a step-by-step process for storing bitcoins in a highly secure way. It was designed to provide strong protection against theft while also protecting against loss. The protocol is optimized for storing large amounts of bitcoins for long periods of time without touching them. It uses a multi-signature approach combined with physical security measures to create an extremely robust storage solution. The protocol includes detailed procedures for key generation, storage, and recovery, making it suitable for individuals and institutions that need the highest level of security.",
+    author: "Glacier Team",
+    keyPoints: [
+      "Multi-signature cold storage with geographic distribution",
+      "Detailed step-by-step security procedures",
+      "Protection against both theft and loss scenarios",
+      "Designed for long-term storage of large amounts",
+      "Includes operational security and disaster recovery"
+    ],
+    whatYoullLearn: [
+      "How to set up multi-sig cold storage securely",
+      "Proper key generation and entropy procedures",
+      "Geographic distribution strategies",
+      "Operational security best practices",
+      "Disaster recovery and inheritance planning"
+    ],
+    prerequisites: [
+      "Strong understanding of Bitcoin basics",
+      "Familiarity with hardware wallets",
+      "Understanding of multi-signature concepts",
+      "Willingness to follow detailed procedures"
+    ],
+    links: {
+      official: "https://glacierprotocol.org/",
+      guide: "https://glacierprotocol.org/docs/overview/"
+    },
+    tags: ["Cold Storage", "Multi-sig", "Advanced", "Institutional"],
+    importance: 5
+  },
+  {
+    title: "Bitcoin Security Guide",
+    category: "Storage",
+    difficulty: "Intermediate",
+    description: "Comprehensive security guide by Bitcoin expert Jameson Lopp.",
+    synopsis: "Jameson Lopp's Bitcoin Security Guide is one of the most comprehensive resources for securing your Bitcoin holdings. It covers everything from basic security principles to advanced setups for high-net-worth individuals. The guide provides practical advice on wallet selection, backup strategies, physical security, and operational security. It includes detailed comparisons of different security models and helps readers understand the trade-offs between security and convenience. The guide is regularly updated to reflect the latest security best practices and emerging threats in the Bitcoin ecosystem.",
+    author: "Jameson Lopp",
+    keyPoints: [
+      "Comprehensive wallet security strategies",
+      "Physical and digital security considerations",
+      "Security model comparisons and trade-offs",
+      "Practical implementation guidance",
+      "Regular updates with latest threats and solutions"
+    ],
+    whatYoullLearn: [
+      "How to evaluate different security models",
+      "Proper backup and recovery procedures",
+      "Physical security for Bitcoin storage",
+      "Operational security for Bitcoin users",
+      "How to balance security with usability"
+    ],
+    prerequisites: [
+      "Basic understanding of Bitcoin wallets",
+      "Awareness of common security threats",
+      "Willingness to implement security measures"
+    ],
+    links: {
+      official: "https://blog.lopp.net/how-to-secure-your-bitcoin/",
+      guide: "https://bitcoinsecurity.guide/"
+    },
+    tags: ["Comprehensive", "Practical", "Updated", "Expert"],
+    importance: 4
+  },
+  {
+    title: "Seed Phrase Security",
+    category: "Storage",
+    difficulty: "Beginner",
+    description: "Essential guide to protecting your wallet seed phrases and recovery words.",
+    synopsis: "Seed phrase security is fundamental to Bitcoin ownership, yet many users don't properly understand how to protect their recovery words. This guide covers the critical importance of seed phrases, common mistakes users make, and best practices for storing them securely. It explains the difference between various backup methods including paper, metal, and digital storage, along with their respective security trade-offs. The guide also covers advanced topics like passphrase protection, decoy wallets, and geographic distribution of backups.",
+    keyPoints: [
+      "Understanding the critical importance of seed phrases",
+      "Common mistakes and how to avoid them",
+      "Physical backup methods and materials",
+      "Digital backup security considerations",
+      "Advanced protection with passphrases"
+    ],
+    whatYoullLearn: [
+      "How to properly generate and store seed phrases",
+      "Different backup materials and their durability",
+      "How to test and verify your backups",
+      "Passphrase protection strategies",
+      "Planning for inheritance and emergency access"
+    ],
+    prerequisites: [
+      "Basic understanding of Bitcoin wallets",
+      "Knowledge of what seed phrases are"
+    ],
+    links: {
+      guide: "https://blog.lopp.net/metal-bitcoin-seed-storage-stress-test/",
+      tools: [
+        { name: "Jameson Lopp's Seed Tests", url: "https://jlopp.github.io/metal-bitcoin-storage-reviews/" },
+        { name: "Steel Wallet Reviews", url: "https://safu.ninja/" }
+      ]
+    },
+    tags: ["Fundamental", "Beginner", "Backup", "Recovery"],
+    importance: 5
+  },
+  {
+    title: "Multi-sig Setup Guide",
+    category: "Storage",
+    difficulty: "Advanced",
+    description: "Complete guide to setting up multi-signature Bitcoin wallets for enhanced security.",
+    synopsis: "Multi-signature (multi-sig) wallets require multiple signatures to authorize Bitcoin transactions, providing superior security compared to single-signature wallets. This comprehensive guide covers the fundamentals of multi-sig technology, different setup configurations (2-of-3, 3-of-5, etc.), and practical implementation using various wallet software. It explains the trade-offs between security and convenience, backup strategies for multi-sig setups, and how to plan for key loss scenarios. The guide includes step-by-step instructions for setting up multi-sig wallets with popular software and hardware wallet combinations.",
+    keyPoints: [
+      "Understanding multi-sig technology and benefits",
+      "Different multi-sig configurations and use cases",
+      "Software and hardware wallet compatibility",
+      "Backup and recovery strategies for multi-sig",
+      "Operational considerations and best practices"
+    ],
+    whatYoullLearn: [
+      "How multi-signature technology works",
+      "How to choose the right multi-sig configuration",
+      "Step-by-step multi-sig wallet setup",
+      "Backup strategies for multiple keys",
+      "How to handle key loss and recovery scenarios"
+    ],
+    prerequisites: [
+      "Strong understanding of Bitcoin transactions",
+      "Experience with hardware wallets",
+      "Understanding of backup and recovery concepts"
+    ],
+    links: {
+      guide: "https://bitcoinmagazine.com/guides/multisig-bitcoin-guide",
+      tutorial: "https://blog.keys.casa/the-ultimate-guide-to-bitcoin-multisig-security/",
+      tools: [
+        { name: "Electrum Multi-sig Guide", url: "https://electrum.readthedocs.io/en/latest/multisig.html" },
+        { name: "Casa Multi-sig", url: "https://keys.casa/" }
+      ]
+    },
+    tags: ["Multi-sig", "Advanced", "Enterprise", "High Security"],
+    importance: 4
+  },
+  {
+    title: "Privacy Guide",
+    category: "Privacy",
+    difficulty: "Intermediate",
+    description: "Comprehensive guide to protecting your privacy when using Bitcoin.",
+    synopsis: "Bitcoin transactions are recorded on a public blockchain, making privacy a critical concern for users who want to protect their financial information. This guide covers the fundamentals of Bitcoin privacy, common privacy mistakes, and advanced techniques for maintaining anonymity. It explains concepts like address reuse, transaction clustering, and blockchain analysis, while providing practical solutions including coin mixing, privacy-focused wallets, and proper transaction management. The guide also covers network-level privacy, including Tor usage and running your own Bitcoin node.",
+    keyPoints: [
+      "Understanding Bitcoin's privacy limitations",
+      "Common privacy mistakes and how to avoid them",
+      "Privacy-enhancing techniques and tools",
+      "Network-level privacy considerations",
+      "Balancing privacy with practicality"
+    ],
+    whatYoullLearn: [
+      "How blockchain analysis works and its limitations",
+      "Proper address and UTXO management",
+      "Privacy-focused wallet selection and usage",
+      "Network privacy tools and techniques",
+      "How to evaluate and improve your privacy practices"
+    ],
+    prerequisites: [
+      "Understanding of Bitcoin transactions and addresses",
+      "Basic knowledge of blockchain technology",
+      "Awareness of privacy threats and goals"
+    ],
+    links: {
+      official: "https://en.bitcoin.it/wiki/Privacy",
+      guide: "https://bitcoinprivacy.guide/",
+      tools: [
+        { name: "Bitcoin Privacy Wiki", url: "https://en.bitcoin.it/wiki/Privacy" },
+        { name: "Privacy-focused Wallets", url: "https://bitcoinprivacy.guide/wallets.html" }
+      ]
+    },
+    tags: ["Privacy", "Anonymity", "Blockchain Analysis", "Network Security"],
+    importance: 4
+  },
+  {
+    title: "VPN Setup for Bitcoin",
+    category: "Privacy",
+    difficulty: "Beginner",
+    description: "Guide to using VPNs for enhanced privacy in Bitcoin transactions.",
+    synopsis: "Using a VPN (Virtual Private Network) is one of the most accessible ways to enhance your privacy when using Bitcoin. This guide explains how VPNs work, why they're important for Bitcoin users, and how to choose and configure a VPN service properly. It covers the different types of VPN protocols, logging policies, and jurisdiction considerations. The guide also explains how to verify your VPN is working correctly and provides recommendations for privacy-focused VPN services that accept Bitcoin payments.",
+    keyPoints: [
+      "Understanding how VPNs enhance Bitcoin privacy",
+      "Choosing the right VPN service and protocol",
+      "Proper VPN configuration and testing",
+      "VPN limitations and additional privacy measures",
+      "Bitcoin-accepting VPN services"
+    ],
+    whatYoullLearn: [
+      "How to select a privacy-focused VPN service",
+      "Proper VPN configuration for maximum privacy",
+      "How to verify your VPN is working correctly",
+      "Understanding VPN limitations and complementary tools",
+      "How to pay for VPN services with Bitcoin"
+    ],
+    prerequisites: [
+      "Basic understanding of internet networking",
+      "Awareness of privacy threats online"
+    ],
+    links: {
+      guide: "https://bitcoinprivacy.guide/vpn.html",
+      tools: [
+        { name: "Privacy-focused VPN List", url: "https://privacyguides.org/vpn/" },
+        { name: "VPN Comparison", url: "https://thatoneprivacysite.net/" }
+      ]
+    },
+    tags: ["VPN", "Network Privacy", "Beginner", "Accessible"],
+    importance: 3
+  },
+  {
+    title: "Secure Communication",
+    category: "OpSec",
+    difficulty: "Beginner",
+    description: "Essential tools and practices for secure communication in the Bitcoin space.",
+    synopsis: "Secure communication is essential for Bitcoin users, especially when discussing holdings, transactions, or seeking help with technical issues. This guide covers encrypted messaging apps, secure email services, and best practices for communicating about Bitcoin-related topics. It explains the importance of end-to-end encryption, metadata protection, and secure key exchange. The guide also covers operational security considerations when communicating about Bitcoin, including what information to share and with whom.",
+    keyPoints: [
+      "Importance of encrypted communication for Bitcoin users",
+      "Recommended secure messaging and email apps",
+      "Understanding encryption and metadata protection",
+      "Operational security in Bitcoin communications",
+      "Safe practices for seeking Bitcoin-related help"
+    ],
+    whatYoullLearn: [
+      "How to set up and use encrypted messaging apps",
+      "Choosing secure email services and practices",
+      "Understanding different types of encryption",
+      "What Bitcoin information to keep private",
+      "How to safely participate in Bitcoin communities"
+    ],
+    prerequisites: [
+      "Basic understanding of digital privacy concepts"
+    ],
+    links: {
+      tools: [
+        { name: "Signal Messenger", url: "https://signal.org/" },
+        { name: "ProtonMail", url: "https://proton.me/mail" },
+        { name: "Tutanota", url: "https://tutanota.com/" }
+      ]
+    },
+    tags: ["Communication", "Encryption", "OpSec", "Privacy"],
+    importance: 3
+  },
+  {
+    title: "Physical Security",
+    category: "OpSec",
+    difficulty: "Intermediate",
+    description: "Protecting your Bitcoin-related devices and storage from physical threats.",
+    synopsis: "Physical security is often overlooked but critical for Bitcoin protection. This guide covers strategies for protecting computers, hardware wallets, and backup materials from theft, damage, and unauthorized access. It includes recommendations for secure storage locations, physical security devices, and operational security practices. The guide also covers travel security, home security improvements, and how to protect against sophisticated physical attacks including evil maid attacks and hardware tampering.",
+    keyPoints: [
+      "Securing devices used for Bitcoin transactions",
+      "Physical protection of backup materials",
+      "Home and office security improvements",
+      "Travel security for Bitcoin users",
+      "Protection against advanced physical threats"
+    ],
+    whatYoullLearn: [
+      "How to secure Bitcoin-related devices and storage",
+      "Physical security best practices for homes and offices",
+      "Safe travel practices for Bitcoin users",
+      "How to detect and prevent physical tampering",
+      "Emergency procedures for physical security breaches"
+    ],
+    prerequisites: [
+      "Understanding of Bitcoin storage methods",
+      "Basic awareness of physical security concepts"
+    ],
+    links: {
+      guide: "https://blog.lopp.net/physical-bitcoin-attacks/",
+      tools: [
+        { name: "Security Safes Guide", url: "https://blog.lopp.net/home-security-for-bitcoin-investors/" }
+      ]
+    },
+    tags: ["Physical Security", "Devices", "Storage", "OpSec"],
+    importance: 4
+  },
+  {
+    title: "Estate Planning",
+    category: "Advanced",
+    difficulty: "Advanced",
+    description: "Planning for Bitcoin inheritance and emergency access scenarios.",
+    synopsis: "Estate planning for Bitcoin presents unique challenges due to its decentralized nature and cryptographic security. This comprehensive guide covers strategies for ensuring your Bitcoin can be safely inherited while maintaining security during your lifetime. It explains different inheritance models, from simple solutions for small amounts to sophisticated multi-party schemes for larger holdings. The guide covers legal considerations, technical implementation options, and how to balance security with accessibility for beneficiaries.",
+    keyPoints: [
+      "Unique challenges of Bitcoin inheritance",
+      "Different inheritance models and strategies",
+      "Legal and technical implementation considerations",
+      "Balancing security with beneficiary access",
+      "Testing and maintaining inheritance plans"
+    ],
+    whatYoullLearn: [
+      "How to create a secure Bitcoin inheritance plan",
+      "Different technical approaches to Bitcoin inheritance",
+      "Legal considerations and documentation needs",
+      "How to prepare beneficiaries for Bitcoin inheritance",
+      "Testing and updating your inheritance strategy"
+    ],
+    prerequisites: [
+      "Advanced understanding of Bitcoin security",
+      "Experience with Bitcoin storage methods",
+      "Understanding of estate planning concepts"
+    ],
+    links: {
+      guide: "https://blog.lopp.net/bitcoin-estate-planning/",
+      tools: [
+        { name: "Casa Inheritance", url: "https://keys.casa/inheritance/" },
+        { name: "Unchained Inheritance", url: "https://unchained-capital.com/inheritance/" }
+      ]
+    },
+    tags: ["Estate Planning", "Inheritance", "Legal", "Advanced"],
+    importance: 4
+  },
+  {
+    title: "Hardware Wallet Security",
+    category: "Storage",
+    difficulty: "Intermediate",
+    description: "Complete guide to securely using and storing hardware wallets.",
+    synopsis: "Hardware wallets are considered the gold standard for Bitcoin storage security, but they must be used correctly to provide their security benefits. This guide covers everything from initial setup and verification to advanced security practices and attack mitigation. It explains how hardware wallets work, their security model, and potential vulnerabilities. The guide includes best practices for purchasing, initializing, using, and storing hardware wallets, as well as backup and recovery procedures.",
+    keyPoints: [
+      "Understanding hardware wallet security models",
+      "Proper purchase, setup, and verification procedures",
+      "Best practices for daily usage and storage",
+      "Backup and recovery strategies",
+      "Advanced security considerations and attack mitigation"
+    ],
+    whatYoullLearn: [
+      "How to securely purchase and verify hardware wallets",
+      "Proper initialization and backup procedures",
+      "Daily usage best practices and security habits",
+      "How to detect and respond to potential compromises",
+      "Advanced features and security configurations"
+    ],
+    prerequisites: [
+      "Basic understanding of Bitcoin wallets",
+      "Familiarity with Bitcoin transactions"
+    ],
+    links: {
+      guide: "https://blog.lopp.net/hardware-wallet-attacks/",
+      tutorial: "https://bitcoinmagazine.com/guides/how-to-use-hardware-wallet",
+      tools: [
+        { name: "Hardware Wallet Reviews", url: "https://blog.lopp.net/metal-bitcoin-seed-storage-stress-test/" }
+      ]
+    },
+    tags: ["Hardware Wallets", "Cold Storage", "Security", "Best Practices"],
+    importance: 4
+  }
+];
+
+// Helper function to render importance stars
+function renderImportance(importance: number): string {
+  return '★'.repeat(importance) + '☆'.repeat(5 - importance);
+}
+---
+
+<div class="grid md:grid-cols-2 gap-6">
+  <!-- Security Best Practices -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      🛡️ Security Best Practices
+    </h3>
+    <div class="space-y-4">
+      {securityResources.filter(resource => resource.category === 'Storage').map((resource, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-resource-index={securityResources.indexOf(resource)}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {resource.difficulty}
+              </span>
+              <span class="text-yellow-500 text-sm" title={`Importance: ${resource.importance}/5`}>
+                {renderImportance(resource.importance)}
+              </span>
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+            {resource.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Operational Security -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      🔐 Operational Security
+    </h3>
+    <div class="space-y-4">
+      {securityResources.filter(resource => ['Privacy', 'OpSec', 'Advanced'].includes(resource.category)).map((resource, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-resource-index={securityResources.indexOf(resource)}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {resource.difficulty}
+              </span>
+              <span class="text-yellow-500 text-sm" title={`Importance: ${resource.importance}/5`}>
+                {renderImportance(resource.importance)}
+              </span>
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+            {resource.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="security-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="security-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-blue-600 dark:text-blue-400 text-xl font-bold">🛡️</span>
+          </div>
+          <div>
+            <h2 id="security-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="security-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="security-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Resource Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="security-modal-importance" class="flex items-center space-x-2"></div>
+            <div id="security-modal-difficulty" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="security-modal-category" class="text-sm text-gray-600 dark:text-gray-400"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📋</span>
+              </span>
+              Overview
+            </h3>
+            <div id="security-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Points -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">🔑</span>
+              </span>
+              Key Points
+            </h3>
+            <ul id="security-modal-key-points" class="space-y-2"></ul>
+          </div>
+
+          <!-- What You'll Learn -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">🎓</span>
+              </span>
+              What You'll Learn
+            </h3>
+            <ul id="security-modal-learn" class="space-y-2"></ul>
+          </div>
+
+          <!-- Prerequisites -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">📚</span>
+              </span>
+              Prerequisites
+            </h3>
+            <ul id="security-modal-prerequisites" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">🏷️</span>
+              </span>
+              Topics
+            </h3>
+            <div id="security-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Links -->
+          <div id="security-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Resources
+            </h3>
+            <div id="security-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ securityResourcesData: securityResources }}>
+  // Modal functionality - data is injected from server-side
+  const securityResources = securityResourcesData;
+
+  function renderImportance(importance) {
+    return '★'.repeat(importance) + '☆'.repeat(5 - importance);
+  }
+
+  function showSecurityModal(resourceIndex) {
+    const resource = securityResources[resourceIndex];
+    const modal = document.getElementById('security-modal-overlay');
+    const modalContent = document.getElementById('security-modal');
+    
+    // Populate modal content
+    document.getElementById('security-modal-title').textContent = resource.title;
+    document.getElementById('security-modal-meta').textContent = `${resource.category} • ${resource.difficulty}${resource.author ? ' • by ' + resource.author : ''}`;
+    document.getElementById('security-modal-synopsis').textContent = resource.synopsis;
+    
+    // Importance and details
+    const importanceElement = document.getElementById('security-modal-importance');
+    importanceElement.innerHTML = `
+      <span class="text-yellow-400 dark:text-yellow-300">${renderImportance(resource.importance)}</span>
+      <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">Importance: ${resource.importance}/5</span>
+    `;
+    
+    document.getElementById('security-modal-difficulty').textContent = `Difficulty: ${resource.difficulty}`;
+    document.getElementById('security-modal-category').textContent = `Category: ${resource.category}`;
+    
+    // Key points
+    const keyPointsElement = document.getElementById('security-modal-key-points');
+    keyPointsElement.innerHTML = resource.keyPoints.map(point => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">✓</span>
+        <span class="text-gray-700 dark:text-gray-300">${point}</span>
+      </li>`
+    ).join('');
+    
+    // What you'll learn
+    const learnElement = document.getElementById('security-modal-learn');
+    learnElement.innerHTML = resource.whatYoullLearn.map(item => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">📖</span>
+        <span class="text-gray-700 dark:text-gray-300">${item}</span>
+      </li>`
+    ).join('');
+    
+    // Prerequisites
+    const prerequisitesElement = document.getElementById('security-modal-prerequisites');
+    prerequisitesElement.innerHTML = resource.prerequisites.map(prereq => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-orange-500 dark:text-orange-400 mt-1 flex-shrink-0">📋</span>
+        <span class="text-gray-700 dark:text-gray-300">${prereq}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('security-modal-tags');
+    tagsElement.innerHTML = resource.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('security-modal-links');
+    const linkButtons = [];
+    
+    if (resource.links.official) {
+      linkButtons.push(`
+        <a href="${resource.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official Site</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.guide) {
+      linkButtons.push(`
+        <a href="${resource.links.guide}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>Guide</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.tutorial) {
+      linkButtons.push(`
+        <a href="${resource.links.tutorial}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>🎓</span>
+          <span>Tutorial</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.tools) {
+      resource.links.tools.forEach(tool => {
+        linkButtons.push(`
+          <a href="${tool.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+            <span>🔧</span>
+            <span>${tool.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideSecurityModal() {
+    const modal = document.getElementById('security-modal-overlay');
+    const modalContent = document.getElementById('security-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const resourceIndex = parseInt(this.getAttribute('data-resource-index'));
+        showSecurityModal(resourceIndex);
+      });
+    });
+    
+    // Close modal
+    document.getElementById('security-close-modal').addEventListener('click', hideSecurityModal);
+    
+    // Close on overlay click
+    document.getElementById('security-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('security-modal').contains(e.target)) {
+        hideSecurityModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('security-modal-overlay').classList.contains('hidden')) {
+        hideSecurityModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #security-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #security-modal-overlay:not(.hidden) #security-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

@@ -1,0 +1,637 @@
+---
+// Software Wallets component for Bitcoin Resources page
+
+interface SoftwareWallet {
+  title: string;
+  developer?: string;
+  type: string; // "Desktop", "Mobile", "Web", "Hardware Interface", etc.
+  description?: string;
+  synopsis: string;
+  platforms: string[]; // ["Windows", "macOS", "Linux", "iOS", "Android", "Web"]
+  yearLaunched?: number;
+  lastUpdated?: string;
+  keyFeatures: string[];
+  whoShouldUse: string[];
+  links: {
+    official?: string;
+    github?: string;
+    download?: string;
+    documentation?: string;
+    appStore?: string;
+    playStore?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  rating?: number;
+  openSource?: boolean;
+}
+
+const softwareWallets: SoftwareWallet[] = [
+  {
+    title: "Electrum",
+    developer: "Thomas Voegtlin",
+    type: "Desktop",
+    description: "Lightweight Bitcoin wallet with advanced features and security options.",
+    synopsis: "Electrum is one of the most popular and trusted Bitcoin wallets, known for its speed, security, and advanced features. Unlike full node wallets, Electrum doesn't download the entire blockchain, making it lightweight and fast to sync. It supports hardware wallet integration, multi-signature wallets, and advanced features like coin control and custom transaction fees. Electrum has been continuously developed since 2011 and has established itself as a reliable choice for both beginners and advanced users. The wallet offers excellent security features including seed phrase backup, password protection, and the ability to create watch-only wallets.",
+    platforms: ["Windows", "macOS", "Linux", "Android"],
+    yearLaunched: 2011,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Fast startup and blockchain synchronization",
+      "Hardware wallet support (Ledger, Trezor, etc.)",
+      "Multi-signature wallet support",
+      "Advanced coin control and fee customization",
+      "Cold storage and watch-only wallet capabilities",
+      "Plugin system for extended functionality"
+    ],
+    whoShouldUse: [
+      "Users wanting a reliable, feature-rich desktop wallet",
+      "Those needing hardware wallet integration",
+      "Advanced users requiring coin control features",
+      "People creating multi-signature setups",
+      "Anyone prioritizing speed and efficiency"
+    ],
+    links: {
+      official: "https://electrum.org/",
+      github: "https://github.com/spesmilo/electrum",
+      download: "https://electrum.org/#download",
+      playStore: "https://play.google.com/store/apps/details?id=org.electrum.electrum"
+    },
+    tags: ["Desktop", "Lightweight", "Hardware Support", "Multi-sig", "Advanced"],
+    difficulty: "Intermediate",
+    rating: 4.7,
+    openSource: true
+  },
+  {
+    title: "Sparrow Wallet",
+    developer: "Craig Raw",
+    type: "Desktop",
+    description: "Modern desktop Bitcoin wallet focused on privacy, security, and usability.",
+    synopsis: "Sparrow Wallet is a modern, feature-rich Bitcoin desktop wallet that emphasizes privacy, security, and user experience. Built specifically for Bitcoin, it offers comprehensive transaction analysis, coin control, and privacy features. Sparrow supports all major hardware wallets and provides detailed transaction information including fee analysis and coin selection. The wallet includes advanced features like CoinJoin integration, PSBT (Partially Signed Bitcoin Transaction) support, and comprehensive seed phrase management. With its clean, intuitive interface and powerful features, Sparrow has quickly become a favorite among privacy-conscious Bitcoin users and professionals.",
+    platforms: ["Windows", "macOS", "Linux"],
+    yearLaunched: 2020,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Comprehensive transaction and UTXO analysis",
+      "Built-in CoinJoin support for privacy",
+      "Full hardware wallet support and PSBT handling",
+      "Advanced coin control and labeling system",
+      "Detailed fee analysis and RBF support",
+      "Clean, modern user interface with dark mode"
+    ],
+    whoShouldUse: [
+      "Privacy-conscious Bitcoin users",
+      "Advanced users wanting detailed transaction analysis",
+      "Hardware wallet users seeking better software",
+      "Those interested in CoinJoin privacy techniques",
+      "Bitcoin professionals and power users"
+    ],
+    links: {
+      official: "https://sparrowwallet.com/",
+      github: "https://github.com/sparrowwallet/sparrow",
+      download: "https://sparrowwallet.com/download/"
+    },
+    tags: ["Desktop", "Privacy", "Advanced", "CoinJoin", "Modern"],
+    difficulty: "Advanced",
+    rating: 4.8,
+    openSource: true
+  },
+  {
+    title: "BlueWallet",
+    developer: "BlueWallet Team",
+    type: "Mobile",
+    description: "User-friendly mobile Bitcoin and Lightning wallet for iOS and Android.",
+    synopsis: "BlueWallet is a beautiful, intuitive mobile Bitcoin wallet that supports both on-chain Bitcoin transactions and Lightning Network payments. Designed with simplicity in mind, it makes Bitcoin accessible to newcomers while offering advanced features for experienced users. BlueWallet supports multiple wallet types including standard Bitcoin wallets, Lightning wallets, and watch-only wallets. The app features a clean, modern interface and includes useful tools like a marketplace for Lightning apps and services. It's particularly popular for its excellent Lightning Network implementation and user-friendly design that doesn't compromise on security.",
+    platforms: ["iOS", "Android", "macOS"],
+    yearLaunched: 2018,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Native Lightning Network support",
+      "Multiple wallet types in one app",
+      "Beautiful, intuitive user interface",
+      "Built-in Lightning marketplace",
+      "Watch-only wallet support",
+      "SegWit and Taproot support"
+    ],
+    whoShouldUse: [
+      "Mobile users new to Bitcoin",
+      "Lightning Network enthusiasts",
+      "Users wanting a simple, beautiful interface",
+      "Those needing both Bitcoin and Lightning in one app",
+      "People looking for a beginner-friendly wallet"
+    ],
+    links: {
+      official: "https://bluewallet.io/",
+      github: "https://github.com/BlueWallet/BlueWallet",
+      appStore: "https://apps.apple.com/app/bluewallet-bitcoin-wallet/id1376878040",
+      playStore: "https://play.google.com/store/apps/details?id=io.bluewallet.bluewallet"
+    },
+    tags: ["Mobile", "Lightning", "Beginner-Friendly", "Beautiful", "Multi-wallet"],
+    difficulty: "Beginner",
+    rating: 4.6,
+    openSource: true
+  },
+  {
+    title: "Phoenix",
+    developer: "ACINQ",
+    type: "Mobile",
+    description: "Self-custodial Lightning wallet with automatic channel management.",
+    synopsis: "Phoenix is a sophisticated Lightning Network wallet that provides a self-custodial Lightning experience with automatic channel management. Developed by ACINQ, the team behind the Eclair Lightning implementation, Phoenix handles all the complexities of Lightning channels automatically while maintaining user control of funds. The wallet seamlessly switches between on-chain and Lightning payments based on the situation, making Lightning Network accessible to everyday users. Phoenix features automatic channel rebalancing, dynamic fee calculation, and a clean, minimalist interface. It represents the cutting edge of Lightning wallet technology, offering both simplicity for users and advanced Lightning features under the hood.",
+    platforms: ["iOS", "Android"],
+    yearLaunched: 2019,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Automatic Lightning channel management",
+      "Self-custodial with user-controlled private keys",
+      "Seamless on-chain to Lightning conversion",
+      "Automatic channel rebalancing and liquidity",
+      "Advanced Lightning features (MPP, AMP, etc.)",
+      "Minimalist, intuitive user interface"
+    ],
+    whoShouldUse: [
+      "Lightning Network users wanting simplicity",
+      "Those needing automatic channel management",
+      "Mobile users making frequent small payments",
+      "People interested in cutting-edge Lightning tech",
+      "Users wanting self-custody without complexity"
+    ],
+    links: {
+      official: "https://phoenix.acinq.co/",
+      github: "https://github.com/ACINQ/phoenix",
+      appStore: "https://apps.apple.com/app/phoenix-wallet/id1544097028",
+      playStore: "https://play.google.com/store/apps/details?id=fr.acinq.phoenix.mainnet"
+    },
+    tags: ["Mobile", "Lightning", "Self-Custodial", "Automatic", "Advanced"],
+    difficulty: "Intermediate",
+    rating: 4.5,
+    openSource: true
+  },
+  {
+    title: "Specter Desktop",
+    developer: "Cryptoadvance",
+    type: "Desktop",
+    description: "Desktop wallet designed for multi-signature setups and hardware wallet coordination.",
+    synopsis: "Specter Desktop is a sophisticated Bitcoin wallet specifically designed for advanced security setups, particularly multi-signature configurations and hardware wallet coordination. It supports a wide range of hardware wallets and makes it easy to create and manage complex multi-sig setups with different devices and manufacturers. Specter integrates with Bitcoin Core and provides a user-friendly interface for advanced Bitcoin operations while maintaining high security standards. The wallet is particularly popular among institutions, Bitcoin businesses, and security-conscious individuals who need robust multi-signature capabilities and hardware wallet support.",
+    platforms: ["Windows", "macOS", "Linux"],
+    yearLaunched: 2020,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Advanced multi-signature wallet creation and management",
+      "Extensive hardware wallet support and coordination",
+      "Bitcoin Core integration for full node usage",
+      "PSBT support for secure transaction signing",
+      "Air-gapped signing capabilities",
+      "Advanced security features and backup options"
+    ],
+    whoShouldUse: [
+      "Users setting up multi-signature security",
+      "Hardware wallet users needing coordination tools",
+      "Institutions requiring advanced security",
+      "Bitcoin Core node operators",
+      "Security professionals and power users"
+    ],
+    links: {
+      official: "https://specter.solutions/",
+      github: "https://github.com/cryptoadvance/specter-desktop",
+      download: "https://github.com/cryptoadvance/specter-desktop/releases",
+      documentation: "https://docs.specter.solutions/"
+    },
+    tags: ["Desktop", "Multi-sig", "Hardware", "Advanced", "Security"],
+    difficulty: "Advanced",
+    rating: 4.4,
+    openSource: true
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    👛 Software Wallets
+  </h3>
+  <div class="space-y-6">
+    {softwareWallets.map((wallet, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {wallet.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-wallet-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {wallet.openSource && (
+                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                  Open Source
+                </span>
+              )}
+              {wallet.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(wallet.difficulty)}`}>
+                  {wallet.difficulty}
+                </span>
+              )}
+              {wallet.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${wallet.rating}/5`}>
+                  {renderStars(wallet.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{wallet.type}</span>
+            {wallet.developer && (
+              <>
+                <span>•</span>
+                <span>by {wallet.developer}</span>
+              </>
+            )}
+            <span>•</span>
+            <span>{wallet.platforms.join(", ")}</span>
+          </div>
+          {wallet.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {wallet.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {wallet.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="wallet-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="wallet-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-emerald-50 to-cyan-50 dark:from-emerald-900/20 dark:to-cyan-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-emerald-100 dark:bg-emerald-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-emerald-600 dark:text-emerald-400 text-xl font-bold">👛</span>
+          </div>
+          <div>
+            <h2 id="wallet-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="wallet-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="wallet-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Wallet Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="wallet-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="wallet-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="wallet-modal-platforms" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="wallet-modal-opensource" class="text-sm"></div>
+            <div id="wallet-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Wallet
+            </h3>
+            <div id="wallet-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">⭐</span>
+              </span>
+              Key Features
+            </h3>
+            <ul id="wallet-modal-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Use -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Use This
+            </h3>
+            <ul id="wallet-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="wallet-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Download Links -->
+          <div id="wallet-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">⬇️</span>
+              </span>
+              Download & Links
+            </h3>
+            <div id="wallet-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              🔐 Always download wallets from official sources to ensure security.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ softwareWalletsData: softwareWallets }}>
+  // Modal functionality - data is injected from server-side
+  const softwareWallets = softwareWalletsData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showWalletModal(walletIndex) {
+    const wallet = softwareWallets[walletIndex];
+    const modal = document.getElementById('wallet-modal-overlay');
+    const modalContent = document.getElementById('wallet-modal');
+    
+    // Populate modal content
+    document.getElementById('wallet-modal-title').textContent = wallet.title;
+    document.getElementById('wallet-modal-meta').textContent = wallet.developer ? `by ${wallet.developer}` : wallet.type;
+    document.getElementById('wallet-modal-synopsis').textContent = wallet.synopsis;
+    
+    // Rating and details
+    const ratingElement = document.getElementById('wallet-modal-rating');
+    if (wallet.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(wallet.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${wallet.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Wallet details
+    document.getElementById('wallet-modal-type').textContent = wallet.type;
+    document.getElementById('wallet-modal-platforms').textContent = `Platforms: ${wallet.platforms.join(", ")}`;
+    
+    const openSourceElement = document.getElementById('wallet-modal-opensource');
+    if (wallet.openSource) {
+      openSourceElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">Open Source</span>';
+    } else {
+      openSourceElement.innerHTML = '';
+    }
+    
+    const difficultyElement = document.getElementById('wallet-modal-difficulty');
+    if (wallet.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(wallet.difficulty)}">${wallet.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key features
+    const featuresElement = document.getElementById('wallet-modal-features');
+    featuresElement.innerHTML = wallet.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">⭐</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('wallet-modal-audience');
+    audienceElement.innerHTML = wallet.whoShouldUse.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('wallet-modal-tags');
+    tagsElement.innerHTML = wallet.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('wallet-modal-links');
+    const linkButtons = [];
+    
+    if (wallet.links.official) {
+      linkButtons.push(`
+        <a href="${wallet.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official Site</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.download) {
+      linkButtons.push(`
+        <a href="${wallet.links.download}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>⬇️</span>
+          <span>Download</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.appStore) {
+      linkButtons.push(`
+        <a href="${wallet.links.appStore}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>🍎</span>
+          <span>App Store</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.playStore) {
+      linkButtons.push(`
+        <a href="${wallet.links.playStore}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-600 hover:bg-green-700 text-white rounded-lg transition-colors">
+          <span>📱</span>
+          <span>Play Store</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.github) {
+      linkButtons.push(`
+        <a href="${wallet.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-700 hover:bg-gray-800 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.documentation) {
+      linkButtons.push(`
+        <a href="${wallet.links.documentation}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>Documentation</span>
+        </a>
+      `);
+    }
+    
+    if (wallet.links.other) {
+      wallet.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideWalletModal() {
+    const modal = document.getElementById('wallet-modal-overlay');
+    const modalContent = document.getElementById('wallet-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const walletIndex = parseInt(this.getAttribute('data-wallet-index'));
+        if (!isNaN(walletIndex)) {
+          showWalletModal(walletIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('wallet-close-modal').addEventListener('click', hideWalletModal);
+    
+    // Close on overlay click
+    document.getElementById('wallet-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('wallet-modal').contains(e.target)) {
+        hideWalletModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('wallet-modal-overlay').classList.contains('hidden')) {
+        hideWalletModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #wallet-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #wallet-modal-overlay:not(.hidden) #wallet-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

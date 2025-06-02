@@ -1,0 +1,788 @@
+---
+// News and Analysis component for Bitcoin Resources page
+
+interface NewsResource {
+  title: string;
+  category: 'News' | 'Market Data' | 'Analysis' | 'Research';
+  type: 'Website' | 'Platform' | 'Service' | 'Newsletter';
+  description: string;
+  synopsis: string;
+  founded?: number;
+  keyFeatures: string[];
+  bestFor: string[];
+  pricingModel: 'Free' | 'Freemium' | 'Paid' | 'Subscription';
+  links: {
+    website?: string;
+    twitter?: string;
+    newsletter?: string;
+    mobile?: string;
+    api?: string;
+  };
+  tags: string[];
+  reliability: number; // 1-5 scale
+}
+
+const newsResources: NewsResource[] = [
+  {
+    title: "Bitcoin Magazine",
+    category: "News",
+    type: "Website",
+    description: "Leading Bitcoin-focused news publication covering industry developments.",
+    synopsis: "Bitcoin Magazine is the oldest and most established publication dedicated to Bitcoin, cryptocurrency, and blockchain technology. Founded in 2012, it provides comprehensive coverage of Bitcoin news, technical developments, regulatory updates, and market analysis. The publication features in-depth articles, interviews with industry leaders, and educational content for both beginners and advanced users. Bitcoin Magazine maintains editorial independence and focuses specifically on Bitcoin rather than broader cryptocurrency topics, making it a trusted source for Bitcoin-focused news and analysis.",
+    founded: 2012,
+    keyFeatures: [
+      "Daily Bitcoin news and market updates",
+      "In-depth technical analysis and explanations",
+      "Industry leader interviews and insights",
+      "Educational content for all skill levels",
+      "Live event coverage and conferences"
+    ],
+    bestFor: [
+      "Daily Bitcoin news consumption",
+      "Understanding technical developments",
+      "Industry trend analysis",
+      "Educational Bitcoin content",
+      "Conference and event updates"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://bitcoinmagazine.com/",
+      twitter: "https://twitter.com/BitcoinMagazine",
+      newsletter: "https://bitcoinmagazine.com/newsletter"
+    },
+    tags: ["News", "Education", "Technical", "Industry"],
+    reliability: 5
+  },
+  {
+    title: "CoinDesk",
+    category: "News",
+    type: "Website",
+    description: "Major cryptocurrency news platform with extensive Bitcoin coverage.",
+    synopsis: "CoinDesk is one of the most influential cryptocurrency news platforms, providing comprehensive coverage of Bitcoin, blockchain technology, and digital assets. Founded in 2013, it has become a go-to source for breaking news, market analysis, and regulatory developments in the cryptocurrency space. While covering the broader crypto ecosystem, CoinDesk maintains strong Bitcoin coverage with dedicated sections for Bitcoin news, price analysis, and technical developments. The platform is known for its professional journalism standards and breaking major stories in the cryptocurrency industry.",
+    founded: 2013,
+    keyFeatures: [
+      "Breaking cryptocurrency and Bitcoin news",
+      "Comprehensive market analysis and reporting",
+      "Regulatory and policy coverage",
+      "Professional journalism standards",
+      "Daily newsletter and podcasts"
+    ],
+    bestFor: [
+      "Breaking news and market updates",
+      "Regulatory and policy developments",
+      "Broad cryptocurrency market coverage",
+      "Professional market analysis",
+      "Industry conference coverage"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://www.coindesk.com/",
+      twitter: "https://twitter.com/coindesk",
+      newsletter: "https://www.coindesk.com/newsletters/"
+    },
+    tags: ["News", "Market Analysis", "Regulatory", "Professional"],
+    reliability: 4
+  },
+  {
+    title: "The Block",
+    category: "News",
+    type: "Website",
+    description: "Professional cryptocurrency research and news platform.",
+    synopsis: "The Block is a cryptocurrency research and media company that provides institutional-grade news, analysis, and data. Known for its rigorous research methodology and professional approach, The Block offers both free and premium content covering Bitcoin, blockchain technology, and digital assets. The platform emphasizes data-driven journalism and provides detailed research reports alongside breaking news coverage. The Block is particularly valued by institutional investors and professional traders for its analytical depth and market insights.",
+    founded: 2018,
+    keyFeatures: [
+      "Institutional-grade research and analysis",
+      "Data-driven journalism and reporting",
+      "Premium research reports and insights",
+      "Professional market coverage",
+      "Detailed regulatory analysis"
+    ],
+    bestFor: [
+      "Professional and institutional users",
+      "In-depth market research",
+      "Data-driven analysis",
+      "Regulatory compliance insights",
+      "Investment research"
+    ],
+    pricingModel: "Freemium",
+    links: {
+      website: "https://www.theblock.co/",
+      twitter: "https://twitter.com/TheBlock__",
+      newsletter: "https://www.theblock.co/newsletters"
+    },
+    tags: ["Research", "Professional", "Institutional", "Data"],
+    reliability: 5
+  },
+  {
+    title: "Bitcoin Optech",
+    category: "News",
+    type: "Newsletter",
+    description: "Technical newsletter focused on Bitcoin protocol developments.",
+    synopsis: "Bitcoin Optech is a technical newsletter and website dedicated to helping Bitcoin companies adopt scaling technologies and improve their technical understanding of Bitcoin. Created by leading Bitcoin developers and engineers, Optech provides weekly newsletters covering Bitcoin protocol developments, scaling solutions, and technical improvements. The content is specifically designed for engineers, developers, and technical decision-makers at Bitcoin companies. It's considered the most authoritative source for technical Bitcoin development news and protocol updates.",
+    founded: 2018,
+    keyFeatures: [
+      "Weekly technical newsletter",
+      "Bitcoin protocol development updates",
+      "Scaling technology explanations",
+      "Developer-focused content",
+      "Technical workshop materials"
+    ],
+    bestFor: [
+      "Bitcoin developers and engineers",
+      "Technical protocol understanding",
+      "Scaling technology adoption",
+      "Protocol development tracking",
+      "Technical decision making"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://bitcoinops.org/",
+      newsletter: "https://bitcoinops.org/en/newsletters/",
+      twitter: "https://twitter.com/bitcoinoptech"
+    },
+    tags: ["Technical", "Development", "Protocol", "Engineering"],
+    reliability: 5
+  },
+  {
+    title: "CoinGecko",
+    category: "Market Data",
+    type: "Platform",
+    description: "Comprehensive cryptocurrency market data and tracking platform.",
+    synopsis: "CoinGecko is one of the world's largest independent cryptocurrency market data platforms, providing comprehensive price tracking, market analysis, and research tools. Founded in 2014, it offers real-time and historical data for Bitcoin and thousands of other cryptocurrencies across multiple exchanges. Beyond basic price data, CoinGecko provides market capitalization rankings, trading volume analysis, developer activity metrics, and community statistics. The platform is known for its user-friendly interface, comprehensive free features, and detailed market analytics.",
+    founded: 2014,
+    keyFeatures: [
+      "Real-time Bitcoin price tracking across exchanges",
+      "Historical price data and charts",
+      "Market capitalization and volume analysis",
+      "Portfolio tracking and management",
+      "Developer activity and community metrics"
+    ],
+    bestFor: [
+      "Price tracking and monitoring",
+      "Market analysis and research",
+      "Portfolio management",
+      "Exchange comparison",
+      "Market trend analysis"
+    ],
+    pricingModel: "Freemium",
+    links: {
+      website: "https://www.coingecko.com/",
+      mobile: "https://www.coingecko.com/en/mobile",
+      api: "https://www.coingecko.com/en/api",
+      twitter: "https://twitter.com/coingecko"
+    },
+    tags: ["Market Data", "Price Tracking", "Portfolio", "Analytics"],
+    reliability: 5
+  },
+  {
+    title: "Blockchain.info",
+    category: "Market Data",
+    type: "Platform",
+    description: "Bitcoin blockchain explorer and network statistics platform.",
+    synopsis: "Blockchain.info is one of the oldest and most trusted Bitcoin blockchain explorers and network analysis platforms. Launched in 2011, it provides real-time Bitcoin network statistics, transaction monitoring, and blockchain analysis tools. The platform offers detailed insights into Bitcoin network health, mining statistics, transaction fees, and network congestion. Beyond basic blockchain exploration, it provides market data, wallet services, and comprehensive Bitcoin network analytics that are essential for understanding Bitcoin's on-chain activity and network performance.",
+    founded: 2011,
+    keyFeatures: [
+      "Bitcoin blockchain explorer and transaction tracking",
+      "Real-time network statistics and mining data",
+      "Transaction fee estimation and analysis",
+      "Wallet services and tools",
+      "Historical blockchain data and charts"
+    ],
+    bestFor: [
+      "Blockchain transaction verification",
+      "Network statistics monitoring",
+      "Transaction fee analysis",
+      "Mining pool tracking",
+      "On-chain data research"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://www.blockchain.com/",
+      api: "https://www.blockchain.com/api",
+      twitter: "https://twitter.com/blockchain"
+    },
+    tags: ["Blockchain Explorer", "Network Stats", "On-chain", "Mining"],
+    reliability: 4
+  },
+  {
+    title: "BitcoinVisuals",
+    category: "Market Data",
+    type: "Platform",
+    description: "Bitcoin network metrics and visualization platform.",
+    synopsis: "BitcoinVisuals is a specialized platform dedicated to visualizing Bitcoin network data and metrics through comprehensive charts and analytics. Created by Bitcoin researcher and developer, it focuses specifically on Bitcoin network health, adoption metrics, and long-term trends. The platform provides unique insights into Bitcoin's network growth, transaction patterns, fee markets, and adoption indicators that aren't easily found elsewhere. It's particularly valuable for researchers, analysts, and anyone interested in understanding Bitcoin's fundamental network metrics beyond just price data.",
+    keyFeatures: [
+      "Specialized Bitcoin network visualizations",
+      "Unique adoption and growth metrics",
+      "Long-term trend analysis",
+      "Fee market and transaction analysis",
+      "Network health indicators"
+    ],
+    bestFor: [
+      "Bitcoin network research",
+      "Long-term trend analysis",
+      "Network health monitoring",
+      "Academic and professional research",
+      "Fundamental analysis"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://bitcoinvisuals.com/",
+      twitter: "https://twitter.com/BitcoinVisuals"
+    },
+    tags: ["Network Metrics", "Visualization", "Research", "Fundamental"],
+    reliability: 4
+  },
+  {
+    title: "Glassnode",
+    category: "Analysis",
+    type: "Platform",
+    description: "Advanced Bitcoin on-chain analytics and market intelligence platform.",
+    synopsis: "Glassnode is a leading on-chain analytics platform that provides advanced Bitcoin and cryptocurrency market intelligence through blockchain data analysis. Founded in 2018, it offers comprehensive on-chain metrics, market indicators, and research tools used by professional traders, institutions, and researchers. The platform tracks everything from network fundamentals to advanced market signals, providing insights into holder behavior, market cycles, and network adoption. Glassnode is widely regarded as the gold standard for on-chain analysis and is used by major institutions and professional analysts.",
+    founded: 2018,
+    keyFeatures: [
+      "Advanced on-chain analytics and metrics",
+      "Professional market intelligence reports",
+      "Custom indicator creation and analysis",
+      "Institutional-grade data and insights",
+      "API access for data integration"
+    ],
+    bestFor: [
+      "Professional on-chain analysis",
+      "Market cycle analysis",
+      "Institutional research",
+      "Advanced trading strategies",
+      "Academic research"
+    ],
+    pricingModel: "Freemium",
+    links: {
+      website: "https://glassnode.com/",
+      twitter: "https://twitter.com/glassnode",
+      newsletter: "https://insights.glassnode.com/",
+      api: "https://docs.glassnode.com/"
+    },
+    tags: ["On-chain", "Professional", "Analytics", "Institutional"],
+    reliability: 5
+  },
+  {
+    title: "Messari",
+    category: "Analysis",
+    type: "Platform",
+    description: "Comprehensive cryptocurrency research and data platform.",
+    synopsis: "Messari is a comprehensive cryptocurrency research and data platform that provides professional-grade analysis, market intelligence, and research tools. Founded in 2018, it offers detailed fundamental analysis, market research reports, and data analytics for Bitcoin and the broader cryptocurrency ecosystem. The platform is designed for institutional investors, researchers, and serious crypto market participants who need in-depth analysis and reliable data. Messari combines quantitative data analysis with qualitative research to provide comprehensive market insights and investment research.",
+    founded: 2018,
+    keyFeatures: [
+      "Professional cryptocurrency research reports",
+      "Fundamental analysis and market intelligence",
+      "Quantitative data analysis tools",
+      "Institutional-grade research platform",
+      "Regular market analysis and insights"
+    ],
+    bestFor: [
+      "Institutional investment research",
+      "Fundamental analysis",
+      "Market intelligence",
+      "Professional trading decisions",
+      "Academic and research purposes"
+    ],
+    pricingModel: "Freemium",
+    links: {
+      website: "https://messari.io/",
+      twitter: "https://twitter.com/messaricrypto",
+      newsletter: "https://messari.io/newsletter"
+    },
+    tags: ["Research", "Institutional", "Fundamental", "Professional"],
+    reliability: 5
+  },
+  {
+    title: "Unchained Capital",
+    category: "Analysis",
+    type: "Service",
+    description: "Bitcoin-focused financial services with market analysis and research.",
+    synopsis: "Unchained Capital is a Bitcoin-focused financial services company that provides market analysis, research, and insights alongside their financial products. Known for their deep Bitcoin expertise and institutional-grade analysis, they publish regular market commentary, research reports, and educational content. Their analysis team includes respected Bitcoin researchers and analysts who provide unique insights into Bitcoin markets, adoption trends, and macroeconomic factors affecting Bitcoin. The company's research is particularly valued for its Bitcoin-specific focus and institutional perspective.",
+    founded: 2016,
+    keyFeatures: [
+      "Bitcoin-focused market analysis",
+      "Institutional perspective and insights",
+      "Regular research reports and commentary",
+      "Macroeconomic Bitcoin analysis",
+      "Educational content and resources"
+    ],
+    bestFor: [
+      "Institutional Bitcoin analysis",
+      "Macroeconomic perspective",
+      "Bitcoin-specific research",
+      "Professional market insights",
+      "Long-term investment analysis"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://unchained-capital.com/",
+      twitter: "https://twitter.com/unchainedcap",
+      newsletter: "https://unchained-capital.com/blog/"
+    },
+    tags: ["Bitcoin Focus", "Institutional", "Macroeconomic", "Research"],
+    reliability: 4
+  },
+  {
+    title: "Woo.org",
+    category: "Analysis",
+    type: "Platform",
+    description: "Bitcoin market analysis and research by Willy Woo.",
+    synopsis: "Woo.org is the personal research platform of Willy Woo, one of Bitcoin's most respected on-chain analysts and market researchers. Known for developing innovative Bitcoin market models and analysis frameworks, Willy Woo provides unique insights into Bitcoin market cycles, adoption trends, and price analysis. His research combines on-chain data analysis with market psychology and macroeconomic factors to provide comprehensive Bitcoin market intelligence. The platform is particularly valued for its original research, unique market models, and accessible explanations of complex Bitcoin market dynamics.",
+    keyFeatures: [
+      "Original Bitcoin market research and models",
+      "Innovative on-chain analysis frameworks",
+      "Market cycle and trend analysis",
+      "Accessible explanations of complex concepts",
+      "Regular market commentary and insights"
+    ],
+    bestFor: [
+      "Bitcoin market cycle analysis",
+      "On-chain data interpretation",
+      "Original research and models",
+      "Market timing insights",
+      "Educational market analysis"
+    ],
+    pricingModel: "Free",
+    links: {
+      website: "https://woobull.com/",
+      twitter: "https://twitter.com/woonomic"
+    },
+    tags: ["Original Research", "On-chain", "Market Cycles", "Educational"],
+    reliability: 4
+  }
+];
+
+// Helper function to render reliability stars
+function renderReliability(reliability: number): string {
+  return '★'.repeat(reliability) + '☆'.repeat(5 - reliability);
+}
+---
+
+<div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+  <!-- News Sources -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      📰 News Sources
+    </h3>
+    <div class="space-y-4">
+      {newsResources.filter(resource => resource.category === 'News').map((resource, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-resource-index={newsResources.indexOf(resource)}
+                  title="Click to view details">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-resource-index={newsResources.indexOf(resource)}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {resource.pricingModel}
+              </span>
+              <span class="text-yellow-500 text-sm" title={`Reliability: ${resource.reliability}/5`}>
+                {renderReliability(resource.reliability)}
+              </span>
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+            {resource.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Market Data -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      📊 Market Data
+    </h3>
+    <div class="space-y-4">
+      {newsResources.filter(resource => resource.category === 'Market Data').map((resource, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-resource-index={newsResources.indexOf(resource)}
+                  title="Click to view details">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-resource-index={newsResources.indexOf(resource)}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {resource.pricingModel}
+              </span>
+              <span class="text-yellow-500 text-sm" title={`Reliability: ${resource.reliability}/5`}>
+                {renderReliability(resource.reliability)}
+              </span>
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+            {resource.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+
+  <!-- Analysis Platforms -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      📈 Analysis Platforms
+    </h3>
+    <div class="space-y-4">
+      {newsResources.filter(resource => resource.category === 'Analysis').map((resource, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-3 last:border-b-0 last:pb-0">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-resource-index={newsResources.indexOf(resource)}
+                  title="Click to view details">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-resource-index={newsResources.indexOf(resource)}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {resource.pricingModel}
+              </span>
+              <span class="text-yellow-500 text-sm" title={`Reliability: ${resource.reliability}/5`}>
+                {renderReliability(resource.reliability)}
+              </span>
+            </div>
+          </div>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mt-1">
+            {resource.description}
+          </p>
+        </div>
+      ))}
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="news-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="news-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-6xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-green-50 to-blue-50 dark:from-green-900/20 dark:to-blue-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-green-100 dark:bg-green-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-green-600 dark:text-green-400 text-xl font-bold">📰</span>
+          </div>
+          <div>
+            <h2 id="news-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="news-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <a id="news-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="news-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Resource Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="news-modal-reliability" class="flex items-center space-x-2"></div>
+            <div id="news-modal-pricing" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="news-modal-founded" class="text-sm text-gray-600 dark:text-gray-400"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📋</span>
+              </span>
+              Overview
+            </h3>
+            <div id="news-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">⭐</span>
+              </span>
+              Key Features
+            </h3>
+            <ul id="news-modal-key-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Best For -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">🎯</span>
+              </span>
+              Best For
+            </h3>
+            <ul id="news-modal-best-for" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">🏷️</span>
+              </span>
+              Topics
+            </h3>
+            <div id="news-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Links -->
+          <div id="news-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Links
+            </h3>
+            <div id="news-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ newsResourcesData: newsResources }}>
+  // Modal functionality - data is injected from server-side
+  const newsResources = newsResourcesData;
+
+  function renderReliability(reliability) {
+    return '★'.repeat(reliability) + '☆'.repeat(5 - reliability);
+  }
+
+  function showNewsModal(resourceIndex) {
+    const resource = newsResources[resourceIndex];
+    const modal = document.getElementById('news-modal-overlay');
+    const modalContent = document.getElementById('news-modal');
+    
+    // Populate modal content
+    document.getElementById('news-modal-title').textContent = resource.title;
+    document.getElementById('news-modal-meta').textContent = `${resource.category} • ${resource.type}`;
+    document.getElementById('news-modal-synopsis').textContent = resource.synopsis;
+    
+    // Reliability and details
+    const reliabilityElement = document.getElementById('news-modal-reliability');
+    reliabilityElement.innerHTML = `
+      <span class="text-yellow-400 dark:text-yellow-300">${renderReliability(resource.reliability)}</span>
+      <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">Reliability: ${resource.reliability}/5</span>
+    `;
+    
+    document.getElementById('news-modal-pricing').textContent = `Pricing: ${resource.pricingModel}`;
+    document.getElementById('news-modal-founded').textContent = resource.founded ? `Founded: ${resource.founded}` : '';
+    
+    // Key features
+    const keyFeaturesElement = document.getElementById('news-modal-key-features');
+    keyFeaturesElement.innerHTML = resource.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">✓</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Best for
+    const bestForElement = document.getElementById('news-modal-best-for');
+    bestForElement.innerHTML = resource.bestFor.map(item => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">🎯</span>
+        <span class="text-gray-700 dark:text-gray-300">${item}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('news-modal-tags');
+    tagsElement.innerHTML = resource.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('news-modal-links');
+    const linkButtons = [];
+    
+    if (resource.links.website) {
+      linkButtons.push(`
+        <a href="${resource.links.website}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Website</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.newsletter) {
+      linkButtons.push(`
+        <a href="${resource.links.newsletter}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📧</span>
+          <span>Newsletter</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.twitter) {
+      linkButtons.push(`
+        <a href="${resource.links.twitter}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-sky-500 hover:bg-sky-600 text-white rounded-lg transition-colors">
+          <span>🐦</span>
+          <span>Twitter</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.mobile) {
+      linkButtons.push(`
+        <a href="${resource.links.mobile}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>📱</span>
+          <span>Mobile App</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.api) {
+      linkButtons.push(`
+        <a href="${resource.links.api}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-500 hover:bg-gray-600 text-white rounded-lg transition-colors">
+          <span>⚙️</span>
+          <span>API</span>
+        </a>
+      `);
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Set external link
+    const externalLink = document.getElementById('news-external-link');
+    const mainLink = resource.links.website || resource.links.newsletter;
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideNewsModal() {
+    const modal = document.getElementById('news-modal-overlay');
+    const modalContent = document.getElementById('news-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const resourceIndex = parseInt(this.getAttribute('data-resource-index'));
+        showNewsModal(resourceIndex);
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-resource-index]').forEach(title => {
+      title.addEventListener('click', function() {
+        const resourceIndex = parseInt(this.getAttribute('data-resource-index'));
+        showNewsModal(resourceIndex);
+      });
+    });
+    
+    // Close modal
+    document.getElementById('news-close-modal').addEventListener('click', hideNewsModal);
+    
+    // Close on overlay click
+    document.getElementById('news-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('news-modal').contains(e.target)) {
+        hideNewsModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('news-modal-overlay').classList.contains('hidden')) {
+        hideNewsModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #news-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #news-modal-overlay:not(.hidden) #news-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

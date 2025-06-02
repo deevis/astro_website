@@ -1,0 +1,113 @@
+---
+import Layout from '../layouts/Layout.astro';
+import EssentialBooks from '../components/bitcoin-resources/EssentialBooks.astro';
+import Documentaries from '../components/bitcoin-resources/Documentaries.astro';
+import Podcasts from '../components/bitcoin-resources/Podcasts.astro';
+import Development from '../components/bitcoin-resources/Development.astro';
+import ResearchPapers from '../components/bitcoin-resources/ResearchPapers.astro';
+import SoftwareWallets from '../components/bitcoin-resources/SoftwareWallets.astro';
+import NodeSoftware from '../components/bitcoin-resources/NodeSoftware.astro';
+import PrivacyTools from '../components/bitcoin-resources/PrivacyTools.astro';
+import EducationalPlatforms from '../components/bitcoin-resources/EducationalPlatforms.astro';
+import SecurityResources from '../components/bitcoin-resources/SecurityResources.astro';
+import NewsAndAnalysis from '../components/bitcoin-resources/NewsAndAnalysis.astro';
+---
+
+<Layout title="Bitcoin Resources - Essential Learning Materials and Tools">
+  <main class="container mx-auto px-4 py-8 pt-24">
+    <h1 class="text-4xl font-bold text-center mb-8 text-gray-900 dark:text-gray-100">Bitcoin Resources</h1>
+    
+    <!-- Introduction Section -->
+    <section class="mb-12">
+      <div class="prose prose-lg max-w-4xl mx-auto">
+        <p class="mb-6 text-gray-700 dark:text-gray-300 text-lg text-center">
+          A curated collection of essential resources for learning about Bitcoin, understanding its technology, 
+          and participating in the ecosystem responsibly.
+        </p>
+      </div>
+    </section>
+
+    <!-- Learning Resources Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Learning Resources</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Books -->
+        <EssentialBooks />
+
+        <!-- Documentaries -->
+        <Documentaries />
+
+        <!-- Podcasts -->
+        <Podcasts />
+      </div>
+    </section>
+
+    <!-- Educational Platforms Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Educational Platforms</h2>
+      
+      <div class="grid md:grid-cols-1 gap-6">
+        <!-- Educational Platforms -->
+        <EducationalPlatforms />
+      </div>
+    </section>
+
+    <!-- Technical Resources Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Technical Resources</h2>
+      
+      <div class="grid md:grid-cols-2 gap-6">
+        <!-- Development -->
+        <Development />
+
+        <!-- Research Papers -->
+        <ResearchPapers />
+      </div>
+    </section>
+
+    <!-- Tools and Software Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Tools and Software</h2>
+      
+      <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- Software Wallets -->
+        <SoftwareWallets />
+
+        <!-- Node Software -->
+        <NodeSoftware />
+
+        <!-- Privacy Tools -->
+        <PrivacyTools />
+      </div>
+    </section>
+
+    <!-- Security Resources Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">Security Resources</h2>
+      
+      <SecurityResources />
+    </section>
+
+    <!-- News and Analysis Section -->
+    <section class="mb-12">
+      <h2 class="text-3xl font-semibold mb-8 text-gray-900 dark:text-gray-100">News and Analysis</h2>
+      
+      <NewsAndAnalysis />
+    </section>
+
+    <!-- Call to Action -->
+    <section class="text-center py-12 bg-gradient-to-r from-orange-50 to-yellow-50 dark:from-orange-900/20 dark:to-yellow-900/20 rounded-lg">
+      <h2 class="text-2xl font-bold mb-4 text-gray-900 dark:text-gray-100">Ready to Start Learning?</h2>
+      <p class="text-gray-700 dark:text-gray-300 mb-6">
+        Begin your Bitcoin journey with our comprehensive tutorial series
+      </p>
+      <a 
+        href="/bitcoin-tutorial" 
+        class="inline-block bg-orange-500 hover:bg-orange-600 dark:bg-orange-600 dark:hover:bg-orange-700 text-white px-8 py-3 rounded-lg font-semibold transition-colors"
+      >
+        Start Bitcoin Tutorial
+      </a>
+    </section>
+  </main>
+</Layout> 

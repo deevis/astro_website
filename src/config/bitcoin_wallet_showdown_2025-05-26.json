@@ -1,0 +1,796 @@
+[
+    {
+      "name": "Ledger Nano X",
+      "vendor": "Ledger",
+      "first_release": "2019-01",
+      "price_usd": 149,
+      "status": "active",
+      "strengths": [
+        "Secure element (ST33)",
+        "Bluetooth connectivity",
+        "Ledger Live app support"
+      ],
+      "weaknesses": [
+        "Closed-source firmware",
+        "Controversial Ledger Recover feature"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Uses a secure element and is widely vetted, but loses trust points for closed-source firmware and Ledger Recover concerns.",
+      "expert_reviews": [
+        {
+          "source": "Bitcoin Magazine",
+          "url": "https://bitcoinmagazine.com/guides/ledger-nano-x-review"
+        },
+        {
+          "source": "CoinDesk",
+          "url": "https://www.coindesk.com/learn/ledger-nano-x-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://ledger.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/ledger-nano-x.png",
+      "summary": "Ledger Nano X is a secure, Bluetooth-enabled wallet with strong hardware protection and mobile capability via Ledger Live.",
+      "display": "128x64 OLED",
+      "power": "USB-C rechargeable battery"
+    },
+    {
+      "name": "Ledger Nano S Plus",
+      "vendor": "Ledger",
+      "first_release": "2022-04",
+      "price_usd": 79,
+      "status": "active",
+      "strengths": [
+        "Secure element",
+        "Larger memory than Nano S",
+        "Great value"
+      ],
+      "weaknesses": [
+        "No wireless connectivity",
+        "Closed firmware"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Strong hardware security like Nano X, no Bluetooth reduces attack surface, but still closed-source firmware.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/hardware-wallets/ledger-nano-s-plus-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://ledger.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/ledger-nano-s-plus.png",
+      "summary": "Nano S Plus brings enhanced memory and screen to Ledger's affordable model, without Bluetooth, making it ideal for secure desktop use.",
+      "display": "128x64 OLED",
+      "power": "USB-C powered"
+    },
+    {
+      "name": "Trezor Model T",
+      "vendor": "SatoshiLabs",
+      "first_release": "2018-02",
+      "price_usd": 219,
+      "status": "active",
+      "strengths": [
+        "Open-source firmware",
+        "Color touchscreen",
+        "Shamir Backup support"
+      ],
+      "weaknesses": [
+        "No secure element",
+        "Higher price"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Open-source and well-audited, but lacks a secure element for physical extraction resistance.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/hardware-wallets/trezor-model-t-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://trezor.io/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/trezor-model-t.png",
+      "summary": "Trezor Model T is a highly trusted open-source wallet with a touchscreen interface and advanced backup options.",
+      "display": "240x240 color touchscreen",
+      "power": "USB-C powered"
+    },
+    {
+      "name": "Trezor Model One",
+      "vendor": "SatoshiLabs",
+      "first_release": "2014-08",
+      "price_usd": 69,
+      "status": "active",
+      "strengths": [
+        "Open-source firmware",
+        "Very affordable",
+        "Long security track record"
+      ],
+      "weaknesses": [
+        "No secure element",
+        "Monochrome display"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": "limited"
+      },
+      "security_score": 7,
+      "security_rationale": "Secure in practice, but outdated hardware and no physical protection via secure element.",
+      "expert_reviews": [
+        {
+          "source": "Bitcoin Magazine",
+          "url": "https://bitcoinmagazine.com/guides/trezor-model-one-review"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://trezor.io/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/trezor-model-1.png",
+      "summary": "Trezor One is the original hardware wallet, still relevant for its simplicity, affordability, and proven security record.",
+      "display": "128x64 monochrome OLED",
+      "power": "USB powered"
+    },
+    {
+      "name": "Trezor Safe 3",
+      "vendor": "SatoshiLabs",
+      "first_release": "2023-10",
+      "price_usd": 79,
+      "status": "active",
+      "strengths": [
+        "Now includes secure element",
+        "Open-source firmware",
+        "Supports Bitcoin-only firmware"
+      ],
+      "weaknesses": [
+        "No touchscreen",
+        "New product (less field-tested)"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Secure element + open-source firmware combines the best of both worlds for high confidence security.",
+      "expert_reviews": [
+        {
+          "source": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/trezor-safe-3-launch"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://trezor.io/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/trezor-safe-3.png",
+      "summary": "Trezor Safe 3 is a modernized wallet with secure element hardware and Bitcoin-only firmware options, making it ideal for new users.",
+      "display": "128x64 OLED",
+      "power": "USB powered"
+    },
+    {
+      "name": "Coldcard Mk4",
+      "vendor": "Coinkite",
+      "first_release": "2022-03",
+      "price_usd": 147,
+      "status": "active",
+      "strengths": [
+        "Air-gapped with microSD",
+        "Dual secure elements",
+        "Bitcoin-only, open-source"
+      ],
+      "weaknesses": [
+        "Steep learning curve",
+        "No altcoin support"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 10,
+      "security_rationale": "Designed for maximum offline protection; no Bluetooth/USB reliance and battle-tested security.",
+      "expert_reviews": [
+        {
+          "source": "Jameson Lopp",
+          "url": "https://blog.lopp.net/how-to-setup-a-coldcard-wallet/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://coinkite.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/coldcard-mk4.png",
+      "summary": "Coldcard Mk4 is a top-tier Bitcoin-only wallet built for air-gapped, multisig cold storage and security maximalists.",
+      "display": "128x64 OLED",
+      "power": "USB or AAA battery (with adapter)"
+    },
+    {
+      "name": "Coldcard Q",
+      "vendor": "Coinkite",
+      "first_release": "2024-03",
+      "price_usd": "239.99",
+      "status": "active",
+      "strengths": [
+        "Dual secure elements (two chips from different vendors) protect private keys",
+        "Fully air-gapped via QR codes, NFC, and microSD (no USB required for transactions)",
+        "Full QWERTY keyboard and large screen for easy BIP-39 passphrase entry",
+        "Battery-powered (3×AAA) option for wireless operation",
+        "Advanced security features (duress PINs and \"Brick Me\" self-destruct PIN) add to safety"
+      ],
+      "weaknesses": [
+        "High price compared to basic hardware wallets",
+        "Not very beginner-friendly; geared toward advanced users",
+        "Some early units had hardware reliability issues (needed replacement)",
+        "Bulky form factor (BlackBerry-like size with keyboard and batteries)"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 10,
+      "security_rationale": "Implements dual secure elements, open-source firmware, and air-gapped design for top-tier security (no known vulnerabilities)",
+      "expert_reviews": [
+        {
+          "source": "Bitcoin Magazine",
+          "url": "https://bitcoinmagazine.com/business/coinkite-new-bitcoin-wallet-coldcard-q1"
+        },
+        {
+          "source": "BTC Sessions (YouTube)",
+          "url": "https://www.youtube.com/watch?v=cVGjksyv1uA"
+        }
+      ],
+      "affiliate_support": false,
+      "affiliate_link_placeholder": null,
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/coldcard-q.png",
+      "summary": "The Coldcard Q is a high-end Bitcoin-only hardware wallet from Coinkite featuring a full QWERTY keyboard and a large LCD screen for easier passphrase entry. These capabilities make the Coldcard Q one of the most secure and feature-rich options for Bitcoin self-custody.",
+      "display": "320x240 pixels LCD (3.2-inch diagonal)",
+      "power": "Powered by 3×AAA batteries (air-gapped use) or via USB-C connection"
+    },    
+    {
+      "name": "Keystone 3 Pro",
+      "vendor": "Keystone",
+      "first_release": "2023-07",
+      "price_usd": 149,
+      "status": "active",
+      "strengths": [
+        "Fully air-gapped (QR)",
+        "Fingerprint unlock + secure element",
+        "Open-source firmware"
+      ],
+      "weaknesses": [
+        "Battery reliant",
+        "Newer product with less field testing"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Strong security with QR-only airgap, fingerprint unlock, and secure chip. Fully open firmware.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/keystone-wallet-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://keyst.one/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/keystone-3-pro.png",
+      "summary": "Keystone 3 Pro uses QR codes for complete air-gap and includes fingerprint security and a large touchscreen for ease-of-use.",
+      "display": "4-inch touchscreen",
+      "power": "Rechargeable battery or AAA battery pack"
+    },
+    {
+      "name": "Ledger Stax",
+      "vendor": "Ledger",
+      "first_release": "2024-05",
+      "price_usd": 399,
+      "status": "active",
+      "strengths": [
+        "E-Ink curved display",
+        "Wireless charging + Bluetooth",
+        "Premium design"
+      ],
+      "weaknesses": [
+        "Very expensive",
+        "Still closed-source firmware"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Strong Ledger base security but costly and still closed-source.",
+      "expert_reviews": [
+        {
+          "source": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/ledger-stax-review"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://ledger.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/ledger-stax.png",
+      "summary": "Ledger Stax is a luxury hardware wallet with a curved E-Ink display and wireless charging for design-conscious users.",
+      "display": "3.7-inch E-Ink touchscreen",
+      "power": "Wireless charging or USB-C"
+    },
+    {
+      "name": "Trezor Safe 5",
+      "vendor": "SatoshiLabs",
+      "first_release": "2024-06",
+      "price_usd": 169,
+      "status": "active",
+      "strengths": [
+        "Color touchscreen",
+        "Secure element",
+        "Open-source firmware"
+      ],
+      "weaknesses": [
+        "More expensive than Safe 3",
+        "New product (needs time to prove itself)"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Secure element plus touchscreen usability makes it the most feature-rich Trezor to date.",
+      "expert_reviews": [
+        {
+          "source": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/trezor-safe-5-review"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://trezor.io/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/trezor-safe-5.png",
+      "summary": "Trezor Safe 5 offers touchscreen usability, a secure element, and open-source firmware for ultimate transparency and protection.",
+      "display": "240x240 color touchscreen",
+      "power": "USB powered"
+    },
+    {
+      "name": "BitBox02",
+      "vendor": "Shift Crypto",
+      "first_release": "2019-09",
+      "price_usd": 150,
+      "status": "active",
+      "strengths": [
+        "Open-source firmware",
+        "Secure element (ATECC608A)",
+        "MicroSD backup"
+      ],
+      "weaknesses": [
+        "No air-gap support",
+        "Passphrase input via app"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Secure chip and open-source design, with good physical protections and easy usability.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/bitbox02-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://shiftcrypto.ch/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/bitbox.png",
+      "summary": "BitBox02 is a compact Swiss-made wallet with strong open-source credentials and microSD backups, ideal for beginners and intermediate users.",
+      "display": "128x64 OLED",
+      "power": "USB-C powered"
+    },
+    {
+      "name": "Foundation Passport Batch 2",
+      "vendor": "Foundation",
+      "first_release": "2022-03",
+      "price_usd": 259,
+      "status": "active",
+      "strengths": [
+        "Bitcoin-only",
+        "Air-gapped with QR and microSD",
+        "Secure element + open-source"
+      ],
+      "weaknesses": [
+        "No altcoin support",
+        "Smaller screen than others"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Open hardware and firmware, secure element, and strong design — ideal for Bitcoiners.",
+      "expert_reviews": [
+        {
+          "source": "Bitcoin Magazine",
+          "url": "https://bitcoinmagazine.com/technical/foundation-passport-review"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://foundationdevices.com/affiliates/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/foundation-passport-batch2.png",
+      "summary": "Passport is a premium Bitcoin-only hardware wallet with an emphasis on open-source, air-gapped use and intuitive design.",
+      "display": "128x64 OLED",
+      "power": "USB-C + removable AAA battery"
+    },
+    {
+      "name": "Foundation Passport Founders Edition",
+      "vendor": "Foundation",
+      "first_release": "2021-01",
+      "price_usd": 299,
+      "status": "discontinued",
+      "strengths": [
+        "Bitcoin-only",
+        "Open-source",
+        "Air-gapped"
+      ],
+      "weaknesses": [
+        "Battery issues in early units",
+        "Replaced by Batch 2"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Same solid base as Batch 2 but early hardware quirks reduce confidence.",
+      "expert_reviews": [
+        {
+          "source": "Cointelegraph",
+          "url": "https://cointelegraph.com/news/foundation-passport-review"
+        }
+      ],
+      "affiliate_support": false,
+      "affiliate_link_placeholder": "",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/coldcard.png",
+      "summary": "The original Passport wallet introduced open-source, air-gapped Bitcoin custody with excellent physical and digital security.",
+      "display": "128x64 OLED",
+      "power": "USB-C + AAA battery"
+    },
+    {
+      "name": "Blockstream Jade",
+      "vendor": "Blockstream",
+      "first_release": "2021-01",
+      "price_usd": 55,
+      "status": "active",
+      "strengths": [
+        "Low cost and open source",
+        "QR code support and Bluetooth",
+        "Integrates with Blockstream Green"
+      ],
+      "weaknesses": [
+        "No secure element",
+        "Battery can drain fast"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 6,
+      "security_rationale": "Solid open-source tool but no secure element limits resistance to physical attacks.",
+      "expert_reviews": [
+        {
+          "source": "Lopp Blog",
+          "url": "https://blog.lopp.net/how-to-use-blockstream-jade/"
+        }
+      ],
+      "affiliate_support": false,
+      "affiliate_link_placeholder": "",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/blockstream-jade.png",
+      "summary": "Blockstream Jade is a budget-friendly wallet supporting Bitcoin and Liquid with QR and Bluetooth signing support.",
+      "display": "240x135 color LCD",
+      "power": "Rechargeable battery via USB-C"
+    },
+    {
+      "name": "Blockstream Jade Plus",
+      "vendor": "Blockstream",
+      "first_release": "2025-01",
+      "price_usd": 149,
+      "status": "active",
+      "strengths": [
+        "66% larger and 25% brighter screen for improved readability",
+        "Enhanced camera for faster QR code scanning",
+        "Supports air-gapped operations via SD card and built-in battery",
+        "Open-source hardware and firmware",
+        "Advanced security features including Blind Oracle PIN protection and Secure Boot"
+      ],
+      "weaknesses": [
+        "Limited to Bitcoin and Liquid assets only",
+        "No touchscreen; relies on physical navigation buttons",
+        "Metal variants are priced higher at $169"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Offers robust security with open-source design, air-gapped capabilities, and advanced features like Blind Oracle PIN protection. However, it lacks a secure element chip, which some users might consider a drawback.",
+      "expert_reviews": [
+        {
+          "source": "Blockstream Press Release",
+          "url": "https://blockstream.com/press-releases/2025-01-03-blockstream-launch-jade-plus/"
+        },
+        {
+          "source": "ValueWalk",
+          "url": "https://www.valuewalk.com/blockstreams-brand-new-jade-plus-hardware-wallet-debuts-with-better-features-and-free-global-shipping/"
+        },
+        {
+          "source": "BeInCrypto",
+          "url": "https://beincrypto.com/blockstream-unveils-jade-plus-self-custody-wallet/"
+        }
+      ],
+      "affiliate_support": false,
+      "affiliate_link_placeholder": null,
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/blockstream-jade-plus.png",
+      "summary": "The Blockstream Jade Plus is an upgraded Bitcoin hardware wallet featuring a larger, brighter screen and enhanced security features. Designed for both beginners and advanced users, it supports air-gapped operations and integrates seamlessly with popular Bitcoin wallets.",
+      "display": "1.9-inch LCD, 320×170 resolution",
+      "power": "280 mAh rechargeable battery; USB-C for charging and connectivity"
+    },    
+    {
+      "name": "KeepKey",
+      "vendor": "ShapeShift",
+      "first_release": "2015-09",
+      "price_usd": 49,
+      "status": "active",
+      "strengths": [
+        "Large screen",
+        "Affordable",
+        "Open-source firmware"
+      ],
+      "weaknesses": [
+        "No secure element",
+        "Limited firmware updates"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": false
+      },
+      "security_score": 6,
+      "security_rationale": "Safe for low-risk usage, but aging hardware and no secure chip hurt long-term confidence.",
+      "expert_reviews": [
+        {
+          "source": "Boxmining",
+          "url": "https://boxmining.com/keepkey/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://shapeshift.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/keepkey.png",
+      "summary": "KeepKey is a visually sleek wallet from ShapeShift with a large display and beginner-friendly interface at a low price.",
+      "display": "256x64 OLED",
+      "power": "USB powered"
+    },
+    {
+      "name": "SafePal S1",
+      "vendor": "SafePal",
+      "first_release": "2019-01",
+      "price_usd": 49,
+      "status": "active",
+      "strengths": [
+        "Fully air-gapped with QR",
+        "Secure element chip",
+        "Multi-coin support"
+      ],
+      "weaknesses": [
+        "Closed-source firmware",
+        "Limited multisig tools"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": "limited",
+        "advanced_features": true
+      },
+      "security_score": 7,
+      "security_rationale": "Affordable, good protection, but proprietary firmware and less transparency are concerns.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/safepal-wallet-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://safepal.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/safepal-s1.png",
+      "summary": "SafePal S1 is an inexpensive, air-gapped wallet with secure QR-based signing and native app support.",
+      "display": "1.3-inch color screen",
+      "power": "Rechargeable battery via micro-USB"
+    },
+    {
+      "name": "Ellipal Titan 2.0",
+      "vendor": "Ellipal",
+      "first_release": "2023-11",
+      "price_usd": 169,
+      "status": "active",
+      "strengths": [
+        "Air-gapped QR",
+        "Self-destruct tamper protection",
+        "Supports many coins"
+      ],
+      "weaknesses": [
+        "Closed source",
+        "Sealed battery"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 7,
+      "security_rationale": "Good tamper protections and air-gap but lacks open-source review and has past trust issues.",
+      "expert_reviews": [
+        {
+          "source": "CoinBureau",
+          "url": "https://www.coinbureau.com/review/ellipal-titan/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://ellipal.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/ellipal-titan.png",
+      "summary": "Ellipal Titan 2.0 is a rugged, fully air-gapped wallet with metal body and QR-based signing for multi-chain support.",
+      "display": "3.97-inch touchscreen",
+      "power": "Rechargeable internal battery"
+    },
+    {
+      "name": "NGRAVE ZERO",
+      "vendor": "NGRAVE",
+      "first_release": "2020-10",
+      "price_usd": 398,
+      "status": "active",
+      "strengths": [
+        "EAL7 secure element",
+        "Air-gapped with QR",
+        "Biometric access"
+      ],
+      "weaknesses": [
+        "Closed-source firmware",
+        "Very expensive"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Top-tier hardware security, but closed firmware limits full transparency.",
+      "expert_reviews": [
+        {
+          "source": "99Bitcoins",
+          "url": "https://99bitcoins.com/ngrave-zero-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://ngrave.io/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/ngrave-zero.png",
+      "summary": "The ZERO offers air-gapped QR signing and EAL7-grade protection for maximum resilience against attacks.",
+      "display": "4-inch color touchscreen",
+      "power": "Rechargeable battery via USB-C"
+    },
+    {
+      "name": "Cypherock X1",
+      "vendor": "Cypherock",
+      "first_release": "2023-01",
+      "price_usd": 159,
+      "status": "active",
+      "strengths": [
+        "Seedless key sharding",
+        "NFC smart cards",
+        "Secure element in device and cards"
+      ],
+      "weaknesses": [
+        "Complex recovery process",
+        "Less field-tested"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": false,
+        "advanced_features": true
+      },
+      "security_score": 9,
+      "security_rationale": "Unique seedless recovery with strong cryptography, but usability has learning curve.",
+      "expert_reviews": [
+        {
+          "source": "Coinspeaker",
+          "url": "https://www.coinspeaker.com/cypherock-x1-review/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://cypherock.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/cypherock-x1.png",
+      "summary": "Cypherock X1 uses distributed recovery cards for seedless storage and is designed for advanced key protection.",
+      "display": "OLED",
+      "power": "USB-C powered"
+    },
+    {
+      "name": "GridPlus Lattice1",
+      "vendor": "GridPlus",
+      "first_release": "2020-01",
+      "price_usd": 399,
+      "status": "active",
+      "strengths": [
+        "Smartcard support",
+        "Large touchscreen",
+        "APIs for dev integrations"
+      ],
+      "weaknesses": [
+        "Expensive",
+        "Network-connected (increases surface area)"
+      ],
+      "complexity": {
+        "beginner_friendly": false,
+        "multi_sig_supported": true,
+        "advanced_features": true
+      },
+      "security_score": 8,
+      "security_rationale": "Very secure enclave and unique design but online status reduces air-gapped appeal.",
+      "expert_reviews": [
+        {
+          "source": "CoinDesk",
+          "url": "https://www.coindesk.com/review/gridplus-lattice1/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://gridplus.io/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/gridplus-lattice-1.png",
+      "summary": "GridPlus Lattice1 is a powerful enterprise-grade wallet with touchscreen and smartcard architecture, ideal for developers.",
+      "display": "5-inch color touchscreen",
+      "power": "USB powered"
+    },
+    {
+      "name": "Tangem Wallet",
+      "vendor": "Tangem",
+      "first_release": "2018-01",
+      "price_usd": 50,
+      "status": "active",
+      "strengths": [
+        "NFC smartcard wallet",
+        "Portable and minimal",
+        "Supports multi-card backup"
+      ],
+      "weaknesses": [
+        "No screen",
+        "Relies on phone for display"
+      ],
+      "complexity": {
+        "beginner_friendly": true,
+        "multi_sig_supported": false,
+        "advanced_features": false
+      },
+      "security_score": 5,
+      "security_rationale": "Strong chip-level security but reliance on external UI reduces trust.",
+      "expert_reviews": [
+        {
+          "source": "CryptoNews",
+          "url": "https://cryptonews.com/reviews/tangem-wallet/"
+        }
+      ],
+      "affiliate_support": true,
+      "affiliate_link_placeholder": "https://tangem.com/affiliate/YOUR_CODE",
+      "thumbnail_image": "/images/bitcoin_wallet_showdown_2025-05-26/tangem-wallet.png",
+      "summary": "Tangem offers a minimal NFC-enabled card-based wallet great for gifting or spending but limited for serious custody.",
+      "display": "None",
+      "power": "NFC-powered (uses phone)"
+    }
+  ]
+  

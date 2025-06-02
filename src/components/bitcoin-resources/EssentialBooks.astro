@@ -1,0 +1,856 @@
+---
+// Essential Books component for Bitcoin Resources page
+interface Book {
+  title: string;
+  author: string;
+  description?: string;
+  synopsis: string;
+  readingLevel?: 'Beginner' | 'Intermediate' | 'Advanced';
+  isbn?: string;
+  publishYear?: number;
+  pages?: number;
+  coverImage?: string;
+  keyTakeaways: string[];
+  whoShouldRead: string[];
+  purchaseLinks: {
+    amazon?: string;
+    bookDepository?: string;
+    audible?: string;
+    kindle?: string;
+  };
+  tags: string[];
+  rating?: number;
+}
+
+const books: Book[] = [
+  {
+    title: "21 Lessons",
+    author: "Gigi",
+    description: "Philosophical insights about Bitcoin, economics, and technology learned from the rabbit hole.",
+    synopsis: "21 Lessons is a collection of philosophical reflections inspired by falling down the Bitcoin rabbit hole. The mysterious nature of Bitcoin seems to attract all kinds of curious characters, leading to a vibrant community of builders, thinkers, and writers. Gigi is one of them. What started as an innocent question about the number of bitcoin in existence turned into a multi-year journey down various rabbit holes. The result is this distillation of philosophical insights and practical wisdom gained along the way. These 21 lessons are organized into seven chapters covering philosophy, economics, and technology.",
+    readingLevel: "Beginner",
+    publishYear: 2019,
+    pages: 260,
+    keyTakeaways: [
+      "Bitcoin as a complex adaptive system",
+      "The nature of money and value",
+      "Lessons about time, scarcity, and patience",
+      "Understanding decentralization and antifragility",
+      "Personal sovereignty and responsibility"
+    ],
+    whoShouldRead: [
+      "Bitcoin newcomers seeking perspective",
+      "Philosophy enthusiasts",
+      "Anyone interested in complex systems",
+      "Readers wanting accessible Bitcoin insights"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1697526349?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B083L93MJ7?tag=darrenhicksde-20"
+    },
+    tags: ["Philosophy", "Beginner-Friendly", "Reflections", "Wisdom"],
+    rating: 4.9
+  },
+  {
+    title: "The Bitcoin Standard",
+    author: "Saifedean Ammous",
+    description: "The definitive guide to Bitcoin's economic philosophy and its potential to replace fiat money.",
+    synopsis: "In The Bitcoin Standard, economist Saifedean Ammous examines the historical context of the rise of Bitcoin. From the use of seashells and stones to today's most sophisticated monetary system, Ammous guides readers through the history of technologies performing the functions of money. He explores what gave these technologies their monetary role, how most lost it, why this matters, and what it means for Bitcoin. The book demonstrates how Bitcoin's technology represents the first engineering solution to the problem of sound money in the digital age. Rather than serving as a currency, Bitcoin is better understood as a new emerging store of value technology, and possibly the best one ever invented.",
+    readingLevel: "Intermediate",
+    publishYear: 2018,
+    pages: 304,
+    keyTakeaways: [
+      "Understanding the properties of sound money throughout history",
+      "Why gold became the global monetary standard",
+      "How fiat currencies lead to economic distortions",
+      "Bitcoin as digital gold and the hardest money ever created",
+      "The Austrian School of Economics perspective on money"
+    ],
+    whoShouldRead: [
+      "Anyone wanting to understand Bitcoin's economic significance",
+      "Investors looking for macro-economic perspective",
+      "Students of Austrian economics",
+      "Policy makers and financial professionals"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1119473861?tag=darrenhicksde-20",
+      audible: "https://audible.com/pd/B07D7ZQZX1?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B077K3GSNY?tag=darrenhicksde-20"
+    },
+    tags: ["Economics", "Monetary Theory", "Austrian School", "History"],
+    rating: 4.8
+  },
+  {
+    title: "The Fiat Standard",
+    author: "Saifedean Ammous",
+    description: "Analysis of the current fiat monetary system and its historical development.",
+    synopsis: "In The Fiat Standard, world-renowned economist Saifedean Ammous applies his unique analytical framework to examine the rise of fiat money and its far-reaching effects on government, society, and culture. In contrast to the gold standard, which limited government intervention in the economy, the fiat standard has enabled governments to expand their power dramatically. Ammous demonstrates how this has fundamentally altered the incentive structure of society, leading to higher time preference, reduced savings, and a culture of instant gratification that undermines long-term thinking.",
+    readingLevel: "Intermediate",
+    publishYear: 2021,
+    pages: 432,
+    keyTakeaways: [
+      "How the abandonment of gold standard changed society",
+      "The role of central banks in modern economics",
+      "Fiat money's impact on art, architecture, and culture",
+      "Why fiat systems promote short-term thinking",
+      "The connection between money and civilization"
+    ],
+    whoShouldRead: [
+      "Readers of The Bitcoin Standard",
+      "Students of monetary policy",
+      "Anyone questioning current economic systems",
+      "Cultural critics and social scientists"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1544526474?tag=darrenhicksde-20",
+      audible: "https://audible.com/pd/B09HC5PNZ8?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B09HG11KGF?tag=darrenhicksde-20"
+    },
+    tags: ["Economics", "Monetary Policy", "Cultural Analysis", "History"],
+    rating: 4.7
+  },
+  {
+    title: "Broken Money",
+    author: "Lyn Alden",
+    description: "How our monetary system is failing us and how to fix it through understanding technology and finance.",
+    synopsis: "In Broken Money, macroeconomist and investment strategist Lyn Alden explores how our global monetary system has become increasingly fragile and disconnected from economic reality. Drawing on her extensive background in engineering and finance, Alden explains how money has evolved throughout history and why our current fiat system is experiencing structural problems. The book examines inflation, debt cycles, and monetary debasement while proposing practical solutions including the role that Bitcoin and other technologies might play in creating a more sound monetary future. Alden provides both historical context and forward-looking analysis, making complex economic concepts accessible to general readers.",
+    readingLevel: "Intermediate",
+    publishYear: 2023,
+    pages: 464,
+    keyTakeaways: [
+      "Historical evolution of money and why systems change",
+      "How central banking and fiat currency create structural problems",
+      "The relationship between energy, technology, and monetary systems",
+      "Why inflation is more complex than commonly understood",
+      "Practical investment strategies in a changing monetary landscape",
+      "How Bitcoin fits into the broader context of monetary innovation"
+    ],
+    whoShouldRead: [
+      "Investors seeking to understand macro trends",
+      "Anyone interested in monetary policy and economics",
+      "People concerned about inflation and currency debasement",
+      "Readers wanting practical financial guidance",
+      "Those interested in Bitcoin's monetary properties"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1394155174?tag=darrenhicksde-20",
+      audible: "https://audible.com/pd/B0C4M6QJZ8?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B0C4M74WJN?tag=darrenhicksde-20"
+    },
+    tags: ["Economics", "Investment", "Monetary Policy", "Practical"],
+    rating: 4.6
+  },
+  {
+    title: "The Price of Tomorrow",
+    author: "Jeff Booth",
+    description: "Why deflation is the key to an abundant future and how technology is changing everything.",
+    synopsis: "The Price of Tomorrow presents a compelling argument that we are living through the most important period in human history, where exponential technological advancement is creating a deflationary world that conflicts with our inflationary monetary system. Technology entrepreneur Jeff Booth explains how artificial intelligence, robotics, and other technologies are making goods and services cheaper and more abundant, but our debt-based monetary system requires constant inflation to function. This fundamental mismatch creates economic instability and inequality. Booth argues that we must choose between preserving the current system through increasing centralization and control, or embracing deflation and the abundance it can bring through decentralized technologies like Bitcoin.",
+    readingLevel: "Intermediate",
+    publishYear: 2020,
+    pages: 256,
+    keyTakeaways: [
+      "How technology creates natural deflation through efficiency gains",
+      "Why our debt-based system requires inflation to survive",
+      "The fundamental conflict between technological progress and monetary policy",
+      "How inequality is driven by monetary system design",
+      "Why decentralized money is necessary for technological abundance",
+      "The choice between centralized control and decentralized freedom"
+    ],
+    whoShouldRead: [
+      "Technology professionals and entrepreneurs",
+      "Anyone interested in future economic trends",
+      "People concerned about growing inequality",
+      "Readers interested in the intersection of technology and money",
+      "Those seeking to understand Bitcoin's role in the future economy"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1999257405?tag=darrenhicksde-20",
+      audible: "https://audible.com/pd/B087C34W8G?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B0842Z3L5G?tag=darrenhicksde-20"
+    },
+    tags: ["Technology", "Future Economics", "Deflation", "Innovation"],
+    rating: 4.7
+  },
+  {
+    title: "Mastering Bitcoin",
+    author: "Andreas Antonopoulos",
+    description: "Technical deep-dive into Bitcoin's underlying technology and programming interfaces.",
+    synopsis: "Mastering Bitcoin is your guide through the seemingly complex world of bitcoin, providing the knowledge you need to participate in the internet of money. Whether you're building the next killer app, investing in a startup, or simply curious about the technology, this revised and expanded second edition provides essential detail to get you started. Bitcoin, the first successful decentralized digital currency, is still in its early stages and yet it's already spawned a multi-billion-dollar global economy open to anyone with the knowledge and passion to participate.",
+    readingLevel: "Advanced",
+    publishYear: 2017,
+    pages: 416,
+    keyTakeaways: [
+      "How Bitcoin transactions work at the protocol level",
+      "Cryptographic primitives: hashes, digital signatures, merkle trees",
+      "Bitcoin scripting language and smart contracts",
+      "Mining, consensus mechanisms, and network security",
+      "Wallet technology and key management"
+    ],
+    whoShouldRead: [
+      "Software developers building on Bitcoin",
+      "Technical professionals in fintech",
+      "Blockchain researchers and academics",
+      "Anyone wanting deep technical understanding"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1491954388?tag=darrenhicksde-20",
+      audible: "https://audible.com/pd/B071K7FCD4?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B071K7FCYS?tag=darrenhicksde-20"
+    },
+    tags: ["Technical", "Programming", "Cryptography", "Protocol"],
+    rating: 4.7
+  },
+  {
+    title: "Programming Bitcoin",
+    author: "Jimmy Song",
+    description: "Learn how to program Bitcoin from scratch with Python examples and exercises.",
+    synopsis: "Programming Bitcoin teaches you how to program a Bitcoin library from scratch. You'll learn how to work with the building blocks of Bitcoin: transactions, elliptic curve cryptography, and the Bitcoin network. By the end of this book, you'll understand how Bitcoin works under the hood by coding each component from scratch. This hands-on approach ensures you truly understand Bitcoin's architecture rather than just using existing libraries. The book includes exercises and real Python code examples that you can run and modify.",
+    readingLevel: "Advanced",
+    publishYear: 2019,
+    pages: 320,
+    keyTakeaways: [
+      "Build a Bitcoin library from scratch in Python",
+      "Understand elliptic curve cryptography practically",
+      "Create and validate Bitcoin transactions",
+      "Implement simplified payment verification (SPV)",
+      "Connect to and interact with the Bitcoin network"
+    ],
+    whoShouldRead: [
+      "Python developers learning Bitcoin",
+      "Computer science students",
+      "Developers building Bitcoin applications",
+      "Anyone wanting hands-on Bitcoin programming experience"
+    ],
+    purchaseLinks: {
+      amazon: "https://amazon.com/dp/1492031496?tag=darrenhicksde-20",
+      kindle: "https://amazon.com/dp/B07XJ9ZDQQ?tag=darrenhicksde-20"
+    },
+    tags: ["Programming", "Python", "Hands-on", "Education"],
+    rating: 4.6
+  }
+];
+
+// Helper function to get reading level badge color
+function getReadingLevelColor(level?: string): string {
+  switch (level) {
+    case 'Beginner':
+      return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+    case 'Intermediate':
+      return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+    case 'Advanced':
+      return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+    default:
+      return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+  }
+}
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    📚 Essential Books
+  </h3>
+  <div class="space-y-6">
+    {books.map((book, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-book-index={index}
+                  title="Click to view details">
+                {book.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-book-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {book.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${book.rating}/5`}>
+                  {renderStars(book.rating)}
+                </span>
+              )}
+              {book.readingLevel && (
+                <span class={`px-2 py-1 text-xs font-medium rounded-full ${getReadingLevelColor(book.readingLevel)}`}>
+                  {book.readingLevel}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>by {book.author}</span>
+            {book.publishYear && (
+              <>
+                <span>•</span>
+                <span>{book.publishYear}</span>
+              </>
+            )}
+            {book.pages && (
+              <>
+                <span>•</span>
+                <span>{book.pages} pages</span>
+              </>
+            )}
+          </div>
+          {book.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {book.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {book.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+  
+  <!-- Reading Level Legend -->
+  <div class="mt-6 pt-4 border-t border-gray-100 dark:border-gray-700">
+    <p class="text-xs text-gray-500 dark:text-gray-500 mb-2">Reading Levels:</p>
+    <div class="flex flex-wrap gap-2 text-xs">
+      <span class="px-2 py-1 rounded-full bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400">Beginner</span>
+      <span class="px-2 py-1 rounded-full bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400">Intermediate</span>
+      <span class="px-2 py-1 rounded-full bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400">Advanced</span>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="book-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="book-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-blue-100 dark:bg-blue-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-blue-600 dark:text-blue-400 text-xl font-bold">📖</span>
+          </div>
+          <div>
+            <h2 id="modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="modal-author" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <a id="book-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Book Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="modal-rating" class="flex items-center space-x-2"></div>
+            <div id="modal-level" class="flex items-center space-x-2"></div>
+            <div id="modal-year" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="modal-pages" class="text-sm text-gray-600 dark:text-gray-400"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              Synopsis
+            </h3>
+            <div id="modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Takeaways -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">💡</span>
+              </span>
+              Key Takeaways
+            </h3>
+            <ul id="modal-takeaways" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Read -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Read This
+            </h3>
+            <ul id="modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Topics
+            </h3>
+            <div id="modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Purchase Links -->
+          <div id="modal-purchase-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🛒</span>
+              </span>
+              Get This Book
+            </h3>
+            <div id="modal-purchase-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              📢 Disclosure: Some links may contain affiliate codes that help support this site at no extra cost to you.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  // Modal functionality
+  const books = [
+    {
+      title: "21 Lessons",
+      author: "Gigi",
+      synopsis: "21 Lessons is a collection of philosophical reflections inspired by falling down the Bitcoin rabbit hole. The mysterious nature of Bitcoin seems to attract all kinds of curious characters, leading to a vibrant community of builders, thinkers, and writers. Gigi is one of them. What started as an innocent question about the number of bitcoin in existence turned into a multi-year journey down various rabbit holes. The result is this distillation of philosophical insights and practical wisdom gained along the way. These 21 lessons are organized into seven chapters covering philosophy, economics, and technology.",
+      readingLevel: "Beginner",
+      publishYear: 2019,
+      pages: 260,
+      keyTakeaways: [
+        "Bitcoin as a complex adaptive system",
+        "The nature of money and value",
+        "Lessons about time, scarcity, and patience",
+        "Understanding decentralization and antifragility",
+        "Personal sovereignty and responsibility"
+      ],
+      whoShouldRead: [
+        "Bitcoin newcomers seeking perspective",
+        "Philosophy enthusiasts",
+        "Anyone interested in complex systems",
+        "Readers wanting accessible Bitcoin insights"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1697526349?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B083L93MJ7?tag=darrenhicksde-20"
+      },
+      tags: ["Philosophy", "Beginner-Friendly", "Reflections", "Wisdom"],
+      rating: 4.9
+    },
+    {
+      title: "The Bitcoin Standard",
+      author: "Saifedean Ammous",
+      synopsis: "In The Bitcoin Standard, economist Saifedean Ammous examines the historical context of the rise of Bitcoin. From the use of seashells and stones to today's most sophisticated monetary system, Ammous guides readers through the history of technologies performing the functions of money. He explores what gave these technologies their monetary role, how most lost it, why this matters, and what it means for Bitcoin. The book demonstrates how Bitcoin's technology represents the first engineering solution to the problem of sound money in the digital age. Rather than serving as a currency, Bitcoin is better understood as a new emerging store of value technology, and possibly the best one ever invented.",
+      readingLevel: "Intermediate",
+      publishYear: 2018,
+      pages: 304,
+      keyTakeaways: [
+        "Understanding the properties of sound money throughout history",
+        "Why gold became the global monetary standard",
+        "How fiat currencies lead to economic distortions",
+        "Bitcoin as digital gold and the hardest money ever created",
+        "The Austrian School of Economics perspective on money"
+      ],
+      whoShouldRead: [
+        "Anyone wanting to understand Bitcoin's economic significance",
+        "Investors looking for macro-economic perspective",
+        "Students of Austrian economics",
+        "Policy makers and financial professionals"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1119473861?tag=darrenhicksde-20",
+        audible: "https://audible.com/pd/B07D7ZQZX1?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B077K3GSNY?tag=darrenhicksde-20"
+      },
+      tags: ["Economics", "Monetary Theory", "Austrian School", "History"],
+      rating: 4.8
+    },
+    {
+      title: "The Fiat Standard",
+      author: "Saifedean Ammous",
+      synopsis: "In The Fiat Standard, world-renowned economist Saifedean Ammous applies his unique analytical framework to examine the rise of fiat money and its far-reaching effects on government, society, and culture. In contrast to the gold standard, which limited government intervention in the economy, the fiat standard has enabled governments to expand their power dramatically. Ammous demonstrates how this has fundamentally altered the incentive structure of society, leading to higher time preference, reduced savings, and a culture of instant gratification that undermines long-term thinking.",
+      readingLevel: "Intermediate",
+      publishYear: 2021,
+      pages: 432,
+      keyTakeaways: [
+        "How the abandonment of gold standard changed society",
+        "The role of central banks in modern economics",
+        "Fiat money's impact on art, architecture, and culture",
+        "Why fiat systems promote short-term thinking",
+        "The connection between money and civilization"
+      ],
+      whoShouldRead: [
+        "Readers of The Bitcoin Standard",
+        "Students of monetary policy",
+        "Anyone questioning current economic systems",
+        "Cultural critics and social scientists"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1544526474?tag=darrenhicksde-20",
+        audible: "https://audible.com/pd/B09HC5PNZ8?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B09HG11KGF?tag=darrenhicksde-20"
+      },
+      tags: ["Economics", "Monetary Policy", "Cultural Analysis", "History"],
+      rating: 4.7
+    },
+    {
+      title: "Broken Money",
+      author: "Lyn Alden",
+      synopsis: "In Broken Money, macroeconomist and investment strategist Lyn Alden explores how our global monetary system has become increasingly fragile and disconnected from economic reality. Drawing on her extensive background in engineering and finance, Alden explains how money has evolved throughout history and why our current fiat system is experiencing structural problems. The book examines inflation, debt cycles, and monetary debasement while proposing practical solutions including the role that Bitcoin and other technologies might play in creating a more sound monetary future. Alden provides both historical context and forward-looking analysis, making complex economic concepts accessible to general readers.",
+      readingLevel: "Intermediate",
+      publishYear: 2023,
+      pages: 464,
+      keyTakeaways: [
+        "Historical evolution of money and why systems change",
+        "How central banking and fiat currency create structural problems",
+        "The relationship between energy, technology, and monetary systems",
+        "Why inflation is more complex than commonly understood",
+        "Practical investment strategies in a changing monetary landscape",
+        "How Bitcoin fits into the broader context of monetary innovation"
+      ],
+      whoShouldRead: [
+        "Investors seeking to understand macro trends",
+        "Anyone interested in monetary policy and economics",
+        "People concerned about inflation and currency debasement",
+        "Readers wanting practical financial guidance",
+        "Those interested in Bitcoin's monetary properties"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1394155174?tag=darrenhicksde-20",
+        audible: "https://audible.com/pd/B0C4M6QJZ8?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B0C4M74WJN?tag=darrenhicksde-20"
+      },
+      tags: ["Economics", "Investment", "Monetary Policy", "Practical"],
+      rating: 4.6
+    },
+    {
+      title: "The Price of Tomorrow",
+      author: "Jeff Booth",
+      synopsis: "The Price of Tomorrow presents a compelling argument that we are living through the most important period in human history, where exponential technological advancement is creating a deflationary world that conflicts with our inflationary monetary system. Technology entrepreneur Jeff Booth explains how artificial intelligence, robotics, and other technologies are making goods and services cheaper and more abundant, but our debt-based monetary system requires constant inflation to function. This fundamental mismatch creates economic instability and inequality. Booth argues that we must choose between preserving the current system through increasing centralization and control, or embracing deflation and the abundance it can bring through decentralized technologies like Bitcoin.",
+      readingLevel: "Intermediate",
+      publishYear: 2020,
+      pages: 256,
+      keyTakeaways: [
+        "How technology creates natural deflation through efficiency gains",
+        "Why our debt-based system requires inflation to survive",
+        "The fundamental conflict between technological progress and monetary policy",
+        "How inequality is driven by monetary system design",
+        "Why decentralized money is necessary for technological abundance",
+        "The choice between centralized control and decentralized freedom"
+      ],
+      whoShouldRead: [
+        "Technology professionals and entrepreneurs",
+        "Anyone interested in future economic trends",
+        "People concerned about growing inequality",
+        "Readers interested in the intersection of technology and money",
+        "Those seeking to understand Bitcoin's role in the future economy"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1999257405?tag=darrenhicksde-20",
+        audible: "https://audible.com/pd/B087C34W8G?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B0842Z3L5G?tag=darrenhicksde-20"
+      },
+      tags: ["Technology", "Future Economics", "Deflation", "Innovation"],
+      rating: 4.7
+    },
+    {
+      title: "Mastering Bitcoin",
+      author: "Andreas Antonopoulos",
+      synopsis: "Mastering Bitcoin is your guide through the seemingly complex world of bitcoin, providing the knowledge you need to participate in the internet of money. Whether you're building the next killer app, investing in a startup, or simply curious about the technology, this revised and expanded second edition provides essential detail to get you started. Bitcoin, the first successful decentralized digital currency, is still in its early stages and yet it's already spawned a multi-billion-dollar global economy open to anyone with the knowledge and passion to participate.",
+      readingLevel: "Advanced",
+      publishYear: 2017,
+      pages: 416,
+      keyTakeaways: [
+        "How Bitcoin transactions work at the protocol level",
+        "Cryptographic primitives: hashes, digital signatures, merkle trees",
+        "Bitcoin scripting language and smart contracts",
+        "Mining, consensus mechanisms, and network security",
+        "Wallet technology and key management"
+      ],
+      whoShouldRead: [
+        "Software developers building on Bitcoin",
+        "Technical professionals in fintech",
+        "Blockchain researchers and academics",
+        "Anyone wanting deep technical understanding"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1491954388?tag=darrenhicksde-20",
+        audible: "https://audible.com/pd/B071K7FCD4?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B071K7FCYS?tag=darrenhicksde-20"
+      },
+      tags: ["Technical", "Programming", "Cryptography", "Protocol"],
+      rating: 4.7
+    },
+    {
+      title: "Programming Bitcoin",
+      author: "Jimmy Song",
+      synopsis: "Programming Bitcoin teaches you how to program a Bitcoin library from scratch. You'll learn how to work with the building blocks of Bitcoin: transactions, elliptic curve cryptography, and the Bitcoin network. By the end of this book, you'll understand how Bitcoin works under the hood by coding each component from scratch. This hands-on approach ensures you truly understand Bitcoin's architecture rather than just using existing libraries. The book includes exercises and real Python code examples that you can run and modify.",
+      readingLevel: "Advanced",
+      publishYear: 2019,
+      pages: 320,
+      keyTakeaways: [
+        "Build a Bitcoin library from scratch in Python",
+        "Understand elliptic curve cryptography practically",
+        "Create and validate Bitcoin transactions",
+        "Implement simplified payment verification (SPV)",
+        "Connect to and interact with the Bitcoin network"
+      ],
+      whoShouldRead: [
+        "Python developers learning Bitcoin",
+        "Computer science students",
+        "Developers building Bitcoin applications",
+        "Anyone wanting hands-on Bitcoin programming experience"
+      ],
+      purchaseLinks: {
+        amazon: "https://amazon.com/dp/1492031496?tag=darrenhicksde-20",
+        kindle: "https://amazon.com/dp/B07XJ9ZDQQ?tag=darrenhicksde-20"
+      },
+      tags: ["Programming", "Python", "Hands-on", "Education"],
+      rating: 4.6
+    }
+  ];
+
+  function getReadingLevelColor(level) {
+    switch (level) {
+      case 'Beginner':
+        return 'bg-green-100 text-green-800 dark:bg-green-900/20 dark:text-green-400';
+      case 'Intermediate':
+        return 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/20 dark:text-yellow-400';
+      case 'Advanced':
+        return 'bg-red-100 text-red-800 dark:bg-red-900/20 dark:text-red-400';
+      default:
+        return 'bg-gray-100 text-gray-800 dark:bg-gray-900/20 dark:text-gray-400';
+    }
+  }
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function showBookModal(bookIndex) {
+    const book = books[bookIndex];
+    const modal = document.getElementById('book-modal-overlay');
+    const modalContent = document.getElementById('book-modal');
+    
+    // Populate modal content
+    document.getElementById('modal-title').textContent = book.title;
+    document.getElementById('modal-author').textContent = `by ${book.author}`;
+    document.getElementById('modal-synopsis').textContent = book.synopsis;
+    
+    // Set external link
+    const externalLink = document.getElementById('book-external-link') as HTMLAnchorElement;
+    const mainLink = book.purchaseLinks.amazon || book.purchaseLinks.kindle || book.purchaseLinks.audible;
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
+    
+    // Rating and details
+    const ratingElement = document.getElementById('modal-rating');
+    if (book.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(book.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${book.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Reading level
+    const levelElement = document.getElementById('modal-level');
+    if (book.readingLevel) {
+      levelElement.innerHTML = `<span class="px-2 py-1 text-xs font-medium rounded-full ${getReadingLevelColor(book.readingLevel)}">${book.readingLevel}</span>`;
+    } else {
+      levelElement.innerHTML = '';
+    }
+    
+    // Year and pages
+    document.getElementById('modal-year').textContent = book.publishYear ? `Published ${book.publishYear}` : '';
+    document.getElementById('modal-pages').textContent = book.pages ? `${book.pages} pages` : '';
+    
+    // Key takeaways
+    const takeawaysElement = document.getElementById('modal-takeaways');
+    takeawaysElement.innerHTML = book.keyTakeaways.map(takeaway => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">✓</span>
+        <span class="text-gray-700 dark:text-gray-300">${takeaway}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('modal-audience');
+    audienceElement.innerHTML = book.whoShouldRead.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('modal-tags');
+    tagsElement.innerHTML = book.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Purchase links
+    const purchaseElement = document.getElementById('modal-purchase-links');
+    const linkButtons = [];
+    
+    if (book.purchaseLinks.amazon) {
+      linkButtons.push(`
+        <a href="${book.purchaseLinks.amazon}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>📦</span>
+          <span>Amazon</span>
+        </a>
+      `);
+    }
+    
+    if (book.purchaseLinks.kindle) {
+      linkButtons.push(`
+        <a href="${book.purchaseLinks.kindle}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>📱</span>
+          <span>Kindle</span>
+        </a>
+      `);
+    }
+    
+    if (book.purchaseLinks.audible) {
+      linkButtons.push(`
+        <a href="${book.purchaseLinks.audible}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>🎧</span>
+          <span>Audible</span>
+        </a>
+      `);
+    }
+    
+    purchaseElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideBookModal() {
+    const modal = document.getElementById('book-modal-overlay');
+    const modalContent = document.getElementById('book-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const bookIndex = parseInt(this.getAttribute('data-book-index'));
+        showBookModal(bookIndex);
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-book-index]').forEach(title => {
+      title.addEventListener('click', function() {
+        const bookIndex = parseInt(this.getAttribute('data-book-index'));
+        showBookModal(bookIndex);
+      });
+    });
+    
+    // Close modal
+    document.getElementById('close-modal').addEventListener('click', hideBookModal);
+    
+    // Close on overlay click
+    document.getElementById('book-modal-overlay').addEventListener('click', function(e) {
+      // Close if clicking outside the modal content
+      if (e.target && !document.getElementById('book-modal').contains(e.target as Node)) {
+        hideBookModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('book-modal-overlay').classList.contains('hidden')) {
+        hideBookModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #book-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #book-modal-overlay:not(.hidden) #book-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

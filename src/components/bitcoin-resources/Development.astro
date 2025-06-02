@@ -1,0 +1,622 @@
+---
+// Development component for Bitcoin Resources page
+
+interface DevelopmentResource {
+  title: string;
+  maintainer?: string;
+  type: string; // "Software", "Documentation", "Specification", etc.
+  description?: string;
+  synopsis: string;
+  yearStarted?: number;
+  lastUpdated?: string;
+  keyFeatures: string[];
+  whoShouldUse: string[];
+  links: {
+    official?: string;
+    github?: string;
+    documentation?: string;
+    download?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  rating?: number;
+}
+
+const developmentResources: DevelopmentResource[] = [
+  {
+    title: "Bitcoin Core",
+    maintainer: "Bitcoin Core Contributors",
+    type: "Software",
+    description: "The reference implementation of Bitcoin protocol and full node software.",
+    synopsis: "Bitcoin Core is the reference implementation of the Bitcoin protocol, serving as both a full node and wallet software. Developed and maintained by a global community of contributors, it defines the consensus rules for the Bitcoin network. Bitcoin Core validates transactions and blocks, maintains the blockchain, and can serve as a wallet for storing and sending Bitcoin. It's the most widely used Bitcoin node software and forms the backbone of the Bitcoin network. The software is open-source and undergoes rigorous peer review to ensure security and reliability. Running Bitcoin Core helps secure the network and provides users with the highest level of security and privacy.",
+    yearStarted: 2009,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Full Bitcoin node validation and consensus enforcement",
+      "Built-in wallet with advanced features and security",
+      "Complete blockchain download and verification",
+      "Peer-to-peer network participation and block relay",
+      "RPC interface for developers and advanced users",
+      "Comprehensive testing suite and security audits"
+    ],
+    whoShouldUse: [
+      "Anyone wanting to run a full Bitcoin node",
+      "Developers building Bitcoin applications",
+      "Users prioritizing maximum security and privacy",
+      "Those contributing to Bitcoin network decentralization",
+      "Advanced users comfortable with technical software"
+    ],
+    links: {
+      official: "https://bitcoincore.org/",
+      github: "https://github.com/bitcoin/bitcoin",
+      documentation: "https://bitcoincore.org/en/doc/",
+      download: "https://bitcoincore.org/en/download/"
+    },
+    tags: ["Full Node", "Reference Implementation", "Core Protocol", "Open Source"],
+    difficulty: "Advanced",
+    rating: 4.9
+  },
+  {
+    title: "Bitcoin Developer Guide",
+    maintainer: "Bitcoin Core Contributors",
+    type: "Documentation",
+    description: "Comprehensive technical documentation for Bitcoin developers.",
+    synopsis: "The Bitcoin Developer Guide is the authoritative documentation for understanding Bitcoin's technical implementation and developing Bitcoin applications. It covers everything from basic concepts to advanced topics, including transaction structure, script language, network protocol, and API usage. The guide explains how Bitcoin works at a technical level, making it essential reading for developers who want to build on Bitcoin. It includes practical examples, code snippets, and detailed explanations of Bitcoin's various components. The documentation is regularly updated to reflect protocol changes and improvements, ensuring developers have access to current and accurate information.",
+    yearStarted: 2014,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Complete technical specification of Bitcoin protocol",
+      "Detailed explanation of transaction and block structure",
+      "Bitcoin Script language documentation and examples",
+      "Network protocol and peer-to-peer communication details",
+      "API reference for Bitcoin Core RPC commands",
+      "Security best practices for Bitcoin development"
+    ],
+    whoShouldUse: [
+      "Software developers building Bitcoin applications",
+      "Technical professionals learning Bitcoin internals",
+      "Researchers studying cryptocurrency technology",
+      "Students pursuing blockchain development",
+      "Anyone implementing Bitcoin-related software"
+    ],
+    links: {
+      official: "https://developer.bitcoin.org/",
+      github: "https://github.com/bitcoin-dot-org/developer.bitcoin.org",
+      documentation: "https://developer.bitcoin.org/reference/"
+    },
+    tags: ["Documentation", "Developer Resources", "Technical Reference", "Learning"],
+    difficulty: "Intermediate",
+    rating: 4.8
+  },
+  {
+    title: "Lightning Network Specifications",
+    maintainer: "Lightning Network Contributors",
+    type: "Specification",
+    description: "Technical specifications (BOLTs) defining the Lightning Network protocol.",
+    synopsis: "The Lightning Network Specifications, also known as BOLTs (Basis of Lightning Technology), define the technical standards for Lightning Network implementation. These specifications cover the peer-to-peer protocol, channel management, routing, and payment processing that enable instant, low-cost Bitcoin transactions. BOLTs ensure interoperability between different Lightning Network implementations, allowing users to seamlessly interact across various wallets and services. The specifications are developed collaboratively by the Lightning Network community and cover everything from the fundamental protocols to advanced features like multi-path payments and watchtowers. Understanding BOLTs is essential for developers building Lightning Network applications or implementing Lightning functionality.",
+    yearStarted: 2016,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Complete Lightning Network protocol specification",
+      "Channel establishment and management procedures",
+      "Payment routing and onion routing protocols",
+      "Invoice format and payment request standards",
+      "Watchtower and backup mechanisms",
+      "Interoperability standards for Lightning implementations"
+    ],
+    whoShouldUse: [
+      "Lightning Network developers and implementers",
+      "Wallet developers integrating Lightning functionality",
+      "Researchers studying Layer 2 scaling solutions",
+      "Technical users understanding Lightning internals",
+      "Anyone building Lightning Network services"
+    ],
+    links: {
+      official: "https://github.com/lightning/bolts",
+      github: "https://github.com/lightning/bolts",
+      documentation: "https://github.com/lightning/bolts/blob/master/00-introduction.md"
+    },
+    tags: ["Lightning Network", "Layer 2", "Specifications", "Protocol"],
+    difficulty: "Advanced",
+    rating: 4.7
+  },
+  {
+    title: "Bitcoin Improvement Proposals",
+    maintainer: "Bitcoin Community",
+    type: "Documentation",
+    description: "Formal proposals for changes and improvements to the Bitcoin protocol.",
+    synopsis: "Bitcoin Improvement Proposals (BIPs) are the formal mechanism for proposing changes to the Bitcoin protocol, documenting standards, and sharing information with the Bitcoin community. BIPs cover everything from protocol upgrades and new features to informational documents and best practices. The BIP process ensures that all changes to Bitcoin are thoroughly discussed, reviewed, and documented before implementation. Notable BIPs include Segregated Witness (BIP 141), Taproot (BIP 341), and various wallet standards. Understanding BIPs is crucial for staying current with Bitcoin development and understanding the rationale behind protocol changes. The BIP repository serves as a historical record of Bitcoin's evolution and future direction.",
+    yearStarted: 2011,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Formal protocol change and improvement proposals",
+      "Standardization of Bitcoin-related technologies",
+      "Community-driven development process",
+      "Historical documentation of Bitcoin evolution",
+      "Technical specifications for protocol upgrades",
+      "Reference implementations and test vectors"
+    ],
+    whoShouldUse: [
+      "Bitcoin protocol developers and researchers",
+      "Anyone following Bitcoin technical development",
+      "Wallet and service developers implementing standards",
+      "Technical users understanding protocol changes",
+      "Contributors to Bitcoin improvement discussions"
+    ],
+    links: {
+      official: "https://github.com/bitcoin/bips",
+      github: "https://github.com/bitcoin/bips",
+      documentation: "https://github.com/bitcoin/bips/blob/master/bip-0001.mediawiki"
+    },
+    tags: ["Protocol Development", "Standards", "Community", "Evolution"],
+    difficulty: "Advanced",
+    rating: 4.6
+  },
+  {
+    title: "Learn Me A Bitcoin",
+    maintainer: "Greg Walker",
+    type: "Educational Platform",
+    description: "Comprehensive Bitcoin education with visual explanations and practical examples.",
+    synopsis: "Learn Me A Bitcoin is an exceptional educational resource created by Greg Walker that explains Bitcoin's technical concepts through clear, visual explanations and practical examples. The site covers everything from basic concepts like transactions and blocks to advanced topics like script language and mining. What sets Learn Me A Bitcoin apart is its visual approach, using diagrams, animations, and interactive examples to make complex technical concepts accessible. The content is meticulously researched and presents Bitcoin's technical details in a way that's both comprehensive and understandable. It's become one of the most popular resources for learning Bitcoin development and understanding how Bitcoin works under the hood.",
+    yearStarted: 2015,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Visual explanations of Bitcoin technical concepts",
+      "Interactive examples and code demonstrations",
+      "Progressive learning from basics to advanced topics",
+      "Practical tutorials and hands-on exercises",
+      "Clear explanations of Bitcoin Script and programming",
+      "Regular updates with latest Bitcoin developments"
+    ],
+    whoShouldUse: [
+      "Beginners learning Bitcoin technical concepts",
+      "Developers transitioning to Bitcoin development",
+      "Technical users wanting visual learning approaches",
+      "Educators teaching Bitcoin and blockchain concepts",
+      "Anyone preferring example-driven learning"
+    ],
+    links: {
+      official: "https://learnmeabitcoin.com/",
+      other: [
+        { name: "Bitcoin Script Guide", url: "https://learnmeabitcoin.com/technical/script" },
+        { name: "Transaction Guide", url: "https://learnmeabitcoin.com/technical/transaction" }
+      ]
+    },
+    tags: ["Education", "Visual Learning", "Beginner-Friendly", "Interactive"],
+    difficulty: "Beginner",
+    rating: 4.9
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    💻 Development
+  </h3>
+  <div class="space-y-6">
+    {developmentResources.map((resource, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-dev-index={index}
+                  title="Click to view details">
+                {resource.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-dev-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {resource.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(resource.difficulty)}`}>
+                  {resource.difficulty}
+                </span>
+              )}
+              {resource.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${resource.rating}/5`}>
+                  {renderStars(resource.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{resource.type}</span>
+            {resource.maintainer && (
+              <>
+                <span>•</span>
+                <span>by {resource.maintainer}</span>
+              </>
+            )}
+            {resource.lastUpdated && (
+              <>
+                <span>•</span>
+                <span>Updated {resource.lastUpdated}</span>
+              </>
+            )}
+          </div>
+          {resource.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {resource.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {resource.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="dev-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="dev-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-orange-50 to-amber-50 dark:from-orange-900/20 dark:to-amber-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-orange-100 dark:bg-orange-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-orange-600 dark:text-orange-400 text-xl font-bold">💻</span>
+          </div>
+          <div>
+            <h2 id="dev-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="dev-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2">
+          <a id="dev-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="dev-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Resource Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="dev-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="dev-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="dev-modal-year" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="dev-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Resource
+            </h3>
+            <div id="dev-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">⭐</span>
+              </span>
+              Key Features
+            </h3>
+            <ul id="dev-modal-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Use -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Use This
+            </h3>
+            <ul id="dev-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="dev-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Access Links -->
+          <div id="dev-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Access & Links
+            </h3>
+            <div id="dev-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              🔓 All development resources are open source and freely available.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ developmentResourcesData: developmentResources }}>
+  // Modal functionality - data is injected from server-side
+  const developmentResources = developmentResourcesData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showDevModal(devIndex) {
+    const resource = developmentResources[devIndex];
+    const modal = document.getElementById('dev-modal-overlay');
+    const modalContent = document.getElementById('dev-modal');
+    
+    // Populate modal content
+    document.getElementById('dev-modal-title').textContent = resource.title;
+    document.getElementById('dev-modal-meta').textContent = resource.maintainer ? `by ${resource.maintainer}` : resource.type;
+    document.getElementById('dev-modal-synopsis').textContent = resource.synopsis;
+    
+    // Set external link
+    const externalLink = document.getElementById('dev-external-link');
+    const mainLink = resource.links.official || resource.links.github || resource.links.documentation || (resource.links.other && resource.links.other[0]?.url);
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
+    
+    // Rating and details
+    const ratingElement = document.getElementById('dev-modal-rating');
+    if (resource.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(resource.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${resource.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Resource details
+    document.getElementById('dev-modal-type').textContent = resource.type;
+    document.getElementById('dev-modal-year').textContent = resource.yearStarted ? `Since ${resource.yearStarted}` : '';
+    
+    const difficultyElement = document.getElementById('dev-modal-difficulty');
+    if (resource.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(resource.difficulty)}">${resource.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key features
+    const featuresElement = document.getElementById('dev-modal-features');
+    featuresElement.innerHTML = resource.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">⭐</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('dev-modal-audience');
+    audienceElement.innerHTML = resource.whoShouldUse.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('dev-modal-tags');
+    tagsElement.innerHTML = resource.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('dev-modal-links');
+    const linkButtons = [];
+    
+    if (resource.links.official) {
+      linkButtons.push(`
+        <a href="${resource.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official Site</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.github) {
+      linkButtons.push(`
+        <a href="${resource.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.documentation) {
+      linkButtons.push(`
+        <a href="${resource.links.documentation}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>Documentation</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.download) {
+      linkButtons.push(`
+        <a href="${resource.links.download}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>⬇️</span>
+          <span>Download</span>
+        </a>
+      `);
+    }
+    
+    if (resource.links.other) {
+      resource.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideDevModal() {
+    const modal = document.getElementById('dev-modal-overlay');
+    const modalContent = document.getElementById('dev-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const devIndex = parseInt(this.getAttribute('data-dev-index'));
+        if (!isNaN(devIndex)) {
+          showDevModal(devIndex);
+        }
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-dev-index]').forEach(title => {
+      title.addEventListener('click', function() {
+        const devIndex = parseInt(this.getAttribute('data-dev-index'));
+        if (!isNaN(devIndex)) {
+          showDevModal(devIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('dev-close-modal').addEventListener('click', hideDevModal);
+    
+    // Close on overlay click
+    document.getElementById('dev-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('dev-modal').contains(e.target)) {
+        hideDevModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('dev-modal-overlay').classList.contains('hidden')) {
+        hideDevModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #dev-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #dev-modal-overlay:not(.hidden) #dev-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 

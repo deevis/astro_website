@@ -1,0 +1,644 @@
+---
+// Node Software component for Bitcoin Resources page
+
+interface NodeSoftware {
+  title: string;
+  developer?: string;
+  type: string; // "Full Node", "Package", "Implementation", etc.
+  description?: string;
+  synopsis: string;
+  platforms: string[]; // ["Windows", "macOS", "Linux", "Raspberry Pi"]
+  yearLaunched?: number;
+  lastUpdated?: string;
+  keyFeatures: string[];
+  whoShouldUse: string[];
+  links: {
+    official?: string;
+    github?: string;
+    download?: string;
+    documentation?: string;
+    shop?: string;
+    other?: { name: string; url: string; }[];
+  };
+  tags: string[];
+  difficulty?: "Beginner" | "Intermediate" | "Advanced";
+  rating?: number;
+  openSource?: boolean;
+  requiresHardware?: boolean;
+}
+
+const nodeSoftware: NodeSoftware[] = [
+  {
+    title: "Bitcoin Core",
+    developer: "Bitcoin Core Contributors",
+    type: "Full Node",
+    description: "The reference implementation providing complete Bitcoin network validation.",
+    synopsis: "Bitcoin Core is the original and reference implementation of the Bitcoin protocol, serving as the backbone of the Bitcoin network. When you run Bitcoin Core, you're operating a full node that downloads, validates, and stores the entire Bitcoin blockchain. This software enforces all consensus rules and helps secure the network by independently verifying every transaction and block. Bitcoin Core includes both node software and wallet functionality, though many users run it primarily for its node capabilities. It's the most trusted and widely used Bitcoin node software, maintained by a global community of developers and extensively tested for security and reliability.",
+    platforms: ["Windows", "macOS", "Linux"],
+    yearLaunched: 2009,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Complete blockchain validation and storage",
+      "Full consensus rule enforcement",
+      "Built-in wallet with advanced features",
+      "RPC interface for developers",
+      "Extensive configuration options",
+      "Comprehensive testing and security audits"
+    ],
+    whoShouldUse: [
+      "Users wanting maximum security and privacy",
+      "Developers building Bitcoin applications",
+      "Those contributing to network decentralization",
+      "Privacy-conscious individuals",
+      "Anyone interested in running a full node"
+    ],
+    links: {
+      official: "https://bitcoincore.org/",
+      github: "https://github.com/bitcoin/bitcoin",
+      download: "https://bitcoincore.org/en/download/",
+      documentation: "https://bitcoincore.org/en/doc/"
+    },
+    tags: ["Reference Implementation", "Full Node", "Security", "Decentralization"],
+    difficulty: "Advanced",
+    rating: 4.9,
+    openSource: true,
+    requiresHardware: false
+  },
+  {
+    title: "Bitcoin Knots",
+    developer: "Luke Dashjr",
+    type: "Full Node",
+    description: "Alternative Bitcoin Core implementation with additional features and policy options.",
+    synopsis: "Bitcoin Knots is a derivative of Bitcoin Core that includes additional features and configuration options not found in the reference implementation. Maintained by Luke Dashjr, a long-time Bitcoin Core contributor, Bitcoin Knots aims to provide more user control and additional functionality while maintaining compatibility with the Bitcoin network. It includes features like more granular fee policies, additional RPC commands, and enhanced privacy options. Bitcoin Knots follows the same rigorous security standards as Bitcoin Core but offers users more customization options for their node operation. It's particularly popular among advanced users who want more control over their node's behavior.",
+    platforms: ["Windows", "macOS", "Linux"],
+    yearLaunched: 2011,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Enhanced policy and fee customization",
+      "Additional RPC commands and functionality",
+      "Improved privacy and security options",
+      "Full Bitcoin Core compatibility",
+      "Advanced transaction filtering capabilities",
+      "Customizable block size and relay policies"
+    ],
+    whoShouldUse: [
+      "Advanced users wanting more control",
+      "Developers needing additional RPC features",
+      "Privacy-focused node operators",
+      "Users interested in policy customization",
+      "Those wanting enhanced node functionality"
+    ],
+    links: {
+      official: "https://bitcoinknots.org/",
+      github: "https://github.com/bitcoinknots/bitcoin",
+      download: "https://bitcoinknots.org/files/"
+    },
+    tags: ["Alternative", "Advanced", "Customization", "Privacy"],
+    difficulty: "Advanced",
+    rating: 4.6,
+    openSource: true,
+    requiresHardware: false
+  },
+  {
+    title: "Umbrel",
+    developer: "Umbrel Team",
+    type: "Node Package",
+    description: "Personal server platform making it easy to run Bitcoin and Lightning nodes.",
+    synopsis: "Umbrel is a personal server operating system that makes running Bitcoin and Lightning Network nodes accessible to everyone. Built with simplicity in mind, Umbrel provides a beautiful web interface for managing your Bitcoin node, Lightning channels, and a growing ecosystem of Bitcoin and privacy apps. It's designed to run on affordable hardware like Raspberry Pi, making it one of the most cost-effective ways to operate a full Bitcoin node. Umbrel includes features like automatic updates, app store functionality, and integrated management tools. The platform emphasizes self-sovereignty and privacy while maintaining ease of use for non-technical users.",
+    platforms: ["Raspberry Pi", "Linux"],
+    yearLaunched: 2020,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Beautiful web-based management interface",
+      "Integrated Bitcoin and Lightning node",
+      "App store with privacy and Bitcoin applications",
+      "Automatic updates and maintenance",
+      "Remote access and mobile apps",
+      "One-click app installations"
+    ],
+    whoShouldUse: [
+      "Beginners wanting an easy node setup",
+      "Users interested in Lightning Network",
+      "Those wanting a complete Bitcoin suite",
+      "Privacy enthusiasts seeking self-hosting",
+      "People wanting low-cost node solutions"
+    ],
+    links: {
+      official: "https://umbrel.com/",
+      github: "https://github.com/getumbrel/umbrel",
+      download: "https://umbrel.com/#start",
+      shop: "https://umbrel.com/umbrella"
+    },
+    tags: ["Beginner-Friendly", "Lightning", "Web Interface", "Raspberry Pi"],
+    difficulty: "Beginner",
+    rating: 4.7,
+    openSource: true,
+    requiresHardware: true
+  },
+  {
+    title: "MyNode",
+    developer: "MyNode Team",
+    type: "Node Package",
+    description: "Bitcoin and Lightning node software with premium features and support.",
+    synopsis: "MyNode is a comprehensive Bitcoin node solution that combines Bitcoin Core, Lightning Network, and numerous other Bitcoin-related applications in a single, easy-to-manage package. Available in both community (free) and premium versions, MyNode provides a web interface for managing your node and accessing various Bitcoin tools and services. The premium version includes additional features, priority support, and exclusive applications. MyNode is designed to work on various hardware platforms and provides professional-grade node management capabilities. It's particularly popular among users who want a feature-rich node setup with commercial support options.",
+    platforms: ["Raspberry Pi", "Linux", "x86"],
+    yearLaunched: 2019,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Comprehensive Bitcoin and Lightning suite",
+      "Web-based management and monitoring",
+      "Premium support and additional features",
+      "Multiple hardware platform support",
+      "Professional node management tools",
+      "Regular updates and maintenance"
+    ],
+    whoShouldUse: [
+      "Users wanting professional support",
+      "Those needing comprehensive node features",
+      "Businesses running Bitcoin infrastructure",
+      "Advanced home users",
+      "People valuing commercial backing"
+    ],
+    links: {
+      official: "https://mynodebtc.com/",
+      github: "https://github.com/mynodebtc/mynode",
+      download: "https://mynodebtc.com/download",
+      documentation: "https://mynodebtc.com/guide"
+    },
+    tags: ["Professional", "Support", "Comprehensive", "Lightning"],
+    difficulty: "Intermediate",
+    rating: 4.5,
+    openSource: true,
+    requiresHardware: true
+  },
+  {
+    title: "RaspiBlitz",
+    developer: "Rootzoll",
+    type: "DIY Node Package",
+    description: "DIY Bitcoin Lightning node with focus on education and customization.",
+    synopsis: "RaspiBlitz is a do-it-yourself Bitcoin and Lightning Network node built specifically for Raspberry Pi. Created by Christian Rotzoll (rootzoll), it emphasizes education, customization, and hands-on learning about Bitcoin technology. RaspiBlitz provides detailed setup instructions, educational materials, and extensive customization options. The project focuses on helping users understand how Bitcoin nodes work while providing a powerful platform for running Lightning Network services. It includes features like channel management tools, backup solutions, and integration with various Bitcoin services. RaspiBlitz is ideal for users who want to learn about Bitcoin technology while running their own infrastructure.",
+    platforms: ["Raspberry Pi"],
+    yearLaunched: 2018,
+    lastUpdated: "2024",
+    keyFeatures: [
+      "Educational focus with detailed documentation",
+      "Extensive customization and scripting options",
+      "Lightning Network channel management tools",
+      "Hardware assembly guides and tutorials",
+      "Community-driven development and support",
+      "Integration with various Bitcoin services"
+    ],
+    whoShouldUse: [
+      "Users interested in learning Bitcoin technology",
+      "DIY enthusiasts and tinkerers",
+      "Lightning Network developers",
+      "Educational institutions and workshops",
+      "Those wanting full customization control"
+    ],
+    links: {
+      official: "https://raspiblitz.org/",
+      github: "https://github.com/rootzoll/raspiblitz",
+      documentation: "https://github.com/rootzoll/raspiblitz/blob/v1.10/README.md"
+    },
+    tags: ["DIY", "Educational", "Raspberry Pi", "Lightning", "Customizable"],
+    difficulty: "Intermediate",
+    rating: 4.4,
+    openSource: true,
+    requiresHardware: true
+  }
+];
+
+// Helper function to render star rating
+function renderStars(rating?: number): string {
+  if (!rating) return '';
+  const fullStars = Math.floor(rating);
+  const hasHalfStar = rating % 1 >= 0.5;
+  const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+  
+  return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+}
+
+// Helper function to get difficulty badge color
+function getDifficultyColor(difficulty?: string): string {
+  switch (difficulty) {
+    case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+    case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+    case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+    default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+  }
+}
+---
+
+<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+    🖥️ Node Software
+  </h3>
+  <div class="space-y-6">
+    {nodeSoftware.map((node, index) => (
+      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+        <div class="flex flex-col space-y-2">
+          <div class="flex items-start justify-between">
+            <div class="flex items-center space-x-3 flex-1">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+                {node.title}
+              </h4>
+              <button 
+                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-node-index={index}
+                title="View detailed information"
+              >
+                i
+              </button>
+            </div>
+            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+              {node.requiresHardware && (
+                <span class="px-2 py-1 text-xs rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">
+                  Hardware Required
+                </span>
+              )}
+              {node.openSource && (
+                <span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">
+                  Open Source
+                </span>
+              )}
+              {node.difficulty && (
+                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(node.difficulty)}`}>
+                  {node.difficulty}
+                </span>
+              )}
+              {node.rating && (
+                <span class="text-yellow-500 text-sm" title={`Rating: ${node.rating}/5`}>
+                  {renderStars(node.rating)}
+                </span>
+              )}
+            </div>
+          </div>
+          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+            <span>{node.type}</span>
+            {node.developer && (
+              <>
+                <span>•</span>
+                <span>by {node.developer}</span>
+              </>
+            )}
+            <span>•</span>
+            <span>{node.platforms.join(", ")}</span>
+          </div>
+          {node.description && (
+            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+              {node.description}
+            </p>
+          )}
+          <div class="flex flex-wrap gap-1 mt-2">
+            {node.tags.map(tag => (
+              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </div>
+      </div>
+    ))}
+  </div>
+</div>
+
+<!-- Modal Overlay -->
+<div id="node-modal-overlay" class="fixed inset-0 bg-black bg-opacity-50 backdrop-blur-sm z-50 hidden transition-opacity duration-300">
+  <div class="flex items-center justify-center min-h-screen p-4">
+    <div id="node-modal" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl max-w-4xl w-full max-h-[90vh] overflow-hidden transform transition-transform duration-300 scale-95">
+      <!-- Modal Header -->
+      <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-700 bg-gradient-to-r from-slate-50 to-gray-50 dark:from-slate-900/20 dark:to-gray-900/20">
+        <div class="flex items-center space-x-4">
+          <div class="w-12 h-12 bg-slate-100 dark:bg-slate-900/30 rounded-xl flex items-center justify-center">
+            <span class="text-slate-600 dark:text-slate-400 text-xl font-bold">🖥️</span>
+          </div>
+          <div>
+            <h2 id="node-modal-title" class="text-2xl font-bold text-gray-900 dark:text-gray-100"></h2>
+            <p id="node-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
+          </div>
+        </div>
+        <button id="node-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+        </button>
+      </div>
+      
+      <!-- Modal Content -->
+      <div class="overflow-y-auto max-h-[calc(90vh-140px)]">
+        <div class="p-6 space-y-6">
+          <!-- Node Info Header -->
+          <div class="flex flex-wrap items-center gap-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-600">
+            <div id="node-modal-rating" class="flex items-center space-x-2"></div>
+            <div id="node-modal-type" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="node-modal-platforms" class="text-sm text-gray-600 dark:text-gray-400"></div>
+            <div id="node-modal-hardware" class="text-sm"></div>
+            <div id="node-modal-opensource" class="text-sm"></div>
+            <div id="node-modal-difficulty" class="text-sm"></div>
+          </div>
+
+          <!-- Synopsis -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-purple-100 dark:bg-purple-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-purple-600 dark:text-purple-400 text-sm">📝</span>
+              </span>
+              About This Node Software
+            </h3>
+            <div id="node-modal-synopsis" class="text-gray-700 dark:text-gray-300 leading-relaxed text-justify"></div>
+          </div>
+
+          <!-- Key Features -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-green-100 dark:bg-green-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-green-600 dark:text-green-400 text-sm">⭐</span>
+              </span>
+              Key Features
+            </h3>
+            <ul id="node-modal-features" class="space-y-2"></ul>
+          </div>
+
+          <!-- Who Should Use -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-blue-100 dark:bg-blue-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-blue-600 dark:text-blue-400 text-sm">👥</span>
+              </span>
+              Who Should Use This
+            </h3>
+            <ul id="node-modal-audience" class="space-y-2"></ul>
+          </div>
+
+          <!-- Tags -->
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-orange-100 dark:bg-orange-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-orange-600 dark:text-orange-400 text-sm">🏷️</span>
+              </span>
+              Categories
+            </h3>
+            <div id="node-modal-tags" class="flex flex-wrap gap-2"></div>
+          </div>
+
+          <!-- Access Links -->
+          <div id="node-modal-links-section">
+            <h3 class="text-lg font-semibold text-gray-900 dark:text-gray-100 mb-3 flex items-center">
+              <span class="w-6 h-6 bg-emerald-100 dark:bg-emerald-900/30 rounded-lg flex items-center justify-center mr-2">
+                <span class="text-emerald-600 dark:text-emerald-400 text-sm">🔗</span>
+              </span>
+              Download & Resources
+            </h3>
+            <div id="node-modal-links" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3"></div>
+            <p class="text-xs text-gray-500 dark:text-gray-400 mt-3 italic">
+              🛡️ Running a Bitcoin node contributes to network security and decentralization.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script define:vars={{ nodeSoftwareData: nodeSoftware }}>
+  // Modal functionality - data is injected from server-side
+  const nodeSoftware = nodeSoftwareData;
+
+  function renderStars(rating) {
+    if (!rating) return '';
+    const fullStars = Math.floor(rating);
+    const hasHalfStar = rating % 1 >= 0.5;
+    const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+    
+    return '★'.repeat(fullStars) + (hasHalfStar ? '☆' : '') + '☆'.repeat(emptyStars);
+  }
+
+  function getDifficultyColor(difficulty) {
+    switch (difficulty) {
+      case 'Beginner': return 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300';
+      case 'Intermediate': return 'bg-yellow-100 dark:bg-yellow-900/30 text-yellow-700 dark:text-yellow-300';
+      case 'Advanced': return 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300';
+      default: return 'bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300';
+    }
+  }
+
+  function showNodeModal(nodeIndex) {
+    const node = nodeSoftware[nodeIndex];
+    const modal = document.getElementById('node-modal-overlay');
+    const modalContent = document.getElementById('node-modal');
+    
+    // Populate modal content
+    document.getElementById('node-modal-title').textContent = node.title;
+    document.getElementById('node-modal-meta').textContent = node.developer ? `by ${node.developer}` : node.type;
+    document.getElementById('node-modal-synopsis').textContent = node.synopsis;
+    
+    // Rating and details
+    const ratingElement = document.getElementById('node-modal-rating');
+    if (node.rating) {
+      ratingElement.innerHTML = `
+        <span class="text-yellow-400 dark:text-yellow-300">${renderStars(node.rating)}</span>
+        <span class="text-sm text-gray-700 dark:text-gray-200 font-medium">${node.rating}/5</span>
+      `;
+    } else {
+      ratingElement.innerHTML = '';
+    }
+    
+    // Node details
+    document.getElementById('node-modal-type').textContent = node.type;
+    document.getElementById('node-modal-platforms').textContent = `Platforms: ${node.platforms.join(", ")}`;
+    
+    const hardwareElement = document.getElementById('node-modal-hardware');
+    if (node.requiresHardware) {
+      hardwareElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-purple-100 dark:bg-purple-900/30 text-purple-700 dark:text-purple-300">Hardware Required</span>';
+    } else {
+      hardwareElement.innerHTML = '';
+    }
+    
+    const openSourceElement = document.getElementById('node-modal-opensource');
+    if (node.openSource) {
+      openSourceElement.innerHTML = '<span class="px-2 py-1 text-xs rounded-full bg-blue-100 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300">Open Source</span>';
+    } else {
+      openSourceElement.innerHTML = '';
+    }
+    
+    const difficultyElement = document.getElementById('node-modal-difficulty');
+    if (node.difficulty) {
+      difficultyElement.innerHTML = `<span class="px-2 py-1 text-xs rounded-full ${getDifficultyColor(node.difficulty)}">${node.difficulty}</span>`;
+    } else {
+      difficultyElement.innerHTML = '';
+    }
+    
+    // Key features
+    const featuresElement = document.getElementById('node-modal-features');
+    featuresElement.innerHTML = node.keyFeatures.map(feature => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-green-500 dark:text-green-400 mt-1 flex-shrink-0">⭐</span>
+        <span class="text-gray-700 dark:text-gray-300">${feature}</span>
+      </li>`
+    ).join('');
+    
+    // Audience
+    const audienceElement = document.getElementById('node-modal-audience');
+    audienceElement.innerHTML = node.whoShouldUse.map(audience => 
+      `<li class="flex items-start space-x-2">
+        <span class="text-blue-500 dark:text-blue-400 mt-1 flex-shrink-0">👤</span>
+        <span class="text-gray-700 dark:text-gray-300">${audience}</span>
+      </li>`
+    ).join('');
+    
+    // Tags
+    const tagsElement = document.getElementById('node-modal-tags');
+    tagsElement.innerHTML = node.tags.map(tag => 
+      `<span class="px-3 py-1 text-sm bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded-full">${tag}</span>`
+    ).join('');
+    
+    // Links
+    const linksElement = document.getElementById('node-modal-links');
+    const linkButtons = [];
+    
+    if (node.links.official) {
+      linkButtons.push(`
+        <a href="${node.links.official}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors">
+          <span>🌐</span>
+          <span>Official Site</span>
+        </a>
+      `);
+    }
+    
+    if (node.links.download) {
+      linkButtons.push(`
+        <a href="${node.links.download}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-green-500 hover:bg-green-600 text-white rounded-lg transition-colors">
+          <span>⬇️</span>
+          <span>Download</span>
+        </a>
+      `);
+    }
+    
+    if (node.links.github) {
+      linkButtons.push(`
+        <a href="${node.links.github}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-gray-800 hover:bg-gray-900 text-white rounded-lg transition-colors">
+          <span>📂</span>
+          <span>GitHub</span>
+        </a>
+      `);
+    }
+    
+    if (node.links.documentation) {
+      linkButtons.push(`
+        <a href="${node.links.documentation}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-purple-500 hover:bg-purple-600 text-white rounded-lg transition-colors">
+          <span>📚</span>
+          <span>Documentation</span>
+        </a>
+      `);
+    }
+    
+    if (node.links.shop) {
+      linkButtons.push(`
+        <a href="${node.links.shop}" target="_blank" rel="noopener noreferrer" 
+           class="flex items-center justify-center space-x-2 px-4 py-3 bg-orange-500 hover:bg-orange-600 text-white rounded-lg transition-colors">
+          <span>🛒</span>
+          <span>Shop</span>
+        </a>
+      `);
+    }
+    
+    if (node.links.other) {
+      node.links.other.forEach(link => {
+        linkButtons.push(`
+          <a href="${link.url}" target="_blank" rel="noopener noreferrer" 
+             class="flex items-center justify-center space-x-2 px-4 py-3 bg-indigo-500 hover:bg-indigo-600 text-white rounded-lg transition-colors">
+            <span>🔗</span>
+            <span>${link.name}</span>
+          </a>
+        `);
+      });
+    }
+    
+    linksElement.innerHTML = linkButtons.join('');
+    
+    // Show modal with animation
+    modal.classList.remove('hidden');
+    setTimeout(() => {
+      modal.classList.remove('opacity-0');
+      modalContent.classList.remove('scale-95');
+      modalContent.classList.add('scale-100');
+    }, 10);
+    
+    // Prevent body scrolling
+    document.body.style.overflow = 'hidden';
+  }
+
+  function hideNodeModal() {
+    const modal = document.getElementById('node-modal-overlay');
+    const modalContent = document.getElementById('node-modal');
+    
+    modal.classList.add('opacity-0');
+    modalContent.classList.remove('scale-100');
+    modalContent.classList.add('scale-95');
+    
+    setTimeout(() => {
+      modal.classList.add('hidden');
+      document.body.style.overflow = '';
+    }, 300);
+  }
+
+  // Event listeners
+  document.addEventListener('DOMContentLoaded', function() {
+    // Info button clicks
+    document.querySelectorAll('.info-button').forEach(button => {
+      button.addEventListener('click', function() {
+        const nodeIndex = parseInt(this.getAttribute('data-node-index'));
+        if (!isNaN(nodeIndex)) {
+          showNodeModal(nodeIndex);
+        }
+      });
+    });
+    
+    // Close modal
+    document.getElementById('node-close-modal').addEventListener('click', hideNodeModal);
+    
+    // Close on overlay click
+    document.getElementById('node-modal-overlay').addEventListener('click', function(e) {
+      if (e.target && !document.getElementById('node-modal').contains(e.target)) {
+        hideNodeModal();
+      }
+    });
+    
+    // Close on escape key
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !document.getElementById('node-modal-overlay').classList.contains('hidden')) {
+        hideNodeModal();
+      }
+    });
+  });
+</script>
+
+<style>
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+  
+  @keyframes slideIn {
+    from { transform: scale(0.95) translateY(20px); }
+    to { transform: scale(1) translateY(0); }
+  }
+  
+  #node-modal-overlay:not(.hidden) {
+    animation: fadeIn 0.3s ease-out;
+  }
+  
+  #node-modal-overlay:not(.hidden) #node-modal {
+    animation: slideIn 0.3s ease-out;
+  }
+  
+  .info-button:hover {
+    transform: scale(1.1);
+  }
+  
+  .info-button {
+    transition: all 0.2s ease;
+  }
+</style> 
