@@ -69,10 +69,13 @@ const bitcoinDropdown = [
         <ThemeToggle />
         <button
           id="mobile-menu-button"
-          class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800"
+          class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer touch-manipulation"
+          type="button"
+          aria-label="Toggle mobile menu"
+          aria-expanded="false"
         >
           <svg
-            class="w-6 h-6"
+            class="w-6 h-6 pointer-events-none"
             fill="none"
             stroke="currentColor"
             viewBox="0 0 24 24"
@@ -104,10 +107,13 @@ const bitcoinDropdown = [
       <div class="space-y-2">
         <button
           id="mobile-bitcoin-toggle"
-          class="flex items-center justify-between w-full py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
+          type="button"
+          aria-label="Toggle Bitcoin menu"
+          aria-expanded="false"
         >
           Bitcoin
-          <svg id="mobile-bitcoin-arrow" class="w-4 h-4 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+          <svg id="mobile-bitcoin-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
           </svg>
         </button>
@@ -144,17 +150,55 @@ const bitcoinDropdown = [
     const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
     const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
 
-    if (button && menu) {
-      button.addEventListener('click', () => {
+    function toggleMobileMenu(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (menu) {
+        const isHidden = menu.classList.contains('hidden');
         menu.classList.toggle('hidden');
-      });
+        
+        // Update aria-expanded attribute
+        if (button) {
+          button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        }
+      }
+    }
+
+    function toggleBitcoinMenu(e) {
+      e.preventDefault();
+      e.stopPropagation();
+      if (bitcoinMenu && bitcoinArrow) {
+        const isHidden = bitcoinMenu.classList.contains('hidden');
+        bitcoinMenu.classList.toggle('hidden');
+        bitcoinArrow.classList.toggle('rotate-180');
+        
+        // Update aria-expanded attribute
+        if (bitcoinToggle) {
+          bitcoinToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        }
+      }
+    }
+
+    if (button && menu) {
+      // Add both click and touchstart for maximum compatibility
+      button.addEventListener('click', toggleMobileMenu);
+      button.addEventListener('touchstart', toggleMobileMenu, { passive: false });
     }
 
     if (bitcoinToggle && bitcoinMenu && bitcoinArrow) {
-      bitcoinToggle.addEventListener('click', () => {
-        bitcoinMenu.classList.toggle('hidden');
-        bitcoinArrow.classList.toggle('rotate-180');
-      });
+      // Add both click and touchstart for maximum compatibility
+      bitcoinToggle.addEventListener('click', toggleBitcoinMenu);
+      bitcoinToggle.addEventListener('touchstart', toggleBitcoinMenu, { passive: false });
     }
+
+    // Close mobile menu when clicking outside
+    document.addEventListener('click', function(e) {
+      if (menu && button && e.target instanceof Element) {
+        if (!menu.contains(e.target) && !button.contains(e.target)) {
+          menu.classList.add('hidden');
+          button.setAttribute('aria-expanded', 'false');
+        }
+      }
+    });
   });
 </script>
