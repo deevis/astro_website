@@ -245,7 +245,7 @@ function getDifficultyColor(difficulty?: string): string {
                 {node.title}
               </h4>
               <button 
-                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                class="node-info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
                 data-node-index={index}
                 title="View detailed information"
               >
@@ -606,7 +606,7 @@ function getDifficultyColor(difficulty?: string): string {
   // Event listeners
   document.addEventListener('DOMContentLoaded', function() {
     // Info button clicks
-    document.querySelectorAll('.info-button').forEach(button => {
+    document.querySelectorAll('.node-info-button').forEach(button => {
       button.addEventListener('click', function() {
         const nodeIndex = parseInt(this.getAttribute('data-node-index'));
         if (!isNaN(nodeIndex)) {
@@ -663,11 +663,11 @@ function getDifficultyColor(difficulty?: string): string {
     animation: slideIn 0.3s ease-out;
   }
   
-  .info-button:hover {
+  .node-info-button:hover {
     transform: scale(1.1);
   }
   
-  .info-button {
+  .node-info-button {
     transition: all 0.2s ease;
   }
 </style> 

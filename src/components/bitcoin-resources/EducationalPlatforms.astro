@@ -353,7 +353,7 @@ function getDifficultyColor(difficulty?: string): string {
                   {platform.title}
                 </h4>
                 <button 
-                  class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                  class="platform-info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
                   data-platform-index={educationalPlatforms.indexOf(platform)}
                   title="View detailed information"
                 >
@@ -426,7 +426,7 @@ function getDifficultyColor(difficulty?: string): string {
                   {platform.title}
                 </h4>
                 <button 
-                  class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                  class="platform-info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
                   data-platform-index={educationalPlatforms.indexOf(platform)}
                   title="View detailed information"
                 >
@@ -794,7 +794,7 @@ function getDifficultyColor(difficulty?: string): string {
   // Event listeners
   document.addEventListener('DOMContentLoaded', function() {
     // Info button clicks
-    document.querySelectorAll('.info-button').forEach(button => {
+    document.querySelectorAll('.platform-info-button').forEach(button => {
       button.addEventListener('click', function() {
         const platformIndex = parseInt(this.getAttribute('data-platform-index'));
         if (!isNaN(platformIndex)) {
@@ -851,11 +851,11 @@ function getDifficultyColor(difficulty?: string): string {
     animation: slideIn 0.3s ease-out;
   }
   
-  .info-button:hover {
+  .platform-info-button:hover {
     transform: scale(1.1);
   }
   
-  .info-button {
+  .platform-info-button {
     transition: all 0.2s ease;
   }
 </style> 

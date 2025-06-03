@@ -137,18 +137,24 @@ const bitcoinDropdown = [
 </header>
 
 <script>
-  const button = document.getElementById('mobile-menu-button');
-  const menu = document.getElementById('mobile-menu');
-  const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
-  const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
-  const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
+  document.addEventListener('DOMContentLoaded', function() {
+    const button = document.getElementById('mobile-menu-button');
+    const menu = document.getElementById('mobile-menu');
+    const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
+    const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
+    const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
 
-  button?.addEventListener('click', () => {
-    menu?.classList.toggle('hidden');
-  });
+    if (button && menu) {
+      button.addEventListener('click', () => {
+        menu.classList.toggle('hidden');
+      });
+    }
 
-  bitcoinToggle?.addEventListener('click', () => {
-    bitcoinMenu?.classList.toggle('hidden');
-    bitcoinArrow?.classList.toggle('rotate-180');
+    if (bitcoinToggle && bitcoinMenu && bitcoinArrow) {
+      bitcoinToggle.addEventListener('click', () => {
+        bitcoinMenu.classList.toggle('hidden');
+        bitcoinArrow.classList.toggle('rotate-180');
+      });
+    }
   });
 </script>

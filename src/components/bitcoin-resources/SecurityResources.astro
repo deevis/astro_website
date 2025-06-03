@@ -385,13 +385,13 @@ function renderImportance(importance: number): string {
           <div class="flex items-start justify-between">
             <div class="flex items-center space-x-3 flex-1">
               <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  data-resource-index={securityResources.indexOf(resource)}
+                  data-security-index={securityResources.indexOf(resource)}
                   title="Click to view details">
                 {resource.title}
               </h4>
               <button 
-                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
-                data-resource-index={securityResources.indexOf(resource)}
+                class="security-info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-security-index={securityResources.indexOf(resource)}
                 title="View detailed information"
               >
                 i
@@ -425,13 +425,13 @@ function renderImportance(importance: number): string {
           <div class="flex items-start justify-between">
             <div class="flex items-center space-x-3 flex-1">
               <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  data-resource-index={securityResources.indexOf(resource)}
+                  data-security-index={securityResources.indexOf(resource)}
                   title="Click to view details">
                 {resource.title}
               </h4>
               <button 
-                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
-                data-resource-index={securityResources.indexOf(resource)}
+                class="security-info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                data-security-index={securityResources.indexOf(resource)}
                 title="View detailed information"
               >
                 i
@@ -711,18 +711,22 @@ function renderImportance(importance: number): string {
   // Event listeners
   document.addEventListener('DOMContentLoaded', function() {
     // Info button clicks
-    document.querySelectorAll('.info-button').forEach(button => {
+    document.querySelectorAll('.security-info-button').forEach(button => {
       button.addEventListener('click', function() {
-        const resourceIndex = parseInt(this.getAttribute('data-resource-index'));
-        showSecurityModal(resourceIndex);
+        const resourceIndex = parseInt(this.getAttribute('data-security-index'));
+        if (!isNaN(resourceIndex)) {
+          showSecurityModal(resourceIndex);
+        }
       });
     });
     
     // Title clicks
-    document.querySelectorAll('h4[data-resource-index]').forEach(title => {
+    document.querySelectorAll('h4[data-security-index]').forEach(title => {
       title.addEventListener('click', function() {
-        const resourceIndex = parseInt(this.getAttribute('data-resource-index'));
-        showSecurityModal(resourceIndex);
+        const resourceIndex = parseInt(this.getAttribute('data-security-index'));
+        if (!isNaN(resourceIndex)) {
+          showSecurityModal(resourceIndex);
+        }
       });
     });
     
@@ -764,11 +768,11 @@ function renderImportance(importance: number): string {
     animation: slideIn 0.3s ease-out;
   }
   
-  .info-button:hover {
+  .security-info-button:hover {
     transform: scale(1.1);
   }
   
-  .info-button {
+  .security-info-button {
     transition: all 0.2s ease;
   }
 </style> 

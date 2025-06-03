@@ -1,6 +1,7 @@
 ---
 import '../../styles/bitcoin-tutorial/global.css';
 import Navigation from '../../components/Navigation.astro';
+import Footer from '../../components/Footer.astro';
 
 interface Props {
 	title: string;
@@ -176,6 +177,7 @@ const currentPath = Astro.url.pathname;
 				<slot />
 			</main>
 		</div>
+		<Footer />
 	</body>
 </html>
 
