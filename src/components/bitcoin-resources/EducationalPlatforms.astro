@@ -31,13 +31,13 @@ interface EducationalPlatform {
 const educationalPlatforms: EducationalPlatform[] = [
   {
     title: "Bitcoin Tutorial (Our Guide)",
-    provider: "This Website",
+    provider: "darrenhicks.dev",
     type: "Tutorial Series",
     description: "Comprehensive Bitcoin tutorial covering fundamentals to advanced concepts.",
     synopsis: "Our comprehensive Bitcoin tutorial series is designed to take complete beginners through advanced Bitcoin concepts in a structured, easy-to-understand format. Starting with basic questions like 'What is Bitcoin?' and progressing through technical topics like mining, transactions, and the Lightning Network, our tutorial provides a complete educational journey. Each section builds upon previous knowledge and includes practical examples, real-world applications, and hands-on exercises. The tutorial is regularly updated to reflect the latest developments in Bitcoin technology and includes interactive elements to help reinforce learning. Perfect for anyone wanting a thorough understanding of Bitcoin from the ground up.",
     platforms: ["Web"],
-    yearLaunched: 2023,
-    lastUpdated: "2024",
+    yearLaunched: 2025,
+    lastUpdated: "2025",
     keyFeatures: [
       "Progressive learning from basics to advanced topics",
       "Practical examples and real-world applications",
@@ -333,73 +333,151 @@ function getDifficultyColor(difficulty?: string): string {
 }
 ---
 
-<div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
-  <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
-    🎓 Educational Platforms
-  </h3>
-  <div class="space-y-6">
-    {educationalPlatforms.map((platform, index) => (
-      <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
-        <div class="flex flex-col space-y-2">
-          <div class="flex items-start justify-between">
-            <div class="flex items-center space-x-3 flex-1">
-              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
-                  data-platform-index={index}
-                  title="Click to view details">
-                {platform.title}
-              </h4>
-              <button 
-                class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
-                data-platform-index={index}
-                title="View detailed information"
-              >
-                i
-              </button>
+<div class="grid md:grid-cols-2 gap-6">
+  <!-- Structured Learning -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      🎓 Structured Learning
+    </h3>
+    <div class="space-y-6">
+      {educationalPlatforms.filter(platform => 
+        ['Bitcoin Tutorial (Our Guide)', 'Saylor Academy - Bitcoin for Everyone', 'MIT OpenCourseWare - Blockchain', 'Khan Academy - Bitcoin Basics'].includes(platform.title)
+      ).map((platform, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+          <div class="flex flex-col space-y-2">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3 flex-1">
+                <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    data-platform-index={educationalPlatforms.indexOf(platform)}
+                    title="Click to view details">
+                  {platform.title}
+                </h4>
+                <button 
+                  class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                  data-platform-index={educationalPlatforms.indexOf(platform)}
+                  title="View detailed information"
+                >
+                  i
+                </button>
+              </div>
+              <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                {platform.freeToUse && (
+                  <span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                    Free
+                  </span>
+                )}
+                {platform.difficulty && (
+                  <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(platform.difficulty)}`}>
+                    {platform.difficulty}
+                  </span>
+                )}
+                {platform.rating && (
+                  <span class="text-yellow-500 text-sm" title={`Rating: ${platform.rating}/5`}>
+                    {renderStars(platform.rating)}
+                  </span>
+                )}
+              </div>
             </div>
-            <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
-              {platform.freeToUse && (
-                <span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
-                  Free
-                </span>
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <span>{platform.type}</span>
+              {platform.provider && (
+                <>
+                  <span>•</span>
+                  <span>by {platform.provider}</span>
+                </>
               )}
-              {platform.difficulty && (
-                <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(platform.difficulty)}`}>
-                  {platform.difficulty}
-                </span>
-              )}
-              {platform.rating && (
-                <span class="text-yellow-500 text-sm" title={`Rating: ${platform.rating}/5`}>
-                  {renderStars(platform.rating)}
-                </span>
-              )}
+              <span>•</span>
+              <span>{platform.platforms.join(", ")}</span>
             </div>
-          </div>
-          <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
-            <span>{platform.type}</span>
-            {platform.provider && (
-              <>
-                <span>•</span>
-                <span>by {platform.provider}</span>
-              </>
+            {platform.description && (
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                {platform.description}
+              </p>
             )}
-            <span>•</span>
-            <span>{platform.platforms.join(", ")}</span>
-          </div>
-          {platform.description && (
-            <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
-              {platform.description}
-            </p>
-          )}
-          <div class="flex flex-wrap gap-1 mt-2">
-            {platform.tags.map(tag => (
-              <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
-                {tag}
-              </span>
-            ))}
+            <div class="flex flex-wrap gap-1 mt-2">
+              {platform.tags.map(tag => (
+                <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                  {tag}
+                </span>
+              ))}
+            </div>
           </div>
         </div>
-      </div>
-    ))}
+      ))}
+    </div>
+  </div>
+
+  <!-- Community & Resources -->
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-md dark:shadow-gray-900/20 p-6 border border-gray-200 dark:border-gray-700">
+    <h3 class="text-xl font-semibold mb-6 text-gray-900 dark:text-gray-100 flex items-center">
+      👥 Community & Resources
+    </h3>
+    <div class="space-y-6">
+      {educationalPlatforms.filter(platform => 
+        ['Bitcoin Wiki', 'Blockchain Demo', 'Bitcoin Talk Forum', 'Bitcoin Stack Exchange'].includes(platform.title)
+      ).map((platform, index) => (
+        <div class="border-b border-gray-100 dark:border-gray-700 pb-4 last:border-b-0 last:pb-0">
+          <div class="flex flex-col space-y-2">
+            <div class="flex items-start justify-between">
+              <div class="flex items-center space-x-3 flex-1">
+                <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                    data-platform-index={educationalPlatforms.indexOf(platform)}
+                    title="Click to view details">
+                  {platform.title}
+                </h4>
+                <button 
+                  class="info-button flex-shrink-0 w-5 h-5 rounded-full bg-blue-100 dark:bg-blue-900/20 text-blue-600 dark:text-blue-400 hover:bg-blue-200 dark:hover:bg-blue-900/40 transition-colors flex items-center justify-center text-xs font-bold"
+                  data-platform-index={educationalPlatforms.indexOf(platform)}
+                  title="View detailed information"
+                >
+                  i
+                </button>
+              </div>
+              <div class="flex items-center space-x-2 flex-shrink-0 ml-2">
+                {platform.freeToUse && (
+                  <span class="px-2 py-1 text-xs rounded-full bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300">
+                    Free
+                  </span>
+                )}
+                {platform.difficulty && (
+                  <span class={`px-2 py-1 text-xs rounded-full ${getDifficultyColor(platform.difficulty)}`}>
+                    {platform.difficulty}
+                  </span>
+                )}
+                {platform.rating && (
+                  <span class="text-yellow-500 text-sm" title={`Rating: ${platform.rating}/5`}>
+                    {renderStars(platform.rating)}
+                  </span>
+                )}
+              </div>
+            </div>
+            <div class="flex items-center space-x-2 text-sm text-gray-600 dark:text-gray-400">
+              <span>{platform.type}</span>
+              {platform.provider && (
+                <>
+                  <span>•</span>
+                  <span>by {platform.provider}</span>
+                </>
+              )}
+              <span>•</span>
+              <span>{platform.platforms.join(", ")}</span>
+            </div>
+            {platform.description && (
+              <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed">
+                {platform.description}
+              </p>
+            )}
+            <div class="flex flex-wrap gap-1 mt-2">
+              {platform.tags.map(tag => (
+                <span class="px-2 py-1 text-xs bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-400 rounded">
+                  {tag}
+                </span>
+              ))}
+            </div>
+          </div>
+        </div>
+      ))}
+    </div>
   </div>
 </div>
 

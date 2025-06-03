@@ -222,7 +222,9 @@ function getDifficultyColor(difficulty?: string): string {
         <div class="flex flex-col space-y-2">
           <div class="flex items-start justify-between">
             <div class="flex items-center space-x-3 flex-1">
-              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight">
+              <h4 class="font-semibold text-gray-900 dark:text-gray-100 leading-tight cursor-pointer hover:text-blue-600 dark:hover:text-blue-400 transition-colors"
+                  data-paper-index={index}
+                  title="Click to view details">
                 {paper.title}
               </h4>
               <button 
@@ -292,9 +294,16 @@ function getDifficultyColor(difficulty?: string): string {
             <p id="paper-modal-meta" class="text-gray-600 dark:text-gray-400"></p>
           </div>
         </div>
-        <button id="paper-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-          <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
-        </button>
+        <div class="flex items-center space-x-2">
+          <a id="paper-external-link" href="#" target="_blank" rel="noopener noreferrer" 
+             class="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-700 hover:bg-blue-200 dark:hover:bg-blue-600 transition-colors flex items-center justify-center"
+             title="Open external resource">
+            <span class="text-blue-600 dark:text-blue-400 text-sm">↗</span>
+          </a>
+          <button id="paper-close-modal" class="w-8 h-8 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
+            <span class="text-gray-500 dark:text-gray-400 text-lg">&times;</span>
+          </button>
+        </div>
       </div>
       
       <!-- Modal Content -->
@@ -403,6 +412,16 @@ function getDifficultyColor(difficulty?: string): string {
     document.getElementById('paper-modal-title').textContent = paper.title;
     document.getElementById('paper-modal-meta').textContent = `by ${paper.authors.join(", ")}`;
     document.getElementById('paper-modal-abstract').textContent = paper.abstract;
+    
+    // Set external link
+    const externalLink = document.getElementById('paper-external-link');
+    const mainLink = paper.links.pdf || paper.links.official || paper.links.arxiv || paper.links.github;
+    if (mainLink) {
+      externalLink.href = mainLink;
+      externalLink.style.display = 'flex';
+    } else {
+      externalLink.style.display = 'none';
+    }
     
     // Paper details
     document.getElementById('paper-modal-type').textContent = paper.type;
@@ -536,6 +555,16 @@ function getDifficultyColor(difficulty?: string): string {
     // Info button clicks
     document.querySelectorAll('.info-button').forEach(button => {
       button.addEventListener('click', function() {
+        const paperIndex = parseInt(this.getAttribute('data-paper-index'));
+        if (!isNaN(paperIndex)) {
+          showPaperModal(paperIndex);
+        }
+      });
+    });
+    
+    // Title clicks
+    document.querySelectorAll('h4[data-paper-index]').forEach(title => {
+      title.addEventListener('click', function() {
         const paperIndex = parseInt(this.getAttribute('data-paper-index'));
         if (!isNaN(paperIndex)) {
           showPaperModal(paperIndex);
