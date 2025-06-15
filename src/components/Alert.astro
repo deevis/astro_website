@@ -39,17 +39,19 @@ const icons = {
   styles[type],
   className
 ]}>
-  <div class="flex">
-    <div class="flex-shrink-0" set:html={icons[type]} />
-    {title && (
-      <div class="ml-3 font-medium">
-        {title}
-      </div>
-    )}
-  </div>
-  {Astro.slots.has('default') && (
-    <div class="mt-2 ml-8">
-      <slot />
+  <div class="flex items-center">
+    <div class="flex-shrink-0 mt-0.5" set:html={icons[type]} />
+    <div class="ml-3">
+      {title && (
+        <div class="font-medium mb-1">
+          {title}
+        </div>
+      )}
+      {Astro.slots.has('default') && (
+        <div>
+          <slot />
+        </div>
+      )}
     </div>
-  )}
+  </div>
 </div> 

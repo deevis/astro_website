@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galton Box Physics Simulation</title>
+    <style>
+        body {
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            min-height: 100vh;
+        }
+
+        .container {
+            display: flex;
+            width: 100%;
+            height: 100vh;
+        }
+
+        .sidebar {
+            width: 300px;
+            background: rgba(0, 0, 0, 0.3);
+            backdrop-filter: blur(10px);
+            padding: 20px;
+            overflow-y: auto;
+            border-right: 2px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .main-content {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        h1 {
+            color: white;
+            margin-bottom: 20px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .config-section {
+            background: rgba(255,255,255,0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            padding: 15px;
+            margin-bottom: 15px;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.1);
+        }
+
+        .config-section h3 {
+            color: white;
+            margin: 0 0 15px 0;
+            font-size: 16px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .config-item {
+            margin-bottom: 12px;
+        }
+
+        .config-item label {
+            display: block;
+            color: white;
+            font-size: 12px;
+            margin-bottom: 5px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .config-item input[type="range"] {
+            width: 100%;
+            margin-bottom: 3px;
+        }
+
+        .config-item .value-display {
+            color: rgba(255,255,255,0.8);
+            font-size: 11px;
+            text-align: right;
+        }
+
+        .config-item input[type="checkbox"] {
+            margin-right: 8px;
+        }
+
+        .button-group {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        button {
+            background: linear-gradient(45deg, #ff6b6b, #ff8e53);
+            border: none;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 12px;
+            transition: transform 0.2s, box-shadow 0.2s;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+            flex: 1;
+            min-width: 80px;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        .stats {
+            color: white;
+            font-size: 14px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        canvas {
+            border: 3px solid rgba(255,255,255,0.3);
+            border-radius: 15px;
+            background: rgba(255,255,255,0.05);
+            box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+        }
+
+        /* Modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(5px);
+        }
+
+        .modal-content {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 5% auto;
+            padding: 30px;
+            border-radius: 20px;
+            width: 80%;
+            max-width: 700px;
+            max-height: 80vh;
+            overflow-y: auto;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.5);
+            color: white;
+            position: relative;
+        }
+
+        .modal h2 {
+            color: white;
+            margin-top: 0;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+            border-bottom: 2px solid rgba(255,255,255,0.3);
+            padding-bottom: 10px;
+        }
+
+        .modal h3 {
+            color: #ffd700;
+            margin-top: 25px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.5);
+        }
+
+        .modal p {
+            line-height: 1.6;
+            margin-bottom: 15px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .modal ul {
+            margin-left: 20px;
+            line-height: 1.6;
+        }
+
+        .modal li {
+            margin-bottom: 8px;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.3);
+        }
+
+        .close {
+            color: white;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            position: absolute;
+            right: 20px;
+            top: 15px;
+            width: 30px;
+            height: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            transition: background 0.3s;
+        }
+
+        .close:hover {
+            background: rgba(255,255,255,0.3);
+        }
+
+        .learn-more-btn {
+            background: linear-gradient(45deg, #4CAF50, #45a049);
+            margin-left: 10px;
+        }
+
+        .learn-more-btn:hover {
+            background: linear-gradient(45deg, #45a049, #3d8b40);
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="sidebar">
+            <h2 style="color: white; margin-top: 0; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">🎯 Galton Box Config</h2>
+            
+            <div class="config-section">
+                <h3>Trail Settings</h3>
+                <div class="config-item">
+                    <label>
+                        <input type="checkbox" id="showTrails" checked onchange="toggleTrails()"> Show Trails
+                    </label>
+                </div>
+                <div class="config-item">
+                    <label>Trail Duration</label>
+                    <input type="range" id="trailDuration" min="0.5" max="5" step="0.1" value="2" oninput="updateTrailDuration()">
+                    <div class="value-display" id="trailDurationValue">2.0s</div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>Physics Constants</h3>
+                <div class="config-item">
+                    <label>Gravity</label>
+                    <input type="range" id="gravitySlider" min="0.05" max="0.95" step="0.05" value="0.2" oninput="updateGravity()">
+                    <div class="value-display" id="gravityValue">0.20</div>
+                </div>
+                <div class="config-item">
+                    <label>Friction</label>
+                    <input type="range" id="frictionSlider" min="0.90" max="1.0" step="0.005" value="0.99" oninput="updateFriction()">
+                    <div class="value-display" id="frictionValue">0.990</div>
+                </div>
+                <div class="config-item">
+                    <label>Bounce</label>
+                    <input type="range" id="bounceSlider" min="0.1" max="0.95" step="0.05" value="0.55" oninput="updateBounce()">
+                    <div class="value-display" id="bounceValue">0.55</div>
+                </div>
+                <div class="config-item">
+                    <label>Max Velocity</label>
+                    <input type="range" id="maxVelocitySlider" min="2" max="10" step="0.5" value="4" oninput="updateMaxVelocity()">
+                    <div class="value-display" id="maxVelocityValue">4.0</div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>Ball Properties</h3>
+                <div class="config-item">
+                    <label>Ball Radius</label>
+                    <input type="range" id="ballRadiusSlider" min="2" max="14" step="1" value="6" oninput="updateBallRadius()">
+                    <div class="value-display" id="ballRadiusValue">6</div>
+                </div>
+            </div>
+
+            <div class="config-section">
+                <h3>Peg Properties</h3>
+                <div class="config-item">
+                    <label>Peg Radius</label>
+                    <input type="range" id="pegRadiusSlider" min="2" max="12" step="1" value="6" oninput="updatePegRadius()">
+                    <div class="value-display" id="pegRadiusValue">6</div>
+                </div>
+                <div class="config-item">
+                    <label>Horizontal Spacing</label>
+                    <input type="range" id="pegSpacingHSlider" min="20" max="60" step="5" value="40" oninput="updatePegSpacingH()">
+                    <div class="value-display" id="pegSpacingHValue">40</div>
+                </div>
+                <div class="config-item">
+                    <label>Vertical Spacing</label>
+                    <input type="range" id="pegSpacingVSlider" min="20" max="45" step="5" value="40" oninput="updatePegSpacingV()">
+                    <div class="value-display" id="pegSpacingVValue">40</div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="main-content">
+            <h1 style="color: white; text-shadow: 2px 2px 4px rgba(0,0,0,0.3);">Galton Box Physics Simulation</h1>
+            
+            <div class="main-controls" style="background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border-radius: 15px; padding: 15px; margin-bottom: 20px; box-shadow: 0 8px 32px rgba(0,0,0,0.1);">
+                <div style="display: flex; gap: 15px; align-items: center; flex-wrap: wrap;">
+                    <div class="button-group" style="display: flex; gap: 8px;">
+                        <button onclick="dropBall()">Drop Ball</button>
+                        <button onclick="startContinuous()">Auto Drop</button>
+                        <button onclick="stopContinuous()">Stop</button>
+                        <button onclick="clearBalls()">Clear</button>
+                        <button class="learn-more-btn" onclick="openModal()">Learn More</button>
+                    </div>
+                    <div style="color: white; font-size: 14px; text-shadow: 1px 1px 2px rgba(0,0,0,0.5); margin-left: auto;">
+                        <span id="ballCount">Active: 0</span> | 
+                        <span id="totalBinned">Binned: 0</span> | 
+                        <span id="fps">FPS: 60</span>
+                    </div>
+                </div>
+            </div>
+            
+            <canvas id="galtonCanvas" width="800" height="800"></canvas>
+        </div>
+
+        <!-- Modal Dialog -->
+        <div id="learnMoreModal" class="modal">
+            <div class="modal-content">
+                <span class="close" onclick="closeModal()">&times;</span>
+                <h2>🎯 The Galton Box: Where Physics Meets Statistics</h2>
+                
+                <h3>👨‍🔬 The Inventor: Sir Francis Galton</h3>
+                <p>The Galton Box, also known as a "bean machine" or "quincunx," was invented by Sir Francis Galton (1822-1911), a British polymath and cousin of Charles Darwin. Galton created this device in the 1890s to demonstrate the central limit theorem and the emergence of normal distributions from random processes.</p>
+                
+                <p>Galton was fascinated by statistics, heredity, and the mathematical patterns underlying natural phenomena. His invention elegantly shows how individual random events can collectively produce predictable statistical patterns.</p>
+
+                <h3>📊 The Mathematical Foundation: Central Limit Theorem</h3>
+                <p>The Galton Box demonstrates one of the most important theorems in statistics: the <strong>Central Limit Theorem (CLT)</strong>. Here's why the math guarantees a bell curve:</p>
+                
+                <ul>
+                    <li><strong>Independent Random Events:</strong> Each peg collision is essentially a coin flip - the ball goes left or right with roughly equal probability</li>
+                    <li><strong>Additive Process:</strong> The final position is the sum of many small random movements</li>
+                    <li><strong>Large Numbers:</strong> With enough balls and peg rows, the CLT kicks in</li>
+                    <li><strong>Normal Distribution:</strong> The sum of many independent random variables approaches a normal (bell curve) distribution</li>
+                </ul>
+
+                <p>Mathematically, if a ball encounters <em>n</em> pegs and goes right <em>k</em> times, its final position follows a binomial distribution. As <em>n</em> increases, this binomial distribution approximates a normal distribution with:</p>
+                <ul>
+                    <li><strong>Mean (μ):</strong> n/2 (center of the distribution)</li>
+                    <li><strong>Standard Deviation (σ):</strong> √(n/4)</li>
+                </ul>
+
+                <h3>⚖️ Physics vs. Pure Mathematics</h3>
+                <p>While the mathematical theory predicts a perfect bell curve, real physics simulations (like this one) introduce fascinating deviations:</p>
+
+                <h4>🔬 Physical Factors That Affect the Distribution:</h4>
+                <ul>
+                    <li><strong>Ball Size & Peg Geometry:</strong> Larger balls may skip pegs or have biased collisions</li>
+                    <li><strong>Momentum & Velocity:</strong> Fast-moving balls don't always split 50/50 at each peg</li>
+                    <li><strong>Collision Physics:</strong> Bounce, friction, and energy loss create path dependencies</li>
+                    <li><strong>Gravity Effects:</strong> Balls may "tunnel" through gaps or follow curved trajectories</li>
+                    <li><strong>Edge Effects:</strong> Walls and boundaries can skew the distribution</li>
+                </ul>
+
+                <h4>📈 Why Simulations Differ from Theory:</h4>
+                <ul>
+                    <li><strong>Non-Independent Events:</strong> A ball's velocity affects its next collision, violating the independence assumption</li>
+                    <li><strong>Continuous vs. Discrete:</strong> Real balls follow continuous trajectories, not discrete left/right choices</li>
+                    <li><strong>Energy Conservation:</strong> Physics must conserve momentum and energy, constraining possible paths</li>
+                    <li><strong>Finite Precision:</strong> Computer simulations have rounding errors and numerical limits</li>
+                </ul>
+
+                <h3>🎮 Experiment and Explore!</h3>
+                <p>Use the controls to see how different parameters affect the distribution:</p>
+                <ul>
+                    <li><strong>Higher bounce:</strong> More chaotic paths, potentially wider distributions</li>
+                    <li><strong>Tighter spacing:</strong> More peg interactions, closer to theoretical predictions</li>
+                    <li><strong>Different ball/peg sizes:</strong> Changes collision dynamics and path probabilities</li>
+                    <li><strong>Gravity adjustments:</strong> Affects how much time balls have to "decide" at each peg</li>
+                </ul>
+
+                <p>The beauty of the Galton Box lies in this tension between mathematical elegance and physical reality - showing us that while math provides the framework, the real world adds its own fascinating complexity!</p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const canvas = document.getElementById('galtonCanvas');
+        const ctx = canvas.getContext('2d');
+        
+        // Physics constants (now dynamic)
+        let GRAVITY = 0.2;
+        let FRICTION = 0.99;
+        let BOUNCE = 0.55;
+        let PEG_RADIUS = 6;
+        let BALL_RADIUS = 6;
+        let MAX_VELOCITY = 4;
+        
+        // Galton box setup
+        const ROWS = 12;
+        let PEG_SPACING_H = 40; // Horizontal spacing between pegs
+        let PEG_SPACING_V = 40; // Vertical spacing between rows
+        const START_X = canvas.width / 2;
+        const START_Y = 80;
+        const BIN_COUNT = ROWS + 1;
+        
+        // Calculate bin positioning based on bottom row of pegs (will be updated when spacing changes)
+        let BOTTOM_ROW_PEGS = ROWS;
+        let BOTTOM_ROW_START_X = START_X - (BOTTOM_ROW_PEGS - 1) * PEG_SPACING_H / 2;
+        let BIN_WIDTH = PEG_SPACING_H; // Make bins same width as peg spacing so they touch
+        let BIN_START_X = BOTTOM_ROW_START_X - PEG_SPACING_H / 2 - BIN_WIDTH / 2;
+        
+        let balls = [];
+        let pegs = [];
+        let bins = new Array(BIN_COUNT).fill(0);
+        let ballCounter = 0;
+        let totalBallsInBins = 0; // Track total balls that have been binned
+        let continuousDropping = false;
+        let dropInterval;
+        let lastTime = 0;
+        let fps = 60;
+        let showTrails = true;
+        let trailDurationSeconds = 2.0;
+        let trailLength = Math.floor(trailDurationSeconds * 60); // Convert to frames at 60fps
+        
+        // Create pegs in triangular formation
+        function createPegs() {
+            pegs = [];
+            for (let row = 0; row < ROWS; row++) {
+                const pegsInRow = row + 1;
+                const rowY = START_Y + 80 + row * PEG_SPACING_V;
+                const startX = START_X - (pegsInRow - 1) * PEG_SPACING_H / 2;
+                
+                for (let i = 0; i < pegsInRow; i++) {
+                    pegs.push({
+                        x: startX + i * PEG_SPACING_H,
+                        y: rowY,
+                        radius: PEG_RADIUS
+                    });
+                }
+            }
+            
+            // Update bin positioning when pegs are recreated
+            updateBinPositioning();
+        }
+        
+        // Update bin positioning based on current peg spacing
+        function updateBinPositioning() {
+            BOTTOM_ROW_PEGS = ROWS;
+            BOTTOM_ROW_START_X = START_X - (BOTTOM_ROW_PEGS - 1) * PEG_SPACING_H / 2;
+            BIN_WIDTH = PEG_SPACING_H;
+            BIN_START_X = BOTTOM_ROW_START_X - PEG_SPACING_H / 2 - BIN_WIDTH / 2;
+        }
+        
+        // Ball class
+        class Ball {
+            constructor(x, y) {
+                this.x = x + (Math.random() - 0.5) * 20; // Small random offset
+                this.y = y;
+                this.vx = (Math.random() - 0.5) * 2;
+                this.vy = 0;
+                this.radius = BALL_RADIUS;
+                this.color = `hsl(${Math.random() * 360}, 70%, 60%)`;
+                this.trail = [];
+                this.collected = false;
+            }
+            
+            update() {
+                // Always update trails, even for collected balls, so they fade away
+                if (showTrails) {
+                    // Only add new trail points if ball is still moving
+                    if (!this.collected) {
+                        this.trail.push({x: this.x, y: this.y});
+                    }
+                    // Always remove old trail points to make trails fade
+                    if (this.trail.length > trailLength) {
+                        this.trail.shift();
+                    }
+                    // For collected balls, gradually remove trail points to fade them
+                    if (this.collected && this.trail.length > 0) {
+                        this.trail.shift(); // Remove one trail point per frame for faster fading
+                    }
+                } else {
+                    this.trail = []; // Clear trail if trails are disabled
+                }
+                
+                if (this.collected) return;
+                
+                // Apply gravity
+                this.vy += GRAVITY;
+                
+                // Apply friction
+                this.vx *= FRICTION;
+                this.vy *= FRICTION;
+                
+                // Cap velocity to prevent excessive bouncing
+                const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                if (speed > MAX_VELOCITY) {
+                    this.vx = (this.vx / speed) * MAX_VELOCITY;
+                    this.vy = (this.vy / speed) * MAX_VELOCITY;
+                }
+                
+                // Update position
+                this.x += this.vx;
+                this.y += this.vy;
+                
+                // Collision with pegs
+                for (let peg of pegs) {
+                    const dx = this.x - peg.x;
+                    const dy = this.y - peg.y;
+                    const distance = Math.sqrt(dx * dx + dy * dy);
+                    const minDistance = this.radius + peg.radius;
+                    
+                    if (distance < minDistance) {
+                        // Calculate collision response
+                        const angle = Math.atan2(dy, dx);
+                        const targetX = peg.x + Math.cos(angle) * minDistance;
+                        const targetY = peg.y + Math.sin(angle) * minDistance;
+                        
+                        // Separate balls
+                        this.x = targetX;
+                        this.y = targetY;
+                        
+                        // Bounce velocity with much more energy loss
+                        const speed = Math.sqrt(this.vx * this.vx + this.vy * this.vy);
+                        this.vx = Math.cos(angle) * speed * BOUNCE;
+                        this.vy = Math.sin(angle) * speed * BOUNCE;
+                        
+                        // Add minimal randomness to prevent perfect symmetry
+                        this.vx += (Math.random() - 0.5) * 0.5;
+                        
+                        // Ensure downward motion is preserved
+                        if (this.vy < 0.1) {
+                            this.vy = 0.1;
+                        }
+                    }
+                }
+                
+                // Wall collisions
+                if (this.x - this.radius < 0) {
+                    this.x = this.radius;
+                    this.vx *= -BOUNCE;
+                }
+                if (this.x + this.radius > canvas.width) {
+                    this.x = canvas.width - this.radius;
+                    this.vx *= -BOUNCE;
+                }
+                
+                // Bottom collection - positioned at bottom of canvas
+                if (this.y + this.radius > canvas.height - 100) {
+                    if (!this.collected) {
+                        this.collected = true;
+                        const binIndex = Math.floor((this.x - BIN_START_X) / PEG_SPACING_H);
+                        const clampedIndex = Math.max(0, Math.min(BIN_COUNT - 1, binIndex));
+                        bins[clampedIndex]++;
+                        totalBallsInBins++; // Increment total binned balls counter
+                        // Ball disappears immediately - no position or velocity needed
+                    }
+                }
+            }
+            
+            draw() {
+                // Draw trail
+                if (showTrails && this.trail.length > 0) {
+                    ctx.globalAlpha = 0.3;
+                    for (let i = 0; i < this.trail.length; i++) {
+                        const point = this.trail[i];
+                        const alpha = i / this.trail.length;
+                        ctx.globalAlpha = alpha * 0.3;
+                        ctx.fillStyle = this.color;
+                        ctx.beginPath();
+                        ctx.arc(point.x, point.y, this.radius * alpha, 0, Math.PI * 2);
+                        ctx.fill();
+                    }
+                }
+                
+                // Only draw the ball itself if it's not collected (collected balls are drawn as part of bins)
+                if (!this.collected) {
+                    // Draw ball
+                    ctx.globalAlpha = 1;
+                    const gradient = ctx.createRadialGradient(
+                        this.x - 2, this.y - 2, 0,
+                        this.x, this.y, this.radius
+                    );
+                    gradient.addColorStop(0, this.color);
+                    gradient.addColorStop(1, this.color.replace('60%', '40%'));
+                    
+                    ctx.fillStyle = gradient;
+                    ctx.beginPath();
+                    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+                    ctx.fill();
+                    
+                    // Highlight
+                    ctx.fillStyle = 'rgba(255,255,255,0.4)';
+                    ctx.beginPath();
+                    ctx.arc(this.x - 2, this.y - 2, this.radius * 0.3, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                
+                // Reset alpha
+                ctx.globalAlpha = 1;
+            }
+        }
+        
+        function drawPegs() {
+            for (let peg of pegs) {
+                // Peg shadow
+                ctx.fillStyle = 'rgba(0,0,0,0.3)';
+                ctx.beginPath();
+                ctx.arc(peg.x + 2, peg.y + 2, peg.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Peg gradient
+                const gradient = ctx.createRadialGradient(
+                    peg.x - 3, peg.y - 3, 0,
+                    peg.x, peg.y, peg.radius
+                );
+                gradient.addColorStop(0, '#ff9a9e');
+                gradient.addColorStop(1, '#fecfef');
+                
+                ctx.fillStyle = gradient;
+                ctx.beginPath();
+                ctx.arc(peg.x, peg.y, peg.radius, 0, Math.PI * 2);
+                ctx.fill();
+                
+                // Peg highlight
+                ctx.fillStyle = 'rgba(255,255,255,0.6)';
+                ctx.beginPath();
+                ctx.arc(peg.x - 2, peg.y - 2, peg.radius * 0.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+        
+        function drawBins() {
+            const maxCount = Math.max(...bins, 1);
+            
+            for (let i = 0; i < BIN_COUNT; i++) {
+                const x = BIN_START_X + i * PEG_SPACING_H;
+                const height = (bins[i] / maxCount) * 100;
+                
+                // Bin background
+                ctx.fillStyle = 'rgba(255,255,255,0.1)';
+                ctx.fillRect(x, canvas.height, BIN_WIDTH, -100);
+                
+                // Bin chart
+                const gradient = ctx.createLinearGradient(0, canvas.height, 0, canvas.height - 100);
+                gradient.addColorStop(0, 'rgba(255,107,107,0.8)');
+                gradient.addColorStop(1, 'rgba(255,142,83,0.8)');
+                
+                ctx.fillStyle = gradient;
+                ctx.fillRect(x, canvas.height, BIN_WIDTH, -height);
+                
+                // Bin count text
+                if (bins[i] > 0) {
+                    ctx.fillStyle = 'white';
+                    ctx.font = '12px Arial';
+                    ctx.textAlign = 'center';
+                    ctx.fillText(bins[i], x + BIN_WIDTH / 2, canvas.height - 5 - height);
+                }
+                
+                // Bin separator (only draw right edge, not left, so bins touch)
+                if (i < BIN_COUNT - 1) {
+                    ctx.strokeStyle = 'rgba(255,255,255,0.3)';
+                    ctx.lineWidth = 1;
+                    ctx.beginPath();
+                    ctx.moveTo(x + BIN_WIDTH, canvas.height);
+                    ctx.lineTo(x + BIN_WIDTH, canvas.height - 100);
+                    ctx.stroke();
+                }
+            }
+        }
+        
+        function animate(currentTime) {
+            // Calculate FPS
+            if (currentTime - lastTime >= 1000) {
+                fps = Math.round(1000 / (currentTime - lastTime) * 60);
+                lastTime = currentTime;
+                document.getElementById('fps').textContent = `FPS: ${fps}`;
+            }
+            
+            // Clear canvas - use full clear if no balls are moving and no trails exist, otherwise use fade effect
+            const hasMovingBalls = balls.some(ball => !ball.collected);
+            const hasTrails = balls.some(ball => ball.trail.length > 0);
+            if (hasMovingBalls || continuousDropping || hasTrails) {
+                ctx.fillStyle = 'rgba(0,0,0,0.05)';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            } else {
+                // Complete clear when simulation is stopped and no trails remain
+                ctx.fillStyle = 'black';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+            }
+            
+            // Update and draw balls
+            for (let ball of balls) {
+                ball.update();
+                ball.draw();
+            }
+            
+            // Remove balls that have no trail left and are collected
+            balls = balls.filter(ball => !ball.collected || ball.trail.length > 0);
+            
+            // Draw pegs and bins
+            drawPegs();
+            drawBins();
+            
+            // Update ball counters
+            document.getElementById('ballCount').textContent = `Active: ${balls.length}`;
+            document.getElementById('totalBinned').textContent = `Binned: ${totalBallsInBins}`;
+            
+            requestAnimationFrame(animate);
+        }
+        
+        function dropBall() {
+            balls.push(new Ball(START_X, START_Y));
+            ballCounter++;
+        }
+        
+        function startContinuous() {
+            if (!continuousDropping) {
+                continuousDropping = true;
+                dropInterval = setInterval(dropBall, 200);
+            }
+        }
+        
+        function stopContinuous() {
+            continuousDropping = false;
+            if (dropInterval) {
+                clearInterval(dropInterval);
+            }
+        }
+        
+        function clearBalls() {
+            balls = [];
+            bins = new Array(BIN_COUNT).fill(0);
+            ballCounter = 0;
+            totalBallsInBins = 0; // Reset total binned balls counter
+            stopContinuous();
+            
+            // Force a complete canvas clear to remove any ghost images
+            ctx.fillStyle = 'black';
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+        }
+        
+        function toggleTrails() {
+            showTrails = document.getElementById('showTrails').checked;
+        }
+        
+        function updateTrailDuration() {
+            trailDurationSeconds = parseFloat(document.getElementById('trailDuration').value);
+            trailLength = Math.floor(trailDurationSeconds * 60); // Convert to frames at 60fps
+            document.getElementById('trailDurationValue').textContent = trailDurationSeconds.toFixed(1) + 's';
+        }
+        
+        // Physics constant update functions
+        function updateGravity() {
+            GRAVITY = parseFloat(document.getElementById('gravitySlider').value);
+            document.getElementById('gravityValue').textContent = GRAVITY.toFixed(2);
+        }
+        
+        function updateFriction() {
+            FRICTION = parseFloat(document.getElementById('frictionSlider').value);
+            document.getElementById('frictionValue').textContent = FRICTION.toFixed(3);
+        }
+        
+        function updateBounce() {
+            BOUNCE = parseFloat(document.getElementById('bounceSlider').value);
+            document.getElementById('bounceValue').textContent = BOUNCE.toFixed(2);
+        }
+        
+        function updateMaxVelocity() {
+            MAX_VELOCITY = parseFloat(document.getElementById('maxVelocitySlider').value);
+            document.getElementById('maxVelocityValue').textContent = MAX_VELOCITY.toFixed(1);
+        }
+        
+        function updateBallRadius() {
+            BALL_RADIUS = parseInt(document.getElementById('ballRadiusSlider').value);
+            document.getElementById('ballRadiusValue').textContent = BALL_RADIUS;
+        }
+        
+        function updatePegRadius() {
+            PEG_RADIUS = parseInt(document.getElementById('pegRadiusSlider').value);
+            document.getElementById('pegRadiusValue').textContent = PEG_RADIUS;
+            // Recreate pegs with new radius
+            createPegs();
+        }
+        
+        function updatePegSpacingH() {
+            PEG_SPACING_H = parseInt(document.getElementById('pegSpacingHSlider').value);
+            document.getElementById('pegSpacingHValue').textContent = PEG_SPACING_H;
+            // Recreate pegs and bins with new horizontal spacing
+            createPegs();
+        }
+        
+        function updatePegSpacingV() {
+            PEG_SPACING_V = parseInt(document.getElementById('pegSpacingVSlider').value);
+            document.getElementById('pegSpacingVValue').textContent = PEG_SPACING_V;
+            // Recreate pegs with new vertical spacing
+            createPegs();
+        }
+        
+        // Modal functions
+        function openModal() {
+            document.getElementById('learnMoreModal').style.display = 'block';
+        }
+        
+        function closeModal() {
+            document.getElementById('learnMoreModal').style.display = 'none';
+        }
+        
+        // Close modal when clicking outside of it
+        window.onclick = function(event) {
+            const modal = document.getElementById('learnMoreModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+        
+        // Initialize
+        createPegs();
+        requestAnimationFrame(animate);
+        
+        // Drop a few balls to start
+        setTimeout(() => {
+            for (let i = 0; i < 3; i++) {
+                setTimeout(dropBall, i * 300);
+            }
+        }, 500);
+    </script>
+</body>
+</html>

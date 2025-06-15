@@ -23,6 +23,18 @@ const currentPath = Astro.url.pathname;
 		<link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 		<meta name="generator" content={Astro.generator} />
 		<title>{title}</title>
+		<script is:inline>
+			// On page load or when changing themes, best to add inline in `head` to avoid FOUC
+			if (
+				localStorage.getItem('color-theme') === 'dark' ||
+				(!('color-theme' in localStorage) &&
+					window.matchMedia('(prefers-color-scheme: dark)').matches)
+			) {
+				document.documentElement.classList.add('dark');
+			} else {
+				document.documentElement.classList.remove('dark');
+			}
+		</script>
 	</head>
 	<body class="min-h-screen bg-slate-50 dark:bg-gray-950">
 		<!-- Main Site Navigation -->
@@ -31,10 +43,10 @@ const currentPath = Astro.url.pathname;
 		<!-- Bitcoin Tutorial Layout -->
 		<div class="flex flex-col md:flex-row min-h-screen pt-20">
 			<!-- Fixed Left Navigation Panel -->
-			<aside class="w-full md:w-64 bg-slate-800 dark:bg-gray-900 text-white fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto z-10 border-r border-slate-700 dark:border-gray-800">
+			<aside class="w-full md:w-64 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto z-10 border-r border-gray-300 dark:border-gray-800 transition-colors duration-200">
 				<div class="p-4">
-					<div class="text-xl font-bold mb-2 text-white">Bitcoin Education Series</div>
-					<div id="modules-progress" class="text-sm text-gray-400 mb-6">0 out of 9 modules completed</div>
+					<div class="text-xl font-bold mb-2 text-gray-900 dark:text-white">Bitcoin Education Series</div>
+					<div id="modules-progress" class="text-sm text-gray-600 dark:text-gray-400 mb-6">0 out of 9 modules completed</div>
 					<nav>
 						<ul class="space-y-2">
 							<li>
@@ -42,7 +54,7 @@ const currentPath = Astro.url.pathname;
 								   class={`block py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/' || currentPath === '/bitcoin-tutorial'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`}>
 								   Home
 								</a>
@@ -52,7 +64,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/1'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="1">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -64,7 +76,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/2'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="2">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -76,7 +88,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/3'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="3">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -88,7 +100,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/4'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="4">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -100,7 +112,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/5'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="5">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -112,7 +124,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/6'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="6">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -124,7 +136,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/7'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="7">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -136,7 +148,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/8'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="8">
 									<span class="module-check mr-2 opacity-0">✓</span>
@@ -148,7 +160,7 @@ const currentPath = Astro.url.pathname;
 								   class={`flex items-center py-2 px-4 rounded transition-colors ${
 								   	currentPath === '/bitcoin-tutorial/module/9'
 								   		? 'bg-blue-600 dark:bg-blue-700 text-white'
-								   		: 'text-gray-200 hover:text-white hover:bg-slate-700 dark:hover:bg-gray-800'
+								   		: 'text-gray-700 dark:text-gray-200 hover:text-gray-900 dark:hover:text-white hover:bg-gray-200 dark:hover:bg-gray-800'
 								   }`} 
 								   data-module="9">
 									<span class="module-check mr-2 opacity-0">✓</span>

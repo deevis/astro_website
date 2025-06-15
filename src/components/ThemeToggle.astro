@@ -6,10 +6,10 @@
   class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
   aria-label="Toggle dark mode"
 >
-  <!-- Sun icon -->
+  <!-- Sun icon (shows in dark mode to switch to light) -->
   <svg
     id="theme-toggle-light-icon"
-    class="hidden w-5 h-5"
+    class="w-5 h-5"
     fill="currentColor"
     viewBox="0 0 20 20"
     xmlns="http://www.w3.org/2000/svg"
@@ -18,7 +18,7 @@
       d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
     />
   </svg>
-  <!-- Moon icon -->
+  <!-- Moon icon (shows in light mode to switch to dark) -->
   <svg
     id="theme-toggle-dark-icon"
     class="hidden w-5 h-5"
@@ -31,45 +31,158 @@
 </button>
 
 <script>
-  const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
-  const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
-  const themeToggleBtn = document.getElementById('theme-toggle');
+  function initThemeToggle() {
+    console.log('Initializing theme toggle...');
+    
+    const themeToggleDarkIcon = document.getElementById('theme-toggle-dark-icon');
+    const themeToggleLightIcon = document.getElementById('theme-toggle-light-icon');
+    const themeToggleBtn = document.getElementById('theme-toggle');
 
-  // Change the icons inside the button based on previous settings
-  if (
-    localStorage.getItem('color-theme') === 'dark' ||
-    (!('color-theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    themeToggleLightIcon?.classList.remove('hidden');
-    document.documentElement.classList.add('dark');
-  } else {
-    themeToggleDarkIcon?.classList.remove('hidden');
-    document.documentElement.classList.remove('dark');
-  }
+    console.log('Elements found:', {
+      darkIcon: !!themeToggleDarkIcon,
+      lightIcon: !!themeToggleLightIcon,
+      button: !!themeToggleBtn
+    });
 
-  themeToggleBtn?.addEventListener('click', function() {
-    // Toggle icons
-    themeToggleDarkIcon?.classList.toggle('hidden');
-    themeToggleLightIcon?.classList.toggle('hidden');
+    if (!themeToggleBtn || !themeToggleDarkIcon || !themeToggleLightIcon) {
+      console.error('Theme toggle elements not found');
+      return;
+    }
 
-    // If is set in localStorage
-    if (localStorage.getItem('color-theme')) {
-      if (localStorage.getItem('color-theme') === 'light') {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
-      } else {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
-      }
-    } else {
-      if (document.documentElement.classList.contains('dark')) {
-        document.documentElement.classList.remove('dark');
-        localStorage.setItem('color-theme', 'light');
-      } else {
-        document.documentElement.classList.add('dark');
-        localStorage.setItem('color-theme', 'dark');
+    // Function to update theme
+    function updateTheme(isDark) {
+      console.log('⚡ updateTheme called with isDark:', isDark);
+      console.log('  - Theme will be:', isDark ? 'DARK' : 'LIGHT');
+      
+      try {
+        if (isDark) {
+          console.log('  - Adding "dark" class to documentElement');
+          document.documentElement.classList.add('dark');
+          console.log('  - Showing light icon (sun), hiding dark icon (moon)');
+          
+          // Use both CSS classes AND inline styles for reliability
+          themeToggleLightIcon.classList.remove('hidden');
+          themeToggleLightIcon.style.display = 'block';
+          themeToggleDarkIcon.classList.add('hidden');
+          themeToggleDarkIcon.style.display = 'none';
+          
+          console.log('  - Setting localStorage to "dark"');
+          localStorage.setItem('color-theme', 'dark');
+          
+          // Debug icon visibility
+          console.log('  🔍 Icon visibility check after dark mode:');
+          console.log('    - Light icon computed style:', window.getComputedStyle(themeToggleLightIcon).display);
+          console.log('    - Dark icon computed style:', window.getComputedStyle(themeToggleDarkIcon).display);
+        } else {
+          console.log('  - Removing "dark" class from documentElement');
+          document.documentElement.classList.remove('dark');
+          console.log('  - Showing dark icon (moon), hiding light icon (sun)');
+          
+          // Use both CSS classes AND inline styles for reliability
+          themeToggleDarkIcon.classList.remove('hidden');
+          themeToggleDarkIcon.style.display = 'block';
+          themeToggleLightIcon.classList.add('hidden');
+          themeToggleLightIcon.style.display = 'none';
+          
+          console.log('  - Setting localStorage to "light"');
+          localStorage.setItem('color-theme', 'light');
+          
+          // Debug icon visibility
+          console.log('  🔍 Icon visibility check after light mode:');
+          console.log('    - Light icon computed style:', window.getComputedStyle(themeToggleLightIcon).display);
+          console.log('    - Dark icon computed style:', window.getComputedStyle(themeToggleDarkIcon).display);
+        }
+        console.log('✅ updateTheme completed successfully');
+      } catch (error) {
+        console.error('❌ Error in updateTheme:', error);
       }
     }
-  });
+
+    // Set initial theme based on localStorage or system preference
+    const currentTheme = localStorage.getItem('color-theme');
+    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+    const shouldBeDark = currentTheme === 'dark' || (!currentTheme && systemPrefersDark);
+    
+    console.log('Initial theme detection:', {
+      currentTheme,
+      systemPrefersDark,
+      shouldBeDark,
+      currentlyDark: document.documentElement.classList.contains('dark')
+    });
+
+    updateTheme(shouldBeDark);
+
+    // Add click event listener with multiple approaches
+    console.log('🔗 Attempting to add event listeners...');
+    
+    const clickHandler = function(e) {
+      e.preventDefault();
+      console.log('🔥 THEME TOGGLE CLICKED!');
+      console.log('Event object:', e);
+      console.log('Button element:', themeToggleBtn);
+      
+      const isDarkNow = document.documentElement.classList.contains('dark');
+      console.log('📊 Current state before toggle:');
+      console.log('  - isDarkNow:', isDarkNow);
+      console.log('  - document.documentElement.classList:', document.documentElement.classList.toString());
+      console.log('  - localStorage color-theme:', localStorage.getItem('color-theme'));
+      console.log('  - dark icon classes:', themeToggleDarkIcon.classList.toString());
+      console.log('  - light icon classes:', themeToggleLightIcon.classList.toString());
+      
+      console.log('🔄 Calling updateTheme with:', !isDarkNow);
+      updateTheme(!isDarkNow);
+      
+      console.log('📊 State after toggle:');
+      console.log('  - document.documentElement.classList:', document.documentElement.classList.toString());
+      console.log('  - localStorage color-theme:', localStorage.getItem('color-theme'));
+      console.log('  - dark icon classes:', themeToggleDarkIcon.classList.toString());
+      console.log('  - light icon classes:', themeToggleLightIcon.classList.toString());
+    };
+
+    // Try multiple event listener approaches
+    try {
+      console.log('  - Adding click event listener...');
+      themeToggleBtn.addEventListener('click', clickHandler);
+      console.log('  ✅ Click event listener added successfully');
+    } catch (error) {
+      console.error('  ❌ Error adding click event listener:', error);
+    }
+
+    // Also try onclick as fallback
+    try {
+      console.log('  - Setting onclick handler as fallback...');
+      themeToggleBtn.onclick = clickHandler;
+      console.log('  ✅ onclick handler set successfully');
+    } catch (error) {
+      console.error('  ❌ Error setting onclick handler:', error);
+    }
+
+    // Test if the button is actually clickable
+    console.log('🧪 Testing button properties:');
+    console.log('  - Button tagName:', themeToggleBtn.tagName);
+    console.log('  - Button disabled:', (themeToggleBtn as HTMLButtonElement).disabled);
+    console.log('  - Button style.display:', themeToggleBtn.style.display);
+    console.log('  - Button style.visibility:', themeToggleBtn.style.visibility);
+    console.log('  - Button style.pointerEvents:', themeToggleBtn.style.pointerEvents);
+    console.log('  - Button offsetParent:', themeToggleBtn.offsetParent);
+
+    console.log('✅ Theme toggle initialization completed');
+
+    // Add a test function to window for manual testing
+    (window as any).testThemeToggle = function() {
+      console.log('🧪 Manual theme toggle test triggered');
+      clickHandler({preventDefault: () => {}});
+    };
+    console.log('💡 You can test manually by running: testThemeToggle() in console');
+  }
+
+  // Try multiple initialization methods to ensure it works
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  } else {
+    initThemeToggle();
+  }
+
+  // Also try after a short delay as fallback
+  setTimeout(initThemeToggle, 100);
 </script>

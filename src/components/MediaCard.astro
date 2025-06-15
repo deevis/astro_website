@@ -62,7 +62,7 @@ const isVideoWithSameThumb = type === 'video' && thumb === src;
     <p class="text-sm text-gray-600 dark:text-gray-300 mb-2 line-clamp-2">{description}</p>
     <div class="flex flex-wrap gap-1">
       {tags.map(tag => (
-        <span class="text-xs px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full">
+        <span class="card-tag text-xs px-2 py-0.5 bg-gray-100 dark:bg-dark-700 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors" data-tag={tag}>
           {tag}
         </span>
       ))}

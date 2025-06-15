@@ -1,5 +1,19 @@
 {
     "showcases":  [
+      {
+        "title": "Supply & Demand Economic Simulator",
+        "description": "Comprehensive economic simulation showcasing market dynamics in a closed economy with 50 agents. Features real-time supply and demand curves, multiple economic scenarios (scarcity, abundance, tech boom, demand surge), market interventions (price floors/ceilings, taxes, subsidies), and a money printer mechanism. Watch producers, consumers, and traders interact through order books with detailed agent statistics, wealth inequality tracking, and exportable simulation data.",
+        "href": "html_showcase/supply_and_demand/index.html",
+        "image": "html_showcase/supply_and_demand/thumb.png",
+        "tags": ["economics", "simulation", "supply and demand", "market dynamics", "educational", "interactive", "economic policy", "agent-based modeling", "market interventions"]
+      },
+      {
+        "title": "Galton Box Physics Simulation",
+        "description": "Interactive physics simulation of Sir Francis Galton's bean machine demonstrating the Central Limit Theorem. Features real-time parameter adjustment for gravity, friction, bounce, ball/peg sizes, and spacing. Includes trail visualization, statistical tracking, and educational modal explaining the mathematical principles behind normal distribution emergence from random processes.",
+        "href": "html_showcase/galton_box_simulation/index.html",
+        "image": "html_showcase/galton_box_simulation/thumb.png",
+        "tags": ["physics simulation", "statistics", "Central Limit Theorem", "educational", "interactive", "mathematics", "normal distribution", "Galton Box"]
+      },
       { "title": "Bitcoin Strategic Reserve - US States Progress",
         "description": "The current progress of the Bitcoin Strategic Reserve in the United States (as of May 7, 2025)",
         "href": "html_showcase/bitcoin_strategic_reserve_us_states_progress/index.html",
@@ -14,11 +28,18 @@
         "tags": ["Claude 3.5 Sonnet", "simulation", "economics", "data visualization"]
       },
       {
-        "title": "Retirement Planner",
-        "description": "Learn how your future earnings (or lack thereof) impact your social security benefits",
+        "title": "Social Security Scenario Simulator",
+        "description": "Comprehensive Social Security benefits calculator with break-even analysis. Input your earnings history to see monthly benefits at different retirement ages (62-70), compare lifetime totals with COLA adjustments, and analyze investment scenarios. Features detailed year-by-year projections, visual break-even point detection, and CSV export for financial planning.",
         "href": "html_showcase/social_security_calculator/index.html",
         "image": "html_showcase/social_security_calculator/thumb.png",
-        "tags": ["calculator", "finance", "retirement", "economics"]
+        "tags": ["social security", "benefits calculator", "retirement planning", "break-even analysis", "financial modeling"]
+      },
+      {
+        "title": "Last Stack Standing - Money Printer Simulation",
+        "description": "Educational simulation demonstrating how the ability to create money provides unfair advantages in competitive environments. Compare fair play vs. money printer modes through dice-based chip games with escalating stakes. Features real-time visualization of win distributions and chip flow analysis across multiple game simulations.",
+        "href": "html_showcase/last_stack_standing/index.html",
+        "image": "html_showcase/last_stack_standing/thumb.png",
+        "tags": ["economics", "simulation", "game theory", "inequality", "educational", "money printing", "statistical analysis"]
       },
       { "title": "Water Cycle Simulation - Claude 3.5 Sonnet",
         "description": "A simulation of rainfall and evaporation across various altitudes.",

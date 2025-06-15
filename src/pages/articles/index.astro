@@ -10,28 +10,234 @@ const articles = await getCollection('articles');
 const sortedArticles = articles.sort((a, b) => 
   new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
 );
+
+// Extract all unique tags
+const allTags = [...new Set(sortedArticles.flatMap(article => article.data.tags || []))].sort();
 ---
 
 <Layout title="Articles | Professional Portfolio">
-  <Navigation />
   <main class="pt-24 pb-16">
     <div class="container mx-auto px-4 md:px-6 lg:px-8">
       <h1 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Articles</h1>
-      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
+      
+      <!-- Collapsible search and filter section -->
+      <div class="mb-8 bg-gray-50 dark:bg-dark-900 rounded-lg overflow-hidden">
+        <!-- Toggle button -->
+        <button id="filter-toggle" class="w-full p-4 text-left flex justify-between items-center">
+          <span class="font-medium">Search & Filters</span>
+          <svg id="filter-chevron-down" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M5.293 7.293a1 1 0 011.414 0L10 10.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z" clip-rule="evenodd" />
+          </svg>
+          <svg id="filter-chevron-up" xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 hidden" viewBox="0 0 20 20" fill="currentColor">
+            <path fill-rule="evenodd" d="M14.707 12.707a1 1 0 01-1.414 0L10 9.414l-3.293 3.293a1 1 0 01-1.414-1.414l4-4a1 1 0 011.414 0l4 4a1 1 0 010 1.414z" clip-rule="evenodd" />
+          </svg>
+        </button>
+        
+        <!-- Collapsible content -->
+        <div id="filter-content" class="hidden p-4 border-t border-gray-200 dark:border-dark-700">
+          <div class="mb-4">
+            <label for="article-search" class="block text-sm font-medium mb-1">Search</label>
+            <input 
+              type="text" 
+              id="article-search" 
+              placeholder="Search by title or description..."
+              class="w-full p-2 border border-gray-300 dark:border-dark-700 rounded-md dark:bg-dark-800"
+            />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-medium mb-1">Filter by Tags</label>
+            <div class="flex flex-wrap gap-2 mb-3" id="tag-filters">
+              {allTags.map(tag => (
+                <button
+                  class="tag-filter px-3 py-1 text-sm rounded-full bg-gray-200 dark:bg-dark-700 hover:bg-gray-300 dark:hover:bg-dark-600 transition-colors"
+                  data-tag={tag}
+                >
+                  {tag}
+                </button>
+              ))}
+            </div>
+            <button 
+              id="clear-filters" 
+              class="text-sm text-blue-600 dark:text-blue-400 hover:underline">
+              Clear filters
+            </button>
+          </div>
+        </div>
+      </div>
+      
+      <div id="articles-grid" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-6">
         {sortedArticles.map((article) => (
-          <Card 
-            title={article.data.title}
-            description={article.data.description}
-            image={article.data.image.src}
-            imageAlt={article.data.image.alt}
-            href={`/articles/${article.slug}`}
-            date={article.data.publishDate}
-            author={article.data.author}
-            tags={article.data.tags}
-          />
+          <div class="article-card" data-tags={article.data.tags?.join(',')}>
+            <Card 
+              title={article.data.title}
+              description={article.data.description}
+              image={article.data.image.src}
+              imageAlt={article.data.image.alt}
+              href={`/articles/${article.slug}`}
+              date={article.data.publishDate}
+              author={article.data.author}
+              tags={article.data.tags}
+            />
+          </div>
         ))}
+      </div>
+      
+      <div id="no-results" class="hidden text-center py-10">
+        <p class="text-lg">No articles match your search criteria.</p>
       </div>
     </div>
   </main>
-  <Footer />
 </Layout>
+
+<script>
+  // Client-side filtering logic
+  document.addEventListener('DOMContentLoaded', () => {
+    const articleCards = document.querySelectorAll('.article-card');
+    const tagButtons = document.querySelectorAll('.tag-filter');
+    const searchInput = document.getElementById('article-search') as HTMLInputElement;
+    const clearFiltersBtn = document.getElementById('clear-filters');
+    const articlesGrid = document.getElementById('articles-grid');
+    const noResults = document.getElementById('no-results');
+    const cardTags = document.querySelectorAll('.card-tag');
+    
+    // Collapsible filter section elements
+    const filterToggle = document.getElementById('filter-toggle');
+    const filterContent = document.getElementById('filter-content');
+    const filterChevronDown = document.getElementById('filter-chevron-down');
+    const filterChevronUp = document.getElementById('filter-chevron-up');
+    
+    // Toggle filter section visibility
+    filterToggle?.addEventListener('click', () => {
+      filterContent?.classList.toggle('hidden');
+      filterChevronDown?.classList.toggle('hidden');
+      filterChevronUp?.classList.toggle('hidden');
+    });
+    
+    // Function to open filter section if closed
+    function openFilterSection() {
+      if (filterContent?.classList.contains('hidden')) {
+        filterContent.classList.remove('hidden');
+        filterChevronDown?.classList.add('hidden');
+        filterChevronUp?.classList.remove('hidden');
+      }
+    }
+    
+    // Function to activate a tag filter
+    function activateTagFilter(tag: string) {
+      // Clear existing filters first
+      activeFilters.clear();
+      searchInput.value = '';
+      
+      // Reset all tag buttons
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+      });
+      
+      // Find and activate the clicked tag
+      const targetButton = Array.from(tagButtons).find(btn => 
+        (btn as HTMLElement).dataset.tag === tag
+      ) as HTMLElement;
+      
+      if (targetButton) {
+        activeFilters.add(tag);
+        targetButton.classList.remove('bg-gray-200', 'dark:bg-dark-700');
+        targetButton.classList.add('bg-blue-500', 'text-white');
+      }
+      
+      filterArticles();
+    }
+    
+    let activeFilters = new Set();
+    
+    // Function to filter articles
+    function filterArticles() {
+      const searchTerm = searchInput.value.toLowerCase().trim();
+      let visibleCount = 0;
+      
+      articleCards.forEach(card => {
+        const cardEl = card as HTMLElement;
+        const title = cardEl.querySelector('h2')?.textContent?.toLowerCase() || '';
+        const description = cardEl.querySelector('p')?.textContent?.toLowerCase() || '';
+        const tags = (cardEl.dataset.tags || '').split(',');
+        
+        // Check if card passes the search filter
+        const matchesSearch = searchTerm === '' || 
+          title.includes(searchTerm) || 
+          description.includes(searchTerm);
+        
+        // Check if card passes the tag filters
+        const matchesTags = activeFilters.size === 0 || 
+          tags.some(tag => activeFilters.has(tag));
+        
+        // Show or hide the card
+        if (matchesSearch && matchesTags) {
+          cardEl.classList.remove('hidden');
+          visibleCount++;
+        } else {
+          cardEl.classList.add('hidden');
+        }
+      });
+      
+      // Show "no results" message if needed
+      if (visibleCount === 0) {
+        articlesGrid?.classList.add('hidden');
+        noResults?.classList.remove('hidden');
+      } else {
+        articlesGrid?.classList.remove('hidden');
+        noResults?.classList.add('hidden');
+      }
+    }
+    
+    // Set up tag filter buttons
+    tagButtons.forEach(button => {
+      button.addEventListener('click', () => {
+        const btn = button as HTMLElement;
+        const tag = btn.dataset.tag || '';
+        
+        if (activeFilters.has(tag)) {
+          activeFilters.delete(tag);
+          btn.classList.remove('bg-blue-500', 'text-white');
+          btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+        } else {
+          activeFilters.add(tag);
+          btn.classList.remove('bg-gray-200', 'dark:bg-dark-700');
+          btn.classList.add('bg-blue-500', 'text-white');
+        }
+        
+        filterArticles();
+      });
+    });
+    
+    // Set up search input
+    searchInput.addEventListener('input', filterArticles);
+    
+    // Set up clear filters button
+    clearFiltersBtn?.addEventListener('click', () => {
+      activeFilters.clear();
+      searchInput.value = '';
+      
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+      });
+      
+      filterArticles();
+    });
+    
+    // Set up card tag click handlers
+    cardTags.forEach(cardTag => {
+      cardTag.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const tag = (cardTag as HTMLElement).dataset.tag;
+        if (tag) {
+          openFilterSection();
+          activateTagFilter(tag);
+        }
+      });
+    });
+  });
+</script>

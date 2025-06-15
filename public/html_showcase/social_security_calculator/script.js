@@ -69,7 +69,31 @@ function showTab(tabName) {
     });
     
     document.getElementById(tabName).classList.add('active');
-    document.querySelector(`button[onclick="showTab('${tabName}')"]`).classList.add('active');
+    
+    // Handle different onclick patterns for tabs
+    const tabButton = document.querySelector(`button[onclick*="'${tabName}'"]`);
+    if (tabButton) {
+        tabButton.classList.add('active');
+    }
+}
+
+function showTabIfEnabled(tabName) {
+    const tabButton = document.getElementById(tabName + 'Tab');
+    if (!tabButton.classList.contains('disabled')) {
+        showTab(tabName);
+    }
+}
+
+function enableTabs() {
+    const resultsTab = document.getElementById('resultsTab');
+    const comparisonTab = document.getElementById('comparisonTab');
+    
+    resultsTab.classList.remove('disabled');
+    comparisonTab.classList.remove('disabled');
+    
+    // Update onclick handlers
+    resultsTab.setAttribute('onclick', "showTab('results')");
+    comparisonTab.setAttribute('onclick', "showTab('comparison')");
 }
 
 function getEarningsLimit(year) {
@@ -158,6 +182,7 @@ function processInput() {
         "Including Future Work");
 
     clearError();
+    enableTabs();
     displayResults(baseScenario, futureScenario);
     showTab('results');
 }
@@ -426,8 +451,14 @@ function displayResults(baseScenario, futureScenario) {
     const futureWorkYears = parseInt(document.getElementById('futureWorkYears').value) || 0;
     const futureAnnualEarnings = parseFloat(document.getElementById('futureAnnualEarnings').value) || 0;
 
+    // Store the preferred scenario for break-even analysis
+    // Use future scenario if it has meaningful future work, otherwise use base scenario
+    const scenarioForBreakEven = futureWorkYears > 0 && futureAnnualEarnings > 0 ? futureScenario : baseScenario;
+    storeScenarioData(scenarioForBreakEven);
+
     document.getElementById('results').innerHTML = `
         ${generateSummary(baseScenario, futureScenario, currentAge, futureWorkYears, futureAnnualEarnings)}
+        ${generateTableExplanation()}
         <div class="scenario-comparison">
             <div class="scenario">
                 <h3>${baseScenario.label}</h3>
@@ -548,6 +579,35 @@ function displayComparisonChart(baseScenario, futureScenario) {
     });
 }
 
+function generateTableExplanation() {
+    return `
+        <div class="table-explanation">
+            <h3>📊 Understanding Your Earnings Tables</h3>
+            <div class="explanation-grid">
+                <div class="explanation-item">
+                    <span class="color-indicator red-indicator"></span>
+                    <div class="explanation-text">
+                        <strong>Red rows ($0 earnings):</strong> These years hurt your Social Security benefits because the system uses your highest 35 earning years. If you don't have 35 years of work, these $0 years are included in the calculation, lowering your average.
+                    </div>
+                </div>
+                <div class="explanation-item">
+                    <span class="color-indicator blue-indicator"></span>
+                    <div class="explanation-text">
+                        <strong>Blue rows (future years):</strong> These are projected earnings from your additional work years. They can replace some of your lowest earning years (including $0 years), potentially increasing your benefits.
+                    </div>
+                </div>
+                <div class="explanation-item">
+                    <span class="color-indicator normal-indicator"></span>
+                    <div class="explanation-text">
+                        <strong>Regular rows:</strong> Your actual historical earnings from your Social Security statement. The system ranks all years and uses the highest 35 for benefit calculations.
+                    </div>
+                </div>
+            </div>
+            <p class="key-insight"><strong>💡 Key Insight:</strong> Additional work years that earn more than your current lowest years (especially $0 years) will improve your Social Security benefits by raising your 35-year average.</p>
+        </div>
+    `;
+}
+
 // Add to script.js
 function generateSummary(baseScenario, futureScenario, currentAge, futureWorkYears, futureAnnualEarnings) {
     const fraAmount = {
@@ -592,7 +652,948 @@ function initializeThemeToggle() {
     });
 }
 
+// Break-even analysis functionality
+let breakEvenChart = null;
+let breakEvenChartFullscreen = null;
+let currentScenarioData = null;
+let lastChartData = null;
+
+function generateBreakEvenAnalysis() {
+    if (!currentScenarioData) {
+        alert('Please calculate your benefits first in the "View Results" tab.');
+        return;
+    }
+
+    const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+    const colaRate = parseFloat(document.getElementById('colaRate').value) / 100;
+    
+    // Get investment parameters
+    const enableInvestment = document.getElementById('enableInvestment').checked;
+    const investmentPercentage = enableInvestment ? parseFloat(document.getElementById('investmentPercentage').value) / 100 : 0;
+    const expectedYield = enableInvestment ? parseFloat(document.getElementById('expectedYield').value) / 100 : 0;
+    
+    // Get ages from input fields
+    const selectedAges = [];
+    for (let i = 1; i <= 4; i++) {
+        const ageInput = document.getElementById(`compareAge${i}`);
+        const age = parseInt(ageInput.value);
+        if (age && age >= 62 && age <= 70 && !selectedAges.includes(age)) {
+            selectedAges.push(age);
+        }
+    }
+    
+    if (selectedAges.length === 0) {
+        alert('Please enter at least one valid retirement age between 62-70.');
+        return;
+    }
+
+    // Sort ages for consistent display
+    selectedAges.sort((a, b) => a - b);
+
+    const analysisData = calculateBreakEvenData(selectedAges, lifeExpectancy, colaRate, investmentPercentage, expectedYield);
+    displayBreakEvenChart(analysisData, selectedAges, lifeExpectancy, enableInvestment);
+    displayBreakEvenSummary(analysisData, selectedAges, enableInvestment);
+}
+
+function calculateBreakEvenData(selectedAges, lifeExpectancy, colaRate, investmentPercentage = 0, expectedYield = 0) {
+    const data = {};
+    
+    selectedAges.forEach(retirementAge => {
+        const monthlyBenefit = currentScenarioData.benefitsByAge[retirementAge];
+        const yearlyData = [];
+        let cumulativeTotal = 0;
+        let investmentBalance = 0;
+        let totalInvested = 0;
+        
+        for (let age = retirementAge; age <= lifeExpectancy; age++) {
+            const yearsFromStart = age - retirementAge;
+            const adjustedMonthlyBenefit = monthlyBenefit * Math.pow(1 + colaRate, yearsFromStart);
+            const yearlyAmount = adjustedMonthlyBenefit * 12;
+            
+            cumulativeTotal += yearlyAmount;
+            
+            // Calculate investment portion
+            let yearlyInvestment = 0;
+            if (investmentPercentage > 0) {
+                // Amount invested this year
+                yearlyInvestment = yearlyAmount * investmentPercentage;
+                totalInvested += yearlyInvestment;
+                
+                // Grow existing investment balance
+                investmentBalance = investmentBalance * (1 + expectedYield);
+                
+                // Add new investment (assuming invested throughout the year, so average growth of half a year)
+                investmentBalance += yearlyInvestment * (1 + expectedYield / 2);
+            }
+            
+            yearlyData.push({
+                age: age,
+                monthlyAmount: adjustedMonthlyBenefit,
+                yearlyAmount: yearlyAmount,
+                cumulativeTotal: cumulativeTotal,
+                yearlyInvestment: yearlyInvestment,
+                totalInvested: totalInvested,
+                investmentBalance: investmentBalance,
+                totalWithInvestments: cumulativeTotal + investmentBalance
+            });
+        }
+        
+        data[retirementAge] = yearlyData;
+    });
+    
+    return data;
+}
+
+function displayBreakEvenChart(analysisData, selectedAges, lifeExpectancy, enableInvestment = false) {
+    if (breakEvenChart) {
+        breakEvenChart.destroy();
+    }
+
+    const ctx = document.getElementById('breakEvenChart').getContext('2d');
+    const ages = [];
+    for (let age = Math.min(...selectedAges); age <= lifeExpectancy; age++) {
+        ages.push(age);
+    }
+
+    const datasets = [];
+    
+    // Generate colors dynamically for any number of ages
+    const colorPalette = [
+        { bar: 'rgba(255, 99, 132, 0.6)', line: 'rgb(255, 99, 132)', investment: 'rgb(255, 99, 132, 0.8)' },   // Red
+        { bar: 'rgba(54, 162, 235, 0.6)', line: 'rgb(54, 162, 235)', investment: 'rgb(54, 162, 235, 0.8)' },   // Blue
+        { bar: 'rgba(75, 192, 192, 0.6)', line: 'rgb(75, 192, 192)', investment: 'rgb(75, 192, 192, 0.8)' },   // Teal
+        { bar: 'rgba(255, 206, 86, 0.6)', line: 'rgb(255, 206, 86)', investment: 'rgb(255, 206, 86, 0.8)' },   // Yellow
+        { bar: 'rgba(153, 102, 255, 0.6)', line: 'rgb(153, 102, 255)', investment: 'rgb(153, 102, 255, 0.8)' }, // Purple
+        { bar: 'rgba(255, 159, 64, 0.6)', line: 'rgb(255, 159, 64)', investment: 'rgb(255, 159, 64, 0.8)' }    // Orange
+    ];
+    
+    const colors = {};
+    selectedAges.forEach((age, index) => {
+        colors[age] = colorPalette[index % colorPalette.length];
+    });
+
+    // Add bar datasets (yearly amounts)
+    selectedAges.forEach(retirementAge => {
+        const yearlyAmounts = ages.map(age => {
+            const dataPoint = analysisData[retirementAge]?.find(d => d.age === age);
+            return dataPoint ? dataPoint.yearlyAmount : 0;
+        });
+
+        datasets.push({
+            type: 'bar',
+            label: `Age ${retirementAge} - Yearly Amount`,
+            data: yearlyAmounts,
+            backgroundColor: colors[retirementAge].bar,
+            borderColor: colors[retirementAge].line,
+            borderWidth: 1,
+            yAxisID: 'y'
+        });
+    });
+
+    // Add line datasets (cumulative SS totals)
+    selectedAges.forEach(retirementAge => {
+        const cumulativeTotals = ages.map(age => {
+            const dataPoint = analysisData[retirementAge]?.find(d => d.age === age);
+            return dataPoint ? dataPoint.cumulativeTotal : null;
+        });
+
+        datasets.push({
+            type: 'line',
+            label: `Age ${retirementAge} - SS Only`,
+            data: cumulativeTotals,
+            borderColor: colors[retirementAge].line,
+            backgroundColor: 'transparent',
+            borderWidth: 2,
+            tension: 0.1,
+            yAxisID: 'y1',
+            pointRadius: 1,
+            borderDash: enableInvestment ? [5, 5] : []
+        });
+    });
+
+    // Add investment line datasets if enabled
+    if (enableInvestment) {
+        selectedAges.forEach(retirementAge => {
+            const totalWithInvestments = ages.map(age => {
+                const dataPoint = analysisData[retirementAge]?.find(d => d.age === age);
+                return dataPoint ? dataPoint.totalWithInvestments : null;
+            });
+
+            datasets.push({
+                type: 'line',
+                label: `Age ${retirementAge} - With Investments`,
+                data: totalWithInvestments,
+                borderColor: colors[retirementAge].investment,
+                backgroundColor: 'transparent',
+                borderWidth: 4,
+                tension: 0.1,
+                yAxisID: 'y1',
+                pointRadius: 2
+            });
+        });
+    }
+
+    const chartTitle = enableInvestment ? 
+        'Social Security Benefits: With Investment Option' : 
+        'Social Security Benefits: Yearly Amounts vs. Cumulative Totals';
+
+    const chartConfig = {
+        type: 'bar',
+        data: {
+            labels: ages,
+            datasets: datasets
+        },
+        options: {
+            responsive: true,
+            maintainAspectRatio: false,
+            interaction: {
+                mode: 'index',
+                intersect: false,
+            },
+            plugins: {
+                tooltip: {
+                    callbacks: {
+                        title: function(tooltipItems) {
+                            return `Age ${tooltipItems[0].label}`;
+                        },
+                        label: function(context) {
+                            // Return empty to suppress individual labels - we'll handle grouping in afterBody
+                            return '';
+                        },
+                        afterBody: function(tooltipItems) {
+                            // Group tooltip items by retirement age for better organization
+                            let result = [];
+                            
+                            // Get unique retirement ages from dataset labels
+                            const retirementAges = new Set();
+                            tooltipItems.forEach(item => {
+                                const match = item.dataset.label.match(/Age (\d+)/);
+                                if (match) {
+                                    retirementAges.add(parseInt(match[1]));
+                                }
+                            });
+                            
+                            // Group items by retirement age
+                            Array.from(retirementAges).sort((a, b) => a - b).forEach(retAge => {
+                                const ageItems = tooltipItems.filter(item => 
+                                    item.dataset.label.includes(`Age ${retAge}`)
+                                );
+                                
+                                if (ageItems.length > 0) {
+                                    result.push(`--- Retire at Age ${retAge} ---`);
+                                    ageItems.forEach(item => {
+                                        const value = item.parsed.y !== null ? item.parsed.y : item.parsed.y1;
+                                        const label = item.dataset.label.replace(`Age ${retAge} - `, '');
+                                        result.push(`${label}: $${value.toLocaleString()}`);
+                                    });
+                                    result.push(''); // Add spacing between age groups
+                                }
+                            });
+                            
+                            // Remove last empty line
+                            if (result[result.length - 1] === '') {
+                                result.pop();
+                            }
+                            
+                            return result;
+                        }
+                    }
+                },
+                title: {
+                    display: true,
+                    text: chartTitle
+                },
+                legend: {
+                    display: true,
+                    position: 'top'
+                }
+            },
+            scales: {
+                x: {
+                    title: {
+                        display: true,
+                        text: 'Age'
+                    }
+                },
+                y: {
+                    type: 'linear',
+                    display: true,
+                    position: 'left',
+                    title: {
+                        display: true,
+                        text: 'Annual Benefit Amount ($)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    }
+                },
+                y1: {
+                    type: 'linear',
+                    display: true,
+                    position: 'right',
+                    title: {
+                        display: true,
+                        text: 'Cumulative Total ($)'
+                    },
+                    ticks: {
+                        callback: function(value) {
+                            return '$' + value.toLocaleString();
+                        }
+                    },
+                    grid: {
+                        drawOnChartArea: false,
+                    },
+                }
+            }
+        }
+    };
+
+    breakEvenChart = new Chart(ctx, chartConfig);
+
+    // Store chart data for fullscreen view
+    lastChartData = {
+        config: JSON.parse(JSON.stringify(chartConfig)),
+        title: chartTitle
+    };
+}
+
+function displayBreakEvenSummary(analysisData, selectedAges, enableInvestment = false) {
+    let summaryHtml = '<h3>Break-Even Analysis Summary <span class="info-icon" onclick="showBreakEvenInfo()" title="Click for break-even explanation">ℹ️</span></h3>';
+    
+    // Calculate break-even points (using appropriate totals based on investment status)
+    const breakEvenPoints = [];
+    
+    // console.log('=== BREAK-EVEN DETECTION DEBUG ===');
+    // console.log('Selected ages:', selectedAges);
+    // console.log('Enable investment:', enableInvestment);
+    // console.log('Analysis data keys:', Object.keys(analysisData));
+    
+    for (let i = 0; i < selectedAges.length - 1; i++) {
+        for (let j = i + 1; j < selectedAges.length; j++) {
+            const age1 = selectedAges[i];
+            const age2 = selectedAges[j];
+            const data1 = analysisData[age1];
+            const data2 = analysisData[age2];
+            
+            // console.log(`\nComparing Age ${age1} vs Age ${age2}`);
+            // console.log('Data1 length:', data1?.length || 'undefined');
+            // console.log('Data2 length:', data2?.length || 'undefined');
+            
+            // Show the age ranges for each dataset
+            // if (data1 && data1.length > 0) {
+            //     console.log(`Age ${age1} data range: ${data1[0].age} to ${data1[data1.length-1].age}`);
+            // }
+            // if (data2 && data2.length > 0) {
+            //     console.log(`Age ${age2} data range: ${data2[0].age} to ${data2[data2.length-1].age}`);
+            // }
+            
+            if (!data1 || !data2) {
+                // console.log('Missing data for one of the ages, skipping...');
+                continue;
+            }
+            
+            // Find where totals cross - compare by age, not by index
+            const startAge = Math.max(age1, age2); // Start from when both are collecting
+            const endAge = Math.min(data1[data1.length-1]?.age || 0, data2[data2.length-1]?.age || 0);
+            
+            for (let currentAge = startAge + 1; currentAge <= endAge; currentAge++) {
+                const point1 = data1.find(d => d.age === currentAge);
+                const point2 = data2.find(d => d.age === currentAge);
+                const prevPoint1 = data1.find(d => d.age === currentAge - 1);
+                const prevPoint2 = data2.find(d => d.age === currentAge - 1);
+                
+                // Use investment totals if enabled, otherwise SS only
+                const total1Current = enableInvestment ? point1.totalWithInvestments : point1.cumulativeTotal;
+                const total2Current = enableInvestment ? point2.totalWithInvestments : point2.cumulativeTotal;
+                const total1Prev = enableInvestment ? prevPoint1.totalWithInvestments : prevPoint1.cumulativeTotal;
+                const total2Prev = enableInvestment ? prevPoint2.totalWithInvestments : prevPoint2.cumulativeTotal;
+                
+                // Log detailed comparison for key ages
+                // if (currentAge >= 75 && currentAge <= 85) {
+                //     console.log(`Age ${currentAge}:`);
+                //     console.log(`  Age ${age1} - Prev: $${total1Prev?.toLocaleString()}, Current: $${total1Current?.toLocaleString()}`);
+                //     console.log(`  Age ${age2} - Prev: $${total2Prev?.toLocaleString()}, Current: $${total2Current?.toLocaleString()}`);
+                // }
+                
+                // Check if lines crossed between previous and current points
+                // We want to detect when the later retirement age (higher age) surpasses the earlier retirement age (lower age)
+                let crossed = false;
+                let crossoverAge = currentAge;
+                
+                if (age1 < age2) {
+                    // age1 is earlier retirement, age2 is later retirement
+                    // Look for when age2 (later) surpasses age1 (earlier)
+                    crossed = (total2Prev <= total1Prev && total2Current > total1Current);
+                    
+                    // if (currentAge >= 75 && currentAge <= 85) {
+                    //     console.log(`  Checking crossover: ${total2Prev} <= ${total1Prev} && ${total2Current} > ${total1Current} = ${crossed}`);
+                    // }
+                } else if (age1 > age2) {
+                    // age2 is earlier retirement, age1 is later retirement  
+                    // Look for when age1 (later) surpasses age2 (earlier)
+                    crossed = (total1Prev <= total2Prev && total1Current > total2Current);
+                    
+                    // if (currentAge >= 75 && currentAge <= 85) {
+                    //     console.log(`  Checking crossover: ${total1Prev} <= ${total2Prev} && ${total1Current} > ${total2Current} = ${crossed}`);
+                    // }
+                }
+                
+                if (crossed) {
+                    // console.log(`*** CROSSOVER DETECTED at age ${currentAge} between ages ${age1} and ${age2} ***`);
+                    
+                    // Try to interpolate for more precise break-even age
+                    try {
+                        const diff1 = total1Current - total1Prev;
+                        const diff2 = total2Current - total2Prev;
+                        const prevGap = Math.abs(total1Prev - total2Prev);
+                        const currentGap = Math.abs(total1Current - total2Current);
+                        
+                        if (prevGap + currentGap > 0) {
+                            const ratio = prevGap / (prevGap + currentGap);
+                            crossoverAge = Math.round(currentAge - 1 + ratio);
+                        }
+                    } catch (e) {
+                        // Use current age if interpolation fails
+                        crossoverAge = currentAge;
+                    }
+                    
+                    breakEvenPoints.push({
+                        age1: age1,
+                        age2: age2,
+                        breakEvenAge: crossoverAge,
+                        amount1: total1Current,
+                        amount2: total2Current
+                    });
+                }
+                }
+        }
+    }
+    
+    // console.log('Final break-even points found:', breakEvenPoints.length);
+    // console.log('Break-even points:', breakEvenPoints);
+    
+    if (breakEvenPoints.length > 0) {
+        summaryHtml += `<h4>Break-Even Points${enableInvestment ? ' (Including Investments)' : ''}:</h4><ul>`;
+        breakEvenPoints.forEach(point => {
+            const earlierAge = Math.min(point.age1, point.age2);
+            const laterAge = Math.max(point.age1, point.age2);
+            summaryHtml += `<li><strong>Age ${earlierAge} vs Age ${laterAge}:</strong> Break-even at age ${point.breakEvenAge}<br>
+                           <small>At this age, delaying retirement to ${laterAge} becomes more valuable than retiring at ${earlierAge}</small></li>`;
+        });
+        summaryHtml += '</ul>';
+    } else {
+        summaryHtml += '<p>No break-even points found within the selected life expectancy range.</p>';
+        // console.log('Debug: No break-even points detected. Selected ages:', selectedAges, 'Enable investment:', enableInvestment);
+    }
+    
+    // Add lifetime totals
+    summaryHtml += '<h4>Lifetime Totals:</h4>';
+    
+    if (enableInvestment) {
+        summaryHtml += '<table><tr><th>Retirement Age</th><th>SS Benefits Only</th><th>Investment Balance</th><th>Total with Investments</th></tr>';
+        selectedAges.forEach(age => {
+            const data = analysisData[age];
+            const lastData = data[data.length - 1];
+            const ssTotal = lastData?.cumulativeTotal || 0;
+            const investmentBalance = lastData?.investmentBalance || 0;
+            const totalWithInvestments = lastData?.totalWithInvestments || 0;
+            
+            summaryHtml += `<tr>
+                <td>Age ${age}</td>
+                <td>$${Math.round(ssTotal).toLocaleString()}</td>
+                <td>$${Math.round(investmentBalance).toLocaleString()}</td>
+                <td>$${Math.round(totalWithInvestments).toLocaleString()}</td>
+            </tr>`;
+        });
+        summaryHtml += '</table>';
+    } else {
+        summaryHtml += '<ul>';
+        selectedAges.forEach(age => {
+            const data = analysisData[age];
+            const lifetimeTotal = data[data.length - 1]?.cumulativeTotal || 0;
+            summaryHtml += `<li>Retiring at age ${age}: $${Math.round(lifetimeTotal).toLocaleString()}</li>`;
+        });
+        summaryHtml += '</ul>';
+    }
+    
+    document.getElementById('breakEvenSummary').innerHTML = summaryHtml;
+    
+    // Generate detailed data table
+    generateDetailedDataTable(analysisData, selectedAges, enableInvestment);
+}
+
+function generateDetailedDataTable(analysisData, selectedAges, enableInvestment = false) {
+    const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+    
+    // Get all years to display
+    const startAge = Math.min(...selectedAges);
+    const allAges = [];
+    for (let age = startAge; age <= lifeExpectancy; age++) {
+        allAges.push(age);
+    }
+    
+    let tableHtml = '<h3>Detailed Year-by-Year Analysis</h3>';
+    
+    // Add context information
+    tableHtml += generateAnalysisContext(selectedAges, enableInvestment);
+    
+    tableHtml += '<table class="data-table">';
+    
+    // Create header
+    tableHtml += '<thead><tr>';
+    tableHtml += '<th rowspan="2" class="year-cell">Age</th>';
+    
+    selectedAges.forEach(retirementAge => {
+        const colSpan = enableInvestment ? 6 : 3;
+        tableHtml += `<th colspan="${colSpan}" class="age-group-header">Retire at Age ${retirementAge}</th>`;
+    });
+    tableHtml += '</tr><tr>';
+    
+    selectedAges.forEach(retirementAge => {
+        tableHtml += '<th>Monthly Amount</th>';
+        tableHtml += '<th>Yearly Amount</th>';
+        tableHtml += '<th>Total Collected</th>';
+        if (enableInvestment) {
+            tableHtml += '<th class="investment-value">Total Invested</th>';
+            tableHtml += '<th class="investment-value">Investment Balance</th>';
+            tableHtml += '<th class="total-value">Total Value</th>';
+        }
+    });
+    tableHtml += '</tr></thead>';
+    
+    // Create body
+    tableHtml += '<tbody>';
+    allAges.forEach(age => {
+        tableHtml += '<tr>';
+        tableHtml += `<td class="year-cell">${age}</td>`;
+        
+        selectedAges.forEach(retirementAge => {
+            const data = analysisData[retirementAge];
+            const yearData = data?.find(d => d.age === age);
+            
+            if (yearData && age >= retirementAge) {
+                tableHtml += `<td class="monetary-value">$${Math.round(yearData.monthlyAmount).toLocaleString()}</td>`;
+                tableHtml += `<td class="monetary-value">$${Math.round(yearData.yearlyAmount).toLocaleString()}</td>`;
+                tableHtml += `<td class="monetary-value">$${Math.round(yearData.cumulativeTotal).toLocaleString()}</td>`;
+                
+                if (enableInvestment) {
+                    tableHtml += `<td class="monetary-value investment-value">$${Math.round(yearData.totalInvested).toLocaleString()}</td>`;
+                    tableHtml += `<td class="monetary-value investment-value">$${Math.round(yearData.investmentBalance).toLocaleString()}</td>`;
+                    tableHtml += `<td class="monetary-value total-value">$${Math.round(yearData.totalWithInvestments).toLocaleString()}</td>`;
+                }
+            } else {
+                // Before retirement age for this scenario
+                const colSpan = enableInvestment ? 6 : 3;
+                tableHtml += `<td colspan="${colSpan}" style="background-color: #f8f9fa; color: #6c757d; text-align: center;">Not yet retired</td>`;
+            }
+        });
+        
+        tableHtml += '</tr>';
+    });
+    tableHtml += '</tbody></table>';
+    
+    document.getElementById('detailedDataTable').innerHTML = tableHtml;
+}
+
+function generateAnalysisContext(selectedAges, enableInvestment) {
+    const currentAge = parseInt(document.getElementById('currentAge').value) || 0;
+    const futureWorkYears = parseInt(document.getElementById('futureWorkYears').value) || 0;
+    const futureAnnualEarnings = parseFloat(document.getElementById('futureAnnualEarnings').value) || 0;
+    const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+    const colaRate = parseFloat(document.getElementById('colaRate').value);
+    const investmentPercentage = enableInvestment ? parseFloat(document.getElementById('investmentPercentage').value) : 0;
+    const expectedYield = enableInvestment ? parseFloat(document.getElementById('expectedYield').value) : 0;
+
+    let contextHtml = '<div class="analysis-context">';
+    contextHtml += '<h4>Analysis Parameters & Assumptions</h4>';
+    contextHtml += '<div class="context-grid">';
+    
+    // Basic parameters
+    contextHtml += '<div class="context-section">';
+    contextHtml += '<strong>Analysis Settings:</strong><br>';
+    contextHtml += `• Life Expectancy: ${lifeExpectancy} years<br>`;
+    contextHtml += `• Annual COLA: ${colaRate}%<br>`;
+    contextHtml += `• Retirement Ages Compared: ${selectedAges.join(', ')}<br>`;
+    contextHtml += '</div>';
+    
+    // Personal situation
+    if (currentAge > 0) {
+        contextHtml += '<div class="context-section">';
+        contextHtml += '<strong>Personal Situation:</strong><br>';
+        contextHtml += `• Current Age: ${currentAge}<br>`;
+        
+        if (futureWorkYears > 0) {
+            contextHtml += `• Additional Work Years: ${futureWorkYears} (until age ${currentAge + futureWorkYears})<br>`;
+            if (futureAnnualEarnings > 0) {
+                contextHtml += `• Expected Annual Earnings: $${futureAnnualEarnings.toLocaleString()}<br>`;
+            }
+        }
+        contextHtml += '</div>';
+    }
+    
+    // Monthly benefits at each age
+    if (currentScenarioData && selectedAges.length > 0) {
+        contextHtml += '<div class="context-section">';
+        contextHtml += '<strong>Monthly Benefits:</strong><br>';
+        selectedAges.forEach(age => {
+            const monthlyBenefit = currentScenarioData.benefitsByAge[age];
+            contextHtml += `• Age ${age}: $${Math.round(monthlyBenefit).toLocaleString()}/month<br>`;
+        });
+        contextHtml += '</div>';
+    }
+    
+    // Investment strategy
+    if (enableInvestment) {
+        contextHtml += '<div class="context-section">';
+        contextHtml += '<strong>Investment Strategy:</strong><br>';
+        contextHtml += `• Investment Rate: ${investmentPercentage}% of each SS payment<br>`;
+        contextHtml += `• Expected Return: ${expectedYield}% annually<br>`;
+        contextHtml += '</div>';
+    }
+    
+    contextHtml += '</div>'; // Close context-grid
+    contextHtml += '</div>'; // Close analysis-context
+    
+    return contextHtml;
+}
+
+// Store scenario data when results are calculated
+function storeScenarioData(scenario) {
+    currentScenarioData = scenario;
+}
+
+// Investment toggle functionality
+function initializeInvestmentToggle() {
+    const enableInvestmentCheckbox = document.getElementById('enableInvestment');
+    const investmentInputs = document.getElementById('investmentInputs');
+    
+    enableInvestmentCheckbox.addEventListener('change', () => {
+        if (enableInvestmentCheckbox.checked) {
+            investmentInputs.style.display = 'block';
+        } else {
+            investmentInputs.style.display = 'none';
+        }
+    });
+}
+
+// Full screen chart functionality
+function initializeChartMaximize() {
+    const maximizeBtn = document.getElementById('maximizeChart');
+    const chartModal = document.getElementById('chartModal');
+    const closeBtn = document.getElementById('closeModal');
+    const modalTitle = document.getElementById('modalChartTitle');
+
+    maximizeBtn.addEventListener('click', () => {
+        if (lastChartData) {
+            modalTitle.textContent = lastChartData.title;
+            chartModal.style.display = 'block';
+            
+            // Small delay to ensure modal is visible before creating chart
+            setTimeout(() => {
+                createFullscreenChart();
+            }, 100);
+        }
+    });
+
+    closeBtn.addEventListener('click', () => {
+        closeFullscreenChart();
+    });
+
+    // Close modal when clicking outside
+    chartModal.addEventListener('click', (e) => {
+        if (e.target === chartModal) {
+            closeFullscreenChart();
+        }
+    });
+
+    // Close modal with Escape key
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape' && chartModal.style.display === 'block') {
+            closeFullscreenChart();
+        }
+    });
+}
+
+function createFullscreenChart() {
+    if (breakEvenChartFullscreen) {
+        breakEvenChartFullscreen.destroy();
+    }
+
+    const ctx = document.getElementById('breakEvenChartFullscreen').getContext('2d');
+    
+    // Create a deep copy of the config to ensure tooltips work properly
+    const fullscreenConfig = JSON.parse(JSON.stringify(lastChartData.config));
+    
+    // Ensure tooltip configuration is applied
+    if (!fullscreenConfig.options.plugins.tooltip) {
+        fullscreenConfig.options.plugins.tooltip = {};
+    }
+    
+    fullscreenConfig.options.plugins.tooltip.callbacks = {
+        title: function(tooltipItems) {
+            return `Age ${tooltipItems[0].label}`;
+        },
+        label: function(context) {
+            // Return empty to suppress individual labels - we'll handle grouping in afterBody
+            return '';
+        },
+        afterBody: function(tooltipItems) {
+            // Group tooltip items by retirement age for better organization
+            let result = [];
+            
+            // Get unique retirement ages from dataset labels
+            const retirementAges = new Set();
+            tooltipItems.forEach(item => {
+                const match = item.dataset.label.match(/Age (\d+)/);
+                if (match) {
+                    retirementAges.add(parseInt(match[1]));
+                }
+            });
+            
+            // Group items by retirement age
+            Array.from(retirementAges).sort((a, b) => a - b).forEach(retAge => {
+                const ageItems = tooltipItems.filter(item => 
+                    item.dataset.label.includes(`Age ${retAge}`)
+                );
+                
+                if (ageItems.length > 0) {
+                    result.push(`--- Retire at Age ${retAge} ---`);
+                    ageItems.forEach(item => {
+                        const value = item.parsed.y !== null ? item.parsed.y : item.parsed.y1;
+                        const label = item.dataset.label.replace(`Age ${retAge} - `, '');
+                        result.push(`${label}: $${value.toLocaleString()}`);
+                    });
+                    result.push(''); // Add spacing between age groups
+                }
+            });
+            
+            // Remove last empty line
+            if (result[result.length - 1] === '') {
+                result.pop();
+            }
+            
+            return result;
+        }
+    };
+    
+    breakEvenChartFullscreen = new Chart(ctx, fullscreenConfig);
+    
+    // Generate info panel
+    generateChartInfoPanel();
+}
+
+function generateChartInfoPanel() {
+    const currentAge = parseInt(document.getElementById('currentAge').value) || 0;
+    const futureWorkYears = parseInt(document.getElementById('futureWorkYears').value) || 0;
+    const futureAnnualEarnings = parseFloat(document.getElementById('futureAnnualEarnings').value) || 0;
+    const lifeExpectancy = parseInt(document.getElementById('lifeExpectancy').value);
+    const colaRate = parseFloat(document.getElementById('colaRate').value);
+    const enableInvestment = document.getElementById('enableInvestment').checked;
+    const investmentPercentage = enableInvestment ? parseFloat(document.getElementById('investmentPercentage').value) : 0;
+    const expectedYield = enableInvestment ? parseFloat(document.getElementById('expectedYield').value) : 0;
+
+    // Get selected ages
+    const selectedAges = [];
+    for (let i = 1; i <= 4; i++) {
+        const ageInput = document.getElementById(`compareAge${i}`);
+        const age = parseInt(ageInput.value);
+        if (age && age >= 62 && age <= 70 && !selectedAges.includes(age)) {
+            selectedAges.push(age);
+        }
+    }
+    selectedAges.sort((a, b) => a - b);
+
+    let infoHtml = '<h4>Analysis Assumptions</h4>';
+
+    // Personal Information
+    if (currentAge > 0) {
+        infoHtml += '<div class="info-section">';
+        infoHtml += '<div class="info-label">Current Age:</div>';
+        infoHtml += `<div class="info-value">${currentAge}</div>`;
+        infoHtml += '</div>';
+    }
+
+    // Future work plans
+    if (futureWorkYears > 0) {
+        infoHtml += '<div class="info-section">';
+        infoHtml += '<div class="info-label">Additional Work Years:</div>';
+        infoHtml += `<div class="info-value">${futureWorkYears} years (until age ${currentAge + futureWorkYears})</div>`;
+        infoHtml += '</div>';
+
+        if (futureAnnualEarnings > 0) {
+            infoHtml += '<div class="info-section">';
+            infoHtml += '<div class="info-label">Expected Annual Earnings:</div>';
+            infoHtml += `<div class="info-value">$${futureAnnualEarnings.toLocaleString()}</div>`;
+            infoHtml += '</div>';
+        }
+    }
+
+    // Benefits at each age
+    if (currentScenarioData && selectedAges.length > 0) {
+        infoHtml += '<div class="info-section">';
+        infoHtml += '<div class="info-label">Monthly Benefits at Each Age:</div>';
+        selectedAges.forEach(age => {
+            const monthlyBenefit = currentScenarioData.benefitsByAge[age];
+            infoHtml += `<div class="benefit-breakdown">Age ${age}: $${Math.round(monthlyBenefit).toLocaleString()}/month</div>`;
+        });
+        infoHtml += '</div>';
+    }
+
+    // Analysis parameters
+    infoHtml += '<div class="info-section">';
+    infoHtml += '<div class="info-label">Analysis Parameters:</div>';
+    infoHtml += `<div class="info-value">Life Expectancy: ${lifeExpectancy}</div>`;
+    infoHtml += `<div class="info-value">Annual COLA: ${colaRate}%</div>`;
+    infoHtml += '</div>';
+
+    // Investment details
+    if (enableInvestment) {
+        infoHtml += '<div class="info-section">';
+        infoHtml += '<div class="info-label">Investment Strategy:</div>';
+        infoHtml += `<div class="info-value">${investmentPercentage}% of each SS payment invested</div>`;
+        infoHtml += `<div class="info-value">Expected annual return: ${expectedYield}%</div>`;
+        infoHtml += '</div>';
+    }
+
+    document.getElementById('chartInfoPanel').innerHTML = infoHtml;
+}
+
+// Main info modal functionality
+function showMainInfo() {
+    const modal = document.getElementById('mainInfoModal');
+    modal.style.display = 'block';
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeMainInfo();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', handleMainInfoEscapeKey);
+}
+
+function closeMainInfo() {
+    const modal = document.getElementById('mainInfoModal');
+    modal.style.display = 'none';
+    document.removeEventListener('keydown', handleMainInfoEscapeKey);
+}
+
+function handleMainInfoEscapeKey(e) {
+    if (e.key === 'Escape') {
+        closeMainInfo();
+    }
+}
+
+// Break-even info modal functionality
+function showBreakEvenInfo() {
+    const modal = document.getElementById('breakEvenInfoModal');
+    modal.style.display = 'block';
+    
+    // Close modal when clicking outside
+    modal.addEventListener('click', (e) => {
+        if (e.target === modal) {
+            closeBreakEvenInfo();
+        }
+    });
+    
+    // Close modal with Escape key
+    document.addEventListener('keydown', handleEscapeKey);
+}
+
+function closeBreakEvenInfo() {
+    const modal = document.getElementById('breakEvenInfoModal');
+    modal.style.display = 'none';
+    document.removeEventListener('keydown', handleEscapeKey);
+}
+
+function handleEscapeKey(e) {
+    if (e.key === 'Escape') {
+        closeBreakEvenInfo();
+    }
+}
+
+// CSV Export functionality
+function exportTableToCSV() {
+    const table = document.querySelector('.data-table');
+    if (!table) {
+        alert('No data table found to export.');
+        return;
+    }
+
+    let csvContent = '';
+    const rows = table.querySelectorAll('tr');
+    
+    rows.forEach((row, rowIndex) => {
+        const cells = row.querySelectorAll('th, td');
+        const csvRow = [];
+        
+        cells.forEach(cell => {
+            let cellText = cell.textContent.trim();
+            
+            // Handle special cases
+            if (cellText === 'Not yet retired') {
+                cellText = '';
+            }
+            
+            // Remove dollar signs and commas for better CSV formatting
+            if (cellText.includes('$')) {
+                cellText = cellText.replace(/[$,]/g, '');
+            }
+            
+            // Escape quotes and wrap in quotes if contains comma
+            if (cellText.includes(',') || cellText.includes('"')) {
+                cellText = '"' + cellText.replace(/"/g, '""') + '"';
+            }
+            
+            csvRow.push(cellText);
+        });
+        
+        csvContent += csvRow.join(',') + '\n';
+    });
+    
+    // Create filename with current date
+    const now = new Date();
+    const dateStr = now.getFullYear() + '-' + 
+                   String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                   String(now.getDate()).padStart(2, '0');
+    const filename = `social_security_analysis_${dateStr}.csv`;
+    
+    // Create and trigger download
+    const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    
+    if (link.download !== undefined) {
+        const url = URL.createObjectURL(blob);
+        link.setAttribute('href', url);
+        link.setAttribute('download', filename);
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    } else {
+        // Fallback for browsers that don't support download attribute
+        const url = 'data:text/csv;charset=utf-8,' + encodeURIComponent(csvContent);
+        window.open(url, '_blank');
+    }
+}
+
+function closeFullscreenChart() {
+    const chartModal = document.getElementById('chartModal');
+    chartModal.style.display = 'none';
+    
+    if (breakEvenChartFullscreen) {
+        breakEvenChartFullscreen.destroy();
+        breakEvenChartFullscreen = null;
+    }
+}
+
 // Add this to your initialization code
 document.addEventListener('DOMContentLoaded', () => {
     initializeThemeToggle();
+    initializeInvestmentToggle();
+    initializeChartMaximize();
 });

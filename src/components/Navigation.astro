@@ -66,7 +66,6 @@ const bitcoinDropdown = [
       </div>
 
       <div class="md:hidden flex items-center space-x-4">
-        <ThemeToggle />
         <button
           id="mobile-menu-button"
           class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer touch-manipulation"
@@ -144,27 +143,49 @@ const bitcoinDropdown = [
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
+    console.log('Navigation script loaded');
+    
     const button = document.getElementById('mobile-menu-button');
     const menu = document.getElementById('mobile-menu');
     const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
     const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
     const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
 
+    console.log('Elements found:', {
+      button: !!button,
+      menu: !!menu,
+      bitcoinToggle: !!bitcoinToggle,
+      bitcoinMenu: !!bitcoinMenu,
+      bitcoinArrow: !!bitcoinArrow
+    });
+
     function toggleMobileMenu(e) {
+      console.log('toggleMobileMenu called', e.type);
       e.preventDefault();
       e.stopPropagation();
       if (menu) {
         const isHidden = menu.classList.contains('hidden');
+        console.log('Menu currently hidden:', isHidden);
         menu.classList.toggle('hidden');
+        console.log('Menu hidden after toggle:', menu.classList.contains('hidden'));
         
         // Update aria-expanded attribute
         if (button) {
           button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         }
+        
+        // Add visual debugging - temporarily change button color
+        if (button) {
+          button.style.backgroundColor = isHidden ? 'red' : 'blue';
+          setTimeout(() => {
+            button.style.backgroundColor = '';
+          }, 1000);
+        }
       }
     }
 
     function toggleBitcoinMenu(e) {
+      console.log('toggleBitcoinMenu called', e.type);
       e.preventDefault();
       e.stopPropagation();
       if (bitcoinMenu && bitcoinArrow) {
@@ -180,12 +201,23 @@ const bitcoinDropdown = [
     }
 
     if (button && menu) {
+      console.log('Adding event listeners to hamburger button');
       // Add both click and touchstart for maximum compatibility
       button.addEventListener('click', toggleMobileMenu);
       button.addEventListener('touchstart', toggleMobileMenu, { passive: false });
+      
+      // Add additional touch events for debugging
+      button.addEventListener('touchend', function(e) {
+        console.log('touchend on button');
+      });
+      
+      console.log('Event listeners added successfully');
+    } else {
+      console.error('Button or menu not found!', { button, menu });
     }
 
     if (bitcoinToggle && bitcoinMenu && bitcoinArrow) {
+      console.log('Adding event listeners to bitcoin toggle');
       // Add both click and touchstart for maximum compatibility
       bitcoinToggle.addEventListener('click', toggleBitcoinMenu);
       bitcoinToggle.addEventListener('touchstart', toggleBitcoinMenu, { passive: false });
@@ -200,5 +232,12 @@ const bitcoinDropdown = [
         }
       }
     });
+
+    // Add global touch debugging
+    document.addEventListener('touchstart', function(e) {
+      if (e.target instanceof HTMLElement) {
+        console.log('Global touchstart detected on:', e.target.tagName, e.target.id || e.target.className);
+      }
+    }, { passive: true });
   });
 </script>

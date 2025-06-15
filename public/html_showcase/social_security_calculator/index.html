@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Retirement Planner: Future Earnings Impact on Social Security Benefits</title>
+    <title>Social Security Scenario Simulator: Benefits Calculator with Break-Even Analysis</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.7.0/chart.min.js"></script>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -14,17 +14,49 @@
         </button>
     </div>    
     <header class="page-header">
-        <h1>Retirement Planner</h1>
-        <h2>Future Earnings Impact on Social Security Benefits</h2>
+        <h1>Social Security Scenario Simulator <span class="info-icon main-info" onclick="showMainInfo()" title="How to use this calculator">ℹ️</span></h1>
+        <h2>Benefits Calculator with Break-Even Analysis</h2>
     </header>
 
     <div class="tab-container">
         <div class="tab-buttons">
             <button class="tab-button active" onclick="showTab('input')">Input Earnings</button>
-            <button class="tab-button" onclick="showTab('results')">View Results</button>
+            <button class="tab-button disabled" id="resultsTab" onclick="showTabIfEnabled('results')">View Results</button>
+            <button class="tab-button disabled" id="comparisonTab" onclick="showTabIfEnabled('comparison')">Break-Even Analysis</button>
         </div>
 
+
         <div id="input" class="tab-content active">
+            <div class="instructions-section">
+                <h2>How This Simulator Works</h2>
+                <div class="workflow-steps">
+                    <div class="step">
+                        <span class="step-number">1</span>
+                        <div class="step-content">
+                            <strong>Enter Your Information:</strong> Add your current age and any future work plans above
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">2</span>
+                        <div class="step-content">
+                            <strong>Input Earnings History:</strong> Paste your earnings data below (get from your SSA statement at ssa.gov)
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">3</span>
+                        <div class="step-content">
+                            <strong>View Results:</strong> See your calculated benefits and how future work impacts them
+                        </div>
+                    </div>
+                    <div class="step">
+                        <span class="step-number">4</span>
+                        <div class="step-content">
+                            <strong>Break-Even Analysis:</strong> Compare retirement ages and see when delaying retirement pays off
+                        </div>
+                    </div>
+                </div>
+            </div>
+
             <div class="current-info-section">
                 <h2>Your Information</h2>
                 <div class="input-group">
@@ -40,16 +72,38 @@
                     <input type="number" id="futureAnnualEarnings" min="0" value="0">
                 </div>
             </div>
+            
+
             <div class="input-section">
                 <h2>Input Earnings History</h2>
-                <p>Paste earnings data in either format:<br>
-                CSV format: year,earnings<br>
-                Tab-delimited format: year[tab]earnings<br>
-                Examples:<br>
-                1990,30000<br>
-                1991[tab]32000</p>
-                <p>Note: Earnings will automatically be capped at each year's Social Security contribution limit.</p>
-                <textarea id="csvInput" rows="10" cols="50"></textarea><br>
+                <p>Paste your earnings data from your Social Security statement. Supported formats:</p>
+                <div class="format-examples">
+                    <div class="format-example">
+                        <strong>CSV Format (comma-separated):</strong>
+                        <div class="sample-data">
+2020,65000<br>
+2021,68000<br>
+2022,72000<br>
+2023,75000<br>
+2024,78000</div>
+                    </div>
+                    <div class="format-example">
+                        <strong>Tab-Delimited Format:</strong>
+                        <div class="sample-data">
+2020&nbsp;&nbsp;&nbsp;&nbsp;65000<br>
+2021&nbsp;&nbsp;&nbsp;&nbsp;68000<br>
+2022&nbsp;&nbsp;&nbsp;&nbsp;72000<br>
+2023&nbsp;&nbsp;&nbsp;&nbsp;75000<br>
+2024&nbsp;&nbsp;&nbsp;&nbsp;78000</div>
+                    </div>
+                </div>
+                <p><em>Note: Earnings will automatically be capped at each year's Social Security contribution limit. You can enter any number of years - the system will use your highest 35 years.</em></p>
+                
+                <div class="input-area">
+                    <div class="textarea-section">
+                        <textarea id="csvInput" rows="12" cols="50" placeholder="Paste your earnings data here (year,earnings format)"></textarea>
+                    </div>
+                </div>
                 <button class="calculate" onclick="processInput()">Calculate Benefits</button>
             </div>
             <div id="earningsTable"></div>
@@ -74,7 +128,191 @@
                 <div id="benefitTable"></div>
             </div>
         </div>
+
+        <div id="comparison" class="tab-content">
+            <div class="comparison-controls">
+                <div class="top-settings-grid">
+                    <div class="basic-settings">
+                        <h2>Break-Even Analysis Settings</h2>
+                        <div class="input-group">
+                            <label for="lifeExpectancy">Life Expectancy:</label>
+                            <input type="number" id="lifeExpectancy" min="65" max="110" value="85">
+                        </div>
+                        <div class="input-group">
+                            <label for="colaRate">Annual COLA (%):</label>
+                            <input type="number" id="colaRate" min="0" max="10" step="0.1" value="2.5">
+                        </div>
+                    </div>
+                    <div class="investment-section">
+                        <h2>Investment Option</h2>
+                        <div class="investment-controls">
+                            <label class="investment-toggle">
+                                <input type="checkbox" id="enableInvestment"> 
+                                Enable investment of portion of Social Security benefits
+                            </label>
+                            <div id="investmentInputs" class="investment-inputs" style="display: none;">
+                                <div class="input-group">
+                                    <label for="investmentPercentage">Percentage to Invest (%):</label>
+                                    <input type="number" id="investmentPercentage" min="0" max="100" step="1" value="25">
+                                </div>
+                                <div class="input-group">
+                                    <label for="expectedYield">Expected Annual Yield (%):</label>
+                                    <input type="number" id="expectedYield" min="0" max="20" step="0.1" value="7.0">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="control-group">
+                    <h3>Select Retirement Ages to Compare:</h3>
+                    <p>Enter up to 4 retirement ages (between 62-70) to compare:</p>
+                    <div class="age-inputs">
+                        <div class="age-input-group">
+                            <label for="compareAge1">Age 1:</label>
+                            <input type="number" id="compareAge1" min="62" max="70" value="62">
+                        </div>
+                        <div class="age-input-group">
+                            <label for="compareAge2">Age 2:</label>
+                            <input type="number" id="compareAge2" min="62" max="70" value="67">
+                        </div>
+                        <div class="age-input-group">
+                            <label for="compareAge3">Age 3:</label>
+                            <input type="number" id="compareAge3" min="62" max="70" value="70">
+                        </div>
+                        <div class="age-input-group">
+                            <label for="compareAge4">Age 4:</label>
+                            <input type="number" id="compareAge4" min="62" max="70" placeholder="Optional">
+                        </div>
+                    </div>
+                </div>
+                <button class="calculate" onclick="generateBreakEvenAnalysis()">Generate Analysis</button>
+            </div>
+            <div id="breakEvenResults" class="break-even-results">
+                <div class="chart-container">
+                    <button class="maximize-btn" id="maximizeChart" title="View chart in full screen">
+                        <span class="maximize-icon">⛶</span>
+                    </button>
+                    <canvas id="breakEvenChart"></canvas>
+                </div>
+                <div id="breakEvenSummary" class="calculation-details"></div>
+                <div id="detailedDataTable" class="detailed-data-table">
+                    <!-- Table will be populated by JavaScript -->
+                </div>
+                <div class="export-controls">
+                    <button id="exportCsvBtn" class="export-btn" onclick="exportTableToCSV()">
+                        📊 Export Data to CSV
+                    </button>
+                </div>
+            </div>
+        </div>
     </div>
+
+    <!-- Full screen chart modal -->
+    <div id="chartModal" class="chart-modal">
+        <div class="chart-modal-content">
+            <div class="chart-modal-header">
+                <h3 id="modalChartTitle">Social Security Benefits Analysis</h3>
+                <button class="close-btn" id="closeModal" title="Close full screen view">
+                    <span class="close-icon">✕</span>
+                </button>
+            </div>
+            <div class="chart-modal-body">
+                <div class="chart-info-panel" id="chartInfoPanel">
+                    <!-- Info panel content will be populated by JavaScript -->
+                </div>
+                <canvas id="breakEvenChartFullscreen"></canvas>
+            </div>
+        </div>
+                </div>
+        </div>
+    </div>
+
+    <!-- Main info modal -->
+    <div id="mainInfoModal" class="info-modal">
+        <div class="info-modal-content">
+            <div class="info-modal-header">
+                <h3>How to Use the Social Security Scenario Simulator</h3>
+                <button class="close-btn" onclick="closeMainInfo()" title="Close">
+                    <span class="close-icon">✕</span>
+                </button>
+            </div>
+            <div class="info-modal-body">
+                <h4>📊 Three Powerful Analysis Tools</h4>
+                
+                <h4>1️⃣ Input Earnings</h4>
+                <p><strong>What it does:</strong> Calculate your Social Security benefits based on your earnings history</p>
+                <ul>
+                    <li><strong>Enter your current age</strong> and future work plans</li>
+                    <li><strong>Paste your earnings data</strong> from your Social Security statement (year,earnings format)</li>
+                    <li><strong>Compare scenarios</strong> with and without additional future work</li>
+                </ul>
+                
+                <h4>2️⃣ View Results</h4>
+                <p><strong>What you'll see:</strong> Detailed benefit calculations and monthly amounts by retirement age</p>
+                <ul>
+                    <li><strong>AIME & PIA calculations</strong> - how Social Security calculates your benefits</li>
+                    <li><strong>Monthly benefits from age 62-70</strong> - see the impact of early vs. delayed retirement</li>
+                    <li><strong>Earnings impact analysis</strong> - understand how additional work affects your benefits</li>
+                </ul>
+                
+                <h4>3️⃣ Break-Even Analysis</h4>
+                <p><strong>The most powerful feature:</strong> Compare different retirement ages over your lifetime</p>
+                <ul>
+                    <li><strong>Visual break-even detection</strong> - see exactly when delaying retirement pays off</li>
+                    <li><strong>Investment scenario modeling</strong> - analyze investing part of your Social Security</li>
+                    <li><strong>Customizable assumptions</strong> - adjust life expectancy, COLA rates, investment returns</li>
+                    <li><strong>Detailed year-by-year tables</strong> - export to CSV for your financial planning</li>
+                </ul>
+                
+                <h4>💡 Pro Tips</h4>
+                <ul>
+                    <li><strong>Start with your SSA statement:</strong> Get your earnings history from ssa.gov</li>
+                    <li><strong>Try different scenarios:</strong> Compare working vs. not working additional years</li>
+                    <li><strong>Use break-even analysis:</strong> The visual chart shows crossover points clearly</li>
+                    <li><strong>Consider investment options:</strong> See how investing Social Security payments could impact your total wealth</li>
+                    <li><strong>Export your data:</strong> Save detailed analysis tables for financial planning</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <!-- Break-even info modal -->
+    <div id="breakEvenInfoModal" class="info-modal">
+        <div class="info-modal-content">
+            <div class="info-modal-header">
+                <h3>Understanding Break-Even Analysis</h3>
+                <button class="close-btn" onclick="closeBreakEvenInfo()" title="Close">
+                    <span class="close-icon">✕</span>
+                </button>
+            </div>
+            <div class="info-modal-body">
+                <h4>What is a Break-Even Point?</h4>
+                <p>A break-even point occurs when the <strong>cumulative total</strong> received by someone who delayed retirement surpasses the cumulative total of someone who retired earlier.</p>
+                
+                <h4>Example:</h4>
+                <p>• Person A retires at age 62 and starts collecting smaller monthly benefits immediately<br>
+                • Person B retires at age 70 and starts collecting larger monthly benefits later<br>
+                • Initially, Person A has collected more total money<br>
+                • Eventually, Person B's higher monthly benefits accumulate to surpass Person A's total<br>
+                • <strong>That crossover point is the break-even age</strong></p>
+                
+                <h4>How We Detect Break-Even Points:</h4>
+                <p>The analysis examines the cumulative total lines on the chart and identifies where they intersect:</p>
+                <ul>
+                    <li><strong>Cumulative Tracking:</strong> We track total money received (including COLA adjustments) for each retirement age</li>
+                    <li><strong>Investment Consideration:</strong> When investment option is enabled, we compare total wealth (SS + investments)</li>
+                    <li><strong>Crossover Detection:</strong> We find ages where a "later retirement" line crosses above an "earlier retirement" line</li>
+                    <li><strong>Practical Meaning:</strong> After the break-even age, delaying retirement provides more lifetime value</li>
+                </ul>
+                
+                <h4>Important Notes:</h4>
+                <p>• Break-even analysis assumes you live to your specified life expectancy<br>
+                • It doesn't account for other factors like healthcare costs, taxes, or opportunity costs<br>
+                • The "best" strategy depends on your health, financial needs, and risk tolerance</p>
+            </div>
+        </div>
+    </div>
+
     <script src="script.js"></script>
 </body>
 </html>

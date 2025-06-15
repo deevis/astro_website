@@ -11,7 +11,6 @@ const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort()
 ---
 
 <Layout title="Media Gallery | Professional Portfolio">
-  <Navigation />
   <main class="pt-24 pb-16">
     <div class="container mx-auto px-4">
       <h1 class="text-2xl font-bold mb-6">Media Gallery</h1>
@@ -109,8 +108,6 @@ const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort()
   </main>
   
   <MediaModal />
-  
-  <Footer />
 </Layout>
 
 <script>
@@ -124,6 +121,7 @@ const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort()
     const galleryGrid = document.getElementById('gallery-grid');
     const noResults = document.getElementById('no-gallery-results');
     const tagFiltersContainer = document.getElementById('gallery-tag-filters');
+    const cardTags = document.querySelectorAll('.card-tag');
     
     // Collapsible filter section elements
     const filterToggle = document.getElementById('filter-toggle');
@@ -137,6 +135,41 @@ const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort()
       filterChevronDown?.classList.toggle('hidden');
       filterChevronUp?.classList.toggle('hidden');
     });
+    
+    // Function to open filter section if closed
+    function openFilterSection() {
+      if (filterContent?.classList.contains('hidden')) {
+        filterContent.classList.remove('hidden');
+        filterChevronDown?.classList.add('hidden');
+        filterChevronUp?.classList.remove('hidden');
+      }
+    }
+    
+    // Function to activate a tag filter
+    function activateTagFilter(tag: string) {
+      // Clear existing tag filters and search
+      activeTagFilters.clear();
+      searchInput.value = '';
+      
+      // Reset all tag buttons
+      tagButtons.forEach(btn => {
+        btn.classList.remove('bg-blue-500', 'text-white');
+        btn.classList.add('bg-gray-200', 'dark:bg-dark-700');
+      });
+      
+      // Find and activate the clicked tag
+      const targetButton = Array.from(tagButtons).find(btn => 
+        (btn as HTMLElement).dataset.tag === tag
+      ) as HTMLElement;
+      
+      if (targetButton) {
+        activeTagFilters.add(tag);
+        targetButton.classList.remove('bg-gray-200', 'dark:bg-dark-700');
+        targetButton.classList.add('bg-blue-500', 'text-white');
+      }
+      
+      filterMediaItems();
+    }
     
     // Create a map to track which tags belong to which media types
     const tagsByType = new Map();
@@ -313,5 +346,19 @@ const allTags = [...new Set(mediaItems.flatMap(item => item.tags || []))].sort()
     
     // Initialize the tags display
     updateAvailableTags();
+    
+    // Set up card tag click handlers
+    cardTags.forEach(cardTag => {
+      cardTag.addEventListener('click', (e) => {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const tag = (cardTag as HTMLElement).dataset.tag;
+        if (tag) {
+          openFilterSection();
+          activateTagFilter(tag);
+        }
+      });
+    });
   });
 </script>
