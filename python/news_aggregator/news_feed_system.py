@@ -565,10 +565,32 @@ class ProductionNewsFeed:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(feed, f, indent=2, ensure_ascii=False)
         
-        # Also create latest.json for easy access
+        # Also create latest.json for easy access in public directory
         latest_file = os.path.join(self.base_directory, 'latest.json')
         with open(latest_file, 'w', encoding='utf-8') as f:
             json.dump(feed, f, indent=2, ensure_ascii=False)
+        
+        # ALSO update the dist directory for production serving (if it exists)
+        dist_base_directory = "../../dist"
+        if os.path.exists(dist_base_directory):
+            dist_directory = os.path.join(dist_base_directory, "news_feeds")
+            self._ensure_directory_exists(dist_directory)
+            
+            # Copy latest.json to dist directory
+            dist_latest_file = os.path.join(dist_directory, 'latest.json')
+            with open(dist_latest_file, 'w', encoding='utf-8') as f:
+                json.dump(feed, f, indent=2, ensure_ascii=False)
+            
+            # Copy timestamped file to dist directory structure
+            dist_output_file = output_file.replace(self.base_directory, dist_directory)
+            dist_output_dir = os.path.dirname(dist_output_file)
+            self._ensure_directory_exists(dist_output_dir)
+            with open(dist_output_file, 'w', encoding='utf-8') as f:
+                json.dump(feed, f, indent=2, ensure_ascii=False)
+            
+            logger.info(f"Production dist files updated: {dist_latest_file}")
+        else:
+            logger.info("No dist directory found - running in development mode")
         
         logger.info(f"News feed saved to {output_file}")
         logger.info(f"Latest feed also saved to {latest_file}")

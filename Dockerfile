@@ -86,9 +86,9 @@ RUN echo '#!/bin/bash\n\
 # Start cron daemon\n\
 cron\n\
 \n\
-# Run initial news feed generation\n\
-echo "Running initial news feed generation..."\n\
-cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py\n\
+# Run initial news feed generation in background\n\
+echo "Running initial news feed generation in background..."\n\
+cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py &\n\
 \n\
 # Start the main application\n\
 exec pnpm start\n\
