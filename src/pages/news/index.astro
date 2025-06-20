@@ -1,0 +1,425 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+// We'll fetch the news data in the client since it changes frequently
+const pageTitle = "Latest News | Tech & Crypto Updates";
+const pageDescription = "Stay updated with the latest news in Bitcoin, Software Development, and AI Progress. Curated tech news from trusted sources.";
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4">
+      <!-- Header -->
+      <div class="mb-8">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Latest News</h1>
+        <p class="text-lg text-gray-600 dark:text-gray-400">Stay updated with the latest developments in software development, AI, and Bitcoin.</p>
+      </div>
+
+      <!-- Loading state -->
+      <div id="loading-state" class="flex items-center justify-center py-12">
+        <div class="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-600"></div>
+        <span class="ml-3 text-gray-600 dark:text-gray-400">Loading latest news...</span>
+      </div>
+
+      <!-- Error state -->
+      <div id="error-state" class="hidden bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg p-6 text-center">
+        <div class="text-red-600 dark:text-red-400 mb-2">
+          <svg class="w-12 h-12 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+          </svg>
+          <h3 class="text-lg font-semibold">Unable to Load News</h3>
+          <p class="text-sm mt-2">There was an error loading the news feed. Please try again later.</p>
+        </div>
+      </div>
+
+      <!-- Filters and Search -->
+      <div id="news-controls" class="hidden mb-8 bg-gray-50 dark:bg-gray-900 rounded-lg p-6">
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+          <!-- Search -->
+          <div>
+            <label for="news-search" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Search News</label>
+            <input 
+              type="text" 
+              id="news-search" 
+              placeholder="Search articles..." 
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            />
+          </div>
+
+          <!-- Category Filter -->
+          <div>
+            <label for="category-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Category</label>
+            <select 
+              id="category-filter" 
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="all">All Categories</option>
+              <option value="bitcoin">₿ Bitcoin</option>
+              <option value="software_dev">💻 Software Development</option>
+              <option value="ai_progress">🤖 AI Progress</option>
+            </select>
+          </div>
+
+          <!-- Sort By -->
+          <div>
+            <label for="sort-filter" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">Sort By</label>
+            <select 
+              id="sort-filter" 
+              class="w-full px-3 py-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
+            >
+              <option value="date">Latest First</option>
+              <option value="importance">Importance</option>
+              <option value="source">Source</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Results summary -->
+        <div class="mt-4 pt-4 border-t border-gray-200 dark:border-gray-700">
+          <div class="flex justify-between items-center text-sm text-gray-600 dark:text-gray-400">
+            <span id="results-count">Showing 0 articles</span>
+            <span id="last-updated">Last updated: Never</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Grid -->
+      <div id="news-grid" class="hidden grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <!-- News cards will be populated here -->
+      </div>
+
+      <!-- Empty state -->
+      <div id="empty-state" class="hidden text-center py-12">
+        <div class="text-gray-400 dark:text-gray-500">
+          <svg class="w-16 h-16 mx-auto mb-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 12h6m-6-4h6m2 5.291A7.962 7.962 0 0112 15c-2.034 0-3.9.785-5.291 2.291M6.414 15.414A2 2 0 019.172 13h5.656a2 2 0 012.758 2.414"></path>
+          </svg>
+          <h3 class="text-lg font-medium text-gray-900 dark:text-white mb-2">No articles found</h3>
+          <p class="text-gray-600 dark:text-gray-400">Try adjusting your search or filter criteria.</p>
+        </div>
+      </div>
+    </div>
+  </main>
+</Layout>
+
+<style>
+  .news-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+  }
+  
+  .news-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+  }
+  
+  .dark .news-card:hover {
+    box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.2);
+  }
+</style>
+
+<script is:inline>
+  // @ts-nocheck
+  (function() {
+    class NewsPage {
+      constructor() {
+        this.articles = [];
+        this.filteredArticles = [];
+        this.init();
+      }
+
+      async init() {
+        try {
+          await this.loadNews();
+          this.setupEventListeners();
+          this.showContent();
+          this.filterAndRender();
+        } catch (error) {
+          console.error('Error initializing news page:', error);
+          this.showError();
+        }
+      }
+
+      async findMostRecentFeed() {
+        try {
+          // Try the latest endpoint first (most efficient)
+          try {
+            const latestResponse = await fetch('/news_feeds/latest.json', { method: 'HEAD' });
+            if (latestResponse.ok) {
+              return '/news_feeds/latest.json';
+            }
+          } catch (e) {
+            console.log('Latest endpoint not available, trying fallback');
+          }
+          
+          // Fallback to known file
+          const fallbackFile = '/news_feeds/2025/06/news_feed_2025-06-20_04-29-21.json';
+          try {
+            const testResponse = await fetch(fallbackFile, { method: 'HEAD' });
+            if (testResponse.ok) {
+              return fallbackFile;
+            }
+          } catch (e) {
+            console.log('Fallback file not found');
+          }
+          
+          return null;
+        } catch (error) {
+          console.error('Error finding recent feed:', error);
+          return null;
+        }
+      }
+
+      async loadNews() {
+        try {
+          // Find and fetch the most recent news feed
+          const mostRecentFile = await this.findMostRecentFeed();
+          if (!mostRecentFile) {
+            throw new Error('No news feed files found');
+          }
+          
+          const response = await fetch(mostRecentFile);
+          if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+          }
+          const data = await response.json();
+          this.articles = data.news_feed.articles;
+          
+          // Update last updated time
+          const lastUpdated = new Date(data.news_feed.generated_at);
+          document.getElementById('last-updated').textContent = 'Last updated: ' + lastUpdated.toLocaleString();
+        } catch (error) {
+          console.error('Error loading news:', error);
+          throw error;
+        }
+      }
+
+      setupEventListeners() {
+        // Search input
+        document.getElementById('news-search').addEventListener('input', () => {
+          this.filterAndRender();
+        });
+
+        // Category filter
+        document.getElementById('category-filter').addEventListener('change', () => {
+          this.filterAndRender();
+        });
+
+        // Sort filter
+        document.getElementById('sort-filter').addEventListener('change', () => {
+          this.filterAndRender();
+        });
+      }
+
+      filterAndRender() {
+        this.applyFilters();
+        this.renderArticles();
+        this.updateResultsCount();
+      }
+
+      applyFilters() {
+        let filtered = [...this.articles];
+
+        // Apply search filter
+        const searchTerm = document.getElementById('news-search').value.toLowerCase().trim();
+        if (searchTerm) {
+          filtered = filtered.filter(article => 
+            article.title.toLowerCase().includes(searchTerm) ||
+            article.content_preview.toLowerCase().includes(searchTerm) ||
+            article.source.toLowerCase().includes(searchTerm) ||
+            article.author.toLowerCase().includes(searchTerm) ||
+            article.tags.some(tag => tag.toLowerCase().includes(searchTerm))
+          );
+        }
+
+        // Apply category filter
+        const category = document.getElementById('category-filter').value;
+        if (category !== 'all') {
+          filtered = filtered.filter(article => article.category === category);
+        }
+
+        // Apply sorting
+        const sortBy = document.getElementById('sort-filter').value;
+        if (sortBy === 'date') {
+          filtered.sort((a, b) => new Date(b.published_date).getTime() - new Date(a.published_date).getTime());
+        } else if (sortBy === 'importance') {
+          const importanceOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+          filtered.sort((a, b) => {
+            const importanceA = importanceOrder[a.importance] || 0;
+            const importanceB = importanceOrder[b.importance] || 0;
+            return importanceB - importanceA;
+          });
+        } else if (sortBy === 'source') {
+          filtered.sort((a, b) => a.source.localeCompare(b.source));
+        }
+
+        this.filteredArticles = filtered;
+      }
+
+      renderArticles() {
+        const grid = document.getElementById('news-grid');
+        const emptyState = document.getElementById('empty-state');
+
+        if (this.filteredArticles.length === 0) {
+          grid.classList.add('hidden');
+          emptyState.classList.remove('hidden');
+          return;
+        }
+
+        emptyState.classList.add('hidden');
+        grid.classList.remove('hidden');
+
+        grid.innerHTML = this.filteredArticles.map(article => this.createArticleCard(article)).join('');
+
+        // Add click handlers to cards
+        grid.querySelectorAll('.news-card').forEach(card => {
+          card.addEventListener('click', () => {
+            const articleId = card.dataset.articleId;
+            const article = this.articles.find(a => a.id === articleId);
+            if (article) {
+              this.openModal(article);
+            }
+          });
+        });
+      }
+
+      createArticleCard(article) {
+        const categoryInfo = this.getCategoryInfo(article.category);
+        const importanceInfo = this.getImportanceInfo(article.importance);
+        const timeAgo = this.formatTimeAgo(article.published_date);
+
+        return '<div class="news-card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer overflow-hidden" data-article-id="' + article.id + '">' +
+          '<div class="p-6">' +
+            '<div class="flex items-center justify-between mb-3">' +
+              '<span class="px-2 py-1 text-xs font-semibold rounded-full ' + categoryInfo.color + '">' +
+                categoryInfo.icon + ' ' + categoryInfo.name +
+              '</span>' +
+              '<span class="px-2 py-1 text-xs font-medium rounded-full ' + importanceInfo.color + '">' +
+                importanceInfo.icon +
+              '</span>' +
+            '</div>' +
+            '<h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">' +
+              article.title +
+            '</h3>' +
+            '<p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">' +
+              article.content_preview +
+            '</p>' +
+            '<div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">' +
+              '<span>' + article.source + '</span>' +
+              '<span>' + timeAgo + '</span>' +
+            '</div>' +
+          '</div>' +
+        '</div>';
+      }
+
+      updateResultsCount() {
+        const count = this.filteredArticles.length;
+        const total = this.articles.length;
+        const countElement = document.getElementById('results-count');
+        
+        if (count === total) {
+          countElement.textContent = 'Showing all ' + total + ' articles';
+        } else {
+          countElement.textContent = 'Showing ' + count + ' of ' + total + ' articles';
+        }
+      }
+
+      openModal(article) {
+        const event = new CustomEvent('openNewsModal', {
+          detail: { article: article, articles: this.articles }
+        });
+        document.dispatchEvent(event);
+      }
+
+      getCategoryInfo(category) {
+        const categoryMap = {
+          'bitcoin': { 
+            name: 'Bitcoin', 
+            color: 'bg-orange-500 text-white',
+            icon: '₿'
+          },
+          'software_dev': { 
+            name: 'Software Dev', 
+            color: 'bg-blue-500 text-white',
+            icon: '💻'
+          },
+          'ai_progress': { 
+            name: 'AI Progress', 
+            color: 'bg-purple-500 text-white',
+            icon: '🤖'
+          }
+        };
+        
+        return categoryMap[category] || { 
+          name: 'News', 
+          color: 'bg-gray-500 text-white',
+          icon: '📰'
+        };
+      }
+
+      getImportanceInfo(importance) {
+        const importanceMap = {
+          'high': { 
+            name: 'High', 
+            color: 'bg-red-500 text-white',
+            icon: '🔥'
+          },
+          'medium': { 
+            name: 'Medium', 
+            color: 'bg-yellow-500 text-white',
+            icon: '⚡'
+          },
+          'low': { 
+            name: 'Low', 
+            color: 'bg-green-500 text-white',
+            icon: '📝'
+          }
+        };
+        
+        return importanceMap[importance] || { 
+          name: 'Normal', 
+          color: 'bg-gray-500 text-white',
+          icon: '📰'
+        };
+      }
+
+      formatTimeAgo(dateString) {
+        try {
+          const date = new Date(dateString);
+          const now = new Date();
+          const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+          
+          if (diffInHours < 1) {
+            return 'Just now';
+          } else if (diffInHours < 24) {
+            return diffInHours + 'h ago';
+          } else if (diffInHours < 48) {
+            return 'Yesterday';
+          } else {
+            const days = Math.floor(diffInHours / 24);
+            return days + 'd ago';
+          }
+        } catch (error) {
+          return 'Unknown';
+        }
+      }
+
+      showContent() {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('news-controls').classList.remove('hidden');
+        document.getElementById('news-grid').classList.remove('hidden');
+      }
+
+      showError() {
+        document.getElementById('loading-state').classList.add('hidden');
+        document.getElementById('error-state').classList.remove('hidden');
+      }
+    }
+
+    // Initialize when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      new NewsPage();
+    });
+  })();
+</script>
+
+<!-- NewsModal will be included via Layout --> 

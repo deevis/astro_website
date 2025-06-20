@@ -141,6 +141,12 @@ class RSSParser:
             feed = feedparser.parse(response.content)
             
             for entry in feed.entries[:5]:  # Limit to 5 articles per feed
+                # Filter Bitcoin articles to only include those with "BTC" or "Bitcoin" in title
+                if category == 'bitcoin':
+                    title_lower = entry.title.lower()
+                    if not ('btc' in title_lower or 'bitcoin' in title_lower):
+                        continue  # Skip articles without BTC or Bitcoin in title
+                
                 article = {
                     'id': hashlib.md5(entry.link.encode()).hexdigest()[:12],
                     'title': entry.title,
@@ -317,7 +323,7 @@ class SourceAggregator:
 class ProductionNewsFeed:
     """Production news feed system"""
     
-    def __init__(self, update_interval_hours: int = 6):
+    def __init__(self, update_interval_hours: int = 5):
         self.update_interval_hours = update_interval_hours
         self.base_filename = "news_feed"
         self.base_directory = "../../public/news_feeds"
@@ -331,7 +337,8 @@ class ProductionNewsFeed:
                 'https://cointelegraph.com/rss',
                 'https://cryptoslate.com/feed/',
                 'https://bitcoinist.com/feed',
-                'https://newsbtc.com/feed'
+                'https://newsbtc.com/feed',
+                'https://decrypt.co/feed'
             ],
             'ai_progress': [
                 'http://rss.slashdot.org/Slashdot/slashdotMain',
@@ -513,6 +520,7 @@ class ProductionNewsFeed:
         for category, urls in self.feeds.items():
             logger.info(f"Fetching {category} articles...")
             for url in urls:
+                logger.info(f"   Parsing feed: {url}")
                 articles = self.rss_parser.parse_feed(url, category)
                 all_articles.extend(articles)
         
@@ -557,7 +565,13 @@ class ProductionNewsFeed:
         with open(output_file, 'w', encoding='utf-8') as f:
             json.dump(feed, f, indent=2, ensure_ascii=False)
         
+        # Also create latest.json for easy access
+        latest_file = os.path.join(self.base_directory, 'latest.json')
+        with open(latest_file, 'w', encoding='utf-8') as f:
+            json.dump(feed, f, indent=2, ensure_ascii=False)
+        
         logger.info(f"News feed saved to {output_file}")
+        logger.info(f"Latest feed also saved to {latest_file}")
         return output_file
     
     def update_if_needed(self) -> tuple[bool, str]:
@@ -578,7 +592,7 @@ class ProductionNewsFeed:
 def main():
     """Main function"""
     try:
-        news_feed = ProductionNewsFeed(update_interval_hours=6)
+        news_feed = ProductionNewsFeed(update_interval_hours=2)
         
         # Check if update is needed and perform it
         updated, output_file = news_feed.update_if_needed()

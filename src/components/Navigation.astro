@@ -4,6 +4,7 @@ import ThemeToggle from './ThemeToggle.astro';
 const links = [
   { href: '/', text: 'Home' },
   { href: '/articles', text: 'Articles' },
+  { href: '/news', text: 'News' },
   // Bitcoin dropdown will be handled separately
   { href: '/gallery', text: 'Gallery' },
   { href: '/showcase', text: 'HTML Showcase' },
@@ -100,6 +101,12 @@ const bitcoinDropdown = [
         class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
       >
         Articles
+      </a>
+      <a
+        href="/news"
+        class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+      >
+        News
       </a>
       
       <!-- Bitcoin Mobile Dropdown -->

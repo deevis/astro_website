@@ -41,7 +41,7 @@ const currentPath = Astro.url.pathname;
 		<Navigation />
 		
 		<!-- Bitcoin Tutorial Layout -->
-		<div class="flex flex-col md:flex-row min-h-screen pt-20">
+		<div class="min-h-screen pt-20">
 			<!-- Fixed Left Navigation Panel -->
 			<aside class="w-full md:w-64 bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white fixed top-20 left-0 h-[calc(100vh-5rem)] overflow-y-auto z-10 border-r border-gray-300 dark:border-gray-800 transition-colors duration-200">
 				<div class="p-4">
@@ -184,12 +184,11 @@ const currentPath = Astro.url.pathname;
 				</div>
 			</aside>
 			
-			<!-- Main Content Area (with left margin for sidebar and top margin for main nav) -->
-			<main class="flex-1 md:ml-64 bg-white dark:bg-gray-950">
+			<!-- Main Content Area -->
+			<main class="md:ml-64 bg-white dark:bg-gray-950">
 				<slot />
 			</main>
 		</div>
-		<Footer />
 	</body>
 </html>
 
@@ -263,7 +262,7 @@ const currentPath = Astro.url.pathname;
 	}
 </script>
 
-<style>
+<style is:global>
 	/* Make sure the layout works on mobile too */
 	@media (max-width: 768px) {
 		aside {

@@ -1,0 +1,12 @@
+# News Feed Update Cron Job Configuration
+# Runs every 2 hours to update the news feed
+
+# Environment variables for cron
+PATH=/opt/news_feed_env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+SHELL=/bin/bash
+
+# Run news feed update every 2 hours
+0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1
+
+# Alternative for local development (using local paths)
+# 0 */2 * * * cd /path/to/your/project && python/news_aggregator/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1 

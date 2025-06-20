@@ -6,6 +6,8 @@ import '@fontsource/inter/700.css';
 import 'prismjs/themes/prism-tomorrow.css';
 import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import NewsModal from '../components/NewsModal.astro';
 
 interface Props {
   title: string;
@@ -46,8 +48,10 @@ const {
   </head>
   <body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
     <Navigation />
+    <NewsTicker />
     <slot />
     <Footer />
+    <NewsModal />
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>
@@ -65,5 +69,21 @@ const {
   html {
     font-family: var(--font-sans);
     scroll-behavior: smooth;
+    zoom: 0.8; /* Chrome zoom equivalent */
+  }
+  
+  /* Fallback for browsers that don't support zoom */
+  @supports not (zoom: 0.8) {
+    body {
+      transform: scale(0.8);
+      transform-origin: top left;
+      width: 125%; /* Compensate for the scale */
+      height: 125%;
+    }
+  }
+  
+  /* Adjust for fixed news ticker */
+  main.pt-24 {
+    padding-top: 8rem; /* 128px = 96px (original pt-24) + 32px (ticker height) */
   }
 </style>

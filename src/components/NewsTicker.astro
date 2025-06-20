@@ -1,0 +1,403 @@
+---
+// NewsTicker.astro - Scrolling news ticker component
+---
+
+<div id="news-ticker" class="fixed top-16 left-0 right-0 bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-700 dark:to-purple-700 text-white py-2 shadow-md z-40">
+  <div class="container mx-auto px-4">
+    <div class="flex items-center">
+      <div class="flex-shrink-0 mr-4">
+        <span class="font-bold text-sm uppercase tracking-wide">📰 Top Stories</span>
+      </div>
+      <div class="flex-1 overflow-hidden">
+        <div id="ticker-content" class="ticker-scroll">
+          <div class="ticker-item">Loading latest news...</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<style>
+  #ticker-content {
+    display: flex;
+    white-space: nowrap;
+    align-items: center;
+  }
+  
+  .ticker-item {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10rem;
+    padding-right: 8rem;
+    cursor: pointer;
+    transition: opacity 0.3s ease;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  
+  .ticker-item:hover {
+    opacity: 0.8;
+  }
+  
+  .ticker-separator {
+    margin: 0 1rem;
+    opacity: 0.6;
+  }
+  
+  .category-badge {
+    font-size: 0.75rem;
+    padding: 0.125rem 0.5rem;
+    border-radius: 0.75rem;
+    margin-right: 0.5rem;
+    font-weight: 600;
+  }
+  
+  .importance-high {
+    position: relative;
+  }
+  
+  .importance-high::before {
+    content: '🔥';
+    margin-right: 0.5rem;
+  }
+  
+  /* Removed CSS animation - using JavaScript instead */
+  
+  /* Responsive adjustments */
+  @media (max-width: 768px) {
+    .ticker-item {
+      margin-right: 8rem;
+      padding-right: 6rem;
+    }
+  }
+</style>
+
+<script is:inline>
+  // @ts-nocheck
+  (function() {
+    class NewsTicker {
+      constructor() {
+        this.tickerContent = document.getElementById('ticker-content');
+        this.articles = [];
+        this.scrollPosition = 0;
+        this.animationId = null;
+        this.isScrolling = false;
+        this.isPaused = false;
+        this.isHovered = false;
+        this.pauseReason = [];
+        this.init();
+      }
+
+      async init() {
+        try {
+          await this.fetchNews();
+          this.renderTicker();
+          this.setupEventListeners();
+        } catch (error) {
+          console.error('Error initializing news ticker:', error);
+          this.showError();
+        }
+      }
+
+      async findMostRecentFeed() {
+        try {
+          // Try the latest endpoint first (most efficient)
+          try {
+            const latestResponse = await fetch('/news_feeds/latest.json', { method: 'HEAD' });
+            if (latestResponse.ok) {
+              return '/news_feeds/latest.json';
+            }
+          } catch (e) {
+            console.log('Latest endpoint not available, trying fallback');
+          }
+          
+          // Fallback to known file
+          const fallbackFile = '/news_feeds/2025/06/news_feed_2025-06-20_04-29-21.json';
+          try {
+            const testResponse = await fetch(fallbackFile, { method: 'HEAD' });
+            if (testResponse.ok) {
+              return fallbackFile;
+            }
+          } catch (e) {
+            console.log('Fallback file not found');
+          }
+          
+          return null;
+        } catch (error) {
+          console.error('Error finding recent feed:', error);
+          return null;
+        }
+      }
+
+      async fetchNews() {
+        try {
+          // Find and fetch the most recent news feed
+          const mostRecentFile = await this.findMostRecentFeed();
+          if (!mostRecentFile) {
+            throw new Error('No news feed files found');
+          }
+          
+          const response = await fetch(mostRecentFile);
+          if (!response.ok) {
+            throw new Error('HTTP error! status: ' + response.status);
+          }
+          const data = await response.json();
+          
+          // Filter out articles without meaningful content, prioritize by importance, then randomize
+          this.articles = data.news_feed.articles
+            .filter(article => {
+              // Only include articles with meaningful content
+              const content = article.content_preview || '';
+              return content.trim().length > 0;
+            })
+            .sort((a, b) => {
+              const importanceOrder = { 'high': 3, 'medium': 2, 'low': 1 };
+              const importanceA = importanceOrder[a.importance] || 0;
+              const importanceB = importanceOrder[b.importance] || 0;
+              return importanceB - importanceA;
+            })
+            .slice(0, 10)
+            .sort(() => Math.random() - 0.5); // Randomize the order
+        } catch (error) {
+          console.error('Error fetching news:', error);
+          throw error;
+        }
+      }
+
+      renderTicker() {
+        if (!this.articles.length) {
+          this.showError();
+          return;
+        }
+
+        const tickerItems = this.articles.map(article => {
+          const categoryInfo = this.getCategoryInfo(article.category);
+          const timeAgo = this.formatTimeAgo(article.published_date);
+          
+          return '<span class="ticker-item ' + (article.importance === 'high' ? 'importance-high' : '') + '" data-article-id="' + article.id + '" style="margin-right: 8rem;">' +
+            '<span class="category-badge ' + categoryInfo.color + '">' +
+              categoryInfo.icon + ' ' + categoryInfo.name +
+            '</span>' +
+            '<span class="font-medium" style="margin-left: 0.5rem;">' + this.truncateText(article.title, 80) + '</span>' +
+            '<span class="ticker-separator">•</span>' +
+            '<span class="text-sm opacity-75">' + article.source + '</span>' +
+            '<span class="ticker-separator">•</span>' +
+            '<span class="text-xs opacity-60">' + timeAgo + '</span>' +
+          '</span>';
+        }).join('');
+
+        // Duplicate the content for seamless scrolling
+        this.tickerContent.innerHTML = tickerItems + tickerItems;
+        
+        // Start custom JavaScript scrolling
+        this.startScrolling();
+      }
+
+      startScrolling() {
+        // Stop any existing animation
+        if (this.animationId) {
+          cancelAnimationFrame(this.animationId);
+        }
+
+        // Wait for content to be rendered
+        setTimeout(() => {
+          this.isScrolling = true;
+          this.scrollPosition = this.tickerContent.parentElement.offsetWidth; // Start from right edge
+          this.tickerContent.style.transform = `translateX(${this.scrollPosition}px)`;
+          
+          const contentWidth = this.tickerContent.scrollWidth;
+          const containerWidth = this.tickerContent.parentElement.offsetWidth;
+          
+          console.log(`Ticker: ${this.articles.length} articles, content width: ${contentWidth}px, container: ${containerWidth}px`);
+          
+          this.animate();
+        }, 100);
+      }
+
+            animate() {
+        if (!this.isScrolling || this.isPaused) {
+          // Continue the animation loop even when paused, just don't update position
+          this.animationId = requestAnimationFrame(() => this.animate());
+          return;
+        }
+
+        const scrollSpeed = 1;
+        
+        this.scrollPosition -= scrollSpeed;
+        
+        // Get current dimensions
+        const contentWidth = this.tickerContent.scrollWidth;
+        const containerWidth = this.tickerContent.parentElement.offsetWidth;
+        
+        // Reset position when we've scrolled past half the content (since we duplicated it)
+        const resetPoint = -(contentWidth / 2);
+        
+        if (this.scrollPosition <= resetPoint) {
+          this.scrollPosition = containerWidth;
+        }
+        
+        // Apply the transform
+        this.tickerContent.style.transform = `translateX(${this.scrollPosition}px)`;
+        
+        // Continue animation
+        this.animationId = requestAnimationFrame(() => this.animate());
+      }
+
+      stopScrolling() {
+        this.isScrolling = false;
+        if (this.animationId) {
+          cancelAnimationFrame(this.animationId);
+          this.animationId = null;
+        }
+      }
+
+      setupEventListeners() {
+        // Add click handlers to ticker items
+        this.tickerContent.addEventListener('click', (e) => {
+          const tickerItem = e.target.closest('.ticker-item');
+          if (tickerItem) {
+            const articleId = tickerItem.dataset.articleId;
+            const article = this.articles.find(a => a.id === articleId);
+            if (article) {
+              this.openModal(article);
+            }
+          }
+        });
+
+        // Pause on hover
+        const tickerContainer = document.getElementById('news-ticker');
+        tickerContainer.addEventListener('mouseenter', () => {
+          this.isHovered = true;
+          this.pause();
+        });
+        
+        tickerContainer.addEventListener('mouseleave', () => {
+          this.isHovered = false;
+          // Only resume if modal isn't open
+          if (!this.pauseReason.includes('modal')) {
+            this.resume();
+          }
+        });
+
+        // Listen for modal open/close events
+        document.addEventListener('openNewsModal', () => {
+          this.pauseForModal();
+        });
+
+        document.addEventListener('closeNewsModal', () => {
+          this.resumeFromModal();
+        });
+      }
+
+      pause() {
+        this.isPaused = true;
+        this.pauseReason = this.pauseReason || [];
+        // Add visual feedback when paused
+        this.tickerContent.style.opacity = '0.7';
+        console.log('Ticker paused:', this.pauseReason);
+      }
+
+      resume() {
+        this.isPaused = false;
+        this.pauseReason = [];
+        // Remove visual feedback when resumed
+        this.tickerContent.style.opacity = '1';
+        console.log('Ticker resumed');
+      }
+
+      pauseForModal() {
+        this.isPaused = true;
+        this.pauseReason = ['modal'];
+        this.tickerContent.style.opacity = '0.7';
+        console.log('Ticker paused for modal');
+      }
+
+      resumeFromModal() {
+        // Only resume if we're not also paused for hover
+        if (!this.isHovered) {
+          this.isPaused = false;
+          this.pauseReason = [];
+          this.tickerContent.style.opacity = '1';
+          console.log('Ticker resumed from modal');
+        } else {
+          this.pauseReason = ['hover'];
+          console.log('Ticker still paused for hover after modal close');
+        }
+      }
+
+      openModal(article) {
+        // Dispatch custom event for modal opening
+        const event = new CustomEvent('openNewsModal', {
+          detail: { article: article, articles: this.articles }
+        });
+        document.dispatchEvent(event);
+      }
+
+      getCategoryInfo(category) {
+        const categoryMap = {
+          'bitcoin': { 
+            name: 'Bitcoin', 
+            color: 'bg-orange-500 text-white',
+            icon: '₿'
+          },
+          'software_dev': { 
+            name: 'Dev', 
+            color: 'bg-blue-500 text-white',
+            icon: '💻'
+          },
+          'ai_progress': { 
+            name: 'AI', 
+            color: 'bg-purple-500 text-white',
+            icon: '🤖'
+          }
+        };
+        
+        return categoryMap[category] || { 
+          name: 'News', 
+          color: 'bg-gray-500 text-white',
+          icon: '📰'
+        };
+      }
+
+      formatTimeAgo(dateString) {
+        try {
+          const date = new Date(dateString);
+          const now = new Date();
+          const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
+          
+          if (diffInHours < 1) {
+            return 'Just now';
+          } else if (diffInHours < 24) {
+            return diffInHours + 'h ago';
+          } else if (diffInHours < 48) {
+            return '1d ago';
+          } else {
+            const days = Math.floor(diffInHours / 24);
+            return days + 'd ago';
+          }
+        } catch (error) {
+          return '';
+        }
+      }
+
+      truncateText(text, maxLength) {
+        if (!text || text.length <= maxLength) {
+          return text;
+        }
+        return text.substring(0, maxLength).trim() + '...';
+      }
+
+      showError() {
+        this.tickerContent.innerHTML = 
+          '<span class="ticker-item">' +
+            '<span class="text-red-200">⚠️ Unable to load news feed</span>' +
+          '</span>';
+      }
+    }
+
+    // Initialize the ticker when DOM is loaded
+    document.addEventListener('DOMContentLoaded', function() {
+      new NewsTicker();
+    });
+  })();
+</script> 

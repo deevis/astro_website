@@ -1,12 +1,26 @@
 #!/bin/bash
 # Production News Feed Update Script with Timestamping
 
-echo "🚀 Production News Feed System (6-hour intervals)"
+echo "🚀 Production News Feed System (2-hour intervals)"
 echo "Timestamp: $(date)"
 echo "================================"
 
 # Change to script directory
 cd "$(dirname "$0")"
+
+# Activate virtual environment if it exists
+if [ -d "/opt/news_feed_env" ]; then
+    source /opt/news_feed_env/bin/activate
+    echo "✅ Activated virtual environment: /opt/news_feed_env"
+elif [ -d "news_feed_env" ]; then
+    source news_feed_env/bin/activate
+    echo "✅ Activated local virtual environment: news_feed_env"
+else
+    echo "⚠️  No virtual environment found, using system Python"
+fi
+
+# Set Python path
+export PYTHONPATH="$(pwd):$PYTHONPATH"
 
 # Run the news feed system
 echo "Checking if update is needed..."
@@ -29,6 +43,11 @@ if [ $? -eq 0 ]; then
         echo "📁 Latest file: $latest_file"
         echo "📊 File size: $(du -h "$latest_file" | cut -f1)"
         echo "🕒 Last modified: $(stat -c %y "$latest_file" 2>/dev/null || stat -f %Sm "$latest_file")"
+    fi
+    
+    # Check if latest.json was created
+    if [ -f "../../public/news_feeds/latest.json" ]; then
+        echo "📋 Latest.json updated: $(stat -c %y "../../public/news_feeds/latest.json" 2>/dev/null || stat -f %Sm "../../public/news_feeds/latest.json")"
     fi
 else
     echo ""

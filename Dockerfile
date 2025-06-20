@@ -4,6 +4,14 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
+# Install Python, cron, and other system dependencies
+RUN apt-get update && apt-get install -y \
+    python3 \
+    python3-pip \
+    python3-venv \
+    cron \
+    && rm -rf /var/lib/apt/lists/*
+
 # Media stage - these layers will be cached and reused across builds
 # as long as the media files don't change
 FROM base as media
@@ -19,13 +27,21 @@ FROM base as deps
 COPY package.json package-lock.json astro.config.mjs tsconfig.json tailwind.config.mjs ./  
 RUN pnpm install
 
+# Python dependencies stage
+FROM base as python-deps
+COPY python/news_aggregator/requirements.txt ./python/news_aggregator/
+RUN python3 -m venv /opt/news_feed_env && \
+    /opt/news_feed_env/bin/pip install --upgrade pip && \
+    /opt/news_feed_env/bin/pip install -r python/news_aggregator/requirements.txt
+
 # Builder stage
 FROM base as builder
 # Copy dependencies
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=python-deps /opt/news_feed_env /opt/news_feed_env
 
 # Create directory structure first
-RUN mkdir -p public/images
+RUN mkdir -p public/images public/news_feeds
 # Copy all source code EXCEPT the heavy media directories
 COPY src ./src
 COPY public ./public
@@ -36,6 +52,9 @@ RUN rm -rf ./public/images/gallery ./public/mp4
 COPY --from=media /app/public/images/gallery ./public/images/gallery
 COPY --from=media /app/public/mp4 ./public/mp4
 
+# Copy Python news aggregator
+COPY python/news_aggregator/ ./python/news_aggregator/
+
 # Copy remaining config files
 COPY *.js *.json *.mjs *.astro ./.gitignore* ./
 # Build the application
@@ -44,9 +63,36 @@ RUN pnpm build
 # Runner stage - the final image
 FROM base as runner
 COPY --from=builder /app/dist ./dist
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/python ./python
 COPY --from=deps /app/node_modules ./node_modules
+COPY --from=python-deps /opt/news_feed_env /opt/news_feed_env
 COPY package.json package-lock.json astro.config.mjs tsconfig.json tailwind.config.mjs ./ 
 RUN corepack enable && corepack prepare --activate
 
+# Set up environment variables for Python
+ENV VIRTUAL_ENV=/opt/news_feed_env
+ENV PATH="$VIRTUAL_ENV/bin:$PATH"
+ENV PYTHONPATH="/app/python/news_aggregator:$PYTHONPATH"
+
+# Create cron job for news feed updates (every 2 hours)
+RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/news-feed-update && \
+    chmod 0644 /etc/cron.d/news-feed-update && \
+    crontab /etc/cron.d/news-feed-update && \
+    touch /var/log/news_feed_cron.log
+
+# Create startup script
+RUN echo '#!/bin/bash\n\
+# Start cron daemon\n\
+cron\n\
+\n\
+# Run initial news feed generation\n\
+echo "Running initial news feed generation..."\n\
+cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py\n\
+\n\
+# Start the main application\n\
+exec pnpm start\n\
+' > /app/start.sh && chmod +x /app/start.sh
+
 EXPOSE 4321
-CMD ["pnpm", "start"]
+CMD ["/app/start.sh"]
