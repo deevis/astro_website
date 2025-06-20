@@ -1,0 +1,186 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact | Get in Touch">
+  <main class="pt-24 pb-16">
+    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      
+      <!-- Hero Section -->
+      <section class="max-w-4xl mx-auto text-center mb-16">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6 text-gray-900 dark:text-white">
+          Let's Build Something Interesting
+        </h1>
+        <p class="text-xl text-gray-600 dark:text-gray-300 mb-8">
+          Whether you need performance optimization, data visualization, system integration, modeling/simulation, 
+          or just want to explore a wild idea - let's talk.
+        </p>
+      </section>
+
+      <div class="max-w-6xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-12">
+        
+        <!-- Contact Form -->
+        <section class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 border border-gray-200 dark:border-gray-700">
+          <h2 class="text-2xl font-bold mb-6 text-gray-900 dark:text-white">Send a Message</h2>
+          
+          <form class="space-y-6" method="POST" action="https://formspree.io/f/mpwrjwbr">
+            <div>
+              <label for="name" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Name
+              </label>
+              <input 
+                type="text" 
+                id="name" 
+                name="name" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                placeholder="Your name"
+              />
+            </div>
+            
+            <div>
+              <label for="email" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Email
+              </label>
+              <input 
+                type="email" 
+                id="email" 
+                name="email" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                placeholder="your@email.com"
+              />
+            </div>
+            
+            <div>
+              <label for="project-type" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                What brings you here?
+              </label>
+                             <select 
+                 id="project-type" 
+                 name="project-type"
+                 class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+               >
+                 <option value="">Select a reason</option>
+                 <option value="performance-optimization">Performance Optimization</option>
+                 <option value="data-visualization">Data Visualization Project</option>
+                 <option value="modeling-simulation">Modeling/Simulation Project</option>
+                 <option value="system-integration">System Integration</option>
+                 <option value="educational-content">Educational Content</option>
+                 <option value="sidekiq-help">Sidekiq/Background Job Issues</option>
+                 <option value="consulting">General Consulting</option>
+                 <option value="collaboration">Collaboration Opportunity</option>
+                 <option value="other">Something Else Entirely</option>
+               </select>
+            </div>
+            
+            <div>
+              <label for="message" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                Tell me about your project
+              </label>
+              <textarea 
+                id="message" 
+                name="message" 
+                rows="6" 
+                required
+                class="w-full px-4 py-3 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary-500 focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-vertical"
+                placeholder="Describe your project, challenge, or wild idea..."
+              ></textarea>
+            </div>
+            
+            <button 
+              type="submit"
+              class="w-full bg-primary-600 hover:bg-primary-700 text-white font-semibold py-3 px-6 rounded-lg transition-colors"
+            >
+              Send Message
+            </button>
+          </form>
+        </section>
+
+        <!-- Contact Info & Availability -->
+        <section class="space-y-8">
+          
+          <!-- Direct Contact -->
+          <div class="bg-gray-50 dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Prefer Direct Contact?</h3>
+            <div class="space-y-3">
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 4.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+                </svg>
+                <span class="text-gray-700 dark:text-gray-300">me@darrenhicks.dev</span>
+              </div>
+              <div class="flex items-center">
+                <svg class="w-5 h-5 text-primary-600 mr-3" fill="currentColor" viewBox="0 0 24 24">
+                  <path d="M22.46 6c-.77.35-1.6.58-2.46.69.88-.53 1.56-1.37 1.88-2.38-.83.5-1.75.85-2.72 1.05C18.37 4.5 17.26 4 16 4c-2.35 0-4.27 1.92-4.27 4.29 0 .34.04.67.11.98C8.28 9.09 5.11 7.38 3 4.79c-.37.63-.58 1.37-.58 2.15 0 1.49.75 2.81 1.91 3.56-.71 0-1.37-.2-1.95-.5v.03c0 2.08 1.48 3.82 3.44 3.95-.36.1-.74.15-1.13.15-.27 0-.54-.03-.81-.08.54 1.69 2.11 2.95 4 2.98-1.46 1.16-3.31 1.84-5.33 1.84-.35 0-.69-.02-1.02-.06C3.44 20.29 5.7 21 8.12 21 16 21 20.33 14.46 20.33 8.79c0-.19 0-.37-.01-.56.84-.6 1.56-1.36 2.14-2.23z"/>
+                </svg>
+                <span class="text-gray-700 dark:text-gray-300">@deevis</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- What to Expect -->
+          <div class="bg-primary-50 dark:bg-primary-900/20 rounded-lg p-6 border border-primary-200 dark:border-primary-800">
+            <h3 class="text-xl font-bold mb-4 text-primary-900 dark:text-primary-100">What to Expect</h3>
+            <div class="space-y-3 text-primary-800 dark:text-primary-200">
+              <div class="flex items-start">
+                <div class="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <span>Response within 24-48 hours</span>
+              </div>
+              <div class="flex items-start">
+                <div class="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <span>Free initial consultation to understand your needs</span>
+              </div>
+              <div class="flex items-start">
+                <div class="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <span>Honest assessment of timeline and feasibility</span>
+              </div>
+              <div class="flex items-start">
+                <div class="w-2 h-2 bg-primary-600 rounded-full mt-2 mr-3 flex-shrink-0"></div>
+                <span>Clear communication throughout the project</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Specialties -->
+          <div class="bg-white dark:bg-gray-800 rounded-lg p-6 border border-gray-200 dark:border-gray-700">
+            <h3 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Perfect Projects For Me</h3>
+                         <div class="grid grid-cols-1 gap-3">
+               <div class="flex items-center p-3 bg-green-50 dark:bg-green-900/20 rounded-lg">
+                 <svg class="w-5 h-5 text-green-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                 </svg>
+                 <span class="text-green-800 dark:text-green-200">Slow Sidekiq queues driving you crazy</span>
+               </div>
+               <div class="flex items-center p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                 <svg class="w-5 h-5 text-blue-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                 </svg>
+                 <span class="text-blue-800 dark:text-blue-200">Complex data that needs beautiful visualization</span>
+               </div>
+               <div class="flex items-center p-3 bg-indigo-50 dark:bg-indigo-900/20 rounded-lg">
+                 <svg class="w-5 h-5 text-indigo-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                 </svg>
+                 <span class="text-indigo-800 dark:text-indigo-200">Interactive models and simulations</span>
+               </div>
+               <div class="flex items-center p-3 bg-purple-50 dark:bg-purple-900/20 rounded-lg">
+                 <svg class="w-5 h-5 text-purple-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                 </svg>
+                 <span class="text-purple-800 dark:text-purple-200">Systems that don't talk to each other (but should!)</span>
+               </div>
+               <div class="flex items-center p-3 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
+                 <svg class="w-5 h-5 text-orange-600 mr-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                   <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                 </svg>
+                 <span class="text-orange-800 dark:text-orange-200">Educational content that needs to be interactive</span>
+               </div>
+             </div>
+          </div>
+
+        </section>
+      </div>
+    </div>
+  </main>
+</Layout> 

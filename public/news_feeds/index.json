@@ -1,0 +1,22 @@
+{
+  "news_feeds_index": {
+    "description": "Index of available news feed files organized by year and month",
+    "base_url": "/news_feeds",
+    "structure": {
+      "pattern": "YYYY/MM/news_feed_YYYY-MM-DD_HH-MM-SS.json",
+      "example": "2025/06/news_feed_2025-06-19_22-13-34.json"
+    },
+    "api_endpoints": {
+      "latest": "/news_feeds/latest.json",
+      "by_date": "/news_feeds/{year}/{month}/",
+      "archive": "/news_feeds/archive.json"
+    },
+    "categories": [
+      "bitcoin",
+      "software_dev", 
+      "ai_progress"
+    ],
+    "update_interval_hours": 6,
+    "last_updated": "2025-06-19T22:13:34.524294+00:00"
+  }
+} 

@@ -26,4 +26,7 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
+python/news_aggregator/news_feed_env/
+python/news_aggregator/__pycache__/
+
 astro-website.tar

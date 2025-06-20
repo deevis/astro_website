@@ -1,0 +1,46 @@
+# Enhanced News Feed System - Python Dependencies
+# Production-ready RSS parsing, web scraping, and source aggregation
+
+# Core RSS and Web Scraping
+feedparser==6.0.11          # RSS/Atom feed parsing
+beautifulsoup4==4.13.4       # HTML parsing and web scraping
+requests==2.32.3             # HTTP requests for web scraping
+lxml==5.3.0                  # Fast XML/HTML parser (optional but recommended)
+
+# URL and Content Processing
+urllib3==2.2.3               # HTTP client (used by requests)
+chardet==5.2.0               # Character encoding detection
+certifi==2024.8.30           # SSL certificate verification
+
+# Date and Time Handling
+python-dateutil==2.9.0       # Enhanced date parsing for RSS feeds
+pytz==2024.2                 # Timezone handling
+
+# Text Processing and Similarity
+nltk==3.9.1                  # Natural language processing (optional for advanced text analysis)
+# Note: difflib is built-in to Python for similarity matching
+
+# Data Validation and Parsing
+jsonschema==4.23.0           # JSON schema validation (optional)
+
+# Development and Testing (optional)
+pytest==8.3.3                # Testing framework
+pytest-cov==5.0.0            # Coverage reporting
+black==24.8.0                # Code formatting
+flake8==7.1.1                # Code linting
+
+# Production Deployment (optional)
+gunicorn==23.0.0              # WSGI server for web deployment
+supervisor==4.2.5            # Process management
+
+# Logging and Monitoring (optional)
+structlog==24.4.0            # Structured logging
+sentry-sdk==2.14.0           # Error tracking and monitoring
+
+# Performance Optimization (optional)
+cachetools==5.5.0            # Caching utilities
+redis==5.1.1                 # Redis client for distributed caching
+
+# Security (recommended for production)
+cryptography==43.0.1         # Cryptographic utilities
+
