@@ -13,6 +13,9 @@ yarn-debug.log*
 yarn-error.log*
 pnpm-debug.log*
 
+# all .log files
+*.log
+
 # don't upload mp4 files
 *.mp4
 

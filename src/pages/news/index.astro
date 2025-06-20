@@ -143,7 +143,13 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         try {
           // Try the latest endpoint first (most efficient)
           try {
-            const latestResponse = await fetch('/news_feeds/latest.json', { method: 'HEAD' });
+            const latestResponse = await fetch('/news_feeds/latest.json', { 
+              method: 'HEAD',
+              headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+              }
+            });
             if (latestResponse.ok) {
               return '/news_feeds/latest.json';
             }
@@ -154,7 +160,13 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
           // Fallback to known file
           const fallbackFile = '/news_feeds/2025/06/news_feed_2025-06-20_04-29-21.json';
           try {
-            const testResponse = await fetch(fallbackFile, { method: 'HEAD' });
+            const testResponse = await fetch(fallbackFile, { 
+              method: 'HEAD',
+              headers: {
+                'Cache-Control': 'no-cache',
+                'Pragma': 'no-cache'
+              }
+            });
             if (testResponse.ok) {
               return fallbackFile;
             }
@@ -177,7 +189,14 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
             throw new Error('No news feed files found');
           }
           
-          const response = await fetch(mostRecentFile);
+          // Add timestamp to prevent caching
+          const cacheBuster = `?t=${Date.now()}`;
+          const response = await fetch(mostRecentFile + cacheBuster, {
+            headers: {
+              'Cache-Control': 'no-cache',
+              'Pragma': 'no-cache'
+            }
+          });
           if (!response.ok) {
             throw new Error('HTTP error! status: ' + response.status);
           }
