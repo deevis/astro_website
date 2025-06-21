@@ -572,6 +572,9 @@ class ProductionNewsFeed:
         
         # ALSO update the dist directory for production serving (if it exists)
         dist_base_directory = "../../dist"
+        if not os.path.exists(dist_base_directory):
+            dist_base_directory = "/app/dist"
+
         if os.path.exists(dist_base_directory):
             dist_directory = os.path.join(dist_base_directory, "news_feeds")
             self._ensure_directory_exists(dist_directory)
