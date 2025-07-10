@@ -1,0 +1,292 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Bitcoin Blockchain – Interactive Tutorial">
+  <!-- Tailwind classes assume Tailwind is configured globally in your Astro project -->
+  <!-- Use Web Crypto API instead of external library -->
+  <div class="pt-32">
+    <div class="container mx-auto px-4 py-6 bg-orange-500 text-white shadow-lg rounded-lg">
+      <h1 class="text-3xl font-bold">🟧 Bitcoin Blockchain – Interactive Walkthrough</h1>
+      <p class="max-w-3xl mt-2">Understand the magic of Bitcoin from hashing basics to global ledger immutability. Click the <span class="italic">Run</span> buttons and tweak inputs to see the concepts in real time!</p>
+    </div>
+  </div>
+
+  <main class="container mx-auto px-4 py-8 space-y-12">
+    <!-- INTRODUCTION -->
+    <div class="bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 p-6 rounded-lg">
+      <h2 class="text-xl font-semibold text-blue-800 dark:text-blue-200 mb-3">Why These Concepts Matter</h2>
+      <p class="text-blue-700 dark:text-blue-300 leading-relaxed">
+        Bitcoin isn't just digital money—it's a revolutionary breakthrough in computer science that solves the "double-spending problem" without requiring trust in any central authority. The following interactive sections will walk you through the core cryptographic and economic principles that make Bitcoin's blockchain an immutable, decentralized ledger. Each concept builds upon the last, creating an elegant system where mathematics and incentives align to create digital scarcity and unstoppable money.
+      </p>
+    </div>
+
+    <!-- 1. HASHING -->
+    <section id="hashing" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">1. What is a Hash?</h2>
+      <div class="bg-amber-50 dark:bg-amber-900/20 border-l-4 border-amber-400 p-4 rounded">
+        <p class="text-amber-700 dark:text-amber-300 text-sm"><strong>Why this matters:</strong> Cryptographic hashing is the foundation of Bitcoin's security. Every transaction, block, and wallet address depends on SHA-256's one-way mathematical function that's impossible to reverse but easy to verify.</p>
+      </div>
+      <p>Bitcoin uses the SHA-256 hash function. Enter any text and generate its 256‑bit digital fingerprint. Even a tiny change produces a wildly different output.</p>
+      <div class="flex flex-col sm:flex-row gap-4">
+        <input type="text" id="hashInput" class="p-3 flex-1 rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" value="Let's Hash this content 0" placeholder="Type something…">
+        <button id="hashBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded self-start">Run ↻</button>
+      </div>
+      <p class="text-sm text-gray-600 dark:text-gray-400 italic">💡 Try making small changes like changing the "0" to "1" or "2" to see how dramatically the hash changes!</p>
+      <div class="bg-gray-900 dark:bg-gray-800 rounded border border-gray-700 dark:border-gray-600 max-h-96 overflow-y-auto">
+        <div class="p-3 border-b border-gray-700">
+          <h4 class="text-lime-400 dark:text-lime-300 font-semibold mb-2">Hash History</h4>
+        </div>
+        <div id="hashHistory" class="p-3 space-y-3"></div>
+      </div>
+    </section>
+
+    <!-- 2. BUILDING A BLOCK FROM THE MEMPOOL -->
+    <section id="block" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">2. What is a Block?</h2>
+      <div class="bg-green-50 dark:bg-green-900/20 border-l-4 border-green-400 p-4 rounded">
+        <p class="text-green-700 dark:text-green-300 text-sm"><strong>Why this matters:</strong> Understanding how blocks are constructed shows how Bitcoin creates an unbreakable chain of transactions. Each block cryptographically references the previous one, making historical changes impossible.</p>
+      </div>
+      <p>Miners pick unconfirmed transactions (the <em>mempool</em>) and bundle them with a <strong>block height</strong> (sequential number), a reference to the <span class="font-mono">previous_block_hash</span>, and a timestamp to build a <strong>candidate block</strong>. The block height ensures every block has a unique position in the chain.</p>
+      <p><strong>Key:</strong> Every block starts with a special <strong>coinbase transaction</strong> that creates new bitcoin and awards it to the winning miner. This is how new bitcoin enters circulation.</p>
+      <button id="mineBlockBtn" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded">Assemble Candidate Block 🧩</button>
+              <pre id="blockOutput" class="bg-gray-900 dark:bg-gray-800 text-cyan-300 dark:text-cyan-200 p-3 rounded overflow-x-auto border border-gray-700 dark:border-gray-600"></pre>
+      <div id="blockNotes" class="hidden mt-4 p-4 bg-blue-50 dark:bg-blue-900/20 border-l-4 border-blue-400 rounded text-sm">
+        <h4 class="font-semibold text-blue-800 dark:text-blue-200 mb-2">Understanding This Block:</h4>
+        <ul class="space-y-1 text-blue-700 dark:text-blue-300">
+          <li>• <strong>The previous block's hash would have been:</strong> <span id="prevHashNote" class="font-mono"></span></li>
+          <li>• <strong>The previous block's height would have been:</strong> <span id="prevHeightNote" class="font-mono"></span></li>
+          <li>• <strong>The "nonce" is a very important piece of the puzzle</strong> — more to come in the next section...</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- 3. DIFFICULTY & NONCE RACE -->
+    <section id="difficulty" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">3. Difficulty & The Nonce Race</h2>
+      <div class="bg-red-50 dark:bg-red-900/20 border-l-4 border-red-400 p-4 rounded">
+        <p class="text-red-700 dark:text-red-300 text-sm"><strong>Why this matters:</strong> Mining difficulty is Bitcoin's self-regulating mechanism that maintains a steady 10-minute block time regardless of total mining power. This creates predictable issuance and prevents any single entity from dominating the network.</p>
+      </div>
+      <p>To win, miners search for a nonce that makes the block hash smaller than the <span class="font-mono">target</span>. Raise the difficulty to make the target smaller and watch the search time jump.</p>
+      <div class="flex items-center gap-4">
+        <label for="difficultySlider">Difficulty (log scale)</label>
+        <input id="difficultySlider" type="range" min="1" max="4" step="0.5" value="1" class="flex-1">
+        <span id="difficultyVal" class="font-bold w-12 text-center">1</span>
+      </div>
+      <button id="startMining" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded">Mine ⛏️</button>
+              <pre id="miningLog" class="bg-gray-900 dark:bg-gray-800 text-yellow-400 dark:text-yellow-300 p-3 rounded overflow-x-auto h-56 border border-gray-700 dark:border-gray-600"></pre>
+    </section>
+
+    <!-- 4. MINING INCENTIVE & HALVINGS -->
+    <section id="incentive" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+        <h2 class="text-2xl font-semibold">4. Mining Incentive & The Halving</h2>
+        <div class="bg-purple-50 dark:bg-purple-900/20 border-l-4 border-purple-400 p-4 rounded">
+            <p class="text-purple-700 dark:text-purple-300 text-sm"><strong>Why this matters:</strong> The halving creates Bitcoin's predictable monetary policy, making it the hardest money ever created. Unlike fiat currencies that can be printed infinitely, Bitcoin's supply is mathematically capped at 21 million.</p>
+        </div>
+        <p>The first transaction in every block is the <strong>coinbase</strong>. It mints brand‑new bitcoin for the winner plus transaction fees. Every ~210,000 blocks (≈4 years) the reward halves. Adjust the slider to see past & future rewards.</p>
+        <div class="flex items-center gap-4">
+            <label for="halvingSlider" class="whitespace-nowrap">Halving #</label>
+            <input id="halvingSlider" type="range" min="0" max="33" step="1" value="4" class="flex-1">
+            <span id="halvingNum" class="font-bold w-8 text-center">4</span>
+        </div>
+        <p>Block subsidy: <span id="subsidy" class="font-mono font-semibold text-orange-600">3.125 BTC</span> | Active years: <span id="activeYears" class="font-mono font-semibold text-orange-600">2025-2028</span></p>
+        </section>
+        
+    <!-- 5. CONFIRMATIONS & IMMUTABILITY -->
+    <section id="confirmations" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">5. Confirmations & Immutability</h2>
+      <div class="bg-indigo-50 dark:bg-indigo-900/20 border-l-4 border-indigo-400 p-4 rounded">
+        <p class="text-indigo-700 dark:text-indigo-300 text-sm"><strong>Why this matters:</strong> Bitcoin's immutability comes from the exponential cost of rewriting history. To change a transaction, an attacker would need to re-mine all subsequent blocks—a task that becomes exponentially more expensive with each confirmation.</p>
+      </div>
+      <p>Each new block buries the previous ones deeper, making historical tampering astronomically expensive. Click to extend the chain and see confirmations accumulate.</p>
+      <button id="addConfirm" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded">Add Block ➕</button>
+      <div id="chain" class="flex flex-wrap gap-2 mt-2"></div>
+    </section>
+
+    <!-- 6. TIME‑STAMPING DOCUMENTS -->
+    <section id="timestamp" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">6. Timestamping Anything, Forever</h2>
+      <div class="bg-teal-50 dark:bg-teal-900/20 border-l-4 border-teal-400 p-4 rounded">
+        <p class="text-teal-700 dark:text-teal-300 text-sm"><strong>Why this matters:</strong> Bitcoin's blockchain creates the world's most secure timestamp server. Any document hashed and embedded in a block gains immutable proof of existence at that moment in time—a revolutionary capability for legal, scientific, and historical records.</p>
+      </div>
+      <p>Drag &amp; drop a file (or type text) to hash it and imagine embedding that hash in a Bitcoin OP_RETURN. Anyone can later verify it <em>must</em> have existed before the block containing it.</p>
+              <input type="file" id="fileInput" class="mb-2 text-gray-900 dark:text-gray-100">
+      <textarea id="docText" class="p-3 w-full rounded border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-gray-900 dark:text-gray-100" rows="3" placeholder="Or paste some text…"></textarea>
+      <button id="hashDoc" class="bg-orange-500 hover:bg-orange-600 text-white px-6 py-3 rounded mt-2">Hash Document 🔗</button>
+              <pre id="docHashOut" class="bg-gray-900 dark:bg-gray-800 text-purple-300 dark:text-purple-200 p-3 rounded overflow-x-auto border border-gray-700 dark:border-gray-600"></pre>
+    </section>
+
+    <!-- 7. BITCOIN'S IMMUTABLE FOUNDATION -->
+    <section id="conclusion" class="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-8 space-y-6">
+      <h2 class="text-2xl font-semibold">7. Why This Can't Be Copied</h2>
+      <div class="bg-orange-50 dark:bg-orange-900/20 border-l-4 border-orange-400 p-4 rounded">
+        <p class="text-orange-700 dark:text-orange-300 text-sm"><strong>Why this matters:</strong> Bitcoin's unique origin story and network effects create an insurmountable moat. The combination of its fair launch, massive hash rate, and global adoption makes it impossible to replicate—establishing Bitcoin as the ultimate store of value and digital gold.</p>
+      </div>
+      <p>Bitcoin's immaculate conception – zero premine, global launch, fair distribution, and relentless uptime – created a one‑off trust anchor. Competing chains can imitate its code, but not its pristine history nor the gargantuan proof‑of‑work that now backs every sat.</p>
+    </section>
+  </main>
+
+  <footer class="text-center p-6 text-sm text-gray-500">Built with ♥ to help you grok ₿itcoin.</footer>
+
+  <script>
+    // Helper function to convert ArrayBuffer to hex string
+    function arrayBufferToHex(buffer) {
+      return Array.from(new Uint8Array(buffer))
+        .map(b => b.toString(16).padStart(2, '0'))
+        .join('');
+    }
+    
+    // Helper function to create SHA256 hash
+    async function sha256(text) {
+      const encoder = new TextEncoder();
+      const data = encoder.encode(text);
+      const hashBuffer = await crypto.subtle.digest('SHA-256', data);
+      return arrayBufferToHex(hashBuffer);
+    }
+    
+    function initializePage() {
+      console.log('Web Crypto API ready!');
+      
+      // Track hash colors for consistency
+      const hashColorMap = new Map();
+      let colorIndex = 0;
+
+                      // 1. Hashing demo
+        document.getElementById('hashBtn').addEventListener('click', async () => {
+        const msg = document.getElementById('hashInput').value;
+        const hash = await sha256(msg);
+        
+        // Add to hash history
+        const historyDiv = document.getElementById('hashHistory');
+        const entryDiv = document.createElement('div');
+        
+        const hashColors = [
+          'text-lime-400 dark:text-lime-300',
+          'text-cyan-400 dark:text-cyan-300', 
+          'text-purple-400 dark:text-purple-300',
+          'text-pink-400 dark:text-pink-300',
+          'text-orange-400 dark:text-orange-300'
+        ];
+        
+        // Use same color for identical hashes, new color for new hashes
+        let hashColor;
+        if (hashColorMap.has(hash)) {
+          hashColor = hashColorMap.get(hash);
+        } else {
+          hashColor = hashColors[colorIndex % hashColors.length];
+          hashColorMap.set(hash, hashColor);
+          colorIndex++;
+        }
+        
+        entryDiv.className = 'border-b border-gray-700 pb-2 mb-2 last:border-b-0 last:mb-0';
+        entryDiv.innerHTML = `
+          <div class="flex gap-3 text-sm">
+            <span class="${hashColor} font-mono text-xs">${hash}</span>
+            <span class="text-gray-500">←</span>
+            <span class="text-yellow-400 dark:text-yellow-300 font-mono break-all">"${msg}"</span>
+          </div>
+        `;
+        historyDiv.prepend(entryDiv);
+        
+        // Scroll to top to show newest entry
+        historyDiv.parentElement.scrollTop = 0;
+    });
+
+    // 2. Assemble simple candidate block
+    function randomTx(id) {
+      return { txid: id.toString(16).padStart(6, '0'), amount: (Math.random()*0.5).toFixed(4)+' BTC' };
+    }
+    document.getElementById('mineBlockBtn').addEventListener('click', async () => {
+      const mempool = Array.from({length: 4}, (_,i)=> randomTx(Date.now()+i));
+      const prevHash = (await sha256(Math.random().toString())).slice(0,20)+'…';
+      const blockHeight = Math.floor(Math.random() * 100000) + 870000; // Simulate current-ish block height
+      
+      // Create coinbase transaction (always first)
+      const coinbase = {
+        txid: 'coinbase',
+        type: 'coinbase',
+        amount: '3.125 BTC + fees',
+        note: 'Block reward to winning miner'
+      };
+      
+      const block = {
+        height: blockHeight,
+        previous_block_hash: prevHash,
+        transactions: [coinbase, ...mempool], // Coinbase always first
+        nonce: 0,
+        timestamp: new Date().toISOString()
+      };
+      document.getElementById('blockOutput').textContent = JSON.stringify(block, null, 2);
+      
+      // Show explanatory notes
+      document.getElementById('prevHashNote').textContent = prevHash;
+      document.getElementById('prevHeightNote').textContent = (blockHeight - 1).toString();
+      document.getElementById('blockNotes').classList.remove('hidden');
+    });
+
+    // 3. Halving slider
+    const maxSubsidy = 50;
+    document.getElementById('halvingSlider').addEventListener('input', (e)=>{
+      const n = +e.target.value;
+      document.getElementById('halvingNum').textContent = n;
+      const subsidy = maxSubsidy / (2**n);
+      document.getElementById('subsidy').textContent = subsidy.toFixed(8)+' BTC';
+      
+      // Calculate active years for this halving period
+      // Bitcoin halvings: 0:2009-2012, 1:2013-2016, 2:2017-2020, 3:2021-2024, 4:2025-2028, etc.
+      const startYear = 2009 + (n * 4);
+      const endYear = startYear + 3;
+      document.getElementById('activeYears').textContent = `${startYear}-${endYear}`;
+    });
+
+    // 4. Simplified mining loop (toy) – not real PoW speed!
+    document.getElementById('startMining').addEventListener('click', async ()=>{
+      const diff = +document.getElementById('difficultySlider').value;
+      document.getElementById('difficultyVal').textContent = diff;
+      const targetPrefix = '0'.repeat(diff);
+      let nonce = 0, hash;
+      const start = performance.now();
+      while(true){
+        hash = await sha256('candidate'+nonce);
+        if(hash.startsWith(targetPrefix)) break;
+        nonce++;
+        if(nonce % 10000 === 0 && nonce<5e6) {
+          document.getElementById('miningLog').textContent = `Tried ${nonce} nonces…`;
+        }
+        if(nonce>5e6) { hash='Not found within 5M tries'; break; }
+      }
+      const ms = (performance.now()-start).toFixed(0);
+      document.getElementById('miningLog').textContent = `Found nonce ${nonce} in ${ms} ms\nHash: ${hash}`;
+    });
+
+    // 5. Add confirmations
+    let height = 0;
+    document.getElementById('addConfirm').addEventListener('click', ()=>{
+      height++;
+      const blockEl = document.createElement('div');
+      blockEl.textContent = `Block #${height}`;
+      blockEl.className = 'px-4 py-2 bg-green-600 text-white rounded shadow fade-enter';
+      document.getElementById('chain').prepend(blockEl);
+      requestAnimationFrame(()=> blockEl.classList.add('fade-enter-active'));
+    });
+
+    // 6. Document hash
+    document.getElementById('hashDoc').addEventListener('click', async ()=>{
+      const fileInput = document.getElementById('fileInput');
+      if(fileInput.files[0]) {
+        const buf = await fileInput.files[0].arrayBuffer();
+        const hash = arrayBufferToHex(await crypto.subtle.digest('SHA-256', buf));
+        document.getElementById('docHashOut').textContent = hash;
+      } else {
+        const txt = document.getElementById('docText').value;
+        const hash = await sha256(txt);
+        document.getElementById('docHashOut').textContent = hash;
+      }
+    });
+    
+    }
+    
+    // Start initialization
+    initializePage();
+  </script>
+</Layout>

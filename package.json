@@ -17,6 +17,7 @@
     "@astrojs/tailwind": "^6.0.2",
     "@fontsource/inter": "^5.0.17",
     "astro": "^5.6.1",
+    "crypto-js": "^4.2.0",
     "mermaid": "^11.4.0",
     "prismjs": "^1.29.0",
     "svelte": "^5.33.2",
@@ -26,6 +27,7 @@
   },
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee",
   "devDependencies": {
-    "@tailwindcss/typography": "^0.5.15"
+    "@tailwindcss/typography": "^0.5.15",
+    "@types/crypto-js": "^4.2.2"
   }
 }

@@ -32,4 +32,6 @@ pnpm-debug.log*
 python/news_aggregator/news_feed_env/
 python/news_aggregator/__pycache__/
 
+public/news_feeds/
+
 astro-website.tar

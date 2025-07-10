@@ -75,20 +75,18 @@ ENV VIRTUAL_ENV=/opt/news_feed_env
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV PYTHONPATH="/app/python/news_aggregator:$PYTHONPATH"
 
-# Create cron job for news feed updates (every 2 hours)
-RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/news-feed-update && \
-    chmod 0644 /etc/cron.d/news-feed-update && \
-    crontab /etc/cron.d/news-feed-update && \
-    touch /var/log/news_feed_cron.log
+# Create cron jobs for both news feed and Bitcoin price updates
+RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/automated-updates && \
+    echo "0 */4 * * * cd /app && /opt/news_feed_env/bin/python python/bitcoin/populate_price_histories.py >> /var/log/bitcoin_price_cron.log 2>&1" >> /etc/cron.d/automated-updates && \
+    chmod 0644 /etc/cron.d/automated-updates && \
+    crontab /etc/cron.d/automated-updates && \
+    touch /var/log/news_feed_cron.log && \
+    touch /var/log/bitcoin_price_cron.log
 
 # Create startup script
 RUN echo '#!/bin/bash\n\
 # Start cron daemon\n\
 cron\n\
-\n\
-# Run initial news feed generation in background\n\
-echo "Running initial news feed generation in background..."\n\
-cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py &\n\
 \n\
 # Start the main application\n\
 exec pnpm start\n\
