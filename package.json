@@ -9,7 +9,9 @@
     "start": "astro preview --host",
     "build": "astro build",
     "preview": "astro preview",
-    "astro": "astro"
+    "astro": "astro",
+    "generate-thumbnails": "node scripts/generate-thumbnails.js",
+    "optimize-article-images": "node scripts/optimize-article-images.js"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.3",
@@ -28,6 +30,7 @@
   "packageManager": "pnpm@9.12.3+sha512.cce0f9de9c5a7c95bef944169cc5dfe8741abfb145078c0d508b868056848a87c81e626246cb60967cbd7fd29a6c062ef73ff840d96b3c86c40ac92cf4a813ee",
   "devDependencies": {
     "@tailwindcss/typography": "^0.5.15",
-    "@types/crypto-js": "^4.2.2"
+    "@types/crypto-js": "^4.2.2",
+    "sharp": "^0.34.3"
   }
 }

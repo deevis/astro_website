@@ -1,0 +1,2 @@
+# This file ensures the thumbnails directory is included in version control
+# Generated thumbnail files can be ignored by adding them to .gitignore if desired 
