@@ -2,14 +2,15 @@
 """
 Bitcoin Price History Updater
 Fetches current Bitcoin price from CoinGecko API and updates price_data.csv files
+Also populates missing days within the last 60 days
 """
 
 import csv
 import os
 import sys
 import logging
-from datetime import datetime, timezone
-from typing import Optional, List, Dict, Any
+from datetime import datetime, timezone, timedelta
+from typing import Optional, List, Dict, Any, Set
 
 # External dependencies
 try:
@@ -61,9 +62,11 @@ class BitcoinPriceUpdater:
         # File paths - handle both local and production environments
         self.file_paths = self._get_file_paths()
         
-        # CoinGecko API endpoint
-        self.api_url = 'https://api.coingecko.com/api/v3/simple/price'
-        self.params = {
+        # CoinGecko API endpoints
+        self.current_price_url = 'https://api.coingecko.com/api/v3/simple/price'
+        self.historical_price_url = 'https://api.coingecko.com/api/v3/coins/bitcoin/history'
+        
+        self.current_price_params = {
             'ids': 'bitcoin',
             'vs_currencies': 'usd',
             'include_24hr_change': 'false'
@@ -99,9 +102,9 @@ class BitcoinPriceUpdater:
     def fetch_current_price(self) -> Optional[float]:
         """Fetch current Bitcoin price from CoinGecko API"""
         try:
-            logger.info("Fetching Bitcoin price from CoinGecko API...")
+            logger.info("Fetching current Bitcoin price from CoinGecko API...")
             
-            response = self.session.get(self.api_url, params=self.params, timeout=30)
+            response = self.session.get(self.current_price_url, params=self.current_price_params, timeout=30)
             response.raise_for_status()
             
             data = response.json()
@@ -111,15 +114,96 @@ class BitcoinPriceUpdater:
                 logger.error("Failed to extract Bitcoin price from API response")
                 return None
                 
-            logger.info(f"Successfully fetched Bitcoin price: ${price:,.2f}")
+            logger.info(f"Successfully fetched current Bitcoin price: ${price:,.2f}")
             return float(price)
             
         except requests.exceptions.RequestException as e:
-            logger.error(f"Error fetching Bitcoin price: {e}")
+            logger.error(f"Error fetching current Bitcoin price: {e}")
             return None
         except (KeyError, ValueError, TypeError) as e:
-            logger.error(f"Error parsing Bitcoin price response: {e}")
+            logger.error(f"Error parsing current Bitcoin price response: {e}")
             return None
+    
+    def fetch_historical_price(self, date: str) -> Optional[float]:
+        """Fetch historical Bitcoin price for a specific date from CoinGecko API"""
+        try:
+            logger.info(f"Fetching historical Bitcoin price for {date}...")
+            
+            # CoinGecko historical API expects date in DD-MM-YYYY format
+            date_obj = datetime.strptime(date, '%Y-%m-%d')
+            formatted_date = date_obj.strftime('%d-%m-%Y')
+            
+            params = {'date': formatted_date}
+            response = self.session.get(self.historical_price_url, params=params, timeout=30)
+            response.raise_for_status()
+            
+            data = response.json()
+            
+            # The historical API returns price in market_data.current_price.usd
+            price = data.get('market_data', {}).get('current_price', {}).get('usd')
+            
+            if price is None:
+                logger.error(f"Failed to extract historical Bitcoin price for {date}")
+                return None
+                
+            logger.info(f"Successfully fetched historical Bitcoin price for {date}: ${price:,.2f}")
+            return float(price)
+            
+        except requests.exceptions.RequestException as e:
+            logger.error(f"Error fetching historical Bitcoin price for {date}: {e}")
+            return None
+        except (KeyError, ValueError, TypeError) as e:
+            logger.error(f"Error parsing historical Bitcoin price response for {date}: {e}")
+            return None
+    
+    def get_existing_dates(self, file_path: str) -> Set[str]:
+        """Get all existing dates from the CSV file"""
+        existing_dates = set()
+        
+        try:
+            if not os.path.exists(file_path):
+                logger.warning(f"CSV file not found: {file_path}")
+                return existing_dates
+                
+            with open(file_path, 'r', newline='', encoding='utf-8') as file:
+                reader = csv.DictReader(file)
+                for row in reader:
+                    existing_dates.add(row['date'])
+                    
+            logger.info(f"Found {len(existing_dates)} existing dates in {file_path}")
+            return existing_dates
+            
+        except Exception as e:
+            logger.error(f"Error reading existing dates from CSV file {file_path}: {e}")
+            return existing_dates
+    
+    def get_missing_dates(self, file_path: str, days_back: int = 60) -> List[str]:
+        """Get list of missing dates within the last specified number of days"""
+        existing_dates = self.get_existing_dates(file_path)
+        
+        # Generate all dates for the last N days
+        today = datetime.now(timezone.utc).date()
+        all_dates = []
+        
+        for i in range(days_back):
+            date = today - timedelta(days=i)
+            date_str = date.strftime('%Y-%m-%d')
+            all_dates.append(date_str)
+        
+        # Find missing dates
+        missing_dates = []
+        for date_str in all_dates:
+            if date_str not in existing_dates:
+                missing_dates.append(date_str)
+        
+        # Sort missing dates in ascending order (oldest first)
+        missing_dates.sort()
+        
+        logger.info(f"Found {len(missing_dates)} missing dates in the last {days_back} days")
+        if missing_dates:
+            logger.info(f"Missing dates: {missing_dates}")
+        
+        return missing_dates
     
     def get_latest_entry_date(self, file_path: str) -> Optional[str]:
         """Get the date of the latest entry in the CSV file"""
@@ -152,9 +236,9 @@ class BitcoinPriceUpdater:
                 logger.warning(f"CSV file not found: {file_path}")
                 return False
                 
-            # Check if entry for today already exists
-            latest_date = self.get_latest_entry_date(file_path)
-            if latest_date == date:
+            # Check if entry for this date already exists
+            existing_dates = self.get_existing_dates(file_path)
+            if date in existing_dates:
                 logger.info(f"Entry for {date} already exists in {file_path}")
                 return True
                 
@@ -170,12 +254,72 @@ class BitcoinPriceUpdater:
             logger.error(f"Error updating CSV file {file_path}: {e}")
             return False
     
+    def populate_missing_dates(self, days_back: int = 60) -> bool:
+        """Populate missing dates in all CSV files within the specified number of days"""
+        logger.info(f"Starting to populate missing dates within the last {days_back} days...")
+        
+        success_count = 0
+        total_files = len(self.file_paths)
+        
+        for file_path in self.file_paths:
+            logger.info(f"Processing file: {file_path}")
+            
+            # Get missing dates for this file
+            missing_dates = self.get_missing_dates(file_path, days_back)
+            
+            if not missing_dates:
+                logger.info(f"No missing dates found for {file_path}")
+                success_count += 1
+                continue
+            
+            # Fetch and update prices for missing dates
+            file_success = True
+            for date in missing_dates:
+                # Add small delay between API calls to be respectful
+                import time
+                time.sleep(1)
+                
+                price = self.fetch_historical_price(date)
+                if price is not None:
+                    if not self.update_csv_file(file_path, date, price):
+                        file_success = False
+                        logger.error(f"Failed to update {file_path} with {date}")
+                else:
+                    file_success = False
+                    logger.error(f"Failed to fetch price for {date}")
+            
+            if file_success:
+                success_count += 1
+                logger.info(f"Successfully populated all missing dates for {file_path}")
+            else:
+                logger.warning(f"Some dates failed to populate for {file_path}")
+        
+        if success_count == total_files:
+            logger.info("Successfully populated missing dates for all files")
+            return True
+        else:
+            logger.warning(f"Successfully populated {success_count} out of {total_files} files")
+            return False
+    
     def update_all_files(self) -> bool:
+        """Update all CSV files with current Bitcoin price and populate missing dates"""
+        logger.info("Starting comprehensive update process...")
+        
+        # First, populate missing dates
+        missing_dates_success = self.populate_missing_dates(60)
+        
+        # Then, update with current price
+        current_price_success = self.update_current_price()
+        
+        # Return true if both operations succeeded
+        return missing_dates_success and current_price_success
+    
+    def update_current_price(self) -> bool:
         """Update all CSV files with current Bitcoin price"""
         # Get current price
         price = self.fetch_current_price()
         if price is None:
-            logger.error("Failed to fetch Bitcoin price, aborting update")
+            logger.error("Failed to fetch current Bitcoin price, aborting current price update")
             return False
             
         # Get today's date
@@ -187,13 +331,13 @@ class BitcoinPriceUpdater:
             if self.update_csv_file(file_path, today, price):
                 success_count += 1
             else:
-                logger.warning(f"Failed to update {file_path}")
+                logger.warning(f"Failed to update {file_path} with current price")
         
         if success_count == 0:
-            logger.error("Failed to update any CSV files")
+            logger.error("Failed to update any CSV files with current price")
             return False
         else:
-            logger.info(f"Successfully updated {success_count} CSV file(s)")
+            logger.info(f"Successfully updated {success_count} CSV file(s) with current price")
             return True
     
     def validate_csv_structure(self, file_path: str) -> bool:
@@ -264,7 +408,7 @@ def main():
         logger.error("No valid CSV files found to update")
         sys.exit(1)
     
-    # Update the files
+    # Update the files (includes both missing dates and current price)
     if updater.update_all_files():
         logger.info("Bitcoin price update completed successfully")
         sys.exit(0)
