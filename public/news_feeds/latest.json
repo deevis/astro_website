@@ -1,18 +1,18 @@
 {
   "news_feed": {
-    "generated_at": "2025-06-21T01:07:16.427196+00:00",
+    "generated_at": "2025-07-12T06:02:18.423620+00:00",
     "version": "4.0",
     "system": "production_minimal",
     "articles": [
       {
-        "id": "a48415443169",
-        "title": "Bitcoin futures premium falls to 3-month low despite strong BTC ETF inflows",
-        "url": "https://cointelegraph.com/news/bitcoin-futures-premium-falls-to-3-month-low-despite-strong-btc-etf-inflows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "id": "d8ce0794c854",
+        "title": "Altcoins are rocketing, Bitcoin dominance hasn’t ‘even sneezed’: Analyst",
+        "url": "https://cointelegraph.com/news/altcoin-crypto-market-surging-bitcoin-dominance-analyst?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
         "source": "Cointelegraph.com News",
-        "author": "Cointelegraph by Marcel Pechman",
-        "published_date": "2025-06-21T01:22:20+01:00",
+        "author": "Cointelegraph by Ciaran Lyons",
+        "published_date": "2025-07-12T06:11:56+01:00",
         "category": "bitcoin",
-        "content_preview": "Bitcoin derivatives traders turned cautious, despite steady inflows to the spot BTC ETFs.",
+        "content_preview": "Crypto analyst Matthew Hyland suggests altcoins will be “ripping” much more when Bitcoin Dominance drops to 45%.",
         "importance": "medium",
         "tags": [
           "bitcoin"
@@ -22,243 +22,144 @@
         "sources": [
           {
             "name": "Cointelegraph.com News",
-            "url": "https://cointelegraph.com/news/bitcoin-futures-premium-falls-to-3-month-low-despite-strong-btc-etf-inflows?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-            "author": "Cointelegraph by Marcel Pechman",
-            "published_date": "2025-06-21T01:22:20+01:00"
+            "url": "https://cointelegraph.com/news/altcoin-crypto-market-surging-bitcoin-dominance-analyst?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "author": "Cointelegraph by Ciaran Lyons",
+            "published_date": "2025-07-12T06:11:56+01:00"
           }
         ]
       },
       {
-        "id": "4ee67c8a55da",
-        "title": "New Code.org Curriculum Aims To Make Schoolkids Python-Literate and AI-Ready",
-        "url": "https://developers.slashdot.org/story/25/06/09/2254257/new-codeorg-curriculum-aims-to-make-schoolkids-python-literate-and-ai-ready?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "BeauHD",
-        "published_date": "2025-06-21T01:06:35.159549+00:00",
-        "category": "software_dev",
-        "content_preview": "Longtime Slashdot reader theodp writes: The old Code.org curriculum page for middle and high school students has been changed to include a new Python Lab in the tech-backed nonprofit's K-12 offerings. Elsewhere on the site, a Computer Science and AI Foundations curriculum is described that includes ...",
-        "importance": "medium",
-        "tags": [
-          "software_dev",
-          "programming",
-          "language"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://developers.slashdot.org/story/25/06/09/2254257/new-codeorg-curriculum-aims-to-make-schoolkids-python-literate-and-ai-ready?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-06-21T01:06:35.159549+00:00"
-          }
-        ]
-      },
-      {
-        "id": "405b3738edef",
-        "title": "Bill Atkinson, Hypercard Creator and Original Mac Team Member, Dies at Age 74",
-        "url": "https://apple.slashdot.org/story/25/06/08/016210/bill-atkinson-hypercard-creator-and-original-mac-team-member-dies-at-age-74?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "id": "edf23a8e74fb",
+        "title": "Diffusion + Coding = DiffuCode.  How Apple Released a Weirdly Interesting Coding Language Model",
+        "url": "https://developers.slashdot.org/story/25/07/05/1259255/diffusion--coding--diffucode-how-apple-released-a-weirdly-interesting-coding-language-model?utm_source=rss1.0mainlinkanon&utm_medium=feed",
         "source": "Slashdot: Developers",
         "author": "EditorDavid",
-        "published_date": "2025-06-21T01:06:35.159549+00:00",
+        "published_date": "2025-07-12T06:01:35.998555+00:00",
         "category": "software_dev",
-        "content_preview": "AppleInsider reports:\n\nThe engineer behind much of the Mac's early graphical user interfaces, QuickDraw, MacPaint, Hypercard and much more, William D. \"Bill\" Atkinson, died on June 5 of complications from pancreatic cancer... \nAtkinson, who built a post-Apple career as a noted nature photographer, w...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://apple.slashdot.org/story/25/06/08/016210/bill-atkinson-hypercard-creator-and-original-mac-team-member-dies-at-age-74?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "EditorDavid",
-            "published_date": "2025-06-21T01:06:35.159549+00:00"
-          }
-        ]
-      },
-      {
-        "id": "dcc386dd7d54",
-        "title": "Apple Migrates Its Password Monitoring Service to Swift from Java, Gains 40% Performance Uplift",
-        "url": "https://apple.slashdot.org/story/25/06/15/2126220/apple-migrates-its-password-monitoring-service-to-swift-from-java-gains-40-performance-uplift?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "EditorDavid",
-        "published_date": "2025-06-21T01:06:35.158549+00:00",
-        "category": "software_dev",
-        "content_preview": "Meta and AWS have used Rust, and Netflix uses Go,reports the programming news site InfoQ. But using another language, Apple recently \"migrated its global Password Monitoring service from Java to Swift, achieving a 40% increase in throughput, and significantly reducing memory usage.\" \n\n\nThis freed up...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://apple.slashdot.org/story/25/06/15/2126220/apple-migrates-its-password-monitoring-service-to-swift-from-java-gains-40-performance-uplift?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "EditorDavid",
-            "published_date": "2025-06-21T01:06:35.158549+00:00"
-          }
-        ]
-      },
-      {
-        "id": "5208042e0ddc",
-        "title": "Python Creator Guido van Rossum Asks:  Is 'Worse is Better' Still True for Programming Languages?",
-        "url": "https://developers.slashdot.org/story/25/06/14/2359251/python-creator-guido-van-rossum-asks-is-worse-is-better-still-true-for-programming-languages?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "EditorDavid",
-        "published_date": "2025-06-21T01:06:35.158549+00:00",
-        "category": "software_dev",
-        "content_preview": "In 1989 a computer scientist argued that more functionality in software actually lowers usability and practicality — leading to the counterintuitive proposition that \"worse is better\". But is that still true? \n\nPython's original creator Guido van Rossum addressed the question last month in a lightni...",
-        "importance": "medium",
-        "tags": [
-          "software_dev",
-          "programming",
-          "language"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://developers.slashdot.org/story/25/06/14/2359251/python-creator-guido-van-rossum-asks-is-worse-is-better-still-true-for-programming-languages?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "EditorDavid",
-            "published_date": "2025-06-21T01:06:35.158549+00:00"
-          }
-        ]
-      },
-      {
-        "id": "ec174547e551",
-        "title": "UK Universities Sign $13.3 Million Deal To Avoid Oracle Java Back Fees",
-        "url": "https://developers.slashdot.org/story/25/06/13/2034219/uk-universities-sign-133-million-deal-to-avoid-oracle-java-back-fees?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "BeauHD",
-        "published_date": "2025-06-21T01:06:35.158549+00:00",
-        "category": "software_dev",
-        "content_preview": "An anonymous reader quotes a report from The Register: UK universities and colleges have signed a framework worth up to 9.86 million pounds ($13.33 million) with Oracle to use its controversial Java SE Universal Subscription model, in exchange for a \"waiver of historic fees due for any institutions ...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://developers.slashdot.org/story/25/06/13/2034219/uk-universities-sign-133-million-deal-to-avoid-oracle-java-back-fees?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-06-21T01:06:35.158549+00:00"
-          }
-        ]
-      },
-      {
-        "id": "daf48b5faa5e",
-        "title": "Congestion Pricing in Manhattan is a Predictable Success",
-        "url": "https://news.slashdot.org/story/25/06/20/205237/congestion-pricing-in-manhattan-is-a-predictable-success?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "msmash",
-        "published_date": "2025-06-21T01:06:02.508134+00:00",
-        "category": "ai_progress",
-        "content_preview": "Manhattan's congestion pricing program has reduced traffic by 10% and cut car-noise complaints by 70% in its first six months of operation, according to city data. The $9 daily toll for vehicles entering Manhattan below 60th Street began January 5, generating approximately $50 million monthly for su...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://news.slashdot.org/story/25/06/20/205237/congestion-pricing-in-manhattan-is-a-predictable-success?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "msmash",
-            "published_date": "2025-06-21T01:06:02.508134+00:00"
-          }
-        ]
-      },
-      {
-        "id": "b478b6dac7e1",
-        "title": "BBC Threatens Legal Action Against Perplexity AI Over Content Scraping",
-        "url": "https://news.slashdot.org/story/25/06/20/2022200/bbc-threatens-legal-action-against-perplexity-ai-over-content-scraping?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-06-21T01:06:02.507132+00:00",
-        "category": "ai_progress",
-        "content_preview": "Ancient Slashdot reader Alain Williams shares a report from The Guardian: The BBC is threatening legal action against Perplexity AI, in the corporation's first move to protect its content from being scraped without permission to build artificial intelligence technology. The corporation has sent a le...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://news.slashdot.org/story/25/06/20/2022200/bbc-threatens-legal-action-against-perplexity-ai-over-content-scraping?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-06-21T01:06:02.507132+00:00"
-          }
-        ]
-      },
-      {
-        "id": "24891a5b72a8",
-        "title": "Meta Discussed Buying Perplexity Before Investing In Scale AI",
-        "url": "https://meta.slashdot.org/story/25/06/20/2015248/meta-discussed-buying-perplexity-before-investing-in-scale-ai?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-06-21T01:06:02.507132+00:00",
-        "category": "ai_progress",
-        "content_preview": "According to Bloomberg (paywalled), Meta reportedly explored acquiring Perplexity AI but the deal fell through, with conflicting accounts on whether it was mutual or Perplexity backed out. Instead, Meta invested $14.3 billion in Scale AI, taking a 49% stake as part of its broader push to catch up wi...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://meta.slashdot.org/story/25/06/20/2015248/meta-discussed-buying-perplexity-before-investing-in-scale-ai?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-06-21T01:06:02.507132+00:00"
-          }
-        ]
-      },
-      {
-        "id": "b00f1c78d5d8",
-        "title": "Applebee's and IHOP Plan To Introduce AI in Restaurants",
-        "url": "https://slashdot.org/story/25/06/20/1954245/applebees-and-ihop-plan-to-introduce-ai-in-restaurants?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "msmash",
-        "published_date": "2025-06-21T01:06:02.507132+00:00",
-        "category": "ai_progress",
-        "content_preview": "The company behind Applebee's and IHOP plans to use AI in its restaurants and behind the scenes to streamline operations and encourage repeat customers. From a report: Dine Brands is adding AI-infused tech support for all of its franchisees, as well as an AI-powered \"personalization engine\" that hel...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://slashdot.org/story/25/06/20/1954245/applebees-and-ihop-plan-to-introduce-ai-in-restaurants?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "msmash",
-            "published_date": "2025-06-21T01:06:02.507132+00:00"
-          }
-        ]
-      },
-      {
-        "id": "e3bd7e80fb91",
-        "title": "Record DDoS Pummels Site With Once-Unimaginable 7.3Tbps of Junk Traffic",
-        "url": "https://yro.slashdot.org/story/25/06/20/2010218/record-ddos-pummels-site-with-once-unimaginable-73tbps-of-junk-traffic?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-06-21T01:06:02.507132+00:00",
-        "category": "ai_progress",
-        "content_preview": "An anonymous reader quotes a report from Ars Technica: Large-scale attacks designed to bring down Internet services by sending them more traffic than they can process keep getting bigger, with the largest one yet, measured at 7.3 terabits per second, being reported Friday by Internet security and pe...",
+        "content_preview": "\"Apple quietly dropped a new AI model on Hugging Face with an interesting twist,\" writes 9to5Mac. \"Instead of writing code like traditional LLMs generate text (left to right, top to bottom), it can also write out of order, and improve multiple chunks at once.\" \n\n\"The result is faster code generation...",
         "importance": "high",
         "tags": [
+          "software_dev",
+          "release"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot: Developers",
+            "url": "https://developers.slashdot.org/story/25/07/05/1259255/diffusion--coding--diffucode-how-apple-released-a-weirdly-interesting-coding-language-model?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-12T06:01:35.998555+00:00"
+          }
+        ]
+      },
+      {
+        "id": "e31bb0394a1b",
+        "title": "Hugging Face Launches $299 Robot That Could Disrupt Entire Robotics Industry",
+        "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:35.998091+00:00",
+        "category": "software_dev",
+        "content_preview": "An anonymous reader quotes a report from VentureBeat: Hugging Face, the $4.5 billion artificial intelligence platform that has become the GitHub of machine learning, announced Tuesday the launch of Reachy Mini, a $299 desktop robot designed to bring AI-powered robotics to millions of developers worl...",
+        "importance": "high",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot: Developers",
+            "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:35.998091+00:00"
+          }
+        ]
+      },
+      {
+        "id": "506cb3b35f58",
+        "title": "Red Hat Gives Developers Free Access To Enterprise Linux For Business Use",
+        "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:35.997696+00:00",
+        "category": "software_dev",
+        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Red Hat has introduced a new option that gives developers a fast lane to enterprise-grade Linux without needing to go through IT. The new release, called Red Hat Enterprise Linux for Business Developers, is now available for free. It offers direct, self-s...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot: Developers",
+            "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:35.997696+00:00"
+          }
+        ]
+      },
+      {
+        "id": "d00a96e3c73d",
+        "title": "Google Replaces Android Developer Preview With Rolling Canary Channel",
+        "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:35.997371+00:00",
+        "category": "software_dev",
+        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Android is changing how it gives developers access to early features. The company is replacing its old Developer Preview model with a new Canary channel that provides rolling updates all year long. This new approach is meant to give developers earlier and...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot: Developers",
+            "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:35.997371+00:00"
+          }
+        ]
+      },
+      {
+        "id": "9229defdbe72",
+        "title": "'Coding is Dead': University of Washington CS Program Rethinks Curriculum For the AI Era",
+        "url": "https://developers.slashdot.org/story/25/07/11/1418225/coding-is-dead-university-of-washington-cs-program-rethinks-curriculum-for-the-ai-era?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "msmash",
+        "published_date": "2025-07-12T06:01:35.996861+00:00",
+        "category": "software_dev",
+        "content_preview": "The University of Washington's Paul G. Allen School of Computer Science & Engineering is overhauling its approach to computer science education as AI reshapes the tech industry. Director Magdalena Balazinska has declared that \"coding, or the translation of a precise design into software instructions...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot: Developers",
+            "url": "https://developers.slashdot.org/story/25/07/11/1418225/coding-is-dead-university-of-washington-cs-program-rethinks-curriculum-for-the-ai-era?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "msmash",
+            "published_date": "2025-07-12T06:01:35.996861+00:00"
+          }
+        ]
+      },
+      {
+        "id": "3142d8e31efb",
+        "title": "JPMorgan Tells Fintechs They Have To Pay Up For Customer Data",
+        "url": "https://news.slashdot.org/story/25/07/11/1945201/jpmorgan-tells-fintechs-they-have-to-pay-up-for-customer-data?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:03.438286+00:00",
+        "category": "ai_progress",
+        "content_preview": "An anonymous reader quotes a report from Bloomberg: JPMorgan Chase has told financial-technology companies that it will start charging fees amounting to hundreds of millions of dollars for access to their customers' bank account information -- a move that threatens to upend the industry's business m...",
+        "importance": "medium",
+        "tags": [
           "ai_progress"
         ],
         "aggregated": false,
@@ -266,172 +167,21 @@
         "sources": [
           {
             "name": "Slashdot",
-            "url": "https://yro.slashdot.org/story/25/06/20/2010218/record-ddos-pummels-site-with-once-unimaginable-73tbps-of-junk-traffic?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "url": "https://news.slashdot.org/story/25/07/11/1945201/jpmorgan-tells-fintechs-they-have-to-pay-up-for-customer-data?utm_source=rss1.0mainlinkanon&utm_medium=feed",
             "author": "BeauHD",
-            "published_date": "2025-06-21T01:06:02.507132+00:00"
+            "published_date": "2025-07-12T06:01:03.438286+00:00"
           }
         ]
       },
       {
-        "id": "51cf1a20d4f2",
-        "title": "Azure Fundamentals: Microsoft.Features",
-        "url": "https://dev.to/devopsfundamentals/azure-fundamentals-microsoftfeatures-3ki9",
-        "source": "DEV Community",
-        "author": "DevOps Fundamental",
-        "published_date": "2025-06-21T00:45:12+00:00",
-        "category": "software_dev",
-        "content_preview": "\n  \n  \n  Unleashing Feature Flags: A Deep Dive into Microsoft.Features on Azure\n\nImagine you're a product manager at a rapidly growing e-commerce company. You've been working on a major overhaul of the checkout process, promising a 20% increase in conversion rates. But deploying this change directly...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/devopsfundamentals/azure-fundamentals-microsoftfeatures-3ki9",
-            "author": "DevOps Fundamental",
-            "published_date": "2025-06-21T00:45:12+00:00"
-          }
-        ]
-      },
-      {
-        "id": "11e6bdd1af83",
-        "title": "Mengenal Modul Fungsi: Cara Mendefinisikan dan Menjalankan Fungsi di Bahasa Earl",
-        "url": "https://dev.to/dev_nazwashabrina/mengenal-modul-fungsi-cara-mendefinisikan-dan-menjalankan-fungsi-di-bahasa-earl-b6h",
-        "source": "DEV Community",
-        "author": "Nazwa Shabrina Zain",
-        "published_date": "2025-06-21T00:34:13+00:00",
-        "category": "software_dev",
-        "content_preview": "Dalam bahasa pemrograman Earl, fungsi adalah langkah penting menju strukstur kode modular dan teorganisir. Modul fungsi bertugas menambahkan kemampuan tersebut. Artikel ini akan membahas bagaimana modul ini bekerja, apa saja sintaks yang didukung, dan bagaimana fungsi didefinisikan bisa dijalankan.\n...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/dev_nazwashabrina/mengenal-modul-fungsi-cara-mendefinisikan-dan-menjalankan-fungsi-di-bahasa-earl-b6h",
-            "author": "Nazwa Shabrina Zain",
-            "published_date": "2025-06-21T00:34:13+00:00"
-          }
-        ]
-      },
-      {
-        "id": "06317882b6a1",
-        "title": "Developer Presence: The Underrated Skill for Focused & Resilient Code",
-        "url": "https://dev.to/tonystpierre/developer-presence-the-underrated-skill-for-focused-resilient-code-3nc4",
-        "source": "DEV Community",
-        "author": "Tony St Pierre",
-        "published_date": "2025-06-21T00:21:29+00:00",
-        "category": "software_dev",
-        "content_preview": "\n\"Toughness is how you endure. Calm is how you respond. Presence is how you lead.\"\n\nThe sprint drags. Bugs multiply. Focus frays.\nAt some point, the question shifts from \"What's next?\" to \"Where am I right now?\"\nNot in the backlog. It is not in a tab, lost to context switching.\nBut right here, finge...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/tonystpierre/developer-presence-the-underrated-skill-for-focused-resilient-code-3nc4",
-            "author": "Tony St Pierre",
-            "published_date": "2025-06-21T00:21:29+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f5a1eed0ae3e",
-        "title": "Revolutionizing Cloud Cost Management: The Power of AI in FinOps",
-        "url": "https://dev.to/vaib/revolutionizing-cloud-cost-management-the-power-of-ai-in-finops-3e2d",
-        "source": "DEV Community",
-        "author": "Coder",
-        "published_date": "2025-06-21T00:01:44+00:00",
-        "category": "software_dev",
-        "content_preview": "The rapidly evolving landscape of cloud computing presents organizations with unparalleled opportunities for scalability and innovation. However, this flexibility comes with a significant challenge: effectively managing escalating and often unpredictable cloud costs. As global spending on public clo...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/vaib/revolutionizing-cloud-cost-management-the-power-of-ai-in-finops-3e2d",
-            "author": "Coder",
-            "published_date": "2025-06-21T00:01:44+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f69f46daab0a",
-        "title": "Unlocking Speed: Your Essential Guide to CDN Resources",
-        "url": "https://dev.to/vaib/unlocking-speed-your-essential-guide-to-cdn-resources-3fli",
-        "source": "DEV Community",
-        "author": "Coder",
-        "published_date": "2025-06-21T00:01:06+00:00",
-        "category": "software_dev",
-        "content_preview": "Ever wondered how websites load so incredibly fast, even when they're serving content to users across the globe? The unsung heroes behind this magic are Content Delivery Networks, or CDNs. Imagine a vast network of strategically placed servers worldwide, all working together to bring content closer ...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/vaib/unlocking-speed-your-essential-guide-to-cdn-resources-3fli",
-            "author": "Coder",
-            "published_date": "2025-06-21T00:01:06+00:00"
-          }
-        ]
-      },
-      {
-        "id": "agg_87dc205c",
-        "title": "Bitcoin’s Dominance Could Kill Altseason Dreams, Analyst Warns",
-        "url": "https://www.newsbtc.com/news/bitcoin/bitcoins-dominance-could-kill-altseason-dreams-analyst-warns/",
-        "source": "NewsBTC",
-        "author": "Christian Encila",
-        "published_date": "2025-06-21T00:00:53+00:00",
-        "category": "bitcoin",
-        "content_preview": "According to an analyst on X, Bitcoin’s grip on the market looks too strong for altcoins to break free any time soon. Bitcoin’s price ticked up to around $104,000 after climbing 0.4%. It had dipped briefly to $103,000 but buyers stepped in fast. Related Reading: Crypto Gets A Green Light From Spanis...",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "multi-source"
-        ],
-        "sources": [
-          {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/news/bitcoin/bitcoins-dominance-could-kill-altseason-dreams-analyst-warns/",
-            "author": "Christian Encila",
-            "published_date": "2025-06-21T00:00:53+00:00"
-          },
-          {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/news/bitcoin/bitcoin-bullish-divergence/",
-            "author": "Scott Matherson",
-            "published_date": "2025-06-20T22:30:20+00:00"
-          }
-        ],
-        "source_count": 2,
-        "aggregated": true
-      },
-      {
-        "id": "ff1f63ae3b2a",
-        "title": "Hospital cyber attacks cost $600K/hour. Here’s how AI is changing the math",
-        "url": "https://venturebeat.com/security/hospital-cyber-attacks-cost-600k-hour-heres-how-ai-is-changing-the-math/",
-        "source": "AI News | VentureBeat",
-        "author": "Taryn Plumb",
-        "published_date": "2025-06-20T23:16:20+00:00",
+        "id": "df20f72aadaf",
+        "title": "iFixit: the Switch 2 Pro is a 'Piss-Poor Excuse For a Controller'",
+        "url": "https://games.slashdot.org/story/25/07/11/1936226/ifixit-the-switch-2-pro-is-a-piss-poor-excuse-for-a-controller?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:03.437887+00:00",
         "category": "ai_progress",
-        "content_preview": "How Alberta Health Services is using advanced AI to bolster its defenses as attackers increasingly target healthcare facilities.",
+        "content_preview": "iFixit has harsh words for Nintendo's $85 Switch 2 Pro controller, calling it a \"piss-poor excuse for a controller\" due to its difficult repairability, use of outdated drift-prone joysticks, and poor internal accessibility. The Verge reports: Opening the controller requires you to first forcefully r...",
         "importance": "medium",
         "tags": [
           "ai_progress"
@@ -440,23 +190,265 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/security/hospital-cyber-attacks-cost-600k-hour-heres-how-ai-is-changing-the-math/",
-            "author": "Taryn Plumb",
-            "published_date": "2025-06-20T23:16:20+00:00"
+            "name": "Slashdot",
+            "url": "https://games.slashdot.org/story/25/07/11/1936226/ifixit-the-switch-2-pro-is-a-piss-poor-excuse-for-a-controller?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:03.437887+00:00"
           }
         ]
       },
       {
-        "id": "8750e18d6630",
-        "title": "Mistral just updated its open source Small model from 3.1 to 3.2: here’s why",
-        "url": "https://venturebeat.com/ai/mistral-just-updated-its-open-source-small-model-from-3-1-to-3-2-heres-why/",
-        "source": "AI News | VentureBeat",
-        "author": "Carl Franzen",
-        "published_date": "2025-06-20T22:51:45+00:00",
+        "id": "857a3d302153",
+        "title": "Russian Basketball Player Arrested For Alleged Role In Ransomware Attacks",
+        "url": "https://yro.slashdot.org/story/25/07/11/2254200/russian-basketball-player-arrested-for-alleged-role-in-ransomware-attacks?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:03.437548+00:00",
         "category": "ai_progress",
-        "content_preview": "The fact that it is made by a French startup and compliant with EU rules and regulations such as GDPR and the EU AI Act also helps its appeal",
+        "content_preview": "joshuark writes: A Russian basketball player, Daniil Kasatkin, was arrested on June 21 in France at the request of the United States as he allegedly is part of a network of hackers. Daniil Kasatkin, aged 26, is accused by the United States of negotiating the payment of ransoms to this hacker network...",
         "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://yro.slashdot.org/story/25/07/11/2254200/russian-basketball-player-arrested-for-alleged-role-in-ransomware-attacks?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:03.437548+00:00"
+          }
+        ]
+      },
+      {
+        "id": "2dda39b953c7",
+        "title": "Researchers Develop New Tool To Measure Biological Age",
+        "url": "https://science.slashdot.org/story/25/07/11/236230/researchers-develop-new-tool-to-measure-biological-age?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:03.437193+00:00",
+        "category": "ai_progress",
+        "content_preview": "Stanford researchers have developed a blood-based AI tool that calculates the biological age of individual organs to reveal early signs of aging-related disease. The Mercury News reports: The tool, unveiled in Nature Medicine Wednesday, was developed by a research team spearheaded by Tony Wyss-Coray...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://science.slashdot.org/story/25/07/11/236230/researchers-develop-new-tool-to-measure-biological-age?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:03.437193+00:00"
+          }
+        ]
+      },
+      {
+        "id": "f1025f757b89",
+        "title": "AI Therapy Bots Fuel Delusions and Give Dangerous Advice, Stanford Study Finds",
+        "url": "https://science.slashdot.org/story/25/07/11/2314204/ai-therapy-bots-fuel-delusions-and-give-dangerous-advice-stanford-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "BeauHD",
+        "published_date": "2025-07-12T06:01:03.436620+00:00",
+        "category": "ai_progress",
+        "content_preview": "An anonymous reader quotes a report from Ars Technica: When Stanford University researchers asked ChatGPT whether it would be willing to work closely with someone who had schizophrenia, the AI assistant produced a negative response. When they presented it with someone asking about \"bridges taller th...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://science.slashdot.org/story/25/07/11/2314204/ai-therapy-bots-fuel-delusions-and-give-dangerous-advice-stanford-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-12T06:01:03.436620+00:00"
+          }
+        ]
+      },
+      {
+        "id": "46028f5b6c2e",
+        "title": "I'm Sorry Arch! Part 2",
+        "url": "https://dev.to/darthmoomancer/im-sorry-arch-part-2-163h",
+        "source": "DEV Community",
+        "author": "DarthMooMancer",
+        "published_date": "2025-07-12T05:39:37+00:00",
+        "category": "software_dev",
+        "content_preview": "Firstly, DWM is the only window manager for x11 that needs to exist. I used i3 for the longest time, but didn't feel happy. I've tried others but nothing compares to the power and minimalism of DWM. Don't want to install the package, just compile it from source. \nWhile it takes time to understand DW...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/darthmoomancer/im-sorry-arch-part-2-163h",
+            "author": "DarthMooMancer",
+            "published_date": "2025-07-12T05:39:37+00:00"
+          }
+        ]
+      },
+      {
+        "id": "0bcb61cdc8ed",
+        "title": "Rust Implementation for High Concurrency Processing3319",
+        "url": "https://dev.to/member_3bd028d5/rust-implementation-for-high-concurrency-processing3319-ga6",
+        "source": "DEV Community",
+        "author": "member_3bd028d5",
+        "published_date": "2025-07-12T05:38:45+00:00",
+        "category": "software_dev",
+        "content_preview": "GitHub Homepage\nDuring my junior year studies, high concurrency processing has always been one of the technical fields I'm most interested in. While traditional multi-threading models can handle concurrent requests, they often encounter performance bottlenecks when facing large numbers of connection...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/member_3bd028d5/rust-implementation-for-high-concurrency-processing3319-ga6",
+            "author": "member_3bd028d5",
+            "published_date": "2025-07-12T05:38:45+00:00"
+          }
+        ]
+      },
+      {
+        "id": "115b70abb9a1",
+        "title": "Bidirectional Communication Patterns in Modern Web Apps3315",
+        "url": "https://dev.to/member_fdfd31bf/bidirectional-communication-patterns-in-modern-web-apps3315-48lj",
+        "source": "DEV Community",
+        "author": "member_fdfd31bf",
+        "published_date": "2025-07-12T05:38:45+00:00",
+        "category": "software_dev",
+        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nDuring my final year project on distributed systems, I encountered a fundamental challenge that shapes modern web development: how to enable efficient bidirectional communication between clients and servers. Traditional request-response pattern...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/member_fdfd31bf/bidirectional-communication-patterns-in-modern-web-apps3315-48lj",
+            "author": "member_fdfd31bf",
+            "published_date": "2025-07-12T05:38:45+00:00"
+          }
+        ]
+      },
+      {
+        "id": "cfdd369dfa90",
+        "title": "Context Management and Request Lifecycle Optimization3322",
+        "url": "https://dev.to/member_bf115bc6/context-management-and-request-lifecycle-optimization3322-3b12",
+        "source": "DEV Community",
+        "author": "member_bf115bc6",
+        "published_date": "2025-07-12T05:38:45+00:00",
+        "category": "software_dev",
+        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nMy deep dive into context management began during a performance optimization project where I discovered that inefficient request context handling was creating memory leaks and performance bottlenecks. Traditional web frameworks often treat cont...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/member_bf115bc6/context-management-and-request-lifecycle-optimization3322-3b12",
+            "author": "member_bf115bc6",
+            "published_date": "2025-07-12T05:38:45+00:00"
+          }
+        ]
+      },
+      {
+        "id": "fd3154b7191b",
+        "title": "Revolutionary Performance Breakthrough in Modern Web Development3308",
+        "url": "https://dev.to/member_bb466cd7/revolutionary-performance-breakthrough-in-modern-web-development3308-5248",
+        "source": "DEV Community",
+        "author": "member_bb466cd7",
+        "published_date": "2025-07-12T05:38:44+00:00",
+        "category": "software_dev",
+        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nAs a junior computer science student diving deep into web development, I've spent countless hours exploring different frameworks and their performance characteristics. My journey led me to discover something remarkable that completely changed m...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/member_bb466cd7/revolutionary-performance-breakthrough-in-modern-web-development3308-5248",
+            "author": "member_bb466cd7",
+            "published_date": "2025-07-12T05:38:44+00:00"
+          }
+        ]
+      },
+      {
+        "id": "180a8d810dfb",
+        "title": "Bitcoin Breaks Records: What Miners and Leverage Traders Are Doing Behind the Scenes",
+        "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-breaks-records-what-miners-and-leverage-traders-are-doing-behind-the-scenes/",
+        "source": "NewsBTC",
+        "author": "Samuel Edyme",
+        "published_date": "2025-07-12T03:00:31+00:00",
+        "category": "bitcoin",
+        "content_preview": "Bitcoin has surpassed its previous all-time high, reaching $118,254 and marking a notable milestone in its price trajectory. This latest milestone comes after BTC’s former high at $111,000 levels in May, representing a 10% gain over the past week and roughly 5.9% in the last 24 hours. At the time of...",
+        "importance": "high",
+        "tags": [
+          "bitcoin",
+          "ath"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "NewsBTC",
+            "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-breaks-records-what-miners-and-leverage-traders-are-doing-behind-the-scenes/",
+            "author": "Samuel Edyme",
+            "published_date": "2025-07-12T03:00:31+00:00"
+          }
+        ]
+      },
+      {
+        "id": "9774c3be9f16",
+        "title": "No Mania Yet: Bitcoin ATH Lacks Hype, Suggesting Further Upside Potential",
+        "url": "https://www.newsbtc.com/bitcoin-news/no-mania-yet-bitcoin-ath-lacks-hype-suggesting-further-upside-potential/",
+        "source": "NewsBTC",
+        "author": "Ash Tiwari",
+        "published_date": "2025-07-12T02:00:54+00:00",
+        "category": "bitcoin",
+        "content_preview": "As Bitcoin (BTC) continues to post new all-time highs (ATH), reaching as much as $118,869 on Binance, market indicators show little sign of overheating. The lack of retail-driven hype amid BTC’s record-breaking run suggests there may still be room for further growth in the flagship cryptocurrency. B...",
+        "importance": "medium",
+        "tags": [
+          "bitcoin",
+          "ath"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "NewsBTC",
+            "url": "https://www.newsbtc.com/bitcoin-news/no-mania-yet-bitcoin-ath-lacks-hype-suggesting-further-upside-potential/",
+            "author": "Ash Tiwari",
+            "published_date": "2025-07-12T02:00:54+00:00"
+          }
+        ]
+      },
+      {
+        "id": "0dd05e4f1386",
+        "title": "OpenAI delays the release of its open model, again",
+        "url": "https://techcrunch.com/2025/07/11/openai-delays-the-release-of-its-open-model-again/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Maxwell Zeff",
+        "published_date": "2025-07-12T01:38:05+00:00",
+        "category": "ai_progress",
+        "content_preview": "OpenAI CEO Sam Altman said Friday the company is delaying the release of its open model indefinitely.",
+        "importance": "high",
         "tags": [
           "ai_progress",
           "llm"
@@ -465,78 +457,48 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/mistral-just-updated-its-open-source-small-model-from-3-1-to-3-2-heres-why/",
-            "author": "Carl Franzen",
-            "published_date": "2025-06-20T22:51:45+00:00"
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/11/openai-delays-the-release-of-its-open-model-again/",
+            "author": "Maxwell Zeff",
+            "published_date": "2025-07-12T01:38:05+00:00"
           }
         ]
       },
       {
-        "id": "agg_fea7f954",
-        "title": "Bitcoin Open Interest Drops 3.5% – More Pain Ahead?",
-        "url": "https://bitcoinist.com/bitcoin-open-interest-drops-3-5-more-pain-ahead/",
-        "source": "Bitcoinist.com",
-        "author": "Sebastian Villafuerte",
-        "published_date": "2025-06-20T22:30:23+00:00",
+        "id": "a43d718d1713",
+        "title": "Bitcoin Soars Past $118,800—Breakout Or Brutal Bull Trap?",
+        "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-soars-118800-breakout-or-bull-trap/",
+        "source": "NewsBTC",
+        "author": "Jake Simmons",
+        "published_date": "2025-07-12T01:00:11+00:00",
         "category": "bitcoin",
-        "content_preview": "Bitcoin has remained above the critical $100,000 level since early June, suggesting that the market may be establishing a new price equilibrium. Despite holding this psychological threshold, the bullish momentum has stalled as BTC struggles to break above its all-time high near $112,000. This consol...",
+        "content_preview": "Bitcoin’s summer rally accelerated in the early hours of 11 July, when the benchmark cryptocurrency sliced through $118,000 and printed exchange highs that peaked above $118,800, depending on venue data. The spike wiped out an estimated $1.25 billion in short positions within a single trading day, a...",
         "importance": "medium",
         "tags": [
           "bitcoin",
-          "multi-source"
-        ],
-        "sources": [
-          {
-            "name": "Bitcoinist.com",
-            "url": "https://bitcoinist.com/bitcoin-open-interest-drops-3-5-more-pain-ahead/",
-            "author": "Sebastian Villafuerte",
-            "published_date": "2025-06-20T22:30:23+00:00"
-          },
-          {
-            "name": "Bitcoinist.com",
-            "url": "https://bitcoinist.com/new-demand-for-bitcoin-is-drying-up-fast-capital-exits-at-scale/",
-            "author": "Sebastian Villafuerte",
-            "published_date": "2025-06-20T19:00:52+00:00"
-          }
-        ],
-        "source_count": 2,
-        "aggregated": true
-      },
-      {
-        "id": "ad249b2142ac",
-        "title": "Mira Murati’s Thinking Machines Lab closes on $2B at $10B valuation",
-        "url": "https://techcrunch.com/2025/06/20/mira-muratis-thinking-machines-lab-closes-on-2b-at-10b-valuation/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Rebecca Bellan",
-        "published_date": "2025-06-20T21:59:33+00:00",
-        "category": "ai_progress",
-        "content_preview": "Thinking Machines Lab, the secretive AI startup founded by OpenAI’s former chief technology officer Mira Murati, has closed a $2 billion seed round at a $10 billion valuation.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
+          "price"
         ],
         "aggregated": false,
         "source_count": 1,
         "sources": [
           {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/06/20/mira-muratis-thinking-machines-lab-closes-on-2b-at-10b-valuation/",
-            "author": "Rebecca Bellan",
-            "published_date": "2025-06-20T21:59:33+00:00"
+            "name": "NewsBTC",
+            "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-soars-118800-breakout-or-bull-trap/",
+            "author": "Jake Simmons",
+            "published_date": "2025-07-12T01:00:11+00:00"
           }
         ]
       },
       {
-        "id": "925ac82993e4",
-        "title": "Bitcoin’s $96B open interest shows role leverage plays in rallies, but there is a risk",
-        "url": "https://cointelegraph.com/news/bitcoin-leverage-use-sends-oi-to-96b-but-there-s-a-catch?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "id": "c9d3f3d66544",
+        "title": "Bitcoin Christmas rally to $200K or $300K possible based on ‘power law’ model",
+        "url": "https://cointelegraph.com/news/bitcoin-christmas-rally-to-dollar200k-or-dollar300k-possible-based-on-power-law-model?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
         "source": "Cointelegraph.com News",
         "author": "Cointelegraph by Biraajmaan Tamuly",
-        "published_date": "2025-06-20T21:52:36+01:00",
+        "published_date": "2025-07-12T00:23:12+01:00",
         "category": "bitcoin",
-        "content_preview": "Bitcoin’s $96 billion in derivatives open interest fuels BTC price momentum near all-time highs, but rising leverage use raises the risk of liquidations and market volatility.",
-        "importance": "medium",
+        "content_preview": "Bitcoin’s parabolic rally could last until Christmas with a cycle top near $300,000, according to one analyst.",
+        "importance": "high",
         "tags": [
           "bitcoin",
           "price"
@@ -546,292 +508,45 @@
         "sources": [
           {
             "name": "Cointelegraph.com News",
-            "url": "https://cointelegraph.com/news/bitcoin-leverage-use-sends-oi-to-96b-but-there-s-a-catch?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "url": "https://cointelegraph.com/news/bitcoin-christmas-rally-to-dollar200k-or-dollar300k-possible-based-on-power-law-model?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
             "author": "Cointelegraph by Biraajmaan Tamuly",
-            "published_date": "2025-06-20T21:52:36+01:00"
+            "published_date": "2025-07-12T00:23:12+01:00"
           }
         ]
       },
       {
-        "id": "2ac2af093999",
-        "title": "Nakamoto Holdings Rakes in $51.5 Million for Publicly Traded Bitcoin Treasury",
-        "url": "https://decrypt.co/326316/nakamoto-holdings-51-5-million-publicly-traded-bitcoin-treasury",
-        "source": "Decrypt",
-        "author": "Liz Napolitano",
-        "published_date": "2025-06-20T21:09:33+00:00",
-        "category": "bitcoin",
-        "content_preview": "The Bitcoin holdings company's merger partner KindlyMD closed the $51.5 million fundraise with private investors on Friday.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/326316/nakamoto-holdings-51-5-million-publicly-traded-bitcoin-treasury",
-            "author": "Liz Napolitano",
-            "published_date": "2025-06-20T21:09:33+00:00"
-          }
-        ]
-      },
-      {
-        "id": "aaead0d0683a",
-        "title": "Cluely, a startup that helps ‘cheat on everything,’ raises $15M from a16z",
-        "url": "https://techcrunch.com/2025/06/20/cluely-a-startup-that-helps-cheat-on-everything-raises-15m-from-a16z/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Marina Temkin",
-        "published_date": "2025-06-20T21:06:19+00:00",
-        "category": "ai_progress",
-        "content_preview": "Cluely's new funding comes roughly two months after it raised $5.3 million in seed funding co-led by Abstract Ventures and Susa Ventures.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/06/20/cluely-a-startup-that-helps-cheat-on-everything-raises-15m-from-a16z/",
-            "author": "Marina Temkin",
-            "published_date": "2025-06-20T21:06:19+00:00"
-          }
-        ]
-      },
-      {
-        "id": "5020da9e7e5d",
-        "title": "Public Keys: Circle and Coinbase Get GENIUS Bump, Bitcoin Treasuries on Shaky Ground?",
-        "url": "https://decrypt.co/326330/public-keys-circle-coinbase-genius-bump-bitcoin-treasuries-shaky-ground",
-        "source": "Decrypt",
-        "author": "Stacy Elliott",
-        "published_date": "2025-06-20T21:04:39+00:00",
-        "category": "bitcoin",
-        "content_preview": "Circle skyrockets on stablecoin optimism while Bitcoin treasury firms face valuation challenges in this week's public markets roundup.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/326330/public-keys-circle-coinbase-genius-bump-bitcoin-treasuries-shaky-ground",
-            "author": "Stacy Elliott",
-            "published_date": "2025-06-20T21:04:39+00:00"
-          }
-        ]
-      },
-      {
-        "id": "c76d4e5fd4ae",
-        "title": "Anthropic study: Leading AI models show up to 96% blackmail rate against executives",
-        "url": "https://venturebeat.com/ai/anthropic-study-leading-ai-models-show-up-to-96-blackmail-rate-against-executives/",
-        "source": "AI News | VentureBeat",
-        "author": "Michael Nuñez",
-        "published_date": "2025-06-20T19:39:03+00:00",
-        "category": "ai_progress",
-        "content_preview": "Anthropic research reveals AI models from OpenAI, Google, Meta and others chose blackmail, corporate espionage and lethal actions when facing shutdown or conflicting goals.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress",
-          "llm"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/anthropic-study-leading-ai-models-show-up-to-96-blackmail-rate-against-executives/",
-            "author": "Michael Nuñez",
-            "published_date": "2025-06-20T19:39:03+00:00"
-          }
-        ]
-      },
-      {
-        "id": "2e3f09e69eeb",
-        "title": "Bitcoin, Dogecoin Targeted as Norway Eyes Ban on New Crypto Mining Operations",
-        "url": "https://decrypt.co/326280/bitcoin-dogecoin-targeted-norway-eyes-ban-new-crypto-mining-operations",
-        "source": "Decrypt",
-        "author": "Mathew Di Salvo",
-        "published_date": "2025-06-20T19:23:08+00:00",
-        "category": "bitcoin",
-        "content_preview": "The government said it will \"explore the possibility of temporarily prohibiting the establishment of new data centers in Norway that extract cryptocurrency.\"",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/326280/bitcoin-dogecoin-targeted-norway-eyes-ban-new-crypto-mining-operations",
-            "author": "Mathew Di Salvo",
-            "published_date": "2025-06-20T19:23:08+00:00"
-          }
-        ]
-      },
-      {
-        "id": "fd471bef3d05",
-        "title": "Anthropic says most AI models, not just Claude, will resort to blackmail",
-        "url": "https://techcrunch.com/2025/06/20/anthropic-says-most-ai-models-not-just-claude-will-resort-to-blackmail/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Maxwell Zeff",
-        "published_date": "2025-06-20T19:17:44+00:00",
-        "category": "ai_progress",
-        "content_preview": "Several weeks after Anthropic released research claiming that its Claude Opus 4 AI model resorted to blackmailing engineers who tried to turn the model off in controlled test scenarios, the company is out with new research suggesting the problem is more widespread among leading AI models.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress",
-          "llm"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/06/20/anthropic-says-most-ai-models-not-just-claude-will-resort-to-blackmail/",
-            "author": "Maxwell Zeff",
-            "published_date": "2025-06-20T19:17:44+00:00"
-          }
-        ]
-      },
-      {
-        "id": "86f084d1f096",
-        "title": "Texas Sheriffs Crack Bitcoin ATM With Power Tools to Retrieve $32,000",
-        "url": "https://decrypt.co/326308/texas-sheriffs-crack-bitcoin-atm-with-power-tools-to-retrieve-32000",
-        "source": "Decrypt",
-        "author": "André Beganski",
-        "published_date": "2025-06-20T19:04:54+00:00",
-        "category": "bitcoin",
-        "content_preview": "Jasper County Sheriff Chuck Havard told Decrypt that authorities have likely accessed the machines before.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/326308/texas-sheriffs-crack-bitcoin-atm-with-power-tools-to-retrieve-32000",
-            "author": "André Beganski",
-            "published_date": "2025-06-20T19:04:54+00:00"
-          }
-        ]
-      },
-      {
-        "id": "19b5cddfbfc9",
-        "title": "Bitcoin Quickly Plunges Below $103K, With Volatility Burst Spurring $450M in Crypto Liquidations",
-        "url": "https://www.coindesk.com/markets/2025/06/20/bitcoin-quickly-plunges-below-103k-with-volatility-burst-spurring-450m-in-crypto-liquidations",
-        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-        "author": "CD Analytics",
-        "published_date": "2025-06-20T18:55:12+00:00",
-        "category": "bitcoin",
-        "content_preview": "",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-            "url": "https://www.coindesk.com/markets/2025/06/20/bitcoin-quickly-plunges-below-103k-with-volatility-burst-spurring-450m-in-crypto-liquidations",
-            "author": "CD Analytics",
-            "published_date": "2025-06-20T18:55:12+00:00"
-          }
-        ]
-      },
-      {
-        "id": "7e340ba74cf3",
-        "title": "Bitcoin falls to monthly lows triggering $464 million in liquidations amid global market jitters",
-        "url": "https://cryptoslate.com/bitcoins-falls-to-monthly-lows-triggering-464-million-in-liquidations-amid-global-market-jitters/",
+        "id": "ed5e4e142bdb",
+        "title": "Tether to sunset USDT redemptions on 5 ‘legacy’ networks including Bitcoin Cash, Algorand",
+        "url": "https://cryptoslate.com/tether-to-sunset-usdt-redemptions-on-5-legacy-networks-including-bitcoin-cash-algorand/",
         "source": "CryptoSlate",
         "author": "Assad Jafri",
-        "published_date": "2025-06-20T18:15:35+00:00",
+        "published_date": "2025-07-11T23:15:30+00:00",
         "category": "bitcoin",
-        "content_preview": "Bitcoin (BTC) fell to its lowest price this month on June 20, triggering $464 million in liquidations across cryptocurrency markets as geopolitical jitters and heavy selling pressure rattled traders. Bitcoin dropped to a low of $102,225, reversing the gains recorded earlier in the day after failing ...",
+        "content_preview": "Tether announced it will discontinue support for its USDT stablecoin on five “legacy” blockchains, including Omni Layer, Bitcoin Cash SLP, Kusama, EOS, and Algorand. According to the July 11 announcement, the move will become effective Sept. 1, ending redemptions and freezing remaining tokens on tho...",
         "importance": "medium",
         "tags": [
-          "bitcoin",
-          "price"
+          "bitcoin"
         ],
         "aggregated": false,
         "source_count": 1,
         "sources": [
           {
             "name": "CryptoSlate",
-            "url": "https://cryptoslate.com/bitcoins-falls-to-monthly-lows-triggering-464-million-in-liquidations-amid-global-market-jitters/",
+            "url": "https://cryptoslate.com/tether-to-sunset-usdt-redemptions-on-5-legacy-networks-including-bitcoin-cash-algorand/",
             "author": "Assad Jafri",
-            "published_date": "2025-06-20T18:15:35+00:00"
+            "published_date": "2025-07-11T23:15:30+00:00"
           }
         ]
       },
       {
-        "id": "c12e7de8c00b",
-        "title": "Bitcoin Price Deviates From Global M2 Money Supply, Is The Bull Run Over?",
-        "url": "https://www.newsbtc.com/news/bitcoin/bitcoin-deviates-from-global-m2/",
-        "source": "NewsBTC",
-        "author": "Scott Matherson",
-        "published_date": "2025-06-20T18:00:56+00:00",
-        "category": "bitcoin",
-        "content_preview": "Crypto analyst Colin has highlighted the Bitcoin price’s deviation from the Global M2 money supply, raising concerns that the bull run may be over. The analyst quickly addressed concerns, noting how such deviations usually happen at some point but don’t invalidate the macro trend.  Analyst Highlight...",
-        "importance": "high",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/news/bitcoin/bitcoin-deviates-from-global-m2/",
-            "author": "Scott Matherson",
-            "published_date": "2025-06-20T18:00:56+00:00"
-          }
-        ]
-      },
-      {
-        "id": "1c89170abcf3",
-        "title": "Peter Schiff Says He 'Gets Bitcoin' But Not USD-Pegged Stablecoins, Floats Gold-Backed Token Plan",
-        "url": "https://www.coindesk.com/markets/2025/06/20/peter-schiff-says-he-gets-bitcoin-but-not-usd-pegged-stablecoins-floats-gold-backed-token-plan",
-        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-        "author": "Krisztian Sandor",
-        "published_date": "2025-06-20T17:53:47+00:00",
-        "category": "bitcoin",
-        "content_preview": "",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-            "url": "https://www.coindesk.com/markets/2025/06/20/peter-schiff-says-he-gets-bitcoin-but-not-usd-pegged-stablecoins-floats-gold-backed-token-plan",
-            "author": "Krisztian Sandor",
-            "published_date": "2025-06-20T17:53:47+00:00"
-          }
-        ]
-      },
-      {
-        "id": "90da3a0b4381",
-        "title": "ChatGPT: Everything you need to know about the AI-powered chatbot",
-        "url": "https://techcrunch.com/2025/06/20/chatgpt-everything-to-know-about-the-ai-chatbot/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Kyle Wiggers, Cody Corrall, Alyssa Stringer, Kate Park",
-        "published_date": "2025-06-20T17:27:58+00:00",
+        "id": "04a25477f8b0",
+        "title": "Moonshot AI’s Kimi K2 outperforms GPT-4 in key benchmarks — and it’s free",
+        "url": "https://venturebeat.com/ai/moonshot-ais-kimi-k2-outperforms-gpt-4-in-key-benchmarks-and-its-free/",
+        "source": "AI News | VentureBeat",
+        "author": "Michael Nuñez",
+        "published_date": "2025-07-11T22:56:30+00:00",
         "category": "ai_progress",
-        "content_preview": "ChatGPT, OpenAI’s text-generating AI chatbot, has taken the world by storm since its launch in November 2022. What started as a tool to supercharge productivity through writing essays and code with short text prompts has evolved into a behemoth with 300 million weekly active users. 2024 was a big ye...",
+        "content_preview": "Chinese AI startup Moonshot releases open-source Kimi K2 model that outperforms OpenAI and Anthropic on coding tasks with breakthrough agentic capabilities and competitive pricing.",
         "importance": "medium",
         "tags": [
           "ai_progress",
@@ -841,22 +556,47 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/06/20/chatgpt-everything-to-know-about-the-ai-chatbot/",
-            "author": "Kyle Wiggers, Cody Corrall, Alyssa Stringer, Kate Park",
-            "published_date": "2025-06-20T17:27:58+00:00"
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/moonshot-ais-kimi-k2-outperforms-gpt-4-in-key-benchmarks-and-its-free/",
+            "author": "Michael Nuñez",
+            "published_date": "2025-07-11T22:56:30+00:00"
           }
         ]
       },
       {
-        "id": "89a918867859",
-        "title": "Character.AI taps Meta’s former VP of business products as CEO",
-        "url": "https://techcrunch.com/2025/06/20/character-ai-taps-metas-former-vp-of-business-products-as-ceo/",
+        "id": "68ea9ef8f90d",
+        "title": "A new paradigm for AI: How ‘thinking as optimization’ leads to better general-purpose models",
+        "url": "https://venturebeat.com/ai/a-new-paradigm-for-ai-how-thinking-as-optimization-leads-to-better-general-purpose-models/",
+        "source": "AI News | VentureBeat",
+        "author": "Ben Dickson",
+        "published_date": "2025-07-11T22:26:03+00:00",
+        "category": "ai_progress",
+        "content_preview": "A new AI model learns to \"think\" longer on hard problems, achieving more robust reasoning and better generalization to novel, unseen tasks.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress",
+          "llm"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/a-new-paradigm-for-ai-how-thinking-as-optimization-leads-to-better-general-purpose-models/",
+            "author": "Ben Dickson",
+            "published_date": "2025-07-11T22:26:03+00:00"
+          }
+        ]
+      },
+      {
+        "id": "ee935bd826a2",
+        "title": "Windsurf’s CEO goes to Google; OpenAI’s acquisition falls apart",
+        "url": "https://techcrunch.com/2025/07/11/windsurfs-ceo-goes-to-google-openais-acquisition-falls-apart/",
         "source": "AI News & Artificial Intelligence | TechCrunch",
         "author": "Maxwell Zeff",
-        "published_date": "2025-06-20T17:20:06+00:00",
+        "published_date": "2025-07-11T22:21:51+00:00",
         "category": "ai_progress",
-        "content_preview": "Karandeep Anand comes to Character.AI with experience running advertising products that reached billions of users on Meta's apps.",
+        "content_preview": "Notably, Google is not taking a stake in Windsurf and will not have any control over the company.",
         "importance": "medium",
         "tags": [
           "ai_progress"
@@ -866,19 +606,214 @@
         "sources": [
           {
             "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/06/20/character-ai-taps-metas-former-vp-of-business-products-as-ceo/",
+            "url": "https://techcrunch.com/2025/07/11/windsurfs-ceo-goes-to-google-openais-acquisition-falls-apart/",
             "author": "Maxwell Zeff",
-            "published_date": "2025-06-20T17:20:06+00:00"
+            "published_date": "2025-07-11T22:21:51+00:00"
           }
         ]
       },
       {
-        "id": "61d2e0fcec06",
-        "title": "Semler Scientific Investors Cheered by New Hire, Lofty Bitcoin Acquisition Goals",
-        "url": "https://www.coindesk.com/markets/2025/06/20/semler-scientific-investors-cheered-by-new-hire-lofty-bitcoin-acquisition-goals",
+        "id": "576b1218e9b4",
+        "title": "Coinbase, Strategy, Other Bitcoin and Crypto Stocks Soar in Record-Setting Week",
+        "url": "https://decrypt.co/329740/coinbase-strategy-bitcoin-and-crypto-stocks-soar-record-week",
+        "source": "Decrypt",
+        "author": "Mathew Di Salvo",
+        "published_date": "2025-07-11T21:58:35+00:00",
+        "category": "bitcoin",
+        "content_preview": "Crypto-focused companies benefited from the surge in crypto markets this week.",
+        "importance": "high",
+        "tags": [
+          "bitcoin",
+          "ath"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Decrypt",
+            "url": "https://decrypt.co/329740/coinbase-strategy-bitcoin-and-crypto-stocks-soar-record-week",
+            "author": "Mathew Di Salvo",
+            "published_date": "2025-07-11T21:58:35+00:00"
+          }
+        ]
+      },
+      {
+        "id": "f5197908bbd4",
+        "title": "Tether to End USDT Redemptions on Bitcoin Cash, Algorand and Beyond",
+        "url": "https://decrypt.co/329857/tether-to-end-usdt-redemptions-on-bitcoin-cash-algorand-and-beyond",
+        "source": "Decrypt",
+        "author": "Logan Hitchcock",
+        "published_date": "2025-07-11T21:31:25+00:00",
+        "category": "bitcoin",
+        "content_preview": "Stablecoin issuer Tether is ending support for USDT on five \"legacy\" blockchains after previously halting minting on those networks.",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Decrypt",
+            "url": "https://decrypt.co/329857/tether-to-end-usdt-redemptions-on-bitcoin-cash-algorand-and-beyond",
+            "author": "Logan Hitchcock",
+            "published_date": "2025-07-11T21:31:25+00:00"
+          }
+        ]
+      },
+      {
+        "id": "5765c21c08b0",
+        "title": "Solo.io wins ‘most likely to succeed’ award at VB Transform 2025 innovation showcase",
+        "url": "https://venturebeat.com/ai/solo-io-wins-most-likely-to-succeed-award-at-vb-transform-2025-innovation-showcase/",
+        "source": "AI News | VentureBeat",
+        "author": "Aliyah Mohammed",
+        "published_date": "2025-07-11T20:18:18+00:00",
+        "category": "ai_progress",
+        "content_preview": "Solo.io's Kagent Studio framework allows enterprises to build, secure, run and manage their AI agents in Kubernetes.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/solo-io-wins-most-likely-to-succeed-award-at-vb-transform-2025-innovation-showcase/",
+            "author": "Aliyah Mohammed",
+            "published_date": "2025-07-11T20:18:18+00:00"
+          }
+        ]
+      },
+      {
+        "id": "2b5406b4de7a",
+        "title": "Public Keys: CoreWeave Fusion Dance, $1 Billion Day for Bitcoin ETFs and Strategy's Bye Week",
+        "url": "https://decrypt.co/329825/public-keys-coreweave-1-billion-bitcoin-etfs-strategy-week-off",
+        "source": "Decrypt",
+        "author": "Stacy Elliott",
+        "published_date": "2025-07-11T20:05:26+00:00",
+        "category": "bitcoin",
+        "content_preview": "Core Scientific and CoreWeave announce a massive $9B merger while Bitcoin ETFs see their second-biggest day ever with $1.17B in inflows.",
+        "importance": "medium",
+        "tags": [
+          "bitcoin",
+          "price"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Decrypt",
+            "url": "https://decrypt.co/329825/public-keys-coreweave-1-billion-bitcoin-etfs-strategy-week-off",
+            "author": "Stacy Elliott",
+            "published_date": "2025-07-11T20:05:26+00:00"
+          }
+        ]
+      },
+      {
+        "id": "4036a487be29",
+        "title": "AI coding tools may not speed up every developer, study shows",
+        "url": "https://techcrunch.com/2025/07/11/ai-coding-tools-may-not-speed-up-every-developer-study-shows/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Maxwell Zeff",
+        "published_date": "2025-07-11T19:56:41+00:00",
+        "category": "ai_progress",
+        "content_preview": "Software engineer workflows have been transformed in recent years by an influx of AI coding tools. However, a new study calls into question the extent to which today's AI coding tools enhance productivity for experienced developers.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/11/ai-coding-tools-may-not-speed-up-every-developer-study-shows/",
+            "author": "Maxwell Zeff",
+            "published_date": "2025-07-11T19:56:41+00:00"
+          }
+        ]
+      },
+      {
+        "id": "bb719b770183",
+        "title": "Altcoins roar as Bitcoin hits new all-time highs, Cardano and XRP surge over 10%",
+        "url": "https://cryptoslate.com/altcoins-roar-as-bitcoin-hits-new-all-time-highs-cardano-and-xrp-surge-over-10/",
+        "source": "CryptoSlate",
+        "author": "Gino Matos",
+        "published_date": "2025-07-11T19:10:17+00:00",
+        "category": "bitcoin",
+        "content_preview": "Bitcoin (BTC) registered a new all-time high of $118,287.46 on July 11 and is up 3.3% in the past 24 hours, but major altcoins are leading the gains during the same period. Ethereum (ETH) breached the $3,000 threshold for the first time since Feb. 2, and is currently trading at $2,987.55 as of press...",
+        "importance": "high",
+        "tags": [
+          "bitcoin",
+          "ath"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "CryptoSlate",
+            "url": "https://cryptoslate.com/altcoins-roar-as-bitcoin-hits-new-all-time-highs-cardano-and-xrp-surge-over-10/",
+            "author": "Gino Matos",
+            "published_date": "2025-07-11T19:10:17+00:00"
+          }
+        ]
+      },
+      {
+        "id": "01fae6768253",
+        "title": "The great AI agent acceleration: Why enterprise adoption is happening faster than anyone predicted",
+        "url": "https://venturebeat.com/ai/the-great-ai-agent-acceleration-why-enterprise-adoption-is-happening-faster-than-anyone-predicted/",
+        "source": "AI News | VentureBeat",
+        "author": "Matt Marshall",
+        "published_date": "2025-07-11T18:43:35+00:00",
+        "category": "ai_progress",
+        "content_preview": "Enterprise AI agent adoption is accelerating faster than predicted. Get the 4 key takeaways from VB Transform 2025 on how leaders from Intuit, Capital One, and more are deploying agents in production and reshaping their teams for a new era of AI.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/the-great-ai-agent-acceleration-why-enterprise-adoption-is-happening-faster-than-anyone-predicted/",
+            "author": "Matt Marshall",
+            "published_date": "2025-07-11T18:43:35+00:00"
+          }
+        ]
+      },
+      {
+        "id": "0f7c0de96323",
+        "title": "Hugging Face’s new robot is the Seinfeld of AI devices",
+        "url": "https://techcrunch.com/podcast/hugging-faces-new-robot-is-the-seinfeld-of-ai-devices/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Kirsten Korosec, Maxwell Zeff, Anthony Ha, Theresa Loconsolo",
+        "published_date": "2025-07-11T18:15:01+00:00",
+        "category": "ai_progress",
+        "content_preview": "Hugging Face’s new programmable Reachy Mini bots launched this week. The AI robots are open source, Raspberry Pi-powered, and come with cartoonish antennae and big googly eyes. They don’t do much out of the box. And that’s kind of the point. Today, on TechCrunch’s Equity podcast, hosts Kirsten Koros...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/podcast/hugging-faces-new-robot-is-the-seinfeld-of-ai-devices/",
+            "author": "Kirsten Korosec, Maxwell Zeff, Anthony Ha, Theresa Loconsolo",
+            "published_date": "2025-07-11T18:15:01+00:00"
+          }
+        ]
+      },
+      {
+        "id": "9a9a90ca7e69",
+        "title": "Strategy, Metaplanet and Others Sit on Billions in Bitcoin Gains — and They’re Not Selling",
+        "url": "https://www.coindesk.com/markets/2025/07/11/strategy-metaplanet-and-others-sit-on-billions-in-bitcoin-gains-and-they-re-not-selling",
         "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-        "author": "Stephen Alpher",
-        "published_date": "2025-06-20T17:12:35+00:00",
+        "author": "AI Boost",
+        "published_date": "2025-07-11T18:01:02+00:00",
         "category": "bitcoin",
         "content_preview": "",
         "importance": "medium",
@@ -890,93 +825,21 @@
         "sources": [
           {
             "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-            "url": "https://www.coindesk.com/markets/2025/06/20/semler-scientific-investors-cheered-by-new-hire-lofty-bitcoin-acquisition-goals",
-            "author": "Stephen Alpher",
-            "published_date": "2025-06-20T17:12:35+00:00"
+            "url": "https://www.coindesk.com/markets/2025/07/11/strategy-metaplanet-and-others-sit-on-billions-in-bitcoin-gains-and-they-re-not-selling",
+            "author": "AI Boost",
+            "published_date": "2025-07-11T18:01:02+00:00"
           }
         ]
       },
       {
-        "id": "5d756130eb02",
-        "title": "In Memory of Mikeal Rogers: A Builder of Communities",
-        "url": "https://nodejs.org/en/blog/announcements/mikeal",
-        "source": "Node.js Blog",
-        "author": "",
-        "published_date": "2025-06-20T15:00:00+00:00",
-        "category": "software_dev",
-        "content_preview": "",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Node.js Blog",
-            "url": "https://nodejs.org/en/blog/announcements/mikeal",
-            "author": "",
-            "published_date": "2025-06-20T15:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "d604de44bddc",
-        "title": "Google’s Gemini transparency cut leaves enterprise developers ‘debugging blind’",
-        "url": "https://venturebeat.com/ai/googles-gemini-transparency-cut-leaves-enterprise-developers-debugging-blind/",
-        "source": "AI News | VentureBeat",
-        "author": "Ben Dickson",
-        "published_date": "2025-06-20T12:00:00+00:00",
+        "id": "f6fd8a7f63e7",
+        "title": "Sarah Smith launches $16M fund, says AI can ‘unlock’ so much for solo GPs like herself",
+        "url": "https://techcrunch.com/2025/07/11/sarah-smith-launches-16m-fund-says-ai-can-unlock-so-much-for-solo-gps-like-herself/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Dominic-Madori Davis",
+        "published_date": "2025-07-11T18:00:00+00:00",
         "category": "ai_progress",
-        "content_preview": "Why is Google hiding Gemini's reasoning traces? The decision sparks a debate over black-box models versus the need for transparency.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/googles-gemini-transparency-cut-leaves-enterprise-developers-debugging-blind/",
-            "author": "Ben Dickson",
-            "published_date": "2025-06-20T12:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "437f70b393c9",
-        "title": "Defending the realm: Trust and safety at Stack Overflow",
-        "url": "https://stackoverflow.blog/2025/06/20/defending-the-realm-trust-and-safety-at-stack-overflow/",
-        "source": "Stack Overflow Blog",
-        "author": "Phoebe Sajor",
-        "published_date": "2025-06-20T07:40:00+00:00",
-        "category": "software_dev",
-        "content_preview": "In this special episode, Ryan is joined by our Senior VP of Community, Philippe Beaudette, and the Trust and Safety team at Stack Overflow to discuss maintaining platform integrity and managing user safety, handling complex issues like harassment, and how their team balances transparency and privacy...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Stack Overflow Blog",
-            "url": "https://stackoverflow.blog/2025/06/20/defending-the-realm-trust-and-safety-at-stack-overflow/",
-            "author": "Phoebe Sajor",
-            "published_date": "2025-06-20T07:40:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "da52969165cb",
-        "title": "GenLayer launches a new method to incentivize people to market your brand using AI and blockchain",
-        "url": "https://venturebeat.com/ai/genlayer-launches-a-new-method-to-incentivize-people-to-market-your-brand-using-ai-and-blockchain/",
-        "source": "AI News | VentureBeat",
-        "author": "Carl Franzen",
-        "published_date": "2025-06-19T10:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "With applications like Rally already live in beta, GenLayer presents a new category of intelligent blockchain infrastructure.",
+        "content_preview": "She appreciates how she can make fast decisions that don’t require committee approval. She’s also taken to using AI to help her throughout this journey.",
         "importance": "high",
         "tags": [
           "ai_progress"
@@ -985,22 +848,191 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/genlayer-launches-a-new-method-to-incentivize-people-to-market-your-brand-using-ai-and-blockchain/",
-            "author": "Carl Franzen",
-            "published_date": "2025-06-19T10:00:00+00:00"
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/11/sarah-smith-launches-16m-fund-says-ai-can-unlock-so-much-for-solo-gps-like-herself/",
+            "author": "Dominic-Madori Davis",
+            "published_date": "2025-07-11T18:00:00+00:00"
           }
         ]
       },
       {
-        "id": "bcb79f8f81ce",
-        "title": "\"My job is going to change in a dramatic way”: Exploring the future of the internet with Cloudflare",
-        "url": "https://stackoverflow.blog/2025/06/19/my-job-is-going-to-change-in-a-dramatic-way-exploring-the-future-of-the-internet-with-cloudflare/",
+        "id": "b6f628935bca",
+        "title": "Weekly Recap: Bitcoin Hits ATH as Dozens of Treasuries Bloom",
+        "url": "https://www.coindesk.com/news-analysis/2025/07/11/weekly-recap-bitcoin-hits-ath-as-dozens-of-treasuries-bloom",
+        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+        "author": "Benjamin Schiller",
+        "published_date": "2025-07-11T17:06:13+00:00",
+        "category": "bitcoin",
+        "content_preview": "",
+        "importance": "medium",
+        "tags": [
+          "bitcoin",
+          "ath"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "url": "https://www.coindesk.com/news-analysis/2025/07/11/weekly-recap-bitcoin-hits-ath-as-dozens-of-treasuries-bloom",
+            "author": "Benjamin Schiller",
+            "published_date": "2025-07-11T17:06:13+00:00"
+          }
+        ]
+      },
+      {
+        "id": "c9549ed50ce4",
+        "title": "The EU Code of Practice and future of AI in Europe",
+        "url": "https://openai.com/global-affairs/eu-code-of-practice",
+        "source": "OpenAI News",
+        "author": "",
+        "published_date": "2025-07-11T10:00:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "OpenAI joins the EU Code of Practice, advancing responsible AI while partnering with European governments to drive innovation, infrastructure, and economic growth.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "OpenAI News",
+            "url": "https://openai.com/global-affairs/eu-code-of-practice",
+            "author": "",
+            "published_date": "2025-07-11T10:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "48dff4b8168b",
+        "title": "How your favorite movie is changing language learning technology",
+        "url": "https://stackoverflow.blog/2025/07/11/how-your-favorite-movie-is-changing-language-learning-technology/",
+        "source": "Stack Overflow Blog",
+        "author": "Phoebe Sajor",
+        "published_date": "2025-07-11T07:40:00+00:00",
+        "category": "software_dev",
+        "content_preview": "Ryan sits down with CTO Aruna Srivastava and CPO Ruslan Mukhamedvaleev from Koel Labs to talk about how they’re innovating speech technology with the help of AI and classic movies. They also tell Ryan about their time in the Mozilla Builders Accelerator and their experiences as student co-founders i...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Stack Overflow Blog",
+            "url": "https://stackoverflow.blog/2025/07/11/how-your-favorite-movie-is-changing-language-learning-technology/",
+            "author": "Phoebe Sajor",
+            "published_date": "2025-07-11T07:40:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "98cedde6d141",
+        "title": "$8.8 trillion protected: How one CISO went from ‘that’s BS’ to bulletproof in 90 days",
+        "url": "https://venturebeat.com/security/ciso-dodges-bullet-protecting-8-8-trillion-from-shadow-ai/",
+        "source": "AI News | VentureBeat",
+        "author": "Louis Columbus",
+        "published_date": "2025-07-10T23:18:23+00:00",
+        "category": "ai_progress",
+        "content_preview": "Clearwater Analytics CISO Sam Evans dodged a bullet by blocking shadow AI from exposing data integral to $8.8 trillion under management.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/security/ciso-dodges-bullet-protecting-8-8-trillion-from-shadow-ai/",
+            "author": "Louis Columbus",
+            "published_date": "2025-07-10T23:18:23+00:00"
+          }
+        ]
+      },
+      {
+        "id": "c4d03845f08d",
+        "title": "Modeling CORS frameworks with CodeQL to find security vulnerabilities",
+        "url": "https://github.blog/security/application-security/modeling-cors-frameworks-with-codeql-to-find-security-vulnerabilities/",
+        "source": "The GitHub Blog",
+        "author": "Kevin Stubbings",
+        "published_date": "2025-07-10T17:38:14+00:00",
+        "category": "software_dev",
+        "content_preview": "Discover how to increase the coverage of your CodeQL CORS security by modeling developer headers and frameworks.\nThe post Modeling CORS frameworks with CodeQL to find security vulnerabilities appeared first on The GitHub Blog.",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "The GitHub Blog",
+            "url": "https://github.blog/security/application-security/modeling-cors-frameworks-with-codeql-to-find-security-vulnerabilities/",
+            "author": "Kevin Stubbings",
+            "published_date": "2025-07-10T17:38:14+00:00"
+          }
+        ]
+      },
+      {
+        "id": "2daacab30ca5",
+        "title": "A new era of Stack Overflow",
+        "url": "https://stackoverflow.blog/2025/07/10/a-new-era-of-stack-overflow/",
+        "source": "Stack Overflow Blog",
+        "author": "Prashanth Chandrasekar, Jody Bailey",
+        "published_date": "2025-07-10T14:00:00+00:00",
+        "category": "software_dev",
+        "content_preview": "Live from the stage of WeAreDevelopers, we’re unveiling our new vision and mission for the future of Stack Overflow and our community",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Stack Overflow Blog",
+            "url": "https://stackoverflow.blog/2025/07/10/a-new-era-of-stack-overflow/",
+            "author": "Prashanth Chandrasekar, Jody Bailey",
+            "published_date": "2025-07-10T14:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "4abd6f1fcadb",
+        "title": "Have your say on the evolution of our identity",
+        "url": "https://stackoverflow.blog/2025/07/10/vote-on-our-new-identity/",
+        "source": "Stack Overflow Blog",
+        "author": "David Longworth",
+        "published_date": "2025-07-10T13:35:00+00:00",
+        "category": "software_dev",
+        "content_preview": "Help shape the future look of Stack Overflow—cast your vote and share your voice in our visual identity refresh.",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Stack Overflow Blog",
+            "url": "https://stackoverflow.blog/2025/07/10/vote-on-our-new-identity/",
+            "author": "David Longworth",
+            "published_date": "2025-07-10T13:35:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "c1aea43203dd",
+        "title": "There is no golden path anymore: Engineering practices are being rewritten",
+        "url": "https://stackoverflow.blog/2025/07/10/there-is-no-golden-path-anymore-engineering-practices-are-being-rewritten/",
         "source": "Stack Overflow Blog",
         "author": "Katja Skafar",
-        "published_date": "2025-06-19T07:40:00+00:00",
+        "published_date": "2025-07-10T07:40:00+00:00",
         "category": "software_dev",
-        "content_preview": "In this episode of Leaders of Code, Jody Bailey, Chief Product and Technology Officer at Stack Overflow, sits down with Dane Knecht, the newly appointed Chief Technology Officer at Cloudflare.",
+        "content_preview": "How do leaders ensure alignment, autonomy, and productivity as engineering practices continue to evolve?",
         "importance": "medium",
         "tags": [
           "software_dev"
@@ -1010,21 +1042,21 @@
         "sources": [
           {
             "name": "Stack Overflow Blog",
-            "url": "https://stackoverflow.blog/2025/06/19/my-job-is-going-to-change-in-a-dramatic-way-exploring-the-future-of-the-internet-with-cloudflare/",
+            "url": "https://stackoverflow.blog/2025/07/10/there-is-no-golden-path-anymore-engineering-practices-are-being-rewritten/",
             "author": "Katja Skafar",
-            "published_date": "2025-06-19T07:40:00+00:00"
+            "published_date": "2025-07-10T07:40:00+00:00"
           }
         ]
       },
       {
-        "id": "a00995b3f897",
-        "title": "GitHub Copilot Spaces: Bring the right context to every suggestion",
-        "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-spaces-bring-the-right-context-to-every-suggestion/",
+        "id": "f927f1d90dd3",
+        "title": "Beyond prompt crafting: How to be a better partner for your AI pair programmer",
+        "url": "https://github.blog/ai-and-ml/github-copilot/beyond-prompt-crafting-how-to-be-a-better-partner-for-your-ai-pair-programmer/",
         "source": "The GitHub Blog",
-        "author": "Andrea Griffiths",
-        "published_date": "2025-06-18T16:00:00+00:00",
+        "author": "Christopher Harrison",
+        "published_date": "2025-07-09T16:00:00+00:00",
         "category": "software_dev",
-        "content_preview": "Learn how to build your first space in minutes and customize Copilot to match your team's unique coding style and workflows.\nThe post GitHub Copilot Spaces: Bring the right context to every suggestion appeared first on The GitHub Blog.",
+        "content_preview": "Ensuring quality code suggestions from Copilot goes beyond the perfect prompt. Context is key to success when working with your AI pair programmer.\nThe post Beyond prompt crafting: How to be a better partner for your AI pair programmer appeared first on The GitHub Blog.",
         "importance": "medium",
         "tags": [
           "software_dev"
@@ -1034,283 +1066,19 @@
         "sources": [
           {
             "name": "The GitHub Blog",
-            "url": "https://github.blog/ai-and-ml/github-copilot/github-copilot-spaces-bring-the-right-context-to-every-suggestion/",
-            "author": "Andrea Griffiths",
-            "published_date": "2025-06-18T16:00:00+00:00"
+            "url": "https://github.blog/ai-and-ml/github-copilot/beyond-prompt-crafting-how-to-be-a-better-partner-for-your-ai-pair-programmer/",
+            "author": "Christopher Harrison",
+            "published_date": "2025-07-09T16:00:00+00:00"
           }
         ]
       },
       {
-        "id": "d2f68ca243f3",
-        "title": "Learn like a lurker: Gen Z’s digital-first lifestyle and the future of knowledge",
-        "url": "https://stackoverflow.blog/2025/06/18/learn-like-a-lurker-gen-z-s-digital-first-lifestyle-and-the-future-of-knowledge/",
-        "source": "Stack Overflow Blog",
-        "author": "Phoebe Sajor",
-        "published_date": "2025-06-18T16:00:00+00:00",
-        "category": "software_dev",
-        "content_preview": "As a generation characterized as \"digital natives,\" the way Gen Z interacts with and consumes knowledge is rooted in their desire for instant gratification and personalization. How will this affect the future of knowledge management and the technologies of tomorrow?",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Stack Overflow Blog",
-            "url": "https://stackoverflow.blog/2025/06/18/learn-like-a-lurker-gen-z-s-digital-first-lifestyle-and-the-future-of-knowledge/",
-            "author": "Phoebe Sajor",
-            "published_date": "2025-06-18T16:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "4bc1d7baa36d",
-        "title": "Preparing for future AI risks in biology",
-        "url": "https://openai.com/index/preparing-for-future-ai-capabilities-in-biology",
-        "source": "OpenAI News",
-        "author": "",
-        "published_date": "2025-06-18T10:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "Advanced AI can transform biology and medicine—but also raises biosecurity risks. We’re proactively assessing capabilities and implementing safeguards to prevent misuse.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "OpenAI News",
-            "url": "https://openai.com/index/preparing-for-future-ai-capabilities-in-biology",
-            "author": "",
-            "published_date": "2025-06-18T10:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "ee180039f3c1",
-        "title": "Toward understanding and preventing misalignment generalization",
-        "url": "https://openai.com/index/emergent-misalignment",
-        "source": "OpenAI News",
-        "author": "",
-        "published_date": "2025-06-18T10:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "We study how training on incorrect responses can cause broader misalignment in language models and identify an internal feature driving this behavior—one that can be reversed with minimal fine-tuning.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "OpenAI News",
-            "url": "https://openai.com/index/emergent-misalignment",
-            "author": "",
-            "published_date": "2025-06-18T10:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "8527aa0f2c55",
-        "title": "Smarter teams, brighter insights: Stack Overflow for Teams Business summer bundle",
-        "url": "https://stackoverflow.blog/2025/06/18/smarter-teams-brighter-insights-stack-overflow-for-teams-business-summer-bundle/",
-        "source": "Stack Overflow Blog",
-        "author": "Carrie Koos",
-        "published_date": "2025-06-18T02:00:00+00:00",
-        "category": "software_dev",
-        "content_preview": "Read on to see the latest features coming to Stack Overflow for Teams Business users!",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Stack Overflow Blog",
-            "url": "https://stackoverflow.blog/2025/06/18/smarter-teams-brighter-insights-stack-overflow-for-teams-business-summer-bundle/",
-            "author": "Carrie Koos",
-            "published_date": "2025-06-18T02:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "3eb10b101f8f",
-        "title": "5 tips for using GitHub Copilot with issues to boost your productivity",
-        "url": "https://github.blog/ai-and-ml/github-copilot/5-tips-for-using-github-copilot-with-issues-to-boost-your-productivity/",
-        "source": "The GitHub Blog",
-        "author": "Klint Finley",
-        "published_date": "2025-06-17T16:00:00+00:00",
-        "category": "software_dev",
-        "content_preview": "Reduce context-switching, minimize manual work, and accelerate resolution times with these new AI-powered features.\nThe post 5 tips for using GitHub Copilot with issues to boost your productivity appeared first on The GitHub Blog.",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "The GitHub Blog",
-            "url": "https://github.blog/ai-and-ml/github-copilot/5-tips-for-using-github-copilot-with-issues-to-boost-your-productivity/",
-            "author": "Klint Finley",
-            "published_date": "2025-06-17T16:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "8879a7d73d6e",
-        "title": "After 30 years, Java is still brewing up new features",
-        "url": "https://stackoverflow.blog/2025/06/17/after-30-years-java-is-still-brewing-up-new-features/",
-        "source": "Stack Overflow Blog",
-        "author": "Phoebe Sajor",
-        "published_date": "2025-06-17T07:40:00+00:00",
-        "category": "software_dev",
-        "content_preview": "It’s Java’s 30th anniversary! Ryan welcomes back Georges Saab,  Senior VP of Development for the Java Platform Group and Chair of the OpenJDK Governing Board, to reflect on Java’s changes over the last five years.",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Stack Overflow Blog",
-            "url": "https://stackoverflow.blog/2025/06/17/after-30-years-java-is-still-brewing-up-new-features/",
-            "author": "Phoebe Sajor",
-            "published_date": "2025-06-17T07:40:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "ce9bf84c5169",
-        "title": "Highlights from Git 2.50",
-        "url": "https://github.blog/open-source/git/highlights-from-git-2-50/",
-        "source": "The GitHub Blog",
-        "author": "Taylor Blau",
-        "published_date": "2025-06-16T17:12:27+00:00",
-        "category": "software_dev",
-        "content_preview": "The open source Git project just released Git 2.50. Here is GitHub’s look at some of the most interesting features and changes introduced since last time.\nThe post Highlights from Git 2.50 appeared first on The GitHub Blog.",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "The GitHub Blog",
-            "url": "https://github.blog/open-source/git/highlights-from-git-2-50/",
-            "author": "Taylor Blau",
-            "published_date": "2025-06-16T17:12:27+00:00"
-          }
-        ]
-      },
-      {
-        "id": "2bae015b70b9",
-        "title": "Introducing OpenAI for Government",
-        "url": "https://openai.com/global-affairs/introducing-openai-for-government",
-        "source": "OpenAI News",
-        "author": "",
-        "published_date": "2025-06-16T00:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "We’re launching OpenAI for Government, a new initiative focused on bringing our most advanced AI tools to public servants across the United States. We're supporting the U.S. government's efforts in adopting best-in-class technology and deploying these tools in service of the public good.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "OpenAI News",
-            "url": "https://openai.com/global-affairs/introducing-openai-for-government",
-            "author": "",
-            "published_date": "2025-06-16T00:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f9963d156eae",
-        "title": "How the GitHub billing team uses the coding agent in GitHub Copilot to continuously burn down technical debt",
-        "url": "https://github.blog/ai-and-ml/github-copilot/how-the-github-billing-team-uses-the-coding-agent-in-github-copilot-to-continuously-burn-down-technical-debt/",
-        "source": "The GitHub Blog",
-        "author": "Brittany Ellich",
-        "published_date": "2025-06-12T16:00:00+00:00",
-        "category": "software_dev",
-        "content_preview": "Tech debt is a big problem that no one has time to solve. GitHub Copilot coding agent can help.\nThe post How the GitHub billing team uses the coding agent in GitHub Copilot to continuously burn down technical debt appeared first on The GitHub Blog.",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "The GitHub Blog",
-            "url": "https://github.blog/ai-and-ml/github-copilot/how-the-github-billing-team-uses-the-coding-agent-in-github-copilot-to-continuously-burn-down-technical-debt/",
-            "author": "Brittany Ellich",
-            "published_date": "2025-06-12T16:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "0c1f630398bc",
-        "title": "Bringing the Magic of AI to Mattel’s Iconic Brands",
-        "url": "https://openai.com/index/mattels-iconic-brands",
-        "source": "OpenAI News",
-        "author": "",
-        "published_date": "2025-06-12T00:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "OpenAI and Mattel are partnering to integrate AI into iconic brands such as Barbie and Hot Wheels, aiming to enhance creative development, streamline workflows, and create new ways for fans to engage.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "OpenAI News",
-            "url": "https://openai.com/index/mattels-iconic-brands",
-            "author": "",
-            "published_date": "2025-06-12T00:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "00b81fe5b836",
-        "title": "GitHub Availability Report: May 2025",
-        "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2025/",
-        "source": "The GitHub Blog",
-        "author": "Jakub Oleksy",
-        "published_date": "2025-06-11T23:24:41+00:00",
-        "category": "software_dev",
-        "content_preview": "In May, we experienced three incidents that resulted in degraded performance across GitHub services.\nThe post GitHub Availability Report: May 2025 appeared first on The GitHub Blog.",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "The GitHub Blog",
-            "url": "https://github.blog/news-insights/company-news/github-availability-report-may-2025/",
-            "author": "Jakub Oleksy",
-            "published_date": "2025-06-11T23:24:41+00:00"
-          }
-        ]
-      },
-      {
-        "id": "ab7c4e0e1451",
-        "title": "Node v24.2.0 (Current)",
-        "url": "https://nodejs.org/en/blog/release/v24.2.0",
+        "id": "6d3d8ed8857c",
+        "title": "Node v24.4.0 (Current)",
+        "url": "https://nodejs.org/en/blog/release/v24.4.0",
         "source": "Node.js Blog",
         "author": "",
-        "published_date": "2025-06-09T21:51:26+00:00",
+        "published_date": "2025-07-09T12:37:36+00:00",
         "category": "software_dev",
         "content_preview": "",
         "importance": "medium",
@@ -1324,21 +1092,21 @@
         "sources": [
           {
             "name": "Node.js Blog",
-            "url": "https://nodejs.org/en/blog/release/v24.2.0",
+            "url": "https://nodejs.org/en/blog/release/v24.4.0",
             "author": "",
-            "published_date": "2025-06-09T21:51:26+00:00"
+            "published_date": "2025-07-09T12:37:36+00:00"
           }
         ]
       },
       {
-        "id": "52239f470dd9",
-        "title": "Scaling security with responsible disclosure",
-        "url": "https://openai.com/index/scaling-coordinated-vulnerability-disclosure",
+        "id": "f3d044f5c9fd",
+        "title": "Sam & Jony",
+        "url": "https://openai.com/sam-and-jony",
         "source": "OpenAI News",
         "author": "",
-        "published_date": "2025-06-09T10:00:00+00:00",
+        "published_date": "2025-07-09T00:00:00+00:00",
         "category": "ai_progress",
-        "content_preview": "OpenAI introduces its Outbound Coordinated Disclosure Policy to guide how it responsibly reports vulnerabilities in third-party software—emphasizing integrity, collaboration, and proactive security at scale.",
+        "content_preview": "Building a family of AI products for everyone.",
         "importance": "medium",
         "tags": [
           "ai_progress"
@@ -1348,26 +1116,96 @@
         "sources": [
           {
             "name": "OpenAI News",
-            "url": "https://openai.com/index/scaling-coordinated-vulnerability-disclosure",
+            "url": "https://openai.com/sam-and-jony",
             "author": "",
-            "published_date": "2025-06-09T10:00:00+00:00"
+            "published_date": "2025-07-09T00:00:00+00:00"
           }
         ]
       },
       {
-        "id": "3cb44c4dd36d",
-        "title": "Beware of End-of-Life Node.js Versions - Upgrade or Seek Post-EOL Support",
-        "url": "https://nodejs.org/en/blog/announcements/node-18-eol-support",
-        "source": "Node.js Blog",
-        "author": "",
-        "published_date": "2025-06-06T12:00:00+00:00",
+        "id": "d2199c5b427d",
+        "title": "Git security vulnerabilities announced",
+        "url": "https://github.blog/open-source/git/git-security-vulnerabilities-announced-6/",
+        "source": "The GitHub Blog",
+        "author": "Taylor Blau",
+        "published_date": "2025-07-08T17:02:11+00:00",
         "category": "software_dev",
-        "content_preview": "",
+        "content_preview": "Today, the Git project released new versions to address seven security vulnerabilities that affect all prior versions of Git.\nThe post Git security vulnerabilities announced appeared first on The GitHub Blog.",
         "importance": "medium",
         "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "The GitHub Blog",
+            "url": "https://github.blog/open-source/git/git-security-vulnerabilities-announced-6/",
+            "author": "Taylor Blau",
+            "published_date": "2025-07-08T17:02:11+00:00"
+          }
+        ]
+      },
+      {
+        "id": "cce0ca9812e9",
+        "title": "Better performance, smarter workflows: What’s new in Stack Overflow for Teams",
+        "url": "https://stackoverflow.blog/2025/07/08/better-performance-smarter-workflows-what-s-new-in-stack-overflow-for-teams/",
+        "source": "Stack Overflow Blog",
+        "author": "Carrie Koos",
+        "published_date": "2025-07-08T13:00:00+00:00",
+        "category": "software_dev",
+        "content_preview": "Our July 2025 release focuses on stability, integration, and actionable insight—designed to help your teams stay informed, secure, and efficient as they scale.",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Stack Overflow Blog",
+            "url": "https://stackoverflow.blog/2025/07/08/better-performance-smarter-workflows-what-s-new-in-stack-overflow-for-teams/",
+            "author": "Carrie Koos",
+            "published_date": "2025-07-08T13:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "daa6ddc47917",
+        "title": "Working with 400,000 teachers to shape the future of AI in schools",
+        "url": "https://openai.com/global-affairs/aft",
+        "source": "OpenAI News",
+        "author": "",
+        "published_date": "2025-07-08T07:00:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "OpenAI partners with the American Federation of Teachers to launch a 5-year initiative equipping 400,000 K-12 educators to lead AI innovation in classrooms.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "OpenAI News",
+            "url": "https://openai.com/global-affairs/aft",
+            "author": "",
+            "published_date": "2025-07-08T07:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "96b1f28fd16d",
+        "title": "Tuesday, July 15, 2025 Security Releases",
+        "url": "https://nodejs.org/en/blog/vulnerability/july-2025-security-releases",
+        "source": "Node.js Blog",
+        "author": "",
+        "published_date": "2025-07-08T03:00:00+00:00",
+        "category": "software_dev",
+        "content_preview": "",
+        "importance": "high",
+        "tags": [
           "software_dev",
-          "programming",
-          "language",
           "release"
         ],
         "aggregated": false,
@@ -1375,19 +1213,92 @@
         "sources": [
           {
             "name": "Node.js Blog",
-            "url": "https://nodejs.org/en/blog/announcements/node-18-eol-support",
+            "url": "https://nodejs.org/en/blog/vulnerability/july-2025-security-releases",
             "author": "",
-            "published_date": "2025-06-06T12:00:00+00:00"
+            "published_date": "2025-07-08T03:00:00+00:00"
           }
         ]
       },
       {
-        "id": "52d1fb65dea1",
-        "title": "Trip report: Node.js collaboration summit (2025 Paris)",
-        "url": "https://nodejs.org/en/blog/events/collab-summit-2025-paris",
+        "id": "0765a0d80c50",
+        "title": "CVE-2025-53367: An exploitable out-of-bounds write in DjVuLibre",
+        "url": "https://github.blog/security/vulnerability-research/cve-2025-53367-an-exploitable-out-of-bounds-write-in-djvulibre/",
+        "source": "The GitHub Blog",
+        "author": "Kevin Backhouse",
+        "published_date": "2025-07-03T20:52:20+00:00",
+        "category": "software_dev",
+        "content_preview": "DjVuLibre has a vulnerability that could enable an attacker to gain code execution on a Linux Desktop system when the user tries to open a crafted document.\nThe post CVE-2025-53367: An exploitable out-of-bounds write in DjVuLibre appeared first on The GitHub Blog.",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "The GitHub Blog",
+            "url": "https://github.blog/security/vulnerability-research/cve-2025-53367-an-exploitable-out-of-bounds-write-in-djvulibre/",
+            "author": "Kevin Backhouse",
+            "published_date": "2025-07-03T20:52:20+00:00"
+          }
+        ]
+      },
+      {
+        "id": "d013b5839bb4",
+        "title": "5 ways to transform your workflow using GitHub Copilot and MCP",
+        "url": "https://github.blog/ai-and-ml/github-copilot/5-ways-to-transform-your-workflow-using-github-copilot-and-mcp/",
+        "source": "The GitHub Blog",
+        "author": "Klint Finley",
+        "published_date": "2025-07-02T17:44:02+00:00",
+        "category": "software_dev",
+        "content_preview": "Learn how to streamline your development workflow with five different MCP use cases. \nThe post 5 ways to transform your workflow using GitHub Copilot and MCP appeared first on The GitHub Blog.",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "The GitHub Blog",
+            "url": "https://github.blog/ai-and-ml/github-copilot/5-ways-to-transform-your-workflow-using-github-copilot-and-mcp/",
+            "author": "Klint Finley",
+            "published_date": "2025-07-02T17:44:02+00:00"
+          }
+        ]
+      },
+      {
+        "id": "60bd31f2350d",
+        "title": "No-code personal agents, powered by GPT-4.1 and Realtime API",
+        "url": "https://openai.com/index/genspark",
+        "source": "OpenAI News",
+        "author": "",
+        "published_date": "2025-07-01T10:00:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "Learn how Genspark built a $36M ARR AI product in 45 days—with no-code agents powered by GPT-4.1 and OpenAI Realtime API.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress",
+          "llm"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "OpenAI News",
+            "url": "https://openai.com/index/genspark",
+            "author": "",
+            "published_date": "2025-07-01T10:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "4f408ea8519b",
+        "title": "Node.js LGBTQIA+ Stories: Emelia Smith",
+        "url": "https://nodejs.org/en/blog/community/2025-06-28-Emelia-Smith",
         "source": "Node.js Blog",
         "author": "",
-        "published_date": "2025-05-22T00:00:00+00:00",
+        "published_date": "2025-06-30T16:00:00+00:00",
         "category": "software_dev",
         "content_preview": "",
         "importance": "medium",
@@ -1401,19 +1312,67 @@
         "sources": [
           {
             "name": "Node.js Blog",
-            "url": "https://nodejs.org/en/blog/events/collab-summit-2025-paris",
+            "url": "https://nodejs.org/en/blog/community/2025-06-28-Emelia-Smith",
             "author": "",
-            "published_date": "2025-05-22T00:00:00+00:00"
+            "published_date": "2025-06-30T16:00:00+00:00"
           }
         ]
       },
       {
-        "id": "55955df4baeb",
-        "title": "Node v22.16.0 (LTS)",
-        "url": "https://nodejs.org/en/blog/release/v22.16.0",
+        "id": "dd252865bf79",
+        "title": "AI in Australia—OpenAI’s Economic Blueprint",
+        "url": "https://openai.com/global-affairs/openais-australia-economic-blueprint",
+        "source": "OpenAI News",
+        "author": "",
+        "published_date": "2025-06-30T07:00:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "Today, OpenAI, in partnership with Mandala Partners, is sharing the OpenAI AI Economic Blueprint for Australia. At a time when boosting productivity has emerged as a national priority for Australia, the Blueprint provides a clear, actionable plan for how Australia can unlock the full economic and so...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "OpenAI News",
+            "url": "https://openai.com/global-affairs/openais-australia-economic-blueprint",
+            "author": "",
+            "published_date": "2025-06-30T07:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "735edf3d1a7c",
+        "title": "Open sourced identity",
+        "url": "https://nodejs.org/en/blog/community/2025-pride",
         "source": "Node.js Blog",
         "author": "",
-        "published_date": "2025-05-21T15:31:48+00:00",
+        "published_date": "2025-06-27T09:00:00+00:00",
+        "category": "software_dev",
+        "content_preview": "",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Node.js Blog",
+            "url": "https://nodejs.org/en/blog/community/2025-pride",
+            "author": "",
+            "published_date": "2025-06-27T09:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "34f92304f454",
+        "title": "Node v22.17.0 (LTS)",
+        "url": "https://nodejs.org/en/blog/release/v22.17.0",
+        "source": "Node.js Blog",
+        "author": "",
+        "published_date": "2025-06-24T23:59:58+00:00",
         "category": "software_dev",
         "content_preview": "",
         "importance": "medium",
@@ -1427,19 +1386,19 @@
         "sources": [
           {
             "name": "Node.js Blog",
-            "url": "https://nodejs.org/en/blog/release/v22.16.0",
+            "url": "https://nodejs.org/en/blog/release/v22.17.0",
             "author": "",
-            "published_date": "2025-05-21T15:31:48+00:00"
+            "published_date": "2025-06-24T23:59:58+00:00"
           }
         ]
       }
     ],
     "metadata": {
-      "total_articles": 58,
-      "aggregated_articles": 2,
-      "multi_source_articles": 2,
+      "total_articles": 57,
+      "aggregated_articles": 0,
+      "multi_source_articles": 0,
       "total_sources": 16,
-      "last_updated": "2025-06-21T01:07:16.427196+00:00",
+      "last_updated": "2025-07-12T06:02:18.423662+00:00",
       "update_interval_hours": 2
     }
   }
