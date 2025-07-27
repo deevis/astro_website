@@ -338,7 +338,8 @@ class ProductionNewsFeed:
                 'https://cryptoslate.com/feed/',
                 'https://bitcoinist.com/feed',
                 'https://newsbtc.com/feed',
-                'https://decrypt.co/feed'
+                'https://decrypt.co/feed',
+                'https://cryptopotato.com/feed/'
             ],
             'ai_progress': [
                 'http://rss.slashdot.org/Slashdot/slashdotMain',

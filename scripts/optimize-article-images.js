@@ -55,8 +55,8 @@ async function optimizeImage(imagePath, outputPath) {
     console.log(`Optimizing image: ${imagePath}`);
     
     // Generate optimized image using ImageMagick
-    // Resize to target size, convert to WebP, and optimize quality
-    const command = `magick "${fullImagePath}" -resize ${THUMBNAIL_SIZE}^ -gravity center -extent ${THUMBNAIL_SIZE} -quality ${WEBP_QUALITY} "${fullOutputPath}"`;
+    // Resize to fill the target size, then crop to exact dimensions (no padding)
+    const command = `magick "${fullImagePath}" -resize ${THUMBNAIL_SIZE}^ -gravity center -crop ${THUMBNAIL_SIZE}+0+0 -quality ${WEBP_QUALITY} "${fullOutputPath}"`;
     
     execSync(command, { stdio: 'ignore' });
     

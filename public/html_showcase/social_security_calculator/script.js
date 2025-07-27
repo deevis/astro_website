@@ -60,6 +60,83 @@ const earningsLimits = {
     1990: 51300,
 };
 
+// National Average Wage Index data from ssa.gov/oact/cola/AWI.html
+const nawiData = {
+    2023: 63795.13,
+    2022: 61220.07,
+    2021: 60575.07,
+    2020: 55628.60,
+    2019: 54099.99,
+    2018: 52145.80,
+    2017: 50321.89,
+    2016: 48642.15,
+    2015: 48098.63,
+    2014: 46481.52,
+    2013: 44888.16,
+    2012: 44321.67,
+    2011: 42979.61,
+    2010: 41673.83,
+    2009: 40711.61,
+    2008: 41334.97,
+    2007: 40405.48,
+    2006: 38651.41,
+    2005: 36952.94,
+    2004: 35648.55,
+    2003: 34064.95,
+    2002: 33252.09,
+    2001: 32921.92,
+    2000: 32154.82,
+    1999: 30469.84,
+    1998: 28861.44,
+    1997: 27426.00,
+    1996: 25913.90,
+    1995: 24705.66,
+    1994: 23754.55,
+    1993: 23132.67,
+    1992: 22935.42,
+    1991: 21811.60,
+    1990: 21027.98,
+    1989: 20104.29,
+    1988: 19334.04,
+    1987: 18426.51,
+    1986: 17321.81,
+    1985: 16822.51,
+    1984: 16135.07,
+    1983: 15239.24,
+    1982: 14531.34,
+    1981: 13773.10,
+    1980: 12513.46,
+    1979: 11479.46,
+    1978: 10556.03,
+    1977: 9779.44,
+    1976: 9226.48,
+    1975: 8630.92,
+    1974: 8030.76,
+    1973: 7580.16,
+    1972: 7133.80,
+    1971: 6497.08,
+    1970: 6186.24,
+    1969: 5893.76,
+    1968: 5571.76,
+    1967: 5213.44,
+    1966: 4938.36,
+    1965: 4658.72,
+    1964: 4576.32,
+    1963: 4396.64,
+    1962: 4291.40,
+    1961: 4086.76,
+    1960: 4007.12,
+    1959: 3855.80,
+    1958: 3673.80,
+    1957: 3641.72,
+    1956: 3532.36,
+    1955: 3301.44,
+    1954: 3155.64,
+    1953: 3139.44,
+    1952: 2973.32,
+    1951: 2799.16
+};
+
 function showTab(tabName) {
     document.querySelectorAll('.tab-content').forEach(tab => {
         tab.classList.remove('active');
@@ -94,6 +171,20 @@ function enableTabs() {
     // Update onclick handlers
     resultsTab.setAttribute('onclick', "showTab('results')");
     comparisonTab.setAttribute('onclick', "showTab('comparison')");
+}
+
+function getNAWI(year) {
+    if (nawiData[year]) {
+        return nawiData[year];
+    }
+    // If we don't have the year, project it
+    const latestYear = Math.max(...Object.keys(nawiData).map(Number));
+    const latestNawi = nawiData[latestYear];
+    
+    const yearsOut = year - latestYear;
+    // Assume 2.5% annual increase for projection
+    const projectedNawi = latestNawi * Math.pow(1.025, yearsOut);
+    return projectedNawi;
 }
 
 function getEarningsLimit(year) {
@@ -159,7 +250,7 @@ function processInput() {
     }
 
     // Create base scenario
-    const baseScenario = calculateScenario(processedData, "Current Earnings Only");
+    const baseScenario = calculateScenario(processedData, "Current Earnings Only", currentAge);
         
     // Create future earnings data
     let futureData = [];
@@ -179,7 +270,7 @@ function processInput() {
 
     // Create future scenario
     const futureScenario = calculateScenario([...processedData, ...futureData], 
-        "Including Future Work");
+        "Including Future Work", currentAge);
 
     clearError();
     enableTabs();
@@ -187,9 +278,33 @@ function processInput() {
     showTab('results');
 }
 
-function calculateScenario(data, label) {
-    // Sort by earnings and take top 35
-    const earningsData = [...data].sort((a, b) => b.earnings - a.earnings);
+function calculateScenario(data, label, currentAge) {
+    const currentYear = new Date().getFullYear();
+    const birthYear = currentYear - currentAge;
+    const indexingYear = birthYear + 60; // Year person turns 60
+    const indexingNawi = getNAWI(indexingYear);
+
+    // Index earnings
+    const indexedData = data.map(entry => {
+        let indexedEarnings;
+        // Earnings for years up to age 59 are indexed.
+        // Earnings from age 60 onwards are taken at face value.
+        // The indexing year is the year a person turns 60.
+        if (entry.year < indexingYear) {
+            const yearNawi = getNAWI(entry.year);
+            indexedEarnings = entry.earnings * (indexingNawi / yearNawi);
+        } else {
+            indexedEarnings = entry.earnings;
+        }
+        
+        return {
+            ...entry,
+            indexedEarnings: indexedEarnings
+        };
+    });
+
+    // Sort by indexed earnings and take top 35
+    const earningsData = [...indexedData].sort((a, b) => b.indexedEarnings - a.indexedEarnings);
     const aime = calculateAIME(earningsData);
     const {pia, breakdown} = calculatePIA(aime);
     const benefitsByAge = calculateBenefitsByAge(pia);
@@ -253,7 +368,7 @@ function displayEarningsTable() {
 
 function calculateAIME(earningsData) {
     const top35 = earningsData.slice(0, 35);
-    const totalEarnings = top35.reduce((sum, entry) => sum + entry.earnings, 0);
+    const totalEarnings = top35.reduce((sum, entry) => sum + entry.indexedEarnings, 0);
     return totalEarnings / (35 * 12);
 }
 
@@ -304,10 +419,11 @@ function calculateBenefitsByAge(pia) {
 }
 
 function generateAIMEDetails(scenario) {
+    const totalIndexedEarnings = scenario.aime * 35 * 12;
     return `
         <p>Average Indexed Monthly Earnings (AIME): $${scenario.aime.toFixed(2)}</p>
-        <p>Based on top 35 years of earnings</p>
-        <p>Total indexed earnings: $${(scenario.aime * 35 * 12).toLocaleString()}</p>
+        <p>Based on top 35 years of <strong>indexed</strong> earnings</p>
+        <p>Total indexed earnings: $${Math.round(totalIndexedEarnings).toLocaleString()}</p>
     `;
 }
 
@@ -508,23 +624,34 @@ function displayResults(baseScenario, futureScenario) {
 }
 
 function generateEarningsTable(earningsData) {
-    // Sort by year descending
-    const sortedData = [...earningsData].sort((a, b) => b.year - a.year);
-    const top35 = sortedData.slice(0, 35);
+    // Sort by year descending for display
+    const sortedForDisplay = [...earningsData].sort((a, b) => b.year - a.year);
+    const top35Years = new Set(earningsData.slice(0, 35).map(d => d.year));
     
-    let html = '<table><tr><th>Year</th><th>Total Earnings</th><th>SS Eligible Earnings</th><th>Year Limit</th></tr>';
+    let html = '<table><tr><th>Year</th><th>Total Earnings</th><th>SS Eligible Earnings</th><th>Year Limit</th><th>Indexed Earnings</th><th>Used in Top 35?</th></tr>';
     
-    top35.forEach(entry => {
+    sortedForDisplay.forEach(entry => {
         const overLimit = entry.totalEarnings > entry.limit;
         const totalClass = overLimit ? 'earnings-over-limit' : '';
-        const zeroEarnings = entry.totalEarnings === 0 ? 'zero-earnings' : '';
-        const futureYear = entry.year > new Date().getFullYear() ? 'future-year' : '';
+        const isFutureYear = entry.year > new Date().getFullYear();
+        const usedInTop35 = top35Years.has(entry.year);
         
-        html += `<tr class="${zeroEarnings} ${futureYear}">
+        let rowClass = '';
+        if (entry.totalEarnings === 0 && usedInTop35) {
+            rowClass = 'zero-earnings';
+        } else if (isFutureYear) {
+            rowClass = 'future-year';
+        } else if (usedInTop35) {
+            rowClass = 'used-in-top-35';
+        }
+
+        html += `<tr class="${rowClass}">
             <td>${entry.year}</td>
             <td class="${totalClass}">$${entry.totalEarnings.toLocaleString()}</td>
             <td>$${entry.earnings.toLocaleString()}</td>
             <td>$${entry.limit.toLocaleString()}</td>
+            <td>$${Math.round(entry.indexedEarnings).toLocaleString()}</td>
+            <td>${usedInTop35 ? '✓' : '✗'}</td>
         </tr>`;
     });
     
@@ -594,6 +721,12 @@ function generateTableExplanation() {
                     <span class="color-indicator blue-indicator"></span>
                     <div class="explanation-text">
                         <strong>Blue rows (future years):</strong> These are projected earnings from your additional work years. They can replace some of your lowest earning years (including $0 years), potentially increasing your benefits.
+                    </div>
+                </div>
+                <div class="explanation-item">
+                    <span class="color-indicator green-indicator"></span>
+                    <div class="explanation-text">
+                        <strong>Green rows (used in top 35):</strong> These are your highest 35 indexed earning years, which are used to calculate your benefit amount. Replacing a low year with a high year will increase your benefit.
                     </div>
                 </div>
                 <div class="explanation-item">

@@ -143,6 +143,7 @@ body {
 
 [data-theme="dark"] .future-year td {
     background-color: #316fa9;
+    color: #ffffff;
 }
 
 [data-theme="dark"] .scenario h3 {
@@ -527,6 +528,10 @@ button.calculate:hover {
     color: #333;
 }
 
+.used-in-top-35 {
+    background-color: #d4edda;
+}
+
 .explanation-grid {
     display: grid;
     grid-template-columns: 1fr;
@@ -550,6 +555,11 @@ button.calculate:hover {
 
 .red-indicator {
     background-color: #e76868;
+}
+
+.green-indicator {
+    background-color: #d4edda;
+    border: 1px solid #c3e6cb;
 }
 
 .blue-indicator {
@@ -1238,4 +1248,13 @@ button.calculate:hover {
 
 [data-theme="dark"] .info-modal-body strong {
     color: #4fc3f7;
+}
+
+[data-theme="dark"] .used-in-top-35 td {
+    background-color: #1e4620;
+}
+
+[data-theme="dark"] .green-indicator {
+    background-color: #1e4620;
+    border-color: #2a642d;
 }

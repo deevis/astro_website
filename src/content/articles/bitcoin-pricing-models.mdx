@@ -1,0 +1,298 @@
+---
+title: "The Most Popular Bitcoin Pricing Models"
+publishDate: "2025-07-12"
+author: "Darren Hicks"
+image: {
+  src: "/images/articles/bitcoin-pricing-models.png",
+  alt: "Bitcoin Pricing Models"
+}
+description: "A tour of six widely cited frameworks for estimating Bitcoin's value, complete with interactive charts."
+tags: ["bitcoin", "economics", "crypto models", "price predictions"]
+---
+
+import { Image } from 'astro:assets';
+import Alert from '/src/components/Alert.astro';
+import CodeBlock from '/src/components/CodeBlock.astro';
+import ChartModal from '/src/components/ChartModal.astro';
+
+> **Note:** Each interactive chart pulls its data from a CSV file in `/public/data/`.  
+> Update those files or swap in your own API hooks to keep the visuals current.
+
+Bitcoin's meteoric rise has inspired a multitude of pricing frameworks - some grounded in scarcity economics, others in network theory or purely statistical trend-lines. Below we break down **six of the most-referenced models**, summarising their core idea, strengths, weaknesses, and what they indicate as of July 2025. Each model includes an **interactive chart**: click or tap to expand the view and inspect any date (up to 15 years into the future).
+
+---
+
+<div class="bg-white dark:bg-gray-900 rounded-lg shadow-lg overflow-hidden">
+  {/* Tab Navigation */}
+  <div class="border-b border-gray-200 dark:border-gray-700">
+    <nav class="flex flex-wrap" aria-label="Tabs">
+      <button class="tab-button active px-6 py-3 text-sm font-medium border-b-2 border-blue-500 text-blue-600 dark:text-blue-400" data-tab="s2f">
+        Stock-to-Flow (S2F)
+      </button>
+      <button class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" data-tab="s2fx">
+        S2F Cross-Asset
+      </button>
+      <button class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" data-tab="powerlaw">
+        Power-Law Corridor
+      </button>
+      <button class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" data-tab="rainbow">
+        Rainbow Chart
+      </button>
+      <button class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" data-tab="metcalfe">
+        Metcalfe's Law
+      </button>
+      <button class="tab-button px-6 py-3 text-sm font-medium border-b-2 border-transparent text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200" data-tab="halving">
+        Halving Cycles
+      </button>
+    </nav>
+  </div>
+
+  {/* Tab Content */}
+  <div class="p-6">
+    
+    {/* Stock-to-Flow Tab */}
+    <div id="tab-s2f" class="tab-content">
+      <h2 class="text-2xl font-bold mb-4">Stock-to-Flow (S2F) - PlanB</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p class="mb-4">Treat Bitcoin like a mined commodity:</p>
+        <div class="bg-gray-100 dark:bg-gray-800 p-4 rounded-md mb-4">
+          <code>Price is proportional to (Total stock / New annual flow)^b</code>
+        </div>
+        <p>Halvings slash the annual flow, doubling the ratio every ~4 years and - per the model - ratcheting price higher.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li><em>Elegant scarcity narrative</em> that mirrors gold and silver.</li>
+            <li>Historically tracked broad cycle direction through 2020.</li>
+            <li>Easy to compute and extend far into the future.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Ignores demand, macro, regulation - <strong>single-factor</strong> model.</li>
+            <li>Statistical fit breaks down after 2021; long stretches below the curve.</li>
+            <li>Prone to over-promising six-figure targets on optimistic timelines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call (July 2025)</h3>
+        <p>Fair-value band <strong>$250 k - $500 k</strong>; market price (~$100 k) sits well <em>below</em> the S2F line.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="s2fChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+    {/* S2FX Tab */}
+    <div id="tab-s2fx" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Stock-to-Flow Cross-Asset (S2FX)</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p>Extend S2F by <strong>clustering "phases"</strong> of Bitcoin (and gold &amp; silver) onto one power-law line. Each phase jump implies a discrete market-cap leap - e.g., Phase 5 targeted ~$288 k post-2020.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Connects Bitcoin to established scarce metals.</li>
+            <li>"Phase transition" story resonates with adoption milestones.</li>
+            <li>Quantifies a bold, long-term vision toward gold-like value.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Tiny sample implies likely <strong>over-fitted</strong>; Phase 5 already missed.</li>
+            <li>Cross-asset comparison may mix fundamentally different drivers.</li>
+            <li>Removes time, so targets lack falsifiable deadlines.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call</h3>
+        <p>Still implies <strong>$300 k+</strong> "fair value" for the current epoch - widely viewed as <em>over-optimistic</em> after 2024's miss.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="s2fxChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+    {/* Power-Law Tab */}
+    <div id="tab-powerlaw" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Power-Law Corridor - Harold Burger</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p>Fit a straight line to <strong>log(price) vs. log(time)</strong>; draw parallel rails +/- 2 sigma. Corridor widens, reflecting declining relative volatility.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Purely empirical: no supply/demand assumptions.</li>
+            <li>Has contained every weekly close since 2010.</li>
+            <li>Simple upper/lower bounds aid risk management.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Descriptive, not causal - breaks if adoption curve bends sharply.</li>
+            <li>Provides <em>ranges</em> not point targets; wide rails can feel vague.</li>
+            <li>Ignores halving cadence and macro shocks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call</h3>
+        <p>Top rail approximately <strong>$340 k</strong> and floor approximately <strong>$65 k</strong> by year-end 2025; after 2028, corridor never dips below $100 k.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="plChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+    {/* Rainbow Tab */}
+    <div id="tab-rainbow" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Log-Regression "Rainbow" Chart</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p>A long-term log curve with colored +/- sigma bands (blue = cheap, red = bubble). Popularised by BlockchainCenter as a playful sentiment gauge.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Quick visual cue for over/under-valuation zones.</li>
+            <li>Historically captured cycle tops (red) and bottoms (blue).</li>
+            <li>Continuously updated and easy to grasp for newcomers.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Explicitly "for fun" - no economic mechanism.</li>
+            <li>Bands retro-fit past data; could fail if growth path shifts.</li>
+            <li>Offers sentiment zones, not precise forecasts.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call</h3>
+        <p>BTC hovers in the <strong>orange "FOMO" band (~$120 k)</strong>; red "Maximum Bubble" doesn't start until ~$250 k on the 2025 band.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="rainbowChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+    {/* Metcalfe Tab */}
+    <div id="tab-metcalfe" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Metcalfe-Law / Network-Value Model</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p>Market-cap is proportional to (active addresses)². Applies Metcalfe's Law of network effects: more users implies disproportionate increase in value.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Anchors valuation to <strong>actual adoption metrics</strong>.</li>
+            <li>Historically strong correlation between address growth &amp; price.</li>
+            <li>Offers adoption-driven forecasts out to decades.</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Address count does not equal unique users; batching &amp; L2s distort data.</li>
+            <li>Assumes exponential user growth continues unabated.</li>
+            <li>Still omits macro cycles and regulation shocks.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call</h3>
+        <p>With ~1.3 m daily active addresses, model midpoint approximately <strong>$160 k +/- 40%</strong> - suggesting spot price is modestly discounted.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="metcalfeChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+    {/* Halving Tab */}
+    <div id="tab-halving" class="tab-content hidden">
+      <h2 class="text-2xl font-bold mb-4">Four-Year Halving / Cycle-Repeat Model</h2>
+      
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">General idea</h3>
+        <p>Bitcoin's 210,000-block halving cuts miner supply every ~4 years, historically triggering a boom-bust rhythm. Analysts overlay current price on prior cycles to estimate the next peak &amp; draw-down.</p>
+      </div>
+
+      <div class="grid md:grid-cols-2 gap-6 mb-6">
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-green-600">Strengths</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Simple narrative tying price to programmed scarcity shock.</li>
+            <li>Captures miner-sell pressure dynamics &amp; reflexive sentiment.</li>
+            <li>Provides intuitive cycle clock (accumulation-run-bear-reaccumulation).</li>
+          </ul>
+        </div>
+        <div>
+          <h3 class="text-lg font-semibold mb-2 text-red-600">Weaknesses</h3>
+          <ul class="list-disc pl-5 space-y-1">
+            <li>Only three full cycles exist - <strong>tiny sample size</strong>.</li>
+            <li>Institutional flows &amp; ETFs may dampen or shift the rhythm.</li>
+            <li>Peaks &amp; troughs vary; model gives rough timing, not values.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="mb-6">
+        <h3 class="text-lg font-semibold mb-2">Current call</h3>
+        <p>ARK Invest's composite points to a cycle peak <strong>~$240 k +/-</strong> in late 2025, then a typical ~80% draw-down into 2026-27.</p>
+      </div>
+
+      <div class="bg-white dark:bg-gray-900 p-4 rounded-lg shadow-lg">
+        <canvas id="halvingChart" class="w-full h-[800px] cursor-pointer" data-chart="true"></canvas>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+---
+
+## Take-aways
+
+- **No single model is gospel.** S2F/S2FX lean on fixed supply; Metcalfe on adoption; Rainbow & Power-Law on empirical fits; Halving Cycle on recurring sentiment waves.  
+- **Blend lenses for a range, not a point.** As of mid-2025 the composite cluster across models sits roughly **$200 k - $300 k** for the halving epoch, yet individual forecasts vary wildly.  
+- **Expect deviation.** Macro events, regulatory pivots, or technology breakthroughs can shove price far outside any model's path - sometimes for years. Use these frameworks as **context, not certainty**.
+
+<ChartModal />
+
+<script src="/js/bitcoin-pricing-models-charts.js"></script>

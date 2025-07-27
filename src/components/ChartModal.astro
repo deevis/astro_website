@@ -40,11 +40,32 @@
       modal.classList.add('flex');
       document.body.style.overflow = 'hidden'; // Prevent scrolling
       
-      // Dynamically load Chart.js if needed
-      const script = document.createElement('script');
-      script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
-      script.onload = () => renderChart(chartData);
-      document.head.appendChild(script);
+      // Dynamically load Chart.js and date adapter if needed
+      const loadChartJs = new Promise((resolve) => {
+        if ((window as any).Chart) {
+          resolve(true);
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js';
+        script.onload = () => resolve(true);
+        document.head.appendChild(script);
+      });
+      
+      const loadDateAdapter = new Promise((resolve) => {
+        // Always load date adapter for Bitcoin charts since they use time scales
+        const script = document.createElement('script');
+        script.src = 'https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js';
+        script.onload = () => resolve(true);
+        document.head.appendChild(script);
+      });
+      
+      Promise.all([loadChartJs, loadDateAdapter]).then(() => {
+        // Add small delay to ensure adapters are registered
+        setTimeout(() => {
+          renderChart(chartData);
+        }, 100);
+      });
     });
     
     // Function to render the chart
@@ -58,9 +79,13 @@
       
       // Set chart title
       if (chartTitle) {
-        chartTitle.textContent = chartData.type === 'performance' 
-          ? 'CPU Performance Across Tuning Steps' 
-          : 'CPU Temperature Across Tuning Steps';
+        if (chartData.type === 'performance') {
+          chartTitle.textContent = 'CPU Performance Across Tuning Steps';
+        } else if (chartData.type === 'temperature') {
+          chartTitle.textContent = 'CPU Temperature Across Tuning Steps';
+        } else if (chartData.type === 'bitcoin') {
+          chartTitle.textContent = chartData.title || 'Bitcoin Pricing Model';
+        }
       }
       
       // Create the chart based on type
@@ -68,6 +93,8 @@
         createPerformanceChart(chartData);
       } else if (chartData.type === 'temperature') {
         createTemperatureChart(chartData);
+      } else if (chartData.type === 'bitcoin') {
+        createBitcoinChart(chartData);
       }
     }
     
@@ -280,6 +307,124 @@
       });
     }
     
+    // Create bitcoin chart
+    function createBitcoinChart(chartData) {
+      const ctx = chartCanvas.getContext('2d');
+      
+      // Debug: Check what data we received
+      console.log('Bitcoin chart data:', chartData);
+      
+      if (!chartData.datasets || !Array.isArray(chartData.datasets)) {
+        console.error('Invalid datasets in chartData:', chartData);
+        ctx.fillStyle = '#ff0000';
+        ctx.font = '16px Arial';
+        ctx.fillText('Error: Invalid chart data', 10, 50);
+        return;
+      }
+      
+      try {
+        // By the time this executes, Chart.js will be loaded by the script
+        // @ts-ignore - Chart is loaded dynamically
+        modalChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            datasets: chartData.datasets
+          },
+        options: {
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            y: {
+              type: chartData.yAxisType || 'linear',
+              ticks: { 
+                callback: function(value, index, ticks) {
+                  return '$' + value.toLocaleString();
+                }
+              },
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)',
+                lineWidth: 1
+              },
+              title: {
+                display: true,
+                text: 'Price (USD)',
+                font: {
+                  size: 16,
+                  family: 'Inter'
+                }
+              }
+            },
+            x: { 
+              type: 'time',
+              time: {
+                unit: 'year',
+                displayFormats: {
+                  year: 'yyyy'
+                }
+              },
+              grid: {
+                color: 'rgba(200, 200, 200, 0.2)',
+                lineWidth: 1
+              },
+              ticks: {
+                maxTicksLimit: 15,
+                maxRotation: 45
+              },
+              title: {
+                display: true,
+                text: 'Date',
+                font: {
+                  size: 16,
+                  family: 'Inter'
+                }
+              }
+            }
+          },
+          plugins: {
+            legend: { 
+              display: true, 
+              position: 'top',
+              labels: {
+                boxWidth: 15,
+                usePointStyle: true
+              }
+            },
+            tooltip: { 
+              backgroundColor: 'rgba(0, 0, 0, 0.8)',
+              callbacks: { 
+                title: function(context) {
+                  if (context && context[0] && context[0].parsed && context[0].parsed.x) {
+                    return new Date(context[0].parsed.x).toLocaleDateString('en-US', {
+                      year: 'numeric',
+                      month: 'short',
+                      day: 'numeric'
+                    });
+                  }
+                  return '';
+                },
+                label: function(context) {
+                  if (context && context.parsed && context.dataset) {
+                    return context.dataset.label + ': $' + context.parsed.y.toLocaleString();
+                  }
+                  return '';
+                }
+              }
+            }
+          },
+          elements: { 
+            line: { tension: 0.15 },
+            point: { radius: 0, hitRadius: 5, hoverRadius: 3 }
+          }
+        }
+      });
+      } catch (error) {
+        console.error('Error creating Bitcoin chart:', error);
+        ctx.fillStyle = '#ff0000';
+        ctx.font = '16px Arial';
+        ctx.fillText('Error: Could not create chart', 10, 50);
+      }
+    }
+    
     // Add close button functionality
     if (closeButton) {
       closeButton.addEventListener('click', function() {
@@ -314,7 +459,9 @@
 </script>
 
 <script>
-  interface Window {
-    Chart: any;
+  declare global {
+    interface Window {
+      Chart: any;
+    }
   }
 </script> 

@@ -9,6 +9,8 @@ import csv
 import os
 import sys
 import logging
+import time
+import random
 from datetime import datetime, timezone, timedelta
 from typing import Optional, List, Dict, Any, Set
 
@@ -53,11 +55,23 @@ logger = logging.getLogger(__name__)
 class BitcoinPriceUpdater:
     """Fetches Bitcoin price from CoinGecko and updates CSV files"""
     
-    def __init__(self):
+    def __init__(self, rate_limit_delay: float = 10.0, max_retries: int = 5):
+        """
+        Initialize the Bitcoin price updater
+        
+        Args:
+            rate_limit_delay: Base delay between API calls in seconds (default: 10s for free tier)
+            max_retries: Maximum number of retry attempts for failed requests
+        """
         self.session = requests.Session()
         self.session.headers.update({
             'User-Agent': 'Mozilla/5.0 (compatible; BitcoinPriceUpdater/1.0)'
         })
+        
+        # Rate limiting configuration
+        self.rate_limit_delay = rate_limit_delay
+        self.max_retries = max_retries
+        self.last_api_call_time = 0
         
         # File paths - handle both local and production environments
         self.file_paths = self._get_file_paths()
@@ -72,6 +86,84 @@ class BitcoinPriceUpdater:
             'include_24hr_change': 'false'
         }
         
+        logger.info(f"Initialized with rate limit delay: {rate_limit_delay}s, max retries: {max_retries}")
+        
+    def _wait_for_rate_limit(self):
+        """Ensure we respect rate limits by waiting between API calls"""
+        current_time = time.time()
+        time_since_last_call = current_time - self.last_api_call_time
+        
+        if time_since_last_call < self.rate_limit_delay:
+            wait_time = self.rate_limit_delay - time_since_last_call
+            # Add small random jitter to avoid thundering herd
+            jitter = random.uniform(0, 0.5)
+            total_wait = wait_time + jitter
+            
+            logger.info(f"Rate limiting: waiting {total_wait:.1f} seconds before next API call")
+            time.sleep(total_wait)
+        
+        self.last_api_call_time = time.time()
+    
+    def _make_api_request(self, url: str, params: Dict[str, Any], description: str) -> Optional[Dict[str, Any]]:
+        """
+        Make an API request with rate limiting and retry logic
+        
+        Args:
+            url: The API endpoint URL
+            params: Request parameters
+            description: Description for logging
+            
+        Returns:
+            JSON response data or None if failed
+        """
+        for attempt in range(self.max_retries):
+            try:
+                # Wait for rate limit before making request
+                self._wait_for_rate_limit()
+                
+                logger.info(f"Making API request (attempt {attempt + 1}/{self.max_retries}): {description}")
+                
+                response = self.session.get(url, params=params, timeout=30)
+                
+                # Handle rate limiting specifically
+                if response.status_code == 429:
+                    retry_after = response.headers.get('Retry-After')
+                    if retry_after:
+                        wait_time = int(retry_after)
+                        logger.warning(f"Rate limited (429), waiting {wait_time} seconds as requested by server")
+                        time.sleep(wait_time)
+                    else:
+                        # Use exponential backoff if no Retry-After header
+                        wait_time = (2 ** attempt) * self.rate_limit_delay
+                        logger.warning(f"Rate limited (429), using exponential backoff: {wait_time:.1f} seconds")
+                        time.sleep(wait_time)
+                    continue
+                
+                # Handle other HTTP errors
+                response.raise_for_status()
+                
+                # Success
+                data = response.json()
+                logger.info(f"Successfully completed API request: {description}")
+                return data
+                
+            except requests.exceptions.RequestException as e:
+                logger.warning(f"API request failed (attempt {attempt + 1}/{self.max_retries}): {e}")
+                
+                if attempt < self.max_retries - 1:
+                    # Exponential backoff for retries
+                    wait_time = (2 ** attempt) * 2  # 2, 4, 8, 16 seconds
+                    logger.info(f"Retrying in {wait_time} seconds...")
+                    time.sleep(wait_time)
+                else:
+                    logger.error(f"All retry attempts failed for: {description}")
+                    
+            except (KeyError, ValueError, TypeError) as e:
+                logger.error(f"Error parsing API response for {description}: {e}")
+                break  # Don't retry parsing errors
+        
+        return None
+
     def _get_file_paths(self) -> List[str]:
         """Get appropriate file paths for current environment"""
         paths = []
@@ -101,13 +193,16 @@ class BitcoinPriceUpdater:
     
     def fetch_current_price(self) -> Optional[float]:
         """Fetch current Bitcoin price from CoinGecko API"""
+        data = self._make_api_request(
+            self.current_price_url, 
+            self.current_price_params, 
+            "fetching current Bitcoin price"
+        )
+        
+        if data is None:
+            return None
+            
         try:
-            logger.info("Fetching current Bitcoin price from CoinGecko API...")
-            
-            response = self.session.get(self.current_price_url, params=self.current_price_params, timeout=30)
-            response.raise_for_status()
-            
-            data = response.json()
             price = data.get('bitcoin', {}).get('usd')
             
             if price is None:
@@ -117,28 +212,31 @@ class BitcoinPriceUpdater:
             logger.info(f"Successfully fetched current Bitcoin price: ${price:,.2f}")
             return float(price)
             
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error fetching current Bitcoin price: {e}")
-            return None
         except (KeyError, ValueError, TypeError) as e:
             logger.error(f"Error parsing current Bitcoin price response: {e}")
             return None
     
     def fetch_historical_price(self, date: str) -> Optional[float]:
         """Fetch historical Bitcoin price for a specific date from CoinGecko API"""
+        # CoinGecko historical API expects date in DD-MM-YYYY format
         try:
-            logger.info(f"Fetching historical Bitcoin price for {date}...")
-            
-            # CoinGecko historical API expects date in DD-MM-YYYY format
             date_obj = datetime.strptime(date, '%Y-%m-%d')
             formatted_date = date_obj.strftime('%d-%m-%Y')
+        except ValueError as e:
+            logger.error(f"Invalid date format {date}: {e}")
+            return None
+        
+        params = {'date': formatted_date}
+        data = self._make_api_request(
+            self.historical_price_url,
+            params,
+            f"fetching historical Bitcoin price for {date}"
+        )
+        
+        if data is None:
+            return None
             
-            params = {'date': formatted_date}
-            response = self.session.get(self.historical_price_url, params=params, timeout=30)
-            response.raise_for_status()
-            
-            data = response.json()
-            
+        try:
             # The historical API returns price in market_data.current_price.usd
             price = data.get('market_data', {}).get('current_price', {}).get('usd')
             
@@ -149,9 +247,6 @@ class BitcoinPriceUpdater:
             logger.info(f"Successfully fetched historical Bitcoin price for {date}: ${price:,.2f}")
             return float(price)
             
-        except requests.exceptions.RequestException as e:
-            logger.error(f"Error fetching historical Bitcoin price for {date}: {e}")
-            return None
         except (KeyError, ValueError, TypeError) as e:
             logger.error(f"Error parsing historical Bitcoin price response for {date}: {e}")
             return None
@@ -275,10 +370,6 @@ class BitcoinPriceUpdater:
             # Fetch and update prices for missing dates
             file_success = True
             for date in missing_dates:
-                # Add small delay between API calls to be respectful
-                import time
-                time.sleep(1)
-                
                 price = self.fetch_historical_price(date)
                 if price is not None:
                     if not self.update_csv_file(file_path, date, price):
@@ -388,7 +479,12 @@ def main():
     """Main function to update Bitcoin price data"""
     logger.info("Starting Bitcoin price update process...")
     
-    updater = BitcoinPriceUpdater()
+    # Configure rate limiting for CoinGecko free tier
+    # Free tier: 10-30 calls per minute, recommended 6-10 second delays
+    rate_limit_delay = 10.0  # 10 seconds between API calls
+    max_retries = 5          # Maximum retry attempts
+    
+    updater = BitcoinPriceUpdater(rate_limit_delay=rate_limit_delay, max_retries=max_retries)
     
     # Log environment detection
     if os.path.exists('/app'):

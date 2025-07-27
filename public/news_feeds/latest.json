@@ -1,137 +1,16 @@
 {
   "news_feed": {
-    "generated_at": "2025-07-12T06:02:18.423620+00:00",
+    "generated_at": "2025-07-13T21:27:45.684169+00:00",
     "version": "4.0",
     "system": "production_minimal",
     "articles": [
-      {
-        "id": "d8ce0794c854",
-        "title": "Altcoins are rocketing, Bitcoin dominance hasn’t ‘even sneezed’: Analyst",
-        "url": "https://cointelegraph.com/news/altcoin-crypto-market-surging-bitcoin-dominance-analyst?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-        "source": "Cointelegraph.com News",
-        "author": "Cointelegraph by Ciaran Lyons",
-        "published_date": "2025-07-12T06:11:56+01:00",
-        "category": "bitcoin",
-        "content_preview": "Crypto analyst Matthew Hyland suggests altcoins will be “ripping” much more when Bitcoin Dominance drops to 45%.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Cointelegraph.com News",
-            "url": "https://cointelegraph.com/news/altcoin-crypto-market-surging-bitcoin-dominance-analyst?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-            "author": "Cointelegraph by Ciaran Lyons",
-            "published_date": "2025-07-12T06:11:56+01:00"
-          }
-        ]
-      },
-      {
-        "id": "edf23a8e74fb",
-        "title": "Diffusion + Coding = DiffuCode.  How Apple Released a Weirdly Interesting Coding Language Model",
-        "url": "https://developers.slashdot.org/story/25/07/05/1259255/diffusion--coding--diffucode-how-apple-released-a-weirdly-interesting-coding-language-model?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "EditorDavid",
-        "published_date": "2025-07-12T06:01:35.998555+00:00",
-        "category": "software_dev",
-        "content_preview": "\"Apple quietly dropped a new AI model on Hugging Face with an interesting twist,\" writes 9to5Mac. \"Instead of writing code like traditional LLMs generate text (left to right, top to bottom), it can also write out of order, and improve multiple chunks at once.\" \n\n\"The result is faster code generation...",
-        "importance": "high",
-        "tags": [
-          "software_dev",
-          "release"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://developers.slashdot.org/story/25/07/05/1259255/diffusion--coding--diffucode-how-apple-released-a-weirdly-interesting-coding-language-model?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "EditorDavid",
-            "published_date": "2025-07-12T06:01:35.998555+00:00"
-          }
-        ]
-      },
-      {
-        "id": "e31bb0394a1b",
-        "title": "Hugging Face Launches $299 Robot That Could Disrupt Entire Robotics Industry",
-        "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:35.998091+00:00",
-        "category": "software_dev",
-        "content_preview": "An anonymous reader quotes a report from VentureBeat: Hugging Face, the $4.5 billion artificial intelligence platform that has become the GitHub of machine learning, announced Tuesday the launch of Reachy Mini, a $299 desktop robot designed to bring AI-powered robotics to millions of developers worl...",
-        "importance": "high",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:35.998091+00:00"
-          }
-        ]
-      },
-      {
-        "id": "506cb3b35f58",
-        "title": "Red Hat Gives Developers Free Access To Enterprise Linux For Business Use",
-        "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:35.997696+00:00",
-        "category": "software_dev",
-        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Red Hat has introduced a new option that gives developers a fast lane to enterprise-grade Linux without needing to go through IT. The new release, called Red Hat Enterprise Linux for Business Developers, is now available for free. It offers direct, self-s...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:35.997696+00:00"
-          }
-        ]
-      },
-      {
-        "id": "d00a96e3c73d",
-        "title": "Google Replaces Android Developer Preview With Rolling Canary Channel",
-        "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot: Developers",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:35.997371+00:00",
-        "category": "software_dev",
-        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Android is changing how it gives developers access to early features. The company is replacing its old Developer Preview model with a new Canary channel that provides rolling updates all year long. This new approach is meant to give developers earlier and...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot: Developers",
-            "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:35.997371+00:00"
-          }
-        ]
-      },
       {
         "id": "9229defdbe72",
         "title": "'Coding is Dead': University of Washington CS Program Rethinks Curriculum For the AI Era",
         "url": "https://developers.slashdot.org/story/25/07/11/1418225/coding-is-dead-university-of-washington-cs-program-rethinks-curriculum-for-the-ai-era?utm_source=rss1.0mainlinkanon&utm_medium=feed",
         "source": "Slashdot: Developers",
         "author": "msmash",
-        "published_date": "2025-07-12T06:01:35.996861+00:00",
+        "published_date": "2025-07-13T21:27:04.481909+00:00",
         "category": "software_dev",
         "content_preview": "The University of Washington's Paul G. Allen School of Computer Science & Engineering is overhauling its approach to computer science education as AI reshapes the tech industry. Director Magdalena Balazinska has declared that \"coding, or the translation of a precise design into software instructions...",
         "importance": "medium",
@@ -145,139 +24,19 @@
             "name": "Slashdot: Developers",
             "url": "https://developers.slashdot.org/story/25/07/11/1418225/coding-is-dead-university-of-washington-cs-program-rethinks-curriculum-for-the-ai-era?utm_source=rss1.0mainlinkanon&utm_medium=feed",
             "author": "msmash",
-            "published_date": "2025-07-12T06:01:35.996861+00:00"
+            "published_date": "2025-07-13T21:27:04.481909+00:00"
           }
         ]
       },
       {
-        "id": "3142d8e31efb",
-        "title": "JPMorgan Tells Fintechs They Have To Pay Up For Customer Data",
-        "url": "https://news.slashdot.org/story/25/07/11/1945201/jpmorgan-tells-fintechs-they-have-to-pay-up-for-customer-data?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
+        "id": "d00a96e3c73d",
+        "title": "Google Replaces Android Developer Preview With Rolling Canary Channel",
+        "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
         "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:03.438286+00:00",
-        "category": "ai_progress",
-        "content_preview": "An anonymous reader quotes a report from Bloomberg: JPMorgan Chase has told financial-technology companies that it will start charging fees amounting to hundreds of millions of dollars for access to their customers' bank account information -- a move that threatens to upend the industry's business m...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://news.slashdot.org/story/25/07/11/1945201/jpmorgan-tells-fintechs-they-have-to-pay-up-for-customer-data?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:03.438286+00:00"
-          }
-        ]
-      },
-      {
-        "id": "df20f72aadaf",
-        "title": "iFixit: the Switch 2 Pro is a 'Piss-Poor Excuse For a Controller'",
-        "url": "https://games.slashdot.org/story/25/07/11/1936226/ifixit-the-switch-2-pro-is-a-piss-poor-excuse-for-a-controller?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:03.437887+00:00",
-        "category": "ai_progress",
-        "content_preview": "iFixit has harsh words for Nintendo's $85 Switch 2 Pro controller, calling it a \"piss-poor excuse for a controller\" due to its difficult repairability, use of outdated drift-prone joysticks, and poor internal accessibility. The Verge reports: Opening the controller requires you to first forcefully r...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://games.slashdot.org/story/25/07/11/1936226/ifixit-the-switch-2-pro-is-a-piss-poor-excuse-for-a-controller?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:03.437887+00:00"
-          }
-        ]
-      },
-      {
-        "id": "857a3d302153",
-        "title": "Russian Basketball Player Arrested For Alleged Role In Ransomware Attacks",
-        "url": "https://yro.slashdot.org/story/25/07/11/2254200/russian-basketball-player-arrested-for-alleged-role-in-ransomware-attacks?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:03.437548+00:00",
-        "category": "ai_progress",
-        "content_preview": "joshuark writes: A Russian basketball player, Daniil Kasatkin, was arrested on June 21 in France at the request of the United States as he allegedly is part of a network of hackers. Daniil Kasatkin, aged 26, is accused by the United States of negotiating the payment of ransoms to this hacker network...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://yro.slashdot.org/story/25/07/11/2254200/russian-basketball-player-arrested-for-alleged-role-in-ransomware-attacks?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:03.437548+00:00"
-          }
-        ]
-      },
-      {
-        "id": "2dda39b953c7",
-        "title": "Researchers Develop New Tool To Measure Biological Age",
-        "url": "https://science.slashdot.org/story/25/07/11/236230/researchers-develop-new-tool-to-measure-biological-age?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:03.437193+00:00",
-        "category": "ai_progress",
-        "content_preview": "Stanford researchers have developed a blood-based AI tool that calculates the biological age of individual organs to reveal early signs of aging-related disease. The Mercury News reports: The tool, unveiled in Nature Medicine Wednesday, was developed by a research team spearheaded by Tony Wyss-Coray...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://science.slashdot.org/story/25/07/11/236230/researchers-develop-new-tool-to-measure-biological-age?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:03.437193+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f1025f757b89",
-        "title": "AI Therapy Bots Fuel Delusions and Give Dangerous Advice, Stanford Study Finds",
-        "url": "https://science.slashdot.org/story/25/07/11/2314204/ai-therapy-bots-fuel-delusions-and-give-dangerous-advice-stanford-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-        "source": "Slashdot",
-        "author": "BeauHD",
-        "published_date": "2025-07-12T06:01:03.436620+00:00",
-        "category": "ai_progress",
-        "content_preview": "An anonymous reader quotes a report from Ars Technica: When Stanford University researchers asked ChatGPT whether it would be willing to work closely with someone who had schizophrenia, the AI assistant produced a negative response. When they presented it with someone asking about \"bridges taller th...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Slashdot",
-            "url": "https://science.slashdot.org/story/25/07/11/2314204/ai-therapy-bots-fuel-delusions-and-give-dangerous-advice-stanford-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
-            "author": "BeauHD",
-            "published_date": "2025-07-12T06:01:03.436620+00:00"
-          }
-        ]
-      },
-      {
-        "id": "46028f5b6c2e",
-        "title": "I'm Sorry Arch! Part 2",
-        "url": "https://dev.to/darthmoomancer/im-sorry-arch-part-2-163h",
-        "source": "DEV Community",
-        "author": "DarthMooMancer",
-        "published_date": "2025-07-12T05:39:37+00:00",
+        "published_date": "2025-07-13T21:27:04.481909+00:00",
         "category": "software_dev",
-        "content_preview": "Firstly, DWM is the only window manager for x11 that needs to exist. I used i3 for the longest time, but didn't feel happy. I've tried others but nothing compares to the power and minimalism of DWM. Don't want to install the package, just compile it from source. \nWhile it takes time to understand DW...",
+        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Android is changing how it gives developers access to early features. The company is replacing its old Developer Preview model with a new Canary channel that provides rolling updates all year long. This new approach is meant to give developers earlier and...",
         "importance": "medium",
         "tags": [
           "software_dev"
@@ -286,22 +45,22 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "DEV Community",
-            "url": "https://dev.to/darthmoomancer/im-sorry-arch-part-2-163h",
-            "author": "DarthMooMancer",
-            "published_date": "2025-07-12T05:39:37+00:00"
+            "name": "Slashdot: Developers",
+            "url": "https://developers.slashdot.org/story/25/07/10/2329218/google-replaces-android-developer-preview-with-rolling-canary-channel?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-13T21:27:04.481909+00:00"
           }
         ]
       },
       {
-        "id": "0bcb61cdc8ed",
-        "title": "Rust Implementation for High Concurrency Processing3319",
-        "url": "https://dev.to/member_3bd028d5/rust-implementation-for-high-concurrency-processing3319-ga6",
-        "source": "DEV Community",
-        "author": "member_3bd028d5",
-        "published_date": "2025-07-12T05:38:45+00:00",
+        "id": "506cb3b35f58",
+        "title": "Red Hat Gives Developers Free Access To Enterprise Linux For Business Use",
+        "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-13T21:27:04.481909+00:00",
         "category": "software_dev",
-        "content_preview": "GitHub Homepage\nDuring my junior year studies, high concurrency processing has always been one of the technical fields I'm most interested in. While traditional multi-threading models can handle concurrent requests, they often encounter performance bottlenecks when facing large numbers of connection...",
+        "content_preview": "BrianFagioli shares a report from NERDS.xyz: Red Hat has introduced a new option that gives developers a fast lane to enterprise-grade Linux without needing to go through IT. The new release, called Red Hat Enterprise Linux for Business Developers, is now available for free. It offers direct, self-s...",
         "importance": "medium",
         "tags": [
           "software_dev"
@@ -310,194 +69,358 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "DEV Community",
-            "url": "https://dev.to/member_3bd028d5/rust-implementation-for-high-concurrency-processing3319-ga6",
-            "author": "member_3bd028d5",
-            "published_date": "2025-07-12T05:38:45+00:00"
+            "name": "Slashdot: Developers",
+            "url": "https://linux.slashdot.org/story/25/07/10/0112201/red-hat-gives-developers-free-access-to-enterprise-linux-for-business-use?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-13T21:27:04.481909+00:00"
           }
         ]
       },
       {
-        "id": "115b70abb9a1",
-        "title": "Bidirectional Communication Patterns in Modern Web Apps3315",
-        "url": "https://dev.to/member_fdfd31bf/bidirectional-communication-patterns-in-modern-web-apps3315-48lj",
-        "source": "DEV Community",
-        "author": "member_fdfd31bf",
-        "published_date": "2025-07-12T05:38:45+00:00",
+        "id": "e31bb0394a1b",
+        "title": "Hugging Face Launches $299 Robot That Could Disrupt Entire Robotics Industry",
+        "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-13T21:27:04.481909+00:00",
         "category": "software_dev",
-        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nDuring my final year project on distributed systems, I encountered a fundamental challenge that shapes modern web development: how to enable efficient bidirectional communication between clients and servers. Traditional request-response pattern...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/member_fdfd31bf/bidirectional-communication-patterns-in-modern-web-apps3315-48lj",
-            "author": "member_fdfd31bf",
-            "published_date": "2025-07-12T05:38:45+00:00"
-          }
-        ]
-      },
-      {
-        "id": "cfdd369dfa90",
-        "title": "Context Management and Request Lifecycle Optimization3322",
-        "url": "https://dev.to/member_bf115bc6/context-management-and-request-lifecycle-optimization3322-3b12",
-        "source": "DEV Community",
-        "author": "member_bf115bc6",
-        "published_date": "2025-07-12T05:38:45+00:00",
-        "category": "software_dev",
-        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nMy deep dive into context management began during a performance optimization project where I discovered that inefficient request context handling was creating memory leaks and performance bottlenecks. Traditional web frameworks often treat cont...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/member_bf115bc6/context-management-and-request-lifecycle-optimization3322-3b12",
-            "author": "member_bf115bc6",
-            "published_date": "2025-07-12T05:38:45+00:00"
-          }
-        ]
-      },
-      {
-        "id": "fd3154b7191b",
-        "title": "Revolutionary Performance Breakthrough in Modern Web Development3308",
-        "url": "https://dev.to/member_bb466cd7/revolutionary-performance-breakthrough-in-modern-web-development3308-5248",
-        "source": "DEV Community",
-        "author": "member_bb466cd7",
-        "published_date": "2025-07-12T05:38:44+00:00",
-        "category": "software_dev",
-        "content_preview": "GitHub Homepage: https://github.com/eastspire/hyperlane\nAs a junior computer science student diving deep into web development, I've spent countless hours exploring different frameworks and their performance characteristics. My journey led me to discover something remarkable that completely changed m...",
-        "importance": "medium",
-        "tags": [
-          "software_dev"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "DEV Community",
-            "url": "https://dev.to/member_bb466cd7/revolutionary-performance-breakthrough-in-modern-web-development3308-5248",
-            "author": "member_bb466cd7",
-            "published_date": "2025-07-12T05:38:44+00:00"
-          }
-        ]
-      },
-      {
-        "id": "180a8d810dfb",
-        "title": "Bitcoin Breaks Records: What Miners and Leverage Traders Are Doing Behind the Scenes",
-        "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-breaks-records-what-miners-and-leverage-traders-are-doing-behind-the-scenes/",
-        "source": "NewsBTC",
-        "author": "Samuel Edyme",
-        "published_date": "2025-07-12T03:00:31+00:00",
-        "category": "bitcoin",
-        "content_preview": "Bitcoin has surpassed its previous all-time high, reaching $118,254 and marking a notable milestone in its price trajectory. This latest milestone comes after BTC’s former high at $111,000 levels in May, representing a 10% gain over the past week and roughly 5.9% in the last 24 hours. At the time of...",
+        "content_preview": "An anonymous reader quotes a report from VentureBeat: Hugging Face, the $4.5 billion artificial intelligence platform that has become the GitHub of machine learning, announced Tuesday the launch of Reachy Mini, a $299 desktop robot designed to bring AI-powered robotics to millions of developers worl...",
         "importance": "high",
         "tags": [
-          "bitcoin",
-          "ath"
+          "software_dev"
         ],
         "aggregated": false,
         "source_count": 1,
         "sources": [
           {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-breaks-records-what-miners-and-leverage-traders-are-doing-behind-the-scenes/",
-            "author": "Samuel Edyme",
-            "published_date": "2025-07-12T03:00:31+00:00"
+            "name": "Slashdot: Developers",
+            "url": "https://hardware.slashdot.org/story/25/07/09/2051245/hugging-face-launches-299-robot-that-could-disrupt-entire-robotics-industry?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-13T21:27:04.481909+00:00"
           }
         ]
       },
       {
-        "id": "9774c3be9f16",
-        "title": "No Mania Yet: Bitcoin ATH Lacks Hype, Suggesting Further Upside Potential",
-        "url": "https://www.newsbtc.com/bitcoin-news/no-mania-yet-bitcoin-ath-lacks-hype-suggesting-further-upside-potential/",
-        "source": "NewsBTC",
-        "author": "Ash Tiwari",
-        "published_date": "2025-07-12T02:00:54+00:00",
-        "category": "bitcoin",
-        "content_preview": "As Bitcoin (BTC) continues to post new all-time highs (ATH), reaching as much as $118,869 on Binance, market indicators show little sign of overheating. The lack of retail-driven hype amid BTC’s record-breaking run suggests there may still be room for further growth in the flagship cryptocurrency. B...",
+        "id": "2ce9c5ecb87b",
+        "title": "AI Slows Down Some Experienced Software Developers, Study Finds",
+        "url": "https://developers.slashdot.org/story/25/07/12/016247/ai-slows-down-some-experienced-software-developers-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot: Developers",
+        "author": "BeauHD",
+        "published_date": "2025-07-13T21:27:04.480908+00:00",
+        "category": "software_dev",
+        "content_preview": "An anonymous reader quotes a report from Reuters: Contrary to popular belief, using cutting-edge artificial intelligence tools slowed down experienced software developers when they were working in codebases familiar to them, rather than supercharging their work, a new study found. AI research nonpro...",
         "importance": "medium",
         "tags": [
-          "bitcoin",
-          "ath"
+          "software_dev"
         ],
         "aggregated": false,
         "source_count": 1,
         "sources": [
           {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/bitcoin-news/no-mania-yet-bitcoin-ath-lacks-hype-suggesting-further-upside-potential/",
-            "author": "Ash Tiwari",
-            "published_date": "2025-07-12T02:00:54+00:00"
+            "name": "Slashdot: Developers",
+            "url": "https://developers.slashdot.org/story/25/07/12/016247/ai-slows-down-some-experienced-software-developers-study-finds?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "BeauHD",
+            "published_date": "2025-07-13T21:27:04.480908+00:00"
           }
         ]
       },
       {
-        "id": "0dd05e4f1386",
-        "title": "OpenAI delays the release of its open model, again",
-        "url": "https://techcrunch.com/2025/07/11/openai-delays-the-release-of-its-open-model-again/",
+        "id": "1e130032d976",
+        "title": "A Never-Ending Supply of Drones Has Frozen the Front Lines in Ukraine",
+        "url": "https://tech.slashdot.org/story/25/07/13/1930206/a-never-ending-supply-of-drones-has-frozen-the-front-lines-in-ukraine?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "EditorDavid",
+        "published_date": "2025-07-13T21:26:31.856252+00:00",
+        "category": "ai_progress",
+        "content_preview": "\"In the battle for Ukraine, the front line is increasingly at a standstill\" because of \"rapid innovations in drone technology...\" according to the Wall Street Journal. \"Each side has hundreds of them constantly in the air across the 750-mile front line.\" \n\nAnd drones \"now bring everything from food ...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://tech.slashdot.org/story/25/07/13/1930206/a-never-ending-supply-of-drones-has-frozen-the-front-lines-in-ukraine?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-13T21:26:31.856252+00:00"
+          }
+        ]
+      },
+      {
+        "id": "fd436ff65dd4",
+        "title": "Is Enron Transforming Into a Real Texas Retail Electricity Provider?",
+        "url": "https://hardware.slashdot.org/story/25/07/13/1837237/is-enron-transforming-into-a-real-texas-retail-electricity-provider?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "EditorDavid",
+        "published_date": "2025-07-13T21:26:31.856252+00:00",
+        "category": "ai_progress",
+        "content_preview": "HGP Storage is a (real) Texas company providing distributed battery-based, utility-scale energy storage systems. Founded in 2013, it has \"successfully developed over 20+ sites and closed over 200 MW of distributed energy projects,\" according to its web site. \nAnd they just teamed up with Enron, repo...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://hardware.slashdot.org/story/25/07/13/1837237/is-enron-transforming-into-a-real-texas-retail-electricity-provider?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-13T21:26:31.856252+00:00"
+          }
+        ]
+      },
+      {
+        "id": "226676f8b889",
+        "title": "Some Gut Microbes Can Absorb and Help Expel 'Forever Chemicals', Study Shows",
+        "url": "https://science.slashdot.org/story/25/07/13/1743232/some-gut-microbes-can-absorb-and-help-expel-forever-chemicals-study-shows?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "EditorDavid",
+        "published_date": "2025-07-13T21:26:31.856252+00:00",
+        "category": "ai_progress",
+        "content_preview": "\"Certain kinds of gut microbes absorb toxic Pfas 'forever chemicals' and help expel them from the body,\" reports the Guardian, citing a \"new first-of-its-kind University of Cambridge research shows.\"\n\n\nThe microbes were found to remove up to 75% of some Pfas from the gut of mice. Several of the stud...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://science.slashdot.org/story/25/07/13/1743232/some-gut-microbes-can-absorb-and-help-expel-forever-chemicals-study-shows?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-13T21:26:31.856252+00:00"
+          }
+        ]
+      },
+      {
+        "id": "56b0766fff6e",
+        "title": "Underwater Turbine Spins 6.5 Years Off Scotland's Coast, Proving Viability of Tidal Energy",
+        "url": "https://news.slashdot.org/story/25/07/12/0428216/underwater-turbine-spins-65-years-off-scotlands-coast-proving-viability-of-tidal-energy?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "EditorDavid",
+        "published_date": "2025-07-13T21:26:31.856252+00:00",
+        "category": "ai_progress",
+        "content_preview": "An underwater turbine has been spinning for more than six years \"to harness the power of ocean tides for electricity,\" reports the Associated Press. The long-running turbine (off the coast of Scotland) has now proven the commercial viability of the technology:\n\n\nKeeping a large, or grid-scale, turbi...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://news.slashdot.org/story/25/07/12/0428216/underwater-turbine-spins-65-years-off-scotlands-coast-proving-viability-of-tidal-energy?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-13T21:26:31.856252+00:00"
+          }
+        ]
+      },
+      {
+        "id": "11e35fb0028a",
+        "title": "GParted Live 1.7.0 Linux Distro Drops 32-Bit Support",
+        "url": "https://linux.slashdot.org/story/25/07/13/1946205/gparted-live-170-linux-distro-drops-32-bit-support?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+        "source": "Slashdot",
+        "author": "EditorDavid",
+        "published_date": "2025-07-13T21:26:31.855250+00:00",
+        "category": "ai_progress",
+        "content_preview": "\"GParted Live is a Linux distro with a focused purpose,\" writes Slashdot reader BrianFagioli. \"It exists solely to give users a simple and effective way to manage disk partitions. Whether you're resizing drives, prepping for dual boot, or recovering data, this live operating system has you covered.\"...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Slashdot",
+            "url": "https://linux.slashdot.org/story/25/07/13/1946205/gparted-live-170-linux-distro-drops-32-bit-support?utm_source=rss1.0mainlinkanon&utm_medium=feed",
+            "author": "EditorDavid",
+            "published_date": "2025-07-13T21:26:31.855250+00:00"
+          }
+        ]
+      },
+      {
+        "id": "caf388d809b8",
+        "title": "Getting Started with Rust in 2025: Why Now Is a Great Time to Learn Rust 🦀",
+        "url": "https://dev.to/basfar/getting-started-with-rust-in-2025-why-now-is-a-great-time-to-learn-rust-1d89",
+        "source": "DEV Community",
+        "author": "Mukhtar",
+        "published_date": "2025-07-13T20:48:12+00:00",
+        "category": "software_dev",
+        "content_preview": "\n  \n  \n  Getting Started with Rust in 2025 🦀\n\nRust has been growing steadily over the years, and in 2025, it's more relevant than ever. If you've been on the fence about learning it, now's the perfect time to jump in.\n\n  \n  \n  🧠 Why Learn Rust?\n\nRust is a modern systems programming language focused ...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/basfar/getting-started-with-rust-in-2025-why-now-is-a-great-time-to-learn-rust-1d89",
+            "author": "Mukhtar",
+            "published_date": "2025-07-13T20:48:12+00:00"
+          }
+        ]
+      },
+      {
+        "id": "c80b0afca875",
+        "title": "Part 4: Real-time Blockchain Updates --- Listening for Smart Contract Events with web3.py",
+        "url": "https://dev.to/divine_igbinoba_fb6de7207/part-4-real-time-blockchain-updates-listening-for-smart-contract-events-with-web3py-32dl",
+        "source": "DEV Community",
+        "author": "Divine Igbinoba",
+        "published_date": "2025-07-13T20:44:12+00:00",
+        "category": "software_dev",
+        "content_preview": "Learn how to build responsive dApps that react instantly to blockchain changes using event listeners\n\nIn our previous posts (Part 1, Part 2, Part 3), you've mastered connecting to the blockchain, reading its data, and changing its state.\nBut what if you need to know immediately when something import...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/divine_igbinoba_fb6de7207/part-4-real-time-blockchain-updates-listening-for-smart-contract-events-with-web3py-32dl",
+            "author": "Divine Igbinoba",
+            "published_date": "2025-07-13T20:44:12+00:00"
+          }
+        ]
+      },
+      {
+        "id": "7cd3f6715de7",
+        "title": "Milla Photo Image Carousel ( Animation )",
+        "url": "https://dev.to/online_zone76/milla-photo-image-carousel-animation--2agh",
+        "source": "DEV Community",
+        "author": "Online Zone",
+        "published_date": "2025-07-13T20:40:33+00:00",
+        "category": "software_dev",
+        "content_preview": "Check out this Pen I made!\n\n",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/online_zone76/milla-photo-image-carousel-animation--2agh",
+            "author": "Online Zone",
+            "published_date": "2025-07-13T20:40:33+00:00"
+          }
+        ]
+      },
+      {
+        "id": "db748a55d6ff",
+        "title": "The human harbor: Navigating identity and meaning in the AI age",
+        "url": "https://venturebeat.com/ai/the-human-harbor-navigating-identity-and-meaning-in-the-ai-age/",
+        "source": "AI News | VentureBeat",
+        "author": "Gary Grossman, Edelman",
+        "published_date": "2025-07-13T20:35:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "The future is marked by deepening uncertainty about our place in it, and by growing ambiguity about the nature of human purpose itself.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/the-human-harbor-navigating-identity-and-meaning-in-the-ai-age/",
+            "author": "Gary Grossman, Edelman",
+            "published_date": "2025-07-13T20:35:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "b42b59da5f8e",
+        "title": "A Deep Dive into CSS Animations with keyframes",
+        "url": "https://dev.to/mechcloud_academy/a-deep-dive-into-css-animations-with-keyframes-7n6",
+        "source": "DEV Community",
+        "author": "Akash",
+        "published_date": "2025-07-13T20:31:00+00:00",
+        "category": "software_dev",
+        "content_preview": "You’ve mastered CSS hover effects and transitions to add that spark of interactivity to your sites. But what if you want to create more complex, multi-step animations that run without any user interaction? What if you want to make an element pulse, slide in, or shake on command?\nFor that, you need t...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/mechcloud_academy/a-deep-dive-into-css-animations-with-keyframes-7n6",
+            "author": "Akash",
+            "published_date": "2025-07-13T20:31:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "00c0fd6dc5e6",
+        "title": "Progress update with pics!",
+        "url": "https://dev.to/magipunk/progress-update-with-pics-1fio",
+        "source": "DEV Community",
+        "author": "Dan Dahl",
+        "published_date": "2025-07-13T20:26:14+00:00",
+        "category": "software_dev",
+        "content_preview": "Hey folks,\nSo I feel like I've made some decent progress over the last week. My UI is looking polished, and I've got Rive's view models working in all sorts of interesting ways. I've got hooks to expand the grid one row at a time, set each cell to a specific event, and flip the current cell between ...",
+        "importance": "medium",
+        "tags": [
+          "software_dev"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "DEV Community",
+            "url": "https://dev.to/magipunk/progress-update-with-pics-1fio",
+            "author": "Dan Dahl",
+            "published_date": "2025-07-13T20:26:14+00:00"
+          }
+        ]
+      },
+      {
+        "id": "9ba5ff7e7b0d",
+        "title": "Study warns of ‘significant risks’ in using AI therapy chatbots",
+        "url": "https://techcrunch.com/2025/07/13/study-warns-of-significant-risks-in-using-ai-therapy-chatbots/",
         "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Maxwell Zeff",
-        "published_date": "2025-07-12T01:38:05+00:00",
+        "author": "Anthony Ha",
+        "published_date": "2025-07-13T19:50:38+00:00",
         "category": "ai_progress",
-        "content_preview": "OpenAI CEO Sam Altman said Friday the company is delaying the release of its open model indefinitely.",
-        "importance": "high",
+        "content_preview": "Therapy chatbots powered by large language models may stigmatize users with mental health conditions and otherwise respond inappropriately or even dangerously, according to researchers at Stanford University.",
+        "importance": "medium",
         "tags": [
-          "ai_progress",
-          "llm"
+          "ai_progress"
         ],
         "aggregated": false,
         "source_count": 1,
         "sources": [
           {
             "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/07/11/openai-delays-the-release-of-its-open-model-again/",
-            "author": "Maxwell Zeff",
-            "published_date": "2025-07-12T01:38:05+00:00"
+            "url": "https://techcrunch.com/2025/07/13/study-warns-of-significant-risks-in-using-ai-therapy-chatbots/",
+            "author": "Anthony Ha",
+            "published_date": "2025-07-13T19:50:38+00:00"
           }
         ]
       },
       {
-        "id": "a43d718d1713",
-        "title": "Bitcoin Soars Past $118,800—Breakout Or Brutal Bull Trap?",
-        "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-soars-118800-breakout-or-bull-trap/",
+        "id": "26e0e4fa769b",
+        "title": "Bitcoin Stalls After Rally: Will It Blast Through $125,000 Or Slip Back To $110K?",
+        "url": "https://www.newsbtc.com/news/bitcoin/bitcoin-stalls-after-rally-will-it-blast-through-125000-or-slip-back-to-110k/",
         "source": "NewsBTC",
-        "author": "Jake Simmons",
-        "published_date": "2025-07-12T01:00:11+00:00",
+        "author": "Scott Matherson",
+        "published_date": "2025-07-13T19:30:25+00:00",
         "category": "bitcoin",
-        "content_preview": "Bitcoin’s summer rally accelerated in the early hours of 11 July, when the benchmark cryptocurrency sliced through $118,000 and printed exchange highs that peaked above $118,800, depending on venue data. The spike wiped out an estimated $1.25 billion in short positions within a single trading day, a...",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "NewsBTC",
-            "url": "https://www.newsbtc.com/bitcoin-news/bitcoin-soars-118800-breakout-or-bull-trap/",
-            "author": "Jake Simmons",
-            "published_date": "2025-07-12T01:00:11+00:00"
-          }
-        ]
-      },
-      {
-        "id": "c9d3f3d66544",
-        "title": "Bitcoin Christmas rally to $200K or $300K possible based on ‘power law’ model",
-        "url": "https://cointelegraph.com/news/bitcoin-christmas-rally-to-dollar200k-or-dollar300k-possible-based-on-power-law-model?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-        "source": "Cointelegraph.com News",
-        "author": "Cointelegraph by Biraajmaan Tamuly",
-        "published_date": "2025-07-12T00:23:12+01:00",
-        "category": "bitcoin",
-        "content_preview": "Bitcoin’s parabolic rally could last until Christmas with a cycle top near $300,000, according to one analyst.",
+        "content_preview": "After a powerful breakout last week that pushed Bitcoin into a new all-time high of $118,667, the world’s leading cryptocurrency appears to be taking a breather. As of the time of writing, Bitcoin is trading around $117,953, slightly below its recent peak. The move followed a string of consecutive d...",
         "importance": "high",
         "tags": [
           "bitcoin",
@@ -507,22 +430,328 @@
         "source_count": 1,
         "sources": [
           {
-            "name": "Cointelegraph.com News",
-            "url": "https://cointelegraph.com/news/bitcoin-christmas-rally-to-dollar200k-or-dollar300k-possible-based-on-power-law-model?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
-            "author": "Cointelegraph by Biraajmaan Tamuly",
-            "published_date": "2025-07-12T00:23:12+01:00"
+            "name": "NewsBTC",
+            "url": "https://www.newsbtc.com/news/bitcoin/bitcoin-stalls-after-rally-will-it-blast-through-125000-or-slip-back-to-110k/",
+            "author": "Scott Matherson",
+            "published_date": "2025-07-13T19:30:25+00:00"
           }
         ]
       },
       {
-        "id": "ed5e4e142bdb",
-        "title": "Tether to sunset USDT redemptions on 5 ‘legacy’ networks including Bitcoin Cash, Algorand",
-        "url": "https://cryptoslate.com/tether-to-sunset-usdt-redemptions-on-5-legacy-networks-including-bitcoin-cash-algorand/",
-        "source": "CryptoSlate",
-        "author": "Assad Jafri",
-        "published_date": "2025-07-11T23:15:30+00:00",
+        "id": "a7ce4f7f8058",
+        "title": "Bitcoin May Land On 36 More Company Balance Sheets This Year, Blockchain Firm Says",
+        "url": "https://bitcoinist.com/bitcoin-may-land-on-36-more-company-balance-sheets-this-year-blockchain-firm-says/",
+        "source": "Bitcoinist.com",
+        "author": "Christian Encila",
+        "published_date": "2025-07-13T18:30:22+00:00",
         "category": "bitcoin",
-        "content_preview": "Tether announced it will discontinue support for its USDT stablecoin on five “legacy” blockchains, including Omni Layer, Bitcoin Cash SLP, Kusama, EOS, and Algorand. According to the July 11 announcement, the move will become effective Sept. 1, ending redemptions and freezing remaining tokens on tho...",
+        "content_preview": "Public firms around the globe have been piling into Bitcoin this year. According to Blockware Intelligence, the number of public companies holding Bitcoin jumped by 120% in 2025. That surge brought the total to 141 firms. And by the end of 2025, at least 36 more are expected to add Bitcoin to their ...",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Bitcoinist.com",
+            "url": "https://bitcoinist.com/bitcoin-may-land-on-36-more-company-balance-sheets-this-year-blockchain-firm-says/",
+            "author": "Christian Encila",
+            "published_date": "2025-07-13T18:30:22+00:00"
+          }
+        ]
+      },
+      {
+        "id": "363e003f3f78",
+        "title": "Chart of the Week: 'Hyperbitcoinization' May Not Be Just Maximalist Fantasy Anymore",
+        "url": "https://www.coindesk.com/markets/2025/07/13/chart-of-the-week-hyperbitcoinization-may-not-be-just-maximalist-fantasy-anymore",
+        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+        "author": "Aoyon Ashraf",
+        "published_date": "2025-07-13T18:24:27+00:00",
+        "category": "bitcoin",
+        "content_preview": "",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "url": "https://www.coindesk.com/markets/2025/07/13/chart-of-the-week-hyperbitcoinization-may-not-be-just-maximalist-fantasy-anymore",
+            "author": "Aoyon Ashraf",
+            "published_date": "2025-07-13T18:24:27+00:00"
+          }
+        ]
+      },
+      {
+        "id": "454dc5d37b08",
+        "title": "Stop vetting engineers like it’s 2021 — the AI-native workforce has arrived",
+        "url": "https://venturebeat.com/programming-development/stop-vetting-engineers-like-its-2021-the-ai-native-workforce-has-arrived/",
+        "source": "AI News | VentureBeat",
+        "author": "Jacqueline Samira, Howdy.com",
+        "published_date": "2025-07-13T18:15:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "Jobs will fade and rise due to AI. But those who learn to screen, train and build dev teams around AI-enabled talent will write the future.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/programming-development/stop-vetting-engineers-like-its-2021-the-ai-native-workforce-has-arrived/",
+            "author": "Jacqueline Samira, Howdy.com",
+            "published_date": "2025-07-13T18:15:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "2bf1efe61d23",
+        "title": "Kiyosaki Awaits The Next Bitcoin Sale: ‘My Fellow Pigs And I Are Feasting’",
+        "url": "https://www.newsbtc.com/news/bitcoin/kiyosaki-awaits-the-next-bitcoin-sale-my-fellow-pigs-and-i-are-feasting/",
+        "source": "NewsBTC",
+        "author": "Christian Encila",
+        "published_date": "2025-07-13T18:00:40+00:00",
+        "category": "bitcoin",
+        "content_preview": "Robert Kiyosaki, author of “Rich Dad Poor Dad,” stepped back into the Bitcoin market with a bold move. According to his tweet on July 11, he purchased another Bitcoin at $110,000. Related Reading: Analyst Sounds The Alarm: Shiba Inu Primed For Over 1,500% Breakout Based on reports, he’s betting that...",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "NewsBTC",
+            "url": "https://www.newsbtc.com/news/bitcoin/kiyosaki-awaits-the-next-bitcoin-sale-my-fellow-pigs-and-i-are-feasting/",
+            "author": "Christian Encila",
+            "published_date": "2025-07-13T18:00:40+00:00"
+          }
+        ]
+      },
+      {
+        "id": "ef929c418642",
+        "title": "Michael Saylor signals Bitcoin buy after one-week hiatus",
+        "url": "https://cointelegraph.com/news/saylor-signals-btc-buy-after-week-break?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "source": "Cointelegraph.com News",
+        "author": "Cointelegraph by Vince Quill",
+        "published_date": "2025-07-13T18:00:28+01:00",
+        "category": "bitcoin",
+        "content_preview": "Strategy continues to lead the pack among Bitcoin treasury companies, issuing debt and equity instruments to finance more purchases.",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Cointelegraph.com News",
+            "url": "https://cointelegraph.com/news/saylor-signals-btc-buy-after-week-break?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "author": "Cointelegraph by Vince Quill",
+            "published_date": "2025-07-13T18:00:28+01:00"
+          }
+        ]
+      },
+      {
+        "id": "agg_443720b9",
+        "title": "Bitcoin hits new all-time high above $119K as trader eyes 7-week uptrend",
+        "url": "https://cointelegraph.com/news/btc-hits-new-all-time-high-119k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "source": "Cointelegraph.com News",
+        "author": "Cointelegraph by William Suberg",
+        "published_date": "2025-07-13T16:32:57+01:00",
+        "category": "bitcoin",
+        "content_preview": "BTC price action is copying late 2024 — and that could result in fresh 50% gains, one trader says as late Bitcoin shorts feel the pain again. [Reported by: Cointelegraph.com News, CryptoPotato]",
+        "importance": "high",
+        "tags": [
+          "bitcoin",
+          "price",
+          "ath",
+          "multi-source"
+        ],
+        "sources": [
+          {
+            "name": "Cointelegraph.com News",
+            "url": "https://cointelegraph.com/news/btc-hits-new-all-time-high-119k?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "author": "Cointelegraph by William Suberg",
+            "published_date": "2025-07-13T16:32:57+01:00"
+          },
+          {
+            "name": "CryptoPotato",
+            "url": "https://cryptopotato.com/bitcoin-hits-fresh-all-time-high-as-saylor-and-kiyosaki-want-to-buy-more/",
+            "author": "Jordan Lyanchev",
+            "published_date": "2025-07-13T14:58:30+00:00"
+          }
+        ],
+        "source_count": 2,
+        "aggregated": true
+      },
+      {
+        "id": "9572a35aef78",
+        "title": "Bitcoin Breaks $119K, While XLM and HBAR Lead Altcoin Rally",
+        "url": "https://www.coindesk.com/markets/2025/07/13/bitcoin-breaks-usd119k-but-xlm-and-hbar-aren-t-impressed-by-its-meager-percentage-gain",
+        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+        "author": "Siamak Masnavi",
+        "published_date": "2025-07-13T16:23:28+00:00",
+        "category": "bitcoin",
+        "content_preview": "",
+        "importance": "high",
+        "tags": [
+          "bitcoin",
+          "price"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
+            "url": "https://www.coindesk.com/markets/2025/07/13/bitcoin-breaks-usd119k-but-xlm-and-hbar-aren-t-impressed-by-its-meager-percentage-gain",
+            "author": "Siamak Masnavi",
+            "published_date": "2025-07-13T16:23:28+00:00"
+          }
+        ]
+      },
+      {
+        "id": "b4f543913b8e",
+        "title": "Bitcoin Boom Pushes Satoshi Nakamoto Into Top 11 Wealthiest, At $130  Billion",
+        "url": "https://bitcoinist.com/bitcoin-boom-pushes-satoshi-nakamoto-into-top-11-wealthiest-at-130-billion/",
+        "source": "Bitcoinist.com",
+        "author": "Christian Encila",
+        "published_date": "2025-07-13T15:30:14+00:00",
+        "category": "bitcoin",
+        "content_preview": "Satoshi Nakamoto, the anonymous creator of Bitcoin, ranks as the 11th richest person on earth if you count his unspent coins as a liquid fortune. Related Reading: Shiba Inu Bites Into Healthcare, $5,000 Dental Bill Paid In Memecoin He holds about 1.096 million BTC, which works out to roughly $129 bi...",
+        "importance": "medium",
+        "tags": [
+          "bitcoin",
+          "price"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Bitcoinist.com",
+            "url": "https://bitcoinist.com/bitcoin-boom-pushes-satoshi-nakamoto-into-top-11-wealthiest-at-130-billion/",
+            "author": "Christian Encila",
+            "published_date": "2025-07-13T15:30:14+00:00"
+          }
+        ]
+      },
+      {
+        "id": "agg_c0926919",
+        "title": "Who owns the most Bitcoin in 2025? The rich list revealed",
+        "url": "https://cointelegraph.com/news/bitcoin-rich-list-2025?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+        "source": "Cointelegraph.com News",
+        "author": "Cointelegraph by Bradley Peak",
+        "published_date": "2025-07-13T15:20:08+01:00",
+        "category": "bitcoin",
+        "content_preview": "From exchanges and ETFs to sovereign treasuries and crypto billionaires, Bitcoin’s ownership map in 2025 reveals a mix of concentration and quiet decentralization. [Reported by: Cointelegraph.com News, Decrypt]",
+        "importance": "medium",
+        "tags": [
+          "bitcoin",
+          "multi-source"
+        ],
+        "sources": [
+          {
+            "name": "Cointelegraph.com News",
+            "url": "https://cointelegraph.com/news/bitcoin-rich-list-2025?utm_source=rss_feed&utm_medium=rss&utm_campaign=rss_partner_inbound",
+            "author": "Cointelegraph by Bradley Peak",
+            "published_date": "2025-07-13T15:20:08+01:00"
+          },
+          {
+            "name": "Decrypt",
+            "url": "https://decrypt.co/329755/best-bitcoin-crypto-credit-cards-2025",
+            "author": "Logan Hitchcock",
+            "published_date": "2025-07-13T16:01:02+00:00"
+          }
+        ],
+        "source_count": 2,
+        "aggregated": true
+      },
+      {
+        "id": "7a3698cc00c0",
+        "title": "Elon Musk’s SpaceX might invest $2 billion in Musk’s xAI",
+        "url": "https://techcrunch.com/2025/07/13/elon-musks-spacex-might-invest-2-billion-in-musks-xai/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Anthony Ha",
+        "published_date": "2025-07-13T15:12:17+00:00",
+        "category": "ai_progress",
+        "content_preview": "One Elon Musk business might be making a big investment in another.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/13/elon-musks-spacex-might-invest-2-billion-in-musks-xai/",
+            "author": "Anthony Ha",
+            "published_date": "2025-07-13T15:12:17+00:00"
+          }
+        ]
+      },
+      {
+        "id": "9a9892898a8a",
+        "title": "5 of the Weirdest Bitcoin, Dogecoin and Ethereum Treasury Pivots",
+        "url": "https://decrypt.co/329914/5-weirdest-bitcoin-dogecoin-ethereum-treasury-pivots",
+        "source": "Decrypt",
+        "author": "Liz Napolitano",
+        "published_date": "2025-07-13T13:58:51+00:00",
+        "category": "bitcoin",
+        "content_preview": "From noodle giants to love hotel operators and cannabis sellers, these five publicly traded companies made unexpected bets on Bitcoin and other cryptocurrencies.",
+        "importance": "medium",
+        "tags": [
+          "bitcoin"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "Decrypt",
+            "url": "https://decrypt.co/329914/5-weirdest-bitcoin-dogecoin-ethereum-treasury-pivots",
+            "author": "Liz Napolitano",
+            "published_date": "2025-07-13T13:58:51+00:00"
+          }
+        ]
+      },
+      {
+        "id": "65aa32278414",
+        "title": "The countdown’s almost over: 2 days until TechCrunch All Stage 2025 kicks off in Boston",
+        "url": "https://techcrunch.com/2025/07/13/the-countdowns-almost-over-2-days-until-techcrunch-all-stage-2025-kicks-off-in-boston/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "TechCrunch Events",
+        "published_date": "2025-07-13T13:00:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "TechCrunch All Stage 2025 is almost here — In 2 days, the doors swing open at Boston’s SoWa Power Station. If you’re a founder or investor, this is your last shot to lock in the lowest ticket prices before they vanish at the door. This isn’t your average startup conference. TC All Stage is where […]",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/13/the-countdowns-almost-over-2-days-until-techcrunch-all-stage-2025-kicks-off-in-boston/",
+            "author": "TechCrunch Events",
+            "published_date": "2025-07-13T13:00:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "fc8aca36efd6",
+        "title": "Bitcoin gains ground in gold vs. crypto debate",
+        "url": "https://cryptoslate.com/bitcoin-gains-ground-in-gold-vs-crypto-debate/",
+        "source": "CryptoSlate",
+        "author": "Christina Comben",
+        "published_date": "2025-07-13T09:58:48+00:00",
+        "category": "bitcoin",
+        "content_preview": "When gold maximalist Debra Robinson jeered, “Imagine paying $118k for a set of man-made numbers,” she echoed a familiar skepticism among precious metal enthusiasts. Lyn Alden, a respected macro analyst and Bitcoin bull, responded with pragmatic advice: “Precious metal enthusiasts could buy a bitcoin...",
         "importance": "medium",
         "tags": [
           "bitcoin"
@@ -532,9 +761,81 @@
         "sources": [
           {
             "name": "CryptoSlate",
-            "url": "https://cryptoslate.com/tether-to-sunset-usdt-redemptions-on-5-legacy-networks-including-bitcoin-cash-algorand/",
-            "author": "Assad Jafri",
-            "published_date": "2025-07-11T23:15:30+00:00"
+            "url": "https://cryptoslate.com/bitcoin-gains-ground-in-gold-vs-crypto-debate/",
+            "author": "Christina Comben",
+            "published_date": "2025-07-13T09:58:48+00:00"
+          }
+        ]
+      },
+      {
+        "id": "0605000ade20",
+        "title": "A United Nations research institute created an AI refugee avatar",
+        "url": "https://techcrunch.com/2025/07/12/a-united-nations-research-institute-created-an-ai-refugee-avatar/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Anthony Ha",
+        "published_date": "2025-07-12T21:03:39+00:00",
+        "category": "ai_progress",
+        "content_preview": "A research institute connected to the United Nations has created two AI-powered avatars designed to teach people about refugee issues. 404 Media wrote about an experiment conducted by a class at the United Nations University Center for Policy Research that resulted in the creation of two AI agents o...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/12/a-united-nations-research-institute-created-an-ai-refugee-avatar/",
+            "author": "Anthony Ha",
+            "published_date": "2025-07-12T21:03:39+00:00"
+          }
+        ]
+      },
+      {
+        "id": "e1834b3d2544",
+        "title": "Building voice AI that listens to everyone: Transfer learning and synthetic speech in action",
+        "url": "https://venturebeat.com/ai/building-voice-ai-that-listens-to-everyone-transfer-learning-and-synthetic-speech-in-action/",
+        "source": "AI News | VentureBeat",
+        "author": "Harshal Shah",
+        "published_date": "2025-07-12T20:45:00+00:00",
+        "category": "ai_progress",
+        "content_preview": "Enterprises adopting voice AI must consider not just usability, but inclusion. Supporting users with disabilities is a market opportunity.",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News | VentureBeat",
+            "url": "https://venturebeat.com/ai/building-voice-ai-that-listens-to-everyone-transfer-learning-and-synthetic-speech-in-action/",
+            "author": "Harshal Shah",
+            "published_date": "2025-07-12T20:45:00+00:00"
+          }
+        ]
+      },
+      {
+        "id": "bd58d5cd4122",
+        "title": "xAI and Grok apologize for ‘horrific behavior’",
+        "url": "https://techcrunch.com/2025/07/12/xai-and-grok-apologize-for-horrific-behavior/",
+        "source": "AI News & Artificial Intelligence | TechCrunch",
+        "author": "Anthony Ha",
+        "published_date": "2025-07-12T17:13:39+00:00",
+        "category": "ai_progress",
+        "content_preview": "In a series of posts on X, the AI chatbot Grok apologized for what it admitted was “horrific behavior.”\n\nThe posts appear to be an official statement from xAI, the Elon Musk-led company behind Grok, as opposed to an AI-generated explanation for Grok’s posts. (xAI recently acquired X, where Grok is p...",
+        "importance": "medium",
+        "tags": [
+          "ai_progress"
+        ],
+        "aggregated": false,
+        "source_count": 1,
+        "sources": [
+          {
+            "name": "AI News & Artificial Intelligence | TechCrunch",
+            "url": "https://techcrunch.com/2025/07/12/xai-and-grok-apologize-for-horrific-behavior/",
+            "author": "Anthony Ha",
+            "published_date": "2025-07-12T17:13:39+00:00"
           }
         ]
       },
@@ -589,298 +890,6 @@
         ]
       },
       {
-        "id": "ee935bd826a2",
-        "title": "Windsurf’s CEO goes to Google; OpenAI’s acquisition falls apart",
-        "url": "https://techcrunch.com/2025/07/11/windsurfs-ceo-goes-to-google-openais-acquisition-falls-apart/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Maxwell Zeff",
-        "published_date": "2025-07-11T22:21:51+00:00",
-        "category": "ai_progress",
-        "content_preview": "Notably, Google is not taking a stake in Windsurf and will not have any control over the company.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/07/11/windsurfs-ceo-goes-to-google-openais-acquisition-falls-apart/",
-            "author": "Maxwell Zeff",
-            "published_date": "2025-07-11T22:21:51+00:00"
-          }
-        ]
-      },
-      {
-        "id": "576b1218e9b4",
-        "title": "Coinbase, Strategy, Other Bitcoin and Crypto Stocks Soar in Record-Setting Week",
-        "url": "https://decrypt.co/329740/coinbase-strategy-bitcoin-and-crypto-stocks-soar-record-week",
-        "source": "Decrypt",
-        "author": "Mathew Di Salvo",
-        "published_date": "2025-07-11T21:58:35+00:00",
-        "category": "bitcoin",
-        "content_preview": "Crypto-focused companies benefited from the surge in crypto markets this week.",
-        "importance": "high",
-        "tags": [
-          "bitcoin",
-          "ath"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/329740/coinbase-strategy-bitcoin-and-crypto-stocks-soar-record-week",
-            "author": "Mathew Di Salvo",
-            "published_date": "2025-07-11T21:58:35+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f5197908bbd4",
-        "title": "Tether to End USDT Redemptions on Bitcoin Cash, Algorand and Beyond",
-        "url": "https://decrypt.co/329857/tether-to-end-usdt-redemptions-on-bitcoin-cash-algorand-and-beyond",
-        "source": "Decrypt",
-        "author": "Logan Hitchcock",
-        "published_date": "2025-07-11T21:31:25+00:00",
-        "category": "bitcoin",
-        "content_preview": "Stablecoin issuer Tether is ending support for USDT on five \"legacy\" blockchains after previously halting minting on those networks.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/329857/tether-to-end-usdt-redemptions-on-bitcoin-cash-algorand-and-beyond",
-            "author": "Logan Hitchcock",
-            "published_date": "2025-07-11T21:31:25+00:00"
-          }
-        ]
-      },
-      {
-        "id": "5765c21c08b0",
-        "title": "Solo.io wins ‘most likely to succeed’ award at VB Transform 2025 innovation showcase",
-        "url": "https://venturebeat.com/ai/solo-io-wins-most-likely-to-succeed-award-at-vb-transform-2025-innovation-showcase/",
-        "source": "AI News | VentureBeat",
-        "author": "Aliyah Mohammed",
-        "published_date": "2025-07-11T20:18:18+00:00",
-        "category": "ai_progress",
-        "content_preview": "Solo.io's Kagent Studio framework allows enterprises to build, secure, run and manage their AI agents in Kubernetes.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/solo-io-wins-most-likely-to-succeed-award-at-vb-transform-2025-innovation-showcase/",
-            "author": "Aliyah Mohammed",
-            "published_date": "2025-07-11T20:18:18+00:00"
-          }
-        ]
-      },
-      {
-        "id": "2b5406b4de7a",
-        "title": "Public Keys: CoreWeave Fusion Dance, $1 Billion Day for Bitcoin ETFs and Strategy's Bye Week",
-        "url": "https://decrypt.co/329825/public-keys-coreweave-1-billion-bitcoin-etfs-strategy-week-off",
-        "source": "Decrypt",
-        "author": "Stacy Elliott",
-        "published_date": "2025-07-11T20:05:26+00:00",
-        "category": "bitcoin",
-        "content_preview": "Core Scientific and CoreWeave announce a massive $9B merger while Bitcoin ETFs see their second-biggest day ever with $1.17B in inflows.",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "price"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "Decrypt",
-            "url": "https://decrypt.co/329825/public-keys-coreweave-1-billion-bitcoin-etfs-strategy-week-off",
-            "author": "Stacy Elliott",
-            "published_date": "2025-07-11T20:05:26+00:00"
-          }
-        ]
-      },
-      {
-        "id": "4036a487be29",
-        "title": "AI coding tools may not speed up every developer, study shows",
-        "url": "https://techcrunch.com/2025/07/11/ai-coding-tools-may-not-speed-up-every-developer-study-shows/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Maxwell Zeff",
-        "published_date": "2025-07-11T19:56:41+00:00",
-        "category": "ai_progress",
-        "content_preview": "Software engineer workflows have been transformed in recent years by an influx of AI coding tools. However, a new study calls into question the extent to which today's AI coding tools enhance productivity for experienced developers.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/07/11/ai-coding-tools-may-not-speed-up-every-developer-study-shows/",
-            "author": "Maxwell Zeff",
-            "published_date": "2025-07-11T19:56:41+00:00"
-          }
-        ]
-      },
-      {
-        "id": "bb719b770183",
-        "title": "Altcoins roar as Bitcoin hits new all-time highs, Cardano and XRP surge over 10%",
-        "url": "https://cryptoslate.com/altcoins-roar-as-bitcoin-hits-new-all-time-highs-cardano-and-xrp-surge-over-10/",
-        "source": "CryptoSlate",
-        "author": "Gino Matos",
-        "published_date": "2025-07-11T19:10:17+00:00",
-        "category": "bitcoin",
-        "content_preview": "Bitcoin (BTC) registered a new all-time high of $118,287.46 on July 11 and is up 3.3% in the past 24 hours, but major altcoins are leading the gains during the same period. Ethereum (ETH) breached the $3,000 threshold for the first time since Feb. 2, and is currently trading at $2,987.55 as of press...",
-        "importance": "high",
-        "tags": [
-          "bitcoin",
-          "ath"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "CryptoSlate",
-            "url": "https://cryptoslate.com/altcoins-roar-as-bitcoin-hits-new-all-time-highs-cardano-and-xrp-surge-over-10/",
-            "author": "Gino Matos",
-            "published_date": "2025-07-11T19:10:17+00:00"
-          }
-        ]
-      },
-      {
-        "id": "01fae6768253",
-        "title": "The great AI agent acceleration: Why enterprise adoption is happening faster than anyone predicted",
-        "url": "https://venturebeat.com/ai/the-great-ai-agent-acceleration-why-enterprise-adoption-is-happening-faster-than-anyone-predicted/",
-        "source": "AI News | VentureBeat",
-        "author": "Matt Marshall",
-        "published_date": "2025-07-11T18:43:35+00:00",
-        "category": "ai_progress",
-        "content_preview": "Enterprise AI agent adoption is accelerating faster than predicted. Get the 4 key takeaways from VB Transform 2025 on how leaders from Intuit, Capital One, and more are deploying agents in production and reshaping their teams for a new era of AI.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/ai/the-great-ai-agent-acceleration-why-enterprise-adoption-is-happening-faster-than-anyone-predicted/",
-            "author": "Matt Marshall",
-            "published_date": "2025-07-11T18:43:35+00:00"
-          }
-        ]
-      },
-      {
-        "id": "0f7c0de96323",
-        "title": "Hugging Face’s new robot is the Seinfeld of AI devices",
-        "url": "https://techcrunch.com/podcast/hugging-faces-new-robot-is-the-seinfeld-of-ai-devices/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Kirsten Korosec, Maxwell Zeff, Anthony Ha, Theresa Loconsolo",
-        "published_date": "2025-07-11T18:15:01+00:00",
-        "category": "ai_progress",
-        "content_preview": "Hugging Face’s new programmable Reachy Mini bots launched this week. The AI robots are open source, Raspberry Pi-powered, and come with cartoonish antennae and big googly eyes. They don’t do much out of the box. And that’s kind of the point. Today, on TechCrunch’s Equity podcast, hosts Kirsten Koros...",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/podcast/hugging-faces-new-robot-is-the-seinfeld-of-ai-devices/",
-            "author": "Kirsten Korosec, Maxwell Zeff, Anthony Ha, Theresa Loconsolo",
-            "published_date": "2025-07-11T18:15:01+00:00"
-          }
-        ]
-      },
-      {
-        "id": "9a9a90ca7e69",
-        "title": "Strategy, Metaplanet and Others Sit on Billions in Bitcoin Gains — and They’re Not Selling",
-        "url": "https://www.coindesk.com/markets/2025/07/11/strategy-metaplanet-and-others-sit-on-billions-in-bitcoin-gains-and-they-re-not-selling",
-        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-        "author": "AI Boost",
-        "published_date": "2025-07-11T18:01:02+00:00",
-        "category": "bitcoin",
-        "content_preview": "",
-        "importance": "medium",
-        "tags": [
-          "bitcoin"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-            "url": "https://www.coindesk.com/markets/2025/07/11/strategy-metaplanet-and-others-sit-on-billions-in-bitcoin-gains-and-they-re-not-selling",
-            "author": "AI Boost",
-            "published_date": "2025-07-11T18:01:02+00:00"
-          }
-        ]
-      },
-      {
-        "id": "f6fd8a7f63e7",
-        "title": "Sarah Smith launches $16M fund, says AI can ‘unlock’ so much for solo GPs like herself",
-        "url": "https://techcrunch.com/2025/07/11/sarah-smith-launches-16m-fund-says-ai-can-unlock-so-much-for-solo-gps-like-herself/",
-        "source": "AI News & Artificial Intelligence | TechCrunch",
-        "author": "Dominic-Madori Davis",
-        "published_date": "2025-07-11T18:00:00+00:00",
-        "category": "ai_progress",
-        "content_preview": "She appreciates how she can make fast decisions that don’t require committee approval. She’s also taken to using AI to help her throughout this journey.",
-        "importance": "high",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News & Artificial Intelligence | TechCrunch",
-            "url": "https://techcrunch.com/2025/07/11/sarah-smith-launches-16m-fund-says-ai-can-unlock-so-much-for-solo-gps-like-herself/",
-            "author": "Dominic-Madori Davis",
-            "published_date": "2025-07-11T18:00:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "b6f628935bca",
-        "title": "Weekly Recap: Bitcoin Hits ATH as Dozens of Treasuries Bloom",
-        "url": "https://www.coindesk.com/news-analysis/2025/07/11/weekly-recap-bitcoin-hits-ath-as-dozens-of-treasuries-bloom",
-        "source": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-        "author": "Benjamin Schiller",
-        "published_date": "2025-07-11T17:06:13+00:00",
-        "category": "bitcoin",
-        "content_preview": "",
-        "importance": "medium",
-        "tags": [
-          "bitcoin",
-          "ath"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "CoinDesk: Bitcoin, Ethereum, Crypto News and Price Data",
-            "url": "https://www.coindesk.com/news-analysis/2025/07/11/weekly-recap-bitcoin-hits-ath-as-dozens-of-treasuries-bloom",
-            "author": "Benjamin Schiller",
-            "published_date": "2025-07-11T17:06:13+00:00"
-          }
-        ]
-      },
-      {
         "id": "c9549ed50ce4",
         "title": "The EU Code of Practice and future of AI in Europe",
         "url": "https://openai.com/global-affairs/eu-code-of-practice",
@@ -925,30 +934,6 @@
             "url": "https://stackoverflow.blog/2025/07/11/how-your-favorite-movie-is-changing-language-learning-technology/",
             "author": "Phoebe Sajor",
             "published_date": "2025-07-11T07:40:00+00:00"
-          }
-        ]
-      },
-      {
-        "id": "98cedde6d141",
-        "title": "$8.8 trillion protected: How one CISO went from ‘that’s BS’ to bulletproof in 90 days",
-        "url": "https://venturebeat.com/security/ciso-dodges-bullet-protecting-8-8-trillion-from-shadow-ai/",
-        "source": "AI News | VentureBeat",
-        "author": "Louis Columbus",
-        "published_date": "2025-07-10T23:18:23+00:00",
-        "category": "ai_progress",
-        "content_preview": "Clearwater Analytics CISO Sam Evans dodged a bullet by blocking shadow AI from exposing data integral to $8.8 trillion under management.",
-        "importance": "medium",
-        "tags": [
-          "ai_progress"
-        ],
-        "aggregated": false,
-        "source_count": 1,
-        "sources": [
-          {
-            "name": "AI News | VentureBeat",
-            "url": "https://venturebeat.com/security/ciso-dodges-bullet-protecting-8-8-trillion-from-shadow-ai/",
-            "author": "Louis Columbus",
-            "published_date": "2025-07-10T23:18:23+00:00"
           }
         ]
       },
@@ -1394,11 +1379,11 @@
       }
     ],
     "metadata": {
-      "total_articles": 57,
-      "aggregated_articles": 0,
-      "multi_source_articles": 0,
-      "total_sources": 16,
-      "last_updated": "2025-07-12T06:02:18.423662+00:00",
+      "total_articles": 56,
+      "aggregated_articles": 2,
+      "multi_source_articles": 2,
+      "total_sources": 17,
+      "last_updated": "2025-07-13T21:27:45.684169+00:00",
       "update_interval_hours": 2
     }
   }
