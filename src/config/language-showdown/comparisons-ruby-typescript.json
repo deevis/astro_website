@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both are one-liners, but Ruby is interpreted while TypeScript compiles to JavaScript.",
+      "why": "Both one line! Ruby: puts. TypeScript: console.log. Ruby interpreted. TypeScript compiles to JavaScript. Both emphasize developer happiness. Ruby for backend scripts. TypeScript for web. Different ecosystems.",
+      "keyPoints": [
+        "Both one-liners",
+        "Ruby interpreted",
+        "TypeScript compiles to JS",
+        "Different ecosystems",
+        "Both developer-friendly"
+      ]
+    },
+    "variables": {
+      "description": "Ruby is fully dynamic while TypeScript has optional static typing.",
+      "why": "Ruby: dynamic, no types. TypeScript: gradual typing, types optional! Ruby variables can change types freely. TypeScript can too but types help. Ruby for flexibility. TypeScript for safety. Both more flexible than Java.",
+      "keyPoints": [
+        "Ruby fully dynamic",
+        "TypeScript gradual typing",
+        "TypeScript types optional",
+        "Both flexible",
+        "TypeScript adds safety"
+      ]
+    },
+    "strings": {
+      "description": "Ruby's #{} interpolation inspired TypeScript's template literals.",
+      "why": "Ruby: #{} interpolation. TypeScript: ${} template literals. Very similar! Ruby more methods built-in. TypeScript JavaScript methods. Both clean and modern. Ruby influenced JavaScript here.",
+      "keyPoints": [
+        "Very similar interpolation!",
+        "Ruby: #{}, TypeScript: ${}",
+        "Ruby more built-in methods",
+        "Both modern and clean",
+        "Ruby influenced JS"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby uses end keyword while TypeScript uses braces.",
+      "why": "Ruby: end keyword, unless, modifiers. TypeScript: braces, type guards, optional chaining. Ruby more expressive. TypeScript more type-aware. Different syntaxes. Both work well.",
+      "keyPoints": [
+        "Ruby: end, TypeScript: braces",
+        "Ruby has unless",
+        "TypeScript: type guards",
+        "Different styles",
+        "Both work well"
+      ]
+    },
+    "case-statements": {
+      "description": "Ruby's case/when is more powerful than TypeScript's traditional switch.",
+      "why": "Ruby case/when very powerful - ranges, regex, classes. TypeScript traditional switch. Ruby more flexible. TypeScript discriminated unions help. Ruby's approach more elegant. TypeScript catching up with unions.",
+      "keyPoints": [
+        "Ruby more powerful",
+        "Ruby matches ranges/regex",
+        "TypeScript traditional switch",
+        "TypeScript has discriminated unions",
+        "Ruby more elegant"
+      ]
+    },
+    "arrays": {
+      "description": "Both have dynamic arrays with functional methods built-in.",
+      "why": "Both dynamic arrays! Ruby: [], TypeScript: []. Both have map/filter/reduce. Ruby has negative indices. TypeScript doesn't. Ruby << operator. TypeScript push(). Very similar capabilities. Both functional.",
+      "keyPoints": [
+        "Both dynamic arrays",
+        "Both have map/filter",
+        "Ruby negative indices",
+        "Similar capabilities",
+        "Both functional"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby symbols are similar to TypeScript object keys.",
+      "why": "Ruby: hashes with symbols {:key}. TypeScript: objects with keys {key:}. Similar concepts! Both dynamic. Ruby symbols unique. TypeScript string keys. Both clean syntax. Very comparable.",
+      "keyPoints": [
+        "Similar concepts",
+        "Ruby: symbols",
+        "TypeScript: string keys",
+        "Both clean syntax",
+        "Very comparable"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby's blocks are elegant while TypeScript uses arrow functions.",
+      "why": "Ruby: .each with blocks. TypeScript: forEach with arrows. Similar concepts! Ruby blocks more elegant. TypeScript arrows clean. Both emphasize functional iteration. Different syntax, same idea.",
+      "keyPoints": [
+        "Similar functional iteration",
+        "Ruby: blocks",
+        "TypeScript: arrow functions",
+        "Both elegant",
+        "Different syntax"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby's select/map inspired JavaScript's filter/map that TypeScript uses.",
+      "why": "Ruby: select/map/reject. TypeScript: filter/map. JavaScript copied Ruby here! Very similar. Ruby influenced JavaScript design. Both concise and functional. Nearly identical usage.",
+      "keyPoints": [
+        "JavaScript copied Ruby!",
+        "Very similar",
+        "Ruby: select/map",
+        "TypeScript: filter/map",
+        "Nearly identical"
+      ]
+    },
+    "classes": {
+      "description": "Both have simple classes, but TypeScript adds type annotations.",
+      "why": "Ruby: simple classes with initialize. TypeScript: JS classes with types. Both simple. TypeScript adds type safety. Ruby more dynamic. TypeScript more checked. Both developer-friendly.",
+      "keyPoints": [
+        "Both simple classes",
+        "TypeScript adds types",
+        "Ruby more dynamic",
+        "TypeScript type-safe",
+        "Both friendly"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby's attr_accessor is magical while TypeScript uses get/set keywords.",
+      "why": "Ruby: attr_accessor one line magic. TypeScript: get/set keywords. Ruby more concise. TypeScript explicit. Different philosophies. Both work well. Ruby DRY. TypeScript clear.",
+      "keyPoints": [
+        "Ruby: attr_accessor magic",
+        "TypeScript: get/set",
+        "Ruby more concise",
+        "TypeScript explicit",
+        "Different philosophies"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses < for single inheritance while TypeScript uses extends.",
+      "why": "Ruby: < operator, modules for mixins. TypeScript: extends, implements interfaces. Ruby more flexible with modules. TypeScript more traditional. Both single inheritance. Ruby mixins powerful.",
+      "keyPoints": [
+        "Ruby: < operator",
+        "TypeScript: extends",
+        "Ruby has modules",
+        "Both single inheritance",
+        "Ruby more flexible"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide mixins while TypeScript uses structural interfaces.",
+      "why": "Ruby: modules with implementation. TypeScript: interfaces without. Ruby mixins powerful. TypeScript structural typing. Different approaches. Ruby more dynamic. TypeScript type-checked. Both enable code reuse.",
+      "keyPoints": [
+        "Ruby: mixins",
+        "TypeScript: interfaces",
+        "Ruby more dynamic",
+        "TypeScript structural typing",
+        "Different approaches"
+      ]
+    },
+    "file-io": {
+      "description": "Ruby's one-liners are simpler than TypeScript's Node.js APIs.",
+      "why": "Ruby: File.read one-liner. TypeScript: fs module. Ruby simpler for scripts. TypeScript async/await for Node. Ruby blocks auto-close. TypeScript promises. Ruby easier. TypeScript more async.",
+      "keyPoints": [
+        "Ruby simpler",
+        "TypeScript: async/await",
+        "Ruby one-liners",
+        "TypeScript promises",
+        "Different strengths"
+      ]
+    },
+    "json": {
+      "description": "Both have JSON in standard library with simple APIs.",
+      "why": "Both have JSON built-in! Ruby: JSON.parse. TypeScript: JSON.parse. Very similar! Both simple. Ruby returns hashes. TypeScript returns objects. Nearly identical. Both easy to use.",
+      "keyPoints": [
+        "Both built-in",
+        "Nearly identical APIs",
+        "Both simple",
+        "Very similar",
+        "Both easy"
+      ]
+    },
+    "threading": {
+      "description": "Ruby has threads with GIL while TypeScript is single-threaded with async/await.",
+      "why": "Ruby: threads but GIL limits. TypeScript: single-threaded, async/await. Both limited parallelism. Ruby for I/O threading. TypeScript event loop. Different models but similar limitations.",
+      "keyPoints": [
+        "Ruby has GIL",
+        "TypeScript single-threaded",
+        "Both limited parallelism",
+        "TypeScript: async/await",
+        "Similar limitations"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby excels at runtime metaprogramming while TypeScript uses decorators.",
+      "why": "Ruby: powerful runtime metaprogramming. TypeScript: decorators (experimental). Ruby more powerful and dynamic. TypeScript more limited. Ruby can modify anything. TypeScript more structured. Ruby wins here.",
+      "keyPoints": [
+        "Ruby more powerful",
+        "TypeScript: decorators",
+        "Ruby runtime",
+        "TypeScript compile-time",
+        "Ruby advantage"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby uses runtime duck typing while TypeScript adds compile-time structural typing.",
+      "why": "Ruby: runtime duck typing. TypeScript: structural typing at compile time! TypeScript is typed duck typing. Ruby more flexible. TypeScript catches errors early. TypeScript improves on Ruby's idea. Brilliant combination.",
+      "keyPoints": [
+        "Ruby: runtime",
+        "TypeScript: compile-time structural",
+        "TypeScript = typed duck typing!",
+        "TypeScript improves Ruby's idea",
+        "Brilliant approach"
+      ]
+    }
+  }
+}
+
+

@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "go",
+  "comparisons": {
+    "hello-world": {
+      "description": "Ruby minimizes ceremony while Go emphasizes simplicity and compilation speed.",
+      "why": "Ruby is the simplest - just one line. Go requires package and import declarations. Ruby is interpreted, Go is compiled. Go's compilation is very fast though. Ruby emphasizes developer happiness, Go emphasizes simplicity and performance.",
+      "keyPoints": [
+        "Ruby has minimal boilerplate",
+        "Go requires package declaration",
+        "Ruby is interpreted, Go is compiled",
+        "Go compiles extremely fast",
+        "Different philosophies: joy vs performance"
+      ]
+    },
+    "variables": {
+      "description": "Ruby offers dynamic flexibility while Go provides static type safety with inference.",
+      "why": "Ruby is dynamically typed, Go is statically typed. Ruby variables can change types, Go variables cannot. Go's := is like Ruby's = but with type inference. Ruby uses UPPERCASE for constants, Go uses capitalization for visibility. Go catches type errors at compile time.",
+      "keyPoints": [
+        "Ruby is dynamic, Go is static",
+        "Go catches type errors early",
+        "Ruby allows type changes",
+        "Go's := provides type inference",
+        "Trade-off: flexibility vs safety"
+      ]
+    },
+    "strings": {
+      "description": "Ruby's rich built-in methods contrast with Go's explicit package-based approach.",
+      "why": "Ruby has rich built-in string methods. Go requires the strings package. Ruby's #{} interpolation is cleaner than Go's fmt.Sprintf. Both have immutable strings. Ruby's approach is more convenient. Go's is more explicit and performant.",
+      "keyPoints": [
+        "Ruby has more built-in methods",
+        "Go uses separate strings package",
+        "Ruby's interpolation is cleaner",
+        "Both strings are immutable",
+        "Ruby prioritizes convenience"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby provides multiple syntactic options while Go keeps conditionals straightforward.",
+      "why": "Ruby is more flexible - has unless, statement modifiers. Go is straightforward - just if/else. Ruby doesn't need parentheses, neither does Go. Ruby has ternary, Go doesn't. Ruby has more ways to express conditions. Go values simplicity.",
+      "keyPoints": [
+        "Ruby has unless and statement modifiers",
+        "Go has simple if/else only",
+        "Ruby has ternary operator",
+        "Neither requires parentheses",
+        "Ruby offers more syntactic options"
+      ]
+    },
+    "case-statements": {
+      "description": "Both offer powerful switch/case without breaks, but with different matching capabilities.",
+      "why": "Ruby's case/when can match ranges, regex, classes. Go's switch is also powerful but different. Neither needs break by default. Ruby uses === for matching. Go can switch on types and conditions. Both are more powerful than traditional switches.",
+      "keyPoints": [
+        "Ruby matches with ===",
+        "Go can switch on types",
+        "Neither needs break statements",
+        "Ruby is more pattern-matching oriented",
+        "Go emphasizes type switching"
+      ]
+    },
+    "arrays": {
+      "description": "Ruby arrays are dynamic with rich methods; Go slices are efficient with manual operations.",
+      "why": "Ruby arrays are always dynamic with rich methods. Go has slices (dynamic) and arrays (fixed). Ruby's << is idiomatic for append. Go uses append() function. Ruby has negative indices. Go doesn't. Ruby arrays are higher-level.",
+      "keyPoints": [
+        "Ruby arrays have more built-in methods",
+        "Go distinguishes arrays and slices",
+        "Ruby supports negative indexing",
+        "Go's append requires reassignment",
+        "Ruby is more feature-rich"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby hashes offer elegant syntax and rich methods while Go maps are simpler and explicit.",
+      "why": "Ruby symbols (:key) vs Go strings for keys. Ruby has hash rockets (=>), Go has cleaner syntax. Go's comma-ok idiom vs Ruby's default values. Ruby hashes have more methods. Go maps are simpler and faster.",
+      "keyPoints": [
+        "Ruby uses symbols for efficiency",
+        "Go maps are built into language",
+        "Go's comma-ok is explicit",
+        "Ruby has richer hash methods",
+        "Go prioritizes performance"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby's blocks provide elegant iteration while Go's range offers clean simplicity.",
+      "why": "Ruby's each with blocks is elegant. Go's range is straightforward. Ruby has many iterator methods (times, upto). Go has just for with range. Ruby emphasizes expressiveness. Go emphasizes simplicity. Ruby's blocks are more powerful.",
+      "keyPoints": [
+        "Ruby has many iteration methods",
+        "Go uses for for everything",
+        "Ruby blocks are more flexible",
+        "Go's range is simple and clear",
+        "Ruby offers more iteration styles"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby has functional methods built-in while Go uses explicit loops for clarity.",
+      "why": "Ruby has built-in select, map, reject, etc. Go requires manual loops. Ruby's functional methods are convenient. Go emphasizes explicit code. Ruby is more concise. Go is more transparent about performance.",
+      "keyPoints": [
+        "Ruby has functional built-ins",
+        "Go uses explicit loops",
+        "Ruby is more concise",
+        "Go shows performance costs clearly",
+        "Philosophy: convenience vs explicitness"
+      ]
+    },
+    "classes": {
+      "description": "Ruby uses traditional classes while Go favors structs with composition.",
+      "why": "Ruby has traditional classes with initialize. Go has structs with methods. Ruby methods are inside class. Go methods have receivers. Ruby is pure OOP. Go is pragmatic with struct-based design. Both support encapsulation differently.",
+      "keyPoints": [
+        "Ruby has traditional classes",
+        "Go uses structs with methods",
+        "Ruby is pure OOP",
+        "Go is pragmatic, not pure OOP",
+        "Different approaches to organization"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby's attr_accessor provides metaprogramming shortcuts while Go uses explicit methods or exported fields.",
+      "why": "Ruby's attr_accessor is metaprogramming magic. Go writes getters/setters manually or exports fields. Ruby eliminates boilerplate. Go is explicit. Ruby values DRY. Go values clarity over cleverness.",
+      "keyPoints": [
+        "Ruby's attr_accessor is magic",
+        "Go is explicit with methods",
+        "Ruby eliminates boilerplate",
+        "Go often exports fields directly",
+        "Trade-off: magic vs clarity"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses classical inheritance while Go completely avoids it in favor of composition.",
+      "why": "Ruby has single inheritance with <. Go has NO inheritance, only composition. Ruby can use modules for mixins. Go uses interfaces and embedding. Ruby is traditional OOP. Go rejects inheritance entirely. Go's approach reduces coupling.",
+      "keyPoints": [
+        "Ruby has inheritance",
+        "Go has no inheritance",
+        "Ruby uses modules for mixins",
+        "Go uses composition exclusively",
+        "Go promotes looser coupling"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide mixins with implementation while Go interfaces are pure contracts with implicit satisfaction.",
+      "why": "Ruby modules provide mixins with include/extend. Go interfaces are implicit contracts. Ruby modules can have implementation. Go interfaces are just contracts. Ruby's approach adds behavior. Go's approach enables polymorphism.",
+      "keyPoints": [
+        "Ruby modules mix in behavior",
+        "Go interfaces define contracts",
+        "Ruby's include adds methods",
+        "Go's interfaces are implicit",
+        "Different models of code reuse"
+      ]
+    },
+    "file-io": {
+      "description": "Ruby provides one-liner convenience while Go requires explicit error handling.",
+      "why": "Ruby's File.read/write are one-liners. Go requires error checking. Ruby blocks auto-close files. Go uses defer. Ruby is more convenient. Go is more explicit about errors. Both ensure cleanup.",
+      "keyPoints": [
+        "Ruby has simpler file operations",
+        "Go requires explicit error handling",
+        "Ruby blocks auto-close",
+        "Go uses defer",
+        "Ruby optimizes for convenience"
+      ]
+    },
+    "json": {
+      "description": "Ruby's dynamic typing provides seamless JSON conversion while Go uses type-safe struct mapping.",
+      "why": "Ruby's JSON.parse returns hashes directly. Go requires struct definitions or interface{}. Ruby is more dynamic and flexible. Go is type-safe with structs. Ruby is more convenient. Go catches errors earlier.",
+      "keyPoints": [
+        "Ruby returns dynamic hashes",
+        "Go uses static structs",
+        "Ruby is more flexible",
+        "Go is type-safe",
+        "Trade-off: flexibility vs safety"
+      ]
+    },
+    "threading": {
+      "description": "Ruby threads face GIL limitations while Go's goroutines enable true massive concurrency.",
+      "why": "Ruby has threads but GIL limits parallelism. Go has goroutines - true parallelism. Ruby's Mutex#synchronize. Go's channels are preferred. Go's concurrency is a strength. Ruby's threads work for I/O but not CPU tasks.",
+      "keyPoints": [
+        "Go has true parallelism",
+        "Ruby MRI has GIL",
+        "Goroutines are lightweight",
+        "Ruby threads good for I/O",
+        "Go's concurrency is superior"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby excels at runtime metaprogramming while Go intentionally limits it in favor of code generation.",
+      "why": "Ruby is built for metaprogramming - method_missing, define_method, open classes. Go has limited reflection. Ruby can modify anything at runtime. Go emphasizes code generation. Ruby is extremely flexible. Go prioritizes simplicity and performance.",
+      "keyPoints": [
+        "Ruby has powerful metaprogramming",
+        "Go has limited reflection",
+        "Ruby modifies code at runtime",
+        "Go uses code generation",
+        "Ruby is more dynamic"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby uses runtime duck typing while Go provides compile-time structural typing with interfaces.",
+      "why": "Ruby has true duck typing - check at runtime. Go has structural typing - check at compile time. Ruby's respond_to? happens at runtime. Go's interface satisfaction is compile-time. Ruby is more flexible. Go is safer.",
+      "keyPoints": [
+        "Ruby checks at runtime",
+        "Go checks at compile time",
+        "Ruby's duck typing is dynamic",
+        "Go's structural typing is static",
+        "Trade-off: flexibility vs safety"
+      ]
+    }
+  }
+}
+

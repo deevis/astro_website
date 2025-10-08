@@ -1,0 +1,217 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "ruby",
+  "comparisons": {
+    "hello-world": {
+      "description": "The simplest program in both languages showcases their fundamental differences in verbosity and ceremony.",
+      "why": "Ruby eliminates boilerplate. You don't need class declarations, main methods, or even semicolons for single statements. Ruby scripts execute top-to-bottom. 'puts' (put string) is Ruby's standard output method - simpler than System.out.println.",
+      "keyPoints": [
+        "Ruby doesn't require a main method or class wrapper",
+        "Semicolons are optional in Ruby",
+        "puts automatically adds a newline (like println)",
+        "Ruby emphasizes developer happiness through simplicity"
+      ]
+    },
+    "variables": {
+      "description": "Java requires explicit type declarations, while Ruby uses duck typing with dynamic variable assignment.",
+      "why": "Ruby is dynamically typed - variables don't have declared types. The type is determined by the object assigned to it. Ruby uses naming conventions: lowercase_with_underscores for variables, UPPERCASE for constants. Everything in Ruby is an object, even primitives like integers.",
+      "keyPoints": [
+        "No type declarations needed in Ruby",
+        "Variables can hold any type and change types",
+        "Constants use UPPERCASE (but aren't truly immutable)",
+        "Use snake_case, not camelCase",
+        "Primitives are objects with methods (5.times, \"hello\".upcase)"
+      ]
+    },
+    "strings": {
+      "description": "Ruby provides extensive built-in string manipulation without requiring external libraries.",
+      "why": "Ruby's string interpolation with #{} is the idiomatic way to build strings. Ruby strings are mutable and have dozens of built-in methods. Method names ending in ? return booleans (a Ruby convention). The * operator works on strings for repetition.",
+      "keyPoints": [
+        "Use #{} for string interpolation, not concatenation",
+        "Strings are mutable in Ruby (unlike Java)",
+        "Rich built-in methods eliminate helper libraries",
+        "Methods ending in ? return boolean values",
+        "Methods ending in ! modify the object in-place"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby has more flexible conditional syntax and different rules for truthiness.",
+      "why": "Ruby doesn't require parentheses around conditions. 'elsif' not 'else if'. Ruby has 'unless' for negative conditions (more readable than 'if not'). Statement modifiers put the condition after the action for simple cases. Only false and nil are falsy in Ruby - everything else (including 0 and empty strings) is truthy!",
+      "keyPoints": [
+        "Parentheses around conditions are optional",
+        "Use elsif, not else if",
+        "Statement modifiers for simple one-liners",
+        "unless reads better than if not",
+        "Only false and nil are falsy (not 0 or \"\")"
+      ]
+    },
+    "case-statements": {
+      "description": "Ruby's case/when is more powerful and flexible than Java's switch statement.",
+      "why": "Ruby's case/when is far more powerful than Java's switch. No break statements needed (no fall-through by default). case returns a value (it's an expression). Multiple values per when using commas. Can match ranges (90..100), regex patterns, classes, or any object using the === operator. The === operator (case equality) allows custom matching logic. Ranges, Regex, and Classes all implement === to work with case statements naturally.",
+      "keyPoints": [
+        "No break statements needed (cleaner than Java)",
+        "case is an expression that returns a value",
+        "Multiple values per when: when 1, 2, 3",
+        "Match ranges: when 90..100",
+        "Match regex: when /pattern/",
+        "Match classes: when String, when Integer",
+        "Uses === operator (case equality)",
+        "Much more flexible than Java switch"
+      ]
+    },
+    "arrays": {
+      "description": "Ruby arrays are more flexible and have extensive built-in methods compared to Java arrays.",
+      "why": "Ruby arrays are always dynamic. The << operator (shovel) is the idiomatic way to append. Negative indices count from the end (-1 is last element). Ruby ranges (1..3) make slicing elegant. Arrays can hold mixed types. Many convenience methods like first, last, empty? are built-in.",
+      "keyPoints": [
+        "Use << (shovel operator) to append elements",
+        "Negative indices access from the end",
+        "Arrays can contain mixed types",
+        "Ranges (1..3) provide elegant slicing",
+        "first, last, empty? built-in methods"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby hashes are first-class citizens with clean syntax, unlike Java's Map implementations.",
+      "why": "Ruby symbols (:john) are immutable strings often used as hash keys - they're more efficient than strings. The => (hash rocket) syntax works for any key type, but symbol: value is cleaner for symbol keys. Hashes have rich methods like key?, values, transform_values. Blocks make iteration elegant.",
+      "keyPoints": [
+        "Use symbols (:key) for hash keys when possible",
+        "symbol: value syntax is cleaner than :symbol => value",
+        "Hashes maintain insertion order (since Ruby 1.9)",
+        "Rich built-in methods eliminate helper code",
+        "Blocks make transformation and iteration elegant"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby provides multiple elegant ways to iterate, each with specific use cases.",
+      "why": "Ruby treats iteration as a first-class concept. 'each' with blocks is idiomatic. Integers have iteration methods (5.times). Ruby has specific iterators for common needs: each_with_index, each_key, each_value. 'for' loops exist but are rarely used - blocks are preferred. Blocks are more powerful than Java lambdas.",
+      "keyPoints": [
+        "Use each with blocks, not for loops",
+        "Blocks use { } for one-liners, do/end for multi-line",
+        "Integers are objects with iteration methods",
+        "each_with_index for both element and index",
+        "Choose the most semantically appropriate iterator"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby collections have built-in functional methods that eliminate the need for stream APIs.",
+      "why": "Ruby collections have functional methods built-in - no need for a separate stream API. 'select' filters, 'map' transforms, 'reject' is opposite of select. The &:method_name syntax is shorthand for blocks that call a method. Methods ending in ? return booleans. Chaining is natural and reads left-to-right.",
+      "keyPoints": [
+        "select for filtering (keeping items)",
+        "reject for inverse filtering (removing items)",
+        "map for transformations",
+        "&:method_name is shorthand for simple blocks",
+        "Chain methods naturally without collect()"
+      ]
+    },
+    "classes": {
+      "description": "Ruby classes are less verbose and use def for method definitions.",
+      "why": "Ruby doesn't need access modifiers by default (methods are public). 'initialize' is the constructor. Instance variables use @name syntax - no need to declare them. Methods are defined with 'def'. Boolean methods end with ?. No 'new' keyword repetition - constructor is called with .new. Everything is an expression (methods return last value).",
+      "keyPoints": [
+        "initialize is the constructor method",
+        "Instance variables use @ prefix",
+        "No need to declare instance variables",
+        "Methods are public by default",
+        "Boolean methods end with ?",
+        "Implicit returns (last expression is returned)"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby provides metaprogramming shortcuts for accessor methods.",
+      "why": "Ruby's attr_accessor automatically generates getter and setter methods. This is metaprogramming - code that writes code. attr_reader for getters only, attr_writer for setters only. Setters use the = syntax, making them look like simple attribute assignment. This reduces boilerplate dramatically.",
+      "keyPoints": [
+        "attr_accessor creates both getter and setter",
+        "attr_reader for read-only attributes",
+        "attr_writer for write-only attributes",
+        "Setters look like attribute assignment with =",
+        "No getXxx/setXxx naming convention needed"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses simple single inheritance with the < operator.",
+      "why": "Ruby uses < for inheritance (reads as \"Dog inherits from Animal\"). No @Override annotation needed - Ruby allows method overriding naturally. super() calls the parent method. Ruby has single inheritance only, but modules provide mixin functionality for multiple inheritance-like behavior.",
+      "keyPoints": [
+        "Use < for inheritance",
+        "super calls parent method (with same args)",
+        "super() calls parent with no args",
+        "No annotations needed for overriding",
+        "Single inheritance only (use modules for mixins)"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide interface-like behavior plus mixins for code reuse.",
+      "why": "Ruby modules are like interfaces but with actual implementation. 'include' adds module methods as instance methods (mixin). 'extend' adds them as class methods. Modules solve the multiple inheritance problem - include multiple modules. Modules also serve as namespaces. This is more powerful than Java interfaces.",
+      "keyPoints": [
+        "Modules provide mixin functionality",
+        "include for instance methods",
+        "extend for class methods",
+        "Modules can contain actual implementation",
+        "Include multiple modules for composition"
+      ]
+    },
+    "file-io": {
+      "description": "Ruby provides elegant, concise file operations with automatic resource management.",
+      "why": "Ruby makes file I/O remarkably simple. File.read and File.write are one-liners for common cases. Blocks automatically close files (like Java's try-with-resources but cleaner). File.foreach iterates lines without loading entire file into memory. No need for BufferedReader/Writer - Ruby handles buffering. File methods return useful data structures (arrays, strings). Exception handling is optional - let it bubble up or catch with rescue.",
+      "keyPoints": [
+        "File.read and File.write for simple operations",
+        "Blocks automatically close files (no need for try-with-resources)",
+        "File.foreach for memory-efficient line iteration",
+        "No BufferedReader/Writer needed - built-in",
+        "File.exist?, File.size, File.directory? for checks",
+        "Mode strings: \"r\" read, \"w\" write, \"a\" append",
+        "Methods ending in ? return booleans"
+      ]
+    },
+    "json": {
+      "description": "Ruby provides simple JSON parsing with the standard library, converting seamlessly to native data structures.",
+      "why": "Ruby's JSON library is in the standard library - no external dependencies needed. JSON.parse converts JSON directly to Ruby Hashes and Arrays (no type references needed). Use symbolize_names: true for symbol keys (more Ruby-like). Any Ruby object can be converted with .to_json. Combine with File.read/write for easy file I/O. Ruby's dynamic typing eliminates the casting verbosity. Pretty printing built-in for debugging.",
+      "keyPoints": [
+        "JSON library in standard library (require 'json')",
+        "JSON.parse returns Hash or Array directly",
+        "symbolize_names: true for symbol keys",
+        ".to_json converts any object to JSON",
+        "No type references or casting needed",
+        "JSON.pretty_generate for readable output",
+        "Combine with File.read/write easily",
+        "JSON::ParserError for invalid JSON"
+      ]
+    },
+    "threading": {
+      "description": "Ruby provides threading with a simpler API, though with different performance characteristics due to the GIL.",
+      "why": "Ruby's Mutex#synchronize handles lock/unlock automatically with blocks - cleaner than try/finally. Thread.new creates threads (similar to new Thread()). Ruby has a Global Interpreter Lock (GIL) in MRI, so threads don't truly run in parallel for CPU-bound tasks, but they work great for I/O-bound operations. For true parallelism, use processes or JRuby (which runs on JVM without GIL). The concurrent-ruby gem provides Java-like thread pools and executors.",
+      "keyPoints": [
+        "Mutex#synchronize handles lock/unlock safely",
+        "Thread.new creates new threads",
+        "MRI Ruby has a GIL (Global Interpreter Lock)",
+        "Threads good for I/O, not CPU parallelism in MRI",
+        "Use processes (fork) for true parallelism",
+        "JRuby removes GIL, runs on JVM like Java",
+        "concurrent-ruby gem for advanced threading"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby's metaprogramming capabilities far exceed Java's reflection API.",
+      "why": "Ruby is built for metaprogramming. define_method creates methods at runtime. method_missing catches calls to undefined methods (powerful for DSLs). Open classes let you add methods to any class, even built-in ones. send calls methods by name (as symbols/strings). This enables DSLs, frameworks, and extremely DRY code. Use carefully - it's powerful but can be confusing.",
+      "keyPoints": [
+        "define_method creates methods dynamically",
+        "method_missing catches undefined method calls",
+        "Open classes allow modifying any class",
+        "send calls methods by name dynamically",
+        "Enable creation of elegant DSLs",
+        "Use responsibly - can reduce clarity"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby uses duck typing - checking behavior at runtime rather than explicit type declarations.",
+      "why": "Ruby embraces duck typing - if an object responds to the needed methods, it's the right type. No need for explicit interfaces or type hierarchies. respond_to? checks if an object has a method. This makes code more flexible and less coupled. You can pass any object that has the right methods. Trade-off: less compile-time safety, more runtime flexibility.",
+      "keyPoints": [
+        "No interface declarations needed",
+        "Objects defined by behavior, not type",
+        "respond_to? checks method availability",
+        "More flexible, less compile-time safety",
+        "Enables polymorphism without inheritance",
+        "\"If it quacks like a duck, it's a duck\""
+      ]
+    }
+  }
+}
+

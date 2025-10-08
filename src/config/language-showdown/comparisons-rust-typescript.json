@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "rust",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "Rust compiles to native code while TypeScript compiles to JavaScript.",
+      "why": "Rust: compiled to native, no GC. TypeScript: compiles to JavaScript. Rust for systems programming. TypeScript for web. Completely different ecosystems and use cases. Rust maximum performance. TypeScript web convenience.",
+      "keyPoints": [
+        "Rust: native code",
+        "TypeScript: to JavaScript",
+        "Different ecosystems",
+        "Rust for systems",
+        "TypeScript for web"
+      ]
+    },
+    "variables": {
+      "description": "Rust has immutable-by-default ownership while TypeScript has optional types.",
+      "why": "Rust: immutable by default, ownership system. TypeScript: optional types, no ownership. Rust catches memory bugs at compile time. TypeScript prevents type bugs. Rust much stricter. TypeScript more flexible. Fundamentally different.",
+      "keyPoints": [
+        "Rust: ownership system",
+        "TypeScript: optional types",
+        "Rust immutable default",
+        "TypeScript more flexible",
+        "Different safety levels"
+      ]
+    },
+    "strings": {
+      "description": "TypeScript template literals are simpler than Rust's String/&str distinction.",
+      "why": "Rust: String and &str for memory safety. TypeScript: simple strings, template literals. Rust complex but safe. TypeScript simple. Rust ownership prevents bugs. TypeScript convenience. Huge complexity difference.",
+      "keyPoints": [
+        "Rust: String vs &str",
+        "TypeScript: simple strings",
+        "Rust ownership complexity",
+        "TypeScript convenience",
+        "Different priorities"
+      ]
+    },
+    "conditionals": {
+      "description": "Rust's if returns values while TypeScript uses statements with type guards.",
+      "why": "Rust: if is expression. TypeScript: if is statement with type guards. Rust if let for patterns. TypeScript type narrowing. Both modern. Different approaches to type safety.",
+      "keyPoints": [
+        "Rust if is expression",
+        "TypeScript: type guards",
+        "Both type-aware",
+        "Different approaches",
+        "Both modern"
+      ]
+    },
+    "case-statements": {
+      "description": "Rust's exhaustive match far exceeds TypeScript's switch.",
+      "why": "Rust match incredibly powerful - exhaustive, destructuring. TypeScript switch traditional. Rust must handle all cases. TypeScript discriminated unions help. Rust far more advanced. Rust's match is superior.",
+      "keyPoints": [
+        "Rust match far superior",
+        "Rust exhaustive",
+        "TypeScript discriminated unions",
+        "Rust more powerful",
+        "Major difference"
+      ]
+    },
+    "arrays": {
+      "description": "TypeScript arrays are simple while Rust has ownership rules for Vec.",
+      "why": "TypeScript: arrays simple with methods. Rust: Vec<T> with ownership. TypeScript much simpler. Rust prevents memory bugs. TypeScript for convenience. Rust for safety. Huge complexity difference.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "Rust: ownership rules",
+        "TypeScript built-in methods",
+        "Rust memory safety",
+        "Different priorities"
+      ]
+    },
+    "hashes": {
+      "description": "TypeScript objects are simple while Rust HashMap has ownership.",
+      "why": "TypeScript: objects/Map simple. Rust: HashMap with ownership. TypeScript easier. Rust safer. TypeScript dynamic. Rust prevents bugs. Different complexity levels.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "Rust ownership",
+        "TypeScript dynamic",
+        "Rust memory safe",
+        "Different complexity"
+      ]
+    },
+    "iteration": {
+      "description": "TypeScript has multiple iteration methods while Rust has zero-cost iterators.",
+      "why": "TypeScript: for...of, forEach, map. Rust: iterators zero-cost. TypeScript easier. Rust compiles optimally. TypeScript more options. Rust guarantees performance. Different priorities.",
+      "keyPoints": [
+        "TypeScript easier",
+        "Rust zero-cost",
+        "TypeScript more options",
+        "Rust optimal compilation",
+        "Different priorities"
+      ]
+    },
+    "filtering": {
+      "description": "TypeScript has built-in methods while Rust iterators compile to optimal code.",
+      "why": "TypeScript: .filter()/.map() easy. Rust: iterator chains zero-cost. TypeScript simpler. Rust faster. TypeScript for development speed. Rust for execution speed. Different goals.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "Rust zero-cost",
+        "TypeScript easier",
+        "Rust faster",
+        "Speed of dev vs execution"
+      ]
+    },
+    "classes": {
+      "description": "TypeScript has classes while Rust uses structs with impl.",
+      "why": "TypeScript: JavaScript classes. Rust: structs + impl. TypeScript OOP. Rust composition. TypeScript simpler. Rust no GC. Different paradigms.",
+      "keyPoints": [
+        "TypeScript: classes",
+        "Rust: structs + impl",
+        "TypeScript OOP",
+        "Rust composition",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "TypeScript uses get/set while Rust uses methods or public fields.",
+      "why": "TypeScript: get/set keywords elegant. Rust: explicit methods. TypeScript cleaner syntax. Rust more explicit. Different conventions. TypeScript more syntactic sugar.",
+      "keyPoints": [
+        "TypeScript: get/set",
+        "Rust: explicit methods",
+        "TypeScript cleaner",
+        "Rust explicit",
+        "Different conventions"
+      ]
+    },
+    "inheritance": {
+      "description": "TypeScript has inheritance while Rust completely rejects it.",
+      "why": "TypeScript: extends for inheritance. Rust: NO inheritance! TypeScript traditional OOP. Rust composition + traits. Fundamental difference. Rust forces better design.",
+      "keyPoints": [
+        "TypeScript: inheritance",
+        "Rust: no inheritance",
+        "TypeScript OOP",
+        "Rust composition",
+        "Fundamental difference"
+      ]
+    },
+    "modules": {
+      "description": "TypeScript uses structural interfaces while Rust uses explicit traits.",
+      "why": "TypeScript: structural typing (duck typing with types). Rust: explicit traits. TypeScript more flexible. Rust more structured. Different approaches. Both enable polymorphism. TypeScript more dynamic.",
+      "keyPoints": [
+        "TypeScript: structural",
+        "Rust: explicit traits",
+        "TypeScript more flexible",
+        "Rust more structured",
+        "Different approaches"
+      ]
+    },
+    "file-io": {
+      "description": "TypeScript uses async/await while Rust uses Result and explicit errors.",
+      "why": "TypeScript: async/await with try/catch. Rust: Result<T, E> with ?. TypeScript simpler. Rust forces error handling. TypeScript for Node. Rust for systems. Different ecosystems.",
+      "keyPoints": [
+        "TypeScript: async/await",
+        "Rust: Result type",
+        "TypeScript simpler",
+        "Rust forces errors",
+        "Different ecosystems"
+      ]
+    },
+    "json": {
+      "description": "TypeScript has JSON built-in while Rust uses serde with compile-time safety.",
+      "why": "TypeScript: JSON.parse built-in. Rust: serde (external). TypeScript simpler. Rust compile-time safe. TypeScript dynamic. Rust type-safe. Different approaches to JSON.",
+      "keyPoints": [
+        "TypeScript: built-in",
+        "Rust: serde",
+        "TypeScript simpler",
+        "Rust type-safe",
+        "Different approaches"
+      ]
+    },
+    "threading": {
+      "description": "TypeScript is single-threaded while Rust prevents data races at compile time.",
+      "why": "TypeScript: single-threaded, async/await. Rust: prevents data races at COMPILE TIME! TypeScript event loop. Rust true parallelism with safety. Rust's ownership is brilliant. Different concurrency models.",
+      "keyPoints": [
+        "TypeScript single-threaded",
+        "Rust prevents races at compile time!",
+        "TypeScript: async/await",
+        "Rust: ownership safety",
+        "Different models"
+      ]
+    },
+    "metaprogramming": {
+      "description": "TypeScript uses decorators while Rust has compile-time macros.",
+      "why": "TypeScript: decorators (experimental). Rust: powerful macros. Both compile-time. Rust macros more powerful. TypeScript simpler. Both avoid runtime cost. Rust more complex.",
+      "keyPoints": [
+        "TypeScript: decorators",
+        "Rust: macros",
+        "Both compile-time",
+        "Rust more powerful",
+        "TypeScript simpler"
+      ]
+    },
+    "duck-typing": {
+      "description": "TypeScript uses compile-time structural typing while Rust uses explicit traits.",
+      "why": "TypeScript: structural typing brilliant! Rust: explicit traits. TypeScript more flexible (duck typing with types). Rust more structured. Both compile-time safe. Different philosophies on flexibility.",
+      "keyPoints": [
+        "TypeScript: structural typing",
+        "Rust: explicit traits",
+        "TypeScript more flexible",
+        "Both compile-time safe",
+        "Different philosophies"
+      ]
+    }
+  }
+}
+
+

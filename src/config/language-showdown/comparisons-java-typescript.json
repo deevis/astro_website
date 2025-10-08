@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "Java requires class structure while TypeScript is as simple as JavaScript.",
+      "why": "Java requires class wrapper. TypeScript is just JavaScript with optional types - one line! Java compiles to JVM bytecode. TypeScript compiles to JavaScript. Java for backend/systems. TypeScript for web/frontend. Different ecosystems entirely.",
+      "keyPoints": [
+        "TypeScript is JavaScript with types",
+        "Java requires class structure",
+        "TypeScript for web, Java for backend",
+        "TypeScript much simpler to start",
+        "Different ecosystems"
+      ]
+    },
+    "variables": {
+      "description": "Java requires explicit types while TypeScript has optional type annotations with powerful inference.",
+      "why": "Java: types required. TypeScript: types optional! TypeScript has type inference. Java requires types (or var). TypeScript union types (string | number). Java doesn't. TypeScript gradual typing philosophy. Java static typing enforced. TypeScript more flexible.",
+      "keyPoints": [
+        "TypeScript types are optional!",
+        "Java types required",
+        "TypeScript has union types",
+        "TypeScript more flexible",
+        "Gradual typing vs static"
+      ]
+    },
+    "strings": {
+      "description": "TypeScript's template literals are cleaner than Java's string operations.",
+      "why": "TypeScript template literals: `Hello ${name}`. Java: concatenation or String.format. TypeScript cleaner. Both have immutable strings. TypeScript built on JavaScript string methods. Java has String and StringBuilder. TypeScript more convenient.",
+      "keyPoints": [
+        "TypeScript template literals clean",
+        "Java more verbose",
+        "Both immutable strings",
+        "TypeScript more convenient",
+        "Different ecosystems"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, but TypeScript has type guards and optional chaining.",
+      "why": "Very similar if/else. TypeScript has type guards (typeof checks narrow types). TypeScript has optional chaining (?.). Java doesn't. TypeScript nullish coalescing (??). More modern JavaScript features. Java more traditional.",
+      "keyPoints": [
+        "Similar if/else",
+        "TypeScript: type guards",
+        "TypeScript: optional chaining",
+        "TypeScript more modern features",
+        "TypeScript more concise"
+      ]
+    },
+    "case-statements": {
+      "description": "Both have traditional switch, but TypeScript uses discriminated unions for pattern matching.",
+      "why": "Both have traditional switch with break. TypeScript discriminated unions powerful for type narrowing. Java switch improved in Java 14+. TypeScript's type system enables pattern matching through unions. Different but both capable.",
+      "keyPoints": [
+        "Both have traditional switch",
+        "TypeScript: discriminated unions",
+        "Java 14+ has expressions",
+        "TypeScript type narrowing",
+        "Different approaches"
+      ]
+    },
+    "arrays": {
+      "description": "TypeScript arrays are simpler with functional methods built-in.",
+      "why": "TypeScript: arrays are JavaScript arrays with types. Java: arrays or ArrayList. TypeScript has map/filter/reduce built-in. Java needs streams. TypeScript more concise. Java more verbose. TypeScript tuples for mixed types. Java doesn't.",
+      "keyPoints": [
+        "TypeScript arrays simpler",
+        "Built-in map/filter",
+        "Java needs streams",
+        "TypeScript has tuples",
+        "TypeScript more functional"
+      ]
+    },
+    "hashes": {
+      "description": "TypeScript object literals and Maps are simpler than Java's HashMap.",
+      "why": "TypeScript: object literals {key: value} or Map. Java: HashMap<K,V>. TypeScript cleaner syntax. Java more verbose. TypeScript Record type for typed objects. Both type-safe but TypeScript more convenient.",
+      "keyPoints": [
+        "TypeScript object literals clean",
+        "Java HashMap verbose",
+        "TypeScript has Map too",
+        "TypeScript more convenient",
+        "Both type-safe"
+      ]
+    },
+    "iteration": {
+      "description": "TypeScript has multiple iteration options while Java uses enhanced for and streams.",
+      "why": "TypeScript: for...of, forEach, for...in. Java: enhanced for, streams. TypeScript arrow functions clean. Java lambdas verbose. TypeScript more options. Both work well. TypeScript more modern syntax.",
+      "keyPoints": [
+        "TypeScript: for...of",
+        "Java: enhanced for",
+        "TypeScript arrow functions",
+        "TypeScript more options",
+        "Both work well"
+      ]
+    },
+    "filtering": {
+      "description": "TypeScript has built-in array methods while Java uses streams.",
+      "why": "TypeScript: .filter()/.map() built into arrays! Java: needs streams API. TypeScript more concise. Java more verbose. TypeScript chaining natural. Java needs collect(). TypeScript easier to read.",
+      "keyPoints": [
+        "TypeScript: built-in methods",
+        "Java: streams API",
+        "TypeScript more concise",
+        "TypeScript easier",
+        "Both functional"
+      ]
+    },
+    "classes": {
+      "description": "Both have classes, but TypeScript uses JavaScript classes with type annotations.",
+      "why": "Both have OOP classes! TypeScript: JavaScript classes + types. Java: traditional classes. TypeScript parameter properties shorthand. Java more verbose. TypeScript public by default. Java private by default. Different defaults.",
+      "keyPoints": [
+        "Both have classes",
+        "TypeScript: JS classes + types",
+        "TypeScript parameter properties",
+        "TypeScript public default",
+        "Java private default"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both use get/set keywords, with TypeScript's being more concise.",
+      "why": "TypeScript: get/set keywords elegant. Java: getXxx/setXxx methods. TypeScript cleaner. Java more verbose. Both work similarly but TypeScript syntax nicer. TypeScript looks like property access.",
+      "keyPoints": [
+        "TypeScript: get/set keywords",
+        "Java: getXxx/setXxx",
+        "TypeScript cleaner",
+        "Java more verbose",
+        "TypeScript better syntax"
+      ]
+    },
+    "inheritance": {
+      "description": "Both support single inheritance with extends keyword.",
+      "why": "Both use extends! TypeScript: JavaScript inheritance + types. Java: traditional OOP. Both single inheritance. TypeScript abstract classes. Java abstract classes. Very similar here. Both work well.",
+      "keyPoints": [
+        "Both use extends",
+        "Both single inheritance",
+        "Both have abstract classes",
+        "Very similar",
+        "TypeScript adds type safety"
+      ]
+    },
+    "modules": {
+      "description": "TypeScript uses interfaces with structural typing while Java uses nominal typing.",
+      "why": "THIS IS KEY! TypeScript: structural typing (duck typing with types!). Java: nominal typing (must implement). TypeScript more flexible. Java more explicit. TypeScript any object matching interface works. Java must declare implements. Fundamental difference.",
+      "keyPoints": [
+        "TypeScript: structural typing!",
+        "Java: nominal typing",
+        "TypeScript more flexible",
+        "Java more explicit",
+        "Fundamental difference"
+      ]
+    },
+    "file-io": {
+      "description": "TypeScript uses Node.js APIs with async/await while Java uses streams.",
+      "why": "TypeScript: Node.js fs module, async/await. Java: streams, try-with-resources. TypeScript promises modern. Java blocking or callbacks. TypeScript async cleaner. Different ecosystems. Both work well.",
+      "keyPoints": [
+        "TypeScript: async/await",
+        "Java: streams",
+        "TypeScript promises",
+        "Different ecosystems",
+        "TypeScript more modern"
+      ]
+    },
+    "json": {
+      "description": "TypeScript has JSON built-in while Java needs external libraries.",
+      "why": "TypeScript: JSON.parse/stringify built-in! Java: needs Jackson/Gson. TypeScript much simpler. Java more complex. TypeScript type assertions for safety. Java needs annotations. TypeScript wins here.",
+      "keyPoints": [
+        "TypeScript: built-in JSON",
+        "Java: external libraries",
+        "TypeScript simpler",
+        "TypeScript type assertions",
+        "TypeScript advantage"
+      ]
+    },
+    "threading": {
+      "description": "TypeScript is single-threaded with async/await while Java has true multi-threading.",
+      "why": "TypeScript: single-threaded, async/await for concurrency. Java: true multi-threading. TypeScript uses event loop. Java uses threads. TypeScript for I/O. Java for parallelism. Fundamentally different. Web Workers for parallelism in browser.",
+      "keyPoints": [
+        "TypeScript single-threaded",
+        "Java multi-threaded",
+        "TypeScript: async/await",
+        "Java: threads",
+        "Different models"
+      ]
+    },
+    "metaprogramming": {
+      "description": "TypeScript has decorators while Java uses annotations.",
+      "why": "TypeScript: decorators (experimental). Java: annotations. Both compile-time. TypeScript decorators more powerful. Java annotations more limited. Both enable metaprogramming. Similar concepts.",
+      "keyPoints": [
+        "TypeScript: decorators",
+        "Java: annotations",
+        "Similar concepts",
+        "TypeScript more powerful",
+        "Both compile-time"
+      ]
+    },
+    "duck-typing": {
+      "description": "TypeScript embraces structural typing while Java requires explicit implementation.",
+      "why": "TypeScript structural typing is brilliant! Java nominal typing. TypeScript: any matching object works. Java: must declare implements. TypeScript more flexible. Java more explicit. TypeScript is typed duck typing. Major difference.",
+      "keyPoints": [
+        "TypeScript: structural typing!",
+        "Java: nominal typing",
+        "TypeScript more flexible",
+        "TypeScript duck typing with types",
+        "Major difference"
+      ]
+    }
+  }
+}
+
+

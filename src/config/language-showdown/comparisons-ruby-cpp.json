@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "cpp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Ruby's one-liner extreme simplicity contrasts with C++'s compiled systems approach.",
+      "why": "Opposite ends of the spectrum! Ruby: one line, interpreted, maximum convenience. C++: compiled, native code, maximum performance. Ruby for rapid development. C++ for performance-critical systems. Completely different use cases and philosophies.",
+      "keyPoints": [
+        "Opposite philosophies",
+        "Ruby interpreted, C++ compiled",
+        "Ruby convenience, C++ performance",
+        "Different use cases",
+        "Speed of development vs execution"
+      ]
+    },
+    "variables": {
+      "description": "Ruby's dynamic typing contrasts completely with C++'s static typing and manual memory management.",
+      "why": "Ruby: dynamic typing, no declarations, automatic GC. C++: static typing, explicit types, manual memory. Ruby variables can change types. C++ cannot. Ruby prioritizes ease. C++ prioritizes control and performance. Fundamentally different approaches.",
+      "keyPoints": [
+        "Ruby dynamic, C++ static",
+        "Ruby automatic GC, C++ manual",
+        "Ruby no declarations needed",
+        "C++ explicit everything",
+        "Completely different"
+      ]
+    },
+    "strings": {
+      "description": "Ruby's convenient methods contrast with C++'s std::string and C-style strings.",
+      "why": "Ruby: #{} interpolation, rich methods, simple. C++: std::string and char*, complex, powerful. Ruby mutable strings with methods. C++ mutable strings with algorithms. Ruby optimizes convenience. C++ optimizes performance. Huge usability difference.",
+      "keyPoints": [
+        "Ruby much simpler",
+        "C++ std::string and char*",
+        "Ruby rich built-in methods",
+        "C++ more complex",
+        "Convenience vs control"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby uses end keywords and unless while C++ uses braces with traditional syntax.",
+      "why": "Ruby: end keyword, unless, modifiers. C++: braces, traditional. Ruby more expressive. C++ more like C. Ruby emphasizes readability. C++ emphasizes performance. Different syntactic philosophies. Both work fine.",
+      "keyPoints": [
+        "Ruby: end, C++: braces",
+        "Ruby has unless",
+        "Ruby more expressive",
+        "C++ traditional",
+        "Different styles"
+      ]
+    },
+    "case-statements": {
+      "description": "Ruby's powerful case/when with === contrasts with C++'s limited switch.",
+      "why": "Ruby's case/when very powerful - ranges, regex, classes. C++ switch limited to integral types. Ruby uses ===. C++ needs enums for clean code. Ruby more flexible. C++ more limited. Ruby's approach more modern.",
+      "keyPoints": [
+        "Ruby much more powerful",
+        "C++ switch very limited",
+        "Ruby matches ranges/regex",
+        "C++ only integral types",
+        "Ruby more modern"
+      ]
+    },
+    "arrays": {
+      "description": "Ruby arrays are simple and dynamic while C++ offers multiple container types with manual management.",
+      "why": "Ruby arrays extremely simple. C++ has arrays, vector, list, deque, etc. Ruby automatic memory. C++ manual. Ruby negative indices. C++ doesn't. Ruby optimizes ease. C++ optimizes control. Huge complexity difference.",
+      "keyPoints": [
+        "Ruby much simpler",
+        "C++ many container types",
+        "Ruby automatic memory",
+        "C++ manual management",
+        "Ease vs control"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby hashes are simple with symbols while C++ offers map and unordered_map with explicit types.",
+      "why": "Ruby hashes very simple, use symbols. C++ map/unordered_map need types. Ruby dynamic and convenient. C++ static and explicit. Ruby easier to use. C++ faster and safer. Different priorities.",
+      "keyPoints": [
+        "Ruby much simpler",
+        "C++ needs type declarations",
+        "Ruby uses symbols",
+        "C++ offers ordering choice",
+        "Ease vs performance"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby's elegant blocks contrast with C++'s iterators and range-based for loops.",
+      "why": "Ruby's .each with blocks beautiful. C++ range-based for (C++11). Ruby emphasizes elegance. C++ emphasizes performance. Both work well. Ruby more intuitive. C++ more traditional. Different design philosophies.",
+      "keyPoints": [
+        "Ruby blocks elegant",
+        "C++ iterators powerful",
+        "Ruby more intuitive",
+        "C++ more control",
+        "Both work well"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby's select/map methods are concise while C++ uses STL algorithms with lambdas.",
+      "why": "Ruby: .select/.map concise and readable. C++: STL algorithms verbose. Both support functional operations. Ruby easier to write. C++ can be zero-cost. Ruby has overhead. C++ optimizes better. Readability vs performance.",
+      "keyPoints": [
+        "Ruby more concise",
+        "C++ more verbose",
+        "C++ zero-cost possible",
+        "Ruby has overhead",
+        "Readability vs performance"
+      ]
+    },
+    "classes": {
+      "description": "Ruby has traditional simple classes while C++ requires complex constructors and destructors.",
+      "why": "Ruby: simple classes with initialize. C++: complex classes with Rule of 3/5. Ruby automatic memory. C++ manual. Ruby no copy/move constructors needed. C++ requires them. Ruby way simpler. C++ more control. Huge complexity difference.",
+      "keyPoints": [
+        "Ruby much simpler",
+        "C++ requires Rule of 3/5",
+        "Ruby automatic memory",
+        "C++ manual management",
+        "Simplicity vs control"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby's attr_accessor is magical while C++ uses explicit verbose methods.",
+      "why": "Ruby: attr_accessor one line magic. C++: write getXxx/setXxx manually. Ruby eliminates boilerplate. C++ explicit and verbose. Ruby more convenient. C++ more clear. Different philosophies on abstraction.",
+      "keyPoints": [
+        "Ruby: attr_accessor magic",
+        "C++: explicit methods",
+        "Ruby one line",
+        "C++ verbose",
+        "Magic vs explicitness"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses single inheritance with modules while C++ has full multiple inheritance.",
+      "why": "Ruby: single inheritance + modules for mixins. C++: full multiple inheritance including diamond problem. C++ more powerful but dangerous. Ruby safer approach. C++ offers more flexibility. Ruby prevents problems. Different trade-offs.",
+      "keyPoints": [
+        "Ruby: single + modules",
+        "C++: multiple inheritance",
+        "C++ has diamond problem",
+        "Ruby safer",
+        "Power vs safety"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide mixins while C++ uses abstract classes and multiple inheritance.",
+      "why": "Ruby: modules with include/extend. C++: abstract classes with virtual. Ruby's approach cleaner. C++ more traditional. Ruby avoids diamond problem. C++ doesn't. Ruby's mixins convenient. C++ more verbose.",
+      "keyPoints": [
+        "Ruby: mixins",
+        "C++: abstract classes",
+        "Ruby cleaner",
+        "C++ traditional OOP",
+        "Different mechanisms"
+      ]
+    },
+    "file-io": {
+      "description": "Ruby's simple one-liners contrast with C++'s verbose fstream operations.",
+      "why": "Ruby: File.read/write one-liners. C++: ifstream/ofstream verbose. Both use RAII for cleanup. Ruby much simpler. C++ more control. Ruby for scripts. C++ for systems. Huge usability difference.",
+      "keyPoints": [
+        "Ruby much simpler",
+        "C++ verbose",
+        "Both use RAII",
+        "Ruby for convenience",
+        "C++ for control"
+      ]
+    },
+    "json": {
+      "description": "Ruby has JSON in standard library while C++ requires external dependencies.",
+      "why": "Ruby: JSON in standard library. C++: need external library. Ruby's approach simpler. C++ libraries powerful. Ruby better for JSON work. C++ faster but less convenient. Ruby wins on convenience.",
+      "keyPoints": [
+        "Ruby: standard library",
+        "C++: external libraries",
+        "Ruby simpler",
+        "C++ faster",
+        "Convenience vs speed"
+      ]
+    },
+    "threading": {
+      "description": "Ruby has GIL limiting parallelism while C++ offers true multi-threading with manual synchronization.",
+      "why": "Ruby: GIL limits parallelism. C++: true multi-threading. Ruby easier threading API. C++ more complex but powerful. Ruby good for I/O. C++ good for CPU. C++ allows race conditions. Ruby safer but limited.",
+      "keyPoints": [
+        "Ruby has GIL",
+        "C++ true threading",
+        "Ruby simpler API",
+        "C++ more powerful",
+        "Different strengths"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby excels at runtime metaprogramming while C++ uses compile-time templates.",
+      "why": "Ruby: powerful runtime metaprogramming. C++: powerful compile-time templates. Ruby can modify anything at runtime. C++ everything resolved at compile time. Ruby more flexible. C++ faster. Opposite approaches.",
+      "keyPoints": [
+        "Ruby: runtime",
+        "C++: compile-time",
+        "Ruby more flexible",
+        "C++ zero runtime cost",
+        "Opposite approaches"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby uses runtime duck typing while C++ uses compile-time templates and virtual functions.",
+      "why": "Ruby: runtime duck typing. C++: compile-time templates + runtime virtual. Ruby more flexible. C++ catches errors earlier (templates) or has runtime cost (virtual). Different trade-offs. Ruby for flexibility. C++ for safety/speed.",
+      "keyPoints": [
+        "Ruby: runtime",
+        "C++: compile-time + runtime",
+        "Ruby more flexible",
+        "C++ catches template errors early",
+        "Different approaches"
+      ]
+    }
+  }
+}
+

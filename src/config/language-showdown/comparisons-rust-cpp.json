@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "rust",
+  "rightLanguage": "cpp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both compile to native code, but Rust enforces safety while C++ offers maximum control.",
+      "why": "Both systems programming languages compiling to native code. Rust uses println! macro. C++ uses cout. Neither has garbage collection. Rust uses ownership. C++ uses manual management. Rust: safety by default. C++: power by default. Rust is C++'s modern competitor.",
+      "keyPoints": [
+        "Both compile to native code",
+        "Neither has GC",
+        "Rust: safety by default",
+        "C++: power by default",
+        "Rust designed as safer C++"
+      ]
+    },
+    "variables": {
+      "description": "Rust is immutable by default while C++ is mutable; Rust's ownership prevents many C++ bugs.",
+      "why": "Rust immutable by default (use mut). C++ mutable by default (use const). Rust has ownership preventing memory bugs. C++ requires discipline. C++ has references and pointers. Rust has references with borrowing rules. Rust catches bugs at compile time. C++ catches at runtime (or doesn't).",
+      "keyPoints": [
+        "Rust immutable default",
+        "C++ mutable default",
+        "Rust ownership prevents bugs",
+        "C++ requires discipline",
+        "Rust compile-time safety"
+      ]
+    },
+    "strings": {
+      "description": "Both distinguish owned and borrowed strings, but Rust enforces safety while C++ allows errors.",
+      "why": "Rust: String and &str. C++: std::string and char*. Both have owned/borrowed concept! But Rust enforces safety. C++ allows dangling pointers. Rust's borrow checker prevents this. C++ offers more flexibility. Rust offers more safety. Similar concepts, different enforcement.",
+      "keyPoints": [
+        "Both have owned/borrowed",
+        "Rust enforces safety",
+        "C++ allows dangling pointers",
+        "Rust borrow checker",
+        "Safety vs flexibility"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, but Rust's if returns values while C++ uses statements.",
+      "why": "Very similar syntax. Rust's if is expression. C++ if is statement. Rust has if let for patterns. C++ has traditional if. Rust no ternary (use if). C++ has ternary. Both use braces. Rust more consistent. C++ more traditional.",
+      "keyPoints": [
+        "Similar syntax",
+        "Rust if is expression",
+        "Rust has if let",
+        "C++ more traditional",
+        "Similar usage"
+      ]
+    },
+    "case-statements": {
+      "description": "Rust's exhaustive match far surpasses C++'s limited switch statement.",
+      "why": "Rust's match is MUCH MORE POWERFUL! Exhaustive, pattern matching, destructuring. C++ switch limited to integral types. Rust must handle all cases. C++ can forget cases. Rust catches at compile time. This is a major difference. Rust's match is modern.",
+      "keyPoints": [
+        "Rust match far more powerful",
+        "C++ switch very limited",
+        "Rust exhaustive",
+        "Rust pattern matching",
+        "Major advantage for Rust"
+      ]
+    },
+    "arrays": {
+      "description": "Both have fixed arrays and dynamic vectors, but Rust's ownership prevents memory bugs.",
+      "why": "Both have arrays and vectors! Rust: Vec<T>. C++: std::vector<T>. Rust's ownership prevents use-after-free. C++ allows dangling pointers. Rust's push(&mut self) explicit. C++ push_back. Similar containers, different safety. Rust prevents C++'s memory bugs.",
+      "keyPoints": [
+        "Similar containers",
+        "Rust prevents use-after-free",
+        "C++ allows memory bugs",
+        "Rust ownership safety",
+        "Similar performance"
+      ]
+    },
+    "hashes": {
+      "description": "Both have HashMap, but Rust's ownership system prevents many C++ iterator invalidation bugs.",
+      "why": "Rust: HashMap. C++: std::map and std::unordered_map. C++ offers ordered/unordered choice. Rust's ownership prevents iterator invalidation. C++ allows dangling iterators. Both require imports. Rust's entry API powerful. Similar functionality, different safety.",
+      "keyPoints": [
+        "C++ offers more types",
+        "Rust prevents iterator invalidation",
+        "C++ allows dangling iterators",
+        "Both powerful",
+        "Safety difference"
+      ]
+    },
+    "iteration": {
+      "description": "Both have iterators and ranges, with Rust's being zero-cost and memory-safe.",
+      "why": "Both have powerful iterators! Rust's are zero-cost abstractions. C++ STL iterators also efficient. Rust prevents iterator invalidation. C++ allows it. Rust's borrowing ensures safety. Both compile to efficient code. Rust adds safety guarantees.",
+      "keyPoints": [
+        "Both have iterators",
+        "Both zero-cost",
+        "Rust prevents invalidation",
+        "C++ allows bugs",
+        "Rust adds safety"
+      ]
+    },
+    "filtering": {
+      "description": "Both support functional operations with zero-cost abstractions.",
+      "why": "Rust: iterator chains (.filter/.map). C++: STL algorithms + lambdas. C++20 ranges similar to Rust. Both compile to optimal code! Both zero-cost. Rust's syntax cleaner. C++ ranges catching up. Very similar performance and style.",
+      "keyPoints": [
+        "Both zero-cost",
+        "Similar functional style",
+        "C++20 ranges like Rust",
+        "Both compile optimally",
+        "Similar capabilities"
+      ]
+    },
+    "classes": {
+      "description": "Rust uses structs with impl while C++ has classes; Rust prevents many C++ memory bugs.",
+      "why": "Rust: structs + impl. C++: classes. C++ requires copy/move constructors, destructors (Rule of 3/5). Rust handles this automatically with ownership! Rust prevents memory leaks. C++ requires discipline. Rust's RAII is enforced. C++ RAII is convention. Major safety difference.",
+      "keyPoints": [
+        "Rust: structs + impl",
+        "C++: classes",
+        "C++ requires Rule of 3/5",
+        "Rust automatic safety",
+        "Rust prevents memory leaks"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both use explicit methods, with similar verbosity.",
+      "why": "Both write getters/setters explicitly. Rust: no 'get' prefix. C++: getName(). C++ uses const methods. Rust uses &self. Both verbose. Both often use public fields. Very similar approaches. Neither has magic.",
+      "keyPoints": [
+        "Both explicit",
+        "Similar verbosity",
+        "Both use const/&self",
+        "Similar conventions",
+        "Very similar"
+      ]
+    },
+    "inheritance": {
+      "description": "C++ has multiple inheritance while Rust completely rejects inheritance for safety.",
+      "why": "C++ has full multiple inheritance including diamond problem. Rust has ZERO inheritance! Rust uses composition + traits. C++'s inheritance powerful but dangerous. Rust's approach safer. Rust forces better design. C++ offers more flexibility. Fundamental difference.",
+      "keyPoints": [
+        "C++ has multiple inheritance",
+        "Rust has no inheritance",
+        "C++ has diamond problem",
+        "Rust forces composition",
+        "Safety vs flexibility"
+      ]
+    },
+    "modules": {
+      "description": "Rust's traits provide safe polymorphism while C++ uses virtual functions with runtime cost.",
+      "why": "Rust: traits with static/dynamic dispatch. C++: abstract classes with virtual functions. Rust's static dispatch zero-cost. C++ virtual has runtime cost. Rust's trait objects (dyn Trait) for dynamic dispatch. Both powerful. Rust offers more choice.",
+      "keyPoints": [
+        "Rust: traits",
+        "C++: virtual functions",
+        "Rust static dispatch zero-cost",
+        "C++ virtual has cost",
+        "Both powerful"
+      ]
+    },
+    "file-io": {
+      "description": "Both use RAII for cleanup, but Rust's Result forces error handling while C++ allows ignoring errors.",
+      "why": "Both use RAII for automatic cleanup! Rust returns Result<T, E> - must handle errors. C++ can ignore errors. Rust's ? operator elegant. C++ has exceptions (optional). Rust forces safety. C++ offers flexibility. Both ensure cleanup.",
+      "keyPoints": [
+        "Both use RAII",
+        "Rust forces error handling",
+        "C++ can ignore errors",
+        "Rust's ? operator",
+        "Safety vs flexibility"
+      ]
+    },
+    "json": {
+      "description": "Both need external libraries, with Rust's serde being compile-time while C++ libraries vary.",
+      "why": "Neither has built-in JSON. Rust: serde (compile-time). C++: nlohmann/json, RapidJSON. Rust's serde derives at compile time. C++ varies by library. Rust's approach type-safe and fast. C++ can be fast too. Similar external dependency situation.",
+      "keyPoints": [
+        "Neither built-in",
+        "Rust: serde (compile-time)",
+        "C++: various libraries",
+        "Both need external deps",
+        "Similar situation"
+      ]
+    },
+    "threading": {
+      "description": "Rust prevents data races at compile time while C++ can have race conditions.",
+      "why": "THIS IS RUST'S KILLER FEATURE! Rust prevents data races at compile time using ownership. C++ can have race conditions. Rust: Arc<Mutex<T>> is safe by design. C++ requires programmer discipline. Rust's type system enforces thread safety. C++ relies on conventions. HUGE advantage for Rust.",
+      "keyPoints": [
+        "Rust prevents races at compile time!",
+        "C++ can have races",
+        "Rust ownership enforces safety",
+        "C++ requires discipline",
+        "Rust's biggest advantage"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Both use compile-time metaprogramming, with C++ templates being more mature but complex.",
+      "why": "Both compile-time! C++ templates Turing-complete and mature. Rust macros powerful but different. C++ template metaprogramming incredibly powerful but complex. Rust's macro system cleaner. Both zero runtime cost. C++ more established. Rust catching up.",
+      "keyPoints": [
+        "Both compile-time",
+        "C++ templates Turing-complete",
+        "Rust macros cleaner",
+        "Both zero runtime cost",
+        "C++ more mature"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both use compile-time polymorphism, but Rust's traits are safer than C++ templates.",
+      "why": "Both compile-time checked! C++: templates (duck typing at compile time). Rust: traits (explicit). C++ templates can give cryptic errors. Rust traits give clear errors. Rust's approach more structured. C++ more flexible. Both achieve polymorphism safely at compile time.",
+      "keyPoints": [
+        "Both compile-time",
+        "C++: template duck typing",
+        "Rust: explicit traits",
+        "Rust better error messages",
+        "Rust more structured"
+      ]
+    }
+  }
+}
+

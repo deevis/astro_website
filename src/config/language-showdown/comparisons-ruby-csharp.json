@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Ruby's simplicity vs C#'s enterprise structure.",
+      "why": "Ruby: one line! C#: class and Main needed. Ruby dynamic, C# compiled. Ruby for scripting. C# for enterprise. Huge verbosity difference. Ruby optimizes for developer happiness. C# optimizes for type safety.",
+      "keyPoints": [
+        "Ruby one line!",
+        "C# needs class",
+        "Ruby dynamic",
+        "C# compiled",
+        "Huge difference"
+      ]
+    },
+    "variables": {
+      "description": "Ruby dynamic typing vs C# static typing - fundamental difference.",
+      "why": "Ruby dynamically typed. C# statically typed. Ruby no type declarations. C# requires types (or var). Ruby more flexible. C# more safe. Ruby duck typing. C# compile-time checking. Fundamental philosophy difference!",
+      "keyPoints": [
+        "Fundamental difference",
+        "Ruby: dynamic",
+        "C#: static",
+        "Ruby flexible",
+        "C# safe"
+      ]
+    },
+    "strings": {
+      "description": "Both have excellent string interpolation!",
+      "why": "Both great! Ruby #{} since forever. C# $\"{}\" since 2015. Very similar! Ruby more methods built-in. C# StringBuilder for performance. Both excellent. Ruby slightly more methods. Very similar overall.",
+      "keyPoints": [
+        "Both excellent!",
+        "Ruby: #{}",
+        "C#: $\"{}\"",
+        "Very similar",
+        "Both modern"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby more flexible syntax, C# more structured.",
+      "why": "Ruby statement modifiers elegant. C# traditional. Ruby unless keyword. C# doesn't have unless. Ruby parentheses optional. C# requires braces. Ruby more flexible. C# more structured. Different philosophies.",
+      "keyPoints": [
+        "Ruby more flexible",
+        "C# more structured",
+        "Ruby: unless",
+        "C# traditional",
+        "Different styles"
+      ]
+    },
+    "case-statements": {
+      "description": "Ruby case/when vs C# switch expressions - both powerful!",
+      "why": "Ruby case/when powerful with === operator. C# switch expressions (C# 8+) with pattern matching. Both powerful! Ruby ranges, regex. C# ranges, types, patterns. No breaks needed in either (modern versions). Both advanced!",
+      "keyPoints": [
+        "Both powerful!",
+        "Ruby: === operator",
+        "C#: pattern matching",
+        "Both no breaks",
+        "Both advanced"
+      ]
+    },
+    "arrays": {
+      "description": "Ruby arrays more flexible, C# List<T> more structured.",
+      "why": "Ruby arrays dynamic, mixed types. C# List<T> strongly typed. Ruby built-in methods. C# LINQ powerful. Ruby << operator. C# .Add(). Ruby negative indices. C# ^1 index (C# 8+). Both powerful!",
+      "keyPoints": [
+        "Ruby more flexible",
+        "C# more structured",
+        "Both powerful",
+        "Ruby: mixed types",
+        "C#: strong typing"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby hashes first-class, C# Dictionary strongly typed.",
+      "why": "Ruby hashes with symbols elegant. C# Dictionary<K,V> typed. Ruby more flexible. C# more structured. Ruby symbol: value syntax. C# initializers. Both have rich methods. Different approaches.",
+      "keyPoints": [
+        "Ruby more flexible",
+        "C# strongly typed",
+        "Ruby: symbols",
+        "C#: Dictionary<K,V>",
+        "Different approaches"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby blocks vs C# foreach/LINQ - both elegant.",
+      "why": "Ruby blocks with each elegant. C# foreach clean. Ruby 5.times. C# for loops. Ruby each_with_index. C# Select with index. Both have functional methods. Both modern. Different syntax, similar power.",
+      "keyPoints": [
+        "Both elegant",
+        "Ruby: blocks",
+        "C#: foreach/LINQ",
+        "Both functional",
+        "Different syntax"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby select/map vs C# LINQ - very similar concepts!",
+      "why": "Ruby select/map/reject. C# Where/Select. Same concepts! Ruby came first with these names. C# LINQ (2007) inspired by Ruby. Very similar! Both functional. Both chain operations. Microsoft learned from Ruby!",
+      "keyPoints": [
+        "Very similar!",
+        "Same concepts",
+        "Ruby influenced C#",
+        "Both functional",
+        "Both chain operations"
+      ]
+    },
+    "classes": {
+      "description": "Ruby less verbose, C# more explicit with properties.",
+      "why": "Ruby def initialize vs C# constructor. Ruby @ variables vs C# fields. Ruby implicit returns vs C# explicit. Ruby public default vs C# private default. C# properties cleaner than getters. Ruby simpler. C# more explicit.",
+      "keyPoints": [
+        "Ruby simpler",
+        "C# more explicit",
+        "Ruby: @ variables",
+        "C#: properties",
+        "Different approaches"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby attr_accessor vs C# properties - both excellent!",
+      "why": "Ruby attr_accessor metaprogramming magic. C# properties (get; set;) built-in. Both avoid verbose methods! Ruby code-that-writes-code. C# language feature. Both excellent! Similar results, different approaches.",
+      "keyPoints": [
+        "Both excellent!",
+        "Ruby: metaprogramming",
+        "C#: language feature",
+        "Both avoid boilerplate",
+        "Different approaches"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby < operator vs C# colon - similar functionality.",
+      "why": "Ruby < for inheritance. C# uses :. Ruby super without parens. C# base(). Ruby no override keyword needed. C# requires virtual/override. C# more explicit. Ruby more implicit. Both single inheritance.",
+      "keyPoints": [
+        "Similar functionality",
+        "Different syntax",
+        "C# more explicit",
+        "Ruby more implicit",
+        "Both single inheritance"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules/mixins vs C# interfaces - Ruby more flexible.",
+      "why": "Ruby modules with include/extend powerful! C# interfaces traditional. Ruby mixins with implementation. C# interfaces (C# 8+) can have defaults. Ruby more flexible. C# more structured. Ruby composition better. C# more traditional.",
+      "keyPoints": [
+        "Ruby more flexible",
+        "C# more traditional",
+        "Ruby: mixins",
+        "C#: interfaces",
+        "Ruby better composition"
+      ]
+    },
+    "file-io": {
+      "description": "Both have simple file operations!",
+      "why": "Ruby File.read/write one-liners. C# File.ReadAllText/WriteAllText one-liners. Very similar! Both have blocks/using for auto-close. Ruby File.foreach. C# File.ReadLines. Both simple! Almost identical simplicity.",
+      "keyPoints": [
+        "Very similar!",
+        "Both one-liners",
+        "Both auto-close",
+        "Almost identical",
+        "Both simple"
+      ]
+    },
+    "json": {
+      "description": "Ruby JSON in stdlib, C# has System.Text.Json.",
+      "why": "Ruby require 'json' in stdlib. C# System.Text.Json or Newtonsoft.Json. Ruby JSON.parse returns Hash. C# deserializes to classes. Ruby more dynamic. C# more structured. Ruby simpler. C# type-safe.",
+      "keyPoints": [
+        "Both have JSON",
+        "Ruby more dynamic",
+        "C# more structured",
+        "Ruby: Hash",
+        "C#: classes"
+      ]
+    },
+    "threading": {
+      "description": "Ruby GIL limits threads, C# true multi-threading.",
+      "why": "Ruby MRI has GIL - no true parallelism for CPU. C# true multi-threading. Ruby Mutex#synchronize. C# lock. Ruby threads for I/O. C# threads for everything. C# async/await powerful. Ruby simpler threads. C# more powerful.",
+      "keyPoints": [
+        "Ruby: GIL limitation",
+        "C#: true threading",
+        "C# more powerful",
+        "Ruby simpler",
+        "Different models"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby metaprogramming far exceeds C# reflection!",
+      "why": "Ruby BUILT for metaprogramming! define_method, method_missing, open classes. C# reflection limited. C# source generators (C# 9+) catching up. Ruby runtime metaprogramming. C# mostly compile-time. Ruby far more powerful! Ruby wins completely!",
+      "keyPoints": [
+        "Ruby far superior!",
+        "Ruby built for it",
+        "C# limited",
+        "Ruby runtime power",
+        "Ruby wins!"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby embraces duck typing, C# requires interfaces (or dynamic).",
+      "why": "Ruby embraces duck typing! respond_to? checks methods. C# requires interfaces. BUT C# has dynamic type! Ruby compile/runtime duck typing. C# runtime with dynamic. Ruby philosophy. C# optional. Ruby more flexible.",
+      "keyPoints": [
+        "Ruby embraces it!",
+        "C# uses interfaces",
+        "C# has dynamic",
+        "Ruby more flexible",
+        "Different philosophies"
+      ]
+    }
+  }
+}

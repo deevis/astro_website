@@ -1,0 +1,1238 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Car Service Tracker</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .header {
+            background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            color: white;
+            padding: 2rem;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 0.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+
+        .header p {
+            opacity: 0.9;
+            font-size: 1.1rem;
+        }
+
+        .main-content {
+            padding: 2rem;
+        }
+
+        .car-selector {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .car-selector label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .car-selector select, .car-selector input {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .car-selector select:focus, .car-selector input:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-secondary {
+            background: linear-gradient(135deg, #ffecd2 0%, #fcb69f 100%);
+            color: #333;
+        }
+
+        .btn-danger {
+            background: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            color: #333;
+        }
+
+        .btn-small {
+            padding: 0.5rem 1rem;
+            font-size: 0.875rem;
+        }
+
+        .action-buttons {
+            background: #f8f9fa;
+            padding: 2rem;
+            border-radius: 15px;
+            margin-bottom: 2rem;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .action-buttons .btn {
+            margin: 0 0.5rem;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 2rem;
+        }
+
+        .stat-card {
+            background: white;
+            padding: 1.5rem;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 2rem;
+            font-weight: 700;
+            color: #667eea;
+            margin-bottom: 0.5rem;
+        }
+
+        .stat-label {
+            color: #666;
+            font-weight: 600;
+        }
+
+        .services-table {
+            background: white;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            margin-top: 2rem;
+        }
+
+        .table-header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 1rem;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .table-actions {
+            display: flex;
+            gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #f8f9fa;
+            font-weight: 600;
+            color: #333;
+        }
+
+        tr:hover {
+            background: #f8f9fa;
+        }
+
+        .cost-cell {
+            font-weight: 600;
+            color: #28a745;
+        }
+
+        .actions-cell {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #666;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            max-width: 600px;
+            width: 90%;
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+
+        .modal h3 {
+            margin-bottom: 1rem;
+            color: #333;
+        }
+
+        .close {
+            float: right;
+            font-size: 1.5rem;
+            font-weight: bold;
+            cursor: pointer;
+            color: #999;
+        }
+
+        .close:hover {
+            color: #333;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            margin-bottom: 0.5rem;
+            font-weight: 600;
+            color: #333;
+        }
+
+        .form-group input, .form-group textarea {
+            padding: 0.75rem;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+        }
+
+        .form-group input:focus, .form-group textarea:focus {
+            outline: none;
+            border-color: #4facfe;
+            box-shadow: 0 0 0 3px rgba(79, 172, 254, 0.1);
+        }
+
+        .input-group {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .input-group input {
+            flex: 1;
+        }
+
+        .services-selector {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+            background: #f8f9fa;
+        }
+
+        .available-services {
+            margin-bottom: 1rem;
+        }
+
+        .service-tag {
+            display: inline-block;
+            background: #e9ecef;
+            border: 2px solid #dee2e6;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-size: 0.875rem;
+        }
+
+        .service-tag:hover {
+            background: #dee2e6;
+            transform: translateY(-1px);
+        }
+
+        .service-tag.selected {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-color: #667eea;
+        }
+
+        .selected-services-container {
+            border-top: 1px solid #dee2e6;
+            padding-top: 1rem;
+            margin-top: 1rem;
+        }
+
+        .selected-services {
+            min-height: 60px;
+            border: 2px dashed #dee2e6;
+            border-radius: 8px;
+            padding: 0.5rem;
+            background: white;
+        }
+
+        .selected-service-tag {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 20px;
+            padding: 0.5rem 1rem;
+            margin: 0.25rem;
+            font-size: 0.875rem;
+            position: relative;
+            padding-right: 2rem;
+        }
+
+        .selected-service-tag .remove-btn {
+            position: absolute;
+            right: 0.5rem;
+            top: 50%;
+            transform: translateY(-50%);
+            background: none;
+            border: none;
+            color: white;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: bold;
+            line-height: 1;
+        }
+
+        .selected-service-tag .remove-btn:hover {
+            color: #ffcccb;
+        }
+
+        .service-types-list {
+            margin-top: 1rem;
+            max-height: 300px;
+            overflow-y: auto;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 1rem;
+        }
+
+        .service-type-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0.5rem;
+            border-bottom: 1px solid #eee;
+        }
+
+        .service-type-item:last-child {
+            border-bottom: none;
+        }
+
+        .service-type-name {
+            flex: 1;
+            font-weight: 500;
+        }
+
+        .usage-count {
+            color: #666;
+            font-size: 0.875rem;
+            margin-right: 1rem;
+        }
+
+        .file-input {
+            display: none;
+        }
+
+        .file-input-label {
+            background: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            color: #333;
+            border: none;
+            padding: 0.75rem 1.5rem;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            transition: all 0.3s ease;
+            display: inline-block;
+        }
+
+        .file-input-label:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .car-selector {
+                flex-direction: column;
+                align-items: stretch;
+            }
+            
+            .form-row {
+                grid-template-columns: 1fr;
+            }
+            
+            table {
+                font-size: 0.875rem;
+            }
+            
+            th, td {
+                padding: 0.5rem;
+            }
+            
+            .actions-cell {
+                flex-direction: column;
+            }
+
+            .table-actions {
+                flex-direction: column;
+            }
+
+            .action-buttons .btn {
+                margin: 0.25rem;
+                display: block;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🚗 Car Service Tracker</h1>
+            <p>Keep track of your vehicle maintenance and service history</p>
+        </div>
+        
+        <div class="main-content">
+            <!-- Car Selection -->
+            <div class="car-selector">
+                <label for="carSelect">Select Car:</label>
+                <select id="carSelect">
+                    <option value="">Choose a car...</option>
+                </select>
+                <input type="text" id="newCarName" placeholder="Enter new car name">
+                <button class="btn" onclick="addCar()">Add Car</button>
+                <button class="btn btn-danger" onclick="deleteCar()">Delete Car</button>
+            </div>
+
+            <!-- Statistics -->
+            <div id="statsSection" class="stats" style="display: none;">
+                <div class="stat-card">
+                    <div class="stat-value" id="totalServices">0</div>
+                    <div class="stat-label">Total Services</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalCost">$0</div>
+                    <div class="stat-label">Total Cost</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="avgCost">$0</div>
+                    <div class="stat-label">Average Cost</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-value" id="totalMileage">0</div>
+                    <div class="stat-label">Total Mileage</div>
+                </div>
+            </div>
+
+            <!-- Action Buttons -->
+            <div id="actionButtons" class="action-buttons" style="display: none;">
+                <button class="btn" onclick="openServiceModal()">Add New Service Record</button>
+                <button class="btn btn-secondary" onclick="openServicesManagerModal()">Manage Service Types</button>
+            </div>
+
+            <!-- Services Table -->
+            <div id="servicesTable" class="services-table" style="display: none;">
+                <div class="table-header">
+                    <h3>Service History</h3>
+                    <div class="table-actions">
+                        <button class="btn btn-secondary" onclick="exportData()">Export CSV</button>
+                        <label for="importFile" class="file-input-label">Import CSV</label>
+                        <input type="file" id="importFile" class="file-input" accept=".csv" onchange="importData(event)">
+                        <button class="btn" onclick="loadDefaultData()">Load Sample Data</button>
+                    </div>
+                </div>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Mileage</th>
+                            <th>Date</th>
+                            <th>Cost</th>
+                            <th>Services</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="servicesTableBody">
+                    </tbody>
+                </table>
+                <div id="emptyState" class="empty-state">
+                    <div>🔧</div>
+                    <p>No service records yet. Add your first service record above!</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Service Modal (Add/Edit) -->
+    <div id="serviceModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeServiceModal()">&times;</span>
+            <h3 id="serviceModalTitle">Add New Service Record</h3>
+            <form onsubmit="saveService(event)">
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="modalMileage">Mileage</label>
+                        <input type="number" id="modalMileage" required min="0">
+                    </div>
+                    <div class="form-group">
+                        <label for="modalDate">Date</label>
+                        <input type="date" id="modalDate" required>
+                    </div>
+                    <div class="form-group">
+                        <label for="modalCost">Cost ($)</label>
+                        <input type="number" id="modalCost" step="0.01" min="0" required>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="modalServices">Services Performed</label>
+                    <div class="services-selector">
+                        <div id="availableServices" class="available-services"></div>
+                        <div class="selected-services-container">
+                            <label>Selected Services:</label>
+                            <div id="selectedServices" class="selected-services"></div>
+                        </div>
+                    </div>
+                </div>
+                <div style="margin-top: 1rem;">
+                    <button type="submit" class="btn" id="saveServiceBtn">Add Service Record</button>
+                    <button type="button" class="btn btn-secondary" onclick="closeServiceModal()">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Services Manager Modal -->
+    <div id="servicesManagerModal" class="modal">
+        <div class="modal-content">
+            <span class="close" onclick="closeServicesManagerModal()">&times;</span>
+            <h3>Manage Service Types</h3>
+            <div class="form-group">
+                <label for="newServiceType">Add New Service Type:</label>
+                <div class="input-group">
+                    <input type="text" id="newServiceType" placeholder="Enter service name...">
+                    <button type="button" class="btn" onclick="addServiceType()">Add</button>
+                </div>
+            </div>
+            <div class="service-types-list">
+                <h4>Existing Service Types:</h4>
+                <div id="serviceTypesList"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Global variables
+        let db;
+        let currentEditId = null;
+        let selectedServiceTypes = [];
+        let currentServices = [];
+
+        // Default data from the image
+        const defaultData = [
+            { mileage: 67730, date: '2021-08-12', cost: 210, services: 'OFR, Wheel alignment, Rear Differential Drain' },
+            { mileage: 65268, date: '2016-07-07', cost: 0, services: 'Battery Replaced' },
+            { mileage: 66359, date: '2016-08-06', cost: 0, services: 'Oil/Filter/Rotation' },
+            { mileage: 69259, date: '2017-11-28', cost: 0, services: 'Oil/Filter/Rotation' },
+            { mileage: 69327, date: '2017-07-11', cost: 0, services: 'Oil/Filter/Rotation' },
+            { mileage: 60155, date: '2017-11-03', cost: 96, services: 'Wheel Alignment, Recall (Idle)' },
+            { mileage: 69378, date: '2018-02-12', cost: 263, services: 'OFR, Rear Differential, Air Filters Drain' },
+            { mileage: 50973, date: '2018-03-27', cost: 28, services: 'Emissions' },
+            { mileage: 56048, date: '2018-08-14', cost: 0, services: 'OFR' },
+            { mileage: 44153, date: '2019-03-19', cost: 91, services: 'OFR, Cooling System Refill' },
+            { mileage: 52226, date: '2019-10-04', cost: 238, services: 'New OFR plan, Air Filters' },
+            { mileage: 60589, date: '2020-07-14', cost: 452, services: 'OFR, Wipers, Battery, Brake Fluid Flush, Rear Axle Seal, New ignition switch' },
+            { mileage: 72297, date: '2022-04-18', cost: 118, services: 'New OFR plan, Recall (Hood Latch)' },
+            { mileage: 74941, date: '2023-04-06', cost: 273, services: 'OFR, Air Filters, Brake Flush' },
+            { mileage: 78762, date: '2023-04-10', cost: 45, services: 'Emissions' },
+            { mileage: 83932, date: '2024-01-29', cost: 0, services: 'OFR' },
+            { mileage: 89793, date: '2024-12-10', cost: 622, services: 'New OFR, Transfer Case Fluid, Transmission Refill' },
+            { mileage: 94663, date: '2025-08-25', cost: 297, services: 'OFR, Cooling System Refill, Rear Differential Drain' }
+        ];
+
+        // Default service types
+        const defaultServiceTypes = [
+            'OFR', 'Oil/Filter/Rotation', 'Wheel Alignment', 'Rear Differential Drain',
+            'Battery Replaced', 'Battery', 'Emissions', 'Cooling System Refill', 
+            'Air Filters', 'Brake Fluid Flush', 'Brake Flush', 'Recall (Idle)', 
+            'Recall (Hood Latch)', 'Recall', 'Wipers', 'Rear Axle Seal', 
+            'New ignition switch', 'Ignition Switch', 'Transfer Case Fluid', 
+            'Transmission Refill', 'New OFR plan', 'New OFR', 'Rear Differential'
+        ];
+
+        // Initialize IndexedDB
+        function initializeDatabase() {
+            const request = indexedDB.open('CarServiceTracker', 2);
+
+            request.onerror = function(event) {
+                console.error('Database error:', event.target.error);
+                alert('Database initialization failed. Please refresh the page.');
+            };
+
+            request.onsuccess = function(event) {
+                db = event.target.result;
+                console.log('Database initialized successfully');
+                loadCars();
+                loadDefaultServiceTypes();
+            };
+
+            request.onupgradeneeded = function(event) {
+                db = event.target.result;
+                console.log('Upgrading database...');
+                
+                // Create cars store
+                if (!db.objectStoreNames.contains('cars')) {
+                    const carsStore = db.createObjectStore('cars', { keyPath: 'id', autoIncrement: true });
+                    carsStore.createIndex('name', 'name', { unique: true });
+                }
+                
+                // Create services store
+                if (!db.objectStoreNames.contains('services')) {
+                    const servicesStore = db.createObjectStore('services', { keyPath: 'id', autoIncrement: true });
+                    servicesStore.createIndex('carId', 'carId', { unique: false });
+                }
+
+                // Create service types store
+                if (!db.objectStoreNames.contains('serviceTypes')) {
+                    const serviceTypesStore = db.createObjectStore('serviceTypes', { keyPath: 'id', autoIncrement: true });
+                    serviceTypesStore.createIndex('name', 'name', { unique: true });
+                }
+            };
+        }
+
+        // Load default service types into database
+        function loadDefaultServiceTypes() {
+            if (!db) return;
+
+            const transaction = db.transaction(['serviceTypes'], 'readwrite');
+            const store = transaction.objectStore('serviceTypes');
+            
+            // Check if service types already exist
+            store.count().onsuccess = function(event) {
+                if (event.target.result === 0) {
+                    console.log('Loading default service types...');
+                    // Add default service types
+                    defaultServiceTypes.forEach(typeName => {
+                        store.add({ name: typeName, createdAt: new Date() });
+                    });
+                }
+            };
+        }
+
+        // Car management functions
+        function addCar() {
+            const carName = document.getElementById('newCarName').value.trim();
+            if (!carName) {
+                alert('Please enter a car name');
+                return;
+            }
+
+            const transaction = db.transaction(['cars'], 'readwrite');
+            const store = transaction.objectStore('cars');
+            
+            store.add({ name: carName, createdAt: new Date() }).onsuccess = function(event) {
+                const carId = event.target.result;
+                loadCars();
+                document.getElementById('carSelect').value = carId;
+                document.getElementById('newCarName').value = '';
+                showCarSections();
+            };
+
+            transaction.onerror = function() {
+                alert('Car name already exists or error occurred');
+            };
+        }
+
+        function deleteCar() {
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId) {
+                alert('Please select a car to delete');
+                return;
+            }
+
+            if (!confirm('Are you sure you want to delete this car and all its service records?')) {
+                return;
+            }
+
+            const transaction = db.transaction(['cars', 'services'], 'readwrite');
+            
+            // Delete car
+            transaction.objectStore('cars').delete(carId);
+            
+            // Delete all services for this car
+            const servicesStore = transaction.objectStore('services');
+            const index = servicesStore.index('carId');
+            const request = index.openCursor(IDBKeyRange.only(carId));
+            
+            request.onsuccess = function(event) {
+                const cursor = event.target.result;
+                if (cursor) {
+                    cursor.delete();
+                    cursor.continue();
+                }
+            };
+
+            transaction.oncomplete = function() {
+                loadCars();
+                hideCarSections();
+            };
+        }
+
+        function loadCars() {
+            if (!db) return;
+
+            const transaction = db.transaction(['cars'], 'readonly');
+            const store = transaction.objectStore('cars');
+            const request = store.getAll();
+
+            request.onsuccess = function() {
+                const cars = request.result;
+                const select = document.getElementById('carSelect');
+                select.innerHTML = '<option value="">Choose a car...</option>';
+                
+                cars.forEach(car => {
+                    const option = document.createElement('option');
+                    option.value = car.id;
+                    option.textContent = car.name;
+                    select.appendChild(option);
+                });
+            };
+        }
+
+        function showCarSections() {
+            document.getElementById('statsSection').style.display = 'grid';
+            document.getElementById('actionButtons').style.display = 'block';
+            document.getElementById('servicesTable').style.display = 'block';
+            loadServices();
+        }
+
+        function hideCarSections() {
+            document.getElementById('statsSection').style.display = 'none';
+            document.getElementById('actionButtons').style.display = 'none';
+            document.getElementById('servicesTable').style.display = 'none';
+        }
+
+        // Car selection change handler
+        document.addEventListener('DOMContentLoaded', function() {
+            document.getElementById('carSelect').addEventListener('change', function() {
+                if (this.value) {
+                    showCarSections();
+                } else {
+                    hideCarSections();
+                }
+            });
+        });
+
+        // Service Modal Functions
+        function openServiceModal(serviceId = null) {
+            currentEditId = serviceId;
+            selectedServiceTypes = [];
+            
+            if (serviceId) {
+                // Edit mode
+                const service = currentServices.find(s => s.id === serviceId);
+                document.getElementById('serviceModalTitle').textContent = 'Edit Service Record';
+                document.getElementById('saveServiceBtn').textContent = 'Update Record';
+                document.getElementById('modalMileage').value = service.mileage;
+                document.getElementById('modalDate').value = service.date;
+                document.getElementById('modalCost').value = service.cost;
+                selectedServiceTypes = service.services.split(', ').map(s => s.trim());
+            } else {
+                // Add mode
+                document.getElementById('serviceModalTitle').textContent = 'Add New Service Record';
+                document.getElementById('saveServiceBtn').textContent = 'Add Service Record';
+                document.getElementById('modalMileage').value = '';
+                document.getElementById('modalDate').value = new Date().toISOString().split('T')[0];
+                document.getElementById('modalCost').value = '';
+            }
+            
+            loadAvailableServices();
+            updateSelectedServicesDisplay();
+            document.getElementById('serviceModal').style.display = 'flex';
+        }
+
+        function closeServiceModal() {
+            document.getElementById('serviceModal').style.display = 'none';
+            currentEditId = null;
+            selectedServiceTypes = [];
+        }
+
+        function saveService(event) {
+            event.preventDefault();
+            
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId) {
+                alert('Please select a car first');
+                return;
+            }
+
+            if (selectedServiceTypes.length === 0) {
+                alert('Please select at least one service type');
+                return;
+            }
+
+            const service = {
+                carId: carId,
+                mileage: parseInt(document.getElementById('modalMileage').value),
+                date: document.getElementById('modalDate').value,
+                cost: parseFloat(document.getElementById('modalCost').value),
+                services: selectedServiceTypes.join(', '),
+                createdAt: new Date()
+            };
+
+            const transaction = db.transaction(['services'], 'readwrite');
+            const store = transaction.objectStore('services');
+            
+            if (currentEditId) {
+                service.id = currentEditId;
+                store.put(service);
+            } else {
+                store.add(service);
+            }
+
+            transaction.oncomplete = function() {
+                closeServiceModal();
+                loadServices();
+            };
+        }
+
+        function loadAvailableServices() {
+            if (!db) return;
+
+            const transaction = db.transaction(['serviceTypes'], 'readonly');
+            const store = transaction.objectStore('serviceTypes');
+            const request = store.getAll();
+
+            request.onsuccess = function() {
+                const serviceTypes = request.result.sort((a, b) => a.name.localeCompare(b.name));
+                renderAvailableServices(serviceTypes);
+            };
+        }
+
+        function renderAvailableServices(serviceTypes) {
+            const container = document.getElementById('availableServices');
+            container.innerHTML = '<label>Available Service Types:</label>';
+            
+            serviceTypes.forEach(serviceType => {
+                const tag = document.createElement('div');
+                tag.className = 'service-tag';
+                tag.textContent = serviceType.name;
+                tag.onclick = () => toggleServiceType(serviceType.name);
+                container.appendChild(tag);
+            });
+
+            updateServiceTagStyles();
+        }
+
+        function toggleServiceType(serviceName) {
+            const index = selectedServiceTypes.indexOf(serviceName);
+            if (index === -1) {
+                selectedServiceTypes.push(serviceName);
+            } else {
+                selectedServiceTypes.splice(index, 1);
+            }
+            updateServiceTagStyles();
+            updateSelectedServicesDisplay();
+        }
+
+        function updateServiceTagStyles() {
+            const tags = document.querySelectorAll('.service-tag');
+            tags.forEach(tag => {
+                if (selectedServiceTypes.includes(tag.textContent)) {
+                    tag.classList.add('selected');
+                } else {
+                    tag.classList.remove('selected');
+                }
+            });
+        }
+
+        function updateSelectedServicesDisplay() {
+            const container = document.getElementById('selectedServices');
+            container.innerHTML = '';
+            
+            selectedServiceTypes.forEach(serviceName => {
+                const tag = document.createElement('div');
+                tag.className = 'selected-service-tag';
+                tag.innerHTML = `${serviceName}<button type="button" class="remove-btn" onclick="removeSelectedService('${serviceName.replace(/'/g, "\\'")}')">&times;</button>`;
+                container.appendChild(tag);
+            });
+        }
+
+        function removeSelectedService(serviceName) {
+            const index = selectedServiceTypes.indexOf(serviceName);
+            if (index !== -1) {
+                selectedServiceTypes.splice(index, 1);
+                updateServiceTagStyles();
+                updateSelectedServicesDisplay();
+            }
+        }
+
+        // Services Manager Modal Functions
+        function openServicesManagerModal() {
+            loadServiceTypesManager();
+            document.getElementById('servicesManagerModal').style.display = 'flex';
+        }
+
+        function closeServicesManagerModal() {
+            document.getElementById('servicesManagerModal').style.display = 'none';
+        }
+
+        function addServiceType() {
+            const name = document.getElementById('newServiceType').value.trim();
+            if (!name) {
+                alert('Please enter a service type name');
+                return;
+            }
+
+            const transaction = db.transaction(['serviceTypes'], 'readwrite');
+            const store = transaction.objectStore('serviceTypes');
+            
+            store.add({ name: name, createdAt: new Date() }).onsuccess = function() {
+                document.getElementById('newServiceType').value = '';
+                loadServiceTypesManager();
+            };
+
+            transaction.onerror = function() {
+                alert('Service type already exists');
+            };
+        }
+
+        function loadServiceTypesManager() {
+            if (!db) return;
+
+            const transaction = db.transaction(['services', 'serviceTypes'], 'readonly');
+            const serviceTypesStore = transaction.objectStore('serviceTypes');
+            const servicesStore = transaction.objectStore('services');
+            
+            serviceTypesStore.getAll().onsuccess = function(event) {
+                const serviceTypes = event.target.result;
+                
+                // Count usage for each service type
+                servicesStore.getAll().onsuccess = function(servicesEvent) {
+                    const services = servicesEvent.target.result;
+                    const usageCounts = {};
+                    
+                    services.forEach(service => {
+                        const serviceNames = service.services.split(', ').map(s => s.trim());
+                        serviceNames.forEach(name => {
+                            usageCounts[name] = (usageCounts[name] || 0) + 1;
+                        });
+                    });
+
+                    renderServiceTypesManager(serviceTypes, usageCounts);
+                };
+            };
+        }
+
+        function renderServiceTypesManager(serviceTypes, usageCounts) {
+            const container = document.getElementById('serviceTypesList');
+            container.innerHTML = '';
+            
+            serviceTypes.sort((a, b) => a.name.localeCompare(b.name)).forEach(serviceType => {
+                const item = document.createElement('div');
+                item.className = 'service-type-item';
+                
+                const count = usageCounts[serviceType.name] || 0;
+                item.innerHTML = `
+                    <span class="service-type-name">${serviceType.name}</span>
+                    <span class="usage-count">Used ${count} times</span>
+                    <button class="btn btn-danger btn-small" onclick="deleteServiceType(${serviceType.id}, '${serviceType.name.replace(/'/g, "\\'")}', ${count})">Delete</button>
+                `;
+                container.appendChild(item);
+            });
+        }
+
+        function deleteServiceType(serviceTypeId, serviceName, usageCount) {
+            if (usageCount > 0) {
+                if (!confirm(`This service type is used in ${usageCount} records. Deleting it will not affect existing records. Continue?`)) {
+                    return;
+                }
+            }
+
+            const transaction = db.transaction(['serviceTypes'], 'readwrite');
+            const store = transaction.objectStore('serviceTypes');
+            
+            store.delete(serviceTypeId).onsuccess = function() {
+                loadServiceTypesManager();
+            };
+        }
+
+        // Service loading and display functions
+        function loadServices() {
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId || !db) return;
+
+            const transaction = db.transaction(['services'], 'readonly');
+            const store = transaction.objectStore('services');
+            const index = store.index('carId');
+            const request = index.getAll(IDBKeyRange.only(carId));
+
+            request.onsuccess = function() {
+                currentServices = request.result.sort((a, b) => new Date(b.date) - new Date(a.date));
+                renderServices(currentServices);
+                updateStats(currentServices);
+            };
+        }
+
+        function renderServices(services) {
+            const tbody = document.getElementById('servicesTableBody');
+            const emptyState = document.getElementById('emptyState');
+            
+            if (services.length === 0) {
+                tbody.innerHTML = '';
+                emptyState.style.display = 'block';
+                return;
+            }
+
+            emptyState.style.display = 'none';
+            
+            tbody.innerHTML = services.map(service => `
+                <tr>
+                    <td>${service.mileage.toLocaleString()}</td>
+                    <td>${new Date(service.date).toLocaleDateString()}</td>
+                    <td class="cost-cell">${service.cost.toFixed(2)}</td>
+                    <td>${service.services}</td>
+                    <td class="actions-cell">
+                        <button class="btn btn-secondary btn-small" onclick="openServiceModal(${service.id})">Edit</button>
+                        <button class="btn btn-danger btn-small" onclick="deleteService(${service.id})">Delete</button>
+                    </td>
+                </tr>
+            `).join('');
+        }
+
+        function updateStats(services) {
+            const totalServices = services.length;
+            const totalCost = services.reduce((sum, service) => sum + service.cost, 0);
+            const avgCost = totalServices > 0 ? totalCost / totalServices : 0;
+            const mileages = services.map(s => s.mileage).sort((a, b) => a - b);
+            const totalMileage = mileages.length > 1 ? mileages[mileages.length - 1] - mileages[0] : mileages[0] || 0;
+
+            document.getElementById('totalServices').textContent = totalServices;
+            document.getElementById('totalCost').textContent = `${totalCost.toFixed(2)}`;
+            document.getElementById('avgCost').textContent = `${avgCost.toFixed(2)}`;
+            document.getElementById('totalMileage').textContent = totalMileage.toLocaleString();
+        }
+
+        function deleteService(serviceId) {
+            if (!confirm('Are you sure you want to delete this service record?')) return;
+
+            const transaction = db.transaction(['services'], 'readwrite');
+            const store = transaction.objectStore('services');
+            
+            store.delete(serviceId).onsuccess = function() {
+                loadServices();
+            };
+        }
+
+        // Data export/import functions
+        function exportData() {
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId) {
+                alert('Please select a car first');
+                return;
+            }
+
+            const carName = document.getElementById('carSelect').selectedOptions[0].textContent;
+            const headers = ['Mileage', 'Date', 'Cost', 'Services'];
+            const csvContent = [
+                headers.join(','),
+                ...currentServices.map(service => [
+                    service.mileage,
+                    service.date,
+                    service.cost,
+                    `"${service.services.replace(/"/g, '""')}"`
+                ].join(','))
+            ].join('\n');
+
+            const blob = new Blob([csvContent], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `${carName}_service_history.csv`;
+            a.click();
+            window.URL.revokeObjectURL(url);
+        }
+
+        function importData(event) {
+            const file = event.target.files[0];
+            if (!file) return;
+
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId) {
+                alert('Please select a car first');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(e) {
+                const csv = e.target.result;
+                const lines = csv.split('\n');
+                const headers = lines[0].split(',');
+                
+                const transaction = db.transaction(['services'], 'readwrite');
+                const store = transaction.objectStore('services');
+
+                for (let i = 1; i < lines.length; i++) {
+                    const line = lines[i].trim();
+                    if (!line) continue;
+
+                    const values = line.split(',');
+                    if (values.length >= 4) {
+                        const service = {
+                            carId: carId,
+                            mileage: parseInt(values[0]),
+                            date: values[1],
+                            cost: parseFloat(values[2]),
+                            services: values[3].replace(/"/g, ''),
+                            createdAt: new Date()
+                        };
+                        store.add(service);
+                    }
+                }
+
+                transaction.oncomplete = function() {
+                    loadServices();
+                    event.target.value = '';
+                    alert('Data imported successfully!');
+                };
+            };
+            reader.readAsText(file);
+        }
+
+        function loadDefaultData() {
+            const carId = parseInt(document.getElementById('carSelect').value);
+            if (!carId) {
+                alert('Please select a car first');
+                return;
+            }
+
+            if (!confirm('This will add sample data to your selected car. Continue?')) {
+                return;
+            }
+
+            const transaction = db.transaction(['services'], 'readwrite');
+            const store = transaction.objectStore('services');
+
+            defaultData.forEach(serviceData => {
+                const service = {
+                    carId: carId,
+                    mileage: serviceData.mileage,
+                    date: serviceData.date,
+                    cost: serviceData.cost,
+                    services: serviceData.services,
+                    createdAt: new Date()
+                };
+                store.add(service);
+            });
+
+            transaction.oncomplete = function() {
+                loadServices();
+                alert('Sample data loaded successfully!');
+            };
+
+            transaction.onerror = function() {
+                alert('Some records may already exist or an error occurred.');
+            };
+        }
+
+        // Event listeners
+        window.onclick = function(event) {
+            const serviceModal = document.getElementById('serviceModal');
+            const servicesManagerModal = document.getElementById('servicesManagerModal');
+            
+            if (event.target === serviceModal) {
+                closeServiceModal();
+            }
+            if (event.target === servicesManagerModal) {
+                closeServicesManagerModal();
+            }
+        };
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM loaded, initializing database...');
+            initializeDatabase();
+        });
+    </script>
+</body>
+</html>

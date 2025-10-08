@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "cpp",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "C++ manual memory vs C# garbage collection.",
+      "why": "C++ and C# share similar syntax but HUGE difference! C++ manual memory, native code. C# GC, .NET runtime. C++ for systems. C# for applications. C++ maximum control. C# convenience. Brothers from different worlds!",
+      "keyPoints": [
+        "Similar syntax",
+        "HUGE difference!",
+        "C++: manual memory",
+        "C#: GC",
+        "Control vs convenience"
+      ]
+    },
+    "variables": {
+      "description": "C++ manual memory and pointers vs C# automatic memory.",
+      "why": "C++ requires explicit types, manual memory, pointers! C# has GC, no pointers (normally). C++ maximum control, maximum danger. C# safe and convenient. C++ for performance. C# for productivity. Huge difference in complexity!",
+      "keyPoints": [
+        "Huge difference",
+        "C++: manual memory",
+        "C#: automatic GC",
+        "C++: pointers",
+        "C#: safe"
+      ]
+    },
+    "strings": {
+      "description": "C# string interpolation far better than C++ std::string.",
+      "why": "C++ std::string and char* complex and verbose! C# $\"{}\" elegant since 2015! C++ stringstream or std::format (C++20). C# much better! Huge usability advantage. C# wins completely on strings!",
+      "keyPoints": [
+        "C# much better!",
+        "C++: verbose",
+        "C#: $\"{}\" elegant",
+        "C# wins",
+        "Huge advantage"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, both traditional.",
+      "why": "Very similar if/else syntax! C++ traditional. C# similar with added null-conditional (?.). C# slightly more modern. Both use braces. C# more null-safe. C++ more traditional. Minor differences.",
+      "keyPoints": [
+        "Very similar",
+        "C# null-conditional",
+        "Both use braces",
+        "C# more modern",
+        "Minor differences"
+      ]
+    },
+    "case-statements": {
+      "description": "C++ switch limited, C# switch expressions powerful.",
+      "why": "C++ switch limited to integral types, needs breaks. C# switch expressions (C# 8+) powerful with pattern matching! C++ traditional and limited. C# modern and flexible. C# far superior! Major C# advantage!",
+      "keyPoints": [
+        "C# far superior!",
+        "C++: limited",
+        "C#: pattern matching",
+        "C++: needs breaks",
+        "Major difference"
+      ]
+    },
+    "arrays": {
+      "description": "C++ multiple container types complex, C# List<T> simple.",
+      "why": "C++ arrays, vector, list, deque... complex! C# List<T> simple. C++ manual memory. C# GC. C++ iterators complex. C# LINQ elegant. C# much simpler! C++ more control. Huge usability difference!",
+      "keyPoints": [
+        "C# much simpler!",
+        "C++: many types",
+        "C#: List<T>",
+        "C++: manual memory",
+        "Huge difference"
+      ]
+    },
+    "hashes": {
+      "description": "C++ map/unordered_map complex, C# Dictionary simple.",
+      "why": "C++ map/unordered_map with iterators complex! C# Dictionary<K,V> simple. C++ manual memory management. C# GC automatic. C# much easier! C++ more control. Huge usability gap!",
+      "keyPoints": [
+        "C# much easier!",
+        "C++: complex",
+        "C#: simple",
+        "C++: manual",
+        "Huge gap"
+      ]
+    },
+    "iteration": {
+      "description": "C++ iterators complex, C# foreach/LINQ simple.",
+      "why": "C++ iterators (begin, end) verbose and complex! C# foreach simple and clean. C# LINQ elegant. C++ STL algorithms verbose. C# much simpler! C++ more control. Major usability difference!",
+      "keyPoints": [
+        "C# much simpler!",
+        "C++: iterators complex",
+        "C#: foreach simple",
+        "C#: LINQ elegant",
+        "Major difference"
+      ]
+    },
+    "filtering": {
+      "description": "C++ STL algorithms verbose, C# LINQ elegant.",
+      "why": "C++ STL algorithms verbose and complex! C# LINQ elegant and simple. C++ std::copy_if, iterators. C# .Where().Select(). C# MUCH better for productivity! C++ can be zero-cost. Performance vs ease!",
+      "keyPoints": [
+        "C# much better usability!",
+        "C++: verbose",
+        "C#: LINQ elegant",
+        "C++ zero-cost possible",
+        "Productivity vs performance"
+      ]
+    },
+    "classes": {
+      "description": "C++ Rule of 3/5 complex, C# simple classes.",
+      "why": "C++ Rule of 3/5 for memory management complex! C# GC makes classes simple. C++ constructors, destructors, copy constructors, move... C# just constructor! C++ manual. C# automatic. HUGE complexity difference!",
+      "keyPoints": [
+        "HUGE difference!",
+        "C++: Rule of 3/5",
+        "C#: simple",
+        "C++: manual memory",
+        "C#: automatic"
+      ]
+    },
+    "getters-setters": {
+      "description": "C++ verbose methods, C# elegant properties.",
+      "why": "C++ verbose getXxx/setXxx methods! C# properties (get; set;) elegant and automatic. C# MUCH better! Major usability advantage. C++ traditional and verbose. C# modern and clean. C# wins completely!",
+      "keyPoints": [
+        "C# wins!",
+        "C++: verbose",
+        "C#: properties",
+        "C# automatic",
+        "Major advantage"
+      ]
+    },
+    "inheritance": {
+      "description": "C++ multiple inheritance with diamond problem, C# single inheritance.",
+      "why": "C++ full multiple inheritance including diamond problem! C# single inheritance + interfaces. C++ more powerful but dangerous. C# safer. C++ virtual destructors needed. C# GC handles it. C# simpler and safer!",
+      "keyPoints": [
+        "C++ more powerful",
+        "C# safer",
+        "C++: diamond problem",
+        "C#: simpler",
+        "C++ dangerous"
+      ]
+    },
+    "modules": {
+      "description": "C++ abstract classes complex, C# interfaces clean.",
+      "why": "C++ abstract classes with virtual = 0 complex! C# interfaces clean. C++ virtual tables manual. C# automatic. C++ more control. C# easier. C# interface syntax cleaner. C++ more traditional.",
+      "keyPoints": [
+        "C# cleaner",
+        "C++: complex",
+        "C#: interfaces",
+        "C++: manual",
+        "C#: easier"
+      ]
+    },
+    "file-io": {
+      "description": "C++ fstream verbose, C# File class simple.",
+      "why": "C++ fstream verbose and complex! C# File.ReadAllText one-liner! Huge difference! C++ manual file handling. C# automatic. C# MUCH simpler! C++ more control. Major usability advantage for C#!",
+      "keyPoints": [
+        "C# much simpler!",
+        "C++: fstream verbose",
+        "C#: one-liners",
+        "Huge difference",
+        "C# wins"
+      ]
+    },
+    "json": {
+      "description": "C++ needs external library, C# has System.Text.Json built-in.",
+      "why": "C++ needs external library (nlohmann/json). C# has System.Text.Json built-in! C++ needs dependencies. C# included. C++ more setup. C# simpler. C# wins on convenience! Major advantage!",
+      "keyPoints": [
+        "C# wins!",
+        "C++: external library",
+        "C#: built-in",
+        "C# simpler",
+        "Major advantage"
+      ]
+    },
+    "threading": {
+      "description": "C++ std::thread complex, C# async/await elegant.",
+      "why": "C++ std::thread manual and complex! C# async/await elegant! C++ mutex, join manually. C# Task-based programming. C# MUCH easier! C++ more control. C# better productivity! Major difference!",
+      "keyPoints": [
+        "C# much easier!",
+        "C++: manual",
+        "C#: async/await",
+        "C# elegant",
+        "Major difference"
+      ]
+    },
+    "metaprogramming": {
+      "description": "C++ templates Turing-complete but complex, C# reflection and source generators.",
+      "why": "C++ templates Turing-complete and incredibly powerful! But complex! C# reflection + source generators simpler. C++ compile-time. C# runtime + compile-time. C++ more powerful. C# more accessible. Different approaches!",
+      "keyPoints": [
+        "C++ more powerful",
+        "C# more accessible",
+        "C++: templates",
+        "C#: reflection + generators",
+        "Both capable"
+      ]
+    },
+    "duck-typing": {
+      "description": "C++ uses templates and virtual, C# uses interfaces and dynamic.",
+      "why": "C++ templates (compile-time) + virtual functions (runtime). C# interfaces + dynamic type. C++ more complex. C# cleaner. C++ requires more setup. C# more straightforward. C# dynamic type simpler for duck typing.",
+      "keyPoints": [
+        "C# simpler",
+        "C++: templates + virtual",
+        "C#: interfaces + dynamic",
+        "C++ more complex",
+        "C# cleaner"
+      ]
+    }
+  }
+}

@@ -1,0 +1,688 @@
+---
+import Layout from '../layouts/Layout.astro';
+
+// Import configurations directly
+import javaConfig from '../config/language-showdown/java.json';
+import rubyConfig from '../config/language-showdown/ruby.json';
+import goConfig from '../config/language-showdown/go.json';
+import pythonConfig from '../config/language-showdown/python.json';
+import rustConfig from '../config/language-showdown/rust.json';
+import cppConfig from '../config/language-showdown/cpp.json';
+import typescriptConfig from '../config/language-showdown/typescript.json';
+import csharpConfig from '../config/language-showdown/csharp.json';
+import sectionsConfig from '../config/language-showdown/sections.json';
+import javaRubyComparisons from '../config/language-showdown/comparisons-java-ruby.json';
+import javaGoComparisons from '../config/language-showdown/comparisons-java-go.json';
+import javaPythonComparisons from '../config/language-showdown/comparisons-java-python.json';
+import javaRustComparisons from '../config/language-showdown/comparisons-java-rust.json';
+import javaCppComparisons from '../config/language-showdown/comparisons-java-cpp.json';
+import rubyGoComparisons from '../config/language-showdown/comparisons-ruby-go.json';
+import rubyPythonComparisons from '../config/language-showdown/comparisons-ruby-python.json';
+import rubyRustComparisons from '../config/language-showdown/comparisons-ruby-rust.json';
+import rubyCppComparisons from '../config/language-showdown/comparisons-ruby-cpp.json';
+import goPythonComparisons from '../config/language-showdown/comparisons-go-python.json';
+import goRustComparisons from '../config/language-showdown/comparisons-go-rust.json';
+import goCppComparisons from '../config/language-showdown/comparisons-go-cpp.json';
+import pythonRustComparisons from '../config/language-showdown/comparisons-python-rust.json';
+import pythonCppComparisons from '../config/language-showdown/comparisons-python-cpp.json';
+import pythonTypescriptComparisons from '../config/language-showdown/comparisons-python-typescript.json';
+import rustCppComparisons from '../config/language-showdown/comparisons-rust-cpp.json';
+import rustTypescriptComparisons from '../config/language-showdown/comparisons-rust-typescript.json';
+import cppTypescriptComparisons from '../config/language-showdown/comparisons-cpp-typescript.json';
+import javaTypescriptComparisons from '../config/language-showdown/comparisons-java-typescript.json';
+import javaCsharpComparisons from '../config/language-showdown/comparisons-java-csharp.json';
+import rubyTypescriptComparisons from '../config/language-showdown/comparisons-ruby-typescript.json';
+import rubyCsharpComparisons from '../config/language-showdown/comparisons-ruby-csharp.json';
+import goTypescriptComparisons from '../config/language-showdown/comparisons-go-typescript.json';
+import goCsharpComparisons from '../config/language-showdown/comparisons-go-csharp.json';
+import pythonCsharpComparisons from '../config/language-showdown/comparisons-python-csharp.json';
+import rustCsharpComparisons from '../config/language-showdown/comparisons-rust-csharp.json';
+import cppCsharpComparisons from '../config/language-showdown/comparisons-cpp-csharp.json';
+import typescriptCsharpComparisons from '../config/language-showdown/comparisons-typescript-csharp.json';
+
+// Available languages
+const availableLanguages = [
+  { id: 'java', name: javaConfig.name, color: javaConfig.color, icon: javaConfig.icon },
+  { id: 'ruby', name: rubyConfig.name, color: rubyConfig.color, icon: rubyConfig.icon },
+  { id: 'go', name: goConfig.name, color: goConfig.color, icon: goConfig.icon },
+  { id: 'python', name: pythonConfig.name, color: pythonConfig.color, icon: pythonConfig.icon },
+  { id: 'rust', name: rustConfig.name, color: rustConfig.color, icon: rustConfig.icon },
+  { id: 'cpp', name: cppConfig.name, color: cppConfig.color, icon: cppConfig.icon },
+  { id: 'typescript', name: typescriptConfig.name, color: typescriptConfig.color, icon: typescriptConfig.icon },
+  { id: 'csharp', name: csharpConfig.name, color: csharpConfig.color, icon: csharpConfig.icon }
+];
+
+const allLanguages = {
+  java: javaConfig,
+  ruby: rubyConfig,
+  go: goConfig,
+  python: pythonConfig,
+  rust: rustConfig,
+  cpp: cppConfig,
+  typescript: typescriptConfig,
+  csharp: csharpConfig
+};
+
+// All comparison combinations
+const allComparisons = {
+  'java-ruby': javaRubyComparisons.comparisons,
+  'ruby-java': javaRubyComparisons.comparisons,
+  'java-go': javaGoComparisons.comparisons,
+  'go-java': javaGoComparisons.comparisons,
+  'java-python': javaPythonComparisons.comparisons,
+  'python-java': javaPythonComparisons.comparisons,
+  'java-rust': javaRustComparisons.comparisons,
+  'rust-java': javaRustComparisons.comparisons,
+  'java-cpp': javaCppComparisons.comparisons,
+  'cpp-java': javaCppComparisons.comparisons,
+  'ruby-go': rubyGoComparisons.comparisons,
+  'go-ruby': rubyGoComparisons.comparisons,
+  'ruby-python': rubyPythonComparisons.comparisons,
+  'python-ruby': rubyPythonComparisons.comparisons,
+  'ruby-rust': rubyRustComparisons.comparisons,
+  'rust-ruby': rubyRustComparisons.comparisons,
+  'ruby-cpp': rubyCppComparisons.comparisons,
+  'cpp-ruby': rubyCppComparisons.comparisons,
+  'go-python': goPythonComparisons.comparisons,
+  'python-go': goPythonComparisons.comparisons,
+  'go-rust': goRustComparisons.comparisons,
+  'rust-go': goRustComparisons.comparisons,
+  'go-cpp': goCppComparisons.comparisons,
+  'cpp-go': goCppComparisons.comparisons,
+  'python-rust': pythonRustComparisons.comparisons,
+  'rust-python': pythonRustComparisons.comparisons,
+  'python-cpp': pythonCppComparisons.comparisons,
+  'cpp-python': pythonCppComparisons.comparisons,
+  'python-typescript': pythonTypescriptComparisons.comparisons,
+  'typescript-python': pythonTypescriptComparisons.comparisons,
+  'rust-cpp': rustCppComparisons.comparisons,
+  'cpp-rust': rustCppComparisons.comparisons,
+  'rust-typescript': rustTypescriptComparisons.comparisons,
+  'typescript-rust': rustTypescriptComparisons.comparisons,
+  'cpp-typescript': cppTypescriptComparisons.comparisons,
+  'typescript-cpp': cppTypescriptComparisons.comparisons,
+  'java-typescript': javaTypescriptComparisons.comparisons,
+  'typescript-java': javaTypescriptComparisons.comparisons,
+  'java-csharp': javaCsharpComparisons.comparisons,
+  'csharp-java': javaCsharpComparisons.comparisons,
+  'ruby-typescript': rubyTypescriptComparisons.comparisons,
+  'typescript-ruby': rubyTypescriptComparisons.comparisons,
+  'ruby-csharp': rubyCsharpComparisons.comparisons,
+  'csharp-ruby': rubyCsharpComparisons.comparisons,
+  'go-typescript': goTypescriptComparisons.comparisons,
+  'typescript-go': goTypescriptComparisons.comparisons,
+  'go-csharp': goCsharpComparisons.comparisons,
+  'csharp-go': goCsharpComparisons.comparisons,
+  'python-csharp': pythonCsharpComparisons.comparisons,
+  'csharp-python': pythonCsharpComparisons.comparisons,
+  'rust-csharp': rustCsharpComparisons.comparisons,
+  'csharp-rust': rustCsharpComparisons.comparisons,
+  'cpp-csharp': cppCsharpComparisons.comparisons,
+  'csharp-cpp': cppCsharpComparisons.comparisons,
+  'typescript-csharp': typescriptCsharpComparisons.comparisons,
+  'csharp-typescript': typescriptCsharpComparisons.comparisons
+};
+
+const sections = sectionsConfig.sections;
+
+const pageTitle = 'Language Showdown';
+const pageDescription = 'Interactive comparison of programming language patterns and idioms';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <main class="language-showdown-container">
+    <nav class="sidebar">
+      <div class="sidebar-header">
+        <h1>Language Showdown</h1>
+        <div class="language-selectors">
+          <select id="leftLang" class="language-select">
+            {availableLanguages.map(lang => (
+              <option value={lang.id} selected={lang.id === 'java'}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+          <span class="vs">vs</span>
+          <select id="rightLang" class="language-select">
+            {availableLanguages.map(lang => (
+              <option value={lang.id} selected={lang.id === 'ruby'}>
+                {lang.name}
+              </option>
+            ))}
+          </select>
+        </div>
+      </div>
+
+      {sections.map((section) => (
+        <div class="nav-section">
+          <div class="nav-section-title">{section.category}</div>
+          {section.items.map((item, index) => (
+            <div 
+              class={`nav-item ${section.category === 'Basics' && index === 0 ? 'active' : ''}`}
+              data-section={item.id}
+            >
+              {item.title}
+            </div>
+          ))}
+        </div>
+      ))}
+    </nav>
+
+    <main class="main-content" id="main-content">
+      <!-- Initial content rendered server-side -->
+      <div class="comparison-card">
+        <div class="comparison-header">
+          <h2>{sections[0].items[0].title}</h2>
+          <p class="description">{allComparisons['java-ruby']['hello-world'].description}</p>
+        </div>
+        
+        <div class="code-comparison">
+          <div class="code-panel">
+            <div class="code-header" style={`background: ${javaConfig.color};`}>
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px; min-width: 16px; max-width: 16px; flex-shrink: 0;">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              {javaConfig.name}
+            </div>
+            <div class="code-content">
+              <pre>{javaConfig.snippets['hello-world']}</pre>
+            </div>
+          </div>
+          
+          <div class="code-panel">
+            <div class="code-header" style={`background: ${rubyConfig.color};`}>
+              <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px; min-width: 16px; max-width: 16px; flex-shrink: 0;">
+                <path d="M12 2l9 9-9 9-9-9 9-9z"/>
+              </svg>
+              {rubyConfig.name}
+            </div>
+            <div class="code-content">
+              <pre>{rubyConfig.snippets['hello-world']}</pre>
+            </div>
+          </div>
+        </div>
+        
+        <div class="why-section">
+          <h3>💡 Why This Matters</h3>
+          <p>{allComparisons['java-ruby']['hello-world'].why}</p>
+        </div>
+        
+        <div class="key-points">
+          <h3>🎯 Key Takeaways</h3>
+          <ul>
+            {allComparisons['java-ruby']['hello-world'].keyPoints.map(point => (
+              <li>{point}</li>
+            ))}
+          </ul>
+        </div>
+      </div>
+    </main>
+  </main>
+
+  <script define:vars={{ allLanguages, sections, allComparisons }}>
+    // Store data globally for access
+    window.languageData = {
+      languages: allLanguages,
+      sections: sections,
+      allComparisons: allComparisons
+    };
+
+    let currentLeftLang = 'java';
+    let currentRightLang = 'ruby';
+    let currentSection = 'hello-world';
+
+    function escapeHtml(text) {
+      const div = document.createElement('div');
+      div.textContent = text;
+      return div.innerHTML;
+    }
+
+    function getLanguageConfig(langId) {
+      return window.languageData.languages[langId];
+    }
+
+    function getSectionMetadata(sectionId) {
+      for (const section of window.languageData.sections) {
+        const item = section.items.find(i => i.id === sectionId);
+        if (item) return item;
+      }
+      return null;
+    }
+
+    function getComparison(sectionId, leftLang, rightLang) {
+      const comparisonKey = `${leftLang}-${rightLang}`;
+      const comparisons = window.languageData.allComparisons[comparisonKey];
+      
+      if (comparisons && comparisons[sectionId]) {
+        return comparisons[sectionId];
+      }
+      
+      return {
+        why: 'Comparison information not available for this language pair.',
+        keyPoints: []
+      };
+    }
+
+    function renderComparison(sectionId, leftLang, rightLang) {
+      const metadata = getSectionMetadata(sectionId);
+      const leftConfig = getLanguageConfig(leftLang);
+      const rightConfig = getLanguageConfig(rightLang);
+      const comparison = getComparison(sectionId, leftLang, rightLang);
+
+      const leftSnippet = leftConfig?.snippets?.[sectionId] || '// No snippet available';
+      const rightSnippet = rightConfig?.snippets?.[sectionId] || '// No snippet available';
+
+      // Check if dark mode is active
+      const isDark = document.documentElement.classList.contains('dark');
+      
+      return `
+        <div class="comparison-card" style="background: ${isDark ? 'rgb(17, 24, 39)' : 'white'}; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,${isDark ? '0.3' : '0.08'});">
+          <div class="comparison-header" style="margin-bottom: 24px;">
+            <h2 style="font-size: 28px; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">${metadata?.title || sectionId}</h2>
+            <p class="description" style="font-size: 16px; line-height: 1.6; color: ${isDark ? 'rgb(156, 163, 175)' : '#7f8c8d'};">${comparison?.description || ''}</p>
+          </div>
+          
+          <div class="code-comparison" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; width: 100%;">
+            <div class="code-panel" style="border-radius: 8px; overflow: hidden; border: 1px solid #e1e8ed; min-width: 0;">
+              <div class="code-header" style="background: ${leftConfig.color}; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; color: white;">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px; min-width: 16px; max-width: 16px; flex-shrink: 0;">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+                ${leftConfig.name}
+              </div>
+              <div class="code-content" style="background: ${isDark ? 'rgb(31, 41, 55)' : '#f8f9fa'}; padding: 20px; overflow-x: auto;">
+                <pre style="font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 14px; line-height: 1.6; color: ${isDark ? 'rgb(229, 231, 235)' : '#2c3e50'}; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(leftSnippet)}</pre>
+              </div>
+            </div>
+            
+            <div class="code-panel" style="border-radius: 8px; overflow: hidden; border: 1px solid #e1e8ed; min-width: 0;">
+              <div class="code-header" style="background: ${rightConfig.color}; padding: 12px 16px; font-weight: 600; font-size: 14px; display: flex; align-items: center; gap: 8px; color: white;">
+                <svg class="icon" viewBox="0 0 24 24" fill="currentColor" style="width: 16px; height: 16px; min-width: 16px; max-width: 16px; flex-shrink: 0;">
+                  <path d="M12 2l9 9-9 9-9-9 9-9z"/>
+                </svg>
+                ${rightConfig.name}
+              </div>
+              <div class="code-content" style="background: ${isDark ? 'rgb(31, 41, 55)' : '#f8f9fa'}; padding: 20px; overflow-x: auto;">
+                <pre style="font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace; font-size: 14px; line-height: 1.6; color: ${isDark ? 'rgb(229, 231, 235)' : '#2c3e50'}; margin: 0; white-space: pre-wrap; word-wrap: break-word;">${escapeHtml(rightSnippet)}</pre>
+              </div>
+            </div>
+          </div>
+          
+          <div class="why-section" style="background: ${isDark ? 'rgba(59, 130, 246, 0.1)' : '#ecf7ff'}; border-left: 4px solid ${isDark ? 'rgb(59, 130, 246)' : '#3498db'}; padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
+            <h3 style="font-size: 16px; margin-bottom: 8px; color: ${isDark ? 'rgb(96, 165, 250)' : '#2980b9'};">💡 Why This Matters</h3>
+            <p style="line-height: 1.6; font-size: 15px; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'};">${comparison.why}</p>
+          </div>
+          
+          ${comparison.keyPoints.length > 0 ? `
+            <div class="key-points" style="background: ${isDark ? 'rgba(245, 158, 11, 0.1)' : '#fff9e6'}; border-left: 4px solid ${isDark ? 'rgb(251, 191, 36)' : '#f39c12'}; padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
+              <h3 style="font-size: 16px; margin-bottom: 12px; color: ${isDark ? 'rgb(251, 191, 36)' : '#e67e22'};">🎯 Key Takeaways</h3>
+              <ul style="margin-left: 20px;">
+                ${comparison.keyPoints.map(point => `<li style="line-height: 1.8; font-size: 15px; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'};">${point}</li>`).join('')}
+              </ul>
+            </div>
+          ` : ''}
+        </div>
+      `;
+    }
+
+    function loadSection(sectionId) {
+      currentSection = sectionId;
+      const mainContent = document.getElementById('main-content');
+      mainContent.innerHTML = renderComparison(sectionId, currentLeftLang, currentRightLang);
+      mainContent.scrollTop = 0;
+      
+      // Update active nav item
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.classList.remove('active');
+      });
+      const activeItem = document.querySelector(`[data-section="${sectionId}"]`);
+      if (activeItem) {
+        activeItem.classList.add('active');
+      }
+    }
+
+    function updateLanguages() {
+      loadSection(currentSection);
+    }
+
+    // Initialize immediately - Astro loads scripts after DOM is ready
+    // Navigation items
+    document.querySelectorAll('.nav-item').forEach(item => {
+      item.addEventListener('click', () => {
+        const section = item.getAttribute('data-section');
+        loadSection(section);
+      });
+    });
+
+    // Language selectors
+    const leftSelect = document.getElementById('leftLang');
+    const rightSelect = document.getElementById('rightLang');
+
+    if (leftSelect) {
+      leftSelect.addEventListener('change', (e) => {
+        currentLeftLang = e.target.value;
+        updateLanguages();
+      });
+    }
+
+    if (rightSelect) {
+      rightSelect.addEventListener('change', (e) => {
+        currentRightLang = e.target.value;
+        updateLanguages();
+      });
+    }
+  </script>
+
+  <style>
+    .language-showdown-container {
+      display: flex;
+      min-height: calc(100vh - 128px); /* Account for navigation */
+      overflow: hidden;
+      background: #f5f5f5;
+      padding-top: 8rem; /* 128px - same as pt-32 in articles */
+    }
+    
+    :global(.dark) .language-showdown-container {
+      background: rgb(3, 7, 18); /* dark:bg-gray-950 equivalent */
+    }
+
+    .sidebar {
+      width: 280px;
+      background: #2c3e50;
+      color: white;
+      overflow-y: auto;
+      box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+    }
+    
+    :global(.dark) .sidebar {
+      background: #1a252f;
+    }
+
+    .sidebar-header {
+      padding: 24px 20px;
+      background: #1a252f;
+      border-bottom: 1px solid #34495e;
+    }
+
+    .sidebar-header h1 {
+      font-size: 20px;
+      margin-bottom: 16px;
+      color: #3498db;
+    }
+
+    .language-selectors {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      align-items: center;
+    }
+
+    .language-select {
+      width: 100%;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #34495e;
+      background: #34495e;
+      color: white;
+      font-size: 14px;
+      cursor: pointer;
+    }
+
+    .language-select:hover {
+      background: #3f5266;
+    }
+
+    .vs {
+      color: #95a5a6;
+      font-size: 12px;
+      font-weight: 600;
+    }
+
+    .nav-section {
+      padding: 16px 0;
+      border-bottom: 1px solid #34495e;
+    }
+
+    .nav-section-title {
+      padding: 8px 20px;
+      font-size: 11px;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+      color: #95a5a6;
+      font-weight: 600;
+    }
+
+    .nav-item {
+      padding: 12px 20px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      font-size: 14px;
+    }
+
+    .nav-item:hover {
+      background: #34495e;
+      border-left-color: #3498db;
+    }
+
+    .nav-item.active {
+      background: #34495e;
+      border-left-color: #3498db;
+      color: #3498db;
+    }
+
+    .main-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 40px;
+      background: #f5f5f5;
+    }
+    
+    :global(.dark) .main-content {
+      background: rgb(3, 7, 18);
+    }
+
+    .comparison-card {
+      background: white;
+      border-radius: 12px;
+      padding: 32px;
+      margin-bottom: 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      color: #2c3e50;
+    }
+    
+    :global(.dark) .comparison-card {
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
+      color: rgb(243, 244, 246); /* dark:text-gray-100 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .comparison-header {
+      margin-bottom: 24px;
+    }
+
+    .comparison-header h2 {
+      font-size: 28px;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+    
+    :global(.dark) .comparison-header h2 {
+      color: rgb(243, 244, 246);
+    }
+
+    .comparison-header .description {
+      font-size: 16px;
+      color: #7f8c8d;
+      line-height: 1.6;
+    }
+    
+    :global(.dark) .comparison-header .description {
+      color: rgb(156, 163, 175); /* dark:text-gray-400 */
+    }
+
+    .why-section {
+      background: #ecf7ff;
+      border-left: 4px solid #3498db;
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+    
+    :global(.dark) .why-section {
+      background: rgba(59, 130, 246, 0.1); /* dark blue tint */
+      border-left-color: rgb(59, 130, 246);
+    }
+
+    .why-section h3 {
+      color: #2980b9;
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+    
+    :global(.dark) .why-section h3 {
+      color: rgb(96, 165, 250); /* lighter blue for dark mode */
+    }
+
+    .why-section p {
+      color: #34495e;
+      line-height: 1.6;
+      font-size: 15px;
+    }
+    
+    :global(.dark) .why-section p {
+      color: rgb(209, 213, 219); /* dark:text-gray-300 */
+    }
+
+    .code-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+      margin: 24px 0;
+      width: 100%;
+    }
+
+    .code-panel {
+      border-radius: 8px;
+      overflow: hidden;
+      border: 1px solid #e1e8ed;
+      min-width: 0; /* Allow grid items to shrink below content size */
+    }
+
+    .code-header {
+      padding: 12px 16px;
+      font-weight: 600;
+      font-size: 14px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      color: white;
+    }
+
+    .code-header .icon {
+      width: 16px;
+      height: 16px;
+      flex-shrink: 0;
+    }
+    
+    /* Ensure SVG icons don't expand */
+    .code-header svg {
+      width: 16px;
+      height: 16px;
+      min-width: 16px;
+      min-height: 16px;
+      max-width: 16px;
+      max-height: 16px;
+    }
+
+    .code-content {
+      background: #f8f9fa;
+      padding: 20px;
+      overflow-x: auto;
+    }
+    
+    :global(.dark) .code-content {
+      background: rgb(31, 41, 55); /* dark:bg-gray-800 */
+    }
+
+    .code-content pre {
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      color: #2c3e50;
+      margin: 0;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+    
+    :global(.dark) .code-content pre {
+      color: rgb(229, 231, 235); /* dark:text-gray-200 */
+    }
+
+    .key-points {
+      background: #fff9e6;
+      border-left: 4px solid #f39c12;
+      padding: 16px 20px;
+      margin: 24px 0;
+      border-radius: 4px;
+    }
+    
+    :global(.dark) .key-points {
+      background: rgba(245, 158, 11, 0.1); /* dark amber tint */
+      border-left-color: rgb(251, 191, 36);
+    }
+
+    .key-points h3 {
+      color: #e67e22;
+      font-size: 16px;
+      margin-bottom: 12px;
+    }
+    
+    :global(.dark) .key-points h3 {
+      color: rgb(251, 191, 36); /* lighter amber for dark mode */
+    }
+
+    .key-points ul {
+      margin-left: 20px;
+    }
+
+    .key-points li {
+      color: #34495e;
+      line-height: 1.8;
+      font-size: 15px;
+    }
+    
+    :global(.dark) .key-points li {
+      color: rgb(209, 213, 219); /* dark:text-gray-300 */
+    }
+
+    @media (max-width: 968px) {
+      .code-comparison {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        width: 240px;
+      }
+    }
+
+    ::-webkit-scrollbar {
+      width: 10px;
+      height: 10px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #f1f1f1;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: #95a5a6;
+      border-radius: 5px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: #7f8c8d;
+    }
+  </style>
+</Layout>
+

@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "rust",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both require a main function, but Rust uses a macro for printing while Java uses a method.",
+      "why": "Both are compiled languages with main functions. Rust uses println! macro (note the !). Java uses System.out.println method. Both compile to efficient executables. Rust compiles to native code without a runtime. Java compiles to bytecode for the JVM. Rust emphasizes zero-cost abstractions.",
+      "keyPoints": [
+        "Both compiled languages",
+        "Rust uses macros (println!)",
+        "Rust compiles to native code",
+        "Java uses JVM",
+        "Rust has no garbage collector"
+      ]
+    },
+    "variables": {
+      "description": "Java requires explicit types while Rust uses powerful type inference with immutability by default.",
+      "why": "Rust variables are immutable by default - use 'mut' for mutable. Java variables are mutable by default - use 'final' for immutable. Rust has powerful type inference. Java requires types (or var in Java 10+). Both are statically typed. Rust's philosophy: immutable unless you say otherwise.",
+      "keyPoints": [
+        "Rust immutable by default",
+        "Java mutable by default",
+        "Rust has strong type inference",
+        "Both statically typed",
+        "Rust emphasizes safety"
+      ]
+    },
+    "strings": {
+      "description": "Java has simpler string handling while Rust distinguishes String and &str for memory safety.",
+      "why": "Rust has String (owned) and &str (borrowed) - important for memory safety. Java just has String. Rust's approach prevents memory issues at compile time. Java's is simpler but less safe. Rust formatting uses format! macro. Both have immutable strings by default.",
+      "keyPoints": [
+        "Rust: String vs &str",
+        "Java: just String",
+        "Rust's ownership system",
+        "Java's approach simpler",
+        "Rust prevents memory issues"
+      ]
+    },
+    "conditionals": {
+      "description": "Both use similar syntax, but Rust's if is an expression that returns values.",
+      "why": "Very similar conditional syntax. Rust's if is an expression - returns values. Java's if is a statement. Rust has if let for pattern matching. Both use braces. Rust has no ternary operator - use if expression. Java has traditional ternary.",
+      "keyPoints": [
+        "Rust if is an expression",
+        "Java if is a statement",
+        "Rust has if let",
+        "Rust no ternary (use if)",
+        "Similar overall syntax"
+      ]
+    },
+    "case-statements": {
+      "description": "Rust's match is exhaustive pattern matching while Java's switch is more limited.",
+      "why": "Rust's match is incredibly powerful - exhaustive pattern matching. Must handle all cases or use _. Can destructure, use guards, match ranges. Java's switch is more limited. Rust's match is an expression. Java's switch becoming more powerful but still behind Rust.",
+      "keyPoints": [
+        "Rust match is exhaustive",
+        "Must handle all cases",
+        "Rust can destructure",
+        "match is an expression",
+        "More powerful than Java switch"
+      ]
+    },
+    "arrays": {
+      "description": "Rust distinguishes fixed arrays and dynamic vectors while Java uses arrays and ArrayList.",
+      "why": "Rust has arrays (fixed, stack) and Vec (dynamic, heap). Java has arrays (fixed) and ArrayList (dynamic). Rust's ownership affects collections. Rust provides fine-grained control over memory. Java's GC handles memory automatically. Rust is more explicit about allocations.",
+      "keyPoints": [
+        "Rust: arrays and Vec",
+        "Java: arrays and ArrayList",
+        "Rust's ownership system",
+        "Rust more memory control",
+        "Java has automatic GC"
+      ]
+    },
+    "hashes": {
+      "description": "Both use HashMap but Rust's ownership system affects usage patterns.",
+      "why": "Both use HashMap. Rust's must import from std::collections. Java's is java.util.HashMap. Rust's ownership affects how you insert/access. Rust's get() returns Option<&V>. Java's returns V or null. Rust's entry API is powerful. Both require type parameters.",
+      "keyPoints": [
+        "Both have HashMap",
+        "Rust returns Option<&V>",
+        "Java returns V or null",
+        "Rust's ownership affects usage",
+        "Rust's entry API powerful"
+      ]
+    },
+    "iteration": {
+      "description": "Both use for loops, but Rust's iterator chains are zero-cost abstractions.",
+      "why": "Rust's iterators compile to optimal code - zero-cost abstractions. Java's streams have overhead. Rust uses &vec for borrowing. Java doesn't have this concept. Rust's ranges: 0..5 and 0..=5. Both have while loops. Rust has 'loop' for infinite loops.",
+      "keyPoints": [
+        "Rust iterators zero-cost",
+        "Java streams have overhead",
+        "Rust's borrowing (&vec)",
+        "Both have for and while",
+        "Rust has loop keyword"
+      ]
+    },
+    "filtering": {
+      "description": "Both support functional operations, but Rust's iterators are compile-time optimized.",
+      "why": "Rust's iterator chains compile to optimal loops. Java's streams are runtime abstractions. Rust requires .collect() to materialize. Both support filter/map. Rust's closures: |n| n * 2. Java's lambdas: n -> n * 2. Rust's approach is zero-cost.",
+      "keyPoints": [
+        "Rust iterators compile-time optimized",
+        "Java streams runtime overhead",
+        "Rust requires .collect()",
+        "Similar functional operations",
+        "Rust is zero-cost"
+      ]
+    },
+    "classes": {
+      "description": "Rust uses structs with impl blocks while Java uses traditional classes.",
+      "why": "Rust has no classes - uses structs with impl blocks. Java has traditional OOP classes. Rust separates data (struct) and behavior (impl). Java combines them. Rust's methods take &self, &mut self, or self. Java's this is implicit. Different paradigms.",
+      "keyPoints": [
+        "Rust: structs + impl",
+        "Java: traditional classes",
+        "Rust separates data/behavior",
+        "Rust's explicit self",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "Rust uses convention and methods while Java uses explicit getters/setters.",
+      "why": "Rust convention: no 'get' prefix for getters. Java uses getXxx/setXxx. Rust often exposes public fields directly. Java emphasizes private fields. Rust's borrowing provides safety without getters. Both can validate in setters. Different philosophies on encapsulation.",
+      "keyPoints": [
+        "Rust: no 'get' prefix",
+        "Java: get/set prefixes",
+        "Rust often uses pub fields",
+        "Rust's borrowing provides safety",
+        "Different approaches"
+      ]
+    },
+    "inheritance": {
+      "description": "Rust has no inheritance at all, using composition and traits instead.",
+      "why": "Rust has ZERO inheritance - uses composition and traits. Java has traditional class inheritance. Rust's approach: favor composition over inheritance taken to extreme. Rust uses trait bounds for polymorphism. Java uses extends. Rust's approach prevents many design problems.",
+      "keyPoints": [
+        "Rust has no inheritance",
+        "Java has class hierarchy",
+        "Rust uses composition + traits",
+        "Rust prevents inheritance problems",
+        "Fundamentally different"
+      ]
+    },
+    "modules": {
+      "description": "Rust's traits are more powerful than Java's interfaces with static and dynamic dispatch.",
+      "why": "Rust traits are like interfaces but more powerful. Java interfaces require implements. Rust traits can be implemented for existing types. Rust has static dispatch (generics) and dynamic dispatch (trait objects). Java mostly uses dynamic dispatch. Rust's approach enables zero-cost abstractions.",
+      "keyPoints": [
+        "Rust traits more powerful",
+        "Rust: static and dynamic dispatch",
+        "Java: mostly dynamic dispatch",
+        "Rust zero-cost generics",
+        "Rust can impl for any type"
+      ]
+    },
+    "file-io": {
+      "description": "Both require error handling, but Rust uses Result types while Java uses exceptions.",
+      "why": "Rust uses Result<T, E> for error handling - must handle errors. Java uses exceptions. Rust's ? operator propagates errors elegantly. Java uses try-catch. Rust has no exceptions. Rust's approach forces error handling. Both ensure file closing.",
+      "keyPoints": [
+        "Rust: Result<T, E>",
+        "Java: exceptions",
+        "Rust's ? operator elegant",
+        "Rust forces error handling",
+        "No exceptions in Rust"
+      ]
+    },
+    "json": {
+      "description": "Both need external libraries, but Rust's serde provides type-safe compile-time guarantees.",
+      "why": "Rust uses serde crate - powerful and type-safe. Java uses Jackson or Gson. Rust derives Serialize/Deserialize at compile time. Java uses reflection at runtime. Rust catches errors earlier. Both can parse to typed or untyped. Rust's approach is faster and safer.",
+      "keyPoints": [
+        "Rust: serde (compile-time)",
+        "Java: Jackson/Gson (runtime)",
+        "Rust derives at compile time",
+        "Java uses reflection",
+        "Rust faster and safer"
+      ]
+    },
+    "threading": {
+      "description": "Rust's ownership system prevents data races at compile time while Java catches them at runtime.",
+      "why": "Rust's ownership prevents data races at COMPILE TIME! Java can have race conditions at runtime. Rust uses Arc<Mutex<T>> for shared mutable state. Java uses synchronized or locks. Rust's type system enforces thread safety. This is Rust's superpower. Java relies on programmer discipline.",
+      "keyPoints": [
+        "Rust prevents races at compile time!",
+        "Java catches races at runtime",
+        "Rust: Arc<Mutex<T>>",
+        "Rust's type system enforces safety",
+        "Rust's major advantage"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Rust uses powerful compile-time macros while Java has limited runtime reflection.",
+      "why": "Rust has powerful macro system - compile-time code generation. Java has reflection at runtime. Rust's macros: declarative and procedural. Rust has no runtime reflection. Everything resolved at compile time. Rust's approach is faster but more complex to write.",
+      "keyPoints": [
+        "Rust: compile-time macros",
+        "Java: runtime reflection",
+        "Rust has no runtime reflection",
+        "Rust's macros powerful",
+        "Compile-time vs runtime"
+      ]
+    },
+    "duck-typing": {
+      "description": "Rust uses traits with compile-time guarantees while Java uses interfaces with runtime checks.",
+      "why": "Rust uses traits checked at compile time. Java uses interfaces checked at runtime. Rust's static dispatch is zero-cost. Rust's dynamic dispatch (dyn Trait) when needed. Java mostly uses dynamic dispatch. Rust provides type safety without runtime cost.",
+      "keyPoints": [
+        "Rust: compile-time traits",
+        "Java: runtime interfaces",
+        "Rust static dispatch zero-cost",
+        "Rust also has dyn Trait",
+        "Rust no runtime cost"
+      ]
+    }
+  }
+}
+

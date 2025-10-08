@@ -1,0 +1,107 @@
+{
+  "sections": [
+    {
+      "category": "Basics",
+      "items": [
+        {
+          "id": "hello-world",
+          "title": "Hello World"
+        },
+        {
+          "id": "variables",
+          "title": "Variables & Type Inference"
+        },
+        {
+          "id": "duck-typing",
+          "title": "Duck Typing"
+        },
+        {
+          "id": "strings",
+          "title": "String Manipulation"
+        },
+        {
+          "id": "conditionals",
+          "title": "Conditionals & Truthiness"
+        },
+        {
+          "id": "case-statements",
+          "title": "Case Statements"
+        }
+      ]
+    },
+    {
+      "category": "Collections",
+      "items": [
+        {
+          "id": "arrays",
+          "title": "Array Operations"
+        },
+        {
+          "id": "hashes",
+          "title": "Maps vs Hashes"
+        },
+        {
+          "id": "iteration",
+          "title": "Iteration Patterns"
+        },
+        {
+          "id": "filtering",
+          "title": "Filtering & Mapping"
+        }
+      ]
+    },
+    {
+      "category": "Object-Oriented",
+      "items": [
+        {
+          "id": "classes",
+          "title": "Class Definition"
+        },
+        {
+          "id": "getters-setters",
+          "title": "Getters & Setters"
+        },
+        {
+          "id": "inheritance",
+          "title": "Inheritance"
+        },
+        {
+          "id": "modules",
+          "title": "Interfaces vs Modules"
+        }
+      ]
+    },
+    {
+      "category": "Data & I/O",
+      "items": [
+        {
+          "id": "file-io",
+          "title": "File I/O"
+        },
+        {
+          "id": "json",
+          "title": "JSON Parsing"
+        }
+      ]
+    },
+    {
+      "category": "Concurrency",
+      "items": [
+        {
+          "id": "threading",
+          "title": "Threading & Mutexes"
+        }
+      ]
+    },
+    {
+      "category": "Meta & Advanced",
+      "items": [
+        {
+          "id": "metaprogramming",
+          "title": "Metaprogramming"
+        }
+      ]
+    }
+  ]
+}
+

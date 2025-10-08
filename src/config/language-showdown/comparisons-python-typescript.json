@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "python",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both are simple one-liners from different ecosystems.",
+      "why": "Both one line! Python: print(). TypeScript: console.log(). Python interpreted. TypeScript compiles to JavaScript. Python for data science/scripting. TypeScript for web. Different worlds but similar simplicity.",
+      "keyPoints": [
+        "Both one-liners",
+        "Python interpreted",
+        "TypeScript compiles to JS",
+        "Different ecosystems",
+        "Both simple"
+      ]
+    },
+    "variables": {
+      "description": "Python is fully dynamic while TypeScript adds optional static typing.",
+      "why": "Python: dynamic, no types. TypeScript: gradual typing! TypeScript adds types to dynamic language (like Python but for JavaScript). Python purely dynamic. TypeScript optional types. Similar flexibility, TypeScript adds safety option.",
+      "keyPoints": [
+        "Python purely dynamic",
+        "TypeScript gradual typing",
+        "TypeScript types optional",
+        "Similar flexibility",
+        "TypeScript adds safety option"
+      ]
+    },
+    "strings": {
+      "description": "Python's f-strings and TypeScript's template literals are nearly identical.",
+      "why": "Python: f\"Hello {name}\". TypeScript: `Hello ${name}`. Nearly identical! Both modern and clean. Python's approach influenced JavaScript/TypeScript. Very similar. Both excellent.",
+      "keyPoints": [
+        "Nearly identical!",
+        "Python: f-strings",
+        "TypeScript: template literals",
+        "Python influenced JS",
+        "Both excellent"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses indentation while TypeScript uses braces.",
+      "why": "Python: indentation enforced. TypeScript: braces. Python more readable by design. TypeScript traditional. Python has elif. TypeScript has else if. TypeScript has type guards. Different styles. Both work well.",
+      "keyPoints": [
+        "Python: indentation",
+        "TypeScript: braces",
+        "TypeScript: type guards",
+        "Different styles",
+        "Both work well"
+      ]
+    },
+    "case-statements": {
+      "description": "Python's match/case is new while TypeScript uses traditional switch.",
+      "why": "Python: match/case (3.10+) with patterns. TypeScript: traditional switch, discriminated unions. Python's newer and more powerful. TypeScript discriminated unions clever. Both capable. Python more modern.",
+      "keyPoints": [
+        "Python match/case new",
+        "TypeScript traditional switch",
+        "Python more powerful",
+        "TypeScript: discriminated unions",
+        "Both capable"
+      ]
+    },
+    "arrays": {
+      "description": "Both have arrays with functional methods built-in.",
+      "why": "Both have arrays with map/filter! Python: list comprehensions. TypeScript: .map()/.filter(). Python comprehensions more concise. TypeScript more traditional. Both functional. Very similar capabilities.",
+      "keyPoints": [
+        "Both have map/filter",
+        "Python: comprehensions",
+        "TypeScript: methods",
+        "Python more concise",
+        "Similar capabilities"
+      ]
+    },
+    "hashes": {
+      "description": "Python dicts and TypeScript objects are similar concepts.",
+      "why": "Python: dicts simple. TypeScript: objects/Map. Similar concepts! Both dynamic. Python cleaner syntax. TypeScript needs type annotations for safety. Both work well. Very comparable.",
+      "keyPoints": [
+        "Similar concepts",
+        "Python: dicts",
+        "TypeScript: objects/Map",
+        "Both dynamic",
+        "Very comparable"
+      ]
+    },
+    "iteration": {
+      "description": "Python's for loops are simpler while TypeScript has more options.",
+      "why": "Python: for...in simple. TypeScript: for...of, forEach, map. Python simpler. TypeScript more options. Both work well. Python more intuitive. TypeScript more flexible. Different priorities.",
+      "keyPoints": [
+        "Python simpler",
+        "TypeScript more options",
+        "Python more intuitive",
+        "TypeScript more flexible",
+        "Both work well"
+      ]
+    },
+    "filtering": {
+      "description": "Python's comprehensions are elegant while TypeScript uses array methods.",
+      "why": "Python: list comprehensions beautiful. TypeScript: .filter()/.map(). Both concise. Python comprehensions unique. TypeScript more traditional. Both functional. Different syntax, similar power.",
+      "keyPoints": [
+        "Python: comprehensions",
+        "TypeScript: array methods",
+        "Both concise",
+        "Python more unique",
+        "Similar power"
+      ]
+    },
+    "classes": {
+      "description": "Python uses __init__ while TypeScript uses constructor.",
+      "why": "Python: __init__ for constructor. TypeScript: constructor keyword. Both simple OOP. TypeScript adds types. Python more dynamic. TypeScript more checked. Both work well. Different syntaxes.",
+      "keyPoints": [
+        "Python: __init__",
+        "TypeScript: constructor",
+        "TypeScript adds types",
+        "Both simple OOP",
+        "Different syntaxes"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python's @property and TypeScript's get/set are similar concepts.",
+      "why": "Python: @property decorator. TypeScript: get/set keywords. Similar concepts! Both elegant. Python slightly cleaner. TypeScript more explicit. Both work well. Very similar approaches.",
+      "keyPoints": [
+        "Similar concepts",
+        "Python: @property",
+        "TypeScript: get/set",
+        "Both elegant",
+        "Very similar"
+      ]
+    },
+    "inheritance": {
+      "description": "Both support single and multiple inheritance.",
+      "why": "Python: multiple inheritance. TypeScript: single inheritance + interfaces. Python more flexible. TypeScript safer. Python can have diamond problem. TypeScript avoids it. Different approaches.",
+      "keyPoints": [
+        "Python: multiple inheritance",
+        "TypeScript: single + interfaces",
+        "Python more flexible",
+        "TypeScript safer",
+        "Different approaches"
+      ]
+    },
+    "modules": {
+      "description": "Python uses ABCs while TypeScript uses structural interfaces.",
+      "why": "Python: ABC module for protocols. TypeScript: structural interfaces. TypeScript's structural typing brilliant! Python adding Protocol (similar). TypeScript more innovative here. Both enable polymorphism.",
+      "keyPoints": [
+        "TypeScript: structural typing",
+        "Python: ABC/Protocol",
+        "TypeScript more innovative",
+        "Python adopting similar",
+        "Both enable polymorphism"
+      ]
+    },
+    "file-io": {
+      "description": "Python's with statement is simpler than TypeScript's async file operations.",
+      "why": "Python: with open() simple. TypeScript: fs with async/await. Python simpler for sync. TypeScript async-first. Python for scripts. TypeScript for Node. Different priorities.",
+      "keyPoints": [
+        "Python simpler",
+        "TypeScript: async/await",
+        "Python better for scripts",
+        "TypeScript async-first",
+        "Different use cases"
+      ]
+    },
+    "json": {
+      "description": "Both have JSON in standard library with simple APIs.",
+      "why": "Both have JSON built-in! Python: json.loads. TypeScript: JSON.parse. Nearly identical! Both simple. Very similar. Both excellent for JSON work.",
+      "keyPoints": [
+        "Both built-in",
+        "Nearly identical",
+        "Both simple",
+        "Very similar",
+        "Both excellent"
+      ]
+    },
+    "threading": {
+      "description": "Python has GIL limitations while TypeScript is single-threaded with async/await.",
+      "why": "Python: GIL limits parallelism. TypeScript: single-threaded, async/await. Both limited for parallelism. Python multiprocessing for CPU. TypeScript event loop. Similar limitations. Both handle I/O well.",
+      "keyPoints": [
+        "Python has GIL",
+        "TypeScript single-threaded",
+        "Similar limitations",
+        "Both async-capable",
+        "Both I/O focused"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python has powerful runtime metaprogramming while TypeScript uses decorators.",
+      "why": "Python: powerful runtime metaprogramming. TypeScript: decorators (experimental). Python more powerful. TypeScript more limited. Python more dynamic. TypeScript more structured. Python wins here.",
+      "keyPoints": [
+        "Python more powerful",
+        "TypeScript: decorators",
+        "Python runtime",
+        "TypeScript compile-time",
+        "Python advantage"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python uses runtime duck typing while TypeScript adds compile-time structural typing.",
+      "why": "Python: runtime duck typing. TypeScript: compile-time structural typing! TypeScript is what happens when you add types to duck typing. Brilliant! Python more flexible. TypeScript catches errors early. TypeScript improves the concept.",
+      "keyPoints": [
+        "Python: runtime",
+        "TypeScript: compile-time structural",
+        "TypeScript = typed duck typing!",
+        "TypeScript catches errors early",
+        "TypeScript improves concept"
+      ]
+    }
+  }
+}
+
+

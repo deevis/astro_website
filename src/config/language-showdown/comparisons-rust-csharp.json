@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "rust",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Rust compiles to native, C# to .NET - different memory models.",
+      "why": "Rust: native code, no GC, manual memory. C#: .NET, GC, automatic memory. Rust for systems. C# for applications. Rust maximum performance and safety. C# convenience. Fundamentally different!",
+      "keyPoints": [
+        "Fundamental difference",
+        "Rust: no GC",
+        "C#: GC",
+        "Rust: systems",
+        "C#: applications"
+      ]
+    },
+    "variables": {
+      "description": "Rust ownership system vs C# garbage collection.",
+      "why": "HUGE DIFFERENCE! Rust ownership prevents memory bugs at compile time. C# GC handles memory automatically. Rust immutable by default. C# mutable by default. Rust catches bugs compile-time. C# catches bugs runtime. Different safety models!",
+      "keyPoints": [
+        "HUGE difference!",
+        "Rust: ownership",
+        "C#: GC",
+        "Rust compile-time safety",
+        "C# runtime safety"
+      ]
+    },
+    "strings": {
+      "description": "Rust String/&str complex for safety, C# strings simple.",
+      "why": "Rust String and &str for memory safety - complex! C# string simple with GC. Rust ownership prevents bugs. C# convenient. Rust harder to learn. C# easier. Rust no GC overhead. C# GC pauses. Different priorities!",
+      "keyPoints": [
+        "Rust complex",
+        "C# simple",
+        "Rust: safety",
+        "C#: convenience",
+        "Different priorities"
+      ]
+    },
+    "conditionals": {
+      "description": "Rust if returns value, C# has pattern matching.",
+      "why": "Rust if is expression (returns value). C# if is statement. Rust if let for patterns. C# pattern matching (C# 7+). Both modern. Rust more functional. C# more traditional. Both powerful!",
+      "keyPoints": [
+        "Both modern",
+        "Rust if is expression",
+        "C# pattern matching",
+        "Both powerful",
+        "Different approaches"
+      ]
+    },
+    "case-statements": {
+      "description": "Rust match is exhaustive and powerful, C# switch expressions good.",
+      "why": "Rust match INCREDIBLY powerful! Exhaustive, destructuring, patterns. C# switch expressions good but not as powerful. Rust compiler enforces all cases. C# doesn't. Rust match superior! Major Rust advantage!",
+      "keyPoints": [
+        "Rust match superior!",
+        "Rust exhaustive",
+        "Rust more powerful",
+        "C# good but less",
+        "Major difference"
+      ]
+    },
+    "arrays": {
+      "description": "Rust Vec<T> with ownership, C# List<T> with GC.",
+      "why": "Rust Vec<T> with ownership rules. C# List<T> with GC simple. Rust prevents memory bugs. C# convenient. Rust more complex. C# easier. Rust no GC overhead. C# GC pauses. Different memory models!",
+      "keyPoints": [
+        "Different memory models",
+        "Rust: ownership",
+        "C#: GC",
+        "Rust harder",
+        "C# easier"
+      ]
+    },
+    "hashes": {
+      "description": "Rust HashMap with ownership, C# Dictionary with GC.",
+      "why": "Rust HashMap with ownership complex. C# Dictionary simple. Rust prevents bugs. C# convenient. Rust steeper learning curve. C# easier. Different priorities! Safety vs convenience.",
+      "keyPoints": [
+        "Rust complex",
+        "C# simple",
+        "Rust: safety",
+        "C#: convenience",
+        "Different priorities"
+      ]
+    },
+    "iteration": {
+      "description": "Rust iterators zero-cost, C# foreach/LINQ convenient.",
+      "why": "Rust iterators compile to optimal code - zero-cost abstraction! C# LINQ convenient but has overhead. Rust for performance. C# for convenience. Both functional. Rust guarantees performance. C# prioritizes ease.",
+      "keyPoints": [
+        "Rust zero-cost!",
+        "C# convenient",
+        "Rust performance",
+        "C# ease",
+        "Different priorities"
+      ]
+    },
+    "filtering": {
+      "description": "Rust iterator chains zero-cost, C# LINQ convenient.",
+      "why": "Rust .filter()/.map() compile to optimal code! C# LINQ convenient with overhead. Rust no allocations. C# allocates. Rust for performance. C# for productivity. Both functional! Different priorities!",
+      "keyPoints": [
+        "Rust zero-cost",
+        "C# convenient",
+        "Rust no allocations",
+        "C# easier",
+        "Performance vs ease"
+      ]
+    },
+    "classes": {
+      "description": "Rust uses structs with impl, C# has full OOP.",
+      "why": "Rust: NO classes! Structs + impl. C# traditional OOP classes. Rust composition. C# inheritance. Rust no GC. C# GC. Fundamentally different approaches! Rust systems. C# applications.",
+      "keyPoints": [
+        "Fundamental difference",
+        "Rust: no classes",
+        "C#: OOP",
+        "Rust: composition",
+        "C#: inheritance"
+      ]
+    },
+    "getters-setters": {
+      "description": "Rust uses methods or pub fields, C# has properties.",
+      "why": "Rust explicit methods or public fields. C# properties elegant. C# cleaner syntax. Rust more explicit. C# automatic (get; set;). Rust manual. C# better syntax here.",
+      "keyPoints": [
+        "C# better syntax",
+        "Rust: explicit",
+        "C#: properties",
+        "C# cleaner",
+        "Rust manual"
+      ]
+    },
+    "inheritance": {
+      "description": "Rust rejects inheritance completely, C# embraces it!",
+      "why": "Rust: NO inheritance! Composition + traits only. C# traditional inheritance. Fundamental difference! Rust forces better design. C# traditional OOP. Rust intentionally different. Opposite philosophies!",
+      "keyPoints": [
+        "Opposite philosophies!",
+        "Rust: no inheritance",
+        "C#: inheritance",
+        "Rust: traits",
+        "Fundamental difference"
+      ]
+    },
+    "modules": {
+      "description": "Rust traits explicit, C# interfaces explicit.",
+      "why": "Rust traits vs C# interfaces - similar concept! Both explicit implementation. Rust more powerful (associated types, generics). C# more traditional. Both enable polymorphism. Similar approaches! Rust slightly more powerful.",
+      "keyPoints": [
+        "Similar concept",
+        "Both explicit",
+        "Rust more powerful",
+        "C# more traditional",
+        "Both work well"
+      ]
+    },
+    "file-io": {
+      "description": "Rust uses Result for errors, C# uses exceptions.",
+      "why": "Rust std::fs with Result<T, E>. C# File class with exceptions. Rust forces error handling! C# try/catch. Rust compile-time safety. C# runtime. Rust more explicit. C# more convenient. Different error models!",
+      "keyPoints": [
+        "Different error models",
+        "Rust: Result",
+        "C#: exceptions",
+        "Rust forces handling",
+        "C# more convenient"
+      ]
+    },
+    "json": {
+      "description": "Rust serde compile-time safe, C# System.Text.Json or Newtonsoft.",
+      "why": "Rust serde with compile-time safety! C# System.Text.Json or Newtonsoft. Rust catches JSON errors compile-time. C# runtime. Rust more complex setup. C# simpler. Rust safer. C# easier.",
+      "keyPoints": [
+        "Rust compile-time safe!",
+        "C# runtime",
+        "Rust: serde",
+        "Rust more complex",
+        "C# easier"
+      ]
+    },
+    "threading": {
+      "description": "Rust prevents data races at compile time! C# has runtime safety.",
+      "why": "Rust PREVENTS DATA RACES AT COMPILE TIME! Revolutionary! C# lock prevents races at runtime. Rust ownership brilliant for concurrency. C# async/await convenient. Rust compile-time safety unmatched! C# more convenient. Rust more powerful!",
+      "keyPoints": [
+        "Rust prevents races compile-time!",
+        "Revolutionary!",
+        "C# runtime safety",
+        "Rust ownership brilliant",
+        "Major difference"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Rust macros powerful, C# reflection and source generators.",
+      "why": "Rust macros powerful and compile-time! C# reflection runtime, source generators compile-time. Both powerful! Rust macros more complex. C# more familiar. Both enable metaprogramming. Different approaches!",
+      "keyPoints": [
+        "Both powerful",
+        "Rust: macros",
+        "C#: reflection + generators",
+        "Rust compile-time",
+        "Different approaches"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both use explicit traits/interfaces - no duck typing.",
+      "why": "Rust traits explicit. C# interfaces explicit. Both nominal typing! Rust trait bounds. C# interface constraints. Very similar! Neither does duck typing (except C# dynamic). Both compile-time safe.",
+      "keyPoints": [
+        "Very similar",
+        "Both explicit",
+        "Both nominal",
+        "C# has dynamic",
+        "Both compile-time safe"
+      ]
+    }
+  }
+}

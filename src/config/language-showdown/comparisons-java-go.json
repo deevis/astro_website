@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "go",
+  "comparisons": {
+    "hello-world": {
+      "description": "The simplest program showcases Go's focus on simplicity compared to Java's class-based structure.",
+      "why": "Both require boilerplate but Go is simpler. Java needs a class wrapper; Go needs a package and import. Go's fmt.Println is more concise than System.out.println. Both compile to fast executables, but Go compiles much faster.",
+      "keyPoints": [
+        "Both require a main function/method",
+        "Go uses packages, Java uses classes",
+        "Go has faster compilation times",
+        "Both are statically typed and compiled"
+      ]
+    },
+    "variables": {
+      "description": "Both are statically typed, but Go offers cleaner type inference with the := operator.",
+      "why": "Both are statically typed but Go uses type inference with :=. Java requires explicit types or var (Java 10+). Go's const is compile-time only. Both support multiple declarations. Go is stricter about unused variables (compilation error).",
+      "keyPoints": [
+        "Go's := provides cleaner type inference",
+        "Both support explicit type declarations",
+        "Go fails compilation on unused variables",
+        "Java is more lenient with unused code",
+        "Go's const is true compile-time constant"
+      ]
+    },
+    "strings": {
+      "description": "Both have immutable strings and efficient builders, but organize methods differently.",
+      "why": "Go uses the strings package for manipulation; Java has built-in String methods. Both have string formatting (fmt.Sprintf vs String.format). Go's strings are immutable like Java. Go's strings.Builder is like Java's StringBuilder. Go doesn't have method chaining like Java.",
+      "keyPoints": [
+        "Both have immutable strings",
+        "Go uses separate strings package",
+        "Java has more built-in string methods",
+        "Both have efficient string builders",
+        "Go prefers functions over methods"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar conditional syntax, but Go allows inline variable declarations and avoids ternary operators.",
+      "why": "Very similar syntax but Go has no parentheses requirement. Go has no ternary operator (use if/else). Go allows initialization in if statement. Both use && and || for logical operations. Go's if statements can declare variables inline.",
+      "keyPoints": [
+        "Go doesn't require parentheses",
+        "Go has no ternary operator",
+        "Go supports if with initialization",
+        "Both use similar logical operators",
+        "Java has more compact ternary for simple cases"
+      ]
+    },
+    "case-statements": {
+      "description": "Go's switch is cleaner with no break statements and supports type switching and conditions.",
+      "why": "Go's switch is cleaner - no break needed (no fall-through by default). Use 'fallthrough' keyword for Java-like behavior. Go can switch on types. Go can use conditions without an expression. Both support multiple cases. Go's switch is more powerful than Java's traditional switch.",
+      "keyPoints": [
+        "Go doesn't need break statements",
+        "Go can switch without an expression",
+        "Go supports type switches",
+        "Both allow multiple cases per branch",
+        "Java 14+ has expression switches similar to Go"
+      ]
+    },
+    "arrays": {
+      "description": "Go's slices are simpler and more powerful than Java's ArrayList, with built-in slicing operations.",
+      "why": "Go distinguishes arrays (fixed) and slices (dynamic). Java has arrays (fixed) and ArrayList (dynamic). Go's slices are more powerful with built-in append. Both use index access. Go's slicing syntax is cleaner. Go arrays are values, Java arrays are references.",
+      "keyPoints": [
+        "Go slices are the idiomatic choice",
+        "Java typically uses ArrayList",
+        "Go's append is built-in",
+        "Go has better slice syntax",
+        "Go arrays are copied by value"
+      ]
+    },
+    "hashes": {
+      "description": "Both provide key-value maps, but Go's comma-ok idiom is more explicit about key existence.",
+      "why": "Go's maps are built-in with clean syntax. Java requires HashMap class. Go's comma-ok idiom is safer than Java's null checks. Both support iteration. Go's map access is cleaner. Go maps are not thread-safe by default (like Java HashMap).",
+      "keyPoints": [
+        "Go maps are built into the language",
+        "Java requires HashMap import",
+        "Go's comma-ok idiom prevents errors",
+        "Both need synchronization for concurrency",
+        "Go has cleaner map literal syntax"
+      ]
+    },
+    "iteration": {
+      "description": "Go's range keyword provides elegant iteration, similar to Java's enhanced for loop.",
+      "why": "Go's range is cleaner than Java's enhanced for loop. Go can iterate with or without index. Go has no while keyword (use for). Java has more loop varieties. Go's blank identifier (_) for unused values. Both support traditional C-style for loops.",
+      "keyPoints": [
+        "Go's range is more versatile",
+        "Go uses for for all loops",
+        "Java has dedicated while loops",
+        "Go's _ ignores unused values",
+        "Both support break and continue"
+      ]
+    },
+    "filtering": {
+      "description": "Java has streams for functional operations; Go typically uses explicit loops for clarity.",
+      "why": "Go has no built-in filter/map - you write loops manually. Java has streams API for functional operations. Go emphasizes simplicity over abstraction. Go 1.18+ has generics for reusable functions. Java's streams are more powerful but more complex.",
+      "keyPoints": [
+        "Go prefers explicit loops",
+        "Java has functional stream operations",
+        "Go values simplicity and clarity",
+        "Go generics enable reusable filter/map",
+        "Trade-off: verbosity vs abstraction"
+      ]
+    },
+    "classes": {
+      "description": "Go uses structs and functions instead of classes, favoring composition over inheritance.",
+      "why": "Go has no classes - uses structs and methods. Java is fully object-oriented with classes. Go's constructor is just a function (by convention). Go methods have receivers. Both support encapsulation (Go uses capitalization). Go is simpler but less traditional OOP.",
+      "keyPoints": [
+        "Go uses structs instead of classes",
+        "Java is traditional OOP",
+        "Go methods use receiver syntax",
+        "Go has no constructors (use functions)",
+        "Capitalization controls visibility in Go"
+      ]
+    },
+    "getters-setters": {
+      "description": "Go uses capitalization for visibility; methods follow conventions rather than automatic generation.",
+      "why": "Go convention: getters have no Get prefix, setters use Set. Java convention: both use get/set prefixes. Go often uses exported fields instead. Java emphasizes encapsulation. Go values simplicity over strict encapsulation. Both can make fields public.",
+      "keyPoints": [
+        "Go getters omit 'Get' prefix",
+        "Java uses get/set conventions",
+        "Go often exports fields directly",
+        "Java emphasizes private fields",
+        "Go prefers simplicity"
+      ]
+    },
+    "inheritance": {
+      "description": "Go uses composition and struct embedding instead of classical inheritance hierarchies.",
+      "why": "Go has NO inheritance - uses composition (embedding). Java has full inheritance with extends. Go's embedding promotes interface over implementation. Java's inheritance can create tight coupling. Go's approach is more flexible. Both support method overriding (Go through embedding).",
+      "keyPoints": [
+        "Go has no inheritance",
+        "Go uses composition over inheritance",
+        "Java has traditional class hierarchy",
+        "Go promotes looser coupling",
+        "Favor composition (both languages)"
+      ]
+    },
+    "modules": {
+      "description": "Go's implicit interfaces provide flexibility without explicit declarations, unlike Java's explicit interfaces.",
+      "why": "Go interfaces are implicit - no implements keyword. Java requires explicit implementation. Go's interfaces are smaller and more focused. Both support interface composition. Go's duck typing makes code more flexible. Java's explicit contracts are clearer.",
+      "keyPoints": [
+        "Go interfaces are implicit",
+        "Java requires implements keyword",
+        "Go favors small interfaces",
+        "Both support interface composition",
+        "Go's approach is more flexible"
+      ]
+    },
+    "file-io": {
+      "description": "Both require explicit error handling, but Go's defer provides cleaner resource management.",
+      "why": "Go uses os package with simple functions. Java requires streams and readers. Go's defer ensures cleanup. Java uses try-with-resources. Go's error handling is explicit. Both patterns ensure files are closed. Go is more straightforward.",
+      "keyPoints": [
+        "Go uses defer for cleanup",
+        "Java uses try-with-resources",
+        "Go has simpler file operations",
+        "Go requires explicit error checks",
+        "Both ensure proper file closing"
+      ]
+    },
+    "json": {
+      "description": "Both handle JSON well, but Go uses struct tags for type-safe parsing while Java uses frameworks.",
+      "why": "Go uses struct tags for JSON mapping. Java requires annotations or libraries. Go's encoding/json is in standard library. Both need external libraries or features. Go's approach is type-safe with structs. Java has more JSON library options.",
+      "keyPoints": [
+        "Go uses struct tags",
+        "Java uses annotations",
+        "Both have standard/common libraries",
+        "Go's approach is more type-safe",
+        "Java has more library choices"
+      ]
+    },
+    "threading": {
+      "description": "Go's goroutines are much lighter than Java threads, enabling massive concurrency.",
+      "why": "Go's goroutines are lightweight (100s of thousands possible). Java threads are heavier (OS threads). Go uses channels for communication. Java uses shared memory with locks. Go's WaitGroup vs Java's join(). Go's concurrency is a first-class feature.",
+      "keyPoints": [
+        "Goroutines are much lighter than threads",
+        "Go emphasizes channels over locks",
+        "Java uses traditional threading",
+        "Go has better concurrency primitives",
+        "Go makes concurrency easier"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Both have limited runtime metaprogramming; Go uses code generation instead of reflection when possible.",
+      "why": "Go has limited reflection compared to Java. Java's reflection is more powerful. Go emphasizes code generation (go:generate). Both have performance costs for reflection. Go uses struct tags for metadata. Java has annotations.",
+      "keyPoints": [
+        "Java has more powerful reflection",
+        "Go prefers code generation",
+        "Go uses struct tags for metadata",
+        "Java uses annotations",
+        "Both incur runtime costs"
+      ]
+    },
+    "duck-typing": {
+      "description": "Go's structural typing with implicit interfaces provides duck-typing-like flexibility with static safety.",
+      "why": "Go uses structural typing with interfaces. Java requires explicit implements. Go's approach is like duck typing but compile-time checked. Both are statically typed. Go is more flexible. Java is more explicit.",
+      "keyPoints": [
+        "Go has implicit interface satisfaction",
+        "Java requires explicit implementation",
+        "Go combines flexibility with type safety",
+        "Both catch errors at compile-time",
+        "Go's approach is more decoupled"
+      ]
+    }
+  }
+}
+

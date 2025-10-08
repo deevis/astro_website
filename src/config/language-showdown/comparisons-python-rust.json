@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "python",
+  "rightLanguage": "rust",
+  "comparisons": {
+    "hello-world": {
+      "description": "Python's one-liner minimalism contrasts with Rust's compiled function structure.",
+      "why": "Python: one line, maximum simplicity. Rust: function wrapper needed. Python interpreted, Rust compiled to native code. Python for rapid prototyping. Rust for performance-critical systems. Opposite ends of the spectrum. Different use cases entirely.",
+      "keyPoints": [
+        "Python: one line",
+        "Rust: compiled structure",
+        "Interpreted vs compiled",
+        "Prototyping vs systems",
+        "Opposite philosophies"
+      ]
+    },
+    "variables": {
+      "description": "Python's dynamic typing contrasts completely with Rust's static ownership system.",
+      "why": "Python: dynamic typing, no declarations. Rust: static typing with ownership. Python variables can change types. Rust variables cannot. Python mutable by default. Rust immutable by default. Rust catches errors at compile time. Python at runtime. Fundamental differences.",
+      "keyPoints": [
+        "Python dynamic, Rust static",
+        "Python mutable default",
+        "Rust immutable default",
+        "Rust ownership system",
+        "Completely different"
+      ]
+    },
+    "strings": {
+      "description": "Python's f-strings are simple while Rust's String/&str distinction enables memory safety.",
+      "why": "Python's f-strings are beautifully simple. Rust has String (owned) and &str (borrowed). Python optimizes convenience. Rust optimizes safety and performance. Python's string methods intuitive. Rust's require ownership thinking. Huge complexity difference.",
+      "keyPoints": [
+        "Python f-strings simple",
+        "Rust: String vs &str",
+        "Python very convenient",
+        "Rust ownership complexity",
+        "Convenience vs control"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses indentation while Rust uses braces; Rust's if returns values.",
+      "why": "Python enforces indentation. Rust uses braces. Python has elif. Rust has else if. Rust's if is an expression. Python's is a statement. Python has ternary. Rust uses if expression. Python more readable. Rust more consistent.",
+      "keyPoints": [
+        "Python: indentation",
+        "Rust: braces",
+        "Rust if is expression",
+        "Both clear syntax",
+        "Different approaches"
+      ]
+    },
+    "case-statements": {
+      "description": "Python's match/case is new while Rust's exhaustive match is battle-tested.",
+      "why": "Python's match/case added in 3.10. Rust's match is core feature. Rust's is exhaustive - must handle all cases. Python's is more flexible. Rust catches missing cases at compile time. Both have pattern matching. Rust's more rigorous.",
+      "keyPoints": [
+        "Python match/case new",
+        "Rust match battle-tested",
+        "Rust exhaustive",
+        "Rust compile-time checks",
+        "Rust more rigorous"
+      ]
+    },
+    "arrays": {
+      "description": "Python lists are simple and dynamic while Rust vectors have ownership rules.",
+      "why": "Python lists extremely simple and flexible. Rust Vec<T> has ownership rules. Python's slicing very powerful. Rust's requires borrowing. Python has negative indices. Rust doesn't. Python optimizes ease. Rust optimizes safety. Huge usability difference.",
+      "keyPoints": [
+        "Python lists simple",
+        "Rust ownership rules",
+        "Python slicing powerful",
+        "Python negative indices",
+        "Ease vs safety"
+      ]
+    },
+    "hashes": {
+      "description": "Python dicts are simple and dynamic while Rust HashMap requires explicit typing.",
+      "why": "Python dicts extremely flexible. Rust HashMap needs type declarations. Python dynamically typed. Rust statically typed. Python's .get() returns value or None. Rust's returns Option<&V>. Python for flexibility. Rust for safety.",
+      "keyPoints": [
+        "Python very flexible",
+        "Rust requires types",
+        "Python simpler",
+        "Rust safer",
+        "Flexibility vs safety"
+      ]
+    },
+    "iteration": {
+      "description": "Python's for loops are intuitive while Rust's iterators are zero-cost abstractions.",
+      "why": "Python's for...in is incredibly intuitive. Rust's iterators compile to optimal code. Python easier to learn and use. Rust's performance guarantees. Python has runtime overhead. Rust is zero-cost. Different priorities showing clearly.",
+      "keyPoints": [
+        "Python very intuitive",
+        "Rust zero-cost",
+        "Python easier",
+        "Rust faster",
+        "Usability vs performance"
+      ]
+    },
+    "filtering": {
+      "description": "Python's comprehensions are elegant while Rust's iterator chains are compile-time optimized.",
+      "why": "Python's list comprehensions are beautiful and readable. Rust's iterator chains compile to optimal loops. Python easier to write and read. Rust faster to run. Python has runtime overhead. Rust eliminates overhead. Poetry vs performance.",
+      "keyPoints": [
+        "Python comprehensions elegant",
+        "Rust chains optimized",
+        "Python more readable",
+        "Rust faster execution",
+        "Different priorities"
+      ]
+    },
+    "classes": {
+      "description": "Python has traditional classes while Rust uses structs with impl blocks.",
+      "why": "Python has traditional OOP with __init__. Rust uses structs with impl blocks. Python's approach familiar. Rust's approach different. Python's self explicit in parameters. Rust's self explicit in methods. Different paradigms but both explicit about self.",
+      "keyPoints": [
+        "Python: traditional OOP",
+        "Rust: structs + impl",
+        "Python more familiar",
+        "Both explicit self",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python's @property decorator is elegant while Rust uses explicit methods.",
+      "why": "Python's @property is clean and Pythonic. Rust writes methods explicitly or uses pub fields. Python's approach more elegant. Rust's approach more explicit. Python hides complexity. Rust shows it. Different philosophies on abstraction.",
+      "keyPoints": [
+        "Python @property elegant",
+        "Rust explicit methods",
+        "Python hides complexity",
+        "Rust shows complexity",
+        "Abstraction vs explicitness"
+      ]
+    },
+    "inheritance": {
+      "description": "Python supports multiple inheritance while Rust completely rejects inheritance.",
+      "why": "Python has full multiple inheritance. Rust has ZERO inheritance. Python's approach traditional OOP. Rust uses composition and traits only. Python more flexible. Rust forces better design. Completely opposite approaches.",
+      "keyPoints": [
+        "Python: multiple inheritance",
+        "Rust: no inheritance",
+        "Python traditional OOP",
+        "Rust composition only",
+        "Opposite approaches"
+      ]
+    },
+    "modules": {
+      "description": "Python uses inheritance and ABCs while Rust uses traits with zero-cost dispatch.",
+      "why": "Python uses inheritance for code reuse. Rust uses traits. Python's ABC module for protocols. Rust's traits for interfaces. Rust has static and dynamic dispatch. Python mostly dynamic. Rust's static dispatch zero-cost. Performance difference huge.",
+      "keyPoints": [
+        "Python: inheritance/ABC",
+        "Rust: traits",
+        "Rust static dispatch zero-cost",
+        "Python dynamic dispatch",
+        "Performance difference"
+      ]
+    },
+    "file-io": {
+      "description": "Python's with statement is simple while Rust requires explicit Result handling.",
+      "why": "Python's with open() is beautifully simple. Rust requires Result<T, E> handling. Python's approach more convenient. Rust's approach more explicit about errors. Python for quick scripts. Rust for robust systems. Different priorities.",
+      "keyPoints": [
+        "Python very simple",
+        "Rust explicit errors",
+        "Python more convenient",
+        "Rust more robust",
+        "Scripts vs systems"
+      ]
+    },
+    "json": {
+      "description": "Python's dynamic JSON handling contrasts with Rust's type-safe serde.",
+      "why": "Python's json.loads returns dicts dynamically. Rust's serde requires struct definitions. Python more flexible for ad-hoc JSON. Rust type-safe for known schemas. Python faster to write. Rust faster to run and safer. Different strengths.",
+      "keyPoints": [
+        "Python: dynamic",
+        "Rust: type-safe",
+        "Python more flexible",
+        "Rust faster and safer",
+        "Different use cases"
+      ]
+    },
+    "threading": {
+      "description": "Python's threads have GIL limitations while Rust prevents data races at compile time.",
+      "why": "Python has GIL limiting parallelism. Rust has no GIL - true parallelism with compile-time safety! Rust's ownership prevents data races at compile time. Python can have race conditions. This is Rust's superpower. For concurrent systems, Rust far superior.",
+      "keyPoints": [
+        "Python has GIL",
+        "Rust true parallelism",
+        "Rust prevents races at compile time!",
+        "Python limited parallelism",
+        "Rust's major advantage"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python offers runtime metaprogramming while Rust uses compile-time macros.",
+      "why": "Python has powerful runtime metaprogramming - decorators, metaclasses, dynamic attributes. Rust has compile-time macros only. Python can modify anything at runtime. Rust everything resolved at compile time. Python more flexible. Rust faster. Runtime vs compile-time.",
+      "keyPoints": [
+        "Python: runtime",
+        "Rust: compile-time",
+        "Python more flexible",
+        "Rust zero runtime cost",
+        "Opposite approaches"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python's runtime duck typing contrasts with Rust's compile-time trait system.",
+      "why": "Python uses duck typing checked at runtime. Rust uses traits checked at compile time. Python's hasattr(). Rust's trait bounds. Python more flexible. Rust catches errors early. Python for rapid development. Rust for robust systems. Fundamental trade-off.",
+      "keyPoints": [
+        "Python: runtime checks",
+        "Rust: compile-time checks",
+        "Python more flexible",
+        "Rust catches errors early",
+        "Development speed vs robustness"
+      ]
+    }
+  }
+}
+

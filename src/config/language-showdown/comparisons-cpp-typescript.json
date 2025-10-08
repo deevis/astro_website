@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "cpp",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "C++ compiles to native code while TypeScript compiles to JavaScript.",
+      "why": "Extreme opposites! C++: native code, manual memory, maximum performance. TypeScript: JavaScript, GC, web convenience. C++ for systems. TypeScript for web. Completely different worlds and use cases.",
+      "keyPoints": [
+        "Extreme opposites",
+        "C++: native code",
+        "TypeScript: to JavaScript",
+        "Different ecosystems",
+        "Systems vs web"
+      ]
+    },
+    "variables": {
+      "description": "C++ requires explicit types and manual memory while TypeScript has optional types and GC.",
+      "why": "C++: explicit types, manual memory, pointers. TypeScript: optional types, GC, no pointers. C++ maximum control. TypeScript maximum convenience. Fundamentally opposite. C++ for performance. TypeScript for productivity.",
+      "keyPoints": [
+        "C++: manual memory",
+        "TypeScript: automatic GC",
+        "C++: pointers",
+        "TypeScript: no pointers",
+        "Control vs convenience"
+      ]
+    },
+    "strings": {
+      "description": "TypeScript template literals are far simpler than C++'s std::string and char*.",
+      "why": "C++: std::string and char* complex. TypeScript: template literals simple. TypeScript much easier. C++ more control. Huge usability difference. TypeScript for humans. C++ for machines.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "C++: std::string and char*",
+        "TypeScript: template literals",
+        "Huge usability gap",
+        "Humans vs machines"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax but TypeScript adds type guards for safety.",
+      "why": "Similar if/else syntax. TypeScript: type guards, optional chaining. C++: traditional. TypeScript more modern features. Both use braces. TypeScript more web-focused. C++ more systems-focused.",
+      "keyPoints": [
+        "Similar syntax",
+        "TypeScript: type guards",
+        "TypeScript: optional chaining",
+        "C++ more traditional",
+        "Different focuses"
+      ]
+    },
+    "case-statements": {
+      "description": "Both have traditional switch but C++ is more limited than TypeScript's discriminated unions.",
+      "why": "Both traditional switch. C++ limited to integral types. TypeScript discriminated unions powerful. TypeScript more flexible. C++ more limited. TypeScript better for modern code.",
+      "keyPoints": [
+        "Both have switch",
+        "C++ very limited",
+        "TypeScript: discriminated unions",
+        "TypeScript more flexible",
+        "TypeScript more modern"
+      ]
+    },
+    "arrays": {
+      "description": "TypeScript arrays are simple while C++ has multiple container types with manual memory.",
+      "why": "TypeScript: arrays simple with methods. C++: arrays, vector, list, etc. TypeScript automatic memory. C++ manual. TypeScript much simpler. C++ more control. Huge complexity difference.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "C++: many container types",
+        "TypeScript: automatic memory",
+        "C++: manual control",
+        "Huge difference"
+      ]
+    },
+    "hashes": {
+      "description": "TypeScript objects are simple while C++ has map and unordered_map with explicit types.",
+      "why": "TypeScript: objects/Map simple. C++: map/unordered_map complex. TypeScript dynamic. C++ needs type declarations. TypeScript much easier. C++ more control. Different priorities.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "C++: map/unordered_map",
+        "TypeScript dynamic",
+        "C++ explicit types",
+        "Ease vs control"
+      ]
+    },
+    "iteration": {
+      "description": "TypeScript has multiple simple methods while C++ uses iterators.",
+      "why": "TypeScript: for...of, forEach, map easy. C++: iterators powerful but complex. TypeScript simpler. C++ more control. TypeScript for humans. C++ for machines. Big usability difference.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "C++: iterators",
+        "TypeScript easier",
+        "C++ more control",
+        "Usability difference"
+      ]
+    },
+    "filtering": {
+      "description": "TypeScript has built-in methods while C++ uses STL algorithms.",
+      "why": "TypeScript: .filter()/.map() built-in easy. C++: STL algorithms verbose. TypeScript much simpler. C++ can be zero-cost. TypeScript for productivity. C++ for performance. Different goals.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "C++: STL algorithms",
+        "TypeScript easier",
+        "C++ can be zero-cost",
+        "Productivity vs performance"
+      ]
+    },
+    "classes": {
+      "description": "TypeScript has simple classes while C++ requires Rule of 3/5.",
+      "why": "TypeScript: simple JavaScript classes. C++: complex with Rule of 3/5. TypeScript automatic memory. C++ manual. TypeScript way simpler. C++ way more control. Massive complexity difference.",
+      "keyPoints": [
+        "TypeScript much simpler",
+        "C++: Rule of 3/5",
+        "TypeScript: automatic memory",
+        "C++: manual control",
+        "Huge difference"
+      ]
+    },
+    "getters-setters": {
+      "description": "TypeScript uses get/set keywords while C++ uses verbose methods.",
+      "why": "TypeScript: get/set keywords elegant. C++: getXxx/setXxx verbose. TypeScript cleaner. C++ more explicit. TypeScript better syntax. C++ more traditional. TypeScript wins on convenience.",
+      "keyPoints": [
+        "TypeScript: get/set",
+        "C++: getXxx/setXxx",
+        "TypeScript cleaner",
+        "C++ verbose",
+        "TypeScript better syntax"
+      ]
+    },
+    "inheritance": {
+      "description": "TypeScript has single inheritance while C++ has full multiple inheritance.",
+      "why": "TypeScript: single inheritance + interfaces. C++: full multiple inheritance including diamond problem. C++ more powerful but dangerous. TypeScript safer. C++ more flexible. TypeScript more sensible.",
+      "keyPoints": [
+        "TypeScript: single",
+        "C++: multiple inheritance",
+        "C++: diamond problem",
+        "TypeScript safer",
+        "C++ more powerful"
+      ]
+    },
+    "modules": {
+      "description": "TypeScript uses structural interfaces while C++ uses abstract classes.",
+      "why": "TypeScript: structural typing brilliant! C++: abstract classes with virtual. TypeScript more flexible. C++ more traditional. TypeScript duck typing with types. C++ explicit. TypeScript more innovative.",
+      "keyPoints": [
+        "TypeScript: structural typing!",
+        "C++: abstract classes",
+        "TypeScript more innovative",
+        "C++ traditional",
+        "Different approaches"
+      ]
+    },
+    "file-io": {
+      "description": "TypeScript uses async/await while C++ uses fstream.",
+      "why": "TypeScript: async/await with Node fs. C++: fstream verbose. TypeScript simpler. C++ more control. TypeScript for Node scripts. C++ for systems. Different ecosystems.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "C++: fstream verbose",
+        "TypeScript: async/await",
+        "Different ecosystems",
+        "Scripts vs systems"
+      ]
+    },
+    "json": {
+      "description": "TypeScript has JSON built-in while C++ needs external libraries.",
+      "why": "TypeScript: JSON.parse built-in! C++: need external library. TypeScript much simpler. C++ needs dependencies. TypeScript wins completely here. Huge advantage for TypeScript.",
+      "keyPoints": [
+        "TypeScript: built-in",
+        "C++: external libraries",
+        "TypeScript much simpler",
+        "TypeScript wins",
+        "Huge advantage"
+      ]
+    },
+    "threading": {
+      "description": "TypeScript is single-threaded with async/await while C++ has true multi-threading.",
+      "why": "TypeScript: single-threaded, async/await for I/O. C++: true multi-threading, complex. TypeScript simpler for web. C++ powerful for systems. Different use cases. Both work for their domains.",
+      "keyPoints": [
+        "TypeScript single-threaded",
+        "C++: true multi-threading",
+        "TypeScript: async/await",
+        "C++ more complex",
+        "Different use cases"
+      ]
+    },
+    "metaprogramming": {
+      "description": "TypeScript uses decorators while C++ has template metaprogramming.",
+      "why": "TypeScript: decorators (experimental). C++: templates Turing-complete! C++ templates incredibly powerful but complex. TypeScript simpler. Both compile-time. C++ more established. TypeScript more accessible.",
+      "keyPoints": [
+        "TypeScript: decorators",
+        "C++: templates",
+        "C++ Turing-complete",
+        "TypeScript simpler",
+        "C++ more powerful"
+      ]
+    },
+    "duck-typing": {
+      "description": "TypeScript uses structural typing while C++ uses templates and virtual functions.",
+      "why": "TypeScript: structural typing at compile time! C++: templates (compile-time) + virtual (runtime). TypeScript approach cleaner. C++ more complex. TypeScript modern. C++ traditional. TypeScript more elegant.",
+      "keyPoints": [
+        "TypeScript: structural",
+        "C++: templates + virtual",
+        "TypeScript cleaner",
+        "C++ more complex",
+        "TypeScript more modern"
+      ]
+    }
+  }
+}
+
+

@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "cpp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Java was designed as a simpler alternative to C++, both requiring boilerplate but with different philosophies.",
+      "why": "Java was literally created to be simpler than C++! Both need main functions. C++ uses cout, Java uses System.out.println. Java compiles to bytecode for JVM. C++ compiles to native machine code. Java has garbage collection. C++ requires manual memory management. Java: 'write once, run anywhere'. C++: maximum performance.",
+      "keyPoints": [
+        "Java created as simpler C++",
+        "C++ compiles to native code",
+        "Java has garbage collection",
+        "C++ manual memory management",
+        "Different goals: portability vs performance"
+      ]
+    },
+    "variables": {
+      "description": "Both statically typed, but Java has automatic memory management while C++ offers manual control.",
+      "why": "Both require explicit types. Java has var (Java 10+), C++ has auto. Java handles memory automatically. C++ requires new/delete. C++ has references and pointers. Java only has references (no pointers). C++ offers more control. Java is safer by default.",
+      "keyPoints": [
+        "Both statically typed",
+        "C++ has pointers, Java doesn't",
+        "C++ requires manual memory management",
+        "Java automatic garbage collection",
+        "Control vs safety trade-off"
+      ]
+    },
+    "strings": {
+      "description": "Java's String class is simpler while C++ offers std::string and C-style strings.",
+      "why": "Java has simple String class. C++ has std::string AND C-style char*. Java strings immutable. C++ strings mutable. C++ more complex but more flexible. Java's approach safer. C++ can optimize better. Both have string builders for concatenation.",
+      "keyPoints": [
+        "C++ has std::string and char*",
+        "Java just has String",
+        "Java strings immutable",
+        "C++ more complex",
+        "C++ offers more control"
+      ]
+    },
+    "conditionals": {
+      "description": "Very similar conditional syntax, both using braces and parentheses.",
+      "why": "Nearly identical syntax! Both use if/else if/else. Both have ternary operator. Both use braces. Java enforces braces for multi-statement blocks. C++ allows skipping braces (dangerous). Very similar coming from same C heritage.",
+      "keyPoints": [
+        "Nearly identical syntax",
+        "Both from C heritage",
+        "Java enforces some safety",
+        "C++ more permissive",
+        "Very similar usage"
+      ]
+    },
+    "case-statements": {
+      "description": "Both have traditional switch statements with similar limitations.",
+      "why": "Both have traditional C-style switch. Both need break statements. Java switch improved in Java 14+. C++ switch limited to integral types. C++ can use enums effectively. Both verbose compared to modern languages. Java's new switch expressions cleaner.",
+      "keyPoints": [
+        "Both have traditional switch",
+        "Both need break statements",
+        "Java 14+ has expressions",
+        "Both limited compared to modern languages",
+        "Similar limitations"
+      ]
+    },
+    "arrays": {
+      "description": "Java has simpler arrays with ArrayList while C++ offers multiple container types.",
+      "why": "Java: arrays and ArrayList. C++ has arrays, std::array, and std::vector. C++ offers more container types (list, deque, etc.). Java's approach simpler. C++ offers fine-grained control. Both have dynamic vectors. C++ vector more flexible.",
+      "keyPoints": [
+        "C++ offers more container types",
+        "Java simpler",
+        "Both have dynamic arrays",
+        "C++ more control",
+        "Java easier to use"
+      ]
+    },
+    "hashes": {
+      "description": "Both have HashMap but C++ offers map and unordered_map with different trade-offs.",
+      "why": "Java has HashMap. C++ has map (ordered, tree) and unordered_map (hash). C++ offers choice: order vs speed. Java's HashMap is hash-based. C++ iterators more powerful. Java's approach simpler. C++ more flexible.",
+      "keyPoints": [
+        "C++ offers map and unordered_map",
+        "Java just HashMap",
+        "C++ offers ordering choice",
+        "Java simpler",
+        "C++ more options"
+      ]
+    },
+    "iteration": {
+      "description": "Both support range-based for loops, with C++ offering more control through iterators.",
+      "why": "Java has enhanced for loop (Java 5+). C++ has range-based for (C++11). Both support traditional for loops. C++ has powerful iterators. C++ offers more fine-grained control. Java's approach simpler. Very similar surface syntax.",
+      "keyPoints": [
+        "Similar range-based for",
+        "C++ has iterators",
+        "Both support traditional for",
+        "C++ more control",
+        "Similar usage"
+      ]
+    },
+    "filtering": {
+      "description": "Java has streams while C++ uses STL algorithms and lambdas.",
+      "why": "Java has Stream API (Java 8+). C++ has STL algorithms (since C++98, lambdas C++11). C++ ranges in C++20. Both support functional operations. C++ algorithms more verbose. Java streams more intuitive. C++ can be zero-cost.",
+      "keyPoints": [
+        "Java: Stream API",
+        "C++: STL algorithms",
+        "Both support functional style",
+        "C++ more verbose",
+        "C++ can be zero-cost"
+      ]
+    },
+    "classes": {
+      "description": "Both have traditional OOP, but C++ requires explicit memory management for objects.",
+      "why": "Both full OOP languages! C++ requires copy/move constructors and destructors. Java handles this automatically. C++ has RAII pattern. Java has garbage collection. C++ offers more control. Java is safer. Both use virtual methods for polymorphism.",
+      "keyPoints": [
+        "Both full OOP",
+        "C++ requires copy/move/destructor",
+        "C++ has RAII",
+        "Java automatic GC",
+        "Control vs safety"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both use explicit getter/setter methods with similar verbosity.",
+      "why": "Both use getXxx/setXxx pattern! Very similar verbosity. C++ uses const for getter methods. Java doesn't. Both emphasize encapsulation. Neither has automatic property generation. Both equally verbose here.",
+      "keyPoints": [
+        "Both use get/set pattern",
+        "Similar verbosity",
+        "C++ uses const methods",
+        "Both emphasize encapsulation",
+        "Very similar"
+      ]
+    },
+    "inheritance": {
+      "description": "Both support inheritance, but C++ allows multiple inheritance while Java uses interfaces.",
+      "why": "Java has single inheritance + interfaces. C++ has full multiple inheritance. C++ has diamond problem. Java avoids it with interfaces. C++ uses virtual keyword for polymorphism. Java's approach safer. C++ more powerful but dangerous.",
+      "keyPoints": [
+        "C++ has multiple inheritance",
+        "Java single + interfaces",
+        "C++ has diamond problem",
+        "Java approach safer",
+        "C++ more powerful"
+      ]
+    },
+    "modules": {
+      "description": "Both use interfaces/abstract classes, but C++ allows multiple inheritance.",
+      "why": "Java has interfaces. C++ has abstract classes (pure virtual). C++ can inherit multiple classes. Java only interfaces. C++ more flexible but complex. Java safer. Both achieve polymorphism. Different approaches to same goal.",
+      "keyPoints": [
+        "Java: interfaces",
+        "C++: abstract classes",
+        "C++ allows multiple inheritance",
+        "Java approach safer",
+        "Both achieve polymorphism"
+      ]
+    },
+    "file-io": {
+      "description": "Java uses try-with-resources while C++ uses RAII for automatic cleanup.",
+      "why": "Java uses try-with-resources for auto-close. C++ uses RAII (files close when out of scope). Java's streams are complex. C++ fstreams also complex. Both ensure cleanup. C++ RAII more automatic. Java more explicit. Different philosophies.",
+      "keyPoints": [
+        "Java: try-with-resources",
+        "C++: RAII",
+        "Both ensure cleanup",
+        "Both somewhat complex",
+        "Different mechanisms"
+      ]
+    },
+    "json": {
+      "description": "Both need external libraries, with Java having more mature ecosystem.",
+      "why": "Neither has built-in JSON! Java uses Jackson, Gson. C++ uses nlohmann/json, RapidJSON. Java's libraries more mature. C++ libraries catching up. Both use annotations/reflection. Java ecosystem richer. C++ faster but less convenient.",
+      "keyPoints": [
+        "Neither has built-in JSON",
+        "Java: Jackson/Gson",
+        "C++: nlohmann/json",
+        "Java ecosystem richer",
+        "C++ faster"
+      ]
+    },
+    "threading": {
+      "description": "Both have threading, but Java's is simpler while C++ offers more low-level control.",
+      "why": "Java has Thread class since Java 1.0. C++ added std::thread in C++11. Java's threading simpler. C++ offers more control. Both have mutexes and locks. Java synchronized keyword. C++ lock_guard/unique_lock. C++ more verbose but flexible.",
+      "keyPoints": [
+        "Java threading older/simpler",
+        "C++ std::thread newer",
+        "Java: synchronized keyword",
+        "C++: lock_guard/unique_lock",
+        "C++ more control"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Java uses runtime reflection while C++ has powerful compile-time templates.",
+      "why": "Java has reflection at runtime. C++ has templates at compile time! C++ templates Turing-complete. Java reflection limited. C++ template metaprogramming powerful but complex. Java simpler. C++ zero runtime cost. Compile-time vs runtime.",
+      "keyPoints": [
+        "Java: runtime reflection",
+        "C++: compile-time templates",
+        "C++ templates Turing-complete",
+        "C++ zero runtime cost",
+        "C++ more powerful but complex"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both use static typing with inheritance and polymorphism.",
+      "why": "Both statically typed with interfaces/abstract classes. Java uses interfaces for polymorphism. C++ uses virtual functions. C++ also has templates for compile-time polymorphism. Java's approach simpler. C++ offers both runtime and compile-time polymorphism.",
+      "keyPoints": [
+        "Both statically typed",
+        "Java: interfaces",
+        "C++: virtual functions + templates",
+        "C++ has compile-time polymorphism",
+        "C++ more options"
+      ]
+    }
+  }
+}
+

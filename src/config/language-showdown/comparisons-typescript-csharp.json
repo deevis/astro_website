@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "typescript",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both Microsoft languages! TypeScript compiles to JavaScript, C# to native/MSIL.",
+      "why": "Both from Microsoft! But completely different purposes. TypeScript for web/Node. C# for .NET/backend. TypeScript much simpler (no class needed). C# more traditional. TypeScript gradual typing. C# strong typing. Different ecosystems.",
+      "keyPoints": [
+        "Both Microsoft!",
+        "Different purposes",
+        "TypeScript for web",
+        "C# for backend",
+        "Different ecosystems"
+      ]
+    },
+    "variables": {
+      "description": "TypeScript has optional types, C# requires them. Both have type inference.",
+      "why": "BIG DIFFERENCE! TypeScript types are optional. C# types required (except var). TypeScript more flexible. C# more strict. Both have nullable (? suffix). TypeScript 'any' escapes type system. C# dynamic similar. TypeScript gradual typing. C# strong typing. Different philosophies!",
+      "keyPoints": [
+        "TypeScript: optional types!",
+        "C#: required types",
+        "TypeScript more flexible",
+        "C# more strict",
+        "Different philosophies"
+      ]
+    },
+    "strings": {
+      "description": "Both have excellent string interpolation! TypeScript template literals, C# interpolated strings.",
+      "why": "Both have great string interpolation! TypeScript `${var}` vs C# $\"{var}\" - nearly identical! Both influenced by same ideas. C# got it in 2015, TypeScript had it from JavaScript. Both have rich string methods. Very similar. Both excellent!",
+      "keyPoints": [
+        "Both excellent!",
+        "Nearly identical syntax",
+        "TypeScript: `${}`",
+        "C#: $\"{}\"",
+        "Both modern"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, both have type guards/pattern matching.",
+      "why": "Similar if/else syntax. TypeScript type guards narrow types. C# pattern matching in if. TypeScript optional chaining (?.) C# has it too! TypeScript nullish coalescing (??). C# has it too! Very similar modern features. Microsoft cross-pollination!",
+      "keyPoints": [
+        "Very similar!",
+        "Both have ?.  and ??",
+        "TypeScript: type guards",
+        "C#: pattern matching",
+        "Microsoft cross-pollination"
+      ]
+    },
+    "case-statements": {
+      "description": "TypeScript switch is traditional, C# switch expressions are more powerful.",
+      "why": "TypeScript switch traditional with breaks. C# switch expressions (C# 8+) far more powerful! C# pattern matching, ranges, types. TypeScript discriminated unions help. C# switch more advanced. TypeScript simpler. C# more features.",
+      "keyPoints": [
+        "C# more powerful",
+        "C# pattern matching",
+        "TypeScript: discriminated unions",
+        "C# more features",
+        "TypeScript simpler"
+      ]
+    },
+    "arrays": {
+      "description": "TypeScript arrays simpler, C# has LINQ and more features.",
+      "why": "TypeScript arrays simple with methods. C# List<T> with LINQ powerful. TypeScript .filter()/.map(). C# .Where()/.Select(). Very similar! C# index from end (^1) brilliant. TypeScript doesn't have that. C# more features. TypeScript simpler.",
+      "keyPoints": [
+        "Very similar!",
+        "C# has LINQ",
+        "C# index from end (^1)",
+        "TypeScript simpler",
+        "C# more features"
+      ]
+    },
+    "hashes": {
+      "description": "TypeScript objects are simpler, C# Dictionary is more structured.",
+      "why": "TypeScript objects/Map flexible. C# Dictionary<K,V> strongly typed. TypeScript more dynamic. C# more structured. TypeScript easier. C# safer. Both have similar methods. Different type systems.",
+      "keyPoints": [
+        "TypeScript more flexible",
+        "C# more structured",
+        "TypeScript dynamic",
+        "C# strongly typed",
+        "Different approaches"
+      ]
+    },
+    "iteration": {
+      "description": "TypeScript has multiple options, C# foreach is cleaner.",
+      "why": "TypeScript for...of, forEach, map. C# foreach cleaner syntax! C# LINQ vs TypeScript methods - very similar. Both modern. Both functional. TypeScript more options. C# more consistent. Very similar overall.",
+      "keyPoints": [
+        "Very similar",
+        "C# foreach cleaner",
+        "Both functional",
+        "TypeScript more options",
+        "Both modern"
+      ]
+    },
+    "filtering": {
+      "description": "TypeScript .filter()/.map() vs C# LINQ - very similar!",
+      "why": "VERY SIMILAR! TypeScript .filter()/.map(). C# .Where()/.Select(). Same concepts, different names! LINQ came first (2007). TypeScript learned from it. Both chain operations. Both functional. Microsoft consistency! Almost identical.",
+      "keyPoints": [
+        "VERY SIMILAR!",
+        "Same concepts",
+        "LINQ came first",
+        "Both functional",
+        "Microsoft consistency"
+      ]
+    },
+    "classes": {
+      "description": "TypeScript has JavaScript classes, C# has full OOP.",
+      "why": "TypeScript JavaScript classes simpler. C# full OOP features. TypeScript less verbose. C# more features (properties, expression-bodied). TypeScript public by default. C# private by default. Both have constructors. C# more traditional OOP.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "C# more features",
+        "TypeScript public default",
+        "C# private default",
+        "Different approaches"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both have get/set syntax! TypeScript from JavaScript, C# properties.",
+      "why": "Both have get/set! TypeScript get/set from JavaScript. C# properties (get; set;) automatic. Very similar syntax! C# properties more powerful. TypeScript simpler. Both avoid verbose methods. Microsoft design consistency! Both excellent.",
+      "keyPoints": [
+        "Both excellent!",
+        "Very similar syntax",
+        "C# automatic properties",
+        "TypeScript from JS",
+        "Microsoft consistency"
+      ]
+    },
+    "inheritance": {
+      "description": "TypeScript extends, C# uses colon. Both single inheritance.",
+      "why": "TypeScript extends. C# uses :. TypeScript from JavaScript. C# from Java tradition. Both single inheritance + interfaces. C# requires virtual/override. TypeScript simpler. C# more explicit. Similar functionality.",
+      "keyPoints": [
+        "Similar functionality",
+        "Different syntax",
+        "Both single inheritance",
+        "C# more explicit",
+        "TypeScript simpler"
+      ]
+    },
+    "modules": {
+      "description": "TypeScript structural typing vs C# nominal interfaces - fundamental difference!",
+      "why": "HUGE DIFFERENCE! TypeScript structural typing (duck typing with types). C# nominal typing (must implement interface). TypeScript more flexible. C# more explicit. TypeScript brilliant approach! C# traditional. Fundamental philosophy difference!",
+      "keyPoints": [
+        "HUGE DIFFERENCE!",
+        "TypeScript: structural!",
+        "C#: nominal",
+        "TypeScript more flexible",
+        "Different philosophies"
+      ]
+    },
+    "file-io": {
+      "description": "TypeScript async/await with Node, C# has similar async but different APIs.",
+      "why": "TypeScript async/await with Node fs. C# async/await too! Both have async/await! C# File class simpler for sync. TypeScript promises for async. C# Task-based. Very similar async models! Microsoft influenced both. Different APIs, same concepts.",
+      "keyPoints": [
+        "Both have async/await!",
+        "Similar models",
+        "Different APIs",
+        "Microsoft influenced both",
+        "Very similar"
+      ]
+    },
+    "json": {
+      "description": "TypeScript JSON built-in, C# needs library (but has System.Text.Json).",
+      "why": "TypeScript JSON.parse built-in (from JavaScript). C# System.Text.Json or Newtonsoft.Json. TypeScript simpler. C# type-safe deserialization. TypeScript more convenient. C# more structured. Both work well.",
+      "keyPoints": [
+        "TypeScript built-in",
+        "C# needs library",
+        "TypeScript simpler",
+        "C# more structured",
+        "Both work well"
+      ]
+    },
+    "threading": {
+      "description": "TypeScript single-threaded with async, C# multi-threaded with async/await.",
+      "why": "Different concurrency models! TypeScript single-threaded event loop. C# true multi-threading. BUT both have async/await! C# async/await (2012) influenced JavaScript! TypeScript for I/O. C# for CPU parallelism. Microsoft pioneered async/await!",
+      "keyPoints": [
+        "Both async/await!",
+        "C# pioneered it!",
+        "TypeScript single-thread",
+        "C# multi-thread",
+        "Different models"
+      ]
+    },
+    "metaprogramming": {
+      "description": "TypeScript decorators vs C# attributes - both experimental/established.",
+      "why": "TypeScript decorators (experimental). C# attributes (established). TypeScript compile-time. C# runtime/compile-time (source generators). C# more established. TypeScript more experimental. Both enable metaprogramming. C# more mature.",
+      "keyPoints": [
+        "TypeScript: decorators",
+        "C#: attributes",
+        "C# more established",
+        "Both metaprogramming",
+        "C# more mature"
+      ]
+    },
+    "duck-typing": {
+      "description": "TypeScript structural typing is brilliant! C# uses interfaces but has dynamic.",
+      "why": "TypeScript structural typing brilliant! C# nominal typing traditional. BUT C# has dynamic for duck typing! TypeScript compile-time duck typing. C# runtime duck typing with dynamic. TypeScript more elegant. C# more explicit. Different approaches!",
+      "keyPoints": [
+        "TypeScript structural!",
+        "C# nominal",
+        "C# has dynamic type",
+        "Different approaches",
+        "Both enable flexibility"
+      ]
+    }
+  }
+}

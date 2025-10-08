@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "python",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both minimize ceremony, but Python uses a function call while Ruby uses a method.",
+      "why": "Both are one-liners with no boilerplate. Ruby uses 'puts', Python uses 'print()'. Both are interpreted languages emphasizing developer happiness. Ruby reads like natural language, Python emphasizes explicit is better than implicit. Both eliminate the ceremony of compiled languages.",
+      "keyPoints": [
+        "Both are simple one-liners",
+        "puts vs print()",
+        "Both interpreted languages",
+        "Ruby emphasizes naturalness",
+        "Python emphasizes explicitness"
+      ]
+    },
+    "variables": {
+      "description": "Both are dynamically typed with no declarations, but use different naming conventions.",
+      "why": "Both are dynamically typed - no type declarations needed. Ruby uses snake_case, Python uses snake_case (they agree!). Both use UPPERCASE for constants. Ruby constants aren't truly immutable. Everything is an object in both. Very similar approaches to variables.",
+      "keyPoints": [
+        "Both dynamically typed",
+        "Both use snake_case",
+        "Both use UPPERCASE for constants",
+        "Everything is an object in both",
+        "Very similar philosophies"
+      ]
+    },
+    "strings": {
+      "description": "Both offer elegant string interpolation and rich methods, with slightly different syntax.",
+      "why": "Ruby uses #{} for interpolation, Python uses f\"{}\". Both have rich string methods. Ruby's are methods (.upcase), Python's are also methods (.upper()). Both have immutable strings. Ruby's approach is slightly more method-heavy, Python's is slightly more functional.",
+      "keyPoints": [
+        "Ruby: #{}, Python: f\"{}\"",
+        "Both have rich string methods",
+        "Both strings immutable",
+        "Similar capabilities",
+        "Different interpolation syntax"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby uses end keywords while Python uses indentation; Ruby offers more syntactic variety.",
+      "why": "Ruby uses end to close blocks, Python uses indentation. Ruby has unless and statement modifiers, Python doesn't. Both don't require parentheses. Ruby has more ways to express conditions. Python enforces one obvious way. Both have ternary operators with different syntax.",
+      "keyPoints": [
+        "Ruby uses end, Python uses indentation",
+        "Ruby has unless and modifiers",
+        "Python enforces single style",
+        "Both have ternary operators",
+        "Ruby offers more flexibility"
+      ]
+    },
+    "case-statements": {
+      "description": "Both have powerful case statements without breaks, using different matching mechanisms.",
+      "why": "Ruby's case/when uses === operator for matching. Python's match/case (3.10+) uses pattern matching. Both don't need break statements. Ruby can match ranges, regex, classes. Python has destructuring and guards. Both are more powerful than traditional switches.",
+      "keyPoints": [
+        "Ruby uses ===, Python uses patterns",
+        "Neither needs break",
+        "Ruby matches ranges and regex",
+        "Python has destructuring",
+        "Both very powerful"
+      ]
+    },
+    "arrays": {
+      "description": "Both have dynamic arrays with powerful operations, using different method names.",
+      "why": "Ruby calls them arrays, Python calls them lists. Ruby uses <<, Python uses .append(). Both support negative indices. Ruby's slicing uses ranges (1..3), Python uses colons (1:4). Both have rich methods. Very similar capabilities with different syntax.",
+      "keyPoints": [
+        "Arrays vs lists (same concept)",
+        "<< vs .append()",
+        "Both support negative indices",
+        "Different slicing syntax",
+        "Similar capabilities"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby hashes use symbols for keys while Python dictionaries use any hashable type.",
+      "why": "Ruby hashes often use symbols (:key), Python dicts use strings or any hashable. Ruby's => (hash rocket) or symbol: value syntax. Python uses colons {:}. Both have comprehensions (Ruby 2.1+). Both maintain insertion order. Very similar data structures.",
+      "keyPoints": [
+        "Ruby uses symbols, Python uses strings",
+        "Different literal syntax",
+        "Both have comprehensions",
+        "Both maintain insertion order",
+        "Similar functionality"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby's blocks provide elegant iteration while Python uses for loops and enumerate.",
+      "why": "Ruby's .each with blocks is idiomatic. Python's for...in is simpler. Ruby has each_with_index, Python has enumerate(). Ruby's times/upto for counting. Python's range(). Ruby emphasizes blocks, Python emphasizes loops. Both are elegant in their own way.",
+      "keyPoints": [
+        ".each vs for...in",
+        "each_with_index vs enumerate()",
+        "Ruby blocks vs Python functions",
+        "times/upto vs range()",
+        "Different philosophies"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby uses select/map/reject while Python uses list comprehensions primarily.",
+      "why": "Ruby's .select/.map/.reject are idiomatic. Python's list comprehensions are idiomatic. Ruby chains methods, Python uses comprehensions. Both support functional operations. Ruby's approach is more method-based, Python's is more syntax-based. Both are concise and readable.",
+      "keyPoints": [
+        "Ruby: .select/.map, Python: comprehensions",
+        "Both support functional operations",
+        "Ruby chains methods",
+        "Python uses special syntax",
+        "Both concise and readable"
+      ]
+    },
+    "classes": {
+      "description": "Both have simple class syntax, using initialize vs __init__ for constructors.",
+      "why": "Ruby uses initialize, Python uses __init__. Ruby uses @instance_var, Python uses self.instance_var. Ruby's self is implicit, Python's is explicit. Both support instance and class methods. Python's explicit self is more consistent with its philosophy.",
+      "keyPoints": [
+        "initialize vs __init__",
+        "@var vs self.var",
+        "Ruby's implicit vs Python's explicit self",
+        "Both support OOP well",
+        "Different naming conventions"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby's attr_accessor is more concise while Python's @property is more explicit.",
+      "why": "Ruby's attr_accessor is metaprogramming magic - one line creates both. Python's @property decorator is more explicit. Ruby's approach is more DRY. Python's approach is more readable. Both eliminate boilerplate compared to manual methods. Different philosophies showing.",
+      "keyPoints": [
+        "attr_accessor vs @property",
+        "Ruby is more magical",
+        "Python is more explicit",
+        "Both eliminate boilerplate",
+        "Different approaches to same problem"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses single inheritance with modules while Python supports multiple inheritance.",
+      "why": "Ruby has single inheritance with < operator. Python supports multiple inheritance with parentheses. Ruby uses modules for mixins. Python uses multiple inheritance directly. Ruby's approach avoids diamond problem. Python's approach is more flexible but riskier.",
+      "keyPoints": [
+        "Ruby: single + modules",
+        "Python: multiple inheritance",
+        "Ruby uses < operator",
+        "Python lists parents in ()",
+        "Different approaches to code reuse"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide mixins while Python uses multiple inheritance and abstract base classes.",
+      "why": "Ruby's modules with include/extend are powerful mixins. Python uses multiple inheritance for similar effect. Python has ABC (Abstract Base Classes) for interfaces. Ruby's modules can have implementation. Both support code reuse but differently.",
+      "keyPoints": [
+        "Ruby: modules with include/extend",
+        "Python: multiple inheritance + ABC",
+        "Both enable code reuse",
+        "Different mechanisms",
+        "Both powerful approaches"
+      ]
+    },
+    "file-io": {
+      "description": "Both provide simple file I/O with automatic cleanup through blocks and with statements.",
+      "why": "Ruby's File.read/write are one-liners. Python's with open() is idiomatic. Ruby blocks auto-close, Python's with auto-closes. Both have elegant solutions. Ruby's pathlib equivalent is Pathname. Very similar approaches to file I/O.",
+      "keyPoints": [
+        "File.read vs with open()",
+        "Both auto-close files",
+        "Both have one-liner options",
+        "Very similar capabilities",
+        "Both elegant and safe"
+      ]
+    },
+    "json": {
+      "description": "Both have simple JSON in standard library, converting directly to native data structures.",
+      "why": "Both have json in standard library. Ruby's JSON.parse returns Hashes. Python's json.loads returns dicts. Both convert seamlessly to native structures. Ruby can use symbolize_names for symbols. Python's approach is slightly more straightforward. Very similar.",
+      "keyPoints": [
+        "Both in standard library",
+        "JSON.parse vs json.loads",
+        "Both return native structures",
+        "Very similar approaches",
+        "Both simple and effective"
+      ]
+    },
+    "threading": {
+      "description": "Both languages have GIL limitations, but with different implications and workarounds.",
+      "why": "Both have Global Interpreter Locks! Ruby's MRI GIL, Python's CPython GIL. Both limit CPU parallelism. Ruby's Mutex#synchronize, Python's with lock:. Both need multiprocessing for CPU tasks. JRuby and Jython remove GIL. Very similar threading situations.",
+      "keyPoints": [
+        "Both have GIL!",
+        "Both limit CPU parallelism",
+        "Similar threading APIs",
+        "Both use multiprocessing for CPU",
+        "Very similar situations"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby excels at metaprogramming while Python is more conservative with decorators and metaclasses.",
+      "why": "Ruby is built for metaprogramming - method_missing, define_method, open classes. Python has decorators and metaclasses but is more conservative. Ruby can modify anything. Python is more cautious. Ruby's is more powerful, Python's is more controlled.",
+      "keyPoints": [
+        "Ruby has more metaprogramming",
+        "Python has decorators/metaclasses",
+        "Ruby can modify anything",
+        "Python is more conservative",
+        "Ruby more powerful, Python more controlled"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both embrace duck typing, but Python adds optional type hints while Ruby stays dynamic.",
+      "why": "Both use duck typing at runtime. Ruby's respond_to?, Python's hasattr(). Python added optional type hints (PEP 484). Ruby stays purely dynamic. Python's type hints help tooling. Ruby relies on tests. Python moving toward optional static typing.",
+      "keyPoints": [
+        "Both embrace duck typing",
+        "Ruby: respond_to?, Python: hasattr()",
+        "Python has optional type hints",
+        "Ruby stays purely dynamic",
+        "Python adding gradual typing"
+      ]
+    }
+  }
+}
+

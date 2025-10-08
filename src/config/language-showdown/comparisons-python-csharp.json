@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "python",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Python's simplicity vs C#'s enterprise structure.",
+      "why": "Python one line! C# needs class and Main. Python interpreted. C# compiled to .NET. Python for scripting, data science. C# for enterprise. Huge verbosity difference. Different use cases!",
+      "keyPoints": [
+        "Python one line!",
+        "C# needs structure",
+        "Python interpreted",
+        "C# compiled",
+        "Different use cases"
+      ]
+    },
+    "variables": {
+      "description": "Python dynamic typing vs C# static typing.",
+      "why": "Python dynamically typed. C# statically typed. Python no type declarations (optional hints). C# requires types (or var). Python more flexible. C# more safe. Python duck typing. C# compile-time checking. Fundamental difference!",
+      "keyPoints": [
+        "Fundamental difference",
+        "Python: dynamic",
+        "C#: static",
+        "Python flexible",
+        "C# safe"
+      ]
+    },
+    "strings": {
+      "description": "Both have excellent string interpolation!",
+      "why": "Both excellent! Python f\"{var}\". C# $\"{var}\". Nearly identical! Both modern. Python simpler overall. C# StringBuilder for performance. Very similar features!",
+      "keyPoints": [
+        "Both excellent!",
+        "Nearly identical",
+        "Python: f\"{}\"",
+        "C#: $\"{}\"",
+        "Very similar"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses indentation, C# uses braces.",
+      "why": "Python indentation-based! C# braces. Python no parentheses needed. C# requires them. Python elif. C# else if. Python more concise. C# more traditional. Different syntax styles!",
+      "keyPoints": [
+        "Different syntax!",
+        "Python: indentation",
+        "C#: braces",
+        "Python more concise",
+        "C# more traditional"
+      ]
+    },
+    "case-statements": {
+      "description": "Python match (3.10+) vs C# switch expressions.",
+      "why": "Python match (Python 3.10+) new! C# switch expressions (C# 8+). Both modern pattern matching! Python inspired by other languages. C# evolved. Both powerful! Python match cleaner. C# more mature.",
+      "keyPoints": [
+        "Both modern!",
+        "Python: match (new)",
+        "C#: switch expressions",
+        "Both pattern matching",
+        "Both powerful"
+      ]
+    },
+    "arrays": {
+      "description": "Python lists simple, C# List<T> with LINQ structured.",
+      "why": "Python lists simple and flexible. C# List<T> strongly typed with LINQ. Python mixed types. C# single type. Python more flexible. C# more structured. Python easier. C# safer.",
+      "keyPoints": [
+        "Python simpler",
+        "C# more structured",
+        "Python: mixed types",
+        "C#: LINQ",
+        "Different approaches"
+      ]
+    },
+    "hashes": {
+      "description": "Python dicts simple, C# Dictionary typed.",
+      "why": "Python dicts simple and flexible. C# Dictionary<K,V> strongly typed. Python more convenient. C# more structured. Python any key type (hashable). C# typed keys/values. Different philosophies!",
+      "keyPoints": [
+        "Python simpler",
+        "C# more structured",
+        "Python flexible",
+        "C# type-safe",
+        "Different philosophies"
+      ]
+    },
+    "iteration": {
+      "description": "Python for...in simple, C# foreach/LINQ powerful.",
+      "why": "Python for...in elegant. C# foreach similar! Python enumerate(). C# Select with index. Python list comprehensions! C# LINQ. Both powerful! Python syntax cleaner. C# more structured.",
+      "keyPoints": [
+        "Both powerful!",
+        "Python simpler syntax",
+        "C# more structured",
+        "Python: comprehensions",
+        "C#: LINQ"
+      ]
+    },
+    "filtering": {
+      "description": "Python list comprehensions vs C# LINQ - similar concepts!",
+      "why": "Python list comprehensions elegant! C# LINQ powerful! [x for x in list if condition] vs .Where().Select(). Similar concepts! Python more concise. C# more explicit. Both functional! Very similar!",
+      "keyPoints": [
+        "Very similar!",
+        "Similar concepts",
+        "Python more concise",
+        "C# more explicit",
+        "Both functional"
+      ]
+    },
+    "classes": {
+      "description": "Python simple classes, C# full OOP with properties.",
+      "why": "Python __init__ vs C# constructor. Python self vs C# this. Python simpler. C# more features (properties). Python public by default. C# private by default. Python easier. C# more structured.",
+      "keyPoints": [
+        "Python simpler",
+        "C# more features",
+        "Python: __init__",
+        "C#: properties",
+        "Different complexity"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python @property vs C# properties - both elegant!",
+      "why": "Python @property decorator elegant! C# properties (get; set;) automatic! Both avoid verbose methods! Python more flexible. C# cleaner syntax. Both excellent! Different approaches, similar results.",
+      "keyPoints": [
+        "Both excellent!",
+        "Python: @property",
+        "C#: get; set;",
+        "Both avoid boilerplate",
+        "Different approaches"
+      ]
+    },
+    "inheritance": {
+      "description": "Python simple inheritance, C# requires virtual/override.",
+      "why": "Python simple inheritance. C# requires virtual/override keywords. Python simpler. C# more explicit and safer. Python allows override by default. C# requires declaration. C# more structured.",
+      "keyPoints": [
+        "Python simpler",
+        "C# more explicit",
+        "C# safer",
+        "Python easier",
+        "Different approaches"
+      ]
+    },
+    "modules": {
+      "description": "Python duck typing vs C# interfaces.",
+      "why": "Python embraces duck typing! C# uses interfaces. Python more flexible. C# more structured. Python no declarations needed. C# explicit interfaces. Fundamental philosophy difference!",
+      "keyPoints": [
+        "Fundamental difference",
+        "Python: duck typing",
+        "C#: interfaces",
+        "Python flexible",
+        "C# structured"
+      ]
+    },
+    "file-io": {
+      "description": "Both have simple file operations!",
+      "why": "Python with open() elegant. C# File.ReadAllText simple. Both have one-liners! Python with statement. C# using statement. Very similar! Both auto-close. Almost identical simplicity!",
+      "keyPoints": [
+        "Very similar!",
+        "Both one-liners",
+        "Both auto-close",
+        "Almost identical",
+        "Both simple"
+      ]
+    },
+    "json": {
+      "description": "Python json module simple, C# more structured.",
+      "why": "Python json.loads/dumps simple! C# System.Text.Json or Newtonsoft. Python returns dict. C# deserializes to classes. Python more dynamic. C# more structured. Python simpler. C# type-safe.",
+      "keyPoints": [
+        "Python simpler",
+        "C# more structured",
+        "Python: dict",
+        "C#: classes",
+        "Different approaches"
+      ]
+    },
+    "threading": {
+      "description": "Python GIL limits threading, C# true multi-threading powerful.",
+      "why": "Python GIL limits true parallelism! C# true multi-threading. Python asyncio for I/O. C# async/await for everything. C# more powerful. Python simpler for scripting. C# better for parallelism.",
+      "keyPoints": [
+        "C# more powerful",
+        "Python: GIL limitation",
+        "C#: true threading",
+        "Python: asyncio",
+        "C#: async/await"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python metaprogramming flexible, C# more structured.",
+      "why": "Python powerful metaprogramming! __getattr__, decorators, metaclasses. C# reflection, attributes, source generators. Python runtime flexibility. C# compile-time safety. Python more flexible. C# more structured.",
+      "keyPoints": [
+        "Python more flexible",
+        "C# more structured",
+        "Python: runtime",
+        "C#: compile-time",
+        "Both powerful"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python embraces duck typing, C# uses interfaces (or dynamic).",
+      "why": "Python embraces duck typing! C# requires interfaces. BUT C# has dynamic! Python philosophy. C# option. Python more natural. C# more explicit. Different philosophies!",
+      "keyPoints": [
+        "Python embraces it",
+        "C# uses interfaces",
+        "C# has dynamic",
+        "Different philosophies",
+        "Python more natural"
+      ]
+    }
+  }
+}

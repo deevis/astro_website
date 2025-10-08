@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both require class and Main method, but C# is slightly cleaner.",
+      "why": "Java and C# are cousins - both from the same OOP enterprise tradition. C# started as Microsoft's answer to Java but has evolved much faster. C# now has top-level statements (C# 9+) to eliminate boilerplate. C# Main can omit string[] args. Both compile to bytecode (MSIL vs JVM bytecode).",
+      "keyPoints": [
+        "Very similar origins",
+        "C# evolved faster than Java",
+        "C# 9+ has top-level statements",
+        "Both enterprise OOP languages",
+        "C# slightly less verbose"
+      ]
+    },
+    "variables": {
+      "description": "Both strongly typed, but C# has nullable reference types and cleaner syntax.",
+      "why": "Both strongly typed with type inference (var). C# nullable types (int?, string?) prevent null reference exceptions at compile time - Java requires Optional<>. C# const for compile-time constants. Java final for runtime constants. C# var is cleaner than Java's verbose var. C# has init-only properties.",
+      "keyPoints": [
+        "Both strongly typed",
+        "C# nullable types (int?, string?)",
+        "C# prevents null references at compile time",
+        "C# var cleaner syntax",
+        "C# more modern"
+      ]
+    },
+    "strings": {
+      "description": "C# string interpolation is far cleaner than Java's.",
+      "why": "C# string interpolation ($\"{var}\") has been around since C# 6 (2015). Java only got it in Java 21 (2023) with STR template. C# StringBuilder similar to Java. C# strings have cleaner APIs. Both have immutable strings. C# string interpolation is one of its best features!",
+      "keyPoints": [
+        "C# string interpolation since 2015!",
+        "Java just got it in 2023",
+        "C# $\"{var}\" syntax cleaner",
+        "C# evolved faster",
+        "Major C# advantage"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, but C# has null-conditional operators.",
+      "why": "Very similar if/else syntax. C# null-conditional operator (?.) and null-coalescing (??) are brilliant - prevent NullPointerException! Java requires verbose null checks or Optional<>. C# pattern matching in if statements (C# 7+). Both have ternary operators. C# more null-safe.",
+      "keyPoints": [
+        "Similar if/else",
+        "C# null-conditional (?.) brilliant!",
+        "C# null-coalescing (??)",
+        "C# pattern matching in if",
+        "C# more null-safe"
+      ]
+    },
+    "case-statements": {
+      "description": "C# switch expressions far exceed Java's traditional switch.",
+      "why": "Java switch is verbose with break statements. Java 14+ switch expressions better but still limited. C# switch expressions (C# 8+) with pattern matching are brilliant! C# can match on ranges (>= 90), types, properties. C# 'or' keyword for multiple values. No break needed. C# switch is far more powerful.",
+      "keyPoints": [
+        "C# switch expressions brilliant!",
+        "C# pattern matching powerful",
+        "C# no break needed",
+        "C# can match ranges, types",
+        "C# far more advanced"
+      ]
+    },
+    "arrays": {
+      "description": "Very similar, but C# has indices from end (^1) and ranges.",
+      "why": "Java arrays and ArrayList<T> vs C# arrays and List<T> - very similar. C# index from end (^1) is brilliant! C# ranges ([1..3]) elegant. Both have generics. C# LINQ vs Java Streams - LINQ more integrated. C# slightly more modern syntax.",
+      "keyPoints": [
+        "Very similar",
+        "C# index from end (^1)",
+        "C# ranges ([1..3])",
+        "LINQ vs Streams",
+        "C# slightly more modern"
+      ]
+    },
+    "hashes": {
+      "description": "Java HashMap vs C# Dictionary - similar but C# has cleaner syntax.",
+      "why": "Java HashMap<K,V> vs C# Dictionary<K,V> - nearly identical. C# collection initializers cleaner. C# LINQ methods (ToDictionary) vs Java streams. Both strongly typed. C# syntax slightly cleaner. Very similar functionality.",
+      "keyPoints": [
+        "Nearly identical",
+        "C# cleaner initializers",
+        "LINQ vs Streams",
+        "Both strongly typed",
+        "C# slightly cleaner"
+      ]
+    },
+    "iteration": {
+      "description": "Java for-each vs C# foreach - almost identical.",
+      "why": "Java enhanced for loop vs C# foreach - nearly the same! C# foreach slightly cleaner syntax. Java Streams vs C# LINQ - LINQ more integrated into language. C# Select vs Java map. Both very similar. C# LINQ reads better.",
+      "keyPoints": [
+        "Nearly identical",
+        "C# foreach slightly cleaner",
+        "LINQ vs Streams",
+        "LINQ more integrated",
+        "Very similar"
+      ]
+    },
+    "filtering": {
+      "description": "Java Streams vs C# LINQ - LINQ is more elegant and integrated.",
+      "why": "Java Streams (Java 8+) vs C# LINQ (C# 3, 2007!) - LINQ came first! LINQ integrated into language. Where vs filter. Select vs map. LINQ reads more naturally. Java requires .collect(). LINQ more powerful - can query databases, XML, objects. LINQ is superior.",
+      "keyPoints": [
+        "LINQ came first (2007)!",
+        "LINQ more integrated",
+        "LINQ more powerful",
+        "Java requires .collect()",
+        "LINQ is superior"
+      ]
+    },
+    "classes": {
+      "description": "Nearly identical OOP, but C# has properties and records.",
+      "why": "Very similar OOP. C# properties vs Java getters/setters - C# cleaner. C# records (C# 9+) for immutable data. Java records (Java 14+) came later. C# expression-bodied members cleaner. Both very similar overall. C# slightly more modern.",
+      "keyPoints": [
+        "Very similar OOP",
+        "C# properties cleaner",
+        "C# records since 2020",
+        "Java records since 2020",
+        "C# slightly more modern"
+      ]
+    },
+    "getters-setters": {
+      "description": "C# properties are far cleaner than Java's verbose getters/setters.",
+      "why": "THIS IS A HUGE DIFFERENCE! Java requires verbose getXxx/setXxx methods. C# properties (get; set;) are automatic and clean! C# properties look like fields but are methods. C# expression-bodied properties (=>) elegant. Java requires tons of boilerplate. C# wins completely here!",
+      "keyPoints": [
+        "HUGE DIFFERENCE!",
+        "C# properties vs Java methods",
+        "C# automatic (get; set;)",
+        "Java verbose boilerplate",
+        "C# wins completely!"
+      ]
+    },
+    "inheritance": {
+      "description": "Nearly identical single inheritance with similar syntax.",
+      "why": "Java extends vs C# : (colon) - slightly different syntax. Java @Override annotation vs C# override keyword. C# requires virtual/override keywords explicitly. Java allows override by default (dangerous). C# safer. Both single inheritance. Very similar otherwise.",
+      "keyPoints": [
+        "Nearly identical",
+        "C# uses : not extends",
+        "C# requires virtual/override",
+        "C# safer than Java",
+        "Very similar"
+      ]
+    },
+    "modules": {
+      "description": "Java interfaces vs C# interfaces - C# has default implementations.",
+      "why": "Java interfaces vs C# interfaces - very similar. Java default methods (Java 8+) vs C# default interface implementations (C# 8+). C# got it slightly later. Both solve same problem. Both support multiple interfaces. Very similar. Almost identical.",
+      "keyPoints": [
+        "Very similar",
+        "Both have default implementations",
+        "Java 8 vs C# 8",
+        "Both multiple interfaces",
+        "Almost identical"
+      ]
+    },
+    "file-io": {
+      "description": "C# File class is simpler than Java's verbose BufferedReader/Writer.",
+      "why": "C# File.ReadAllText/WriteAllText vs Java BufferedReader/Writer - C# MUCH simpler! C# one-liners vs Java try-with-resources. C# using statement vs Java try-with-resources - similar. C# cleaner for simple cases. Java more explicit. C# wins on simplicity.",
+      "keyPoints": [
+        "C# much simpler!",
+        "C# one-liners",
+        "Java more verbose",
+        "Both auto-close resources",
+        "C# wins simplicity"
+      ]
+    },
+    "json": {
+      "description": "Both need libraries, but C# has System.Text.Json built-in.",
+      "why": "Java needs Jackson/Gson. C# has System.Text.Json built-in (C# 8+) or Newtonsoft.Json (more popular). C# deserialization to classes cleaner with properties. Java needs verbose type references. C# slightly simpler. Both require external libraries (except System.Text.Json). Similar complexity.",
+      "keyPoints": [
+        "C# has built-in System.Text.Json",
+        "Java needs Jackson/Gson",
+        "C# properties cleaner",
+        "Both similar complexity",
+        "C# slight advantage"
+      ]
+    },
+    "threading": {
+      "description": "Similar threading models, but C# Task/async is more modern than Java threads.",
+      "why": "Java synchronized vs C# lock - very similar. Java Thread vs C# Thread - almost identical. BUT C# Task/async/await is MUCH better than Java threads! C# async/await (C# 5, 2012) revolutionary. Java virtual threads (Java 21, 2023) catching up. C# Parallel.For convenient. C# more modern concurrency.",
+      "keyPoints": [
+        "C# lock vs Java synchronized",
+        "C# async/await revolutionary!",
+        "C# Task-based modern",
+        "Java virtual threads catching up",
+        "C# more modern"
+      ]
+    },
+    "metaprogramming": {
+      "description": "C# reflection is cleaner, and source generators exceed Java annotation processing.",
+      "why": "Both have reflection. C# reflection slightly cleaner API. C# attributes vs Java annotations - similar. C# dynamic type allows duck typing! C# expression trees powerful. C# source generators (C# 9+) more powerful than Java annotation processors. C# more metaprogramming options.",
+      "keyPoints": [
+        "Both have reflection",
+        "C# dynamic type!",
+        "C# source generators powerful",
+        "C# expression trees",
+        "C# more options"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both use interfaces, but C# dynamic type enables true duck typing.",
+      "why": "Java requires interfaces (nominal typing). C# also uses interfaces BUT has dynamic type for duck typing! C# dynamic disables compile-time checking for runtime flexibility. Java has no equivalent. C# generic constraints similar to Java. C# more flexible with dynamic.",
+      "keyPoints": [
+        "Both use interfaces",
+        "C# has dynamic type!",
+        "C# enables duck typing",
+        "Java no equivalent",
+        "C# more flexible"
+      ]
+    }
+  }
+}

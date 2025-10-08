@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "java",
+  "rightLanguage": "python",
+  "comparisons": {
+    "hello-world": {
+      "description": "Python's minimalist syntax contrasts sharply with Java's class-based boilerplate.",
+      "why": "Python eliminates all ceremony - no class, no main method, no semicolons. Just one line. Python emphasizes readability and simplicity. Java's structure is necessary for its compilation model but verbose for simple tasks. Python is interpreted, Java is compiled.",
+      "keyPoints": [
+        "Python requires no boilerplate",
+        "Java needs class and main method",
+        "Python is interpreted, Java is compiled",
+        "Python emphasizes readability",
+        "Both use similar print functions"
+      ]
+    },
+    "variables": {
+      "description": "Java requires explicit types while Python uses dynamic typing with no declarations needed.",
+      "why": "Python is dynamically typed - variables don't need type declarations. Java requires explicit types (or var in Java 10+). Python determines type at runtime, Java at compile time. Both use UPPERCASE for constants by convention. Python's everything-is-an-object is similar to Ruby but different from Java's primitives.",
+      "keyPoints": [
+        "Python has no type declarations",
+        "Java requires explicit types",
+        "Python checks types at runtime",
+        "Java catches type errors at compile time",
+        "Trade-off: flexibility vs safety"
+      ]
+    },
+    "strings": {
+      "description": "Python's f-strings and rich methods compare to Java's verbose string manipulation.",
+      "why": "Python's f-strings (f\"Hello {name}\") are cleaner than Java's concatenation or String.format. Both have immutable strings. Python has many built-in methods on strings. Java requires StringBuilder for efficient concatenation. Python's approach is more intuitive and concise.",
+      "keyPoints": [
+        "Python f-strings are cleaner",
+        "Both have immutable strings",
+        "Python has rich built-in methods",
+        "Java needs StringBuilder for efficiency",
+        "Python's * operator repeats strings"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses significant whitespace while Java uses braces, both requiring explicit comparisons.",
+      "why": "Python uses indentation instead of braces - enforces readable code. Both require explicit boolean expressions (no assignment in conditions). Python has elif, Java has else if. Python's ternary is more readable. Python's truthiness rules: False, None, 0, empty containers are falsy.",
+      "keyPoints": [
+        "Python uses indentation, not braces",
+        "Python has elif vs Java's else if",
+        "Both have ternary operators",
+        "Python has different truthiness rules",
+        "Python enforces readable formatting"
+      ]
+    },
+    "case-statements": {
+      "description": "Python 3.10+ adds pattern matching while Java has traditional switch statements.",
+      "why": "Python 3.10 introduced match/case with powerful pattern matching. Before that, Python used if/elif chains. Java has switch (traditional and modern expressions). Python's pattern matching is more powerful - can destructure, use guards. Java's switch is more limited but getting better.",
+      "keyPoints": [
+        "Python match/case is new (3.10+)",
+        "Python has pattern matching with guards",
+        "Java switch is more established",
+        "Python can destructure in patterns",
+        "Before 3.10, Python used if/elif"
+      ]
+    },
+    "arrays": {
+      "description": "Python lists are dynamic with powerful slicing while Java requires ArrayList.",
+      "why": "Python lists are built-in and dynamic. Java needs ArrayList import. Python's slicing is powerful ([::-1] reverses!). Negative indices in Python are convenient. Python lists are more feature-rich. Java's ArrayList requires more boilerplate.",
+      "keyPoints": [
+        "Python lists are built-in and dynamic",
+        "Java needs ArrayList for dynamic arrays",
+        "Python has powerful slicing syntax",
+        "Python supports negative indices",
+        "Python's approach is more concise"
+      ]
+    },
+    "hashes": {
+      "description": "Python dictionaries have clean syntax compared to Java's HashMap verbosity.",
+      "why": "Python dicts are built-in with clean syntax. Java requires HashMap import and type parameters. Python's dictionary comprehensions are powerful. Both support iteration. Python's .get() method is safer than direct access. Java's approach is more verbose but type-safe.",
+      "keyPoints": [
+        "Python dicts are built into language",
+        "Java needs HashMap with generics",
+        "Python has dict comprehensions",
+        "Python's .get() prevents KeyError",
+        "Java provides compile-time type safety"
+      ]
+    },
+    "iteration": {
+      "description": "Python's for loops are simpler while Java offers traditional and enhanced for loops.",
+      "why": "Python's for...in is cleaner than Java's enhanced for. Python's enumerate() for indices is elegant. Python's range() is simpler than Java's IntStream. Python has no traditional C-style for loop. Java offers more variety but Python's approach is more intuitive.",
+      "keyPoints": [
+        "Python's for...in is more intuitive",
+        "enumerate() for index and value",
+        "range() is cleaner than Java's alternatives",
+        "Python has no C-style for loops",
+        "Java offers more loop varieties"
+      ]
+    },
+    "filtering": {
+      "description": "Python's list comprehensions are elegant while Java uses streams for functional operations.",
+      "why": "Python's list comprehensions are idiomatic and readable: [n for n in numbers if n % 2 == 0]. Java requires streams with lambdas and collectors. Python also has filter()/map() but comprehensions are preferred. Both support functional programming but Python's syntax is cleaner.",
+      "keyPoints": [
+        "Python list comprehensions are idiomatic",
+        "Java uses streams API",
+        "Python's syntax is more readable",
+        "Both support functional operations",
+        "Python comprehensions are more Pythonic"
+      ]
+    },
+    "classes": {
+      "description": "Python classes are simpler with __init__ while Java requires more boilerplate.",
+      "why": "Python uses __init__ instead of constructors named like the class. Python's self is explicit. Java's this is implicit. Python doesn't need access modifiers by default. Java requires public/private. Python is less verbose but less strict about encapsulation.",
+      "keyPoints": [
+        "Python uses __init__ not constructors",
+        "self is explicit in Python",
+        "Java requires access modifiers",
+        "Python is less verbose",
+        "Java enforces encapsulation more strictly"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python's @property decorator provides elegant accessors while Java requires verbose get/set methods.",
+      "why": "Python's @property decorator makes getters/setters look like attribute access. Java requires getXxx/setXxx methods. Python's approach is cleaner and more Pythonic. Both support validation in setters. Python often just uses public attributes directly.",
+      "keyPoints": [
+        "Python's @property is elegant",
+        "Java uses get/set conventions",
+        "Python properties look like attributes",
+        "Both support validation",
+        "Python often uses public attributes"
+      ]
+    },
+    "inheritance": {
+      "description": "Both support single and multiple inheritance, but Python allows multiple base classes.",
+      "why": "Python supports multiple inheritance directly. Java allows single inheritance plus interfaces. Python's super() is cleaner. Java's super() requires more ceremony. Python's approach is more flexible but can lead to the diamond problem. Java's is more restricted but safer.",
+      "keyPoints": [
+        "Python supports multiple inheritance",
+        "Java has single inheritance + interfaces",
+        "Python's super() is simpler",
+        "Python is more flexible",
+        "Java's approach avoids diamond problem"
+      ]
+    },
+    "modules": {
+      "description": "Python uses multiple inheritance while Java uses interfaces with explicit implementation.",
+      "why": "Python classes can inherit from multiple classes directly. Java uses interfaces. Python's approach is more flexible but riskier (diamond problem). Java requires explicit implements. Python's duck typing makes 'interfaces' informal. Java's contracts are explicit.",
+      "keyPoints": [
+        "Python has multiple inheritance",
+        "Java uses interfaces",
+        "Python's approach is more flexible",
+        "Java's is more explicit and safe",
+        "Python uses duck typing for protocols"
+      ]
+    },
+    "file-io": {
+      "description": "Python's with statement provides clean resource management like Java's try-with-resources.",
+      "why": "Python's with statement auto-closes files - cleaner syntax than Java's try-with-resources. Python's file operations are simpler. Java requires more verbose BufferedReader/Writer. Both ensure proper cleanup. Python's pathlib is modern and elegant.",
+      "keyPoints": [
+        "Python's with is cleaner",
+        "Java's try-with-resources is verbose",
+        "Python has simpler file operations",
+        "Both ensure proper cleanup",
+        "Python's pathlib is modern"
+      ]
+    },
+    "json": {
+      "description": "Python's json module is simpler while Java requires external libraries with type mappings.",
+      "why": "Python's json module is in standard library and very simple. Java requires external libraries (Jackson, Gson). Python's dynamic typing makes JSON natural - dicts map directly. Java requires type definitions or verbose casting. Python's approach is more convenient.",
+      "keyPoints": [
+        "Python's json is in standard library",
+        "Java needs external dependencies",
+        "Python dicts map naturally to JSON",
+        "Java requires type definitions",
+        "Python's approach is more convenient"
+      ]
+    },
+    "threading": {
+      "description": "Both have threading with locks, but Python's GIL limits parallelism while Java has true threads.",
+      "why": "Python has a Global Interpreter Lock (GIL) limiting CPU parallelism. Java has true multi-threading. Python's with lock: is clean. Java has synchronized or explicit locks. For CPU-bound tasks in Python, use multiprocessing. Java's threads are more powerful for parallelism.",
+      "keyPoints": [
+        "Python has GIL limiting parallelism",
+        "Java has true multi-threading",
+        "Python's with lock: is clean",
+        "Python use multiprocessing for CPU tasks",
+        "Java better for parallel computing"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python offers powerful metaprogramming with decorators while Java's reflection is more limited.",
+      "why": "Python has decorators, metaclasses, getattr/setattr for metaprogramming. Java has reflection but it's verbose and limited. Python can modify classes at runtime. Java's reflection is mainly for inspection. Python's approach is more powerful but can be harder to understand.",
+      "keyPoints": [
+        "Python has decorators and metaclasses",
+        "Java's reflection is more limited",
+        "Python can modify classes at runtime",
+        "Python's approach is more powerful",
+        "Java emphasizes compile-time structure"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python embraces duck typing with optional type hints while Java requires explicit types.",
+      "why": "Python uses duck typing - if it has the method, it works. Java requires explicit types or interfaces. Python's hasattr() checks capabilities. Python 3.5+ added optional type hints. Python is more flexible, Java is safer with compile-time checks.",
+      "keyPoints": [
+        "Python uses duck typing",
+        "Java requires explicit types",
+        "Python has optional type hints",
+        "Python is more flexible",
+        "Java catches errors at compile time"
+      ]
+    }
+  }
+}
+

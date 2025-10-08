@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "python",
+  "rightLanguage": "cpp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Python's one-liner simplicity contrasts dramatically with C++'s compiled approach.",
+      "why": "Extreme opposites! Python: one line, interpreted, maximum simplicity. C++: compiled, native code, maximum control. Python for rapid prototyping. C++ for performance-critical systems. Completely different use cases and users.",
+      "keyPoints": [
+        "Extreme opposites",
+        "Python interpreted, C++ compiled",
+        "Python simplest, C++ powerful",
+        "Different use cases",
+        "Prototyping vs systems"
+      ]
+    },
+    "variables": {
+      "description": "Python's dynamic no-declaration approach contrasts completely with C++'s static typed system.",
+      "why": "Python: dynamic typing, no declarations, automatic GC. C++: static typing, explicit types, manual memory. Python variables change types. C++ cannot. Python maximum convenience. C++ maximum control. Fundamentally opposite.",
+      "keyPoints": [
+        "Python dynamic, C++ static",
+        "Python no declarations",
+        "C++ manual memory",
+        "Python convenience",
+        "Completely opposite"
+      ]
+    },
+    "strings": {
+      "description": "Python's f-strings are beautifully simple while C++ offers std::string and C-style strings.",
+      "why": "Python f-strings beautifully simple. C++ std::string and char* complex. Python rich methods. C++ complex algorithms. Python optimizes convenience. C++ optimizes performance. Huge usability gap.",
+      "keyPoints": [
+        "Python much simpler",
+        "C++ complex",
+        "Python f-strings elegant",
+        "C++ multiple string types",
+        "Convenience vs control"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses indentation while C++ uses braces.",
+      "why": "Python: enforced indentation. C++: braces. Python has elif. C++ has else if. Python readable by design. C++ traditional. Both work fine. Different philosophies on formatting.",
+      "keyPoints": [
+        "Python: indentation",
+        "C++: braces",
+        "Python enforces style",
+        "C++ traditional",
+        "Different philosophies"
+      ]
+    },
+    "case-statements": {
+      "description": "Python's match/case is new while C++'s switch is very limited.",
+      "why": "Python match/case (3.10+) modern pattern matching. C++ switch limited to integral types. Python more powerful now. C++ very limited. Python's approach more modern. C++ traditional and limiting.",
+      "keyPoints": [
+        "Python match/case new and powerful",
+        "C++ switch very limited",
+        "Python more modern",
+        "C++ traditional",
+        "Python advantage"
+      ]
+    },
+    "arrays": {
+      "description": "Python lists are simple and flexible while C++ offers multiple complex container types.",
+      "why": "Python lists extremely simple. C++ arrays, vector, list, deque, etc. Python automatic memory. C++ manual. Python simpler to use. C++ more control. Huge complexity difference.",
+      "keyPoints": [
+        "Python much simpler",
+        "C++ many container types",
+        "Python automatic memory",
+        "C++ manual control",
+        "Simplicity vs control"
+      ]
+    },
+    "hashes": {
+      "description": "Python dicts are simple while C++ offers map and unordered_map with type declarations.",
+      "why": "Python dicts extremely simple. C++ map/unordered_map complex. Python dynamic. C++ needs type declarations. Python easier. C++ faster. Different priorities.",
+      "keyPoints": [
+        "Python much simpler",
+        "C++ requires types",
+        "Python dynamic",
+        "C++ faster",
+        "Ease vs speed"
+      ]
+    },
+    "iteration": {
+      "description": "Python's for loops are intuitive while C++ offers powerful iterators.",
+      "why": "Python for...in incredibly intuitive. C++ iterators powerful but complex. Python easier to learn. C++ more control. Python for humans. C++ for machines. Huge usability difference.",
+      "keyPoints": [
+        "Python very intuitive",
+        "C++ iterators powerful",
+        "Python easier",
+        "C++ more control",
+        "Humans vs machines"
+      ]
+    },
+    "filtering": {
+      "description": "Python's comprehensions are elegant while C++ uses STL algorithms.",
+      "why": "Python list comprehensions elegant. C++ STL algorithms verbose. Python easier to write and read. C++ can be zero-cost. Python has overhead. Different priorities showing.",
+      "keyPoints": [
+        "Python elegant",
+        "C++ verbose",
+        "Python easier",
+        "C++ zero-cost",
+        "Elegance vs performance"
+      ]
+    },
+    "classes": {
+      "description": "Python has simple classes while C++ requires complex constructors and destructors.",
+      "why": "Python: simple classes with __init__. C++: complex classes with Rule of 3/5. Python automatic memory. C++ manual. Python way simpler. C++ way more control. Massive complexity difference.",
+      "keyPoints": [
+        "Python much simpler",
+        "C++ requires Rule of 3/5",
+        "Python automatic memory",
+        "C++ manual control",
+        "Huge difference"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python's @property is elegant while C++ uses explicit verbose methods.",
+      "why": "Python @property elegant. C++ getXxx/setXxx verbose. Python cleaner. C++ more explicit. Python hides complexity. C++ shows it. Different philosophies.",
+      "keyPoints": [
+        "Python @property elegant",
+        "C++ explicit methods",
+        "Python cleaner",
+        "C++ verbose",
+        "Different philosophies"
+      ]
+    },
+    "inheritance": {
+      "description": "Python supports multiple inheritance while C++ also has it with the diamond problem.",
+      "why": "Both have multiple inheritance! Python's is easier to use. C++ has diamond problem. Python handles it better. Both powerful but dangerous. C++ more complex. Python more usable.",
+      "keyPoints": [
+        "Both have multiple inheritance",
+        "C++ has diamond problem",
+        "Python easier",
+        "Both powerful",
+        "Python more usable"
+      ]
+    },
+    "modules": {
+      "description": "Python uses inheritance and ABCs while C++ uses abstract classes.",
+      "why": "Python: inheritance + ABC module. C++: abstract classes with virtual. Both achieve polymorphism. Python simpler. C++ more traditional. Python dynamic. C++ static. Different approaches.",
+      "keyPoints": [
+        "Both have abstractions",
+        "Python simpler",
+        "C++ more traditional",
+        "Python dynamic",
+        "C++ static"
+      ]
+    },
+    "file-io": {
+      "description": "Python's with statement is simple while C++ iostreams are verbose.",
+      "why": "Python with open() beautifully simple. C++ fstream verbose and complex. Python much easier. C++ more control. Huge usability difference. Both ensure cleanup.",
+      "keyPoints": [
+        "Python much simpler",
+        "C++ verbose",
+        "Both auto-cleanup",
+        "Python for ease",
+        "C++ for control"
+      ]
+    },
+    "json": {
+      "description": "Python has JSON in standard library while C++ needs external dependencies.",
+      "why": "Python: json in standard library. C++: need external library. Python much simpler. C++ faster but less convenient. Python wins on convenience. C++ wins on speed.",
+      "keyPoints": [
+        "Python: standard library",
+        "C++: external dependency",
+        "Python simpler",
+        "C++ faster",
+        "Convenience vs speed"
+      ]
+    },
+    "threading": {
+      "description": "Python has GIL limitations while C++ offers true multi-threading.",
+      "why": "Python: GIL limits parallelism. C++: true multi-threading. Python simpler API. C++ more complex and powerful. Python for I/O. C++ for CPU. Huge performance difference for parallel work.",
+      "keyPoints": [
+        "Python has GIL",
+        "C++ true threading",
+        "Python simpler",
+        "C++ more powerful",
+        "Different strengths"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python uses runtime metaprogramming while C++ has compile-time templates.",
+      "why": "Python: runtime decorators, metaclasses. C++: compile-time templates. Python more flexible. C++ faster. Python easier. C++ more complex. Opposite approaches.",
+      "keyPoints": [
+        "Python: runtime",
+        "C++: compile-time",
+        "Python more flexible",
+        "C++ zero runtime cost",
+        "Opposite approaches"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python uses runtime duck typing while C++ uses compile-time templates and virtual functions.",
+      "why": "Python: runtime duck typing. C++: compile-time templates + runtime virtual. Python more flexible. C++ catches errors earlier or has runtime cost. Flexibility vs safety trade-off.",
+      "keyPoints": [
+        "Python: runtime",
+        "C++: compile-time + runtime",
+        "Python more flexible",
+        "C++ catches errors early (templates)",
+        "Different approaches"
+      ]
+    }
+  }
+}
+

@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "go",
+  "rightLanguage": "python",
+  "comparisons": {
+    "hello-world": {
+      "description": "Python minimizes all boilerplate while Go requires package and import declarations.",
+      "why": "Python is the simplest - one line, no ceremony. Go requires package main, import, and func main(). Python is interpreted, Go is compiled (but very fast). Python emphasizes readability, Go emphasizes simplicity and performance. Different philosophies for different use cases.",
+      "keyPoints": [
+        "Python has minimal boilerplate",
+        "Go requires package and main function",
+        "Python interpreted, Go compiled",
+        "Go compiles extremely fast",
+        "Different use cases: scripting vs systems"
+      ]
+    },
+    "variables": {
+      "description": "Python uses dynamic typing while Go uses static typing with inference.",
+      "why": "Python is dynamically typed - types checked at runtime. Go is statically typed - types checked at compile time. Go's := provides type inference like dynamic but with safety. Python variables can change types. Go variables cannot. Trade-off: flexibility vs safety.",
+      "keyPoints": [
+        "Python dynamic, Go static",
+        "Go's := provides inference",
+        "Python more flexible",
+        "Go catches errors earlier",
+        "Fundamental philosophy difference"
+      ]
+    },
+    "strings": {
+      "description": "Python's f-strings and rich methods contrast with Go's explicit package-based approach.",
+      "why": "Python's f-strings are very concise. Go uses fmt.Sprintf. Python has many string methods built-in. Go uses strings package. Both have immutable strings. Python's approach is more convenient. Go's is more explicit and performant.",
+      "keyPoints": [
+        "Python f-strings vs Go fmt.Sprintf",
+        "Python methods vs Go functions",
+        "Both strings immutable",
+        "Python more convenient",
+        "Go more explicit"
+      ]
+    },
+    "conditionals": {
+      "description": "Python uses indentation while Go uses braces; both have clean conditional syntax.",
+      "why": "Python enforces indentation for readability. Go uses braces but doesn't require parentheses. Python has elif, Go has else if. Neither has Go's initialization in if. Python has ternary, Go doesn't. Both emphasize clarity over cleverness.",
+      "keyPoints": [
+        "Python: indentation, Go: braces",
+        "Go has if with initialization",
+        "Python has ternary, Go doesn't",
+        "Both emphasize clarity",
+        "Neither requires parentheses"
+      ]
+    },
+    "case-statements": {
+      "description": "Both have powerful switch/case statements without breaks, with different matching capabilities.",
+      "why": "Go's switch is clean and powerful. Python's match/case (3.10+) adds pattern matching. Neither needs break. Go can switch on types and conditions. Python has destructuring and guards. Before Python 3.10, if/elif was used.",
+      "keyPoints": [
+        "Neither needs break statements",
+        "Go's type switch is unique",
+        "Python has pattern matching",
+        "Python match/case is new",
+        "Go's switch more established"
+      ]
+    },
+    "arrays": {
+      "description": "Python lists are simple and dynamic while Go distinguishes arrays and slices.",
+      "why": "Python lists are always dynamic with rich methods. Go has arrays (fixed) and slices (dynamic). Python's slicing is more powerful. Go's append is efficient but manual. Python has negative indices, Go doesn't. Python is higher-level and more convenient.",
+      "keyPoints": [
+        "Python lists simpler",
+        "Go has arrays and slices",
+        "Python slicing more powerful",
+        "Python supports negative indices",
+        "Python higher-level"
+      ]
+    },
+    "hashes": {
+      "description": "Python dictionaries are simple while Go maps require explicit type checking.",
+      "why": "Python dicts are dynamic with any keys/values. Go maps require type declarations. Python's syntax is cleaner. Go's comma-ok idiom is explicit about existence. Python's .get() is similar. Go provides compile-time safety. Python is more flexible.",
+      "keyPoints": [
+        "Python dicts are dynamic",
+        "Go maps need types",
+        "Go's comma-ok is explicit",
+        "Python more flexible",
+        "Go provides type safety"
+      ]
+    },
+    "iteration": {
+      "description": "Python's for loops are intuitive while Go's range provides clean simplicity.",
+      "why": "Python's for...in is very readable. Go's range is straightforward. Python's enumerate() for indices. Go's range returns index and value. Python has no while keyword distinction. Go uses for for everything. Both are clean and simple.",
+      "keyPoints": [
+        "Both have clean iteration",
+        "Python: for...in, Go: range",
+        "enumerate() vs range with index",
+        "Go uses for for all loops",
+        "Both emphasize simplicity"
+      ]
+    },
+    "filtering": {
+      "description": "Python's list comprehensions are concise while Go uses explicit loops for clarity.",
+      "why": "Python's list comprehensions are idiomatic and concise. Go has no built-in filter/map - write loops manually. Python emphasizes expressiveness. Go emphasizes explicitness. Go 1.18+ generics enable reusable functions. Different philosophies showing clearly.",
+      "keyPoints": [
+        "Python has comprehensions",
+        "Go uses explicit loops",
+        "Python more concise",
+        "Go more transparent",
+        "Different philosophies"
+      ]
+    },
+    "classes": {
+      "description": "Python uses traditional classes while Go uses structs with methods.",
+      "why": "Python has traditional OOP with classes. Go uses structs with methods. Python's __init__ vs Go's constructor functions. Python's self is explicit. Go uses receivers. Python is pure OOP. Go is pragmatic. Both support encapsulation differently.",
+      "keyPoints": [
+        "Python: classes, Go: structs",
+        "__init__ vs constructor functions",
+        "Python pure OOP",
+        "Go pragmatic approach",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "Python's @property provides elegant accessors while Go uses conventions or exported fields.",
+      "why": "Python's @property decorator makes accessors look like attributes. Go typically exports fields or writes methods manually. Python is more magical. Go is more explicit. Python emphasizes convenience. Go emphasizes clarity. Different approaches to same problem.",
+      "keyPoints": [
+        "Python @property is elegant",
+        "Go exports fields or uses methods",
+        "Python more magical",
+        "Go more explicit",
+        "Different design philosophies"
+      ]
+    },
+    "inheritance": {
+      "description": "Python supports multiple inheritance while Go uses composition exclusively.",
+      "why": "Python has traditional inheritance (single and multiple). Go has NO inheritance - only composition. Python's super() calls parent. Go uses struct embedding. Python's approach is traditional OOP. Go rejects inheritance entirely. Go's approach reduces coupling.",
+      "keyPoints": [
+        "Python has inheritance",
+        "Go has no inheritance",
+        "Python uses super()",
+        "Go uses composition",
+        "Fundamentally different approaches"
+      ]
+    },
+    "modules": {
+      "description": "Python uses multiple inheritance and ABCs while Go uses implicit interfaces.",
+      "why": "Python can inherit from multiple classes or use ABC for interfaces. Go has implicit interfaces - no implements keyword. Python's approach is more traditional. Go's approach is more flexible. Go's interfaces are structural typing. Python moving toward protocols (similar).",
+      "keyPoints": [
+        "Python: inheritance/ABC",
+        "Go: implicit interfaces",
+        "Go's structural typing",
+        "Python adding Protocol (similar)",
+        "Different models"
+      ]
+    },
+    "file-io": {
+      "description": "Python's with statement is cleaner while Go requires explicit error handling.",
+      "why": "Python's with open() is very clean. Go requires explicit error checking. Python's approach is more concise. Go's approach makes errors visible. Both ensure cleanup (with vs defer). Python optimizes convenience. Go optimizes explicitness.",
+      "keyPoints": [
+        "Python's with is cleaner",
+        "Go requires explicit errors",
+        "Both ensure cleanup",
+        "Python more convenient",
+        "Go more explicit about errors"
+      ]
+    },
+    "json": {
+      "description": "Python's dynamic JSON handling contrasts with Go's type-safe struct mapping.",
+      "why": "Python's json.loads returns dicts - very dynamic. Go requires struct tags for type-safe parsing. Python is more flexible and convenient. Go catches errors at compile time. Python better for ad-hoc JSON. Go better for known schemas.",
+      "keyPoints": [
+        "Python returns dicts",
+        "Go uses struct tags",
+        "Python more flexible",
+        "Go type-safe",
+        "Different strengths"
+      ]
+    },
+    "threading": {
+      "description": "Python's threads face GIL limitations while Go's goroutines enable massive concurrency.",
+      "why": "Python has GIL limiting CPU parallelism. Go's goroutines have true parallelism. Goroutines are lightweight (100s of thousands possible). Python threads are heavier. Go's concurrency is a core strength. Python needs multiprocessing for CPU tasks.",
+      "keyPoints": [
+        "Python has GIL",
+        "Go has true parallelism",
+        "Goroutines extremely lightweight",
+        "Go's concurrency is superior",
+        "Python use multiprocessing for CPU"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Python offers more metaprogramming while Go intentionally limits it.",
+      "why": "Python has decorators, metaclasses, getattr/setattr. Go has limited reflection and emphasizes code generation. Python can modify classes at runtime. Go is more static. Python more powerful for metaprogramming. Go prioritizes simplicity and performance.",
+      "keyPoints": [
+        "Python has more metaprogramming",
+        "Go limits reflection",
+        "Python uses decorators",
+        "Go uses code generation",
+        "Different philosophies"
+      ]
+    },
+    "duck-typing": {
+      "description": "Python embraces runtime duck typing while Go provides compile-time structural typing.",
+      "why": "Python uses duck typing - checked at runtime. Go uses structural typing - checked at compile time. Python's hasattr() vs Go's interface satisfaction. Python has optional type hints. Go is always statically typed. Runtime flexibility vs compile-time safety.",
+      "keyPoints": [
+        "Python: runtime duck typing",
+        "Go: compile-time structural typing",
+        "Python more flexible",
+        "Go catches errors earlier",
+        "Fundamental difference"
+      ]
+    }
+  }
+}
+

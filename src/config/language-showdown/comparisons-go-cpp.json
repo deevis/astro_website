@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "go",
+  "rightLanguage": "cpp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both are compiled systems languages, but Go has garbage collection while C++ uses manual memory management.",
+      "why": "Both systems programming languages. Go has GC. C++ manual memory. Go compiles faster. C++ more mature. Go simpler. C++ more powerful. Go designed for modern systems. C++ for maximum performance. Different priorities.",
+      "keyPoints": [
+        "Both systems languages",
+        "Go has GC, C++ manual",
+        "Go compiles faster",
+        "Go simpler",
+        "Different priorities"
+      ]
+    },
+    "variables": {
+      "description": "Go uses := for simple inference while C++ has auto with more complex memory semantics.",
+      "why": "Go: := creates variable, always mutable. C++: auto infers type, manual memory. Go simpler. C++ has pointers and references. Go only has pointers (simpler). C++ offers more control. Go optimizes simplicity. Both statically typed.",
+      "keyPoints": [
+        "Go: := simple",
+        "C++: auto + complex memory",
+        "Go simpler pointer model",
+        "C++ more control",
+        "Both static typing"
+      ]
+    },
+    "strings": {
+      "description": "Go has simple string type while C++ offers std::string and C-style strings.",
+      "why": "Go: simple string type. C++: std::string and char*. Go approach simpler. C++ more complex and flexible. Both UTF-8. Go optimizes simplicity. C++ optimizes control. Similar performance potential.",
+      "keyPoints": [
+        "Go simpler",
+        "C++ std::string and char*",
+        "Go optimizes simplicity",
+        "C++ more options",
+        "Both UTF-8"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax with braces, but Go allows initialization in if statement.",
+      "why": "Very similar! Both use braces, skip parentheses (usually). Go has if with initialization. C++ more traditional. Neither has ternary. Similar C heritage. Very comparable.",
+      "keyPoints": [
+        "Very similar syntax",
+        "Go: if with init",
+        "Both from C heritage",
+        "Neither has ternary",
+        "Very comparable"
+      ]
+    },
+    "case-statements": {
+      "description": "Go's switch is cleaner than C++'s, with no break needed and type switching.",
+      "why": "Go's switch cleaner - no break needed. C++ needs break statements. Go can switch on types! C++ limited to integral types. Go more modern. C++ more traditional. Go's approach better for modern code.",
+      "keyPoints": [
+        "Go: no break needed",
+        "Go can switch on types",
+        "C++ needs break",
+        "C++ very limited",
+        "Go more modern"
+      ]
+    },
+    "arrays": {
+      "description": "Go's slices are simpler than C++'s multiple container types.",
+      "why": "Go: simple slices. C++: arrays, vector, list, deque, etc. Go approach simpler. C++ offers more container choices. Go slices very usable. C++ vectors powerful. Go optimizes simplicity. C++ optimizes choice.",
+      "keyPoints": [
+        "Go simpler",
+        "C++ more container types",
+        "Go slices easy",
+        "C++ more options",
+        "Simplicity vs choice"
+      ]
+    },
+    "hashes": {
+      "description": "Both have built-in map types, with Go's being simpler to use.",
+      "why": "Go: built-in map. C++: std::map and std::unordered_map. Go simpler syntax. C++ offers ordered/unordered choice. Both need type declarations. Go's approach more straightforward. C++ more flexible.",
+      "keyPoints": [
+        "Go simpler syntax",
+        "C++ offers choice",
+        "Both built-in",
+        "Go more straightforward",
+        "C++ more options"
+      ]
+    },
+    "iteration": {
+      "description": "Go's range is simple while C++ offers powerful iterators.",
+      "why": "Go: range keyword simple. C++: iterators and range-based for. Go approach simpler. C++ offers more control. Both efficient. Go optimizes simplicity. C++ optimizes flexibility. Very different philosophies.",
+      "keyPoints": [
+        "Go simpler",
+        "C++ more control",
+        "Both efficient",
+        "Go: simplicity",
+        "C++: flexibility"
+      ]
+    },
+    "filtering": {
+      "description": "Go uses explicit loops while C++ offers STL algorithms and ranges.",
+      "why": "Go: explicit for loops. C++: STL algorithms, C++20 ranges. Go more explicit. C++ functional operations available. Both can be efficient. Go values clarity. C++ offers abstractions. Different philosophies.",
+      "keyPoints": [
+        "Go: explicit loops",
+        "C++: STL algorithms/ranges",
+        "Go more explicit",
+        "C++ more functional",
+        "Different approaches"
+      ]
+    },
+    "classes": {
+      "description": "Both reject traditional class-based OOP, using structs with methods.",
+      "why": "BOTH reject traditional OOP! Go: structs with methods. C++: has classes but also structs. Go simpler. C++ requires Rule of 3/5. Go has GC. C++ manual memory. More similar than you'd think!",
+      "keyPoints": [
+        "Both use structs",
+        "Go simpler",
+        "C++ requires Rule of 3/5",
+        "Go has GC",
+        "More similar than expected"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both use explicit methods with similar conventions.",
+      "why": "Both explicit! Go: no Get prefix, use Set. C++: getName, setName. Similar verbosity. Neither has magic. Both often use public fields. Very similar approaches.",
+      "keyPoints": [
+        "Both explicit",
+        "Similar verbosity",
+        "Similar conventions",
+        "Neither has magic",
+        "Very similar"
+      ]
+    },
+    "inheritance": {
+      "description": "Both reject inheritance, using composition instead.",
+      "why": "NEITHER has inheritance! Both composition-only. Go: struct embedding. C++: has inheritance but shouldn't use it (modern view). Both favor composition. Major similarity between the languages.",
+      "keyPoints": [
+        "Neither uses inheritance much",
+        "Both favor composition",
+        "Go: embedding",
+        "C++: has but shouldn't use",
+        "Major similarity"
+      ]
+    },
+    "modules": {
+      "description": "Go's implicit interfaces contrast with C++'s virtual functions.",
+      "why": "Go: implicit interfaces (unique!). C++: abstract classes with virtual. Go's approach more flexible. C++ more traditional. Go no runtime cost for interfaces. C++ virtual has cost. Different approaches to polymorphism.",
+      "keyPoints": [
+        "Go: implicit interfaces",
+        "C++: virtual functions",
+        "Go more flexible",
+        "C++ has runtime cost",
+        "Different mechanisms"
+      ]
+    },
+    "file-io": {
+      "description": "Both require explicit error handling, but Go's approach is simpler than C++ iostreams.",
+      "why": "Go: simple file operations with error returns. C++: iostream and fstream complex. Both explicit about errors. Go simpler. C++ more powerful. Both use RAII/defer for cleanup. Go easier to use.",
+      "keyPoints": [
+        "Go simpler",
+        "C++ more complex",
+        "Both explicit errors",
+        "Both automatic cleanup",
+        "Go easier"
+      ]
+    },
+    "json": {
+      "description": "Both need some setup, with Go's struct tags being simpler than C++ libraries.",
+      "why": "Go: struct tags in standard library. C++: external libraries needed. Go's approach simpler. C++ more complex. Both type-safe. Go has advantage with std library. C++ needs dependencies.",
+      "keyPoints": [
+        "Go: standard library",
+        "C++: external libraries",
+        "Go simpler",
+        "Both type-safe",
+        "Go has advantage"
+      ]
+    },
+    "threading": {
+      "description": "Go's goroutines are simpler while C++ offers more low-level control.",
+      "why": "Go's goroutines revolutionary - easy concurrency! C++ std::thread traditional. Go's channels elegant. C++ mutexes verbose. Go optimizes simplicity. C++ optimizes control. Go's concurrency is killer feature. C++ more manual.",
+      "keyPoints": [
+        "Go goroutines revolutionary",
+        "C++ traditional threading",
+        "Go channels elegant",
+        "C++ more manual",
+        "Go's major advantage"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Both limit runtime metaprogramming, with C++ templates being more powerful than Go's.",
+      "why": "Both prefer compile-time. C++ templates Turing-complete! Go has no generics until 1.18. C++ template metaprogramming incredibly powerful. Go intentionally simple. C++ more powerful. Go more readable.",
+      "keyPoints": [
+        "Both compile-time focused",
+        "C++ templates powerful",
+        "Go intentionally simple",
+        "C++ more powerful",
+        "Go more readable"
+      ]
+    },
+    "duck-typing": {
+      "description": "Go's implicit interfaces are unique while C++ uses templates and virtual functions.",
+      "why": "Go's implicit interfaces unique and clever! C++: templates (compile-time) + virtual (runtime). Go's approach simpler. C++ more traditional. Both type-safe. Go's interfaces are special feature. C++ more established.",
+      "keyPoints": [
+        "Go implicit interfaces unique",
+        "C++: templates + virtual",
+        "Go simpler",
+        "Both type-safe",
+        "Go's approach innovative"
+      ]
+    }
+  }
+}
+

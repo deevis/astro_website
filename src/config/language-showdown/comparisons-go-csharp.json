@@ -1,0 +1,204 @@
+{
+  "leftLanguage": "go",
+  "rightLanguage": "csharp",
+  "comparisons": {
+    "hello-world": {
+      "description": "Go's simplicity vs C#'s enterprise features.",
+      "why": "Go simple package main. C# class and Main. Go compiles to single binary. C# to .NET. Go for simplicity. C# for features. Go fast compilation. C# more features. Different philosophies!",
+      "keyPoints": [
+        "Go simpler",
+        "C# more features",
+        "Go: single binary",
+        "C#: .NET",
+        "Different philosophies"
+      ]
+    },
+    "variables": {
+      "description": "Go simple := inference vs C# var inference.",
+      "why": "Go := inference simple. C# var inference. Both strongly typed! Go no generics (until Go 1.18). C# generics since 2005. Go simpler type system. C# richer. Go emphasizes simplicity. C# emphasizes features.",
+      "keyPoints": [
+        "Both type inference",
+        "Go simpler",
+        "C# more features",
+        "Go: :=",
+        "C#: var"
+      ]
+    },
+    "strings": {
+      "description": "C# string interpolation cleaner than Go's fmt.Sprintf.",
+      "why": "Go fmt.Sprintf verbose. C# $\"{}\" elegant! Go simpler but verbose. C# more features. Go no built-in interpolation. C# has it! C# wins on strings. Big C# advantage.",
+      "keyPoints": [
+        "C# much better!",
+        "C#: $\"{}\"",
+        "Go: fmt.Sprintf",
+        "C# wins",
+        "Big difference"
+      ]
+    },
+    "conditionals": {
+      "description": "Go simple if, C# has more features.",
+      "why": "Go simple if statements. C# pattern matching, null-conditional. Go emphasizes simplicity. C# more features. Go if with initialization. C# similar. Go simpler. C# more powerful.",
+      "keyPoints": [
+        "Go simpler",
+        "C# more features",
+        "Both effective",
+        "Different philosophies",
+        "Go minimalist"
+      ]
+    },
+    "case-statements": {
+      "description": "Go switch is simple, C# switch expressions more powerful.",
+      "why": "Go switch simple, no break needed. C# switch expressions with pattern matching far more powerful! Go simpler but limited. C# complex but flexible. Go philosophy: simple. C# philosophy: powerful.",
+      "keyPoints": [
+        "Go simpler",
+        "C# more powerful",
+        "Go: simplicity",
+        "C#: features",
+        "Different goals"
+      ]
+    },
+    "arrays": {
+      "description": "Go slices simple, C# List<T> with LINQ powerful.",
+      "why": "Go slices elegant but simple. C# List<T> with LINQ powerful. Go make() for allocation. C# new List<>(). Go simpler API. C# richer methods. LINQ far more powerful. C# wins on features.",
+      "keyPoints": [
+        "Go simpler",
+        "C# LINQ powerful",
+        "Go: slices",
+        "C#: List<T>",
+        "C# more features"
+      ]
+    },
+    "hashes": {
+      "description": "Go maps simple, C# Dictionary with LINQ powerful.",
+      "why": "Go map[K]V simple. C# Dictionary<K,V> with LINQ. Go minimalist. C# feature-rich. Go range for iteration. C# foreach or LINQ. C# more powerful. Go simpler.",
+      "keyPoints": [
+        "Go simpler",
+        "C# more powerful",
+        "Go: map",
+        "C#: Dictionary + LINQ",
+        "Different philosophies"
+      ]
+    },
+    "iteration": {
+      "description": "Go range simple, C# foreach/LINQ powerful.",
+      "why": "Go range elegant and simple. C# foreach/LINQ powerful. Go minimalist approach. C# feature-rich. Go does one thing well. C# many options. Different philosophies!",
+      "keyPoints": [
+        "Go simpler",
+        "C# more options",
+        "Go: range",
+        "C#: LINQ",
+        "Different goals"
+      ]
+    },
+    "filtering": {
+      "description": "Go requires manual loops, C# LINQ is powerful.",
+      "why": "Go NO built-in filter/map! Manual loops needed. C# LINQ powerful! Huge difference. Go philosophy: simple. C# philosophy: convenient. C# wins completely on convenience. Go intentionally minimal.",
+      "keyPoints": [
+        "HUGE difference!",
+        "Go: manual loops",
+        "C#: LINQ",
+        "C# much easier",
+        "Go intentionally simple"
+      ]
+    },
+    "classes": {
+      "description": "Go structs vs C# classes - fundamentally different!",
+      "why": "Go: NO classes! Structs with methods. C# full OOP. Go composition over inheritance. C# traditional OOP. Go simpler. C# more familiar. Go intentionally different. Fundamental difference!",
+      "keyPoints": [
+        "Fundamental difference!",
+        "Go: no classes",
+        "C#: full OOP",
+        "Go: composition",
+        "C#: inheritance"
+      ]
+    },
+    "getters-setters": {
+      "description": "Go uses direct field access, C# has properties.",
+      "why": "Go: NO getters/setters! Direct access or methods. C# properties elegant. Go simpler but more verbose. C# cleaner syntax. C# properties better. Go intentionally minimal.",
+      "keyPoints": [
+        "Go: no properties",
+        "C#: properties",
+        "C# cleaner",
+        "Go simpler",
+        "C# better syntax"
+      ]
+    },
+    "inheritance": {
+      "description": "Go rejects inheritance, C# embraces it!",
+      "why": "Go: NO inheritance! Embedding instead. C# traditional inheritance. Fundamental difference! Go composition. C# inheritance. Go intentionally different. C# traditional. Opposite philosophies!",
+      "keyPoints": [
+        "Opposite philosophies!",
+        "Go: no inheritance",
+        "C#: inheritance",
+        "Go: embedding",
+        "Fundamental difference"
+      ]
+    },
+    "modules": {
+      "description": "Go interfaces implicit, C# interfaces explicit.",
+      "why": "Go interfaces implemented implicitly! C# explicitly. Go structural typing! C# nominal. Go more flexible. C# more explicit. Go brilliant approach! C# traditional. Major difference!",
+      "keyPoints": [
+        "Major difference!",
+        "Go: implicit",
+        "C#: explicit",
+        "Go structural!",
+        "C# nominal"
+      ]
+    },
+    "file-io": {
+      "description": "Both have simple file operations with different error handling.",
+      "why": "Go os.ReadFile simple. C# File.ReadAllText simple. Both one-liners! Go explicit error handling. C# exceptions. Go multiple returns. C# try/catch. Different error philosophies. Similar simplicity.",
+      "keyPoints": [
+        "Both simple!",
+        "Go: error returns",
+        "C#: exceptions",
+        "Different error handling",
+        "Similar simplicity"
+      ]
+    },
+    "json": {
+      "description": "Go encoding/json with struct tags, C# with attributes or System.Text.Json.",
+      "why": "Go json:\"name\" struct tags. C# attributes or properties. Go compile-time safe with reflection. C# similar. Both strongly typed. Go simpler. C# more options. Similar approaches.",
+      "keyPoints": [
+        "Similar approaches",
+        "Go: struct tags",
+        "C#: attributes",
+        "Both type-safe",
+        "Both work well"
+      ]
+    },
+    "threading": {
+      "description": "Go goroutines simple and powerful, C# async/await powerful.",
+      "why": "Go goroutines BRILLIANT! Lightweight threads. C# async/await BRILLIANT! Different models! Go channels for communication. C# Tasks. Both powerful! Go simpler syntax. C# more familiar. Both excellent!",
+      "keyPoints": [
+        "Both excellent!",
+        "Go: goroutines",
+        "C#: async/await",
+        "Different models",
+        "Both brilliant"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Go intentionally minimal, C# has reflection and source generators.",
+      "why": "Go: minimal reflection, no metaprogramming. C# rich reflection, attributes, source generators. Go intentionally limited. C# feature-rich. Go philosophy: simple. C# philosophy: powerful. Opposite approaches!",
+      "keyPoints": [
+        "Opposite approaches!",
+        "Go: minimal",
+        "C#: feature-rich",
+        "Go intentional",
+        "Different philosophies"
+      ]
+    },
+    "duck-typing": {
+      "description": "Go implicit interfaces enable duck typing! C# requires explicit implementation.",
+      "why": "Go interfaces implicit - structural typing! C# interfaces explicit - nominal. Go enables duck typing! C# requires implementation (or dynamic). Go more flexible! C# more explicit. Go brilliant! Major difference!",
+      "keyPoints": [
+        "Major difference!",
+        "Go: structural!",
+        "C#: nominal",
+        "Go more flexible",
+        "Go brilliant"
+      ]
+    }
+  }
+}

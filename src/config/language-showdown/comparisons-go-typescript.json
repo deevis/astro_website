@@ -1,0 +1,206 @@
+{
+  "leftLanguage": "go",
+  "rightLanguage": "typescript",
+  "comparisons": {
+    "hello-world": {
+      "description": "Go requires package and function while TypeScript is as simple as JavaScript.",
+      "why": "Go: package + func main needed. TypeScript: one line! Go compiled systems language. TypeScript compiles to JavaScript for web. Different worlds. Go for backends/systems. TypeScript for web. Both modern.",
+      "keyPoints": [
+        "TypeScript simpler to start",
+        "Go: systems language",
+        "TypeScript: web language",
+        "Different ecosystems",
+        "Both modern"
+      ]
+    },
+    "variables": {
+      "description": "Go uses := with static typing while TypeScript has optional types.",
+      "why": "Go: := creates typed variable. TypeScript: let with optional types. Go statically typed. TypeScript gradually typed. Go catches errors at compile. TypeScript can ignore types (any). Different safety levels.",
+      "keyPoints": [
+        "Go: static typing",
+        "TypeScript: gradual typing",
+        "TypeScript types optional",
+        "Go enforces types",
+        "Different approaches"
+      ]
+    },
+    "strings": {
+      "description": "TypeScript template literals are simpler than Go's fmt.Sprintf.",
+      "why": "TypeScript: template literals `${name}`. Go: fmt.Sprintf. TypeScript cleaner. Go more explicit. TypeScript built for web. Go built for systems. Different priorities.",
+      "keyPoints": [
+        "TypeScript template literals",
+        "Go: fmt.Sprintf",
+        "TypeScript cleaner",
+        "Different priorities",
+        "Both UTF-8"
+      ]
+    },
+    "conditionals": {
+      "description": "Similar syntax, but TypeScript has type guards while Go has initialization in if.",
+      "why": "Similar if/else syntax. Go: if with initialization. TypeScript: type guards, optional chaining. Different modern features. Both skip parentheses. Go more systems-focused. TypeScript web-focused.",
+      "keyPoints": [
+        "Similar syntax",
+        "Go: if with init",
+        "TypeScript: type guards",
+        "Both modern",
+        "Different focuses"
+      ]
+    },
+    "case-statements": {
+      "description": "Go's switch is cleaner than TypeScript's but TypeScript has discriminated unions.",
+      "why": "Go: switch no break, type switching. TypeScript: traditional switch, discriminated unions. Go's switch cleaner. TypeScript unions powerful. Both modern. Different approaches to pattern matching.",
+      "keyPoints": [
+        "Go switch cleaner",
+        "Go can switch on types",
+        "TypeScript: discriminated unions",
+        "Both modern",
+        "Different approaches"
+      ]
+    },
+    "arrays": {
+      "description": "Go's slices are simpler while TypeScript has functional methods built-in.",
+      "why": "Go: slices simple. TypeScript: arrays with map/filter/reduce. TypeScript more functional methods. Go more manual. TypeScript easier for functional programming. Go more explicit. Different philosophies.",
+      "keyPoints": [
+        "TypeScript: built-in methods",
+        "Go: manual operations",
+        "TypeScript more functional",
+        "Go more explicit",
+        "Different approaches"
+      ]
+    },
+    "hashes": {
+      "description": "Go's maps require type declarations while TypeScript object literals are simpler.",
+      "why": "Go: map[string]int needs types. TypeScript: {key: value} or Map. TypeScript simpler syntax. Go more explicit. TypeScript more convenient. Go type-safe. Different priorities.",
+      "keyPoints": [
+        "TypeScript simpler",
+        "Go requires types",
+        "TypeScript object literals",
+        "Both type-safe",
+        "Different priorities"
+      ]
+    },
+    "iteration": {
+      "description": "Go's range is simple while TypeScript has multiple iteration methods.",
+      "why": "Go: range keyword simple. TypeScript: for...of, forEach, map. TypeScript more options. Go more consistent (just for). TypeScript more flexible. Go simpler. Different philosophies.",
+      "keyPoints": [
+        "Go: range simple",
+        "TypeScript: many options",
+        "Go more consistent",
+        "TypeScript more flexible",
+        "Both work well"
+      ]
+    },
+    "filtering": {
+      "description": "TypeScript has built-in array methods while Go uses explicit loops.",
+      "why": "TypeScript: .filter()/.map() built-in. Go: write explicit loops. TypeScript more concise. Go more explicit. TypeScript better for functional style. Go values clarity. Different approaches.",
+      "keyPoints": [
+        "TypeScript: built-in methods",
+        "Go: explicit loops",
+        "TypeScript more concise",
+        "Go more clear",
+        "Different philosophies"
+      ]
+    },
+    "classes": {
+      "description": "TypeScript has classes while Go uses structs with methods.",
+      "why": "TypeScript: JavaScript classes with types. Go: structs with methods. Different approaches. TypeScript OOP. Go composition. TypeScript more traditional. Go simpler. Both work well.",
+      "keyPoints": [
+        "TypeScript: classes",
+        "Go: structs",
+        "TypeScript OOP",
+        "Go composition",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "TypeScript uses get/set keywords while Go uses methods or public fields.",
+      "why": "TypeScript: get/set keywords elegant. Go: methods or public fields. TypeScript cleaner syntax. Go more explicit. Different conventions. Both work. TypeScript more syntactic sugar.",
+      "keyPoints": [
+        "TypeScript: get/set",
+        "Go: methods/public fields",
+        "TypeScript cleaner",
+        "Go more explicit",
+        "Different conventions"
+      ]
+    },
+    "inheritance": {
+      "description": "TypeScript uses extends while Go has no inheritance at all.",
+      "why": "TypeScript: extends for inheritance. Go: NO inheritance! TypeScript traditional OOP. Go composition only. Fundamental difference. Go forces better design. TypeScript more familiar. Go more modern thinking.",
+      "keyPoints": [
+        "TypeScript: inheritance",
+        "Go: no inheritance!",
+        "TypeScript OOP",
+        "Go composition only",
+        "Fundamental difference"
+      ]
+    },
+    "modules": {
+      "description": "TypeScript uses structural interfaces while Go has implicit interfaces.",
+      "why": "BOTH use structural typing! TypeScript: structural interfaces. Go: implicit interfaces. Very similar approach! Both brilliant. TypeScript more explicit syntax. Go more implicit. Both enable duck typing with safety.",
+      "keyPoints": [
+        "Both structural typing!",
+        "Similar approach",
+        "TypeScript more explicit",
+        "Go more implicit",
+        "Both brilliant"
+      ]
+    },
+    "file-io": {
+      "description": "Both require explicit error handling with different patterns.",
+      "why": "TypeScript: async/await with try/catch. Go: error returns. TypeScript promises. Go explicit errors. Different patterns. Both ensure error handling. TypeScript more async-friendly. Go more explicit.",
+      "keyPoints": [
+        "TypeScript: async/await",
+        "Go: error returns",
+        "Different patterns",
+        "Both explicit errors",
+        "TypeScript async-friendly"
+      ]
+    },
+    "json": {
+      "description": "TypeScript has JSON built-in while Go uses struct tags.",
+      "why": "TypeScript: JSON.parse built-in. Go: struct tags for marshaling. TypeScript simpler. Go more type-safe. TypeScript for dynamic JSON. Go for structured data. Both work well.",
+      "keyPoints": [
+        "TypeScript: built-in JSON",
+        "Go: struct tags",
+        "TypeScript simpler",
+        "Go more structured",
+        "Different strengths"
+      ]
+    },
+    "threading": {
+      "description": "Go's goroutines are revolutionary while TypeScript is single-threaded with async/await.",
+      "why": "Go: goroutines for concurrency. TypeScript: async/await. Go true parallelism. TypeScript single-threaded. Go's concurrency model superior for systems. TypeScript perfect for web I/O. Different use cases.",
+      "keyPoints": [
+        "Go: goroutines",
+        "TypeScript: async/await",
+        "Go true parallelism",
+        "TypeScript single-threaded",
+        "Different use cases"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Both limit runtime metaprogramming, preferring compile-time solutions.",
+      "why": "Both avoid runtime metaprogramming. TypeScript: decorators (experimental). Go: code generation. Both prefer compile-time. Similar philosophy. TypeScript decorators more powerful than Go's approach.",
+      "keyPoints": [
+        "Both compile-time focused",
+        "TypeScript: decorators",
+        "Go: code generation",
+        "Similar philosophy",
+        "Both avoid runtime"
+      ]
+    },
+    "duck-typing": {
+      "description": "Both use structural typing with compile-time checks!",
+      "why": "BOTH use structural typing! This is brilliant. TypeScript and Go both enable duck typing with type safety at compile time. Very similar approach. Different syntax. Both catching errors early while staying flexible.",
+      "keyPoints": [
+        "Both structural typing!",
+        "Major similarity",
+        "Both compile-time safe",
+        "Both flexible",
+        "Brilliant approach in both"
+      ]
+    }
+  }
+}
+
+

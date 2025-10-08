@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "ruby",
+  "rightLanguage": "rust",
+  "comparisons": {
+    "hello-world": {
+      "description": "Ruby's one-liner contrasts with Rust's compiled function-based approach.",
+      "why": "Ruby: one line, no boilerplate. Rust: function wrapper needed. Ruby is interpreted, Rust is compiled. Ruby optimizes developer happiness. Rust optimizes performance and safety. Completely different philosophies. Ruby for rapid development, Rust for systems programming.",
+      "keyPoints": [
+        "Ruby: one line",
+        "Rust: function wrapper",
+        "Ruby interpreted, Rust compiled",
+        "Different use cases",
+        "Speed vs convenience trade-off"
+      ]
+    },
+    "variables": {
+      "description": "Ruby's dynamic flexibility contrasts sharply with Rust's static safety and ownership.",
+      "why": "Ruby: dynamic typing, variables can change types. Rust: static typing, types checked at compile time. Ruby variables always mutable. Rust immutable by default (use mut). Rust catches errors early. Ruby catches at runtime. Fundamental philosophy difference.",
+      "keyPoints": [
+        "Ruby dynamic, Rust static",
+        "Ruby always mutable",
+        "Rust immutable by default",
+        "Rust catches errors early",
+        "Opposite philosophies"
+      ]
+    },
+    "strings": {
+      "description": "Ruby's convenient string methods contrast with Rust's ownership-focused String and &str.",
+      "why": "Ruby has rich string methods on mutable strings. Rust distinguishes String (owned) and &str (borrowed). Ruby's #{} interpolation. Rust's format! macro. Rust's approach prevents memory issues. Ruby's is more convenient. Rust requires thinking about ownership.",
+      "keyPoints": [
+        "Ruby: mutable strings",
+        "Rust: String vs &str",
+        "Ruby #{}, Rust format!()",
+        "Rust's ownership complexity",
+        "Ruby more convenient"
+      ]
+    },
+    "conditionals": {
+      "description": "Ruby uses end keywords and offers unless, while Rust uses braces and if expressions.",
+      "why": "Ruby uses end, Rust uses braces. Ruby has unless and modifiers. Rust's if returns values. Ruby has ternary, Rust uses if expression. Ruby more flexible syntax. Rust more consistent. Both don't require parentheses around conditions.",
+      "keyPoints": [
+        "Ruby: end, Rust: braces",
+        "Ruby has unless",
+        "Rust if is expression",
+        "Ruby more syntax options",
+        "Both skip parentheses"
+      ]
+    },
+    "case-statements": {
+      "description": "Ruby's case/when uses === while Rust's match provides exhaustive pattern matching.",
+      "why": "Ruby's case/when uses ===, can match ranges, regex, classes. Rust's match is exhaustive - must handle all cases. Rust's pattern matching more powerful. Rust catches missing cases at compile time. Both don't need break. Rust's approach more rigorous.",
+      "keyPoints": [
+        "Ruby: ===, Rust: exhaustive",
+        "Rust must handle all cases",
+        "Rust catches at compile time",
+        "Neither needs break",
+        "Rust more rigorous"
+      ]
+    },
+    "arrays": {
+      "description": "Ruby's dynamic arrays with rich methods contrast with Rust's owned vectors and ownership rules.",
+      "why": "Ruby arrays always dynamic with rich methods. Rust has Vec<T> with ownership rules. Ruby's << appends. Rust's push(&mut self). Ruby has negative indices. Rust doesn't. Rust's ownership prevents issues Ruby can have. Performance: Rust faster, Ruby easier.",
+      "keyPoints": [
+        "Ruby arrays simpler",
+        "Rust has ownership rules",
+        "Ruby negative indices",
+        "Rust prevents memory issues",
+        "Speed vs convenience"
+      ]
+    },
+    "hashes": {
+      "description": "Ruby's symbol-keyed hashes are simple while Rust's HashMap requires explicit typing.",
+      "why": "Ruby hashes use symbols, very dynamic. Rust HashMap needs type declarations. Ruby's approach more convenient. Rust's approach more safe. Rust returns Option<&V>. Ruby returns nil or default. Rust's entry API powerful. Different priorities.",
+      "keyPoints": [
+        "Ruby more dynamic",
+        "Rust requires types",
+        "Rust returns Option",
+        "Ruby returns nil",
+        "Safety vs convenience"
+      ]
+    },
+    "iteration": {
+      "description": "Ruby's blocks are elegant while Rust's iterators are zero-cost and explicit.",
+      "why": "Ruby's .each with blocks is beautiful. Rust's iterators are zero-cost abstractions. Ruby emphasizes elegance. Rust emphasizes performance. Ruby has many iterator methods. Rust has powerful iterator combinators. Both are expressive but differently.",
+      "keyPoints": [
+        "Ruby: elegant blocks",
+        "Rust: zero-cost iterators",
+        "Ruby emphasizes elegance",
+        "Rust emphasizes performance",
+        "Both powerful"
+      ]
+    },
+    "filtering": {
+      "description": "Ruby's select/map methods are concise while Rust's iterator chains compile to optimal code.",
+      "why": "Ruby's .select/.map are concise and readable. Rust's .filter()/.map() compile to optimal loops. Ruby's approach more intuitive. Rust's approach faster. Ruby has runtime overhead. Rust is zero-cost. Different priorities showing.",
+      "keyPoints": [
+        "Ruby more concise",
+        "Rust compiles to optimal code",
+        "Ruby has runtime overhead",
+        "Rust is zero-cost",
+        "Elegance vs performance"
+      ]
+    },
+    "classes": {
+      "description": "Ruby has traditional OOP classes while Rust uses structs with impl blocks.",
+      "why": "Ruby has full OOP with classes and initialize. Rust has structs with impl blocks. Ruby's approach more traditional. Rust separates data and behavior. Ruby's self implicit in methods. Rust's self explicit. Different paradigms entirely.",
+      "keyPoints": [
+        "Ruby: traditional classes",
+        "Rust: structs + impl",
+        "Ruby self implicit",
+        "Rust self explicit",
+        "Different paradigms"
+      ]
+    },
+    "getters-setters": {
+      "description": "Ruby's attr_accessor is magical while Rust uses explicit methods or public fields.",
+      "why": "Ruby's attr_accessor is one line of metaprogramming magic. Rust writes methods explicitly or uses pub fields. Ruby eliminates boilerplate with magic. Rust is explicit and verbose. Different philosophies: Ruby's DRY vs Rust's explicitness.",
+      "keyPoints": [
+        "Ruby: attr_accessor magic",
+        "Rust: explicit methods",
+        "Ruby very concise",
+        "Rust verbose but clear",
+        "Magic vs explicitness"
+      ]
+    },
+    "inheritance": {
+      "description": "Ruby uses single inheritance with mixins while Rust completely rejects inheritance.",
+      "why": "Ruby has inheritance with < operator plus modules for mixins. Rust has NO inheritance - uses composition and traits only. Ruby's approach is traditional OOP. Rust rejects inheritance entirely. Rust uses trait bounds. Completely different models.",
+      "keyPoints": [
+        "Ruby: inheritance + modules",
+        "Rust: no inheritance at all",
+        "Ruby traditional OOP",
+        "Rust composition only",
+        "Fundamentally different"
+      ]
+    },
+    "modules": {
+      "description": "Ruby modules provide mixins while Rust traits provide zero-cost abstraction.",
+      "why": "Ruby modules can have implementation (mixins). Rust traits define behavior. Ruby's include adds methods. Rust's impl for trait adds methods. Rust's static dispatch is zero-cost. Ruby has runtime overhead. Both powerful but different.",
+      "keyPoints": [
+        "Ruby: mixins with implementation",
+        "Rust: traits with dispatch",
+        "Rust static dispatch zero-cost",
+        "Ruby has runtime overhead",
+        "Different mechanisms"
+      ]
+    },
+    "file-io": {
+      "description": "Ruby's simple one-liners contrast with Rust's explicit error handling.",
+      "why": "Ruby's File.read/write are one-liners. Rust requires Result handling. Ruby blocks auto-close. Rust has no RAII but ownership ensures cleanup. Ruby optimizes convenience. Rust optimizes safety. Rust's ? operator is elegant but Ruby's is simpler.",
+      "keyPoints": [
+        "Ruby simpler one-liners",
+        "Rust explicit error handling",
+        "Ruby blocks auto-close",
+        "Rust ownership ensures cleanup",
+        "Convenience vs safety"
+      ]
+    },
+    "json": {
+      "description": "Ruby's dynamic JSON parsing contrasts with Rust's type-safe serde approach.",
+      "why": "Ruby's JSON.parse returns Hashes dynamically. Rust's serde requires type definitions. Ruby more flexible and convenient. Rust type-safe and fast. Ruby good for ad-hoc JSON. Rust good for known schemas. Different strengths for different use cases.",
+      "keyPoints": [
+        "Ruby: dynamic hashes",
+        "Rust: typed structs",
+        "Ruby more flexible",
+        "Rust type-safe and fast",
+        "Different use cases"
+      ]
+    },
+    "threading": {
+      "description": "Both face concurrency challenges, but Rust prevents data races at compile time.",
+      "why": "Ruby has GIL limiting parallelism. Rust has true parallelism with compile-time safety! Rust's ownership prevents data races at compile time. Ruby can have race conditions. Rust's Arc<Mutex<T>> is safe by design. Ruby needs programmer discipline. Rust's major strength.",
+      "keyPoints": [
+        "Ruby has GIL",
+        "Rust true parallelism",
+        "Rust prevents races at compile time!",
+        "Ruby can have races",
+        "Rust's ownership advantage"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Ruby excels at runtime metaprogramming while Rust uses compile-time macros.",
+      "why": "Ruby built for runtime metaprogramming - method_missing, define_method, open classes. Rust has compile-time macros only. Ruby can modify anything at runtime. Rust everything resolved at compile time. Ruby more dynamic. Rust faster and safer.",
+      "keyPoints": [
+        "Ruby: runtime metaprogramming",
+        "Rust: compile-time macros",
+        "Ruby extremely dynamic",
+        "Rust zero runtime cost",
+        "Opposite approaches"
+      ]
+    },
+    "duck-typing": {
+      "description": "Ruby's runtime duck typing contrasts with Rust's compile-time trait system.",
+      "why": "Ruby uses duck typing checked at runtime. Rust uses traits checked at compile time. Ruby's respond_to?. Rust's trait bounds. Ruby more flexible. Rust catches errors early. Ruby fast to write. Rust fast to run. Fundamental trade-off.",
+      "keyPoints": [
+        "Ruby: runtime duck typing",
+        "Rust: compile-time traits",
+        "Ruby more flexible",
+        "Rust catches errors early",
+        "Runtime vs compile-time"
+      ]
+    }
+  }
+}
+

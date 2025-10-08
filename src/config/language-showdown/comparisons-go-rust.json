@@ -1,0 +1,205 @@
+{
+  "leftLanguage": "go",
+  "rightLanguage": "rust",
+  "comparisons": {
+    "hello-world": {
+      "description": "Both are compiled systems languages but Rust requires no runtime while Go uses a runtime.",
+      "why": "Both compiled systems languages with main functions. Go has package system, Rust has modules. Both compile fast (Rust slower than Go but faster than C++). Go has garbage collector. Rust has no GC - uses ownership. Similar ceremony level but different trade-offs.",
+      "keyPoints": [
+        "Both compiled systems languages",
+        "Go has GC, Rust doesn't",
+        "Go compiles faster",
+        "Rust zero runtime cost",
+        "Similar syntax complexity"
+      ]
+    },
+    "variables": {
+      "description": "Go uses := for inference while Rust has immutability by default with mut keyword.",
+      "why": "Both statically typed with type inference. Go's := creates mutable variables. Rust's let creates immutable (use mut). Go variables always mutable. Rust favors immutability. Both have powerful inference. Rust's approach prevents bugs. Different defaults.",
+      "keyPoints": [
+        "Go: := mutable by default",
+        "Rust: immutable by default",
+        "Both have inference",
+        "Rust requires mut",
+        "Different safety models"
+      ]
+    },
+    "strings": {
+      "description": "Go uses simple strings while Rust distinguishes String and &str for memory control.",
+      "why": "Go has simple string type. Rust has String (owned) and &str (borrowed). Go's approach simpler. Rust's approach safer and more efficient. Both use UTF-8. Go's fmt.Sprintf vs Rust's format!. Rust's complexity enables zero-cost abstractions.",
+      "keyPoints": [
+        "Go: simple string",
+        "Rust: String vs &str",
+        "Go simpler to use",
+        "Rust more control",
+        "Both UTF-8"
+      ]
+    },
+    "conditionals": {
+      "description": "Both skip parentheses and use braces, but Rust's if returns values.",
+      "why": "Very similar conditional syntax. Both skip parentheses. Both use braces. Rust's if is expression. Go's if is statement. Go has if with initialization. Rust has if let for patterns. Go has no ternary. Rust uses if expression. Similar philosophy.",
+      "keyPoints": [
+        "Similar syntax",
+        "Rust if is expression",
+        "Go: if with initialization",
+        "Rust: if let",
+        "Neither has ternary"
+      ]
+    },
+    "case-statements": {
+      "description": "Go's switch is powerful but Rust's match provides exhaustive pattern matching.",
+      "why": "Go's switch is clean and powerful. Rust's match is exhaustive. Go can switch on types and conditions. Rust's pattern matching more powerful. Rust must handle all cases. Go doesn't require this. Rust's approach prevents bugs. Both excellent but Rust more rigorous.",
+      "keyPoints": [
+        "Both very powerful",
+        "Rust match exhaustive",
+        "Go more flexible",
+        "Rust more rigorous",
+        "Different trade-offs"
+      ]
+    },
+    "arrays": {
+      "description": "Go's slices are simple and efficient while Rust's vectors have ownership rules.",
+      "why": "Go: arrays (fixed) and slices (dynamic). Rust: arrays and Vec<T>. Go's slices simpler to use. Rust's Vec has ownership rules. Go's append is easy. Rust's push needs &mut. Rust prevents more bugs. Go easier to learn. Performance similar.",
+      "keyPoints": [
+        "Similar concepts",
+        "Go slices simpler",
+        "Rust has ownership rules",
+        "Rust prevents more bugs",
+        "Go easier to use"
+      ]
+    },
+    "hashes": {
+      "description": "Both use HashMap but Rust's ownership system affects access patterns.",
+      "why": "Both have built-in HashMap. Go's is simpler to use. Rust's ownership affects operations. Go's comma-ok idiom. Rust's get() returns Option<&V>. Both require importing. Rust's entry API more powerful. Go's approach more straightforward.",
+      "keyPoints": [
+        "Both have HashMap",
+        "Go simpler to use",
+        "Rust ownership affects usage",
+        "Similar performance",
+        "Different complexity"
+      ]
+    },
+    "iteration": {
+      "description": "Go's range is simple while Rust's iterators provide zero-cost abstractions.",
+      "why": "Go's range keyword is simple and clear. Rust's iterators are zero-cost. Go easier to understand. Rust compiles to optimal code. Go uses for for everything. Rust has loop for infinite loops. Both are efficient but Rust guarantees zero-cost.",
+      "keyPoints": [
+        "Go range simpler",
+        "Rust iterators zero-cost",
+        "Both efficient",
+        "Go easier to learn",
+        "Rust more guarantees"
+      ]
+    },
+    "filtering": {
+      "description": "Go uses explicit loops while Rust's iterator chains are zero-cost abstractions.",
+      "why": "Go has no filter/map - write explicit loops. Rust has iterator chains. Go's approach more explicit. Rust's approach more functional. Rust's chains compile to optimal loops. Go's loops are already explicit. Go values simplicity. Rust values zero-cost abstractions.",
+      "keyPoints": [
+        "Go: explicit loops",
+        "Rust: iterator chains",
+        "Rust zero-cost",
+        "Go more explicit",
+        "Different philosophies"
+      ]
+    },
+    "classes": {
+      "description": "Both reject traditional OOP, using structs with methods.",
+      "why": "Both use structs, not classes! Go's methods have receivers. Rust's impl blocks. Very similar approaches. Both reject inheritance. Go uses interfaces (implicit). Rust uses traits. Both favor composition. More similar than different.",
+      "keyPoints": [
+        "Both use structs",
+        "Both reject classes",
+        "Similar method syntax",
+        "Both favor composition",
+        "More alike than different"
+      ]
+    },
+    "getters-setters": {
+      "description": "Both use explicit methods or public fields rather than automatic generation.",
+      "why": "Both write getters/setters explicitly. Go: no Get prefix, use Set prefix. Rust: same convention. Both often use public fields. Neither has automatic generation. Very similar approaches. Both value explicitness over magic.",
+      "keyPoints": [
+        "Both explicit",
+        "Similar conventions",
+        "Both use pub fields often",
+        "No magic",
+        "Very similar"
+      ]
+    },
+    "inheritance": {
+      "description": "Both completely reject inheritance, favoring composition.",
+      "why": "NEITHER has inheritance! Both use composition only. Go uses struct embedding. Rust uses struct composition. Both reject traditional OOP hierarchy. This is a major similarity. Both solve code reuse differently. Very similar philosophy.",
+      "keyPoints": [
+        "Neither has inheritance!",
+        "Both composition only",
+        "Major similarity",
+        "Both reject OOP hierarchy",
+        "Similar philosophy"
+      ]
+    },
+    "modules": {
+      "description": "Go's implicit interfaces contrast with Rust's explicit trait implementations.",
+      "why": "Go's interfaces are implicit - no implements keyword. Rust's traits are explicit - use impl. Go's approach more flexible. Rust's approach more clear. Both support zero-cost abstractions. Go's is unique. Rust's is more traditional. Different but both powerful.",
+      "keyPoints": [
+        "Go: implicit interfaces",
+        "Rust: explicit traits",
+        "Both zero-cost capable",
+        "Different approaches",
+        "Both powerful"
+      ]
+    },
+    "file-io": {
+      "description": "Both require explicit error handling, but Rust uses Result while Go uses multiple returns.",
+      "why": "Go returns (value, error). Rust returns Result<T, E>. Go uses if err != nil. Rust uses ? operator or match. Both explicit about errors. Go's approach simpler. Rust's type system enforces handling. Both use defer/RAII for cleanup. Very similar philosophy.",
+      "keyPoints": [
+        "Both explicit errors",
+        "Go: multiple returns",
+        "Rust: Result type",
+        "Rust enforces handling",
+        "Similar philosophy"
+      ]
+    },
+    "json": {
+      "description": "Go uses struct tags while Rust uses derive macros for type-safe JSON handling.",
+      "why": "Go uses struct tags for JSON mapping. Rust uses serde derives. Both compile-time. Both type-safe. Go's approach simpler. Rust's approach more powerful. Both avoid reflection overhead. Very similar results. Different mechanisms.",
+      "keyPoints": [
+        "Go: struct tags",
+        "Rust: derive macros",
+        "Both compile-time",
+        "Both type-safe",
+        "Similar performance"
+      ]
+    },
+    "threading": {
+      "description": "Go's goroutines are simple while Rust prevents data races at compile time.",
+      "why": "Go has goroutines - extremely lightweight. Rust has threads. Goroutines easier to use. Rust's ownership prevents data races at COMPILE TIME! Go can have race conditions. Rust detector vs Rust prevention. Go better for concurrency ergonomics. Rust better for safety guarantees.",
+      "keyPoints": [
+        "Go: goroutines (easy)",
+        "Rust: compile-time safety",
+        "Go can have races",
+        "Rust prevents races",
+        "Ergonomics vs safety"
+      ]
+    },
+    "metaprogramming": {
+      "description": "Both limit runtime metaprogramming, preferring code generation.",
+      "why": "Both have limited reflection. Both prefer code generation. Go has go:generate. Rust has powerful macros. Rust's macros more powerful. Both avoid runtime metaprogramming. Similar philosophy: compile-time over runtime. Both value performance.",
+      "keyPoints": [
+        "Both limit reflection",
+        "Both prefer codegen",
+        "Rust macros more powerful",
+        "Similar philosophy",
+        "Performance focused"
+      ]
+    },
+    "duck-typing": {
+      "description": "Go's implicit interfaces provide structural typing while Rust uses explicit traits.",
+      "why": "Go's implicit interfaces are unique - structural typing at compile time. Rust's traits are explicit. Both compile-time checked. Go's approach more flexible. Rust's approach more clear about dependencies. Both provide type safety. Different approaches, similar goals.",
+      "keyPoints": [
+        "Go: implicit (unique!)",
+        "Rust: explicit traits",
+        "Both compile-time safe",
+        "Go more flexible",
+        "Rust more explicit"
+      ]
+    }
+  }
+}
+
