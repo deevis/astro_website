@@ -2,6 +2,11 @@
   "leftLanguage": "typescript",
   "rightLanguage": "csharp",
   "comparisons": {
+    "overview": {
+      "summary": "TypeScript and C# are both Microsoft languages created by Anders Hejlsberg, making them siblings in design philosophy. TypeScript (2012) brought C#'s type safety thinking to JavaScript, while C# (2000) brought modern OOP to the .NET platform. Both feature excellent string interpolation, nullable types, and async/await (C# pioneered it in 2012, influencing JavaScript/TypeScript). The key difference: TypeScript adds optional types to JavaScript's dynamic flexibility, compiling to JavaScript for web/Node environments. C# requires types, compiles to .NET/native code, and targets enterprise backend applications. TypeScript embraces structural typing (duck typing with types), while C# uses traditional nominal typing. Both offer outstanding developer experience with IntelliSense and tooling. Microsoft's design consistency shines through both languages.",
+      "whenToUseLeft": "Choose TypeScript for web frontend development, Node.js backend, projects requiring JavaScript interoperability, teams transitioning from JavaScript, full-stack web applications, browser-based applications, cross-platform JavaScript/Node environments, serverless functions, and when gradual type adoption from existing JavaScript codebases is needed. TypeScript's structural typing provides more flexibility for rapid web development.",
+      "whenToUseRight": "Choose C# for enterprise backend systems, .NET applications, Unity game development, Windows desktop applications, Azure cloud services, projects requiring strong type safety from the start, CPU-intensive applications, high-performance server applications, teams with Microsoft technology stacks, and when you need true multi-threading with excellent async/await support. C#'s nominal typing provides more structure for large enterprise systems."
+    },
     "hello-world": {
       "description": "Both Microsoft languages! TypeScript compiles to JavaScript, C# to native/MSIL.",
       "why": "Both from Microsoft! But completely different purposes. TypeScript for web/Node. C# for .NET/backend. TypeScript much simpler (no class needed). C# more traditional. TypeScript gradual typing. C# strong typing. Different ecosystems.",

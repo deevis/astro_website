@@ -2,6 +2,41 @@
   "name": "Ruby",
   "color": "#cc0000",
   "icon": "ruby",
+  "history": "Created by Yukihiro Matsumoto (Matz) in 1995 in Japan, Ruby was designed to emphasize programmer happiness and productivity following the principle of least astonishment (POLA). Influenced by Perl, Smalltalk, Eiffel, Ada, and Lisp, Ruby combines functional and imperative programming. The language gained explosive popularity with Ruby on Rails (2004), which revolutionized web development. Ruby 2.0 brought refinements and better performance, while Ruby 3.0 (2020) focused on performance, concurrency, and type checking. Known for its elegant syntax and powerful metaprogramming, Ruby remains beloved by developers who value code readability and developer experience.",
+  "keyFeatures": [
+    "Pure object-oriented (everything is an object)",
+    "Dynamic typing with duck typing",
+    "Powerful metaprogramming capabilities",
+    "Blocks, procs, and lambdas",
+    "Elegant, expressive syntax",
+    "Open classes (monkey patching)",
+    "Automatic garbage collection",
+    "Built-in regex support",
+    "Mixin support through modules",
+    "Extensive gem ecosystem via RubyGems"
+  ],
+  "pros": [
+    "Exceptional developer productivity",
+    "Elegant, readable code",
+    "Ruby on Rails for rapid web development",
+    "Large, friendly community",
+    "Extensive gem library for any task",
+    "Flexible and unopinionated",
+    "Great for startups and MVPs",
+    "Strong metaprogramming for DSLs",
+    "Principle of least astonishment",
+    "Test-Driven Development culture"
+  ],
+  "cons": [
+    "Slower runtime performance",
+    "GIL limits multi-threading (MRI)",
+    "Less suitable for CPU-intensive tasks",
+    "Smaller job market than Java/Python",
+    "Flexibility can lead to inconsistent codebases",
+    "Hosting can be more expensive",
+    "Less popular for non-web applications",
+    "Documentation can be inconsistent"
+  ],
   "snippets": {
     "hello-world": "puts \"Hello, World!\"",
     "variables": "# Ruby uses dynamic typing\nname = \"John\"\nage = 30\nitems = []\nPI = 3.14159  # Constants use UPPERCASE\n\n# Everything is an object\nname.class  # => String\nage.class   # => Integer",

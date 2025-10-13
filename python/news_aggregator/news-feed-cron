@@ -6,7 +6,7 @@ PATH=/opt/news_feed_env/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/s
 SHELL=/bin/bash
 
 # Run news feed update every 2 hours
-0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1
+0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/monthly_aggregate_system.py >> /var/log/news_feed_cron.log 2>&1
 
 # Alternative for local development (using local paths)
 # 0 */2 * * * cd /path/to/your/project && python/news_aggregator/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1 

@@ -2,6 +2,11 @@
   "leftLanguage": "go",
   "rightLanguage": "rust",
   "comparisons": {
+    "overview": {
+      "summary": "Go and Rust are both modern systems languages rejecting garbage collection's unpredictability, but they make opposite trade-offs. Go (2009) chose simplicity: fast compilation, easy concurrency via goroutines, and a small feature set. Rust (2015) chose safety: preventing memory bugs and data races at compile time through its ownership system, accepting longer compile times and steeper learning curves. Go has a GC for convenience; Rust has zero-cost abstractions without GC. Go's error handling is verbose but simple (return error); Rust's Result type is more expressive but complex. Both compile to native binaries and excel at systems programming. Go powers cloud infrastructure (Docker, Kubernetes); Rust powers performance-critical systems (browser engines, operating systems). Go optimizes for developer velocity; Rust optimizes for correctness. Both represent the future of systems programming, just different visions of it.",
+      "whenToUseLeft": "Choose Go for microservices and API servers, DevOps tooling and CLIs, projects needing rapid development, teams prioritizing simplicity, network services and proxies, containerized applications, concurrent I/O-heavy workloads, and when compilation speed matters. Go's gentle learning curve makes it accessible to teams transitioning from scripting languages. Goroutines make concurrent programming straightforward.",
+      "whenToUseRight": "Choose Rust for systems programming requiring zero bugs, performance-critical applications, concurrent/parallel processing with safety guarantees, WebAssembly compilation, embedded systems, operating system components, cryptography and security-critical code, game engines, and when preventing memory bugs and data races is worth the learning investment. Rust's compiler is your strict but helpful teacher preventing entire bug categories."
+    },
     "hello-world": {
       "description": "Both are compiled systems languages but Rust requires no runtime while Go uses a runtime.",
       "why": "Both compiled systems languages with main functions. Go has package system, Rust has modules. Both compile fast (Rust slower than Go but faster than C++). Go has garbage collector. Rust has no GC - uses ownership. Similar ceremony level but different trade-offs.",

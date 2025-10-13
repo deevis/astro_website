@@ -2,6 +2,11 @@
   "leftLanguage": "go",
   "rightLanguage": "csharp",
   "comparisons": {
+    "overview": {
+      "summary": "Go and C# represent Google versus Microsoft's visions for modern enterprise development. Go (2009) was Google's reaction to complexity - stripping away features to achieve simplicity, fast compilation, and straightforward concurrency. C# (2000) was Microsoft's answer to Java - matching it initially, then rapidly evolving with innovative features like LINQ, async/await, and properties. Go rejected inheritance, generics (until 1.18), and complexity; C# embraced them with modern twists. Go compiles to static binaries in seconds; C# compiles to .NET with more overhead. Go's goroutines make concurrency simple; C#'s async/await makes asynchronous code readable. Go dominates cloud infrastructure (Kubernetes, Docker); C# dominates Windows development and Unity game development. Go has minimal features by design; C# adds features yearly. Both are garbage collected and strongly typed, but Go chose minimalism while C# chose power. They rarely compete directly - Go for infrastructure, C# for applications - but both represent their company's engineering culture perfectly.",
+      "whenToUseLeft": "Choose Go for cloud-native microservices, DevOps tooling and infrastructure, containerized applications, network services and proxies, CLI tools, projects requiring single binary deployment, teams valuing simplicity and fast compilation, API gateways, concurrent I/O services, and when you want code that's easy to understand and maintain across large teams. Go's minimalism is its strength.",
+      "whenToUseRight": "Choose C# for .NET enterprise applications, Unity game development, Windows desktop applications, full-stack web with ASP.NET, Azure cloud services, teams using Microsoft ecosystem, projects leveraging Visual Studio tooling, applications requiring rich frameworks and libraries, when LINQ and modern language features boost productivity, and enterprise systems needing comprehensive features. C# offers more power and features."
+    },
     "hello-world": {
       "description": "Go's simplicity vs C#'s enterprise features.",
       "why": "Go simple package main. C# class and Main. Go compiles to single binary. C# to .NET. Go for simplicity. C# for features. Go fast compilation. C# more features. Different philosophies!",

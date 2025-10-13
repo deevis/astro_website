@@ -5,10 +5,14 @@ const links = [
   { href: '/', text: 'Home' },
   { href: '/articles', text: 'Articles' },
   { href: '/news', text: 'News' },
-  // Bitcoin dropdown will be handled separately
+  // Developer Tools and Bitcoin dropdowns will be handled separately
   { href: '/gallery', text: 'Gallery' },
   { href: '/showcase', text: 'HTML Showcase' },
   { href: '/about', text: 'About Me' },
+];
+
+const developerToolsDropdown = [
+  { href: '/language-showdown', text: 'Language Showdown' },
 ];
 
 const bitcoinDropdown = [
@@ -32,6 +36,30 @@ const bitcoinDropdown = [
         >
           Articles
         </a>
+        
+        <!-- Developer Tools Dropdown -->
+        <div class="relative group">
+          <button
+            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          >
+            Developer Tools
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+            {developerToolsDropdown.map(item => (
+              <a
+                href={item.href}
+                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
+              >
+                {item.text}
+              </a>
+            ))}
+          </div>
+        </div>
         
         <!-- Bitcoin Dropdown -->
         <div class="relative group">
@@ -111,6 +139,33 @@ const bitcoinDropdown = [
         News
       </a>
       
+      <!-- Developer Tools Mobile Dropdown -->
+      <div class="space-y-2">
+        <button
+          id="mobile-devtools-toggle"
+          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
+          type="button"
+          aria-label="Toggle Developer Tools menu"
+          aria-expanded="false"
+        >
+          Developer Tools
+          <svg id="mobile-devtools-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div id="mobile-devtools-menu" class="hidden pl-4 space-y-2">
+          {developerToolsDropdown.map(item => (
+            <a
+              href={item.href}
+              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              {item.text}
+            </a>
+          ))}
+        </div>
+      </div>
+      
       <!-- Bitcoin Mobile Dropdown -->
       <div class="space-y-2">
         <button
@@ -156,6 +211,9 @@ const bitcoinDropdown = [
     
     const button = document.getElementById('mobile-menu-button');
     const menu = document.getElementById('mobile-menu');
+    const devToolsToggle = document.getElementById('mobile-devtools-toggle');
+    const devToolsMenu = document.getElementById('mobile-devtools-menu');
+    const devToolsArrow = document.getElementById('mobile-devtools-arrow');
     const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
     const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
     const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
@@ -163,6 +221,9 @@ const bitcoinDropdown = [
     console.log('Elements found:', {
       button: !!button,
       menu: !!menu,
+      devToolsToggle: !!devToolsToggle,
+      devToolsMenu: !!devToolsMenu,
+      devToolsArrow: !!devToolsArrow,
       bitcoinToggle: !!bitcoinToggle,
       bitcoinMenu: !!bitcoinMenu,
       bitcoinArrow: !!bitcoinArrow
@@ -189,6 +250,22 @@ const bitcoinDropdown = [
           setTimeout(() => {
             button.style.backgroundColor = '';
           }, 1000);
+        }
+      }
+    }
+
+    function toggleDevToolsMenu(e) {
+      console.log('toggleDevToolsMenu called', e.type);
+      e.preventDefault();
+      e.stopPropagation();
+      if (devToolsMenu && devToolsArrow) {
+        const isHidden = devToolsMenu.classList.contains('hidden');
+        devToolsMenu.classList.toggle('hidden');
+        devToolsArrow.classList.toggle('rotate-180');
+        
+        // Update aria-expanded attribute
+        if (devToolsToggle) {
+          devToolsToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         }
       }
     }
@@ -223,6 +300,13 @@ const bitcoinDropdown = [
       console.log('Event listeners added successfully');
     } else {
       console.error('Button or menu not found!', { button, menu });
+    }
+
+    if (devToolsToggle && devToolsMenu && devToolsArrow) {
+      console.log('Adding event listeners to developer tools toggle');
+      // Add both click and touchstart for maximum compatibility
+      devToolsToggle.addEventListener('click', toggleDevToolsMenu);
+      devToolsToggle.addEventListener('touchstart', toggleDevToolsMenu, { passive: false });
     }
 
     if (bitcoinToggle && bitcoinMenu && bitcoinArrow) {

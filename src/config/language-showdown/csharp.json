@@ -2,6 +2,41 @@
   "name": "C#",
   "color": "#68217a",
   "icon": "csharp",
+  "history": "Created by Anders Hejlsberg at Microsoft and released in 2000 as part of .NET Framework, C# was designed as a modern alternative to Java. Originally criticized as a Java clone, C# has evolved rapidly and independently. Major milestones include LINQ (C# 3, 2007), async/await (C# 5, 2012), pattern matching (C# 7), nullable reference types (C# 8), records (C# 9), and top-level statements (C# 9). With .NET Core (now .NET 5+), C# became cross-platform. Used by Unity game engine and enterprise applications worldwide, C# combines power, modern features, and excellent tooling.",
+  "keyFeatures": [
+    "Strong static typing with inference",
+    "Automatic properties (get; set;)",
+    "LINQ for querying collections",
+    "Async/await for concurrency",
+    "Garbage collection",
+    "Pattern matching and records",
+    "Nullable reference types (C# 8+)",
+    "Properties instead of getters/setters",
+    "Cross-platform (.NET 5+)",
+    "Excellent Visual Studio integration"
+  ],
+  "pros": [
+    "Modern language with rapid evolution",
+    "Excellent tooling (Visual Studio)",
+    "Strong type safety",
+    "LINQ is incredibly powerful",
+    "Great async/await support",
+    "Cross-platform with .NET",
+    "Unity for game development",
+    "Large ecosystem and community",
+    "Auto-properties reduce boilerplate",
+    "Microsoft backing and support"
+  ],
+  "cons": [
+    "Primarily tied to Microsoft ecosystem",
+    "Windows-centric history (legacy)",
+    "Slower than native languages",
+    "GC pauses in performance-critical apps",
+    "Verbosity compared to dynamic languages",
+    ".NET versioning can be confusing",
+    "Smaller adoption than Java/Python",
+    "Enterprise focus may feel heavy for small projects"
+  ],
   "snippets": {
     "hello-world": "using System;\n\nclass Program\n{\n    static void Main()\n    {\n        Console.WriteLine(\"Hello, World!\");\n    }\n}",
     "variables": "// C# has strong typing with type inference\nstring name = \"John\";\nint age = 30;\nList<string> items = new List<string>();\nconst double PI = 3.14159;\n\n// Type inference with var\nvar message = \"Hello\";  // still strongly typed!\n\n// Nullable types\nint? nullableAge = null;\nstring? nullableName = null;  // C# 8+",

@@ -162,11 +162,14 @@
           }
           const data = await response.json();
           
+          // Use active_articles from top level
+          const allArticles = data.active_articles || [];
+          
           // Filter out articles without meaningful content, prioritize by importance, then randomize
-          this.articles = data.news_feed.articles
+          this.articles = allArticles
             .filter(article => {
               // Only include articles with meaningful content
-              const content = article.content_preview || '';
+              const content = article.content_sample || '';
               return content.trim().length > 0;
             })
             .sort((a, b) => {
@@ -191,17 +194,18 @@
 
         const tickerItems = this.articles.map(article => {
           const categoryInfo = this.getCategoryInfo(article.category);
-          const timeAgo = this.formatTimeAgo(article.published_date);
+          const storyAge = this.formatStoryAge(article);
+          const sourceDisplay = this.formatSources(article.sources);
           
-          return '<span class="ticker-item ' + (article.importance === 'high' ? 'importance-high' : '') + '" data-article-id="' + article.id + '" style="margin-right: 8rem;">' +
+          return '<span class="ticker-item ' + (article.importance === 'high' ? 'importance-high' : '') + '" data-article-id="' + article.story_id + '" style="margin-right: 8rem;">' +
             '<span class="category-badge ' + categoryInfo.color + '">' +
               categoryInfo.icon + ' ' + categoryInfo.name +
             '</span>' +
             '<span class="font-medium" style="margin-left: 0.5rem;">' + this.truncateText(article.title, 80) + '</span>' +
             '<span class="ticker-separator">•</span>' +
-            '<span class="text-sm opacity-75">' + article.source + '</span>' +
+            '<span class="text-sm opacity-75">' + sourceDisplay + '</span>' +
             '<span class="ticker-separator">•</span>' +
-            '<span class="text-xs opacity-60">' + timeAgo + '</span>' +
+            '<span class="text-xs opacity-60">' + storyAge + '</span>' +
           '</span>';
         }).join('');
 
@@ -276,7 +280,7 @@
           const tickerItem = e.target.closest('.ticker-item');
           if (tickerItem) {
             const articleId = tickerItem.dataset.articleId;
-            const article = this.articles.find(a => a.id === articleId);
+            const article = this.articles.find(a => a.story_id === articleId);
             if (article) {
               this.openModal(article);
             }
@@ -368,6 +372,11 @@
             name: 'AI', 
             color: 'bg-purple-500 text-white',
             icon: '🤖'
+          },
+          'tech_news': { 
+            name: 'Tech', 
+            color: 'bg-green-500 text-white',
+            icon: '📡'
           }
         };
         
@@ -378,25 +387,47 @@
         };
       }
 
-      formatTimeAgo(dateString) {
+      formatStoryAge(article) {
         try {
-          const date = new Date(dateString);
+          const firstSeen = new Date(article.first_seen);
+          const lastSeen = new Date(article.last_seen);
           const now = new Date();
-          const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
           
-          if (diffInHours < 1) {
-            return 'Just now';
-          } else if (diffInHours < 24) {
-            return diffInHours + 'h ago';
-          } else if (diffInHours < 48) {
-            return '1d ago';
+          const ageHours = Math.floor((now - firstSeen) / (1000 * 60 * 60));
+          const recencyHours = Math.floor((now - lastSeen) / (1000 * 60 * 60));
+          
+          // Format age
+          let ageStr = '';
+          if (ageHours < 1) {
+            ageStr = 'New';
+          } else if (ageHours < 24) {
+            ageStr = ageHours + 'h old';
           } else {
-            const days = Math.floor(diffInHours / 24);
-            return days + 'd ago';
+            const days = Math.floor(ageHours / 24);
+            ageStr = days + 'd old';
           }
+          
+          // Add recency for active stories
+          if (article.is_active && recencyHours < 6) {
+            if (recencyHours < 1) {
+              return ageStr + ' • Just updated';
+            }
+            return ageStr + ' • Updated ' + recencyHours + 'h ago';
+          }
+          
+          return ageStr;
         } catch (error) {
           return '';
         }
+      }
+
+      formatSources(sources) {
+        if (!sources || sources.length === 0) return 'Unknown';
+        if (sources.length === 1) return sources[0].name;
+        if (sources.length <= 3) {
+          return sources.map(s => s.name).slice(0, 2).join(', ');
+        }
+        return sources[0].name + ' +' + (sources.length - 1) + ' more';
       }
 
       truncateText(text, maxLength) {

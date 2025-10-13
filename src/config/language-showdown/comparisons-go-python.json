@@ -2,6 +2,11 @@
   "leftLanguage": "go",
   "rightLanguage": "python",
   "comparisons": {
+    "overview": {
+      "summary": "Go and Python represent opposite philosophies: Go's minimalist simplicity versus Python's expressive flexibility. Go (2009) was designed at Google for building reliable, efficient services with built-in concurrency via goroutines. Python (1991) emphasizes readability and developer productivity with its 'batteries included' philosophy and massive ecosystem for data science, machine learning, and web development. Go compiles to fast native binaries and excels at microservices and cloud infrastructure (Docker, Kubernetes). Python remains interpreted, slower, but dominates in data analysis, AI/ML, and scripting. Go's strict simplicity means one way to do things; Python's flexibility offers multiple approaches. Go has no generics (until 1.18) to stay simple; Python embraces dynamic typing. Both value clean code, but Go enforces it through gofmt while Python suggests it through PEP 8.",
+      "whenToUseLeft": "Choose Go for cloud-native microservices, DevOps tooling, high-concurrency network services, containerized applications, CLI tools requiring fast startup, projects needing single-binary deployment, teams valuing simplicity over features, REST APIs and gRPC services, and when consistent performance matters more than peak performance. Go's goroutines make concurrent programming straightforward.",
+      "whenToUseRight": "Choose Python for data science and machine learning, scientific computing, rapid prototyping and scripting, web applications with Django/Flask, automation and DevOps scripts, projects requiring extensive libraries (NumPy, pandas, TensorFlow), teams prioritizing development speed over runtime speed, teaching and learning programming, and when the ecosystem and community matter more than execution performance. Python's flexibility and vast ecosystem are unmatched."
+    },
     "hello-world": {
       "description": "Python minimizes all boilerplate while Go requires package and import declarations.",
       "why": "Python is the simplest - one line, no ceremony. Go requires package main, import, and func main(). Python is interpreted, Go is compiled (but very fast). Python emphasizes readability, Go emphasizes simplicity and performance. Different philosophies for different use cases.",

@@ -2,6 +2,41 @@
   "name": "Rust",
   "color": "#CE412B",
   "icon": "rust",
+  "history": "Started by Graydon Hoare at Mozilla Research in 2006 and announced in 2010, Rust 1.0 was released in 2015. Rust was designed to be a safe, concurrent, and practical language for systems programming. It achieves memory safety without garbage collection through its innovative ownership system. Rust has won 'most loved programming language' in Stack Overflow surveys for eight consecutive years (2016-2023). Used in production by companies like Microsoft, Amazon, Google, and Meta, Rust is replacing C++ in critical infrastructure. The Rust Foundation, formed in 2021, now stewards the language's development.",
+  "keyFeatures": [
+    "Memory safety without garbage collection",
+    "Ownership system prevents data races",
+    "Zero-cost abstractions",
+    "Powerful pattern matching",
+    "Type inference with strong static typing",
+    "Immutable by default",
+    "Fearless concurrency",
+    "Expressive error handling with Result",
+    "Cargo build system and package manager",
+    "Macro system for metaprogramming"
+  ],
+  "pros": [
+    "Prevents memory bugs at compile-time",
+    "No null pointer exceptions",
+    "Data race prevention",
+    "C/C++ level performance",
+    "Growing ecosystem",
+    "Excellent tooling (cargo, clippy)",
+    "Modern language features",
+    "Strong community",
+    "Great documentation ('The Book')",
+    "Increasing industry adoption"
+  ],
+  "cons": [
+    "Steep learning curve",
+    "Longer compile times",
+    "Ownership system can be complex",
+    "Smaller ecosystem than established languages",
+    "Less educational resources than Java/Python",
+    "Borrow checker can be frustrating initially",
+    "Verbose syntax in some cases",
+    "Smaller job market (but growing)"
+  ],
   "snippets": {
     "hello-world": "fn main() {\n    println!(\"Hello, World!\");\n}",
     "variables": "// Rust uses immutable by default\nlet name = \"John\";        // Immutable\nlet mut age = 30;          // Mutable with 'mut'\nlet items: Vec<String> = Vec::new();\nconst PI: f64 = 3.14159;   // Compile-time constant\n\n// Type inference is powerful\nlet message = \"Hello\";     // Infers &str\nlet numbers = vec![1, 2, 3]; // Infers Vec<i32>",

@@ -57,6 +57,7 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
               <option value="bitcoin">₿ Bitcoin</option>
               <option value="software_dev">💻 Software Development</option>
               <option value="ai_progress">🤖 AI Progress</option>
+              <option value="tech_news">📡 Tech News</option>
             </select>
           </div>
 
@@ -201,10 +202,10 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
             throw new Error('HTTP error! status: ' + response.status);
           }
           const data = await response.json();
-          this.articles = data.news_feed.articles;
+          this.articles = data.active_articles || [];
           
           // Update last updated time
-          const lastUpdated = new Date(data.news_feed.generated_at);
+          const lastUpdated = new Date(data.monthly_aggregate.last_updated);
           document.getElementById('last-updated').textContent = 'Last updated: ' + lastUpdated.toLocaleString();
         } catch (error) {
           console.error('Error loading news:', error);
@@ -243,9 +244,11 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         if (searchTerm) {
           filtered = filtered.filter(article => 
             article.title.toLowerCase().includes(searchTerm) ||
-            article.content_preview.toLowerCase().includes(searchTerm) ||
-            article.source.toLowerCase().includes(searchTerm) ||
-            article.author.toLowerCase().includes(searchTerm) ||
+            article.content_sample.toLowerCase().includes(searchTerm) ||
+            article.sources.some(s => 
+              s.name.toLowerCase().includes(searchTerm) ||
+              (s.author && s.author.toLowerCase().includes(searchTerm))
+            ) ||
             article.tags.some(tag => tag.toLowerCase().includes(searchTerm))
           );
         }
@@ -259,7 +262,7 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         // Apply sorting
         const sortBy = document.getElementById('sort-filter').value;
         if (sortBy === 'date') {
-          filtered.sort((a, b) => new Date(b.published_date).getTime() - new Date(a.published_date).getTime());
+          filtered.sort((a, b) => new Date(b.first_seen).getTime() - new Date(a.first_seen).getTime());
         } else if (sortBy === 'importance') {
           const importanceOrder = { 'high': 3, 'medium': 2, 'low': 1 };
           filtered.sort((a, b) => {
@@ -268,7 +271,11 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
             return importanceB - importanceA;
           });
         } else if (sortBy === 'source') {
-          filtered.sort((a, b) => a.source.localeCompare(b.source));
+          filtered.sort((a, b) => {
+            const sourceA = a.sources && a.sources[0] ? a.sources[0].name : '';
+            const sourceB = b.sources && b.sources[0] ? b.sources[0].name : '';
+            return sourceA.localeCompare(sourceB);
+          });
         }
 
         this.filteredArticles = filtered;
@@ -293,7 +300,7 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         grid.querySelectorAll('.news-card').forEach(card => {
           card.addEventListener('click', () => {
             const articleId = card.dataset.articleId;
-            const article = this.articles.find(a => a.id === articleId);
+            const article = this.articles.find(a => a.story_id === articleId);
             if (article) {
               this.openModal(article);
             }
@@ -304,9 +311,10 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
       createArticleCard(article) {
         const categoryInfo = this.getCategoryInfo(article.category);
         const importanceInfo = this.getImportanceInfo(article.importance);
-        const timeAgo = this.formatTimeAgo(article.published_date);
+        const storyAge = this.formatStoryAge(article);
+        const sourceDisplay = this.formatSourceBadge(article.sources);
 
-        return '<div class="news-card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer overflow-hidden" data-article-id="' + article.id + '">' +
+        return '<div class="news-card bg-white dark:bg-gray-800 rounded-lg shadow-md cursor-pointer overflow-hidden" data-article-id="' + article.story_id + '">' +
           '<div class="p-6">' +
             '<div class="flex items-center justify-between mb-3">' +
               '<span class="px-2 py-1 text-xs font-semibold rounded-full ' + categoryInfo.color + '">' +
@@ -320,11 +328,11 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
               article.title +
             '</h3>' +
             '<p class="text-gray-600 dark:text-gray-400 text-sm mb-4 line-clamp-3">' +
-              article.content_preview +
+              article.content_sample +
             '</p>' +
             '<div class="flex items-center justify-between text-xs text-gray-500 dark:text-gray-400">' +
-              '<span>' + article.source + '</span>' +
-              '<span>' + timeAgo + '</span>' +
+              '<span>' + sourceDisplay + '</span>' +
+              '<span>' + storyAge + '</span>' +
             '</div>' +
           '</div>' +
         '</div>';
@@ -365,6 +373,11 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
             name: 'AI Progress', 
             color: 'bg-purple-500 text-white',
             icon: '🤖'
+          },
+          'tech_news': { 
+            name: 'Tech News', 
+            color: 'bg-green-500 text-white',
+            icon: '📡'
           }
         };
         
@@ -401,25 +414,50 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         };
       }
 
-      formatTimeAgo(dateString) {
+      formatStoryAge(article) {
         try {
-          const date = new Date(dateString);
+          const firstSeen = new Date(article.first_seen);
+          const lastSeen = new Date(article.last_seen);
           const now = new Date();
-          const diffInHours = Math.floor((now.getTime() - date.getTime()) / (1000 * 60 * 60));
           
-          if (diffInHours < 1) {
-            return 'Just now';
-          } else if (diffInHours < 24) {
-            return diffInHours + 'h ago';
-          } else if (diffInHours < 48) {
-            return 'Yesterday';
+          const ageHours = Math.floor((now - firstSeen) / (1000 * 60 * 60));
+          const recencyHours = Math.floor((now - lastSeen) / (1000 * 60 * 60));
+          
+          // Format age
+          let ageStr = '';
+          if (ageHours < 1) {
+            ageStr = 'Just now';
+          } else if (ageHours < 24) {
+            ageStr = ageHours + 'h ago';
+          } else if (ageHours < 48) {
+            ageStr = '1d ago';
           } else {
-            const days = Math.floor(diffInHours / 24);
-            return days + 'd ago';
+            const days = Math.floor(ageHours / 24);
+            ageStr = days + 'd ago';
           }
+          
+          // Add recency for very recent updates
+          if (article.is_active && recencyHours < 2) {
+            return ageStr + ' (updated recently)';
+          }
+          
+          return ageStr;
         } catch (error) {
           return 'Unknown';
         }
+      }
+
+      formatSourceBadge(sources) {
+        if (!sources || sources.length === 0) return 'Unknown';
+        if (sources.length === 1) return sources[0].name;
+        
+        // Show first source + count badge for multiple sources
+        return '<span class="inline-flex items-center gap-1">' +
+          '<span>' + sources[0].name + '</span>' +
+          '<span class="px-1.5 py-0.5 bg-blue-500 text-white rounded-full text-xs font-semibold">' +
+          sources.length +
+          '</span>' +
+          '</span>';
       }
 
       showContent() {

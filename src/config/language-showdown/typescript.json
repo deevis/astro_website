@@ -2,6 +2,41 @@
   "name": "TypeScript",
   "color": "#3178C6",
   "icon": "typescript",
+  "history": "Developed by Microsoft and released in 2012, TypeScript was created by Anders Hejlsberg (designer of C# and Turbo Pascal) to address JavaScript's limitations in large applications. TypeScript is a superset of JavaScript that adds optional static typing. It compiles to plain JavaScript and can run anywhere JavaScript runs. Major milestones include generics (1.0), async/await (1.7), strict null checks (2.0), and conditional types (2.8). Adopted by Angular, Vue 3, and countless enterprises, TypeScript has become the de facto standard for large-scale JavaScript development. It brings type safety while maintaining JavaScript's flexibility.",
+  "keyFeatures": [
+    "Optional static typing",
+    "Structural type system (duck typing)",
+    "Compiles to JavaScript",
+    "Excellent IDE support and autocomplete",
+    "Gradual typing (JavaScript is valid TS)",
+    "Advanced type features (unions, generics)",
+    "Interface and type aliases",
+    "Decorators (experimental)",
+    "Enum support",
+    "Strong integration with modern frameworks"
+  ],
+  "pros": [
+    "Catches errors at compile time",
+    "Excellent developer experience",
+    "Strong IDE and editor support",
+    "Gradual adoption path from JavaScript",
+    "Large and growing ecosystem",
+    "Backed by Microsoft",
+    "Great for large codebases",
+    "Improves refactoring confidence",
+    "Type-safe without runtime overhead",
+    "Cross-platform (Node, browsers, Deno)"
+  ],
+  "cons": [
+    "Additional build step required",
+    "Learning curve for type system",
+    "Types can be verbose",
+    "Still inherits JavaScript quirks",
+    "Type definitions for libraries vary in quality",
+    "Configuration can be complex",
+    "Single-threaded (inherited from JS)",
+    "Not truly type-safe (any escape hatch)"
+  ],
   "snippets": {
     "hello-world": "console.log(\"Hello, World!\");",
     "variables": "// TypeScript has optional type annotations\nlet name: string = \"John\";\nlet age: number = 30;\nlet items: string[] = [];\nconst PI: number = 3.14159;\n\n// Type inference (types optional!)\nlet message = \"Hello\";  // Infers string\nlet count = 42;         // Infers number\n\n// Any type (escape hatch)\nlet flexible: any = \"anything\";\nflexible = 42;  // OK\n\n// Union types\nlet id: string | number;\nid = \"ABC123\";\nid = 42;",

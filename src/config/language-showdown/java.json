@@ -2,6 +2,41 @@
   "name": "Java",
   "color": "#f76707",
   "icon": "java",
+  "history": "Created by James Gosling at Sun Microsystems in 1995, Java was designed with the principle of \"Write Once, Run Anywhere\" (WORA). Originally called Oak, it was renamed Java after the team's favorite coffee. Java revolutionized programming with the Java Virtual Machine (JVM), enabling platform-independent execution. Acquired by Oracle in 2010, Java has evolved through 20+ versions, with major updates like generics (Java 5), lambdas (Java 8), modules (Java 9), records (Java 14), and pattern matching. Today, Java powers billions of devices and remains the backbone of enterprise computing.",
+  "keyFeatures": [
+    "Platform independence via JVM bytecode",
+    "Strong static typing with type inference (var)",
+    "Automatic garbage collection",
+    "Rich ecosystem with Maven/Gradle",
+    "Enterprise-grade frameworks (Spring, Hibernate)",
+    "Robust multithreading capabilities",
+    "Extensive standard library",
+    "Backward compatibility across versions",
+    "Security manager and sandboxing",
+    "Streams API for functional programming"
+  ],
+  "pros": [
+    "Industry standard for enterprise applications",
+    "Massive ecosystem and community",
+    "Excellent IDE support (IntelliJ, Eclipse)",
+    "Strong type safety catches bugs early",
+    "Mature, battle-tested technology",
+    "Abundant learning resources and tutorials",
+    "High demand in job market",
+    "Excellent performance for large applications",
+    "Cross-platform compatibility",
+    "Long-term support (LTS) versions"
+  ],
+  "cons": [
+    "Verbose syntax with boilerplate code",
+    "Slower development time vs dynamic languages",
+    "Memory hungry applications",
+    "Longer startup time",
+    "Null pointer exceptions despite improvements",
+    "Slower evolution compared to modern languages",
+    "String handling lacks modern interpolation (until Java 21)",
+    "Corporate governance can slow innovation"
+  ],
   "snippets": {
     "hello-world": "public class HelloWorld {\n    public static void main(String[] args) {\n        System.out.println(\"Hello, World!\");\n    }\n}",
     "variables": "// Java requires explicit types\nString name = \"John\";\nint age = 30;\nList<String> items = new ArrayList<>();\nfinal double PI = 3.14159;\n\n// Type inference (Java 10+)\nvar message = \"Hello\";",

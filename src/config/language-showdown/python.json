@@ -2,6 +2,41 @@
   "name": "Python",
   "color": "#3776ab",
   "icon": "python",
+  "history": "Created by Guido van Rossum and released in 1991, Python emphasizes code readability with significant whitespace. Named after Monty Python, it was designed as a successor to the ABC language. Python 2.0 (2000) introduced list comprehensions and garbage collection. Python 3.0 (2008) was a major backward-incompatible update fixing fundamental design flaws. Python has become the dominant language for data science, machine learning, and AI, powered by libraries like NumPy, pandas, and TensorFlow. Its philosophy, outlined in 'The Zen of Python,' emphasizes beautiful, explicit, and simple code.",
+  "keyFeatures": [
+    "Indentation-based syntax",
+    "Dynamic typing with optional type hints",
+    "Extensive standard library ('batteries included')",
+    "Multiple programming paradigms",
+    "Automatic memory management",
+    "List comprehensions and generators",
+    "First-class functions and decorators",
+    "Interpreted with REPL",
+    "Cross-platform compatibility",
+    "Massive ecosystem for data science/ML"
+  ],
+  "pros": [
+    "Extremely readable and maintainable",
+    "Gentle learning curve",
+    "Dominant in data science and AI",
+    "Huge ecosystem and community",
+    "Versatile (web, scripting, data, ML)",
+    "Rich standard library",
+    "Great for rapid prototyping",
+    "Excellent documentation",
+    "Cross-platform",
+    "High demand in job market"
+  ],
+  "cons": [
+    "Slower execution speed",
+    "GIL limits multi-threading",
+    "Not ideal for mobile development",
+    "Runtime errors due to dynamic typing",
+    "Whitespace sensitivity can be contentious",
+    "Package management can be complex",
+    "Python 2/3 compatibility issues (legacy)",
+    "Memory intensive"
+  ],
   "snippets": {
     "hello-world": "print(\"Hello, World!\")",
     "variables": "# Python uses dynamic typing\nname = \"John\"\nage = 30\nitems = []\nPI = 3.14159  # Convention: UPPERCASE for constants\n\n# Everything is an object\ntype(name)  # <class 'str'>\ntype(age)   # <class 'int'>",

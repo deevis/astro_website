@@ -1,6 +1,15 @@
 {
   "sections": [
     {
+      "category": "Overview",
+      "items": [
+        {
+          "id": "overview",
+          "title": "Language Overview"
+        }
+      ]
+    },
+    {
       "category": "Basics",
       "items": [
         {

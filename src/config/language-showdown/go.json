@@ -2,6 +2,41 @@
   "name": "Go",
   "color": "#00ADD8",
   "icon": "go",
+  "history": "Created at Google in 2007 by Robert Griesemer, Rob Pike, and Ken Thompson, Go (Golang) was designed to address criticisms of other languages while maintaining their positive characteristics. Released as open-source in 2009 and reaching 1.0 in 2012, Go was built for the multicore, networked era. It combines the efficiency of C with the safety of Java and readability of Python. Go powers major infrastructure like Docker, Kubernetes, and Terraform. Known for its simplicity, fast compilation, and built-in concurrency via goroutines, Go has become the language of choice for cloud-native and DevOps tooling.",
+  "keyFeatures": [
+    "Fast compilation to native code",
+    "Built-in concurrency with goroutines",
+    "Channels for safe communication",
+    "Simple, minimalist syntax",
+    "Garbage collection",
+    "Strong static typing with inference",
+    "Standard library for networking and web",
+    "No classes, only structs",
+    "Implicit interface implementation",
+    "Fast execution performance"
+  ],
+  "pros": [
+    "Extremely fast compilation",
+    "Excellent concurrency model",
+    "Simple, easy to learn",
+    "Great for microservices",
+    "Single binary deployment",
+    "Strong standard library",
+    "Backed by Google",
+    "Growing adoption in cloud/DevOps",
+    "Fast execution speed",
+    "Cross-platform compilation"
+  ],
+  "cons": [
+    "No generics (until Go 1.18)",
+    "Verbose error handling",
+    "No traditional inheritance",
+    "Limited metaprogramming",
+    "Smaller ecosystem than Java/Python",
+    "Opinionated formatting (gofmt)",
+    "Less expressive than other languages",
+    "No functional programming features"
+  ],
   "snippets": {
     "hello-world": "package main\n\nimport \"fmt\"\n\nfunc main() {\n    fmt.Println(\"Hello, World!\")\n}",
     "variables": "// Go uses type inference with :=\nname := \"John\"\nage := 30\nitems := []string{}\n\n// Explicit types\nvar message string = \"Hello\"\n\n// Constants\nconst PI = 3.14159\n\n// Multiple declaration\nvar (\n    x int = 5\n    y int = 10\n)",

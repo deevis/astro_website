@@ -2,6 +2,11 @@
   "leftLanguage": "java",
   "rightLanguage": "csharp",
   "comparisons": {
+    "overview": {
+      "summary": "Java and C# are like cousins separated at birth. Both born from the same OOP enterprise tradition, they started remarkably similar when C# launched in 2000 as Microsoft's answer to Java. However, while Java has maintained backward compatibility and moved cautiously, C# has evolved rapidly with aggressive innovation. C# introduced LINQ in 2007 (before Java Streams), async/await in 2012 (before Java virtual threads), and properties that eliminate getter/setter boilerplate. Java counters with its massive ecosystem, true platform independence via JVM, and dominance in Android development. C# now runs cross-platform with .NET 5+, powers Unity game development, and offers superior developer experience through modern language features. Both are enterprise stalwarts, but C# is the more modern, rapidly evolving sibling.",
+      "whenToUseLeft": "Choose Java for Android mobile development, true platform independence across any JVM-compatible system, massive enterprise ecosystems with Spring/Hibernate, projects requiring extreme backward compatibility, large teams with established Java expertise, open-source first philosophy, and when you need the widest possible deployment options across diverse platforms and cloud providers.",
+      "whenToUseRight": "Choose C# for modern .NET development, Unity game development, Windows-first applications, projects prioritizing developer productivity with modern language features (LINQ, properties, async/await), teams using Visual Studio tooling, Azure cloud integration, enterprise applications where rapid evolution is valued over extreme backward compatibility, and when string interpolation and cleaner syntax matter."
+    },
     "hello-world": {
       "description": "Both require class and Main method, but C# is slightly cleaner.",
       "why": "Java and C# are cousins - both from the same OOP enterprise tradition. C# started as Microsoft's answer to Java but has evolved much faster. C# now has top-level statements (C# 9+) to eliminate boilerplate. C# Main can omit string[] args. Both compile to bytecode (MSIL vs JVM bytecode).",

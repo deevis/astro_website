@@ -2,6 +2,42 @@
   "name": "C++",
   "color": "#00599C",
   "icon": "cpp",
+  "history": "Created by Bjarne Stroustrup in 1979 as 'C with Classes' at Bell Labs, officially named C++ in 1983. C++ extends C with object-oriented features while maintaining backward compatibility. Major standards include C++98, C++11 (massive modernization), C++14, C++17, C++20, and C++23. C++ powers game engines (Unreal, Unity), browsers (Chrome, Firefox), operating systems (Windows, macOS components), and high-performance applications. Known for giving complete control over system resources, C++ remains dominant in performance-critical domains despite its complexity. Modern C++ (C++11 onward) significantly improved safety and expressiveness.",
+  "keyFeatures": [
+    "Manual memory management with pointers",
+    "Multiple inheritance support",
+    "Templates for generic programming",
+    "Compile to native machine code",
+    "Zero-cost abstractions",
+    "RAII (Resource Acquisition Is Initialization)",
+    "STL (Standard Template Library)",
+    "Low-level hardware access",
+    "Backward compatible with C",
+    "Value and reference semantics"
+  ],
+  "pros": [
+    "Maximum performance and control",
+    "Extensive legacy codebase",
+    "Powerful template system",
+    "Direct hardware access",
+    "Huge ecosystem and libraries",
+    "Industry standard for systems/games",
+    "C++11+ brings modern features",
+    "Cross-platform",
+    "No garbage collection overhead",
+    "Mature, battle-tested"
+  ],
+  "cons": [
+    "Steep learning curve",
+    "Manual memory management prone to errors",
+    "Undefined behavior pitfalls",
+    "Slow compilation times",
+    "Complex syntax and semantics",
+    "Multiple ways to do the same thing",
+    "No standard build system",
+    "Header file complexity",
+    "Difficult to master fully"
+  ],
   "snippets": {
     "hello-world": "#include <iostream>\n\nint main() {\n    std::cout << \"Hello, World!\" << std::endl;\n    return 0;\n}",
     "variables": "// C++ requires explicit types\nstring name = \"John\";\nint age = 30;\nvector<string> items;\nconst double PI = 3.14159;\n\n// Type inference with auto (C++11)\nauto message = \"Hello\";  // Infers const char*\nauto number = 42;        // Infers int\n\n// References (not copies)\nint& ref = age;          // Reference to age",

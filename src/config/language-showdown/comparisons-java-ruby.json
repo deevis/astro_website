@@ -2,6 +2,11 @@
   "leftLanguage": "java",
   "rightLanguage": "ruby",
   "comparisons": {
+    "overview": {
+      "summary": "Java and Ruby represent two fundamentally different philosophies in programming language design. Java, the enterprise stalwart born in 1995, emphasizes strong static typing, compile-time safety, and platform independence through the JVM. Ruby, also from 1995, champions developer happiness, elegant syntax, and rapid development through dynamic typing and powerful metaprogramming. While Java dominates enterprise applications and Android development with its 'Write Once, Run Anywhere' promise, Ruby found its killer app in Ruby on Rails, revolutionizing web development. Java trades verbosity for safety; Ruby trades safety for expressiveness. Java is ubiquitous and battle-tested; Ruby is elegant and beloved by its community. According to [Railsware's comparison](https://railsware.com/blog/ruby-vs-java-elegance-contra-ubiquity/), this matchup is truly 'Elegance Contra Ubiquity.' Both languages have stood the test of time, each serving distinct niches with passionate communities and robust ecosystems.",
+      "whenToUseLeft": "Choose Java for enterprise applications requiring high reliability, large-scale systems with complex architecture, Android mobile development, applications needing strong type safety, projects with large teams, high-traffic systems, long-term maintenance requirements, and when performance at scale is critical.",
+      "whenToUseRight": "Choose Ruby for rapid web application development, startups and MVPs needing fast iteration, projects prioritizing developer productivity, applications with frequently changing requirements, small to medium teams valuing code readability, Ruby on Rails projects, and when time-to-market is more critical than raw performance."
+    },
     "hello-world": {
       "description": "The simplest program in both languages showcases their fundamental differences in verbosity and ceremony.",
       "why": "Ruby eliminates boilerplate. You don't need class declarations, main methods, or even semicolons for single statements. Ruby scripts execute top-to-bottom. 'puts' (put string) is Ruby's standard output method - simpler than System.out.println.",

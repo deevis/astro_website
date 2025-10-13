@@ -76,7 +76,7 @@ ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV PYTHONPATH="/app/python/news_aggregator:$PYTHONPATH"
 
 # Create cron jobs for both news feed and Bitcoin price updates
-RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/news_feed_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/automated-updates && \
+RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/monthly_aggregate_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/automated-updates && \
     echo "0 */4 * * * cd /app && /opt/news_feed_env/bin/python python/bitcoin/populate_price_histories.py >> /var/log/bitcoin_price_cron.log 2>&1" >> /etc/cron.d/automated-updates && \
     chmod 0644 /etc/cron.d/automated-updates && \
     crontab /etc/cron.d/automated-updates && \
