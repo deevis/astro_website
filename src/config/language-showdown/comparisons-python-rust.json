@@ -18,6 +18,18 @@
         "Opposite philosophies"
       ]
     },
+    "comments": {
+      "description": "Python uses # while Rust uses //. Completely different documentation approaches.",
+      "why": "Python # vs Rust // - scripting vs systems heritage. Rust documentation is world-class - /// and //! comments support Markdown and runnable tests! Python docstrings are simpler but less powerful. Rust's doc tests actually run - revolutionary! Python docstrings are objects (__doc__). For multi-line strings, Python f-strings with triple quotes are elegant. Rust raw strings (r#\" \"#) are powerful but more complex. Python better for rapid iteration. Rust better for correctness.",
+      "keyPoints": [
+        "Rust doc tests run as actual tests!",
+        "Python docstrings simpler",
+        "Rust documentation culture superior",
+        "Python f-strings elegant",
+        "Rust raw strings powerful",
+        "Different priorities: speed vs safety"
+      ]
+    },
     "variables": {
       "description": "Python's dynamic typing contrasts completely with Rust's static ownership system.",
       "why": "Python: dynamic typing, no declarations. Rust: static typing with ownership. Python variables can change types. Rust variables cannot. Python mutable by default. Rust immutable by default. Rust catches errors at compile time. Python at runtime. Fundamental differences.",

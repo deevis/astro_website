@@ -18,6 +18,18 @@
         "Different use cases: scripting vs systems"
       ]
     },
+    "comments": {
+      "description": "Python uses # while Go uses //. Docstrings vs GoDoc for documentation.",
+      "why": "Python # vs Go // - different scripting vs systems heritage. Python docstrings (\"\"\" \"\"\") become __doc__ attributes - they're actual objects! Go comments before declarations become GoDoc. Python docstrings more flexible and Pythonic. Go documentation simpler. For multi-line strings, Python triple-quotes support interpolation with f-strings. Go backticks are raw strings (no interpolation). Python approach more flexible for templates and SQL. Go approach simpler for raw text.",
+      "keyPoints": [
+        "Python # vs Go //",
+        "Python docstrings become objects",
+        "GoDoc simpler approach",
+        "Python f-strings support interpolation",
+        "Go raw strings don't interpolate",
+        "Python more flexible for templates"
+      ]
+    },
     "variables": {
       "description": "Python uses dynamic typing while Go uses static typing with inference.",
       "why": "Python is dynamically typed - types checked at runtime. Go is statically typed - types checked at compile time. Go's := provides type inference like dynamic but with safety. Python variables can change types. Go variables cannot. Trade-off: flexibility vs safety.",

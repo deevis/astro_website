@@ -18,6 +18,19 @@
         "Different ecosystems"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but TypeScript has JSDoc and template literals for multi-line strings.",
+      "why": "Comments are identical - TypeScript inherited from JavaScript. Both use // and /* */. TypeScript uses JSDoc (/** */) like Java but with @param and type annotations. TypeScript template literals (backticks) are superior to Java text blocks - they support interpolation ${}, span multiple lines naturally, and are part of the language since ES6 (not a recent addition). Java text blocks came in Java 15 and don't support interpolation until Java 21. TypeScript's approach is cleaner and more integrated. Tagged templates offer even more power.",
+      "keyPoints": [
+        "Comment syntax identical",
+        "Both use JSDoc/JavaDoc for documentation",
+        "Template literals (backticks) superior to text blocks",
+        "Template literals support ${interpolation}",
+        "Part of language since ES6 (not new)",
+        "Tagged templates offer advanced features",
+        "TypeScript's approach more elegant"
+      ]
+    },
     "variables": {
       "description": "Java requires explicit types while TypeScript has optional type annotations with powerful inference.",
       "why": "Java: types required. TypeScript: types optional! TypeScript has type inference. Java requires types (or var). TypeScript union types (string | number). Java doesn't. TypeScript gradual typing philosophy. Java static typing enforced. TypeScript more flexible.",

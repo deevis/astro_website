@@ -17,6 +17,10 @@
           "title": "Hello World"
         },
         {
+          "id": "comments",
+          "title": "Comments & Documentation"
+        },
+        {
           "id": "variables",
           "title": "Variables & Type Inference"
         },

@@ -18,6 +18,18 @@
         "Rust designed as safer C++"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but Rust has nested comments and superior documentation.",
+      "why": "Both inherited from C - similar syntax. Rust nested comments /* /* */ */ superior. Rust doc comments (///) run as tests - revolutionary! C++ Doxygen doesn't do this. For multi-line, Rust raw strings (r#\" \"#) vs C++ raw strings R\"( )\". Both work but Rust's # approach for nesting is cleaner. Rust documentation culture superior. Rust improving on C++'s foundations.",
+      "keyPoints": [
+        "Rust nested comments superior",
+        "Rust doc tests revolutionary",
+        "Rust raw strings cleaner for nesting",
+        "Rust documentation culture better",
+        "Both adequate but Rust more advanced",
+        "Rust learned from C++"
+      ]
+    },
     "variables": {
       "description": "Rust is immutable by default while C++ is mutable; Rust's ownership prevents many C++ bugs.",
       "why": "Rust immutable by default (use mut). C++ mutable by default (use const). Rust has ownership preventing memory bugs. C++ requires discipline. C++ has references and pointers. Rust has references with borrowing rules. Rust catches bugs at compile time. C++ catches at runtime (or doesn't).",

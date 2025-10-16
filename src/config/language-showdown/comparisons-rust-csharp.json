@@ -18,6 +18,18 @@
         "C#: applications"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but Rust has doc tests while C# has richer string features.",
+      "why": "Both use // and /* */. Rust doc comments run as tests - revolutionary! C# XML documentation structured. For multi-line, C# $@\"\" interpolated verbatim strings are elegant. Rust raw strings r#\" \"# powerful. C# interpolation cleaner. Rust documentation testing superior. Trade-offs: C# better strings, Rust better docs. Both modern.",
+      "keyPoints": [
+        "Rust doc tests revolutionary",
+        "C# $@\"\" elegant interpolation",
+        "C# strings more developer-friendly",
+        "Rust documentation testing superior",
+        "Both modern approaches",
+        "Different strengths"
+      ]
+    },
     "variables": {
       "description": "Rust ownership system vs C# garbage collection.",
       "why": "HUGE DIFFERENCE! Rust ownership prevents memory bugs at compile time. C# GC handles memory automatically. Rust immutable by default. C# mutable by default. Rust catches bugs compile-time. C# catches bugs runtime. Different safety models!",

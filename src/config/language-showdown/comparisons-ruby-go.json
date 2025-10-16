@@ -18,6 +18,18 @@
         "Different philosophies: joy vs performance"
       ]
     },
+    "comments": {
+      "description": "Ruby uses # while Go uses //, but both support multi-line comments. HEREDOC vs backticks for multi-line strings.",
+      "why": "Ruby's # feels natural for scripting, Go's // comes from C. Ruby has HEREDOC (<<~) which is more powerful than Go's backticks. Ruby HEREDOC supports interpolation and different delimiters (<<~, <<-, <<). Go raw strings (backticks) don't interpret escapes, which is their strength. Ruby's squiggly HEREDOC (<<~) strips indentation elegantly - Go doesn't have this. Both work well but Ruby's HEREDOC is more feature-rich. Go's backticks are simpler but adequate. Ruby =begin/=end rarely used.",
+      "keyPoints": [
+        "Ruby # vs Go //",
+        "Ruby HEREDOC more powerful than Go backticks",
+        "Squiggly HEREDOC (<<~) strips indentation",
+        "Ruby HEREDOC supports interpolation",
+        "Go raw strings simpler but limited",
+        "Both adequate for their use cases"
+      ]
+    },
     "variables": {
       "description": "Ruby offers dynamic flexibility while Go provides static type safety with inference.",
       "why": "Ruby is dynamically typed, Go is statically typed. Ruby variables can change types, Go variables cannot. Go's := is like Ruby's = but with type inference. Ruby uses UPPERCASE for constants, Go uses capitalization for visibility. Go catches type errors at compile time.",

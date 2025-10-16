@@ -13,6 +13,18 @@
         "TypeScript for web"
       ]
     },
+    "comments": {
+      "description": "Rust uses // while TypeScript uses //. Both modern but very different priorities.",
+      "why": "Both use // and /* */ but serve different purposes. Rust documentation with doc tests is revolutionary. TypeScript JSDoc is good but doesn't run tests. For multi-line, TypeScript template literals with ${} are simpler and more elegant than Rust raw strings r#\" \"#. TypeScript optimized for developer experience. Rust optimized for correctness. Both modern but TypeScript easier. Rust more powerful for systems.",
+      "keyPoints": [
+        "Rust doc tests run as tests!",
+        "TypeScript template literals simpler",
+        "TypeScript easier to use",
+        "Rust more powerful for systems",
+        "Different priorities: UX vs correctness",
+        "Both modern"
+      ]
+    },
     "variables": {
       "description": "Rust has immutable-by-default ownership while TypeScript has optional types.",
       "why": "Rust: immutable by default, ownership system. TypeScript: optional types, no ownership. Rust catches memory bugs at compile time. TypeScript prevents type bugs. Rust much stricter. TypeScript more flexible. Fundamentally different.",

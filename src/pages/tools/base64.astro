@@ -1,0 +1,795 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Base64 Encoder/Decoder';
+const pageDescription = 'Encode and decode Base64 strings easily with this simple developer tool';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="base64-wrapper">
+    <div class="container mx-auto px-4">
+      <main class="base64-container">
+        <h1 class="page-title">Base64 Encoder/Decoder</h1>
+        <p class="page-subtitle">A simple tool for encoding and decoding Base64 strings</p>
+        
+        <div class="controls">
+          <button id="encode-btn" class="btn btn-primary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+            </svg>
+            Encode →
+          </button>
+          <button id="decode-btn" class="btn btn-secondary">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M12 22l10-5-10-5-10 5 10 5zM22 12l-10 5-10-5M22 7L12 12 2 7"/>
+            </svg>
+            ← Decode
+          </button>
+          <button id="clear-btn" class="btn btn-clear">
+            <svg class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+            Clear All
+          </button>
+        </div>
+        
+        <div class="textareas-container">
+          <div class="textarea-wrapper">
+            <label for="plain-text" class="textarea-label">
+              <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                <path d="M14 2v6h6M16 13H8M16 17H8M10 9H8"/>
+              </svg>
+              Plain Text
+            </label>
+            <textarea
+              id="plain-text"
+              class="textarea"
+              placeholder="Enter plain text here to encode..."
+              rows="30"
+            >Hello, World!
+
+This is a sample message that demonstrates Base64 encoding.
+
+Base64 is commonly used for:
+- Embedding images in HTML/CSS
+- Encoding email attachments
+- Storing binary data in text format
+- API authentication tokens
+
+Try encoding this text, or replace it with your own!</textarea>
+            <div class="textarea-info">
+              <span id="plain-length" class="char-count">0 characters</span>
+            </div>
+          </div>
+          
+          <div class="textarea-wrapper">
+            <label for="base64-text" class="textarea-label">
+              <svg class="label-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+              Base64 Encoded
+            </label>
+            <textarea
+              id="base64-text"
+              class="textarea"
+              placeholder="Enter Base64 encoded text here to decode..."
+              rows="30"
+            ></textarea>
+            <div class="textarea-info">
+              <span id="base64-length" class="char-count">0 characters</span>
+            </div>
+          </div>
+        </div>
+        
+        <div class="info-section">
+          <div class="info-header">
+            <div class="info-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="info-title">About Base64 Encoding</h2>
+              <p class="info-tagline">The standard for binary-to-text encoding since 1993</p>
+            </div>
+          </div>
+          
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+              </div>
+              <h3 class="card-title">What is it?</h3>
+              <p class="card-content">
+                Base64 is a binary-to-text encoding scheme that represents binary data in an ASCII string format. 
+                It was originally designed to allow binary data to be transmitted over channels that were designed to handle 
+                only textual data, ensuring that the data remains intact without modification during transport.
+              </p>
+            </div>
+            
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">How It Works</h3>
+              <p class="card-content">
+                Base64 encoding converts every 3 bytes (24 bits) of binary data into 4 ASCII characters. It uses a set of 64 
+                characters: A-Z, a-z, 0-9, +, and /. When the input length isn't a multiple of 3, padding characters (=) are 
+                added to the end.
+              </p>
+            </div>
+            
+            <div class="info-card highlight-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Common Uses</h3>
+              <ul class="card-list">
+                <li><strong>Email Attachments:</strong> MIME email protocol uses Base64 to encode binary attachments</li>
+                <li><strong>Data URIs:</strong> Embedding images and other files directly in HTML/CSS</li>
+                <li><strong>Web APIs:</strong> Transmitting binary data in JSON or XML</li>
+                <li><strong>Basic Authentication:</strong> HTTP Basic Authentication credentials</li>
+                <li><strong>Cryptography:</strong> Representing encrypted data or cryptographic keys</li>
+              </ul>
+            </div>
+            
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">History</h3>
+              <p class="card-content">
+                Base64 encoding was first defined in <strong>RFC 1421 (1993)</strong> as part of the Privacy Enhancement for Internet Electronic 
+                Mail (PEM) specification. It has since become a fundamental encoding scheme in web development and data 
+                transmission, with variations defined in <strong>RFC 2045 (MIME)</strong> and <strong>RFC 4648</strong> (the current standard).
+              </p>
+            </div>
+          </div>
+          
+          <div class="info-warning">
+            <div class="warning-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z"/>
+              </svg>
+            </div>
+            <div>
+              <h4 class="warning-title">Security Notice</h4>
+              <p class="warning-content">
+                Base64 is an <strong>encoding method, not encryption</strong>. It does not provide any security 
+                or privacy. Anyone can decode Base64-encoded data back to its original form. Never use Base64 alone to protect sensitive information.
+              </p>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    // Get DOM elements
+    const plainTextArea = document.getElementById('plain-text') as HTMLTextAreaElement;
+    const base64TextArea = document.getElementById('base64-text') as HTMLTextAreaElement;
+    const encodeBtn = document.getElementById('encode-btn');
+    const decodeBtn = document.getElementById('decode-btn');
+    const clearBtn = document.getElementById('clear-btn');
+    const plainLength = document.getElementById('plain-length');
+    const base64Length = document.getElementById('base64-length');
+
+    // Update character counts
+    function updateCharCounts() {
+      if (plainLength) plainLength.textContent = `${plainTextArea.value.length} characters`;
+      if (base64Length) base64Length.textContent = `${base64TextArea.value.length} characters`;
+    }
+
+    // Encode button handler
+    encodeBtn?.addEventListener('click', () => {
+      try {
+        const plainText = plainTextArea.value;
+        if (!plainText) {
+          showNotification('Please enter some text to encode', 'warning');
+          return;
+        }
+        
+        // Encode to Base64
+        const encoded = btoa(unescape(encodeURIComponent(plainText)));
+        base64TextArea.value = encoded;
+        updateCharCounts();
+        showNotification('Text encoded successfully!', 'success');
+      } catch (error) {
+        showNotification('Error encoding text: ' + (error as Error).message, 'error');
+      }
+    });
+
+    // Decode button handler
+    decodeBtn?.addEventListener('click', () => {
+      try {
+        const base64Text = base64TextArea.value;
+        if (!base64Text) {
+          showNotification('Please enter Base64 text to decode', 'warning');
+          return;
+        }
+        
+        // Decode from Base64
+        const decoded = decodeURIComponent(escape(atob(base64Text)));
+        plainTextArea.value = decoded;
+        updateCharCounts();
+        showNotification('Text decoded successfully!', 'success');
+      } catch (error) {
+        showNotification('Error decoding text: Invalid Base64 string', 'error');
+      }
+    });
+
+    // Clear button handler
+    clearBtn?.addEventListener('click', () => {
+      plainTextArea.value = '';
+      base64TextArea.value = '';
+      updateCharCounts();
+      showNotification('All fields cleared', 'info');
+    });
+
+    // Update character counts on input
+    plainTextArea?.addEventListener('input', updateCharCounts);
+    base64TextArea?.addEventListener('input', updateCharCounts);
+
+    // Notification system
+    function showNotification(message: string, type: 'success' | 'error' | 'warning' | 'info') {
+      // Remove existing notifications
+      const existing = document.querySelector('.notification');
+      if (existing) {
+        existing.remove();
+      }
+
+      // Create notification element
+      const notification = document.createElement('div');
+      notification.className = `notification notification-${type}`;
+      notification.textContent = message;
+      document.body.appendChild(notification);
+
+      // Trigger animation
+      setTimeout(() => notification.classList.add('show'), 10);
+
+      // Remove after 3 seconds
+      setTimeout(() => {
+        notification.classList.remove('show');
+        setTimeout(() => notification.remove(), 300);
+      }, 3000);
+    }
+
+    // Initialize character counts
+    updateCharCounts();
+  </script>
+
+  <style>
+    .base64-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+
+    :global(.dark) .base64-wrapper {
+      background: rgb(3, 7, 18);
+    }
+
+    .base64-container {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    :global(.dark) .base64-container {
+      background: rgb(17, 24, 39);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    :global(.dark) .page-title {
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 32px;
+    }
+
+    :global(.dark) .page-subtitle {
+      color: rgb(156, 163, 175);
+    }
+
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-icon {
+      width: 20px;
+      height: 20px;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #63408a 100%);
+    }
+
+    .btn-secondary {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    .btn-secondary:hover {
+      background: linear-gradient(135deg, #e082ea 0%, #e4465b 100%);
+    }
+
+    .btn-clear {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    :global(.dark) .btn-clear {
+      background: rgb(55, 65, 81);
+      color: rgb(209, 213, 219);
+    }
+
+    .btn-clear:hover {
+      background: #dee2e6;
+    }
+
+    :global(.dark) .btn-clear:hover {
+      background: rgb(75, 85, 99);
+    }
+
+    .textareas-container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      margin-bottom: 48px;
+    }
+
+    @media (max-width: 968px) {
+      .textareas-container {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .textarea-wrapper {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .textarea-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 12px;
+    }
+
+    :global(.dark) .textarea-label {
+      color: rgb(243, 244, 246);
+    }
+
+    .label-icon {
+      width: 20px;
+      height: 20px;
+      color: #667eea;
+    }
+
+    :global(.dark) .label-icon {
+      color: #818cf8;
+    }
+
+    .textarea {
+      width: 100%;
+      padding: 16px;
+      border: 2px solid #e1e8ed;
+      border-radius: 8px;
+      font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+      font-size: 14px;
+      line-height: 1.6;
+      resize: vertical;
+      background: #f8f9fa;
+      color: #2c3e50;
+      transition: border-color 0.2s;
+    }
+
+    :global(.dark) .textarea {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+      color: rgb(229, 231, 235);
+    }
+
+    .textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    :global(.dark) .textarea:focus {
+      border-color: #818cf8;
+    }
+
+    .textarea::placeholder {
+      color: #adb5bd;
+    }
+
+    :global(.dark) .textarea::placeholder {
+      color: rgb(107, 114, 128);
+    }
+
+    .textarea-info {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 8px;
+    }
+
+    .char-count {
+      font-size: 12px;
+      color: #6c757d;
+    }
+
+    :global(.dark) .char-count {
+      color: rgb(156, 163, 175);
+    }
+
+    .info-section {
+      background: linear-gradient(135deg, #667eea15 0%, #764ba215 100%);
+      border-radius: 16px;
+      padding: 48px;
+      margin-top: 48px;
+      border: 1px solid rgba(102, 126, 234, 0.1);
+    }
+
+    :global(.dark) .info-section {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(118, 75, 162, 0.05) 100%);
+      border-color: rgba(102, 126, 234, 0.2);
+    }
+
+    .info-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid rgba(102, 126, 234, 0.2);
+    }
+
+    :global(.dark) .info-header {
+      border-bottom-color: rgba(102, 126, 234, 0.3);
+    }
+
+    .info-header-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 16px rgba(102, 126, 234, 0.3);
+    }
+
+    .info-header-icon svg {
+      width: 36px;
+      height: 36px;
+      color: white;
+    }
+
+    .info-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    :global(.dark) .info-title {
+      color: rgb(243, 244, 246);
+    }
+
+    .info-tagline {
+      font-size: 16px;
+      color: #667eea;
+      margin: 4px 0 0 0;
+      font-weight: 500;
+    }
+
+    :global(.dark) .info-tagline {
+      color: #818cf8;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+      margin-bottom: 32px;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e1e8ed;
+    }
+
+    :global(.dark) .info-card {
+      background: rgb(17, 24, 39);
+      border-color: rgb(55, 65, 81);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.15);
+    }
+
+    :global(.dark) .info-card:hover {
+      box-shadow: 0 8px 24px rgba(102, 126, 234, 0.3);
+    }
+
+    .highlight-card {
+      background: linear-gradient(135deg, #667eea10 0%, #764ba210 100%);
+      border: 2px solid #667eea;
+    }
+
+    :global(.dark) .highlight-card {
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(118, 75, 162, 0.1) 100%);
+      border-color: #818cf8;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 12px 0;
+    }
+
+    :global(.dark) .card-title {
+      color: rgb(243, 244, 246);
+    }
+
+    .card-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #34495e;
+      margin: 0;
+    }
+
+    :global(.dark) .card-content {
+      color: rgb(209, 213, 219);
+    }
+
+    .card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .card-list li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #34495e;
+      margin-bottom: 12px;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    :global(.dark) .card-list li {
+      color: rgb(209, 213, 219);
+    }
+
+    .card-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #667eea;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .info-warning {
+      display: flex;
+      gap: 20px;
+      background: linear-gradient(135deg, #fff3cd 0%, #ffe8a3 100%);
+      border-left: 4px solid #ffc107;
+      padding: 24px;
+      border-radius: 12px;
+      align-items: start;
+    }
+
+    :global(.dark) .info-warning {
+      background: linear-gradient(135deg, rgba(251, 191, 36, 0.15) 0%, rgba(251, 191, 36, 0.1) 100%);
+      border-left-color: rgb(251, 191, 36);
+    }
+
+    .warning-icon {
+      width: 40px;
+      height: 40px;
+      background: #ffc107;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    :global(.dark) .warning-icon {
+      background: rgba(251, 191, 36, 0.2);
+    }
+
+    .warning-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    :global(.dark) .warning-icon svg {
+      color: rgb(251, 191, 36);
+    }
+
+    .warning-title {
+      font-size: 18px;
+      font-weight: 700;
+      color: #856404;
+      margin: 0 0 8px 0;
+    }
+
+    :global(.dark) .warning-title {
+      color: rgb(251, 191, 36);
+    }
+
+    .warning-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #856404;
+      margin: 0;
+    }
+
+    :global(.dark) .warning-content {
+      color: rgb(253, 224, 71);
+    }
+
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      top: 100px;
+      right: 20px;
+      padding: 16px 24px;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 500;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
+      z-index: 1000;
+      opacity: 0;
+      transform: translateX(400px);
+      transition: all 0.3s ease;
+    }
+
+    .notification.show {
+      opacity: 1;
+      transform: translateX(0);
+    }
+
+    .notification-success {
+      background: #d4edda;
+      color: #155724;
+      border-left: 4px solid #28a745;
+    }
+
+    :global(.dark) .notification-success {
+      background: rgba(34, 197, 94, 0.2);
+      color: rgb(134, 239, 172);
+      border-left-color: rgb(34, 197, 94);
+    }
+
+    .notification-error {
+      background: #f8d7da;
+      color: #721c24;
+      border-left: 4px solid #dc3545;
+    }
+
+    :global(.dark) .notification-error {
+      background: rgba(239, 68, 68, 0.2);
+      color: rgb(252, 165, 165);
+      border-left-color: rgb(239, 68, 68);
+    }
+
+    .notification-warning {
+      background: #fff3cd;
+      color: #856404;
+      border-left: 4px solid #ffc107;
+    }
+
+    :global(.dark) .notification-warning {
+      background: rgba(251, 191, 36, 0.2);
+      color: rgb(253, 224, 71);
+      border-left-color: rgb(251, 191, 36);
+    }
+
+    .notification-info {
+      background: #d1ecf1;
+      color: #0c5460;
+      border-left: 4px solid #17a2b8;
+    }
+
+    :global(.dark) .notification-info {
+      background: rgba(14, 165, 233, 0.2);
+      color: rgb(125, 211, 252);
+      border-left-color: rgb(14, 165, 233);
+    }
+  </style>
+</Layout>
+

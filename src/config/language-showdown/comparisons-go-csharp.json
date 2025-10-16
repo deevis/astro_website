@@ -18,6 +18,18 @@
         "Different philosophies"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but C# has richer string features.",
+      "why": "Comments nearly identical. Both use // and /* */. C# XML docs (///) vs Go's GoDoc - similar structured approaches. Major difference: C# has verbatim strings (@\"\") and raw strings (\"\"\" \"\"\"), plus interpolated verbatim ($@\"\") combining features. Go has simple backticks. C# $@\"\" is particularly elegant for multi-line with interpolation. Go needs fmt.Sprintf. C# has evolved more features. Go prioritizes simplicity. C# approach richer.",
+      "keyPoints": [
+        "Comment syntax identical",
+        "C# XML docs vs GoDoc",
+        "C# $@\"\" combines features elegantly",
+        "Go backticks simpler",
+        "C# more evolved",
+        "Go prioritizes simplicity"
+      ]
+    },
     "variables": {
       "description": "Go simple := inference vs C# var inference.",
       "why": "Go := inference simple. C# var inference. Both strongly typed! Go no generics (until Go 1.18). C# generics since 2005. Go simpler type system. C# richer. Go emphasizes simplicity. C# emphasizes features.",

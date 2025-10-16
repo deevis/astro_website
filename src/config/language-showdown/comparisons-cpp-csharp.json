@@ -13,6 +13,18 @@
         "Control vs convenience"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but C# strings are VASTLY better.",
+      "why": "Comments syntax identical (both from C). But strings? C# $\"{}\" interpolation is VASTLY better than C++ stringstream or std::format! C# verbatim @\"\" and raw \"\"\" elegant. C++ R\"( )\" complex. C# has been ahead since 2015! Huge usability advantage. C++ painful. C# delightful. C# wins completely!",
+      "keyPoints": [
+        "C# string interpolation vastly better",
+        "C# $@\"\" combines features elegantly",
+        "C++ strings painful",
+        "C# ahead since 2015",
+        "Huge usability gap",
+        "C# wins completely"
+      ]
+    },
     "variables": {
       "description": "C++ manual memory and pointers vs C# automatic memory.",
       "why": "C++ requires explicit types, manual memory, pointers! C# has GC, no pointers (normally). C++ maximum control, maximum danger. C# safe and convenient. C++ for performance. C# for productivity. Huge difference in complexity!",

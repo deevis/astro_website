@@ -13,6 +13,19 @@
         "Different goals: portability vs performance"
       ]
     },
+    "comments": {
+      "description": "Both use identical // and /* */ syntax, with similar documentation approaches.",
+      "why": "Comments are nearly identical - both inherited from C. Both use // for single-line and /* */ for multi-line. Java uses JavaDoc (/** */), C++ uses Doxygen (/** */ with @param). Documentation tools are similar. For multi-line strings, C++11 introduced raw string literals R\"( )\" which are cleaner than concatenation. Java 15 added text blocks. C++ raw strings can use custom delimiters R\"delim( )delim\" to contain )\" sequences. Java's text blocks can't do this. Both modern approaches work well, though C++'s custom delimiters offer more flexibility.",
+      "keyPoints": [
+        "Comment syntax identical (C heritage)",
+        "JavaDoc vs Doxygen (similar approaches)",
+        "C++11 raw strings R\"( )\" clean and flexible",
+        "Custom delimiters handle edge cases",
+        "Java text blocks (Java 15+) similar capability",
+        "Both solve multi-line string problems well",
+        "Documentation tools mature in both"
+      ]
+    },
     "variables": {
       "description": "Both statically typed, but Java has automatic memory management while C++ offers manual control.",
       "why": "Both require explicit types. Java has var (Java 10+), C++ has auto. Java handles memory automatically. C++ requires new/delete. C++ has references and pointers. Java only has references (no pointers). C++ offers more control. Java is safer by default.",

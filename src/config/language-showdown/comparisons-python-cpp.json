@@ -13,6 +13,18 @@
         "Prototyping vs systems"
       ]
     },
+    "comments": {
+      "description": "Python uses # while C++ uses //. HUGE usability difference in multi-line strings.",
+      "why": "Python # vs C++ // - simplicity vs complexity. Python docstrings are simple and elegant. C++ Doxygen is complex. For multi-line strings, Python f-strings with triple quotes are VASTLY simpler than C++ raw strings R\"( )\". Python's approach natural and intuitive. C++ approach requires memorizing syntax. Python wins completely on usability. C++ focused on performance, not developer experience.",
+      "keyPoints": [
+        "Python vastly simpler",
+        "Python f-strings with triple quotes elegant",
+        "C++ raw strings R\"( )\" complex",
+        "Python developer-friendly",
+        "C++ performance-focused",
+        "Huge usability gap"
+      ]
+    },
     "variables": {
       "description": "Python's dynamic no-declaration approach contrasts completely with C++'s static typed system.",
       "why": "Python: dynamic typing, no declarations, automatic GC. C++: static typing, explicit types, manual memory. Python variables change types. C++ cannot. Python maximum convenience. C++ maximum control. Fundamentally opposite.",

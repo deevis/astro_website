@@ -18,6 +18,19 @@
         "C# slightly less verbose"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, with XML documentation in C# vs JavaDoc in Java.",
+      "why": "Comments are nearly identical as C# was inspired by Java. Both use // and /* */. C# uses XML documentation (/// with <summary> tags) while Java uses JavaDoc (/** */ with @param tags). Both compile to structured docs. For multi-line strings, C# has verbatim strings (@\"\") since C# 1.0, and raw string literals (\"\"\" \"\"\") since C# 11 which are cleaner. C# interpolated verbatim strings ($@\"\") combine both features. Java text blocks came later (Java 15) and don't support interpolation until Java 21. C# has been ahead here.",
+      "keyPoints": [
+        "Comment syntax identical",
+        "C# uses XML docs (<summary>), Java uses JavaDoc (@param)",
+        "C# verbatim strings @\"\" since version 1.0",
+        "C# raw strings \"\"\" since C# 11",
+        "C# $@\"\" combines interpolation and multi-line",
+        "Java text blocks newer (Java 15)",
+        "C# has been more innovative"
+      ]
+    },
     "variables": {
       "description": "Both strongly typed, but C# has nullable reference types and cleaner syntax.",
       "why": "Both strongly typed with type inference (var). C# nullable types (int?, string?) prevent null reference exceptions at compile time - Java requires Optional<>. C# const for compile-time constants. Java final for runtime constants. C# var is cleaner than Java's verbose var. C# has init-only properties.",

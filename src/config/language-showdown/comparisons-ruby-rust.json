@@ -18,6 +18,18 @@
         "Speed vs convenience trade-off"
       ]
     },
+    "comments": {
+      "description": "Ruby uses # while Rust uses //. Rust's documentation system is superior.",
+      "why": "Ruby's # vs Rust's // - different conventions. Rust has nested multi-line comments /* /* */ */ - Ruby doesn't. Rust doc comments (///, //!) are powerful - they support Markdown, examples that run as tests! This is amazing for documentation. Ruby comments are simpler. For multi-line strings, Ruby HEREDOC (<<~) is more elegant than Rust raw strings (r#\" \"#), though Rust's ability to add more # symbols for nesting is clever. Rust's documentation culture and tooling (rustdoc) is world-class. Ruby's is more informal.",
+      "keyPoints": [
+        "Rust supports nested comments",
+        "Rust doc comments run as tests!",
+        "Rust documentation culture excellent",
+        "Ruby HEREDOC more elegant syntax",
+        "Rust raw strings handle nesting well",
+        "Rust's rustdoc is world-class"
+      ]
+    },
     "variables": {
       "description": "Ruby's dynamic flexibility contrasts sharply with Rust's static safety and ownership.",
       "why": "Ruby: dynamic typing, variables can change types. Rust: static typing, types checked at compile time. Ruby variables always mutable. Rust immutable by default (use mut). Rust catches errors early. Ruby catches at runtime. Fundamental philosophy difference.",

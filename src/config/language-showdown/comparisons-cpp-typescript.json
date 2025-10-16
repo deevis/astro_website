@@ -13,6 +13,18 @@
         "Systems vs web"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but TypeScript's template literals are vastly simpler.",
+      "why": "Comments syntax identical. But multi-line strings? TypeScript template literals with ${} are VASTLY simpler and more elegant than C++ R\"( )\". C++ syntax complex and unintuitive. TypeScript natural and beautiful. Huge usability difference. C++ for performance. TypeScript for developer experience. TypeScript wins completely on strings!",
+      "keyPoints": [
+        "TypeScript template literals vastly simpler",
+        "C++ R\"( )\" complex and unintuitive",
+        "TypeScript ${} elegant",
+        "Huge usability gap",
+        "TypeScript wins on developer experience",
+        "C++ focused on performance"
+      ]
+    },
     "variables": {
       "description": "C++ requires explicit types and manual memory while TypeScript has optional types and GC.",
       "why": "C++: explicit types, manual memory, pointers. TypeScript: optional types, GC, no pointers. C++ maximum control. TypeScript maximum convenience. Fundamentally opposite. C++ for performance. TypeScript for productivity.",

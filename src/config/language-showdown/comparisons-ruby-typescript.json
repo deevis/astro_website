@@ -18,6 +18,19 @@
         "Both developer-friendly"
       ]
     },
+    "comments": {
+      "description": "Ruby uses # while TypeScript uses //. HEREDOC vs template literals.",
+      "why": "Ruby # vs TypeScript // - different conventions. TypeScript template literals (backticks) are excellent for multi-line strings with ${interpolation}. Ruby HEREDOC (<<~) also excellent with #{interpolation}. Both work great! TypeScript template literals feel more integrated (part of language since ES6). Ruby HEREDOC more explicit with delimiters. TypeScript tagged templates offer advanced features. Both support interpolation naturally. Very comparable - choose based on ecosystem. Both modern approaches.",
+      "keyPoints": [
+        "Ruby # vs TypeScript //",
+        "Template literals very elegant",
+        "Both support interpolation",
+        "Template literals since ES6",
+        "Ruby HEREDOC more explicit",
+        "Tagged templates powerful",
+        "Both excellent options"
+      ]
+    },
     "variables": {
       "description": "Ruby is fully dynamic while TypeScript has optional static typing.",
       "why": "Ruby: dynamic, no types. TypeScript: gradual typing, types optional! Ruby variables can change types freely. TypeScript can too but types help. Ruby for flexibility. TypeScript for safety. Both more flexible than Java.",

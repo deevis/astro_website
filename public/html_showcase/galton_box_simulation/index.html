@@ -235,8 +235,8 @@
                 </div>
                 <div class="config-item">
                     <label>Trail Duration</label>
-                    <input type="range" id="trailDuration" min="0.5" max="5" step="0.1" value="2" oninput="updateTrailDuration()">
-                    <div class="value-display" id="trailDurationValue">2.0s</div>
+                    <input type="range" id="trailDuration" min="0.5" max="5" step="0.1" value="1" oninput="updateTrailDuration()">
+                    <div class="value-display" id="trailDurationValue">1.0s</div>
                 </div>
             </div>
 
@@ -244,23 +244,23 @@
                 <h3>Physics Constants</h3>
                 <div class="config-item">
                     <label>Gravity</label>
-                    <input type="range" id="gravitySlider" min="0.05" max="0.95" step="0.05" value="0.2" oninput="updateGravity()">
-                    <div class="value-display" id="gravityValue">0.20</div>
+                    <input type="range" id="gravitySlider" min="0.05" max="0.95" step="0.05" value="0.8" oninput="updateGravity()">
+                    <div class="value-display" id="gravityValue">0.80</div>
                 </div>
                 <div class="config-item">
                     <label>Friction</label>
-                    <input type="range" id="frictionSlider" min="0.90" max="1.0" step="0.005" value="0.99" oninput="updateFriction()">
-                    <div class="value-display" id="frictionValue">0.990</div>
+                    <input type="range" id="frictionSlider" min="0.70" max="1.0" step="0.005" value="0.9" oninput="updateFriction()">
+                    <div class="value-display" id="frictionValue">0.9</div>
                 </div>
                 <div class="config-item">
                     <label>Bounce</label>
-                    <input type="range" id="bounceSlider" min="0.1" max="0.95" step="0.05" value="0.55" oninput="updateBounce()">
-                    <div class="value-display" id="bounceValue">0.55</div>
+                    <input type="range" id="bounceSlider" min="0.1" max="1.0" step="0.05" value="0.85" oninput="updateBounce()">
+                    <div class="value-display" id="bounceValue">0.85</div>
                 </div>
                 <div class="config-item">
                     <label>Max Velocity</label>
-                    <input type="range" id="maxVelocitySlider" min="2" max="10" step="0.5" value="4" oninput="updateMaxVelocity()">
-                    <div class="value-display" id="maxVelocityValue">4.0</div>
+                    <input type="range" id="maxVelocitySlider" min="2" max="10" step="0.5" value="5" oninput="updateMaxVelocity()">
+                    <div class="value-display" id="maxVelocityValue">5.0</div>
                 </div>
             </div>
 
@@ -268,8 +268,8 @@
                 <h3>Ball Properties</h3>
                 <div class="config-item">
                     <label>Ball Radius</label>
-                    <input type="range" id="ballRadiusSlider" min="2" max="14" step="1" value="6" oninput="updateBallRadius()">
-                    <div class="value-display" id="ballRadiusValue">6</div>
+                    <input type="range" id="ballRadiusSlider" min="2" max="14" step="1" value="7" oninput="updateBallRadius()">
+                    <div class="value-display" id="ballRadiusValue">7</div>
                 </div>
             </div>
 
@@ -277,18 +277,18 @@
                 <h3>Peg Properties</h3>
                 <div class="config-item">
                     <label>Peg Radius</label>
-                    <input type="range" id="pegRadiusSlider" min="2" max="12" step="1" value="6" oninput="updatePegRadius()">
-                    <div class="value-display" id="pegRadiusValue">6</div>
+                    <input type="range" id="pegRadiusSlider" min="1" max="12" step="1" value="2" oninput="updatePegRadius()">
+                    <div class="value-display" id="pegRadiusValue">2</div>
                 </div>
                 <div class="config-item">
                     <label>Horizontal Spacing</label>
-                    <input type="range" id="pegSpacingHSlider" min="20" max="60" step="5" value="40" oninput="updatePegSpacingH()">
-                    <div class="value-display" id="pegSpacingHValue">40</div>
+                    <input type="range" id="pegSpacingHSlider" min="20" max="60" step="5" value="30" oninput="updatePegSpacingH()">
+                    <div class="value-display" id="pegSpacingHValue">30</div>
                 </div>
                 <div class="config-item">
                     <label>Vertical Spacing</label>
-                    <input type="range" id="pegSpacingVSlider" min="20" max="45" step="5" value="40" oninput="updatePegSpacingV()">
-                    <div class="value-display" id="pegSpacingVValue">40</div>
+                    <input type="range" id="pegSpacingVSlider" min="20" max="45" step="5" value="35" oninput="updatePegSpacingV()">
+                    <div class="value-display" id="pegSpacingVValue">35</div>
                 </div>
             </div>
 
@@ -384,17 +384,17 @@
         const ctx = canvas.getContext('2d');
         
         // Physics constants (now dynamic)
-        let GRAVITY = 0.2;
-        let FRICTION = 0.99;
-        let BOUNCE = 0.55;
-        let PEG_RADIUS = 6;
-        let BALL_RADIUS = 6;
-        let MAX_VELOCITY = 4;
+        let GRAVITY = 0.8;
+        let FRICTION = 0.9;
+        let BOUNCE = 0.85;
+        let PEG_RADIUS = 2;
+        let BALL_RADIUS = 7;
+        let MAX_VELOCITY = 5;
         
         // Galton box setup
         const ROWS = 12;
-        let PEG_SPACING_H = 40; // Horizontal spacing between pegs
-        let PEG_SPACING_V = 40; // Vertical spacing between rows
+        let PEG_SPACING_H = 30; // Horizontal spacing between pegs
+        let PEG_SPACING_V = 35; // Vertical spacing between rows
         const START_X = canvas.width / 2;
         const START_Y = 80;
         const BIN_COUNT = ROWS + 1;
@@ -415,7 +415,7 @@
         let lastTime = 0;
         let fps = 60;
         let showTrails = true;
-        let trailDurationSeconds = 2.0;
+        let trailDurationSeconds = 1.0;
         let trailLength = Math.floor(trailDurationSeconds * 60); // Convert to frames at 60fps
         
         // Create pegs in triangular formation

@@ -130,11 +130,13 @@ const pageDescription = 'Interactive comparison of programming language patterns
 ---
 
 <Layout title={pageTitle} description={pageDescription}>
-  <main class="language-showdown-container">
-    <nav class="sidebar">
-      <div class="sidebar-header">
-        <h1>Language Showdown</h1>
-        <div class="language-selectors">
+  <div id="showdown-wrapper" class="showdown-wrapper">
+    <div id="showdown-container" class="container mx-auto px-4">
+      <main class="language-showdown-container">
+        <nav class="sidebar">
+          <div class="sidebar-header">
+            <h1>Language Showdown</h1>
+            <div class="language-selectors">
           <select id="leftLang" class="language-select">
             {availableLanguages.map(lang => (
               <option value={lang.id} selected={lang.id === 'java'}>
@@ -168,14 +170,33 @@ const pageDescription = 'Interactive comparison of programming language patterns
       ))}
     </nav>
 
-    <main class="main-content" id="main-content">
-      <!-- Initial overview content rendered server-side -->
-      <div class="overview-card">
-        <h1 class="overview-title">{javaConfig.name} vs {rubyConfig.name}</h1>
+    <main class="main-content">
+      <button id="maximize-btn" class="maximize-button" title="Toggle full width">
+        <svg id="maximize-icon" class="icon-svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3H5a2 2 0 00-2 2v3m18 0V5a2 2 0 00-2-2h-3m0 18h3a2 2 0 002-2v-3M3 16v3a2 2 0 002 2h3"/>
+        </svg>
+        <svg id="minimize-icon" class="icon-svg hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <path d="M8 3v3a2 2 0 01-2 2H3m18 0h-3a2 2 0 01-2-2V3m0 18v-3a2 2 0 012-2h3M3 16h3a2 2 0 012 2v3"/>
+        </svg>
+      </button>
+      <div id="main-content">
+        <!-- Initial overview content rendered server-side -->
+        <div class="overview-card">
+        <h1 class="overview-title">
+          <span style={`color: ${javaConfig.color};`}>{javaConfig.name}</span> vs <span style={`color: ${rubyConfig.color};`}>{rubyConfig.name}</span> - Language Overview
+        </h1>
         
-        {allComparisons['java-ruby']['overview'] && (
+        {allComparisons['java-ruby']['overview'] && allComparisons['java-ruby']['overview'].summary && (
           <div class="overview-summary">
-            <p>{allComparisons['java-ruby']['overview'].summary}</p>
+            <h3 style="font-size: 18px; font-weight: 600; margin: 0 0 16px 0;">📋 Overview</h3>
+            <div style="display: flex; flex-direction: column; gap: 12px;">
+              {allComparisons['java-ruby']['overview'].summary.split('.').map(sentence => {
+                const trimmed = sentence.trim();
+                return trimmed.length > 0 ? (
+                  <p style="font-size: 15px; line-height: 1.7; margin: 0;">{trimmed}.</p>
+                ) : null;
+              })}
+            </div>
           </div>
         )}
         
@@ -185,27 +206,41 @@ const pageDescription = 'Interactive comparison of programming language patterns
               <h2>{javaConfig.name}</h2>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>📜 History</h3>
               <p>{javaConfig.history}</p>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>⭐ Key Features</h3>
-              <ul>
-                {javaConfig.keyFeatures.map(feature => (
-                  <li>{feature}</li>
-                ))}
-              </ul>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                  {javaConfig.keyFeatures.slice(0, Math.ceil(javaConfig.keyFeatures.length / 2)).map(feature => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">{feature}</li>
+                  ))}
+                </ul>
+                <ul style="margin: 0; padding-left: 20px;">
+                  {javaConfig.keyFeatures.slice(Math.ceil(javaConfig.keyFeatures.length / 2)).map(feature => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">{feature}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>✅ Strengths</h3>
-              <ul class="pros-list">
-                {javaConfig.pros.map(pro => (
-                  <li>{pro}</li>
-                ))}
-              </ul>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                  {javaConfig.pros.slice(0, Math.ceil(javaConfig.pros.length / 2)).map(pro => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">✓ {pro}</li>
+                  ))}
+                </ul>
+                <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                  {javaConfig.pros.slice(Math.ceil(javaConfig.pros.length / 2)).map(pro => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">✓ {pro}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             
             <div class="overview-section">
@@ -223,27 +258,41 @@ const pageDescription = 'Interactive comparison of programming language patterns
               <h2>{rubyConfig.name}</h2>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>📜 History</h3>
               <p>{rubyConfig.history}</p>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>⭐ Key Features</h3>
-              <ul>
-                {rubyConfig.keyFeatures.map(feature => (
-                  <li>{feature}</li>
-                ))}
-              </ul>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <ul style="margin: 0; padding-left: 20px;">
+                  {rubyConfig.keyFeatures.slice(0, Math.ceil(rubyConfig.keyFeatures.length / 2)).map(feature => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">{feature}</li>
+                  ))}
+                </ul>
+                <ul style="margin: 0; padding-left: 20px;">
+                  {rubyConfig.keyFeatures.slice(Math.ceil(rubyConfig.keyFeatures.length / 2)).map(feature => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">{feature}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             
-            <div class="overview-section">
+            <div class="overview-section" style="padding-bottom: 24px; border-bottom: 1px solid rgba(0,0,0,0.1);">
               <h3>✅ Strengths</h3>
-              <ul class="pros-list">
-                {rubyConfig.pros.map(pro => (
-                  <li>{pro}</li>
-                ))}
-              </ul>
+              <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                  {rubyConfig.pros.slice(0, Math.ceil(rubyConfig.pros.length / 2)).map(pro => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">✓ {pro}</li>
+                  ))}
+                </ul>
+                <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                  {rubyConfig.pros.slice(Math.ceil(rubyConfig.pros.length / 2)).map(pro => (
+                    <li style="font-size: 13px; line-height: 1.8; margin-bottom: 6px;">✓ {pro}</li>
+                  ))}
+                </ul>
+              </div>
             </div>
             
             <div class="overview-section">
@@ -263,18 +312,40 @@ const pageDescription = 'Interactive comparison of programming language patterns
             <div class="when-to-use-grid">
               <div class="when-to-use-card" style={`border-left: 4px solid ${javaConfig.color};`}>
                 <h3>Choose {javaConfig.name} When...</h3>
-                <p>{allComparisons['java-ruby']['overview'].whenToUseLeft}</p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  {allComparisons['java-ruby']['overview'].whenToUseLeft?.split(',').map(point => {
+                    const trimmed = point.trim();
+                    return trimmed.length > 0 ? (
+                      <div style="font-size: 14px; line-height: 1.6; padding-left: 16px; position: relative;">
+                        <span style={`position: absolute; left: 0; color: ${javaConfig.color};`}>•</span>
+                        {trimmed}
+                      </div>
+                    ) : null;
+                  })}
+                </div>
               </div>
               <div class="when-to-use-card" style={`border-left: 4px solid ${rubyConfig.color};`}>
                 <h3>Choose {rubyConfig.name} When...</h3>
-                <p>{allComparisons['java-ruby']['overview'].whenToUseRight}</p>
+                <div style="display: flex; flex-direction: column; gap: 8px;">
+                  {allComparisons['java-ruby']['overview'].whenToUseRight?.split(',').map(point => {
+                    const trimmed = point.trim();
+                    return trimmed.length > 0 ? (
+                      <div style="font-size: 14px; line-height: 1.6; padding-left: 16px; position: relative;">
+                        <span style={`position: absolute; left: 0; color: ${rubyConfig.color};`}>•</span>
+                        {trimmed}
+                      </div>
+                    ) : null;
+                  })}
+                </div>
               </div>
             </div>
           </div>
         )}
       </div>
+      </div>
     </main>
-  </main>
+    </div>
+  </div>
 
   <script define:vars={{ allLanguages, sections, allComparisons }}>
     // Store data globally for access
@@ -294,32 +365,50 @@ const pageDescription = 'Interactive comparison of programming language patterns
       return div.innerHTML;
     }
 
-    function updatePageTitle(leftLang, rightLang) {
+    function updatePageTitle(leftLang, rightLang, sectionId) {
       const leftConfig = getLanguageConfig(leftLang);
       const rightConfig = getLanguageConfig(rightLang);
-      document.title = `${leftConfig.name} vs ${rightConfig.name} - Language Showdown`;
+      const sectionMetadata = getSectionMetadata(sectionId);
+      const sectionTitle = sectionMetadata?.title || (sectionId === 'overview' ? 'Overview' : sectionId);
+      document.title = `${leftConfig.name} vs ${rightConfig.name} - ${sectionTitle} - Language Showdown`;
     }
 
-    function addToHistory(leftLang, rightLang) {
+    function addToHistory(leftLang, rightLang, sectionId = currentSection) {
       const leftConfig = getLanguageConfig(leftLang);
       const rightConfig = getLanguageConfig(rightLang);
+      const sectionMetadata = getSectionMetadata(sectionId);
+      const sectionTitle = sectionMetadata?.title || (sectionId === 'overview' ? 'Overview' : sectionId);
       const timestamp = new Date().toLocaleString();
-      const entry = `${timestamp} - Compared ${leftConfig.name} vs ${rightConfig.name}`;
+      const entry = `${timestamp} - Compared ${leftConfig.name} vs ${rightConfig.name} - ${sectionTitle}`;
       
       // Update page title
-      updatePageTitle(leftLang, rightLang);
+      updatePageTitle(leftLang, rightLang, sectionId);
       
       // Add to browser history state
       const url = new URL(window.location);
       url.searchParams.set('left', leftLang);
       url.searchParams.set('right', rightLang);
+      url.searchParams.set('section', sectionId);
       window.history.pushState(
-        { leftLang, rightLang, section: currentSection },
+        { leftLang, rightLang, section: sectionId },
         '',
         url
       );
       
       console.log(entry);
+    }
+
+    function addSectionToHistory(sectionId) {
+      // Update just the section in the URL and history
+      updatePageTitle(currentLeftLang, currentRightLang, sectionId);
+      
+      const url = new URL(window.location);
+      url.searchParams.set('section', sectionId);
+      window.history.pushState(
+        { leftLang: currentLeftLang, rightLang: currentRightLang, section: sectionId },
+        '',
+        url
+      );
     }
 
     function getLanguageConfig(langId) {
@@ -353,31 +442,56 @@ const pageDescription = 'Interactive comparison of programming language patterns
       const rightConfig = getLanguageConfig(rightLang);
       const comparison = getComparison('overview', leftLang, rightLang);
       
-      // Check if we need to swap the when-to-use content based on language order
-      const comparisonKey = `${leftLang}-${rightLang}`;
-      const comparisons = window.languageData.allComparisons[comparisonKey];
-      const actualComparison = comparisons?.overview;
+      // Canonical comparison file names (the actual files that exist)
+      const canonicalComparisons = new Set([
+        'java-ruby', 'java-go', 'java-python', 'java-rust', 'java-cpp', 'java-typescript', 'java-csharp',
+        'ruby-go', 'ruby-python', 'ruby-rust', 'ruby-cpp', 'ruby-typescript', 'ruby-csharp',
+        'go-python', 'go-rust', 'go-cpp', 'go-typescript', 'go-csharp',
+        'python-rust', 'python-cpp', 'python-typescript', 'python-csharp',
+        'rust-cpp', 'rust-typescript', 'rust-csharp',
+        'cpp-typescript', 'cpp-csharp',
+        'typescript-csharp'
+      ]);
       
-      // Determine if the comparison data is in the same order as our current selection
-      const needsSwap = actualComparison && 
-                        actualComparison.whenToUseLeft && 
-                        actualComparison.whenToUseRight &&
-                        comparisons && 
-                        (comparisons['hello-world']?.leftLanguage !== undefined) &&
-                        comparisons['hello-world']?.leftLanguage !== leftLang;
+      // Check if we need to swap based on whether our current order matches the canonical file name
+      const comparisonKey = `${leftLang}-${rightLang}`;
+      const needsSwap = !canonicalComparisons.has(comparisonKey);
       
       const leftWhenToUse = needsSwap ? comparison.whenToUseRight : comparison.whenToUseLeft;
       const rightWhenToUse = needsSwap ? comparison.whenToUseLeft : comparison.whenToUseRight;
       
       const isDark = document.documentElement.classList.contains('dark');
       
+      // Split summary into sentences for better readability
+      const summarySentences = comparison?.summary
+        ? comparison.summary.split('.').map(s => s.trim()).filter(s => s.length > 0)
+        : [];
+      
+      // Split key features into smaller groups
+      const splitFeatures = (features) => {
+        const mid = Math.ceil(features.length / 2);
+        return [features.slice(0, mid), features.slice(mid)];
+      };
+      
+      const [leftFeaturesCol1, leftFeaturesCol2] = splitFeatures(leftConfig.keyFeatures);
+      const [rightFeaturesCol1, rightFeaturesCol2] = splitFeatures(rightConfig.keyFeatures);
+      
+      // Split pros and cons for better layout
+      const [leftProsCol1, leftProsCol2] = splitFeatures(leftConfig.pros);
+      const [rightProsCol1, rightProsCol2] = splitFeatures(rightConfig.pros);
+      
       return `
         <div class="overview-card" style="background: ${isDark ? 'rgb(17, 24, 39)' : 'white'}; border-radius: 12px; padding: 40px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,${isDark ? '0.3' : '0.08'});">
-          <h1 class="overview-title" style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 24px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">${leftConfig.name} vs ${rightConfig.name}</h1>
+          <h1 class="overview-title" style="font-size: 32px; font-weight: 700; text-align: center; margin-bottom: 24px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">
+            <span style="color: ${leftConfig.color};">${leftConfig.name}</span> vs <span style="color: ${rightConfig.color};">${rightConfig.name}</span> - Language Overview
+          </h1>
           
-          ${comparison?.summary ? `
+          ${summarySentences.length > 0 ? `
             <div class="overview-summary" style="background: ${isDark ? 'rgba(59, 130, 246, 0.1)' : 'rgba(52, 152, 219, 0.05)'}; border-left: 4px solid ${isDark ? 'rgb(59, 130, 246)' : '#3498db'}; padding: 20px; margin-bottom: 32px; border-radius: 4px;">
-              <p style="font-size: 16px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${comparison.summary}</p>
+              <h3 style="font-size: 18px; font-weight: 600; margin: 0 0 16px 0; color: ${isDark ? 'rgb(96, 165, 250)' : '#2980b9'};">📋 Overview</h3>
+              <div style="display: flex; flex-direction: column; gap: 12px;">
+                ${summarySentences.map(sentence => `<p style="font-size: 15px; line-height: 1.7; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${sentence}.</p>`).join('')}
+              </div>
             </div>
           ` : ''}
           
@@ -387,23 +501,33 @@ const pageDescription = 'Interactive comparison of programming language patterns
                 <h2 style="font-size: 24px; font-weight: 700; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin: 0;">${leftConfig.name}</h2>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">📜 History</h3>
                 <p style="font-size: 14px; line-height: 1.7; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${leftConfig.history}</p>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">⭐ Key Features</h3>
-                <ul style="margin-left: 20px; margin-top: 0; margin-bottom: 0;">
-                  ${leftConfig.keyFeatures.map(feature => `<li style="font-size: 14px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 4px;">${feature}</li>`).join('')}
-                </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${leftFeaturesCol1.map(feature => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">${feature}</li>`).join('')}
+                  </ul>
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${leftFeaturesCol2.map(feature => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">${feature}</li>`).join('')}
+                  </ul>
+                </div>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">✅ Strengths</h3>
-                <ul class="pros-list" style="margin-left: 20px; margin-top: 0; margin-bottom: 0; list-style: none;">
-                  ${leftConfig.pros.map(pro => `<li style="font-size: 14px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 4px;">✓ ${pro}</li>`).join('')}
-                </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                    ${leftProsCol1.map(pro => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">✓ ${pro}</li>`).join('')}
+                  </ul>
+                  <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                    ${leftProsCol2.map(pro => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">✓ ${pro}</li>`).join('')}
+                  </ul>
+                </div>
               </div>
               
               <div class="overview-section" style="margin-bottom: 0;">
@@ -419,23 +543,33 @@ const pageDescription = 'Interactive comparison of programming language patterns
                 <h2 style="font-size: 24px; font-weight: 700; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin: 0;">${rightConfig.name}</h2>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">📜 History</h3>
                 <p style="font-size: 14px; line-height: 1.7; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${rightConfig.history}</p>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">⭐ Key Features</h3>
-                <ul style="margin-left: 20px; margin-top: 0; margin-bottom: 0;">
-                  ${rightConfig.keyFeatures.map(feature => `<li style="font-size: 14px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 4px;">${feature}</li>`).join('')}
-                </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${rightFeaturesCol1.map(feature => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">${feature}</li>`).join('')}
+                  </ul>
+                  <ul style="margin: 0; padding-left: 20px;">
+                    ${rightFeaturesCol2.map(feature => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">${feature}</li>`).join('')}
+                  </ul>
+                </div>
               </div>
               
-              <div class="overview-section" style="margin-bottom: 24px;">
+              <div class="overview-section" style="margin-bottom: 24px; padding-bottom: 24px; border-bottom: 1px solid ${isDark ? 'rgba(75, 85, 99, 0.5)' : 'rgba(0, 0, 0, 0.1)'};">
                 <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">✅ Strengths</h3>
-                <ul class="pros-list" style="margin-left: 20px; margin-top: 0; margin-bottom: 0; list-style: none;">
-                  ${rightConfig.pros.map(pro => `<li style="font-size: 14px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 4px;">✓ ${pro}</li>`).join('')}
-                </ul>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px;">
+                  <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                    ${rightProsCol1.map(pro => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">✓ ${pro}</li>`).join('')}
+                  </ul>
+                  <ul class="pros-list" style="margin: 0; padding-left: 20px; list-style: none;">
+                    ${rightProsCol2.map(pro => `<li style="font-size: 13px; line-height: 1.8; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin-bottom: 6px;">✓ ${pro}</li>`).join('')}
+                  </ul>
+                </div>
               </div>
               
               <div class="overview-section" style="margin-bottom: 0;">
@@ -452,12 +586,22 @@ const pageDescription = 'Interactive comparison of programming language patterns
               <h2 style="font-size: 24px; font-weight: 700; text-align: center; margin-bottom: 24px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">🤔 Which Should You Choose?</h2>
               <div class="when-to-use-grid" style="display: grid; grid-template-columns: 1fr 1fr; gap: 24px;">
                 <div class="when-to-use-card" style="background: ${isDark ? 'rgb(31, 41, 55)' : '#f8f9fa'}; padding: 20px; border-radius: 8px; border-left: 4px solid ${leftConfig.color};">
-                  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin-top: 0;">Choose ${leftConfig.name} When...</h3>
-                  <p style="font-size: 14px; line-height: 1.7; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${leftWhenToUse}</p>
+                  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin-top: 0;">Choose ${leftConfig.name} When...</h3>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    ${leftWhenToUse.split(',').map(point => `<div style="font-size: 14px; line-height: 1.6; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; padding-left: 16px; position: relative;">
+                      <span style="position: absolute; left: 0; color: ${leftConfig.color};">•</span>
+                      ${point.trim()}
+                    </div>`).join('')}
+                  </div>
                 </div>
                 <div class="when-to-use-card" style="background: ${isDark ? 'rgb(31, 41, 55)' : '#f8f9fa'}; padding: 20px; border-radius: 8px; border-left: 4px solid ${rightConfig.color};">
-                  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin-top: 0;">Choose ${rightConfig.name} When...</h3>
-                  <p style="font-size: 14px; line-height: 1.7; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; margin: 0;">${rightWhenToUse}</p>
+                  <h3 style="font-size: 18px; font-weight: 600; margin-bottom: 16px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; margin-top: 0;">Choose ${rightConfig.name} When...</h3>
+                  <div style="display: flex; flex-direction: column; gap: 8px;">
+                    ${rightWhenToUse.split(',').map(point => `<div style="font-size: 14px; line-height: 1.6; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'}; padding-left: 16px; position: relative;">
+                      <span style="position: absolute; left: 0; color: ${rightConfig.color};">•</span>
+                      ${point.trim()}
+                    </div>`).join('')}
+                  </div>
                 </div>
               </div>
             </div>
@@ -483,12 +627,28 @@ const pageDescription = 'Interactive comparison of programming language patterns
       // Check if dark mode is active
       const isDark = document.documentElement.classList.contains('dark');
       
+      // Split the "why" text into sentences
+      const whySentences = comparison.why
+        ? comparison.why.split('.').map(s => s.trim()).filter(s => s.length > 0)
+        : [];
+      
       return `
         <div class="comparison-card" style="background: ${isDark ? 'rgb(17, 24, 39)' : 'white'}; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'}; border-radius: 12px; padding: 32px; margin-bottom: 32px; box-shadow: 0 2px 8px rgba(0,0,0,${isDark ? '0.3' : '0.08'});">
           <div class="comparison-header" style="margin-bottom: 24px;">
-            <h2 style="font-size: 28px; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">${metadata?.title || sectionId}</h2>
+            <h2 style="font-size: 28px; margin-bottom: 12px; color: ${isDark ? 'rgb(243, 244, 246)' : '#2c3e50'};">
+              <span style="color: ${leftConfig.color};">${leftConfig.name}</span> vs <span style="color: ${rightConfig.color};">${rightConfig.name}</span> - ${metadata?.title || sectionId}
+            </h2>
             <p class="description" style="font-size: 16px; line-height: 1.6; color: ${isDark ? 'rgb(156, 163, 175)' : '#7f8c8d'};">${comparison?.description || ''}</p>
           </div>
+          
+          ${whySentences.length > 0 ? `
+            <div class="nutshell-section" style="background: ${isDark ? 'rgba(59, 130, 246, 0.1)' : '#ecf7ff'}; border-left: 4px solid ${isDark ? 'rgb(59, 130, 246)' : '#3498db'}; padding: 16px 20px; margin: 0 0 24px 0; border-radius: 4px;">
+              <h3 style="font-size: 16px; margin-bottom: 12px; color: ${isDark ? 'rgb(96, 165, 250)' : '#2980b9'};">💡 In a Nutshell...</h3>
+              <div style="display: flex; flex-direction: column; gap: 8px;">
+                ${whySentences.map(sentence => `<div style="line-height: 1.6; font-size: 15px; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'};">• ${sentence}.</div>`).join('')}
+              </div>
+            </div>
+          ` : ''}
           
           <div class="code-comparison" style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px; margin: 24px 0; width: 100%;">
             <div class="code-panel" style="border-radius: 8px; overflow: hidden; border: 1px solid #e1e8ed; min-width: 0;">
@@ -516,11 +676,6 @@ const pageDescription = 'Interactive comparison of programming language patterns
             </div>
           </div>
           
-          <div class="why-section" style="background: ${isDark ? 'rgba(59, 130, 246, 0.1)' : '#ecf7ff'}; border-left: 4px solid ${isDark ? 'rgb(59, 130, 246)' : '#3498db'}; padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
-            <h3 style="font-size: 16px; margin-bottom: 8px; color: ${isDark ? 'rgb(96, 165, 250)' : '#2980b9'};">💡 Why This Matters</h3>
-            <p style="line-height: 1.6; font-size: 15px; color: ${isDark ? 'rgb(209, 213, 219)' : '#34495e'};">${comparison.why}</p>
-          </div>
-          
           ${comparison.keyPoints.length > 0 ? `
             <div class="key-points" style="background: ${isDark ? 'rgba(245, 158, 11, 0.1)' : '#fff9e6'}; border-left: 4px solid ${isDark ? 'rgb(251, 191, 36)' : '#f39c12'}; padding: 16px 20px; margin: 24px 0; border-radius: 4px;">
               <h3 style="font-size: 16px; margin-bottom: 12px; color: ${isDark ? 'rgb(251, 191, 36)' : '#e67e22'};">🎯 Key Takeaways</h3>
@@ -533,11 +688,14 @@ const pageDescription = 'Interactive comparison of programming language patterns
       `;
     }
 
-    function loadSection(sectionId) {
+    function loadSection(sectionId, addToHistoryFlag = true) {
       currentSection = sectionId;
-      const mainContent = document.getElementById('main-content');
-      mainContent.innerHTML = renderComparison(sectionId, currentLeftLang, currentRightLang);
-      mainContent.scrollTop = 0;
+      const contentWrapper = document.getElementById('main-content');
+      const scrollContainer = document.querySelector('.main-content');
+      contentWrapper.innerHTML = renderComparison(sectionId, currentLeftLang, currentRightLang);
+      if (scrollContainer) {
+        scrollContainer.scrollTop = 0;
+      }
       
       // Update active nav item
       document.querySelectorAll('.nav-item').forEach(item => {
@@ -547,11 +705,16 @@ const pageDescription = 'Interactive comparison of programming language patterns
       if (activeItem) {
         activeItem.classList.add('active');
       }
+      
+      // Add to browser history
+      if (addToHistoryFlag) {
+        addSectionToHistory(sectionId);
+      }
     }
 
     function updateLanguages() {
-      loadSection(currentSection);
-      addToHistory(currentLeftLang, currentRightLang);
+      loadSection(currentSection, false); // Don't add to history here
+      addToHistory(currentLeftLang, currentRightLang, currentSection);
     }
 
     // Initialize immediately - Astro loads scripts after DOM is ready
@@ -607,10 +770,10 @@ const pageDescription = 'Interactive comparison of programming language patterns
         if (rightSelect) rightSelect.value = currentRightLang;
         
         // Update page title
-        updatePageTitle(currentLeftLang, currentRightLang);
+        updatePageTitle(currentLeftLang, currentRightLang, currentSection);
         
-        // Reload the content
-        loadSection(currentSection);
+        // Reload the content (don't add to history again)
+        loadSection(currentSection, false);
       }
     });
 
@@ -618,6 +781,7 @@ const pageDescription = 'Interactive comparison of programming language patterns
     const urlParams = new URLSearchParams(window.location.search);
     const urlLeft = urlParams.get('left');
     const urlRight = urlParams.get('right');
+    const urlSection = urlParams.get('section');
     
     if (urlLeft && urlRight && urlLeft !== urlRight) {
       // Validate that both languages exist
@@ -628,15 +792,23 @@ const pageDescription = 'Interactive comparison of programming language patterns
         currentLeftLang = urlLeft;
         currentRightLang = urlRight;
         
+        // Check if section parameter is valid
+        if (urlSection) {
+          const sectionExists = getSectionMetadata(urlSection);
+          if (sectionExists || urlSection === 'overview') {
+            currentSection = urlSection;
+          }
+        }
+        
         // Update the select elements
         if (leftSelect) leftSelect.value = currentLeftLang;
         if (rightSelect) rightSelect.value = currentRightLang;
         
         // Update page title
-        updatePageTitle(currentLeftLang, currentRightLang);
+        updatePageTitle(currentLeftLang, currentRightLang, currentSection);
         
-        // Reload with URL parameters
-        loadSection(currentSection);
+        // Reload with URL parameters (don't add to history)
+        loadSection(currentSection, false);
         
         // Replace initial history entry with correct state
         window.history.replaceState(
@@ -646,49 +818,154 @@ const pageDescription = 'Interactive comparison of programming language patterns
         );
       } else {
         // Invalid parameters, initialize with defaults
-        addToHistory(currentLeftLang, currentRightLang);
+        addToHistory(currentLeftLang, currentRightLang, currentSection);
       }
     } else {
       // No URL parameters or invalid, initialize with defaults
-      addToHistory(currentLeftLang, currentRightLang);
+      addToHistory(currentLeftLang, currentRightLang, currentSection);
+    }
+
+    // Maximize/Minimize functionality
+    const maximizeBtn = document.getElementById('maximize-btn');
+    const showdownContainer = document.getElementById('showdown-container');
+    const maximizeIcon = document.getElementById('maximize-icon');
+    const minimizeIcon = document.getElementById('minimize-icon');
+    
+    // Check localStorage for saved preference
+    const isMaximized = localStorage.getItem('showdown-maximized') === 'true';
+    
+    function setMaximized(maximized) {
+      if (maximized) {
+        showdownContainer.classList.remove('container', 'mx-auto', 'px-4');
+        showdownContainer.classList.add('w-full');
+        maximizeIcon.classList.add('hidden');
+        minimizeIcon.classList.remove('hidden');
+        localStorage.setItem('showdown-maximized', 'true');
+      } else {
+        showdownContainer.classList.remove('w-full');
+        showdownContainer.classList.add('container', 'mx-auto', 'px-4');
+        maximizeIcon.classList.remove('hidden');
+        minimizeIcon.classList.add('hidden');
+        localStorage.setItem('showdown-maximized', 'false');
+      }
+    }
+    
+    // Apply saved preference on load
+    if (isMaximized) {
+      setMaximized(true);
+    }
+    
+    // Toggle on button click
+    if (maximizeBtn) {
+      maximizeBtn.addEventListener('click', () => {
+        const currentlyMaximized = showdownContainer.classList.contains('w-full');
+        setMaximized(!currentlyMaximized);
+      });
     }
   </script>
 
   <style>
+    .showdown-wrapper {
+      padding-top: 8rem; /* 128px - pt-32 */
+      padding-bottom: 4rem; /* 64px - pb-16 */
+      background: #f8f9fa;
+    }
+
+    :global(.dark) .showdown-wrapper {
+      background: rgb(3, 7, 18);
+    }
+
     .language-showdown-container {
       display: flex;
-      min-height: calc(100vh - 128px); /* Account for navigation */
+      min-height: calc(100vh - 256px); /* Account for navigation and padding */
       overflow: hidden;
-      background: #f5f5f5;
-      padding-top: 8rem; /* 128px - same as pt-32 in articles */
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
     }
     
     :global(.dark) .language-showdown-container {
-      background: rgb(3, 7, 18); /* dark:bg-gray-950 equivalent */
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
 
     .sidebar {
       width: 280px;
-      background: #2c3e50;
-      color: white;
+      background: #e9ecef;
+      color: #2c3e50;
       overflow-y: auto;
       box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+      border-top-left-radius: 12px;
+      border-bottom-left-radius: 12px;
     }
     
     :global(.dark) .sidebar {
       background: #1a252f;
+      color: white;
     }
 
     .sidebar-header {
       padding: 24px 20px;
+      background: #d3d9df;
+      border-bottom: 1px solid #adb5bd;
+      border-top-left-radius: 12px;
+    }
+
+    :global(.dark) .sidebar-header {
       background: #1a252f;
-      border-bottom: 1px solid #34495e;
+      border-bottom-color: #34495e;
     }
 
     .sidebar-header h1 {
       font-size: 20px;
       margin-bottom: 16px;
+      color: #2563eb;
+    }
+
+    :global(.dark) .sidebar-header h1 {
       color: #3498db;
+    }
+
+    .maximize-button {
+      position: absolute;
+      top: 7px;
+      right: 7px;
+      background: white;
+      border: 1px solid #dee2e6;
+      border-radius: 6px;
+      padding: 6px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+      color: #6c757d;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+      z-index: 10;
+    }
+
+    :global(.dark) .maximize-button {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+      color: #95a5a6;
+    }
+
+    .maximize-button:hover {
+      background: #f8f9fa;
+      border-color: #2563eb;
+      color: #2563eb;
+      transform: scale(1.05);
+    }
+
+    :global(.dark) .maximize-button:hover {
+      background: rgb(55, 65, 81);
+      border-color: #3498db;
+      color: #3498db;
+    }
+
+    .maximize-button .icon-svg {
+      width: 18px;
+      height: 18px;
     }
 
     .language-selectors {
@@ -702,26 +979,44 @@ const pageDescription = 'Interactive comparison of programming language patterns
       width: 100%;
       padding: 8px;
       border-radius: 4px;
-      border: 1px solid #34495e;
-      background: #34495e;
-      color: white;
+      border: 1px solid #adb5bd;
+      background: white;
+      color: #2c3e50;
       font-size: 14px;
       cursor: pointer;
     }
 
+    :global(.dark) .language-select {
+      border-color: #34495e;
+      background: #34495e;
+      color: white;
+    }
+
     .language-select:hover {
+      background: #f8f9fa;
+    }
+
+    :global(.dark) .language-select:hover {
       background: #3f5266;
     }
 
     .vs {
-      color: #95a5a6;
+      color: #6c757d;
       font-size: 12px;
       font-weight: 600;
     }
 
+    :global(.dark) .vs {
+      color: #95a5a6;
+    }
+
     .nav-section {
       padding: 16px 0;
-      border-bottom: 1px solid #34495e;
+      border-bottom: 1px solid #ced4da;
+    }
+
+    :global(.dark) .nav-section {
+      border-bottom-color: #34495e;
     }
 
     .nav-section-title {
@@ -729,8 +1024,12 @@ const pageDescription = 'Interactive comparison of programming language patterns
       font-size: 11px;
       text-transform: uppercase;
       letter-spacing: 1px;
-      color: #95a5a6;
+      color: #6c757d;
       font-weight: 600;
+    }
+
+    :global(.dark) .nav-section-title {
+      color: #95a5a6;
     }
 
     .nav-item {
@@ -742,11 +1041,22 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
 
     .nav-item:hover {
+      background: #d3d9df;
+      border-left-color: #2563eb;
+    }
+
+    :global(.dark) .nav-item:hover {
       background: #34495e;
       border-left-color: #3498db;
     }
 
     .nav-item.active {
+      background: #d3d9df;
+      border-left-color: #2563eb;
+      color: #2563eb;
+    }
+
+    :global(.dark) .nav-item.active {
       background: #34495e;
       border-left-color: #3498db;
       color: #3498db;
@@ -756,11 +1066,18 @@ const pageDescription = 'Interactive comparison of programming language patterns
       flex: 1;
       overflow-y: auto;
       padding: 40px;
-      background: #f5f5f5;
+      background: #f8f9fa;
+      border-top-right-radius: 12px;
+      border-bottom-right-radius: 12px;
+      position: relative;
     }
     
     :global(.dark) .main-content {
-      background: rgb(3, 7, 18);
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
+    }
+
+    #main-content {
+      /* Content wrapper - no special styling, just a container for dynamic content */
     }
 
     .comparison-card {
@@ -773,7 +1090,7 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
     
     :global(.dark) .comparison-card {
-      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
+      background: rgb(31, 41, 55); /* dark:bg-gray-800 - slightly lighter for contrast */
       color: rgb(243, 244, 246); /* dark:text-gray-100 */
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
@@ -802,36 +1119,36 @@ const pageDescription = 'Interactive comparison of programming language patterns
       color: rgb(156, 163, 175); /* dark:text-gray-400 */
     }
 
-    .why-section {
+    .nutshell-section {
       background: #ecf7ff;
       border-left: 4px solid #3498db;
       padding: 16px 20px;
-      margin: 24px 0;
+      margin: 0 0 24px 0;
       border-radius: 4px;
     }
     
-    :global(.dark) .why-section {
+    :global(.dark) .nutshell-section {
       background: rgba(59, 130, 246, 0.1); /* dark blue tint */
       border-left-color: rgb(59, 130, 246);
     }
 
-    .why-section h3 {
+    .nutshell-section h3 {
       color: #2980b9;
       font-size: 16px;
-      margin-bottom: 8px;
+      margin-bottom: 12px;
     }
     
-    :global(.dark) .why-section h3 {
+    :global(.dark) .nutshell-section h3 {
       color: rgb(96, 165, 250); /* lighter blue for dark mode */
     }
 
-    .why-section p {
+    .nutshell-section div {
       color: #34495e;
       line-height: 1.6;
       font-size: 15px;
     }
     
-    :global(.dark) .why-section p {
+    :global(.dark) .nutshell-section div {
       color: rgb(209, 213, 219); /* dark:text-gray-300 */
     }
 
@@ -877,13 +1194,13 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
 
     .code-content {
-      background: #f8f9fa;
+      background: #f1f3f5;
       padding: 20px;
       overflow-x: auto;
     }
     
     :global(.dark) .code-content {
-      background: rgb(31, 41, 55); /* dark:bg-gray-800 */
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
     }
 
     .code-content pre {
@@ -953,15 +1270,27 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
 
     ::-webkit-scrollbar-track {
-      background: #f1f1f1;
+      background: #e9ecef;
+    }
+
+    :global(.dark) ::-webkit-scrollbar-track {
+      background: #1a252f;
     }
 
     ::-webkit-scrollbar-thumb {
-      background: #95a5a6;
+      background: #adb5bd;
       border-radius: 5px;
     }
 
+    :global(.dark) ::-webkit-scrollbar-thumb {
+      background: #95a5a6;
+    }
+
     ::-webkit-scrollbar-thumb:hover {
+      background: #868e96;
+    }
+
+    :global(.dark) ::-webkit-scrollbar-thumb:hover {
       background: #7f8c8d;
     }
     
@@ -975,7 +1304,7 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
     
     :global(.dark) .overview-card {
-      background: rgb(17, 24, 39);
+      background: rgb(31, 41, 55); /* dark:bg-gray-800 */
       box-shadow: 0 2px 8px rgba(0,0,0,0.3);
     }
     
@@ -1028,13 +1357,13 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
     
     .language-overview {
-      background: #f8f9fa;
+      background: #f1f3f5;
       border-radius: 8px;
       padding: 24px;
     }
     
     :global(.dark) .language-overview {
-      background: rgb(31, 41, 55);
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 - darker for better contrast */
     }
     
     .language-header {
@@ -1134,13 +1463,13 @@ const pageDescription = 'Interactive comparison of programming language patterns
     }
     
     .when-to-use-card {
-      background: #f8f9fa;
+      background: #f1f3f5;
       padding: 20px;
       border-radius: 8px;
     }
     
     :global(.dark) .when-to-use-card {
-      background: rgb(31, 41, 55);
+      background: rgb(17, 24, 39); /* dark:bg-gray-900 */
     }
     
     .when-to-use-card h3 {

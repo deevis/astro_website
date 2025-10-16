@@ -18,6 +18,19 @@
         "Different ecosystems"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */. Both have excellent multi-line string support!",
+      "why": "Both use // and /* */ - siblings! TypeScript JSDoc. C# XML documentation. Both structured. For multi-line, TypeScript template literals `${}`. C# $@\"\" interpolated verbatim. Both elegant! Very similar capabilities. TypeScript since ES6. C# since version 1.0 (verbatim). Both Microsoft languages done right. Choose based on ecosystem. Both excellent!",
+      "keyPoints": [
+        "Both excellent!",
+        "TypeScript template literals elegant",
+        "C# $@\"\" elegant",
+        "Very similar capabilities",
+        "Both Microsoft",
+        "Choose based on ecosystem",
+        "Both done right"
+      ]
+    },
     "variables": {
       "description": "TypeScript has optional types, C# requires them. Both have type inference.",
       "why": "BIG DIFFERENCE! TypeScript types are optional. C# types required (except var). TypeScript more flexible. C# more strict. Both have nullable (? suffix). TypeScript 'any' escapes type system. C# dynamic similar. TypeScript gradual typing. C# strong typing. Different philosophies!",

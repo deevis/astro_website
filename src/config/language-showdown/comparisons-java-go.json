@@ -17,6 +17,18 @@
         "Both are statically typed and compiled"
       ]
     },
+    "comments": {
+      "description": "Both languages use identical single-line (//) and multi-line (/* */) comment syntax, with similar documentation approaches.",
+      "why": "Comments are nearly identical between Java and Go. Both use // for single-line and /* */ for multi-line. Java uses JavaDoc (/** */) with @tags, while Go uses GoDoc with simpler // comments before declarations. For multi-line strings, Go's backtick raw strings are cleaner than Java's text blocks. Go's raw strings don't interpret escape sequences, making them perfect for regex or file paths. Java text blocks (Java 15+) preserve formatting but are more verbose.",
+      "keyPoints": [
+        "Comment syntax is identical (// and /* */)",
+        "JavaDoc uses @param tags, GoDoc uses plain comments",
+        "GoDoc is simpler - just comment before declaration",
+        "Go raw strings (backticks) are cleaner than Java text blocks",
+        "Raw strings don't need escaping",
+        "Both support package-level documentation"
+      ]
+    },
     "variables": {
       "description": "Both are statically typed, but Go offers cleaner type inference with the := operator.",
       "why": "Both are statically typed but Go uses type inference with :=. Java requires explicit types or var (Java 10+). Go's const is compile-time only. Both support multiple declarations. Go is stricter about unused variables (compilation error).",

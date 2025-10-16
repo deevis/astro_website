@@ -13,6 +13,19 @@
         "Rust has no garbage collector"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but Rust has superior documentation comments and nested multi-line comments.",
+      "why": "Comments look similar but Rust's are more powerful. Both use // and /* */. Rust supports nested multi-line comments /* /* */ */ - Java doesn't. Rust has three doc comment types: /// (following item), //! (containing item/module), /** */ (also for docs). Rust doc comments support Markdown and can include runnable code examples! For multi-line strings, Rust raw strings (r#\" \"#) are powerful - you can add more # symbols to handle nested quotes. Java text blocks require less escaping but are less flexible. Rust's documentation culture is stronger.",
+      "keyPoints": [
+        "Rust supports nested multi-line comments",
+        "Rust has /// and //! for documentation",
+        "Rust doc comments support Markdown",
+        "Doc tests run as actual tests!",
+        "Raw strings (r#\" \"#) very flexible",
+        "Can add more # for nested quotes",
+        "Rust documentation culture is excellent"
+      ]
+    },
     "variables": {
       "description": "Java requires explicit types while Rust uses powerful type inference with immutability by default.",
       "why": "Rust variables are immutable by default - use 'mut' for mutable. Java variables are mutable by default - use 'final' for immutable. Rust has powerful type inference. Java requires types (or var in Java 10+). Both are statically typed. Rust's philosophy: immutable unless you say otherwise.",

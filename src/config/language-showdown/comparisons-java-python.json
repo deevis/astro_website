@@ -18,6 +18,19 @@
         "Both use similar print functions"
       ]
     },
+    "comments": {
+      "description": "Python uses # for comments while Java uses //, but both support multi-line documentation.",
+      "why": "Python's # is simpler than Java's //. For multi-line, Python uses triple-quoted strings (\"\"\" or ''') which double as docstrings for documentation. Java uses JavaDoc (/** */) with structured @tags. Python docstrings are more flexible - they're actual strings that become __doc__ attributes. Python's approach is simpler and more \"Pythonic\". For multi-line text, Python's triple quotes support interpolation with f-strings, while Java's text blocks (Java 15+) don't support interpolation until Java 21. Python's syntax feels more natural for SQL or templates.",
+      "keyPoints": [
+        "Python # vs Java //",
+        "Python docstrings are actual string objects",
+        "JavaDoc is more structured with @tags",
+        "Python docstrings more flexible",
+        "Triple-quoted f-strings support interpolation",
+        "Java text blocks are newer and more limited",
+        "Python's approach feels more natural"
+      ]
+    },
     "variables": {
       "description": "Java requires explicit types while Python uses dynamic typing with no declarations needed.",
       "why": "Python is dynamically typed - variables don't need type declarations. Java requires explicit types (or var in Java 10+). Python determines type at runtime, Java at compile time. Both use UPPERCASE for constants by convention. Python's everything-is-an-object is similar to Ruby but different from Java's primitives.",

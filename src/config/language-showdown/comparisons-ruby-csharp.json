@@ -13,6 +13,19 @@
         "Huge difference"
       ]
     },
+    "comments": {
+      "description": "Ruby uses # while C# uses //. HEREDOC vs verbatim/raw strings.",
+      "why": "Ruby # vs C# // - different heritages. C# has verbatim strings (@\"\") since C# 1.0 and raw strings (\"\"\" \"\"\") since C# 11. Ruby HEREDOC (<<~) is more explicit. C# $@\"\" combines interpolation and multi-line beautifully - very elegant! Ruby HEREDOC with interpolation also works great. C# XML documentation (///) is structured like JavaDoc. Ruby comments are simpler. Both modern approaches work well. C# interpolated verbatim strings ($@\"\") are particularly nice. Ruby HEREDOC more flexible with delimiters.",
+      "keyPoints": [
+        "C# $@\"\" combines features elegantly",
+        "Ruby HEREDOC more explicit delimiters",
+        "C# verbatim strings since version 1.0",
+        "C# raw strings since C# 11",
+        "Both support interpolation",
+        "C# XML docs structured",
+        "Both modern and capable"
+      ]
+    },
     "variables": {
       "description": "Ruby dynamic typing vs C# static typing - fundamental difference.",
       "why": "Ruby dynamically typed. C# statically typed. Ruby no type declarations. C# requires types (or var). Ruby more flexible. C# more safe. Ruby duck typing. C# compile-time checking. Fundamental philosophy difference!",

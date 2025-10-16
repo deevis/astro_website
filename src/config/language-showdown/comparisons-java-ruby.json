@@ -17,6 +17,19 @@
         "Ruby emphasizes developer happiness through simplicity"
       ]
     },
+    "comments": {
+      "description": "Both languages use similar single and multi-line comment syntax, but differ significantly in documentation and multi-line string handling.",
+      "why": "Java uses JavaDoc for documentation with @param and @return tags, while Ruby uses simple # comments or =begin/=end blocks (less common). Ruby's HEREDOC (<<~) is far more elegant than Java's text blocks, especially the squiggly heredoc that strips indentation. Ruby HEREDOC supports interpolation, making it perfect for SQL or template strings. Java had no equivalent until Java 15's text blocks, and still lacks Ruby's flexibility with different HEREDOC styles.",
+      "keyPoints": [
+        "Single-line comments identical (//  vs #)",
+        "Multi-line comments similar (/* */ vs =begin/=end)",
+        "JavaDoc is structured, Ruby docs are freeform",
+        "Ruby HEREDOC is more powerful and flexible",
+        "Squiggly HEREDOC (<<~) strips indentation elegantly",
+        "Ruby HEREDOC supports interpolation by default",
+        "Java text blocks are newer (Java 15+) and more limited"
+      ]
+    },
     "variables": {
       "description": "Java requires explicit type declarations, while Ruby uses duck typing with dynamic variable assignment.",
       "why": "Ruby is dynamically typed - variables don't have declared types. The type is determined by the object assigned to it. Ruby uses naming conventions: lowercase_with_underscores for variables, UPPERCASE for constants. Everything in Ruby is an object, even primitives like integers.",

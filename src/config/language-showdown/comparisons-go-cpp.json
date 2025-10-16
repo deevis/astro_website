@@ -13,6 +13,18 @@
         "Different priorities"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, inherited from C. Raw strings vs backticks.",
+      "why": "Comments identical - both from C heritage. Both use // and /* */. Documentation approaches similar - GoDoc vs Doxygen. For multi-line strings, Go backticks are simpler than C++ raw string literals R\"( )\". C++ custom delimiters R\"delim( )delim\" offer more power. Both solve the multi-line problem well. Go approach simpler and more integrated. C++ approach more flexible for edge cases. Neither supports interpolation (need concatenation or formatting).",
+      "keyPoints": [
+        "Comment syntax identical",
+        "GoDoc vs Doxygen similar",
+        "Go backticks simpler",
+        "C++ custom delimiters more flexible",
+        "Neither supports interpolation",
+        "Both solve multi-line well"
+      ]
+    },
     "variables": {
       "description": "Go uses := for simple inference while C++ has auto with more complex memory semantics.",
       "why": "Go: := creates variable, always mutable. C++: auto infers type, manual memory. Go simpler. C++ has pointers and references. Go only has pointers (simpler). C++ offers more control. Go optimizes simplicity. Both statically typed.",

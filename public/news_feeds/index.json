@@ -1,47 +1,47 @@
 {
   "aggregates_index": {
     "version": "2.0",
-    "generated_at": "2025-10-13T00:16:49.877905+00:00",
+    "generated_at": "2025-10-16T05:34:16.074737+00:00",
     "total_aggregates": 5,
     "aggregates": [
       {
         "filename": "aggregate_2025_10.json",
         "month": "2025-10",
         "path": "/news_feeds/2025/aggregate_2025_10.json",
-        "total_stories": 1229,
-        "active_stories": 223,
-        "is_current": false
+        "total_articles": 485,
+        "active_articles_count": 362,
+        "is_current": true
       },
       {
         "filename": "aggregate_2025_09.json",
         "month": "2025-09",
         "path": "/news_feeds/2025/aggregate_2025_09.json",
-        "total_stories": 2760,
-        "active_stories": 274,
+        "total_articles": 2760,
+        "active_articles_count": 274,
         "is_current": false
       },
       {
         "filename": "aggregate_2025_08.json",
         "month": "2025-08",
         "path": "/news_feeds/2025/aggregate_2025_08.json",
-        "total_stories": 2992,
-        "active_stories": 210,
+        "total_articles": 2992,
+        "active_articles_count": 210,
         "is_current": false
       },
       {
         "filename": "aggregate_2025_07.json",
         "month": "2025-07",
         "path": "/news_feeds/2025/aggregate_2025_07.json",
-        "total_stories": 2967,
-        "active_stories": 287,
+        "total_articles": 2967,
+        "active_articles_count": 287,
         "is_current": false
       },
       {
         "filename": "aggregate_2025_06.json",
         "month": "2025-06",
         "path": "/news_feeds/2025/aggregate_2025_06.json",
-        "total_stories": 1080,
-        "active_stories": 214,
+        "total_articles": 1080,
+        "active_articles_count": 214,
         "is_current": false
       }
     ]

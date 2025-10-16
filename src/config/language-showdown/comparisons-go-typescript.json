@@ -13,6 +13,18 @@
         "Both modern"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but TypeScript template literals are superior for multi-line strings.",
+      "why": "Comments identical (both from C/JavaScript). Both use // and /* */. TypeScript has JSDoc, Go has GoDoc - similar approaches. Major difference: TypeScript template literals (backticks with ${}) are more powerful than Go raw strings (backticks without interpolation). TypeScript interpolation makes templates elegant. Go requires fmt.Sprintf for formatting. TypeScript template literals have been standard since ES6. Go backticks are for raw strings only. TypeScript's approach more modern and web-friendly.",
+      "keyPoints": [
+        "Comment syntax identical",
+        "JSDoc vs GoDoc similar",
+        "TypeScript template literals superior",
+        "TypeScript ${} interpolation",
+        "Go needs fmt.Sprintf",
+        "TypeScript more modern approach"
+      ]
+    },
     "variables": {
       "description": "Go uses := with static typing while TypeScript has optional types.",
       "why": "Go: := creates typed variable. TypeScript: let with optional types. Go statically typed. TypeScript gradually typed. Go catches errors at compile. TypeScript can ignore types (any). Different safety levels.",

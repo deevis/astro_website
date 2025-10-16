@@ -18,6 +18,18 @@
         "Similar syntax complexity"
       ]
     },
+    "comments": {
+      "description": "Both use // and /* */, but Rust has superior documentation with doc tests.",
+      "why": "Comments look similar but Rust is more advanced. Both use // and /* */. Rust supports nested comments - Go doesn't. Rust doc comments (///, //!) support Markdown and runnable examples that get tested! This is revolutionary for documentation. Go's GoDoc is simpler. For multi-line strings, Go backticks are simpler than Rust raw strings (r#\" \"#), but Rust's approach handles nested quotes better with r##\" \"##. Both adequate but Rust documentation culture is exceptional.",
+      "keyPoints": [
+        "Rust supports nested comments",
+        "Rust doc tests run as actual tests",
+        "GoDoc simpler but less powerful",
+        "Rust raw strings handle nesting",
+        "Rust documentation culture superior",
+        "Go backticks simpler"
+      ]
+    },
     "variables": {
       "description": "Go uses := for inference while Rust has immutability by default with mut keyword.",
       "why": "Both statically typed with type inference. Go's := creates mutable variables. Rust's let creates immutable (use mut). Go variables always mutable. Rust favors immutability. Both have powerful inference. Rust's approach prevents bugs. Different defaults.",

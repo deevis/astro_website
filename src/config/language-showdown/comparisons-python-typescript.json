@@ -18,6 +18,18 @@
         "Both simple"
       ]
     },
+    "comments": {
+      "description": "Python uses # while TypeScript uses //. Both have excellent multi-line string support.",
+      "why": "Python # vs TypeScript // - different heritages but similar capabilities. Python docstrings elegant. TypeScript JSDoc powerful. For multi-line, both excellent! Python f-strings with triple quotes. TypeScript template literals with ${}. Very comparable. Both support interpolation. Both modern approaches. Choose based on ecosystem - both are great. Python's docstrings are objects. TypeScript template literals since ES6.",
+      "keyPoints": [
+        "Both have great multi-line support",
+        "Python f-strings with triple quotes",
+        "TypeScript template literals elegant",
+        "Both support interpolation",
+        "Very comparable capabilities",
+        "Choose based on ecosystem"
+      ]
+    },
     "variables": {
       "description": "Python is fully dynamic while TypeScript adds optional static typing.",
       "why": "Python: dynamic, no types. TypeScript: gradual typing! TypeScript adds types to dynamic language (like Python but for JavaScript). Python purely dynamic. TypeScript optional types. Similar flexibility, TypeScript adds safety option.",

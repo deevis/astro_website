@@ -252,8 +252,8 @@ class FeedMigrator:
             (2025, 6, "June"),
             (2025, 7, "July"),
             (2025, 8, "August"),
-            (2025, 9, "September"),
-            (2025, 10, "October")
+            (2025, 9, "September")
+            # (2025, 10, "October")
         ]
         
         print("\n" + "="*60)

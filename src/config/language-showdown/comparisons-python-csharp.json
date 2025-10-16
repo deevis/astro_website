@@ -13,6 +13,19 @@
         "Different use cases"
       ]
     },
+    "comments": {
+      "description": "Python uses # while C# uses //. Both have excellent string interpolation!",
+      "why": "Python # vs C# // - different heritages. Python docstrings simple and effective. C# XML documentation structured. Both excellent for their ecosystems! For multi-line, Python f-strings with triple quotes. C# has $@\"\" interpolated verbatim strings. Both support interpolation beautifully! Very similar capabilities. Python simpler overall. C# more structured docs. Both modern and excellent!",
+      "keyPoints": [
+        "Both have excellent interpolation!",
+        "Python f-strings simple",
+        "C# $@\"\" elegant",
+        "Very similar capabilities",
+        "Python simpler",
+        "C# more structured",
+        "Both modern"
+      ]
+    },
     "variables": {
       "description": "Python dynamic typing vs C# static typing.",
       "why": "Python dynamically typed. C# statically typed. Python no type declarations (optional hints). C# requires types (or var). Python more flexible. C# more safe. Python duck typing. C# compile-time checking. Fundamental difference!",

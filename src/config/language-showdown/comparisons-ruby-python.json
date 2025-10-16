@@ -18,6 +18,19 @@
         "Python emphasizes explicitness"
       ]
     },
+    "comments": {
+      "description": "Both use # for single-line comments. HEREDOC vs triple-quoted strings for multi-line.",
+      "why": "Both use # - very similar! For multi-line, Ruby has HEREDOC (<<~) while Python has triple-quoted strings (\"\"\" or '''). Both work great. Ruby HEREDOC is more explicit with delimiters. Python triple-quotes are simpler and more \"Pythonic\". Ruby =begin/=end exists but rarely used. Python docstrings are actual objects (__doc__), Ruby HEREDOC are just strings. Python f-strings with triple quotes support interpolation - same as Ruby HEREDOC. Very similar capabilities, slightly different syntax. Both excellent.",
+      "keyPoints": [
+        "Both use # (very similar)",
+        "Ruby HEREDOC vs Python triple-quotes",
+        "Python docstrings become __doc__ attributes",
+        "Ruby HEREDOC more explicit",
+        "Python approach simpler",
+        "Both support interpolation",
+        "Capabilities nearly identical"
+      ]
+    },
     "variables": {
       "description": "Both are dynamically typed with no declarations, but use different naming conventions.",
       "why": "Both are dynamically typed - no type declarations needed. Ruby uses snake_case, Python uses snake_case (they agree!). Both use UPPERCASE for constants. Ruby constants aren't truly immutable. Everything is an object in both. Very similar approaches to variables.",

@@ -13,6 +13,18 @@
         "Speed of development vs execution"
       ]
     },
+    "comments": {
+      "description": "Ruby uses # while C++ uses //. HEREDOC vs raw string literals.",
+      "why": "Ruby # vs C++ // - different scripting vs systems heritage. C++ has /* */ from C, Ruby has =begin/=end (rarely used). For multi-line, Ruby HEREDOC (<<~) is more elegant than C++ raw string literals R\"( )\". C++ raw strings can use custom delimiters R\"delim( )delim\" which is powerful for edge cases. Ruby HEREDOC supports interpolation naturally. C++ raw strings don't (just raw text). Ruby's syntax more natural for templates/SQL. C++ approach more about avoiding escaping. Different priorities.",
+      "keyPoints": [
+        "Ruby # more scripting-friendly",
+        "C++ raw strings R\"( )\" since C++11",
+        "C++ custom delimiters powerful",
+        "Ruby HEREDOC supports interpolation",
+        "Ruby syntax more natural",
+        "C++ focused on avoiding escapes"
+      ]
+    },
     "variables": {
       "description": "Ruby's dynamic typing contrasts completely with C++'s static typing and manual memory management.",
       "why": "Ruby: dynamic typing, no declarations, automatic GC. C++: static typing, explicit types, manual memory. Ruby variables can change types. C++ cannot. Ruby prioritizes ease. C++ prioritizes control and performance. Fundamentally different approaches.",
