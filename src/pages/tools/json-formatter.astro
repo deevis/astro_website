@@ -127,9 +127,11 @@ const pageDescription = 'Format, validate, and convert JSON from Ruby, Python, a
   "company" => "Tech Corp",
   :skills => ["Ruby", "Rails", "PostgreSQL"],
   :active => true,
+  :deleted_at => nil,
   :metadata => {
     :created_at => "2024-01-15",
-    :department => "Engineering"
+    :department => "Engineering",
+    :notes => nil
   }
 }`,
       python: `{
@@ -280,6 +282,9 @@ const pageDescription = 'Format, validate, and convert JSON from Ruby, Python, a
       // Ensure all string keys are double-quoted
       result = result.replace(/'([^']*)'/g, '"$1"');
       
+      // Replace Ruby nil with null
+      result = result.replace(/\bnil\b/g, 'null');
+      
       return result;
     }
 
@@ -319,23 +324,50 @@ const pageDescription = 'Format, validate, and convert JSON from Ruby, Python, a
       return result;
     }
 
+    // Detect if input is a Ruby hash
+    function isRubyHash(input: string): boolean {
+      // Look for hash rocket syntax (=>)
+      if (/=>\s*/.test(input)) {
+        return true;
+      }
+      
+      // Look for symbol syntax (:symbol_name)
+      // This checks for symbols followed by hash rockets or the newer syntax
+      if (/:([a-zA-Z_][a-zA-Z0-9_]*)\s*(=>|:)/.test(input)) {
+        return true;
+      }
+      
+      // Look for Ruby nil
+      if (/\bnil\b/.test(input)) {
+        return true;
+      }
+      
+      return false;
+    }
+
     // Convert input to JSON based on format
     function convertToJSON(input: string, format: string): any {
       let jsonString = input.trim();
       
-      switch (format) {
-        case 'ruby':
-          jsonString = rubyToJSON(jsonString);
-          break;
-        case 'python':
-          jsonString = pythonToJSON(jsonString);
-          break;
-        case 'javascript':
-          jsonString = jsToJSON(jsonString);
-          break;
-        case 'json':
-          // Already JSON, no conversion needed
-          break;
+      // Auto-detect Ruby hash regardless of selected format
+      if (isRubyHash(jsonString)) {
+        jsonString = rubyToJSON(jsonString);
+      } else {
+        // Use the selected format
+        switch (format) {
+          case 'ruby':
+            jsonString = rubyToJSON(jsonString);
+            break;
+          case 'python':
+            jsonString = pythonToJSON(jsonString);
+            break;
+          case 'javascript':
+            jsonString = jsToJSON(jsonString);
+            break;
+          case 'json':
+            // Already JSON, no conversion needed
+            break;
+        }
       }
       
       return JSON.parse(jsonString);
