@@ -1,0 +1,753 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Memory Challenge';
+const pageDescription = 'Test your memory by tapping numbers in order';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="memory-wrapper">
+    <div class="container mx-auto px-4">
+      <main class="memory-container">
+        <div id="gameContainer">
+          <div id="splash">
+            <h1 class="page-title">Number Memory Challenge</h1>
+            <p class="subtitle">Tap the numbers in order — how far can you go?</p>
+            <div class="mode-buttons" id="modeButtons">
+              <button data-mode="easy">Easy</button>
+              <button data-mode="medium">Medium</button>
+              <button data-mode="hard">Hard</button>
+              <button data-mode="nightmare">Nightmare</button>
+            </div>
+          </div>
+          <div id="readyScreen" style="display:none;">
+            <p id="selectedModeText" class="selected-mode"></p>
+            <button id="readyBtn" class="ready-button">Ready</button>
+          </div>
+          <div id="countdown" style="display:none;"></div>
+          <canvas id="gameCanvas" style="display:none;"></canvas>
+          <div id="scoreDisplay" style="display:none;">Score: 0</div>
+          <div id="livesDisplay" style="display:none;">Lives: 3</div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    const CONFIG = {
+      INITIAL_DURATION: { easy: 2.5, medium: 3.0, hard: 4.0, nightmare: 5.0 },
+      DURATION_DECREMENT: 0.15,
+      MIN_DURATION: 0.3,
+      POINTS_PER_CORRECT: 10,
+      ROUND_BONUS: { easy: 50, medium: 100, hard: 150, nightmare: 200 },
+      CIRCLE_COUNTS: { easy: 3, medium: 5, hard: 7, nightmare: 9 }
+    };
+
+    let mode: string | null = null;
+    let score = 0;
+    let lives = 3;
+    let currentDuration = 2.5;
+    let circles: Array<{x: number, y: number, number: number, clicked: boolean}> = [];
+    let currentIndex = 0;
+    let roundNumber = 1;
+    let isPlaying = false;
+    
+    const countdownEl = document.getElementById('countdown')!;
+    const canvas = document.getElementById('gameCanvas') as HTMLCanvasElement;
+    const ctx = canvas.getContext('2d')!;
+    const scoreDisplay = document.getElementById('scoreDisplay')!;
+    const livesDisplay = document.getElementById('livesDisplay')!;
+
+    // Audio context for sound effects
+    const audioContext = new (window.AudioContext || (window as any).webkitAudioContext)();
+
+    // Sound effect functions
+    function playBeep() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 800;
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.stop(audioContext.currentTime + 0.1);
+    }
+
+    function playCorrect() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 523.25; // C5
+      oscillator.type = 'sine';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.2);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(659.25, audioContext.currentTime + 0.1); // E5
+      oscillator.stop(audioContext.currentTime + 0.2);
+    }
+
+    function playWrong() {
+      const oscillator = audioContext.createOscillator();
+      const gainNode = audioContext.createGain();
+      
+      oscillator.connect(gainNode);
+      gainNode.connect(audioContext.destination);
+      
+      oscillator.frequency.value = 200;
+      oscillator.type = 'sawtooth';
+      
+      gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      
+      oscillator.start(audioContext.currentTime);
+      oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
+      oscillator.stop(audioContext.currentTime + 0.3);
+    }
+
+    function playRoundComplete() {
+      // Happy ascending notes
+      const notes = [523.25, 659.25, 783.99]; // C5, E5, G5
+      notes.forEach((freq, i) => {
+        const oscillator = audioContext.createOscillator();
+        const gainNode = audioContext.createGain();
+        
+        oscillator.connect(gainNode);
+        gainNode.connect(audioContext.destination);
+        
+        oscillator.frequency.value = freq;
+        oscillator.type = 'sine';
+        
+        const startTime = audioContext.currentTime + (i * 0.15);
+        gainNode.gain.setValueAtTime(0.2, startTime);
+        gainNode.gain.exponentialRampToValueAtTime(0.01, startTime + 0.2);
+        
+        oscillator.start(startTime);
+        oscillator.stop(startTime + 0.2);
+      });
+    }
+
+    // Set canvas size
+    function resizeCanvas() {
+      canvas.width = canvas.offsetWidth;
+      canvas.height = canvas.offsetHeight;
+    }
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+
+    function selectMode(selectedMode: string) {
+      mode = selectedMode;
+      document.querySelectorAll('#modeButtons button').forEach(b => {
+        b.classList.remove('selected', 'deemphasized');
+        if ((b as HTMLElement).dataset.mode === mode) {
+          b.classList.add('selected');
+        } else {
+          b.classList.add('deemphasized');
+        }
+      });
+      document.getElementById('splash')!.style.display = 'none';
+      document.getElementById('readyScreen')!.style.display = 'block';
+      document.getElementById('selectedModeText')!.innerText = `Mode: ${mode.charAt(0).toUpperCase() + mode.slice(1)}`;
+    }
+
+    document.querySelectorAll('#modeButtons button').forEach(btn => {
+      btn.addEventListener('click', () => selectMode((btn as HTMLElement).dataset.mode!));
+    });
+
+    document.getElementById('readyBtn')!.addEventListener('click', startCountdown);
+
+    function startCountdown() {
+      document.getElementById('readyScreen')!.style.display = 'none';
+      countdownEl.style.display = 'block';
+      let count = 3;
+      countdownEl.textContent = String(count);
+      playBeep();
+
+      const countdownTimer = setInterval(() => {
+        count--;
+        if (count > 0) {
+          countdownEl.textContent = String(count);
+          playBeep();
+        } else {
+          clearInterval(countdownTimer);
+          countdownEl.style.display = 'none';
+          startGame();
+        }
+      }, 1000);
+    }
+
+    function startGame() {
+      score = 0;
+      lives = 3;
+      roundNumber = 1;
+      currentDuration = CONFIG.INITIAL_DURATION[mode as keyof typeof CONFIG.INITIAL_DURATION];
+      
+      canvas.style.display = 'block';
+      scoreDisplay.style.display = 'block';
+      livesDisplay.style.display = 'block';
+      
+      updateScore();
+      updateLives();
+      
+      console.log(`Starting ${mode} mode with ${currentDuration}s initial duration`);
+      
+      // Wait a frame for CSS to apply, then resize and start
+      requestAnimationFrame(() => {
+        resizeCanvas();
+        console.log('Canvas dimensions:', canvas.width, 'x', canvas.height);
+        console.log('Canvas offset dimensions:', canvas.offsetWidth, 'x', canvas.offsetHeight);
+        startRound();
+      });
+    }
+
+    function updateScore() {
+      scoreDisplay.textContent = `Score: ${score}`;
+    }
+
+    function updateLives() {
+      livesDisplay.textContent = `Lives: ${lives}`;
+    }
+
+    function startRound() {
+      if (lives <= 0) {
+        gameOver();
+        return;
+      }
+
+      isPlaying = false;
+      currentIndex = 0;
+      circles = [];
+      
+      const count = CONFIG.CIRCLE_COUNTS[mode as keyof typeof CONFIG.CIRCLE_COUNTS];
+      const radius = 40;
+      const padding = 60;
+
+      console.log(`Starting round ${roundNumber} in ${mode} mode with ${count} circles`);
+      console.log('Canvas size:', canvas.width, 'x', canvas.height);
+
+      // Generate random positions for circles
+      for (let i = 0; i < count; i++) {
+        let x, y, overlapping;
+        let attempts = 0;
+        const maxAttempts = 100;
+        
+        do {
+          overlapping = false;
+          x = padding + Math.random() * (canvas.width - 2 * padding);
+          y = padding + Math.random() * (canvas.height - 2 * padding);
+          
+          // Check for overlaps
+          for (const circle of circles) {
+            const dx = x - circle.x;
+            const dy = y - circle.y;
+            const distance = Math.sqrt(dx * dx + dy * dy);
+            if (distance < radius * 2.5) {
+              overlapping = true;
+              break;
+            }
+          }
+          
+          attempts++;
+          if (attempts >= maxAttempts) {
+            // Give up and place it anyway with reduced spacing requirement
+            overlapping = false;
+            x = padding + Math.random() * (canvas.width - 2 * padding);
+            y = padding + Math.random() * (canvas.height - 2 * padding);
+          }
+        } while (overlapping);
+
+        circles.push({ x, y, number: i + 1, clicked: false });
+      }
+
+      console.log('Circles generated:', circles);
+
+      // Countdown before showing numbers
+      if (roundNumber > 1) {
+        // Quick 3-beep countdown for rounds after the first
+        let beepCount = 0;
+        const beepInterval = setInterval(() => {
+          playBeep();
+          beepCount++;
+          if (beepCount >= 3) {
+            clearInterval(beepInterval);
+            // Show numbers briefly
+            showNumbers();
+            setTimeout(() => {
+              hideNumbers();
+              isPlaying = true;
+            }, currentDuration * 1000);
+          }
+        }, 300);
+      } else {
+        // First round, no countdown needed (already did the big countdown)
+        showNumbers();
+        setTimeout(() => {
+          hideNumbers();
+          isPlaying = true;
+        }, currentDuration * 1000);
+      }
+    }
+
+    function showNumbers() {
+      console.log('showNumbers called, drawing', circles.length, 'circles');
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      circles.forEach((circle, idx) => {
+        console.log(`Drawing circle ${idx}:`, circle);
+        // Draw circle
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, 40, 0, Math.PI * 2);
+        ctx.fillStyle = '#b0d9b1';
+        ctx.fill();
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // Draw number
+        ctx.fillStyle = '#2c3e50';
+        ctx.font = 'bold 24px sans-serif';
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'middle';
+        ctx.fillText(String(circle.number), circle.x, circle.y);
+      });
+    }
+
+    function hideNumbers() {
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      circles.forEach(circle => {
+        // Draw circle
+        ctx.beginPath();
+        ctx.arc(circle.x, circle.y, 40, 0, Math.PI * 2);
+        ctx.fillStyle = circle.clicked ? '#7bc67e' : '#f7d9c4';
+        ctx.fill();
+        ctx.strokeStyle = '#2c3e50';
+        ctx.lineWidth = 3;
+        ctx.stroke();
+
+        // If clicked, show the number
+        if (circle.clicked) {
+          ctx.fillStyle = '#2c3e50';
+          ctx.font = 'bold 24px sans-serif';
+          ctx.textAlign = 'center';
+          ctx.textBaseline = 'middle';
+          ctx.fillText(String(circle.number), circle.x, circle.y);
+        }
+      });
+    }
+
+    function checkClick(x: number, y: number) {
+      if (!isPlaying) {
+        console.log('Not playing, ignoring click');
+        return;
+      }
+
+      console.log(`Click at (${x.toFixed(0)}, ${y.toFixed(0)}), looking for number ${currentIndex + 1}`);
+
+      for (const circle of circles) {
+        const dx = x - circle.x;
+        const dy = y - circle.y;
+        const distance = Math.sqrt(dx * dx + dy * dy);
+        
+        console.log(`Circle ${circle.number} at (${circle.x.toFixed(0)}, ${circle.y.toFixed(0)}), distance: ${distance.toFixed(0)}, clicked: ${circle.clicked}`);
+        
+        if (distance <= 40 && !circle.clicked) {
+          console.log(`Clicked circle ${circle.number}, expected ${currentIndex + 1}`);
+          
+          if (circle.number === currentIndex + 1) {
+            // Correct!
+            console.log('✓ Correct!');
+            playCorrect();
+            circle.clicked = true;
+            currentIndex++;
+            score += CONFIG.POINTS_PER_CORRECT;
+            updateScore();
+            hideNumbers();
+
+            if (currentIndex === circles.length) {
+              // Round complete!
+              console.log('🎉 Round complete!');
+              playRoundComplete();
+              score += CONFIG.ROUND_BONUS[mode as keyof typeof CONFIG.ROUND_BONUS];
+              updateScore();
+              roundNumber++;
+              currentDuration = Math.max(CONFIG.MIN_DURATION, currentDuration - CONFIG.DURATION_DECREMENT);
+              
+              console.log(`Next round duration: ${currentDuration}s`);
+              setTimeout(() => startRound(), 1500);
+            }
+          } else {
+            // Wrong circle!
+            console.log('✗ Wrong circle!');
+            playWrong();
+            lives--;
+            updateLives();
+            
+            if (lives <= 0) {
+              gameOver();
+            } else {
+              // Restart round
+              setTimeout(() => startRound(), 1500);
+            }
+          }
+          break;
+        }
+      }
+    }
+
+    function gameOver() {
+      isPlaying = false;
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      
+      // Use canvas theme colors
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.fillStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      
+      ctx.font = 'bold 48px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText('Game Over!', canvas.width / 2, canvas.height / 2 - 60);
+      
+      ctx.font = 'bold 32px sans-serif';
+      ctx.fillText(`Final Score: ${score}`, canvas.width / 2, canvas.height / 2 - 10);
+      
+      ctx.font = '20px sans-serif';
+      ctx.fillText(`Round ${roundNumber} | ${mode?.toUpperCase()} Mode`, canvas.width / 2, canvas.height / 2 + 30);
+      
+      // Draw play again button
+      const buttonWidth = 180;
+      const buttonHeight = 50;
+      const buttonX = canvas.width / 2 - buttonWidth / 2;
+      const buttonY = canvas.height / 2 + 60;
+      
+      ctx.fillStyle = '#b0d9b1';
+      ctx.fillRect(buttonX, buttonY, buttonWidth, buttonHeight);
+      ctx.strokeStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.lineWidth = 3;
+      ctx.strokeRect(buttonX, buttonY, buttonWidth, buttonHeight);
+      
+      ctx.fillStyle = '#2c3e50';
+      ctx.font = 'bold 20px sans-serif';
+      ctx.fillText('Play Again', canvas.width / 2, buttonY + buttonHeight / 2);
+      
+      // Store button bounds for click detection
+      (canvas as any).playAgainButton = { x: buttonX, y: buttonY, width: buttonWidth, height: buttonHeight };
+    }
+
+    function resetGame() {
+      document.getElementById('splash')!.style.display = 'block';
+      canvas.style.display = 'none';
+      scoreDisplay.style.display = 'none';
+      livesDisplay.style.display = 'none';
+      mode = null;
+      document.querySelectorAll('#modeButtons button').forEach(b => {
+        b.classList.remove('selected', 'deemphasized');
+      });
+    }
+
+    // Function to handle both click and touch events
+    function handleCanvasInteraction(clientX: number, clientY: number) {
+      const rect = canvas.getBoundingClientRect();
+      
+      // Scale coordinates to match canvas internal dimensions
+      const scaleX = canvas.width / rect.width;
+      const scaleY = canvas.height / rect.height;
+      const x = (clientX - rect.left) * scaleX;
+      const y = (clientY - rect.top) * scaleY;
+      
+      console.log('Raw interaction:', clientX - rect.left, clientY - rect.top);
+      console.log('Scaled interaction:', x, y);
+      console.log('Scale factors:', scaleX, scaleY);
+      
+      // Check if clicking play again button
+      const playAgainBtn = (canvas as any).playAgainButton;
+      if (playAgainBtn && !isPlaying && lives <= 0) {
+        if (x >= playAgainBtn.x && x <= playAgainBtn.x + playAgainBtn.width &&
+            y >= playAgainBtn.y && y <= playAgainBtn.y + playAgainBtn.height) {
+          resetGame();
+          return;
+        }
+      }
+      
+      checkClick(x, y);
+    }
+
+    // Canvas click handler
+    canvas.addEventListener('click', (e) => {
+      e.preventDefault();
+      handleCanvasInteraction(e.clientX, e.clientY);
+    });
+
+    // Canvas touch handler
+    canvas.addEventListener('touchstart', (e) => {
+      e.preventDefault();
+      if (e.touches.length > 0) {
+        const touch = e.touches[0];
+        handleCanvasInteraction(touch.clientX, touch.clientY);
+      }
+    });
+
+    // Prevent touch scrolling on canvas
+    canvas.addEventListener('touchmove', (e) => {
+      e.preventDefault();
+    }, { passive: false });
+  </script>
+
+  <style>
+    .memory-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+
+    :global(.dark) .memory-wrapper {
+      background: rgb(3, 7, 18);
+    }
+
+    .memory-container {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      width: 90%;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    :global(.dark) .memory-container {
+      background: rgb(17, 24, 39);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    #gameContainer {
+      text-align: center;
+      position: relative;
+      width: 100%;
+      min-height: 700px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .page-title {
+      font-size: 2.2em;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      animation: fadeIn 2s ease-in-out;
+    }
+
+    :global(.dark) .page-title {
+      background: linear-gradient(135deg, #ec4899 0%, #f43f5e 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
+    }
+
+    .subtitle {
+      animation: fadeIn 3s ease-in-out;
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 2rem;
+    }
+
+    :global(.dark) .subtitle {
+      color: rgb(156, 163, 175);
+    }
+
+    .mode-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 0.5em;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .mode-buttons button {
+      background: #f7d9c4;
+      border: none;
+      margin: 0.3em;
+      padding: 0.8em 1.2em;
+      border-radius: 12px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      cursor: pointer;
+      transition: all 0.3s;
+      opacity: 1;
+      font-weight: 600;
+      color: #2c3e50;
+    }
+
+    :global(.dark) .mode-buttons button {
+      background: rgb(75, 85, 99);
+      color: rgb(243, 244, 246);
+    }
+
+    .mode-buttons button.selected {
+      background: #b0d9b1;
+      transform: scale(1.1);
+    }
+
+    :global(.dark) .mode-buttons button.selected {
+      background: #10b981;
+    }
+
+    .mode-buttons button.deemphasized {
+      opacity: 0.5;
+      transform: scale(0.95);
+    }
+
+    .mode-buttons button:hover:not(.deemphasized) {
+      transform: scale(1.05);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    .selected-mode {
+      font-weight: bold;
+      font-size: 1.3em;
+      color: #2c3e50;
+      margin-bottom: 1rem;
+    }
+
+    :global(.dark) .selected-mode {
+      color: rgb(243, 244, 246);
+    }
+
+    .ready-button {
+      background: linear-gradient(135deg, #b0d9b1 0%, #7bc67e 100%);
+      padding: 1em 2em;
+      border-radius: 12px;
+      font-weight: bold;
+      font-size: 1.1em;
+      border: none;
+      margin-top: 1em;
+      cursor: pointer;
+      color: #2c3e50;
+      transition: all 0.2s;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    :global(.dark) .ready-button {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+    }
+
+    .ready-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+    }
+
+    #countdown {
+      font-size: 4em;
+      animation: fadeIn 0.3s ease-in-out;
+      color: #2c3e50;
+      font-weight: bold;
+    }
+
+    :global(.dark) #countdown {
+      color: rgb(243, 244, 246);
+    }
+
+    @keyframes popFade {
+      0% { transform: scale(0.5); opacity: 0; }
+      50% { transform: scale(1.2); opacity: 1; }
+      100% { transform: scale(1); opacity: 0; }
+    }
+
+    canvas {
+      width: 100%;
+      max-width: 500px;
+      height: 700px;
+      margin: 0 auto;
+      position: relative;
+      border-radius: 8px;
+      background: #f8f9fa;
+    }
+
+    :global(.dark) canvas {
+      background: rgb(31, 41, 55);
+    }
+
+    #scoreDisplay, #livesDisplay {
+      position: absolute;
+      top: 10px;
+      font-size: 1.2em;
+      background: rgba(255,255,255,0.9);
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-weight: 600;
+      color: #2c3e50;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    :global(.dark) #scoreDisplay,
+    :global(.dark) #livesDisplay {
+      background: rgba(17, 24, 39, 0.9);
+      color: rgb(243, 244, 246);
+    }
+
+    #scoreDisplay { 
+      left: 10px;
+    }
+    
+    #livesDisplay { 
+      right: 10px;
+    }
+
+    @media (max-width: 768px) {
+      .memory-container {
+        padding: 20px;
+        width: 95%;
+      }
+
+      .page-title {
+        font-size: 1.8em;
+      }
+
+      .mode-buttons button {
+        padding: 0.6em 1em;
+        font-size: 0.9em;
+      }
+
+      canvas {
+        max-width: 100%;
+        height: 600px;
+      }
+
+      #gameContainer {
+        min-height: 600px;
+      }
+    }
+
+    @media (max-width: 480px) {
+      canvas {
+        height: 500px;
+      }
+
+      #gameContainer {
+        min-height: 500px;
+      }
+    }
+  </style>
+</Layout>
+

@@ -1,0 +1,749 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Pink Noise Generator';
+const pageDescription = 'Customizable pink/white/brown noise generator for relaxation and focus';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="noise-wrapper">
+    <div class="container mx-auto px-4">
+      <main class="noise-container">
+        <h1 class="page-title">Custom Pink Noise Generator</h1>
+        <p class="page-subtitle">Customizable sound generator for relaxation, focus, and sleep</p>
+        
+        <div class="controls-header">
+          <button id="toggle" class="btn btn-play">▶ Start</button>
+          <button id="toggleDrawer" class="btn btn-presets">☰ Presets</button>
+        </div>
+        
+        <div class="controls-grid">
+          <label class="control-label">
+            Volume
+            <input id="volume" type="range" min="0" max="2" step="0.01" value="0.3" />
+          </label>
+          <label class="control-label">
+            Color Tilt (White ↔ Brown)
+            <input id="tilt" type="range" min="-1" max="2" step="0.01" value="0.5" />
+          </label>
+          <label class="control-label">
+            Low Cut (Hz)
+            <input id="lowcut" type="range" min="10" max="1000" step="5" value="40" />
+          </label>
+          <label class="control-label">
+            High Cut (Hz)
+            <input id="highcut" type="range" min="500" max="20000" step="250" value="8000" />
+          </label>
+          <label class="control-label">
+            Modulation Depth (±dB)
+            <input id="modDepth" type="range" min="0" max="0.5" step="0.01" value="0.02" />
+          </label>
+          <label class="control-label">
+            Modulation Speed (Hz)
+            <input id="modSpeed" type="range" min="0.001" max="1" step="0.001" value="0.05" />
+          </label>
+        </div>
+        
+        <button id="savePreset" class="btn btn-save">💾 Save Current Settings</button>
+        
+        <canvas id="spectrum"></canvas>
+        
+        <!-- Info Section -->
+        <div class="info-section">
+          <div class="info-header">
+            <div class="info-header-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+              </svg>
+            </div>
+            <div>
+              <h2 class="info-title">About Noise Colors</h2>
+              <p class="info-tagline">Understanding different types of noise for relaxation and focus</p>
+            </div>
+          </div>
+          
+          <div class="info-grid">
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <circle cx="12" cy="12" r="10"/>
+                  <path d="M12 6v6l4 2"/>
+                </svg>
+              </div>
+              <h3 class="card-title">White Noise</h3>
+              <p class="card-content">
+                Contains all frequencies at equal intensity. Like the static from a TV or radio. 
+                Best for masking sudden environmental sounds and creating a consistent audio backdrop.
+              </p>
+            </div>
+            
+            <div class="info-card highlight-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 19V6l12-3v13M9 19c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zm12-3c0 1.105-1.343 2-3 2s-3-.895-3-2 1.343-2 3-2 3 .895 3 2zM9 10l12-3"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Pink Noise</h3>
+              <p class="card-content">
+                Equal energy per octave, creating a balanced, natural sound. Similar to steady rainfall or rustling leaves. 
+                Research suggests pink noise may improve sleep quality and enhance memory consolidation.
+              </p>
+            </div>
+            
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Brown Noise</h3>
+              <p class="card-content">
+                Deeper, more bass-heavy sound with energy decreasing by frequency. Like a powerful waterfall or distant thunder. 
+                Many find it more soothing than white or pink noise, especially for deep focus and sleep.
+              </p>
+            </div>
+            
+            <div class="info-card">
+              <div class="card-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/>
+                </svg>
+              </div>
+              <h3 class="card-title">Use Cases</h3>
+              <ul class="card-list">
+                <li><strong>Focus:</strong> Mask distractions while working or studying</li>
+                <li><strong>Sleep:</strong> Create consistent ambient sound to fall asleep</li>
+                <li><strong>Tinnitus Relief:</strong> Mask ringing or buzzing sounds</li>
+                <li><strong>Privacy:</strong> Make conversations less intelligible</li>
+                <li><strong>Relaxation:</strong> Create a calming atmosphere</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <!-- Preset Drawer -->
+  <div id="drawer" class="drawer">
+    <h2 class="drawer-title">Saved Presets</h2>
+    <div id="presetList" class="preset-list"></div>
+  </div>
+
+  <script>
+    const ctx = new AudioContext();
+    let noiseNode: ScriptProcessorNode | null = null;
+    let gainNode: GainNode | null = null;
+    let lowFilter: BiquadFilterNode | null = null;
+    let highFilter: BiquadFilterNode | null = null;
+    let tiltFilter: BiquadFilterNode | null = null;
+    let modOsc: OscillatorNode | null = null;
+    let modGain: GainNode | null = null;
+    let analyser: AnalyserNode | null = null;
+    let isPlaying = false;
+
+    function createPinkNoise(ctx: AudioContext): ScriptProcessorNode {
+      const bufferSize = 4096;
+      const node = ctx.createScriptProcessor(bufferSize, 1, 1);
+      let b0=0,b1=0,b2=0,b3=0,b4=0,b5=0,b6=0;
+      node.onaudioprocess = e => {
+        const output = e.outputBuffer.getChannelData(0);
+        for (let i = 0; i < bufferSize; i++) {
+          const white = Math.random() * 2 - 1;
+          b0 = 0.99886 * b0 + white * 0.0555179;
+          b1 = 0.99332 * b1 + white * 0.0750759;
+          b2 = 0.96900 * b2 + white * 0.1538520;
+          b3 = 0.86650 * b3 + white * 0.3104856;
+          b4 = 0.55000 * b4 + white * 0.5329522;
+          b5 = -0.7616 * b5 - white * 0.0168980;
+          output[i] = b0 + b1 + b2 + b3 + b4 + b5 + b6 + white * 0.5362;
+          output[i] *= 0.11;
+          b6 = white * 0.115926;
+        }
+      };
+      return node;
+    }
+
+    function createModulation() {
+      if (modOsc) {
+        try { modOsc.stop(); } catch (e) {}
+        modOsc.disconnect();
+        modGain!.disconnect();
+      }
+      modOsc = ctx.createOscillator();
+      modGain = ctx.createGain();
+      modGain.gain.value = parseFloat((document.getElementById('modDepth') as HTMLInputElement).value);
+      modOsc.frequency.value = parseFloat((document.getElementById('modSpeed') as HTMLInputElement).value);
+      modOsc.connect(modGain).connect(gainNode!.gain);
+      modOsc.start();
+    }
+
+    function startNoise() {
+      noiseNode = createPinkNoise(ctx);
+      gainNode = ctx.createGain();
+      lowFilter = ctx.createBiquadFilter();
+      lowFilter.type = 'highpass';
+      lowFilter.frequency.value = parseFloat((document.getElementById('lowcut') as HTMLInputElement).value);
+      highFilter = ctx.createBiquadFilter();
+      highFilter.type = 'lowpass';
+      highFilter.frequency.value = parseFloat((document.getElementById('highcut') as HTMLInputElement).value);
+
+      tiltFilter = ctx.createBiquadFilter();
+      tiltFilter.type = 'lowshelf';
+      tiltFilter.frequency.value = 500;
+      tiltFilter.gain.value = (parseFloat((document.getElementById('tilt') as HTMLInputElement).value) - 0.5) * 12;
+
+      analyser = ctx.createAnalyser();
+      analyser.fftSize = 1024;
+
+      noiseNode.connect(tiltFilter).connect(lowFilter).connect(highFilter).connect(gainNode).connect(analyser).connect(ctx.destination);
+      createModulation();
+      isPlaying = true;
+      animateSpectrum();
+    }
+
+    function stopNoise() {
+      if (modOsc) { try { modOsc.stop(); } catch (e) {} }
+      noiseNode!.disconnect();
+      gainNode!.disconnect();
+      isPlaying = false;
+    }
+
+    document.getElementById('toggle')!.addEventListener('click', () => {
+      if (!isPlaying) {
+        ctx.resume().then(() => {
+          startNoise();
+          document.getElementById('toggle')!.textContent = '⏸ Stop';
+        });
+      } else {
+        stopNoise();
+        document.getElementById('toggle')!.textContent = '▶ Start';
+      }
+    });
+
+    // Drawer logic
+    const drawer = document.getElementById('drawer')!;
+    document.getElementById('toggleDrawer')!.addEventListener('click', () => {
+      drawer.classList.toggle('open');
+      loadPresets();
+    });
+
+    // Save & load presets
+    function getSettings() {
+      return {
+        volume: (document.getElementById('volume') as HTMLInputElement).value,
+        tilt: (document.getElementById('tilt') as HTMLInputElement).value,
+        lowcut: (document.getElementById('lowcut') as HTMLInputElement).value,
+        highcut: (document.getElementById('highcut') as HTMLInputElement).value,
+        modDepth: (document.getElementById('modDepth') as HTMLInputElement).value,
+        modSpeed: (document.getElementById('modSpeed') as HTMLInputElement).value
+      };
+    }
+
+    function setSettings(settings: Record<string, string>) {
+      for (const key in settings) {
+        const el = document.getElementById(key) as HTMLInputElement | null;
+        if (el) {
+          el.value = settings[key];
+          el.dispatchEvent(new Event('input'));
+        }
+      }
+    }
+
+    document.getElementById('savePreset')!.addEventListener('click', () => {
+      const name = prompt('Enter a name for this preset:');
+      if (!name) return;
+      try {
+        const settings = getSettings();
+        const presets = JSON.parse(localStorage.getItem('pinkNoisePresets') || '{}');
+        presets[name] = settings;
+        localStorage.setItem('pinkNoisePresets', JSON.stringify(presets));
+        loadPresets();
+        alert(`Preset "${name}" saved!`);
+      } catch (err) {
+        console.error('Error saving preset:', err);
+        alert('Failed to save preset.');
+      }
+    });
+
+    function loadPresets() {
+      const list = document.getElementById('presetList')!;
+      list.innerHTML = '';
+      const presets = JSON.parse(localStorage.getItem('pinkNoisePresets') || '{}');
+      for (const name in presets) {
+        const div = document.createElement('div');
+        div.className = 'preset-item';
+        div.textContent = name;
+        div.onclick = () => setSettings(presets[name]);
+        list.appendChild(div);
+      }
+    }
+
+    // Update filters and modulation in real time
+    ['volume','tilt','lowcut','highcut','modDepth','modSpeed'].forEach(id => {
+      document.getElementById(id)!.addEventListener('input', e => {
+        if (!gainNode) return;
+        const target = e.target as HTMLInputElement;
+        switch (id) {
+          case 'volume': gainNode.gain.value = parseFloat(target.value); break;
+          case 'tilt': tiltFilter!.gain.value = (parseFloat(target.value) - 0.5) * 12; break;
+          case 'lowcut': lowFilter!.frequency.value = parseFloat(target.value); break;
+          case 'highcut': highFilter!.frequency.value = parseFloat(target.value); break;
+          case 'modDepth':
+          case 'modSpeed':
+            createModulation();
+            break;
+        }
+      });
+    });
+
+    // Visualization
+    const canvas = document.getElementById('spectrum') as HTMLCanvasElement;
+    const ctx2d = canvas.getContext('2d')!;
+    function animateSpectrum() {
+      if (!isPlaying) return;
+      requestAnimationFrame(animateSpectrum);
+      const bufferLength = analyser!.frequencyBinCount;
+      const dataArray = new Uint8Array(bufferLength);
+      analyser!.getByteFrequencyData(dataArray);
+      ctx2d.fillStyle = '#111';
+      ctx2d.fillRect(0,0,canvas.width,canvas.height);
+      const barWidth = (canvas.width / bufferLength) * 2.5;
+      let x = 0;
+      for (let i = 0; i < bufferLength; i++) {
+        const barHeight = dataArray[i] / 2;
+        ctx2d.fillStyle = `hsl(${120 - barHeight/2}, 100%, 60%)`;
+        ctx2d.fillRect(x, canvas.height - barHeight, barWidth, barHeight);
+        x += barWidth + 1;
+      }
+    }
+  </script>
+
+  <style>
+    .noise-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+
+    :global(.dark) .noise-wrapper {
+      background: rgb(3, 7, 18);
+    }
+
+    .noise-container {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    :global(.dark) .noise-container {
+      background: rgb(17, 24, 39);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 12px;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    :global(.dark) .page-title {
+      background: linear-gradient(135deg, #fbbf24 0%, #f59e0b 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .page-subtitle {
+      text-align: center;
+      font-size: 16px;
+      color: #7f8c8d;
+      margin-bottom: 32px;
+    }
+
+    :global(.dark) .page-subtitle {
+      color: rgb(156, 163, 175);
+    }
+
+    .controls-header {
+      display: flex;
+      justify-content: center;
+      gap: 16px;
+      margin-bottom: 32px;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    .btn-play {
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      color: white;
+    }
+
+    .btn-play:hover {
+      background: linear-gradient(135deg, #e09830 0%, #e65b10 100%);
+    }
+
+    .btn-presets {
+      background: #e9ecef;
+      color: #495057;
+    }
+
+    :global(.dark) .btn-presets {
+      background: rgb(55, 65, 81);
+      color: rgb(209, 213, 219);
+    }
+
+    .btn-presets:hover {
+      background: #dee2e6;
+    }
+
+    :global(.dark) .btn-presets:hover {
+      background: rgb(75, 85, 99);
+    }
+
+    .btn-save {
+      display: block;
+      margin: 20px auto;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .btn-save:hover {
+      background: linear-gradient(135deg, #5568d3 0%, #63408a 100%);
+    }
+
+    .controls-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+      max-width: 600px;
+      margin: 0 auto 20px;
+    }
+
+    @media (max-width: 768px) {
+      .controls-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .control-label {
+      display: flex;
+      flex-direction: column;
+      font-size: 14px;
+      font-weight: 600;
+      color: #2c3e50;
+      gap: 8px;
+    }
+
+    :global(.dark) .control-label {
+      color: rgb(243, 244, 246);
+    }
+
+    input[type="range"] {
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: #e1e8ed;
+      outline: none;
+      -webkit-appearance: none;
+    }
+
+    :global(.dark) input[type="range"] {
+      background: rgb(55, 65, 81);
+    }
+
+    input[type="range"]::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      cursor: pointer;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    input[type="range"]::-moz-range-thumb {
+      width: 18px;
+      height: 18px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      cursor: pointer;
+      border: none;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    }
+
+    canvas {
+      margin: 20px auto;
+      display: block;
+      background: #111;
+      border-radius: 8px;
+      width: 100%;
+      max-width: 600px;
+      height: 200px;
+    }
+
+    .drawer {
+      position: fixed;
+      right: -250px;
+      top: 0;
+      width: 250px;
+      height: 100%;
+      background: white;
+      color: #2c3e50;
+      padding: 80px 15px 15px;
+      transition: right 0.3s ease;
+      box-shadow: -2px 0 8px rgba(0,0,0,0.4);
+      z-index: 40;
+    }
+
+    :global(.dark) .drawer {
+      background: rgb(17, 24, 39);
+      color: rgb(243, 244, 246);
+    }
+
+    .drawer.open {
+      right: 0;
+    }
+
+    .drawer-title {
+      color: #f3a93c;
+      margin-top: 0;
+      font-size: 20px;
+      font-weight: 700;
+    }
+
+    :global(.dark) .drawer-title {
+      color: #fbbf24;
+    }
+
+    .preset-list {
+      margin-top: 15px;
+    }
+
+    .preset-item {
+      margin: 8px 0;
+      cursor: pointer;
+      padding: 10px;
+      border-radius: 6px;
+      background: #f8f9fa;
+      transition: all 0.2s;
+    }
+
+    :global(.dark) .preset-item {
+      background: rgb(31, 41, 55);
+    }
+
+    .preset-item:hover {
+      background: #e9ecef;
+      transform: translateX(-4px);
+    }
+
+    :global(.dark) .preset-item:hover {
+      background: rgb(55, 65, 81);
+    }
+
+    /* Info Section Styles */
+    .info-section {
+      background: linear-gradient(135deg, rgba(243, 169, 60, 0.1) 0%, rgba(247, 107, 28, 0.1) 100%);
+      border-radius: 16px;
+      padding: 48px;
+      margin-top: 48px;
+      border: 1px solid rgba(243, 169, 60, 0.2);
+    }
+
+    :global(.dark) .info-section {
+      background: linear-gradient(135deg, rgba(243, 169, 60, 0.05) 0%, rgba(247, 107, 28, 0.05) 100%);
+      border-color: rgba(243, 169, 60, 0.2);
+    }
+
+    .info-header {
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      margin-bottom: 40px;
+      padding-bottom: 24px;
+      border-bottom: 2px solid rgba(243, 169, 60, 0.2);
+    }
+
+    :global(.dark) .info-header {
+      border-bottom-color: rgba(243, 169, 60, 0.3);
+    }
+
+    .info-header-icon {
+      width: 64px;
+      height: 64px;
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      box-shadow: 0 8px 16px rgba(243, 169, 60, 0.3);
+    }
+
+    .info-header-icon svg {
+      width: 36px;
+      height: 36px;
+      color: white;
+    }
+
+    .info-title {
+      font-size: 32px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    :global(.dark) .info-title {
+      color: rgb(243, 244, 246);
+    }
+
+    .info-tagline {
+      font-size: 16px;
+      color: #f3a93c;
+      margin: 4px 0 0 0;
+      font-weight: 500;
+    }
+
+    :global(.dark) .info-tagline {
+      color: #fbbf24;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 24px;
+    }
+
+    .info-card {
+      background: white;
+      border-radius: 12px;
+      padding: 28px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      transition: all 0.3s ease;
+      border: 1px solid #e1e8ed;
+    }
+
+    :global(.dark) .info-card {
+      background: rgb(17, 24, 39);
+      border-color: rgb(55, 65, 81);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+    }
+
+    .info-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 24px rgba(243, 169, 60, 0.15);
+    }
+
+    :global(.dark) .info-card:hover {
+      box-shadow: 0 8px 24px rgba(243, 169, 60, 0.3);
+    }
+
+    .highlight-card {
+      background: linear-gradient(135deg, rgba(243, 169, 60, 0.1) 0%, rgba(247, 107, 28, 0.1) 100%);
+      border: 2px solid #f3a93c;
+    }
+
+    :global(.dark) .highlight-card {
+      background: linear-gradient(135deg, rgba(243, 169, 60, 0.1) 0%, rgba(247, 107, 28, 0.1) 100%);
+      border-color: #fbbf24;
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      background: linear-gradient(135deg, #f3a93c 0%, #f76b1c 100%);
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-bottom: 16px;
+    }
+
+    .card-icon svg {
+      width: 24px;
+      height: 24px;
+      color: white;
+    }
+
+    .card-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin: 0 0 12px 0;
+    }
+
+    :global(.dark) .card-title {
+      color: rgb(243, 244, 246);
+    }
+
+    .card-content {
+      font-size: 15px;
+      line-height: 1.7;
+      color: #34495e;
+      margin: 0;
+    }
+
+    :global(.dark) .card-content {
+      color: rgb(209, 213, 219);
+    }
+
+    .card-list {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+    }
+
+    .card-list li {
+      font-size: 14px;
+      line-height: 1.7;
+      color: #34495e;
+      margin-bottom: 12px;
+      padding-left: 28px;
+      position: relative;
+    }
+
+    :global(.dark) .card-list li {
+      color: rgb(209, 213, 219);
+    }
+
+    .card-list li::before {
+      content: "✓";
+      position: absolute;
+      left: 0;
+      color: #f3a93c;
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    :global(.dark) .card-list li::before {
+      color: #fbbf24;
+    }
+  </style>
+</Layout>
+

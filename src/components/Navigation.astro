@@ -16,6 +16,8 @@ const developerToolsDropdown = [
   { href: '/tools/base64', text: 'Base64 Encoder/Decoder' },
   { href: '/tools/string-escape', text: 'String Escape/Unescape' },
   { href: '/tools/json-formatter', text: 'JSON Formatter/Converter' },
+  { href: '/tools/qr-code', text: 'QR Code Generator/Scanner' },
+  { href: '/tools/hex-converter', text: 'Hex Converter (OP_RETURN)' },
 ];
 
 const bitcoinDropdown = [
@@ -24,6 +26,12 @@ const bitcoinDropdown = [
   { href: '/bitcoin-hardware-wallet-showdown', text: 'Hardware Wallet Showdown' },
   { href: '/bitcoin-dca-what-if', text: 'Bitcoin DCA Scenarios' },
   { href: '/bitcoin-resources', text: 'Bitcoin Resources' },
+];
+
+const appsDropdown = [
+  { href: '/apps/pink-noise-generator', text: 'Pink Noise Generator' },
+  { href: '/apps/reaction-trainer', text: 'Reaction Trainer' },
+  { href: '/apps/memory-challenge', text: 'Memory Challenge' },
 ];
 ---
 
@@ -78,6 +86,30 @@ const bitcoinDropdown = [
           <!-- Dropdown Menu -->
           <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
             {bitcoinDropdown.map(item => (
+              <a
+                href={item.href}
+                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
+              >
+                {item.text}
+              </a>
+            ))}
+          </div>
+        </div>
+        
+        <!-- Apps Dropdown -->
+        <div class="relative group">
+          <button
+            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+          >
+            Apps
+            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+            </svg>
+          </button>
+          
+          <!-- Dropdown Menu -->
+          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+            {appsDropdown.map(item => (
               <a
                 href={item.href}
                 class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
@@ -196,6 +228,33 @@ const bitcoinDropdown = [
         </div>
       </div>
       
+      <!-- Apps Mobile Dropdown -->
+      <div class="space-y-2">
+        <button
+          id="mobile-apps-toggle"
+          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
+          type="button"
+          aria-label="Toggle Apps menu"
+          aria-expanded="false"
+        >
+          Apps
+          <svg id="mobile-apps-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+          </svg>
+        </button>
+        
+        <div id="mobile-apps-menu" class="hidden pl-4 space-y-2">
+          {appsDropdown.map(item => (
+            <a
+              href={item.href}
+              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+            >
+              {item.text}
+            </a>
+          ))}
+        </div>
+      </div>
+      
       {links.slice(2).map(link => (
         <a
           href={link.href}
@@ -220,6 +279,9 @@ const bitcoinDropdown = [
     const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
     const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
     const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
+    const appsToggle = document.getElementById('mobile-apps-toggle');
+    const appsMenu = document.getElementById('mobile-apps-menu');
+    const appsArrow = document.getElementById('mobile-apps-arrow');
 
     console.log('Elements found:', {
       button: !!button,
@@ -229,7 +291,10 @@ const bitcoinDropdown = [
       devToolsArrow: !!devToolsArrow,
       bitcoinToggle: !!bitcoinToggle,
       bitcoinMenu: !!bitcoinMenu,
-      bitcoinArrow: !!bitcoinArrow
+      bitcoinArrow: !!bitcoinArrow,
+      appsToggle: !!appsToggle,
+      appsMenu: !!appsMenu,
+      appsArrow: !!appsArrow
     });
 
     function toggleMobileMenu(e) {
@@ -289,6 +354,22 @@ const bitcoinDropdown = [
       }
     }
 
+    function toggleAppsMenu(e) {
+      console.log('toggleAppsMenu called', e.type);
+      e.preventDefault();
+      e.stopPropagation();
+      if (appsMenu && appsArrow) {
+        const isHidden = appsMenu.classList.contains('hidden');
+        appsMenu.classList.toggle('hidden');
+        appsArrow.classList.toggle('rotate-180');
+        
+        // Update aria-expanded attribute
+        if (appsToggle) {
+          appsToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
+        }
+      }
+    }
+
     if (button && menu) {
       console.log('Adding event listeners to hamburger button');
       // Add both click and touchstart for maximum compatibility
@@ -317,6 +398,13 @@ const bitcoinDropdown = [
       // Add both click and touchstart for maximum compatibility
       bitcoinToggle.addEventListener('click', toggleBitcoinMenu);
       bitcoinToggle.addEventListener('touchstart', toggleBitcoinMenu, { passive: false });
+    }
+
+    if (appsToggle && appsMenu && appsArrow) {
+      console.log('Adding event listeners to apps toggle');
+      // Add both click and touchstart for maximum compatibility
+      appsToggle.addEventListener('click', toggleAppsMenu);
+      appsToggle.addEventListener('touchstart', toggleAppsMenu, { passive: false });
     }
 
     // Close mobile menu when clicking outside

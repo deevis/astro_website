@@ -1,0 +1,790 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Reaction Trainer';
+const pageDescription = 'Test and improve your reaction time and decision-making speed';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="reaction-wrapper">
+    <div class="container mx-auto px-4">
+      <main class="reaction-container">
+        <header class="app-header">
+          <h1 class="page-title">Reaction & Decision Time Trainer</h1>
+          <div class="tab-buttons">
+            <button class="tab-select active" id="play-tab-btn">Play</button>
+            <button class="tab-select" id="compare-tab-btn">Compare Sessions</button>
+          </div>
+        </header>
+
+        <div id="play-tab">
+          <div id="mode-buttons">
+            <button class="mode-btn active" data-mode="reaction">Reaction Only</button>
+            <button class="mode-btn" data-mode="decision">Decision (← / →)</button>
+            <button id="info-btn">ℹ️</button>
+          </div>
+          <button id="start-btn" class="start-button">Start</button>
+
+          <div id="game-area" tabindex="0">
+            <div id="square"></div>
+            <div id="result"></div>
+            <div id="stats"></div>
+            <canvas id="chart" width="300" height="150"></canvas>
+            <button id="save-session-trigger">💾 Save Session</button>
+          </div>
+        </div>
+
+        <div id="compare-tab">
+          <h2 class="compare-title">Compare Previous Sessions</h2>
+          <div class="compare-controls">
+            <label>Comparison Type:</label>
+            <select id="compare-type">
+              <option value="reaction">Reaction Only</option>
+              <option value="decision">Decision (A/L)</option>
+            </select>
+          </div>
+          <div class="compare-controls">
+            <label>Session 1:</label>
+            <select id="session1"></select>
+            <label>Session 2:</label>
+            <select id="session2"></select>
+            <button id="compare-btn">Compare</button>
+          </div>
+          <canvas id="compare-chart" width="350" height="200"></canvas>
+          <div id="compare-stats"></div>
+          <div class="legend">
+            <span class="legend-green"></span>Session 1
+            <span class="legend-blue"></span>Session 2
+          </div>
+        </div>
+
+        <div id="session-name-modal" class="modal">
+          <div class="modal-content">
+            <h2>Save Session</h2>
+            <p>Enter your name (optional):</p>
+            <input type="text" id="session-name" placeholder="Your name"/>
+            <div class="modal-buttons">
+              <button id="save-session-btn">Save</button>
+              <button id="cancel-save-btn">Cancel</button>
+            </div>
+          </div>
+        </div>
+
+        <div id="info-modal" class="modal">
+          <div class="modal-content">
+            <h2>How to Play</h2>
+            <p><strong>Reaction Only:</strong> Wait for the white square to turn <span style="color:#0f0;">green</span>, then press the <b>spacebar</b> (or <b>left-click</b>) as fast as you can. Too early = fail.</p>
+            <p><strong>Decision (← / →):</strong> The square will turn green and display <b>←</b> or <b>→</b>. Press the matching arrow key (or click <b>left/right mouse button</b>) quickly. Wrong direction or early = fail.</p>
+            <p>Each round has 10 trials. After completing a round, you can optionally save your session.</p>
+            <button id="close-info">Got it!</button>
+          </div>
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      const square = document.getElementById('square')!,
+            resultEl = document.getElementById('result')!,
+            statsEl = document.getElementById('stats')!,
+            chartCanvas = document.getElementById('chart') as HTMLCanvasElement,
+            ctx = chartCanvas.getContext('2d')!,
+            startBtn = document.getElementById('start-btn')!,
+            infoBtn = document.getElementById('info-btn')!,
+            infoModal = document.getElementById('info-modal')!,
+            closeInfo = document.getElementById('close-info')!,
+            modeButtons = document.querySelectorAll('.mode-btn'),
+            modal = document.getElementById('session-name-modal')!,
+            saveBtn = document.getElementById('save-session-btn')!,
+            cancelSaveBtn = document.getElementById('cancel-save-btn')!,
+            saveTrigger = document.getElementById('save-session-trigger')!,
+            sessionInput = document.getElementById('session-name') as HTMLInputElement,
+            compareType = document.getElementById('compare-type') as HTMLSelectElement,
+            compareTab = document.getElementById('compare-tab')!,
+            playTab = document.getElementById('play-tab')!,
+            playTabBtn = document.getElementById('play-tab-btn')!,
+            compareTabBtn = document.getElementById('compare-tab-btn')!,
+            session1Select = document.getElementById('session1') as HTMLSelectElement,
+            session2Select = document.getElementById('session2') as HTMLSelectElement,
+            compareBtn = document.getElementById('compare-btn')!,
+            compareChart = (document.getElementById('compare-chart') as HTMLCanvasElement).getContext('2d')!,
+            compareStats = document.getElementById('compare-stats')!;
+
+      const MAX_TRIALS = 10;
+      let waiting = false, ready = false, running = false, currentMode = 'reaction',
+          expectDirection: string | null = null, startTime = 0, 
+          session: Array<{time: number, fail: boolean, direction?: string}> = [], 
+          timer: number | null = null;
+
+      function drawChart() {
+        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
+        ctx.strokeStyle = '#0f0';
+        ctx.beginPath();
+        session.forEach((t, i) => {
+          const x = (i / (MAX_TRIALS - 1)) * chartCanvas.width;
+          const y = chartCanvas.height - (Math.min(t.time || 0, 1000) / 1000) * chartCanvas.height;
+          if (t.fail) {
+            ctx.fillStyle = '#f00';
+            ctx.fillRect(x - 3, chartCanvas.height - 10, 6, 6);
+          } else {
+            ctx.lineTo(x, y);
+          }
+        });
+        ctx.stroke();
+        updateStats();
+      }
+
+      function updateStats() {
+        const valid = session.filter(s => !s.fail);
+        if (!valid.length) { statsEl.textContent = ''; return; }
+        const mean = valid.reduce((a, b) => a + b.time, 0) / valid.length;
+        const sd = Math.sqrt(valid.reduce((a, b) => a + (b.time - mean) ** 2, 0) / valid.length);
+        statsEl.textContent = `Avg: ${mean.toFixed(1)} ms | SD: ${sd.toFixed(1)} | ${valid.length}/${session.length}`;
+      }
+
+      function randomDelay() { return 1000 + Math.random() * 2000; }
+
+      function showReady() {
+        if (session.length >= MAX_TRIALS) { endSession(); return; }
+        waiting = true; ready = false;
+        square.classList.remove('ready');
+        square.style.background = '#fff';
+        square.textContent = '';
+        resultEl.textContent = 'Wait for it...';
+        const delay = randomDelay();
+        if (timer !== null) clearTimeout(timer);
+        timer = window.setTimeout(() => {
+          if (currentMode === 'reaction') {
+            square.style.background = '#0f0';
+            startTime = performance.now();
+          } else {
+            expectDirection = Math.random() > 0.5 ? 'left' : 'right';
+            square.style.background = '#0f0';
+            square.textContent = expectDirection === 'left' ? '←' : '→';
+            startTime = performance.now();
+          }
+          waiting = false; ready = true;
+          square.classList.add('ready');
+        }, delay);
+      }
+
+      function handleResponse(direction: string) {
+        const now = performance.now();
+        if (!running) return;
+        if (waiting && !ready) {
+          if (timer !== null) clearTimeout(timer);
+          session.push({ time: 0, fail: true });
+          resultEl.textContent = 'Too soon!';
+          drawChart();
+          waiting = false; ready = false;
+          square.classList.remove('ready');
+          setTimeout(showReady, 1000);
+          return;
+        }
+        if (ready) {
+          square.classList.remove('ready');
+          const time = now - startTime;
+          if (currentMode === 'reaction') {
+            resultEl.textContent = `Reaction: ${time.toFixed(0)} ms`;
+            session.push({ time, fail: false });
+          } else {
+            if (direction === expectDirection) {
+              const arrow = expectDirection === 'left' ? '←' : '→';
+              resultEl.textContent = `${arrow}: ${time.toFixed(0)} ms`;
+              session.push({ time, fail: false, direction: expectDirection });
+            } else {
+              resultEl.textContent = 'Wrong direction!';
+              session.push({ time: 0, fail: true });
+            }
+          }
+          drawChart();
+          ready = false; waiting = false;
+          setTimeout(showReady, 1000);
+        }
+      }
+
+      function startSession() {
+        if (running) return;
+        (startBtn as HTMLButtonElement).blur();
+        running = true; waiting = false; ready = false; session = [];
+        saveTrigger.style.display = 'none';
+        showReady();
+      }
+
+      function endSession() {
+        running = false; waiting = false; ready = false;
+        if (timer !== null) clearTimeout(timer);
+        resultEl.textContent = "✅ Round complete!";
+        saveTrigger.style.display = 'inline-block';
+      }
+
+      function openSaveModal() {
+        modal.style.display = 'flex';
+        sessionInput.value = '';
+      }
+
+      function cancelSave() {
+        modal.style.display = 'none';
+      }
+
+      function saveSession() {
+        const name = sessionInput.value.trim() || 'Anonymous';
+        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
+        data.push({ name, mode: currentMode, date: new Date().toISOString(), session });
+        localStorage.setItem('reactionSessions', JSON.stringify(data));
+        modal.style.display = 'none';
+        saveTrigger.style.display = 'none';
+        resultEl.textContent = "💾 Session saved!";
+        populateSessionDropdowns();
+      }
+
+      function populateSessionDropdowns() {
+        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
+        const type = compareType.value;
+        const filtered = data.filter((s: any) => s.mode === type);
+        [session1Select, session2Select].forEach(sel => {
+          sel.innerHTML = '';
+          filtered.forEach((s: any, i: number) => {
+            const opt = document.createElement('option');
+            opt.value = String(data.indexOf(s));
+            opt.textContent = `${s.name} (${new Date(s.date).toLocaleString()})`;
+            sel.appendChild(opt);
+          });
+        });
+      }
+
+      function calcStats(sess: Array<{time: number, fail: boolean}>) {
+        const valid = sess.filter(s => !s.fail);
+        if (!valid.length) return { avg: 0, sd: 0 };
+        const mean = valid.reduce((a, b) => a + b.time, 0) / valid.length;
+        const sd = Math.sqrt(valid.reduce((a, b) => a + (b.time - mean) ** 2, 0) / valid.length);
+        return { avg: mean, sd };
+      }
+
+      function compareSessions() {
+        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
+        const s1 = data[parseInt(session1Select.value)], s2 = data[parseInt(session2Select.value)];
+        if (!s1 || !s2) return;
+        const maxLen = Math.max(s1.session.length, s2.session.length);
+        compareChart.clearRect(0, 0, 350, 200);
+        compareChart.strokeStyle = "#555";
+        compareChart.beginPath(); compareChart.moveTo(0, 199); compareChart.lineTo(350, 199); compareChart.stroke();
+        // Green
+        compareChart.beginPath(); compareChart.strokeStyle = '#0f0';
+        s1.session.forEach((t: any, i: number) => {
+          const x = i / maxLen * 350; const y = 200 - (Math.min(t.time || 0, 1000) / 1000) * 200;
+          compareChart.lineTo(x, y);
+        }); compareChart.stroke();
+        // Blue
+        compareChart.beginPath(); compareChart.strokeStyle = '#0af';
+        s2.session.forEach((t: any, i: number) => {
+          const x = i / maxLen * 350; const y = 200 - (Math.min(t.time || 0, 1000) / 1000) * 200;
+          compareChart.lineTo(x, y);
+        }); compareChart.stroke();
+        const stats1 = calcStats(s1.session), stats2 = calcStats(s2.session);
+        compareStats.textContent =
+          `${s1.mode.toUpperCase()} MODE | ` +
+          `${s1.name} 🟩 Avg: ${stats1.avg.toFixed(1)} ms (±${stats1.sd.toFixed(1)}) | ` +
+          `${s2.name} 🟦 Avg: ${stats2.avg.toFixed(1)} ms (±${stats2.sd.toFixed(1)})`;
+      }
+
+      // Event handlers
+      window.addEventListener('keydown', e => {
+        if (currentMode === 'reaction' && e.code === 'Space') { 
+          e.preventDefault(); 
+          handleResponse('any'); 
+        }
+        else if (currentMode === 'decision') {
+          if (e.code === 'ArrowLeft') { 
+            e.preventDefault();
+            handleResponse('left'); 
+          }
+          else if (e.code === 'ArrowRight') { 
+            e.preventDefault();
+            handleResponse('right'); 
+          }
+        }
+      });
+
+      // Mouse click handlers
+      square.addEventListener('mousedown', e => {
+        e.preventDefault();
+        if (currentMode === 'reaction') {
+          if (e.button === 0) { // Left click
+            handleResponse('any');
+          }
+        } else if (currentMode === 'decision') {
+          if (e.button === 0) { // Left click
+            handleResponse('left');
+          } else if (e.button === 2) { // Right click
+            handleResponse('right');
+          }
+        }
+      });
+
+      // Prevent context menu on right-click
+      square.addEventListener('contextmenu', e => {
+        e.preventDefault();
+      });
+
+      startBtn.onclick = startSession;
+      saveBtn.onclick = saveSession;
+      cancelSaveBtn.onclick = cancelSave;
+      saveTrigger.onclick = openSaveModal;
+      infoBtn.onclick = () => infoModal.style.display = 'flex';
+      closeInfo.onclick = () => infoModal.style.display = 'none';
+      compareType.onchange = populateSessionDropdowns;
+      compareBtn.onclick = compareSessions;
+      playTabBtn.onclick = () => { compareTab.style.display = 'none'; playTab.style.display = 'block'; };
+      compareTabBtn.onclick = () => { compareTab.style.display = 'block'; playTab.style.display = 'none'; populateSessionDropdowns(); };
+
+      modeButtons.forEach(btn => {
+        btn.addEventListener('click', () => {
+          modeButtons.forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          currentMode = (btn as HTMLElement).dataset.mode!;
+        });
+      });
+
+      populateSessionDropdowns();
+    })();
+  </script>
+
+  <style>
+    .reaction-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      background: #f8f9fa;
+      min-height: 100vh;
+    }
+
+    :global(.dark) .reaction-wrapper {
+      background: rgb(3, 7, 18);
+    }
+
+    .reaction-container {
+      background: white;
+      border-radius: 12px;
+      padding: 40px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+    }
+
+    :global(.dark) .reaction-container {
+      background: rgb(17, 24, 39);
+      box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+    }
+
+    .app-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      font-size: 36px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 20px;
+      color: #2c3e50;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    :global(.dark) .page-title {
+      background: linear-gradient(135deg, #818cf8 0%, #c084fc 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+
+    .tab-buttons {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+
+    .tab-select {
+      padding: 10px 20px;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      background: #e9ecef;
+      color: #495057;
+      transition: all 0.2s;
+    }
+
+    :global(.dark) .tab-select {
+      background: rgb(55, 65, 81);
+      color: rgb(209, 213, 219);
+    }
+
+    .tab-select.active {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .tab-select:hover:not(.active) {
+      background: #dee2e6;
+    }
+
+    :global(.dark) .tab-select:hover:not(.active) {
+      background: rgb(75, 85, 99);
+    }
+
+    #mode-buttons {
+      margin: 1rem;
+      text-align: center;
+    }
+
+    .mode-btn {
+      padding: 0.6rem 1.2rem;
+      margin: 0.3rem;
+      border: none;
+      border-radius: 6px;
+      font-size: 1rem;
+      background: #e9ecef;
+      color: #2c3e50;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    :global(.dark) .mode-btn {
+      background: rgb(55, 65, 81);
+      color: rgb(209, 213, 219);
+    }
+
+    .mode-btn.active {
+      background: #0f0;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .mode-btn:hover:not(.active) {
+      background: #dee2e6;
+    }
+
+    :global(.dark) .mode-btn:hover:not(.active) {
+      background: rgb(75, 85, 99);
+    }
+
+    #info-btn {
+      background: #0af;
+      border: none;
+      border-radius: 50%;
+      color: #fff;
+      font-size: 1.2rem;
+      width: 32px;
+      height: 32px;
+      margin-left: 0.5rem;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #info-btn:hover {
+      background: #09f;
+    }
+
+    .start-button {
+      display: block;
+      margin: 0 auto 2rem;
+      padding: 12px 32px;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .start-button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
+    }
+
+    #game-area {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      outline: none;
+    }
+
+    #square {
+      width: 150px;
+      height: 150px;
+      background: #fff;
+      border-radius: 8px;
+      margin: 2rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 64px;
+      font-weight: bold;
+      color: #000;
+      user-select: none;
+      transition: background 0.2s ease;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    #square.ready {
+      animation: pulse 1s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 5px 2px rgba(0,255,0,0.5); }
+      50% { box-shadow: 0 0 15px 6px rgba(0,255,0,0.7); }
+      100% { box-shadow: 0 0 5px 2px rgba(0,255,0,0.5); }
+    }
+
+    #result {
+      font-size: 1.2rem;
+      margin: 0.5rem;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    :global(.dark) #result {
+      color: rgb(243, 244, 246);
+    }
+
+    #stats {
+      font-size: 0.95rem;
+      margin-bottom: 1rem;
+      color: #7f8c8d;
+    }
+
+    :global(.dark) #stats {
+      color: rgb(156, 163, 175);
+    }
+
+    canvas {
+      background: #f8f9fa;
+      border-radius: 6px;
+      margin: 1rem 0;
+      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+    }
+
+    :global(.dark) canvas {
+      background: rgb(31, 41, 55);
+    }
+
+    #save-session-trigger {
+      display: none;
+      margin-top: 0.8rem;
+      padding: 10px 20px;
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      border: none;
+      border-radius: 8px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    #save-session-trigger:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
+    }
+
+    .modal {
+      background: rgba(0, 0, 0, 0.85);
+      color: #fff;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      text-align: center;
+      padding: 1rem;
+      z-index: 1000;
+    }
+
+    .modal-content {
+      background: white;
+      color: #2c3e50;
+      padding: 2rem;
+      border-radius: 12px;
+      max-width: 500px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+    }
+
+    :global(.dark) .modal-content {
+      background: rgb(17, 24, 39);
+      color: rgb(243, 244, 246);
+    }
+
+    .modal-content h2 {
+      color: #667eea;
+      margin-top: 0;
+    }
+
+    :global(.dark) .modal-content h2 {
+      color: #818cf8;
+    }
+
+    .modal-content input {
+      font-size: 1rem;
+      padding: 0.5rem;
+      border: 2px solid #e1e8ed;
+      border-radius: 6px;
+      width: 100%;
+      max-width: 300px;
+      background: #f8f9fa;
+      color: #2c3e50;
+    }
+
+    :global(.dark) .modal-content input {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+      color: rgb(243, 244, 246);
+    }
+
+    .modal-buttons {
+      display: flex;
+      gap: 10px;
+      justify-content: center;
+      margin-top: 1rem;
+    }
+
+    .modal-content button {
+      margin-top: 0.5rem;
+      padding: 0.5rem 1rem;
+      background: #667eea;
+      color: #fff;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .modal-content button:hover {
+      background: #5568d3;
+    }
+
+    #compare-tab {
+      display: none;
+      text-align: center;
+    }
+
+    .compare-title {
+      font-size: 24px;
+      font-weight: 700;
+      color: #2c3e50;
+      margin-bottom: 1.5rem;
+    }
+
+    :global(.dark) .compare-title {
+      color: rgb(243, 244, 246);
+    }
+
+    .compare-controls {
+      margin: 1rem 0;
+    }
+
+    .compare-controls label {
+      margin: 0 0.5rem;
+      color: #2c3e50;
+      font-weight: 600;
+    }
+
+    :global(.dark) .compare-controls label {
+      color: rgb(209, 213, 219);
+    }
+
+    .compare-controls select {
+      margin: 0.5rem;
+      padding: 0.4rem 0.8rem;
+      border: 2px solid #e1e8ed;
+      border-radius: 6px;
+      background: #f8f9fa;
+      color: #2c3e50;
+      font-size: 14px;
+    }
+
+    :global(.dark) .compare-controls select {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+      color: rgb(243, 244, 246);
+    }
+
+    .compare-controls button {
+      padding: 0.5rem 1.5rem;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+      border: none;
+      border-radius: 6px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .compare-controls button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
+    }
+
+    #compare-stats {
+      margin-top: 0.5rem;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+    }
+
+    :global(.dark) #compare-stats {
+      color: rgb(156, 163, 175);
+    }
+
+    .legend {
+      font-size: 0.85rem;
+      margin-top: 0.5rem;
+      color: #2c3e50;
+    }
+
+    :global(.dark) .legend {
+      color: rgb(209, 213, 219);
+    }
+
+    .legend span {
+      display: inline-block;
+      width: 12px;
+      height: 12px;
+      margin-right: 6px;
+      border-radius: 3px;
+    }
+
+    .legend-green {
+      background: #0f0;
+    }
+
+    .legend-blue {
+      background: #0af;
+      margin-left: 1rem;
+    }
+
+    @media (max-width: 600px) {
+      #square {
+        width: 100px;
+        height: 100px;
+        font-size: 48px;
+      }
+
+      .reaction-container {
+        padding: 20px;
+      }
+    }
+  </style>
+</Layout>
+
