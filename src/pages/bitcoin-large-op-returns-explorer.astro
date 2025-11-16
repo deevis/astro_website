@@ -1,0 +1,1682 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import NewsModal from '../components/NewsModal.astro';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bitcoin OP_RETURN Timeline - Vis.js</title>
+    <script is:inline>
+      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
+      if (
+        localStorage.getItem('color-theme') === 'dark' ||
+        (!('color-theme' in localStorage) &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+    
+    <!-- Vis.js Timeline -->
+    <script type="text/javascript" src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+    
+    <style is:global>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+                'Segoe UI', Roboto, 'Helvetica Neue', Arial, 'Noto Sans',
+                sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+                'Segoe UI Symbol', 'Noto Color Emoji';
+        }
+        
+        html {
+            font-family: var(--font-sans);
+            scroll-behavior: smooth;
+            zoom: 0.8; /* Chrome zoom equivalent */
+        }
+        
+        /* Fallback for browsers that don't support zoom */
+        @supports not (zoom: 0.8) {
+            body {
+                transform: scale(0.8);
+                transform-origin: top left;
+                width: 125%; /* Compensate for the scale */
+                height: 125%;
+            }
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: #0a0e27;
+            color: #e0e0e0;
+            padding-top: 0;
+            margin-top: 0;
+            position: relative;
+        }
+        
+        /* Ensure Navigation and NewsTicker are positioned correctly */
+        header {
+            position: fixed !important;
+            top: 0 !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 50 !important;
+        }
+        
+        /* Ensure Navigation dropdowns are styled correctly - target by class attribute */
+        header [class*="bg-white"] {
+            background-color: rgb(255, 255, 255) !important;
+        }
+        
+        html.dark header [class*="dark:bg-gray-800"] {
+            background-color: rgb(31, 41, 55) !important;
+        }
+        
+        header [class*="rounded-lg"] {
+            border-radius: 0.5rem !important;
+        }
+        
+        header [class*="shadow-lg"] {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05) !important;
+        }
+        
+        header [class*="border-gray-200"] {
+            border-color: rgb(229, 231, 235) !important;
+            border-width: 1px !important;
+        }
+        
+        html.dark header [class*="dark:border-gray-700"] {
+            border-color: rgb(55, 65, 81) !important;
+        }
+        
+        /* Dropdown menu items - prevent button styling */
+        header [class*="block"][class*="px-4"][class*="py-3"],
+        header a[class*="block"][class*="px-4"][class*="py-3"] {
+            display: block !important;
+            padding: 0.75rem 1rem !important;
+            color: rgb(55, 65, 75) !important;
+            text-decoration: none !important;
+            font-size: 0.875rem !important;
+            line-height: 1.25rem !important;
+            background-color: transparent !important;
+            background-image: none !important;
+            border: none !important;
+            width: 100% !important;
+            text-align: left !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+            cursor: pointer !important;
+        }
+        
+        html.dark header [class*="block"][class*="px-4"][class*="py-3"],
+        html.dark header a[class*="block"][class*="px-4"][class*="py-3"] {
+            color: rgb(209, 213, 219) !important;
+        }
+        
+        header [class*="block"][class*="px-4"][class*="py-3"]:hover,
+        header a[class*="block"][class*="px-4"][class*="py-3"]:hover {
+            background-color: rgb(249, 250, 251) !important;
+            background-image: none !important;
+            color: rgb(37, 99, 235) !important;
+        }
+        
+        html.dark header [class*="block"][class*="px-4"][class*="py-3"]:hover,
+        html.dark header a[class*="block"][class*="px-4"][class*="py-3"]:hover {
+            background-color: rgb(55, 65, 81) !important;
+            background-image: none !important;
+            color: rgb(96, 165, 250) !important;
+        }
+        
+        /* First and last child rounded corners */
+        header [class*="first:rounded-t-lg"]:first-child {
+            border-top-left-radius: 0.5rem !important;
+            border-top-right-radius: 0.5rem !important;
+        }
+        
+        header [class*="last:rounded-b-lg"]:last-child {
+            border-bottom-left-radius: 0.5rem !important;
+            border-bottom-right-radius: 0.5rem !important;
+        }
+        
+        #news-ticker {
+            position: fixed !important;
+            top: 4rem !important; /* top-16 = 64px */
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 40 !important;
+            display: block !important;
+            visibility: visible !important;
+            opacity: 1 !important;
+            background: linear-gradient(to right, #2563eb, #9333ea) !important;
+            color: white !important;
+            padding: 0.5rem 0 !important;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1) !important;
+        }
+        
+        #news-ticker * {
+            box-sizing: border-box;
+        }
+        
+        #news-ticker .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 1rem;
+        }
+        
+        #ticker-content {
+            display: flex !important;
+            white-space: nowrap !important;
+            align-items: center !important;
+        }
+        
+        .header {
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #0a0e27 100%);
+            border-bottom: 2px solid #00ffff;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+            margin-top: 10rem; /* pt-40 equivalent - accounts for fixed navigation + news ticker */
+            position: relative;
+        }
+        
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 10px;
+            margin: 0;
+        }
+        
+        .info-button {
+            background: transparent !important;
+            background-image: none !important;
+            border: none !important;
+            color: rgba(255, 255, 255, 0.5);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            flex-shrink: 0;
+            padding: 0;
+            font-weight: normal;
+            opacity: 0.9;
+        }
+        
+        .info-button:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            background-image: none !important;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #1a1f3a;
+            border-bottom: 1px solid #333;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        
+        .filter-chips {
+            display: flex;
+            gap: 8px;
+            flex-wrap: wrap;
+        }
+        
+        .chip {
+            padding: 6px 12px;
+            border-radius: 20px;
+            border: 2px solid;
+            cursor: pointer;
+            font-size: 0.85em;
+            transition: all 0.3s;
+            background: #1a1f3a;
+            opacity: 0.3;
+            filter: grayscale(80%);
+        }
+        
+        .chip.active {
+            background: rgba(255, 255, 255, 0.15);
+            border-width: 4px !important;
+            border-style: solid !important;
+            box-shadow: 0 0 20px currentColor, 0 0 10px currentColor, inset 0 0 10px rgba(255, 255, 255, 0.1);
+            opacity: 1 !important;
+            font-weight: bold;
+            filter: grayscale(0%) !important;
+            transform: scale(1.08);
+            position: relative;
+        }
+        
+        .chip.active::before {
+            content: '';
+            position: absolute;
+            top: -2px;
+            left: -2px;
+            right: -2px;
+            bottom: -2px;
+            border-radius: 22px;
+            border: 2px solid currentColor;
+            opacity: 0.5;
+            pointer-events: none;
+        }
+        
+        .chip:hover {
+            transform: translateY(-2px);
+            opacity: 0.8;
+            filter: grayscale(40%);
+        }
+        
+        .chip.active:hover {
+            transform: scale(1.1) translateY(-2px);
+        }
+        
+        .chip-text { color: #00ffff; border-color: #00ffff; }
+        .chip-jpg, .chip-jpeg, .chip-png, .chip-gif, .chip-webp, .chip-bmp { 
+            color: #ff00ff; border-color: #ff00ff; 
+        }
+        .chip-mp4, .chip-avi, .chip-webm { 
+            color: #ffff00; border-color: #ffff00; 
+        }
+        .chip-mp3, .chip-flac, .chip-ogg { 
+            color: #00ff00; border-color: #00ff00; 
+        }
+        .chip-pdf, .chip-7z, .chip-zip { 
+            color: #ff8800; border-color: #ff8800; 
+        }
+        
+        .button-group {
+            display: flex;
+            gap: 10px;
+        }
+        
+        /* Only apply button styles to buttons that are NOT in the header */
+        button {
+            background: linear-gradient(135deg, #00ffff 0%, #0088ff 100%);
+            border: none;
+            color: #000;
+            padding: 8px 16px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: bold;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        
+        /* Ensure header buttons and links don't get gradient or button styling */
+        header button,
+        header a {
+            background: transparent !important;
+            background-image: none !important;
+            appearance: none !important;
+            -webkit-appearance: none !important;
+            -moz-appearance: none !important;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(0, 255, 255, 0.5);
+        }
+        
+        /* Don't apply hover transform to header buttons */
+        header button:hover {
+            transform: none !important;
+        }
+        
+        .stats-bar {
+            padding: 10px 20px;
+            background: #0f1428;
+            border-bottom: 1px solid #333;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        
+        .stat {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .stat-value {
+            font-weight: bold;
+            color: #00ffff;
+        }
+        
+        .stat-label {
+            color: #888;
+        }
+        
+        #timeline {
+            height: calc(100vh - 250px);
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #00ffff;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
+        }
+        
+        /* Custom Vis.js styling for dark theme */
+        .vis-timeline {
+            background: #0a0e27;
+            border: none;
+        }
+        
+        .vis-item {
+            background: rgba(0, 255, 255, 0.1);
+            border-color: #00ffff;
+            color: #e0e0e0;
+            border-radius: 4px;
+            font-size: 11px;
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+        }
+        
+        .vis-item.vis-selected {
+            background: rgba(0, 255, 255, 0.3);
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+        }
+        
+        .vis-item.type-text {
+            background: rgba(0, 255, 255, 0.15);
+            border-color: #00ffff;
+        }
+        
+        .vis-item.type-jpg, .vis-item.type-jpeg, .vis-item.type-png, 
+        .vis-item.type-gif, .vis-item.type-webp, .vis-item.type-bmp {
+            background: rgba(255, 0, 255, 0.15);
+            border-color: #ff00ff;
+        }
+        
+        .vis-item.type-mp4, .vis-item.type-avi, .vis-item.type-webm {
+            background: rgba(255, 255, 0, 0.15);
+            border-color: #ffff00;
+        }
+        
+        .vis-item.type-mp3, .vis-item.type-flac, .vis-item.type-ogg {
+            background: rgba(0, 255, 0, 0.15);
+            border-color: #00ff00;
+        }
+        
+        .vis-item.type-pdf, .vis-item.type-7z, .vis-item.type-zip {
+            background: rgba(255, 136, 0, 0.15);
+            border-color: #ff8800;
+        }
+        
+        .vis-time-axis .vis-text {
+            color: #888;
+        }
+        
+        .vis-time-axis .vis-grid {
+            border-color: #333;
+        }
+        
+        .vis-time-axis .vis-grid.vis-odd {
+            background: rgba(255, 255, 255, 0.02);
+        }
+        
+        .vis-labelset .vis-label {
+            background: #1a1f3a;
+            color: #e0e0e0;
+            border-color: #333;
+        }
+        
+        .vis-panel.vis-background.vis-horizontal {
+            background: #0a0e27;
+        }
+        
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        /* Info Modal specific styles */
+        .info-modal-content {
+            background: #1a1f3a;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid #00ffff;
+            box-shadow: 0 8px 40px rgba(0, 255, 255, 0.4);
+            position: relative;
+            padding: 30px;
+        }
+        
+        .info-modal-content h2 {
+            color: #00ffff;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ffff;
+            padding-bottom: 10px;
+        }
+        
+        .info-modal-content h3 {
+            color: #00ffff;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .info-modal-content p {
+            color: #e0e0e0;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .info-modal-content ul {
+            color: #e0e0e0;
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+        
+        .info-modal-content li {
+            margin-bottom: 10px;
+            line-height: 1.6;
+        }
+        
+        .info-modal-content strong {
+            color: #00ffff;
+        }
+        
+        .info-modal-content code {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .modal-content {
+            background: #1a1f3a;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid #00ffff;
+            box-shadow: 0 8px 40px rgba(0, 255, 255, 0.4);
+            position: relative;
+        }
+        
+        .modal-content.wide {
+            max-width: 1400px;
+            width: 90%;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2em;
+            background: none;
+            border: none;
+            color: #00ffff;
+            cursor: pointer;
+            padding: 0;
+            width: 40px;
+            height: 40px;
+            line-height: 40px;
+            text-align: center;
+            z-index: 1001;
+            transition: all 0.3s;
+            pointer-events: auto;
+        }
+        
+        .modal-close:hover {
+            color: #ff00ff;
+            transform: scale(1.2);
+        }
+        
+        .modal-header {
+            padding: 30px 30px 20px 30px;
+            border-bottom: 1px solid #333;
+            position: relative;
+            pointer-events: none;
+        }
+        
+        .modal-header > * {
+            pointer-events: auto;
+        }
+        
+        .modal-share {
+            position: absolute;
+            top: 10px;
+            right: 60px;
+            font-size: 1.5em;
+            background: none;
+            border: none;
+            color: #00ffff;
+            cursor: pointer;
+            padding: 5px;
+            width: 40px;
+            height: 40px;
+            line-height: 30px;
+            text-align: center;
+            transition: all 0.3s;
+            z-index: 1001;
+            pointer-events: auto;
+        }
+        
+        .modal-share:hover {
+            color: #ff00ff;
+            transform: scale(1.2);
+        }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            cursor: pointer;
+            padding: 15px 10px;
+            width: 50px;
+            height: 80px;
+            line-height: 50px;
+            text-align: center;
+            transition: all 0.3s;
+            z-index: 1002;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+        }
+        
+        .modal-nav:hover {
+            background: rgba(0, 255, 255, 0.2);
+            color: #ff00ff;
+            border-color: #ff00ff;
+            transform: translateY(-50%) scale(1.1);
+        }
+        
+        .modal-nav:disabled {
+            opacity: 0.3;
+            cursor: not-allowed;
+            pointer-events: none;
+        }
+        
+        .modal-nav-left {
+            left: 20px;
+        }
+        
+        .modal-nav-right {
+            right: 20px;
+        }
+        
+        /* Responsive adjustments for navigation arrows */
+        @media (max-width: 899px) {
+            .modal-nav {
+                width: 40px;
+                height: 60px;
+                font-size: 1.5em;
+                padding: 10px 8px;
+            }
+            .modal-nav-left {
+                left: 10px;
+            }
+            .modal-nav-right {
+                right: 10px;
+            }
+        }
+        
+        .share-toast {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            background: #1a1f3a;
+            color: #00ffff;
+            padding: 15px 25px;
+            border-radius: 8px;
+            border: 2px solid #00ffff;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.4);
+            z-index: 2000;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+        
+        .share-toast.show {
+            display: block;
+        }
+        
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+                opacity: 0;
+            }
+            to {
+                transform: translateX(0);
+                opacity: 1;
+            }
+        }
+        
+        .modal-title {
+            font-size: 1.5em;
+            color: #00ffff;
+            margin-bottom: 10px;
+        }
+        
+        .modal-meta {
+            padding: 20px 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        
+        .meta-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        
+        .meta-label {
+            font-size: 0.8em;
+            color: #888;
+            text-transform: uppercase;
+        }
+        
+        .meta-value {
+            font-weight: bold;
+            color: #e0e0e0;
+        }
+        
+        .modal-preview {
+            padding: 30px;
+        }
+        
+        .preview-text {
+            background: #0a0e27;
+            padding: 20px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+            white-space: pre-wrap;
+            word-break: break-word;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        
+        .preview-image {
+            text-align: center;
+        }
+        
+        .preview-image img {
+            max-width: 100%;
+            max-height: 500px;
+            border-radius: 8px;
+            border: 2px solid #333;
+        }
+        
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: #888;
+        }
+        
+        .loading:after {
+            content: '...';
+            animation: dots 1.5s steps(4, end) infinite;
+        }
+        
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <Navigation />
+    <NewsTicker />
+    <div class="header">
+        <div class="header-title-container">
+            <h1>🔗 Bitcoin Large OP_RETURN Explorer</h1>
+            <button class="info-button" onclick="openInfoModal()" title="About OP_RETURN Limits">ℹ️</button>
+        </div>
+        <div class="subtitle">Interactive visualization of large OP_RETURN data on Bitcoin blockchain</div>
+    </div>
+    
+    <div class="controls">
+        <div class="filter-section">
+            <strong style="margin-right: 10px;">Filter by Type:</strong>
+            <div class="filter-chips" id="filterChips"></div>
+        </div>
+        <div class="button-group">
+            <button onclick="showAllTypes()">Show All</button>
+            <button onclick="clearAllTypes()">Clear All</button>
+            <button onclick="fitTimeline()">Fit All</button>
+        </div>
+    </div>
+    
+    <div class="controls">
+        <div style="display: flex; gap: 30px; align-items: center; flex-wrap: wrap;">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <strong>Size Range (bytes):</strong>
+                <input type="number" id="minSize" placeholder="min bytes" 
+                       style="width: 120px; padding: 6px 12px; border-radius: 4px; background: #0f1428; color: #e0e0e0; border: 1px solid #00ffff;"
+                       onchange="applySizeFilter()">
+                <span style="color: #888;">to</span>
+                <input type="number" id="maxSize" placeholder="max bytes" 
+                       style="width: 120px; padding: 6px 12px; border-radius: 4px; background: #0f1428; color: #e0e0e0; border: 1px solid #00ffff;"
+                       onchange="applySizeFilter()">
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px; flex: 1;">
+                <strong>Search Text:</strong>
+                <input type="text" id="searchInput" placeholder="Search in text content (press Enter)..." 
+                       style="flex: 1; min-width: 350px; max-width: 500px; padding: 6px 12px; border-radius: 4px; background: #0f1428; color: #e0e0e0; border: 1px solid #00ffff;"
+                       onkeydown="if(event.key === 'Enter') handleSearchEnter(event)">
+                <button onclick="clearSearch()" style="padding: 6px 12px;">Clear</button>
+            </div>
+        </div>
+    </div>
+    
+    <div class="stats-bar" id="statsBar">
+        <div class="loading">Loading timeline data</div>
+    </div>
+    
+    <div id="timeline"></div>
+    
+    <div class="modal" id="modal">
+        <button class="modal-nav modal-nav-left" id="modalNavLeft" title="Previous block (←)">‹</button>
+        <button class="modal-nav modal-nav-right" id="modalNavRight" title="Next block (→)">›</button>
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <button class="modal-share" id="modalShareBtn" title="Share this block">📤</button>
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle"></div>
+            </div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-preview" id="modalPreview"></div>
+        </div>
+    </div>
+    
+    <div class="share-toast" id="shareToast">Link copied to clipboard!</div>
+    
+    <!-- Info Modal -->
+    <div class="modal" id="infoModal">
+        <div class="info-modal-content">
+            <button class="modal-close" onclick="closeInfoModal()">&times;</button>
+            <h2>About Large OP_RETURN Explorer</h2>
+            
+            <h3>Historical OP_RETURN Limits</h3>
+            <p>Bitcoin's OP_RETURN size limits have evolved significantly over time:</p>
+            
+            <ul>
+                <li><strong>March 2014 (Bitcoin Core v0.9.0)</strong>: OP_RETURN introduced with a <strong>40-byte</strong> data payload limit</li>
+                <li><strong>July 2015 (Bitcoin Core v0.11.0)</strong>: Increased to <strong>80 bytes</strong> of data payload</li>
+                <li><strong>February 2016 (Bitcoin Core v0.12.0)</strong>: Allowed multiple data pushes with a <strong>83-byte total script size</strong> limit
+                    <ul style="margin-top: 10px; margin-left: 20px;">
+                        <li>This 83-byte limit accounts for script overhead:
+                            <ul style="margin-top: 5px; margin-left: 20px;">
+                                <li>1 byte: <code>OP_RETURN</code> opcode (<code>0x6a</code>)</li>
+                                <li>1-2 bytes: Push opcode(s)</li>
+                                <li>1 byte: Length byte</li>
+                                <li><strong>80 bytes</strong>: Maximum data payload</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </li>
+                <li><strong>October 2025 (Bitcoin Core v30.0)</strong>: <strong>Limit removed</strong> - OP_RETURN outputs can now be up to the maximum transaction size (~4MB)</li>
+            </ul>
+            
+            <h3>What This Repository Collects</h3>
+            <p>This repository scans for OP_RETURN outputs with <strong>total script size > 83 bytes</strong>, which means:</p>
+            
+            <ul>
+                <li><strong>Data payload exceeds 80 bytes</strong> (the historical limit from 2015-2025)</li>
+                <li><strong>Total script size exceeds 83 bytes</strong> (the limit from 2016-2025)</li>
+            </ul>
+            
+            <p>The 83-byte threshold ensures we capture all OP_RETURNs that exceeded the historical limits, regardless of whether they used single or multiple data pushes. This includes both:</p>
+            
+            <ul>
+                <li>Scripts that exceeded the 80-byte data limit in a single push</li>
+                <li>Scripts that used multiple pushes to exceed the 83-byte total script size limit</li>
+            </ul>
+            
+            <h3>Important Note</h3>
+            <p>The distinction between 80 bytes (data) and 83 bytes (script) is important:</p>
+            
+            <ul>
+                <li><strong>80 bytes</strong> = Historical data payload limit (what users could embed)</li>
+                <li><strong>83 bytes</strong> = Historical total script size limit (what Bitcoin Core enforced)</li>
+                <li>Our scanner checks <strong>> 83 bytes</strong> (total script size) to capture all historically "large" OP_RETURNs</li>
+            </ul>
+        </div>
+    </div>
+    
+    <script is:inline>
+        let timeline;
+        let items;
+        let groups;
+        let allData = [];
+        let activeFilters = new Set();
+        let minSizeBytes = null;
+        let maxSizeBytes = null;
+        let searchText = '';
+        let currentModalItem = null;
+        
+        // Color mapping for file types (with transparency for labels)
+        const colorMap = {
+            'text': '#00ffff',
+            'jpg': '#ff00ff', 'jpeg': '#ff00ff', 'png': '#ff00ff', 
+            'gif': '#ff00ff', 'webp': '#ff00ff', 'bmp': '#ff00ff',
+            'mp4': '#ffff00', 'avi': '#ffff00', 'webm': '#ffff00',
+            'mp3': '#00ff00', 'flac': '#00ff00', 'ogg': '#00ff00',
+            'pdf': '#ff8800', '7z': '#ff8800', 'zip': '#ff8800'
+        };
+        
+        // Helper function to convert hex to rgba with transparency
+        function hexToRgba(hex, alpha = 0.3) {
+            const r = parseInt(hex.slice(1, 3), 16);
+            const g = parseInt(hex.slice(3, 5), 16);
+            const b = parseInt(hex.slice(5, 7), 16);
+            return `rgba(${r}, ${g}, ${b}, ${alpha})`;
+        }
+        
+        // Load and initialize timeline
+        async function loadTimelineData() {
+            try {
+                const response = await fetch('/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/op_return_data/timeline_data.json');
+                if (!response.ok) {
+                    throw new Error('Failed to load timeline data');
+                }
+                
+                allData = await response.json();
+                console.log(`Loaded ${allData.length} OP_RETURN items`);
+                
+                initializeTimeline();
+                
+                // Check for URL parameters to open a specific block
+                checkUrlParams();
+            } catch (error) {
+                console.error('Error loading timeline data:', error);
+                document.getElementById('statsBar').innerHTML = 
+                    '<div style="color: #ff0000;">❌ Error loading data. Make sure bitcoin_large_op_returns/op_return_data/timeline_data.json exists.</div>';
+            }
+        }
+        
+        function initializeTimeline() {
+            // Create groups for file types
+            const types = [...new Set(allData.map(d => d.type))].sort();
+            groups = new vis.DataSet(
+                types.map(type => {
+                    const color = colorMap[type] || '#666';
+                    const bgColor = hexToRgba(color, 0.25); // More transparent background
+                    const borderColor = hexToRgba(color, 0.5); // Slightly more visible border
+                    return {
+                        id: type,
+                        content: getTypeLabel(type),
+                        style: `background-color: ${bgColor}; border-color: ${borderColor};`
+                    };
+                })
+            );
+            
+            // Create filter chips
+            setupFilters(types);
+            
+            // Initially show only media types (not text)
+            const mediaTypes = types.filter(t => 
+                ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg', 'mp4', 'webm', 'avi', 'mov', 'mp3', 'ogg', 'wav', 'flac'].includes(t)
+            );
+            activeFilters = new Set(mediaTypes);
+            updateFilterChips();
+            
+            // Create items dataset
+            items = new vis.DataSet();
+            updateItems();
+            
+            // Timeline container
+            const container = document.getElementById('timeline');
+            
+            // Timeline options
+            const options = {
+                groupOrder: 'content',
+                editable: false,
+                orientation: 'top',
+                zoomMin: 1000 * 60 * 60 * 12,        // 12 hours minimum
+                zoomMax: 1000 * 60 * 60 * 24 * 365,  // 1 year maximum
+                showCurrentTime: false,
+                stack: false,  // Disable stacking - spread items horizontally
+                stackSubgroups: false,
+                margin: {
+                    item: {
+                        horizontal: 50,  // MUCH wider horizontal spacing (was 50)
+                        vertical: 25
+                    }
+                },
+                tooltip: {
+                    followMouse: true,
+                    overflowMethod: 'cap'
+                },
+                template: function(item, element, data) {
+                    const sizeKB = (item.size / 1024).toFixed(1);
+                    return `<div style="padding: 4px 8px; min-width: 80px; text-align: center;">
+                        <strong>${item.block}</strong><br>
+                        ${sizeKB}KB<br>
+                        <span style="font-size: 0.85em; text-transform: uppercase;">${item.fileType}</span>
+                    </div>`;
+                },
+                // Spread items out more
+                maxHeight: 800,
+                verticalScroll: true,
+                width: '100%',
+                min: new Date(2024, 4, 1),  // Start earlier to spread timeline
+                max: new Date(2026, 0, 1)   // End later to spread timeline
+            };
+            
+            // Create timeline
+            timeline = new vis.Timeline(container, items, groups, options);
+            
+            // Handle selection
+            timeline.on('select', function(properties) {
+                if (properties.items.length > 0) {
+                    const itemId = properties.items[0];
+                    const item = allData.find(d => d.id === itemId);
+                    if (item) {
+                        openModal(item);
+                    }
+                }
+            });
+            
+            // Update stats
+            updateStats();
+        }
+        
+        function getTypeLabel(type) {
+            const labels = {
+                'text': '📝 Text',
+                'jpg': '🖼️ JPG', 'jpeg': '🖼️ JPEG', 'png': '🖼️ PNG',
+                'gif': '🖼️ GIF', 'webp': '🖼️ WebP', 'bmp': '🖼️ BMP',
+                'mp4': '🎥 MP4', 'avi': '🎥 AVI', 'webm': '🎥 WebM',
+                'mp3': '🎵 MP3', 'flac': '🎵 FLAC', 'ogg': '🎵 OGG',
+                'pdf': '📄 PDF', '7z': '📦 7z', 'zip': '📦 ZIP'
+            };
+            return labels[type] || type.toUpperCase();
+        }
+        
+        function setupFilters(types) {
+            const filterChips = document.getElementById('filterChips');
+            filterChips.innerHTML = '';
+            
+            types.forEach(type => {
+                const chip = document.createElement('span');
+                chip.className = `chip chip-${type} active`;
+                chip.textContent = getTypeLabel(type);
+                chip.onclick = () => toggleFilter(type, chip);
+                filterChips.appendChild(chip);
+            });
+        }
+        
+        function toggleFilter(type, chipEl) {
+            if (activeFilters.has(type)) {
+                activeFilters.delete(type);
+                chipEl.classList.remove('active');
+            } else {
+                activeFilters.add(type);
+                chipEl.classList.add('active');
+            }
+            updateItems();
+            updateStats();
+        }
+        
+        function showAllTypes() {
+            const types = [...new Set(allData.map(d => d.type))];
+            activeFilters = new Set(types);
+            updateFilterChips();
+            updateItems();
+            updateStats();
+        }
+        
+        function clearAllTypes() {
+            activeFilters.clear();
+            updateFilterChips();
+            updateItems();
+            updateStats();
+        }
+        
+        function fitTimeline() {
+            if (timeline) {
+                timeline.fit();
+            }
+        }
+        
+        function updateFilterChips() {
+            document.querySelectorAll('.chip').forEach(chip => {
+                const type = chip.textContent.split(' ')[1]?.toLowerCase() || 
+                            chip.textContent.toLowerCase();
+                const allTypes = [...new Set(allData.map(d => d.type))];
+                const matchingType = allTypes.find(t => chip.classList.contains(`chip-${t}`));
+                
+                if (matchingType && activeFilters.has(matchingType)) {
+                    chip.classList.add('active');
+                } else {
+                    chip.classList.remove('active');
+                }
+            });
+        }
+        
+        function updateItems() {
+            // Filter data by type, size, and search text
+            const filteredData = allData.filter(d => {
+                // Type filter
+                if (!activeFilters.has(d.type)) return false;
+                
+                // Size filter (bytes)
+                if (minSizeBytes !== null && d.size < minSizeBytes) return false;
+                if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
+                
+                // Search text filter (only for text items)
+                if (searchText && d.type === 'text') {
+                    if (!d.preview) return false;
+                    if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                }
+                
+                return true;
+            });
+            
+            // Convert to Vis.js format
+            const visItems = filteredData.map(item => ({
+                id: item.id,
+                content: `Block ${item.block}`,
+                start: new Date(item.timestamp * 1000),
+                group: item.type,
+                className: `type-${item.type}`,
+                title: createTooltip(item),
+                block: item.block,
+                size: item.size,
+                fileType: item.type  // Use fileType instead of type (which is reserved by Vis.js)
+            }));
+            
+            items.clear();
+            items.add(visItems);
+        }
+        
+        function createTooltip(item) {
+            const sizeKB = (item.size / 1024).toFixed(1);
+            let tooltip = `Block: ${item.block}\n`;
+            tooltip += `Size: ${sizeKB}KB\n`;
+            tooltip += `Type: ${item.type}\n`;
+            tooltip += `Miner: ${item.miner}\n`;
+            if (item.fee) tooltip += `Fee: ${item.fee} sats\n`;
+            if (item.preview) tooltip += `\n${item.preview}`;
+            return tooltip;
+        }
+        
+        function updateStats() {
+            // Apply ALL filters (type, size, search) to match what's shown on timeline
+            const filteredData = allData.filter(d => {
+                // Type filter
+                if (!activeFilters.has(d.type)) return false;
+                
+                // Size filter (bytes)
+                if (minSizeBytes !== null && d.size < minSizeBytes) return false;
+                if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
+                
+                // Search text filter (only for text items)
+                if (searchText && d.type === 'text') {
+                    if (!d.preview) return false;
+                    if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                }
+                
+                return true;
+            });
+            
+            const totalSize = filteredData.reduce((sum, d) => sum + d.size, 0);
+            const avgSize = filteredData.length > 0 ? totalSize / filteredData.length : 0;
+            
+            // Count by type
+            const typeCounts = {};
+            filteredData.forEach(d => {
+                typeCounts[d.type] = (typeCounts[d.type] || 0) + 1;
+            });
+            
+            const typeBreakdown = Object.entries(typeCounts)
+                .map(([type, count]) => `${type}: ${count}`)
+                .join(', ');
+            
+            document.getElementById('statsBar').innerHTML = `
+                <div class="stat">
+                    <span class="stat-label">Total Items:</span>
+                    <span class="stat-value">${filteredData.length}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Total Size:</span>
+                    <span class="stat-value">${(totalSize / 1024 / 1024).toFixed(2)} MB</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Avg Size:</span>
+                    <span class="stat-value">${(avgSize / 1024).toFixed(1)} KB</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Types:</span>
+                    <span class="stat-value">${typeBreakdown}</span>
+                </div>
+            `;
+        }
+        
+        // Get filtered data (reusable function)
+        function getFilteredData() {
+            return allData.filter(d => {
+                // Type filter
+                if (!activeFilters.has(d.type)) return false;
+                
+                // Size filter (bytes)
+                if (minSizeBytes !== null && d.size < minSizeBytes) return false;
+                if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
+                
+                // Search text filter (only for text items)
+                if (searchText && d.type === 'text') {
+                    if (!d.preview) return false;
+                    if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                }
+                
+                return true;
+            });
+        }
+        
+        // Navigate to previous/next item
+        function navigateModal(direction) {
+            if (!currentModalItem) return;
+            
+            const filteredData = getFilteredData();
+            if (filteredData.length === 0) return;
+            
+            // Sort by timestamp (or block number) for consistent ordering
+            filteredData.sort((a, b) => a.timestamp - b.timestamp || a.block - b.block);
+            
+            // Find current index
+            const currentIndex = filteredData.findIndex(d => d.id === currentModalItem.id);
+            
+            if (currentIndex === -1) return;
+            
+            let newIndex;
+            if (direction === 'prev') {
+                newIndex = currentIndex > 0 ? currentIndex - 1 : filteredData.length - 1; // Wrap around
+            } else {
+                newIndex = currentIndex < filteredData.length - 1 ? currentIndex + 1 : 0; // Wrap around
+            }
+            
+            const nextItem = filteredData[newIndex];
+            if (nextItem) {
+                openModal(nextItem, true);
+            }
+        }
+        
+        function updateNavigationButtons() {
+            const filteredData = getFilteredData();
+            const leftBtn = document.getElementById('modalNavLeft');
+            const rightBtn = document.getElementById('modalNavRight');
+            
+            if (filteredData.length <= 1) {
+                leftBtn.disabled = true;
+                rightBtn.disabled = true;
+                return;
+            }
+            
+            // Sort to find position
+            filteredData.sort((a, b) => a.timestamp - b.timestamp || a.block - b.block);
+            const currentIndex = filteredData.findIndex(d => d.id === currentModalItem?.id);
+            
+            // Enable/disable based on position (but allow wrapping)
+            leftBtn.disabled = false;
+            rightBtn.disabled = false;
+        }
+        
+        function openModal(item, positionTimeline = true) {
+            currentModalItem = item;
+            const modal = document.getElementById('modal');
+            const modalContent = modal.querySelector('.modal-content');
+            const title = document.getElementById('modalTitle');
+            const meta = document.getElementById('modalMeta');
+            const preview = document.getElementById('modalPreview');
+            
+            // Position timeline to show this block
+            if (positionTimeline && timeline) {
+                const itemDate = new Date(item.timestamp * 1000);
+                // Set timeline view to show the block with some padding
+                const padding = 1000 * 60 * 60 * 24 * 7; // 7 days padding
+                timeline.setWindow(itemDate.getTime() - padding, itemDate.getTime() + padding);
+                // Select the item on timeline
+                timeline.setSelection([item.id]);
+            }
+            
+            // Make modal wide for text content, normal for media
+            if (item.type === 'text') {
+                modalContent.classList.add('wide');
+            } else {
+                modalContent.classList.remove('wide');
+            }
+            
+            title.textContent = `Block ${item.block} - ${item.type.toUpperCase()}`;
+            
+            // Meta information
+            meta.innerHTML = `
+                <div class="meta-item">
+                    <div class="meta-label">Block Number</div>
+                    <div class="meta-value">${item.block}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Date</div>
+                    <div class="meta-value">${new Date(item.timestamp * 1000).toLocaleString()}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Transaction ID</div>
+                    <div class="meta-value" style="font-size: 0.8em; word-break: break-all;">${item.txid}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Size</div>
+                    <div class="meta-value">${(item.size / 1024).toFixed(1)} KB (${item.size.toLocaleString()} bytes)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">File Type</div>
+                    <div class="meta-value">${item.type} (${item.mime})</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Mined By</div>
+                    <div class="meta-value">${item.miner}</div>
+                </div>
+                ${item.fee ? `
+                <div class="meta-item">
+                    <div class="meta-label">Transaction Fee</div>
+                    <div class="meta-value">${item.fee} sats (${item.feeRate?.toFixed(2)} sats/vbyte)</div>
+                </div>
+                ` : ''}
+            `;
+            
+            // Preview
+            if (item.hasDecoded && item.type === 'text') {
+                // Load full text content
+                const textPath = `/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/op_return_data/${item.blockDir}/tx_${item.txid}_${item.vout}_decoded.txt`;
+                fetch(textPath)
+                    .then(response => response.text())
+                    .then(fullText => {
+                        preview.innerHTML = `
+                            <h3 style="margin-bottom: 15px; color: #00ffff;">Text Content:</h3>
+                            <div class="preview-text">${escapeHtml(fullText)}</div>
+                        `;
+                    })
+                    .catch(error => {
+                        preview.innerHTML = `
+                            <h3 style="margin-bottom: 15px; color: #00ffff;">Text Content:</h3>
+                            <div class="preview-text">${escapeHtml(item.preview || 'Unable to load full content')}</div>
+                        `;
+                    });
+            } else if (item.hasFile && ['jpg', 'jpeg', 'png', 'gif', 'webp', 'bmp', 'svg'].includes(item.type)) {
+                const imgPath = `/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/op_return_data/${item.blockDir}/tx_${item.txid}_${item.vout}.${item.type}`;
+                preview.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #ff00ff;">Image Preview:</h3>
+                    <div class="preview-image">
+                        <img src="${imgPath}" alt="OP_RETURN Image" onerror="this.src=''; this.alt='Image failed to load'">
+                    </div>
+                `;
+            } else if (item.hasFile && ['mp4', 'webm', 'avi', 'mov'].includes(item.type)) {
+                const videoPath = `/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/op_return_data/${item.blockDir}/tx_${item.txid}_${item.vout}.${item.type}`;
+                preview.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #ffff00;">Video Preview:</h3>
+                    <div class="preview-image" style="text-align: center;">
+                        <video controls style="max-width: 100%; max-height: 500px; border-radius: 8px; border: 2px solid #333; background: #000;">
+                            <source src="${videoPath}" type="video/${item.type === 'mov' ? 'quicktime' : item.type}">
+                            Your browser does not support the video tag.
+                        </video>
+                    </div>
+                `;
+            } else if (item.hasFile && ['mp3', 'ogg', 'wav', 'flac'].includes(item.type)) {
+                const audioPath = `/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/op_return_data/${item.blockDir}/tx_${item.txid}_${item.vout}.${item.type}`;
+                preview.innerHTML = `
+                    <h3 style="margin-bottom: 15px; color: #00ff00;">Audio Preview:</h3>
+                    <div style="text-align: center; padding: 30px;">
+                        <audio controls style="width: 100%; max-width: 500px;">
+                            <source src="${audioPath}" type="audio/${item.type === 'mp3' ? 'mpeg' : item.type}">
+                            Your browser does not support the audio tag.
+                        </audio>
+                    </div>
+                `;
+            } else {
+                preview.innerHTML = `<p style="color: #888;">No preview available</p>`;
+            }
+            
+            // Update navigation buttons
+            updateNavigationButtons();
+            
+            modal.classList.add('active');
+        }
+        
+        function closeModal(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            document.getElementById('modal').classList.remove('active');
+            timeline.setSelection([]);
+            currentModalItem = null;
+            // Clear URL parameters when closing modal
+            if (window.history.replaceState) {
+                window.history.replaceState({}, document.title, window.location.pathname);
+            }
+        }
+        
+        // Info modal functions
+        function openInfoModal() {
+            document.getElementById('infoModal').classList.add('active');
+        }
+        
+        function closeInfoModal() {
+            document.getElementById('infoModal').classList.remove('active');
+        }
+        
+        function shareBlock(event) {
+            if (event) {
+                event.preventDefault();
+                event.stopPropagation();
+            }
+            if (!currentModalItem) {
+                alert('No item selected to share');
+                return;
+            }
+            
+            try {
+                // Create shareable URL with block number
+                const url = new URL(window.location.href);
+                url.searchParams.set('block', currentModalItem.block);
+                // Also include txid and vout for more specific identification
+                if (currentModalItem.txid) {
+                    url.searchParams.set('txid', currentModalItem.txid);
+                }
+                if (currentModalItem.vout !== undefined) {
+                    url.searchParams.set('vout', currentModalItem.vout);
+                }
+                
+                const shareUrl = url.toString();
+                
+                // Copy to clipboard
+                if (navigator.clipboard && navigator.clipboard.writeText) {
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        showShareToast();
+                    }).catch(err => {
+                        fallbackCopy(shareUrl);
+                    });
+                } else {
+                    fallbackCopy(shareUrl);
+                }
+            } catch (error) {
+                alert('Error creating share URL: ' + error.message);
+            }
+        }
+        
+        function fallbackCopy(text) {
+            const textArea = document.createElement('textarea');
+            textArea.value = text;
+            textArea.style.position = 'fixed';
+            textArea.style.left = '-999999px';
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            try {
+                document.execCommand('copy');
+                showShareToast();
+            } catch (err) {
+                alert('Share URL: ' + text);
+            }
+            document.body.removeChild(textArea);
+        }
+        
+        function showShareToast() {
+            const toast = document.getElementById('shareToast');
+            toast.classList.add('show');
+            setTimeout(() => {
+                toast.classList.remove('show');
+            }, 3000);
+        }
+        
+        function checkUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const blockParam = urlParams.get('block');
+            const txidParam = urlParams.get('txid');
+            const voutParam = urlParams.get('vout');
+            
+            if (!blockParam && !txidParam) return;
+            
+            // Find the matching item
+            let targetItem = null;
+            
+            if (txidParam && voutParam !== null) {
+                // Most specific: txid + vout
+                targetItem = allData.find(d => 
+                    d.txid === txidParam && 
+                    d.vout === parseInt(voutParam)
+                );
+            } else if (blockParam) {
+                // Find by block number (if multiple, prefer the first one or one matching txid if provided)
+                const blockItems = allData.filter(d => d.block === parseInt(blockParam));
+                if (blockItems.length > 0) {
+                    if (txidParam) {
+                        targetItem = blockItems.find(d => d.txid === txidParam) || blockItems[0];
+                    } else {
+                        targetItem = blockItems[0];
+                    }
+                }
+            }
+            
+            if (targetItem) {
+                // Ensure the item type is visible
+                if (!activeFilters.has(targetItem.type)) {
+                    activeFilters.add(targetItem.type);
+                    updateFilterChips();
+                    updateItems();
+                }
+                
+                // Small delay to ensure timeline is fully initialized
+                setTimeout(() => {
+                    openModal(targetItem, true);
+                }, 500);
+            }
+        }
+        
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+        
+        // Size filter
+        function applySizeFilter() {
+            const minVal = document.getElementById('minSize').value;
+            const maxVal = document.getElementById('maxSize').value;
+            
+            minSizeBytes = minVal ? parseInt(minVal) : null;
+            maxSizeBytes = maxVal ? parseInt(maxVal) : null;
+            
+            updateItems();
+            updateStats();
+        }
+        
+        // Handle Enter key press on search input
+        function handleSearchEnter(event) {
+            event.preventDefault();
+            const resultCount = applySearchFilter();
+            // If there are results, automatically fit the timeline
+            if (resultCount > 0 && timeline) {
+                setTimeout(() => {
+                    fitTimeline();
+                }, 100); // Small delay to ensure timeline has updated
+            }
+        }
+        
+        // Search filter
+        function applySearchFilter() {
+            searchText = document.getElementById('searchInput').value.trim();
+            
+            // When user searches text, automatically show only text items
+            if (searchText) {
+                // Clear all filters first
+                activeFilters.clear();
+                // Enable only text filter
+                activeFilters.add('text');
+                updateFilterChips();
+            }
+            
+            updateItems();
+            updateStats();
+            
+            // Return the count of filtered items
+            const filteredData = getFilteredData();
+            return filteredData.length;
+        }
+        
+        // Clear search
+        function clearSearch() {
+            document.getElementById('searchInput').value = '';
+            searchText = '';
+            updateItems();
+            updateStats();
+        }
+        
+        // Handle keyboard navigation
+        document.addEventListener('keydown', (e) => {
+            const modal = document.getElementById('modal');
+            const infoModal = document.getElementById('infoModal');
+            
+            if (e.key === 'Escape') {
+                if (modal.classList.contains('active')) {
+                    closeModal();
+                }
+                if (infoModal.classList.contains('active')) {
+                    closeInfoModal();
+                }
+            } else if (modal.classList.contains('active')) {
+                if (e.key === 'ArrowLeft') {
+                    e.preventDefault();
+                    navigateModal('prev');
+                } else if (e.key === 'ArrowRight') {
+                    e.preventDefault();
+                    navigateModal('next');
+                }
+            }
+        });
+        
+        // Close modal when clicking outside
+        document.getElementById('modal').addEventListener('click', (e) => {
+            // Only close if clicking directly on the modal background, not on modal-content or its children
+            if (e.target.id === 'modal') {
+                closeModal();
+            }
+        });
+        
+        // Close info modal when clicking outside
+        document.getElementById('infoModal').addEventListener('click', (e) => {
+            // Only close if clicking directly on the modal background, not on info-modal-content or its children
+            if (e.target.id === 'infoModal') {
+                closeInfoModal();
+            }
+        });
+        
+        // Initialize on page load
+        loadTimelineData();
+        
+        // Set up button event listeners (after DOM is ready)
+        const closeBtn = document.getElementById('modalCloseBtn');
+        const shareBtn = document.getElementById('modalShareBtn');
+        const navLeftBtn = document.getElementById('modalNavLeft');
+        const navRightBtn = document.getElementById('modalNavRight');
+        
+        if (closeBtn) {
+            closeBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                closeModal(e);
+            });
+        }
+        
+        if (shareBtn) {
+            shareBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                shareBlock(e);
+            });
+        }
+        
+        if (navLeftBtn) {
+            navLeftBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateModal('prev');
+            });
+        }
+        
+        if (navRightBtn) {
+            navRightBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                navigateModal('next');
+            });
+        }
+    </script>
+    <Footer />
+    <NewsModal />
+</body>
+</html>
+
