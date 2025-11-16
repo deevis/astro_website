@@ -1,0 +1,167 @@
+---
+// Generate unique IDs using timestamp and random number
+const uniqueId = `fn-${Date.now()}-${Math.random().toString(36).substr(2, 9)}`;
+const footnoteId = `footnote-${uniqueId}`;
+const refId = `footnote-ref-${uniqueId}`;
+---
+
+<span class="footnote-wrapper inline-block">
+  <sup>
+    <a
+      id={refId}
+      href={`#${footnoteId}`}
+      data-footnote-ref
+      class="footnote-ref text-primary-600 dark:text-primary-400 hover:text-primary-800 dark:hover:text-primary-300 font-medium cursor-pointer no-underline transition-colors"
+      onclick={`event.preventDefault(); const target = document.getElementById('${footnoteId}'); if (target) { target.scrollIntoView({ behavior: 'smooth', block: 'center' }); target.classList.add('highlight'); setTimeout(() => target.classList.remove('highlight'), 2000); } return false;`}
+      aria-label="Footnote"
+    >
+      [?]
+    </a>
+  </sup>
+</span>
+
+<span
+  id={footnoteId}
+  data-footnote-content
+  class="footnote-content hidden block mt-2 mb-4 pl-4 border-l-4 border-primary-300 dark:border-primary-700 bg-gray-50 dark:bg-gray-900/50 py-2 transition-all duration-500"
+>
+  <span class="footnote-number text-primary-600 dark:text-primary-400 font-semibold mr-2" data-footnote-number>
+    [?]
+  </span>
+  <span class="footnote-text">
+    <slot />
+  </span>
+  <button
+    type="button"
+    class="footnote-close text-xs text-primary-600 dark:text-primary-400 hover:underline ml-2 bg-transparent border-none cursor-pointer p-0"
+    onclick={`const content = document.getElementById('${footnoteId}'); if (content) { content.classList.add('hidden'); }`}
+    aria-label="Close footnote"
+  >
+    [×]
+  </button>
+</span>
+
+<script is:inline>
+  // Initialize footnote numbering system (runs once per page)
+  if (!window.footnoteSystemInitialized) {
+    window.footnoteSystemInitialized = true;
+    
+    function numberFootnotes() {
+      const refs = Array.from(document.querySelectorAll('[data-footnote-ref]'));
+      const contents = Array.from(document.querySelectorAll('[data-footnote-content]'));
+      
+      if (refs.length !== contents.length) {
+        console.warn('Mismatch between footnote references and contents');
+        return;
+      }
+      
+      // Match refs to contents sequentially (they appear in order)
+      refs.forEach((ref, index) => {
+        const content = contents[index];
+        if (!content) return;
+        const number = index + 1;
+        const numberSpan = content.querySelector('[data-footnote-number]');
+        
+        // Update reference
+        ref.textContent = `[${number}]`;
+        ref.setAttribute('aria-label', `Footnote ${number}`);
+        
+        // Update content number
+        if (numberSpan) {
+          numberSpan.textContent = `[${number}]`;
+        }
+        
+        // Update onclick handlers with correct IDs
+        const fnId = content.id;
+        const rId = ref.id;
+        
+        if (fnId && rId) {
+          ref.onclick = function(e) {
+            e.preventDefault();
+            const target = document.getElementById(fnId);
+            if (target) {
+              // Toggle visibility
+              const isHidden = target.classList.contains('hidden');
+              if (isHidden) {
+                target.classList.remove('hidden');
+                // Scroll to footnote and highlight
+                setTimeout(() => {
+                  target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  target.classList.add('highlight');
+                  setTimeout(() => target.classList.remove('highlight'), 800);
+                }, 50);
+              } else {
+                // Hide if already visible
+                target.classList.add('hidden');
+              }
+            }
+            return false;
+          };
+          
+          // Update close button handler
+          const closeBtn = content.querySelector('.footnote-close');
+          if (closeBtn) {
+            closeBtn.onclick = function(e) {
+              e.preventDefault();
+              const target = document.getElementById(fnId);
+              if (target) {
+                target.classList.add('hidden');
+                // Optionally scroll back to reference
+                const refTarget = document.getElementById(rId);
+                if (refTarget) {
+                  refTarget.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                }
+              }
+              return false;
+            };
+          }
+        }
+      });
+    }
+    
+    // Run on DOM ready
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', numberFootnotes);
+    } else {
+      numberFootnotes();
+    }
+    
+    // Also run after a short delay to catch dynamically loaded content
+    setTimeout(numberFootnotes, 100);
+  }
+</script>
+
+<style>
+  .footnote-content.highlight {
+    background-color: rgb(229 231 235 / 0.6);
+    border-color: rgb(156 163 175);
+    animation: pulse-highlight 0.8s ease-in-out;
+  }
+
+  @keyframes pulse-highlight {
+    0%, 100% {
+      background-color: rgb(229 231 235 / 0.6);
+    }
+    50% {
+      background-color: rgb(209 213 219 / 0.7);
+    }
+  }
+
+  .dark .footnote-content.highlight {
+    background-color: rgb(55 65 81 / 0.5);
+    border-color: rgb(75 85 99);
+  }
+
+  .footnote-ref:hover {
+    text-decoration: underline;
+  }
+
+  .footnote-content.hidden {
+    display: none !important;
+  }
+
+  .footnote-close:hover {
+    opacity: 0.7;
+  }
+</style>
+

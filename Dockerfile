@@ -4,12 +4,13 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-# Install Python, cron, and other system dependencies
+# Install Python, cron, git, and other system dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-venv \
     cron \
+    git \
     && rm -rf /var/lib/apt/lists/*
 
 # Media stage - these layers will be cached and reused across builds
@@ -67,7 +68,9 @@ COPY --from=builder /app/public ./public
 COPY --from=builder /app/python ./python
 COPY --from=deps /app/node_modules ./node_modules
 COPY --from=python-deps /opt/news_feed_env /opt/news_feed_env
-COPY package.json package-lock.json astro.config.mjs tsconfig.json tailwind.config.mjs ./ 
+COPY package.json package-lock.json astro.config.mjs tsconfig.json tailwind.config.mjs ./
+COPY scripts/ ./scripts/
+RUN chmod +x /app/scripts/*.sh 
 RUN corepack enable && corepack prepare --activate
 
 # Set up environment variables for Python
@@ -75,13 +78,15 @@ ENV VIRTUAL_ENV=/opt/news_feed_env
 ENV PATH="$VIRTUAL_ENV/bin:$PATH"
 ENV PYTHONPATH="/app/python/news_aggregator:$PYTHONPATH"
 
-# Create cron jobs for both news feed and Bitcoin price updates
+# Create cron jobs for news feed, Bitcoin price, and Bitcoin OP_RETURN data updates
 RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggregator/monthly_aggregate_system.py >> /var/log/news_feed_cron.log 2>&1" > /etc/cron.d/automated-updates && \
     echo "0 */4 * * * cd /app && /opt/news_feed_env/bin/python python/bitcoin/populate_price_histories.py >> /var/log/bitcoin_price_cron.log 2>&1" >> /etc/cron.d/automated-updates && \
+    echo "*/30 * * * * /app/scripts/update-bitcoin-opreturn-data.sh >> /var/log/bitcoin_opreturn_cron.log 2>&1" >> /etc/cron.d/automated-updates && \
     chmod 0644 /etc/cron.d/automated-updates && \
     crontab /etc/cron.d/automated-updates && \
     touch /var/log/news_feed_cron.log && \
-    touch /var/log/bitcoin_price_cron.log
+    touch /var/log/bitcoin_price_cron.log && \
+    touch /var/log/bitcoin_opreturn_cron.log
 
 # Create startup script
 RUN echo '#!/bin/bash\n\

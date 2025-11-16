@@ -1,0 +1,141 @@
+---
+interface Props {
+  activeCase?: string;
+}
+
+const { activeCase = 'china' } = Astro.props;
+---
+
+<div class="case-study-nav">
+  <button 
+    class:list={['nav-button', 'china', { active: activeCase === 'china' }]}
+    data-case="china"
+  >
+    Imperial China<br/><span class="nav-subtitle">1644-1912</span>
+  </button>
+  <button 
+    class:list={['nav-button', 'france', { active: activeCase === 'france' }]}
+    data-case="france"
+  >
+    Medieval France<br/><span class="nav-subtitle">1450-1600</span>
+  </button>
+  <button 
+    class:list={['nav-button', 'civil-war', { active: activeCase === 'civil-war' }]}
+    data-case="civil-war"
+  >
+    American Civil War<br/><span class="nav-subtitle">1850-1865</span>
+  </button>
+  <button 
+    class:list={['nav-button', 'america', { active: activeCase === 'america' }]}
+    data-case="america"
+  >
+    America Today<br/><span class="nav-subtitle">1970s-Present</span>
+  </button>
+</div>
+
+<script>
+  function initCaseStudyNav() {
+    const buttons = document.querySelectorAll('.case-study-nav .nav-button');
+    const cases = document.querySelectorAll('.case-study');
+    
+    buttons.forEach(button => {
+      button.addEventListener('click', (e) => {
+        const caseId = button.getAttribute('data-case');
+        
+        // Remove active class from all buttons
+        buttons.forEach(b => b.classList.remove('active'));
+        // Add active class to clicked button
+        button.classList.add('active');
+        
+        // Hide all cases
+        cases.forEach(c => c.classList.remove('active'));
+        // Show selected case
+        const targetCase = document.getElementById(caseId);
+        if (targetCase) {
+          targetCase.classList.add('active');
+          // Don't scroll - just switch the content
+        }
+      });
+    });
+  }
+  
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initCaseStudyNav);
+  } else {
+    initCaseStudyNav();
+  }
+</script>
+
+<style>
+  .case-study-nav {
+    display: flex;
+    justify-content: center;
+    gap: 1rem;
+    padding: 1rem;
+    background: #f8f9fa;
+    flex-wrap: wrap;
+    margin: 1rem 0;
+  }
+  
+  :global(.dark) .case-study-nav {
+    background: #1a1a1a;
+  }
+  
+  .nav-button {
+    padding: 0.9375rem 1.875rem;
+    border: none;
+    border-radius: 1.5625rem;
+    cursor: pointer;
+    font-size: 1.05em;
+    font-weight: 600;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(0,0,0,0.1);
+    font-family: 'Helvetica', sans-serif;
+    text-align: center;
+    line-height: 1.4;
+  }
+  
+  .nav-button:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+  }
+  
+  .nav-button.china {
+    background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+    color: white;
+  }
+  
+  .nav-button.france {
+    background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+    color: white;
+  }
+  
+  .nav-button.civil-war {
+    background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);
+    color: white;
+  }
+  
+  .nav-button.america {
+    background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);
+    color: white;
+  }
+  
+  .nav-button.active {
+    transform: scale(1.1);
+    box-shadow: 0 5px 25px rgba(0,0,0,0.3);
+  }
+  
+  .nav-subtitle {
+    font-size: 0.9em;
+    opacity: 0.95;
+  }
+  
+  @media (max-width: 768px) {
+    .nav-button {
+      padding: 0.75rem 1.25rem;
+      font-size: 0.95em;
+    }
+  }
+</style>
+

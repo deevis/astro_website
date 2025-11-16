@@ -1,8 +1,7 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/Navigation.astro';
-import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
+import FootnotesList from '../../components/FootnotesList.astro';
 
 // Generate static paths for all articles
 export async function getStaticPaths() {
@@ -27,7 +26,6 @@ const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-
 ---
 
 <Layout title={`${article.data.title} | Professional Portfolio`}>
-  <Navigation />
   <main class="pt-24 pb-16">
     <div class="container mx-auto px-4 md:px-6 lg:px-8">
       <article class="prose prose-xl max-w-none
@@ -44,13 +42,17 @@ const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-
         dark:prose-invert 
         dark:prose-a:text-primary-400
         dark:prose-code:text-primary-400">
-        <img 
-          src={article.data.image.src} 
-          alt={article.data.image.alt}
-          class="w-full aspect-video object-cover mb-4"
-        />
-        <h1 class="!text-2xl mb-2">{article.data.title}</h1>
-        <div class="flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 -mt-2">
+        {article.data.showImageOnPage !== false && (
+          <img 
+            src={article.data.image.src} 
+            alt={article.data.image.alt}
+            class="w-full aspect-video object-cover mb-4"
+          />
+        )}
+        {article.data.showTitleOnPage !== false && (
+          <h1 class="!text-2xl mb-2">{article.data.title}</h1>
+        )}
+        <div class={`flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 ${article.data.showTitleOnPage !== false ? '-mt-2' : 'mt-0'}`}>
           <span>{article.data.author}</span>
           <span>•</span>
           <time datetime={article.data.publishDate}>{formattedDate}</time>
@@ -64,6 +66,11 @@ const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-
         </div>
         <Content />
       </article>
+      
+      <!-- Footnotes List at Bottom -->
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 mt-8">
+        <FootnotesList />
+      </div>
     </div>
   </main>
 </Layout> 

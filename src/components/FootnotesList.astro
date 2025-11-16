@@ -1,0 +1,102 @@
+---
+// This component collects and displays all footnotes at the bottom of the page
+---
+
+<div id="footnotes-list" class="mt-16 pt-8 border-t border-gray-200 dark:border-gray-700 prose prose-sm max-w-none">
+  <h2 class="text-xl font-bold mb-6 text-gray-900 dark:text-gray-100">Footnotes</h2>
+  <div id="footnotes-container" class="space-y-4">
+    <!-- Footnotes will be populated here by JavaScript -->
+  </div>
+</div>
+
+<script is:inline>
+  function populateFootnotesList() {
+    const container = document.getElementById('footnotes-container');
+    if (!container) return;
+    
+    const refs = Array.from(document.querySelectorAll('[data-footnote-ref]'));
+    const contents = Array.from(document.querySelectorAll('[data-footnote-content]'));
+    
+    if (refs.length === 0 || contents.length === 0) {
+      // Hide the entire footnotes section if there are no footnotes
+      const listSection = document.getElementById('footnotes-list');
+      if (listSection) {
+        listSection.style.display = 'none';
+      }
+      return;
+    }
+    
+    // Clear container
+    container.innerHTML = '';
+    
+    // Create footnote entries for bottom section
+    refs.forEach((ref, index) => {
+      const content = contents[index];
+      if (!content) return;
+      
+      const number = index + 1;
+      const footnoteText = content.querySelector('.footnote-text');
+      const text = footnoteText ? footnoteText.innerHTML : '';
+      const refId = ref.id;
+      const contentId = content.id;
+      
+      // Create footnote entry
+      const entry = document.createElement('div');
+      entry.className = 'footnote-entry flex gap-3';
+      entry.id = `footnote-bottom-${number}`;
+      
+      // Number link that scrolls to reference
+      const numberLink = document.createElement('a');
+      numberLink.href = `#${refId}`;
+      numberLink.className = 'footnote-number-link text-primary-600 dark:text-primary-400 font-semibold hover:underline flex-shrink-0';
+      numberLink.textContent = `[${number}]`;
+      numberLink.onclick = function(e) {
+        e.preventDefault();
+        const target = document.getElementById(refId);
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          // Highlight the reference briefly
+          target.style.backgroundColor = 'rgba(59, 130, 246, 0.2)';
+          setTimeout(() => {
+            target.style.backgroundColor = '';
+          }, 800);
+        }
+        return false;
+      };
+      
+      // Text content
+      const textDiv = document.createElement('div');
+      textDiv.className = 'footnote-text-bottom text-sm md:text-base text-gray-700 dark:text-gray-300 prose prose-sm max-w-none';
+      textDiv.innerHTML = text;
+      
+      entry.appendChild(numberLink);
+      entry.appendChild(textDiv);
+      container.appendChild(entry);
+    });
+  }
+  
+  // Run on DOM ready
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', populateFootnotesList);
+  } else {
+    populateFootnotesList();
+  }
+  
+  // Also run after a short delay to catch dynamically loaded content
+  setTimeout(populateFootnotesList, 200);
+</script>
+
+<style>
+  .footnote-entry {
+    line-height: 1.6;
+  }
+  
+  .footnote-text-bottom {
+    flex: 1;
+  }
+  
+  .footnote-number-link {
+    margin-top: 2px;
+  }
+</style>
+

@@ -1,0 +1,26 @@
+---
+interface Props {
+  class?: string;
+}
+
+const { class: className = '' } = Astro.props;
+---
+
+<div class:list={['timeline-content', className]}>
+  <slot />
+</div>
+
+<style>
+  .timeline-content {
+    padding: 0.75rem;
+    padding-top: 1rem;
+  }
+  
+  @media (max-width: 768px) {
+    .timeline-content {
+      padding: 0.5rem;
+      padding-top: 0.75rem;
+    }
+  }
+</style>
+

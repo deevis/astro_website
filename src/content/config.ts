@@ -11,7 +11,9 @@ const articles = defineCollection({
       alt: z.string()
     }),
     description: z.string(),
-    tags: z.array(z.string())
+    tags: z.array(z.string()),
+    showImageOnPage: z.boolean().optional().default(true),
+    showTitleOnPage: z.boolean().optional().default(true)
   })
 });
 

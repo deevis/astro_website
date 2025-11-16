@@ -34,8 +34,8 @@ const { chart, class: className = '', width = '100%' } = Astro.props;
         // Pie chart specific colors for dark mode
         pieSectionTextColor: isDark ? '#fff' : '#000',
         pieTitleTextColor: isDark ? '#fff' : '#000',
-        pieSectionTextSize: '1.2rem',
-        pieTitleTextSize: '1.5rem',
+        pieSectionTextSize: '0.875rem',
+        pieTitleTextSize: '0.875rem',
         
         // Background colors
         backgroundColor: isDark ? 'transparent' : '#f8f9fa',
@@ -53,33 +53,69 @@ const { chart, class: className = '', width = '100%' } = Astro.props;
         nodeTextColor: isDark ? '#fff' : '#333',
         
         // Font sizes for better readability
-        fontSize: 16,
-        ganttFontSize: 16,
+        fontSize: 12,
+        ganttFontSize: 12,
         ganttLeftPadding: 75,
+        
+        // Node padding to prevent text clipping
+        nodePadding: 12,
+        mainBkg: isDark ? '#2d2d2d' : '#f8f9fa',
+        defaultLinkColor: isDark ? '#d3d3d3' : '#666',
       },
       htmlLabels: true,
       securityLevel: 'loose',
       flowchart: {
         useMaxWidth: false,
-        htmlLabels: true
+        htmlLabels: true,
+        nodeSpacing: 60,
+        rankSpacing: 60,
+        padding: 20,
+        curve: 'basis'
       },
       gantt: {
-        useMaxWidth: false,
-        fontSize: 16
+        useMaxWidth: true,
+        fontSize: 12
       },
       sequence: {
-        useMaxWidth: false
+        useMaxWidth: true
       },
       timeline: {
-        useMaxWidth: false
+        useMaxWidth: true
       },
       pie: {
-        useMaxWidth: false
+        useMaxWidth: true
       }
     });
     
     // Re-render all diagrams
-    mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    const initResult = mermaid.init(undefined, document.querySelectorAll('.mermaid'));
+    
+    // Adjust viewBox after rendering (handle both promise and non-promise returns)
+    const adjustViewBox = () => {
+      // Use setTimeout to ensure rendering is complete
+      setTimeout(() => {
+        document.querySelectorAll('.mermaid svg').forEach(svg => {
+          const viewBox = svg.getAttribute('viewBox');
+          if (viewBox) {
+            const parts = viewBox.split(' ').map(Number);
+            if (parts.length === 4) {
+              const [x, y, width, height] = parts;
+              // Add minimal padding around the viewBox (5% on each side) to prevent text clipping without making chart tiny
+              const padding = Math.max(width, height) * 0.05;
+              svg.setAttribute('viewBox', 
+                `${x - padding} ${y - padding} ${width + padding * 2} ${height + padding * 2}`
+              );
+            }
+          }
+        });
+      }, 100);
+    };
+    
+    if (initResult && typeof initResult.then === 'function') {
+      initResult.then(adjustViewBox);
+    } else {
+      adjustViewBox();
+    }
   }
 
   // Initialize on load
@@ -113,8 +149,10 @@ const { chart, class: className = '', width = '100%' } = Astro.props;
   
   /* Chart styles */
   .mermaid {
-    min-width: 60%;
+    width: 100%;
+    max-width: 100%;
     margin: 0 auto;
+    min-width: 400px;
   }
   
   /* Adding some global styles for mermaid in dark mode */
@@ -130,30 +168,64 @@ const { chart, class: className = '', width = '100%' } = Astro.props;
     fill: #ffffff !important;
   }
   
-  /* Fix for chart titles */
+  /* Ensure chart has enough space for title */
+  :global(.mermaid svg) {
+    padding: 1rem;
+    margin: 0 auto;
+    min-width: 400px;
+    width: 100% !important;
+    height: auto !important;
+    overflow: visible !important;
+  }
+  
+  /* Prevent text clipping in nodes */
+  :global(.mermaid .node rect),
+  :global(.mermaid .node polygon),
+  :global(.mermaid .node circle) {
+    overflow: visible !important;
+  }
+  
+  /* Ensure text labels have enough space */
+  :global(.mermaid .nodeLabel),
+  :global(.mermaid .label),
+  :global(.mermaid .edgeLabel) {
+    overflow: visible !important;
+    white-space: normal !important;
+    word-wrap: break-word !important;
+  }
+  
+  /* Add padding to node text */
+  :global(.mermaid .node text) {
+    overflow: visible !important;
+    dominant-baseline: middle;
+    text-anchor: middle;
+  }
+  
+  /* General text sizing for all mermaid elements */
+  :global(.mermaid text) {
+    font-size: 12px !important;
+  }
+  
+  /* Pie chart titles - slightly larger but still readable */
   :global(.mermaid .pieTitleText) {
     dominant-baseline: hanging;
     text-anchor: middle;
-    font-size: 1.2rem;
+    font-size: 0.875rem !important;
     font-weight: bold;
-  }
-  
-  /* Ensure chart has enough space for title */
-  :global(.mermaid svg) {
-    padding-top: 2rem;
-    margin: 0 auto;
-    min-width: 600px;
-    width: 100% !important;
-    height: auto !important;
   }
   
   /* Timeline specific fixes */
   :global(.mermaid .timeline text) {
-    font-size: 16px !important;
+    font-size: 12px !important;
   }
   
   :global(.mermaid .section) {
-    font-size: 16px !important;
+    font-size: 12px !important;
+  }
+  
+  /* Node text sizing */
+  :global(.mermaid .nodeLabel) {
+    font-size: 12px !important;
   }
   
   /* Make sure the mermaid diagram doesn't get too small on mobile */
@@ -164,7 +236,7 @@ const { chart, class: className = '', width = '100%' } = Astro.props;
     }
     
     .mermaid {
-      min-width: 600px;
+      min-width: 100%;
     }
   }
 </style> 

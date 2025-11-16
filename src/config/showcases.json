@@ -1,6 +1,13 @@
 {
     "showcases":  [
       {
+        "title": "Bitcoin Large OP Return Explorer",
+        "description": "A comprehensive explorer for large OP_RETURN transactions on the Bitcoin blockchain. Features a timeline of transactions with detailed metadata, a search function, and a filter system to help you find the information you need.",
+        "href": "html_showcase/bitcoin_large_op_return_explorer/index.html",
+        "image": "html_showcase/bitcoin_large_op_return_explorer/thumb.png",
+        "tags": ["Bitcoin", "explorer", "OP_RETURN", "blockchain"]
+      },
+      {
         "title": "Supply & Demand Economic Simulator",
         "description": "Comprehensive economic simulation showcasing market dynamics in a closed economy with 50 agents. Features real-time supply and demand curves, multiple economic scenarios (scarcity, abundance, tech boom, demand surge), market interventions (price floors/ceilings, taxes, subsidies), and a money printer mechanism. Watch producers, consumers, and traders interact through order books with detailed agent statistics, wealth inequality tracking, and exportable simulation data.",
         "href": "html_showcase/supply_and_demand/index.html",

@@ -1,0 +1,42 @@
+---
+interface Props {
+  label?: string;
+  class?: string;
+}
+
+const { label, class: className = '' } = Astro.props;
+---
+
+<div class:list={['data-point', className]}>
+  {label && <strong>{label}</strong>}
+  <slot />
+</div>
+
+<style>
+  .data-point {
+    background: #f8f9fa;
+    padding: 0.5rem 0.625rem;
+    margin: 0.375rem 0;
+    border-radius: 0.25rem;
+    border-left: 3px solid #667eea;
+    font-family: 'Helvetica', sans-serif;
+    font-size: 0.9em;
+  }
+  
+  .data-point strong {
+    color: #667eea;
+    display: block;
+    margin-bottom: 0.125rem;
+    font-size: 0.95em;
+  }
+  
+  :global(.dark) .data-point {
+    background: #2a2a2a;
+    border-left-color: #667eea;
+  }
+  
+  :global(.dark) .data-point strong {
+    color: #8b9dc3;
+  }
+</style>
+

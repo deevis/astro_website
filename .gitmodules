@@ -1,0 +1,3 @@
+[submodule "public/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns"]
+	path = public/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns
+	url = git@github.com:deevis/bitcoin_large_op_returns.git

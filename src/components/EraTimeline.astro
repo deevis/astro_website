@@ -1,0 +1,537 @@
+---
+// Helper function to convert hex to rgb
+function hexToRgb(hex: string): string {
+  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+  return result 
+    ? `${parseInt(result[1], 16)}, ${parseInt(result[2], 16)}, ${parseInt(result[3], 16)}`
+    : '0, 0, 0';
+}
+
+interface Era {
+  id: string;
+  title: string;
+  years: string;
+  colorStart: string;
+  colorEnd: string;
+  stages: Array<{
+    number: number;
+    label: string;
+    yearRange: string;
+    isCrisis?: boolean;
+    isOutcome?: boolean;
+  }>;
+}
+
+const eras: Era[] = [
+  {
+    id: 'china',
+    title: 'Imperial China: The Qing Dynasty',
+    years: '1644-1912',
+    colorStart: '#f093fb',
+    colorEnd: '#f5576c',
+    stages: [
+      { number: 1, label: 'Initial', yearRange: '1644-1690' },
+      { number: 2, label: 'Wealth Pump', yearRange: '1690-1750' },
+      { number: 3, label: 'Elite Overprod', yearRange: '1750-1800' },
+      { number: 4, label: 'Frustrated', yearRange: '1800-1850' },
+      { number: 5, label: 'Crisis', yearRange: '1850-1864', isCrisis: true },
+      { number: 6, label: 'Outcome', yearRange: '1864-1912', isOutcome: true },
+    ],
+  },
+  {
+    id: 'france',
+    title: 'Medieval France: The Wars of Religion',
+    years: '1450-1600',
+    colorStart: '#4facfe',
+    colorEnd: '#00f2fe',
+    stages: [
+      { number: 1, label: 'Initial', yearRange: '1450-1480' },
+      { number: 2, label: 'Wealth Pump', yearRange: '1480-1510' },
+      { number: 3, label: 'Elite Overprod', yearRange: '1510-1540' },
+      { number: 4, label: 'Competition', yearRange: '1540-1560' },
+      { number: 5, label: 'Fiscal Collapse', yearRange: '1560-1570' },
+      { number: 6, label: 'Crisis', yearRange: '1562-1598', isCrisis: true },
+      { number: 7, label: 'Outcome', yearRange: '1598-1600', isOutcome: true },
+    ],
+  },
+  {
+    id: 'french-revolution',
+    title: 'The French Revolution',
+    years: '1789-1799',
+    colorStart: '#a8edea',
+    colorEnd: '#fed6e3',
+    stages: [
+      { number: 1, label: 'Second Crisis', yearRange: '1780-1789' },
+      { number: 2, label: 'Ancien Régime', yearRange: '1780-1789' },
+      { number: 3, label: 'Elite Overprod', yearRange: '1780-1789' },
+      { number: 4, label: 'Immiseratn', yearRange: '1788-1789' },
+      { number: 5, label: 'Intra-Elite', yearRange: '1789' },
+      { number: 6, label: 'Counter-Elites', yearRange: '1789-1793' },
+      { number: 7, label: 'Crisis', yearRange: '1789-1799', isCrisis: true },
+      { number: 8, label: 'The Terror', yearRange: '1793-1794' },
+      { number: 9, label: 'Napoleon', yearRange: '1799-1815', isOutcome: true },
+      { number: 10, label: 'Lessons', yearRange: '1815+' },
+    ],
+  },
+  {
+    id: 'civil-war',
+    title: 'The American Civil War Era',
+    years: '1850s-1865',
+    colorStart: '#43e97b',
+    colorEnd: '#38f9d7',
+    stages: [
+      { number: 1, label: 'Initial', yearRange: '1850-1852' },
+      { number: 2, label: 'Inequality', yearRange: '1852-1855' },
+      { number: 3, label: 'Elite Overprod', yearRange: '1855-1858' },
+      { number: 4, label: 'Conflict', yearRange: '1858-1861' },
+      { number: 5, label: 'Crisis', yearRange: '1861-1865', isCrisis: true },
+      { number: 6, label: 'Violence', yearRange: '1865-1890' },
+      { number: 7, label: 'Reform', yearRange: '1890-1930', isOutcome: true },
+    ],
+  },
+  {
+    id: 'america',
+    title: 'America Today: The 2020s Crisis',
+    years: '1970s-Present',
+    colorStart: '#fa709a',
+    colorEnd: '#fee140',
+    stages: [
+      { number: 1, label: 'Initial', yearRange: '1970-1978' },
+      { number: 2, label: 'Wealth Pump', yearRange: '1978-1988' },
+      { number: 3, label: 'Elite Overprod', yearRange: '1988-1998' },
+      { number: 4, label: 'Polarization', yearRange: '1998-2008' },
+      { number: 5, label: 'Counter-Elites', yearRange: '2008-2016' },
+      { number: 6, label: 'Crisis', yearRange: '2016-2021', isCrisis: true },
+      { number: 7, label: 'Revolutionary', yearRange: '2021-2025' },
+      { number: 8, label: 'Outcomes', yearRange: '2025-Present', isOutcome: true },
+    ],
+  },
+];
+---
+
+<div class="era-timeline">
+  {eras.map((era) => (
+    <div class="era-row" data-era={era.id}>
+      <div class="era-label">
+        <div class="era-title">{era.title}</div>
+        <div class="era-years">{era.years}</div>
+      </div>
+      <div class="era-bar">
+        {era.stages.map((stage, index) => {
+          const totalStages = era.stages.length;
+          const isCrisis = stage.isCrisis;
+          const isOutcome = stage.isOutcome;
+          
+          // Calculate opacity/intensity for progressive coloring
+          let opacity = 0.5;
+          if (isCrisis) {
+            opacity = 1.0; // Full intensity for crisis
+          } else if (isOutcome) {
+            opacity = 0.3; // Lighter for outcome
+          } else {
+            // Progressive intensity: 0.4 to 0.8
+            opacity = 0.4 + ((index + 1) / totalStages) * 0.4;
+          }
+          
+          const rgbStart = hexToRgb(era.colorStart);
+          const rgbEnd = hexToRgb(era.colorEnd);
+          const bgColor = `linear-gradient(135deg, rgba(${rgbStart}, ${opacity}) 0%, rgba(${rgbEnd}, ${opacity}) 100%)`;
+          
+          return (
+            <div
+              class:list={['stage-segment', { 'crisis': isCrisis, 'outcome': isOutcome }]}
+              style={`background: ${bgColor}; width: ${100 / totalStages}%;`}
+              data-era={era.id}
+              data-stage={stage.number}
+              title={`${era.title} - Stage ${stage.number}: ${stage.label} (${stage.yearRange})`}
+            >
+              <div class="stage-label-container">
+                <span class="stage-label">{stage.label}</span>
+                <span class="stage-year-range">{stage.yearRange}</span>
+              </div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  ))}
+</div>
+
+<script>
+  function switchToEra(eraId, shouldScroll = true) {
+    const cases = document.querySelectorAll('.case-study');
+    const eraRows = document.querySelectorAll('.era-row');
+    
+    // Remove active from all cases and era rows
+    cases.forEach(c => c.classList.remove('active'));
+    eraRows.forEach(r => r.classList.remove('active'));
+    
+    // Activate the correct era row
+    const targetRow = document.querySelector(`.era-row[data-era="${eraId}"]`);
+    if (targetRow) {
+      targetRow.classList.add('active');
+    }
+    
+    // Show the correct case
+    const targetCase = document.getElementById(eraId);
+    if (targetCase) {
+      targetCase.classList.add('active');
+      
+      // Only scroll if explicitly requested (not on initial page load)
+      if (shouldScroll) {
+        // Scroll to the case header, accounting for sticky timeline
+        setTimeout(() => {
+          const caseHeader = targetCase.querySelector('.case-header');
+          const timeline = document.querySelector('.era-timeline');
+          
+          if (caseHeader) {
+            // Get the timeline height and top offset
+            const timelineHeight = timeline && timeline instanceof HTMLElement ? timeline.offsetHeight : 0;
+            const timelineTop = timeline ? parseFloat(getComputedStyle(timeline).top) : 0;
+            const offset = timelineHeight + timelineTop + 20; // Add 20px for spacing
+            
+            // Calculate the target scroll position
+            const headerRect = caseHeader.getBoundingClientRect();
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const targetScroll = currentScroll + headerRect.top - offset;
+            
+            window.scrollTo({
+              top: targetScroll,
+              behavior: 'smooth'
+            });
+          } else {
+            // Fallback: scroll to case start
+            const caseRect = targetCase.getBoundingClientRect();
+            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
+            const timeline = document.querySelector('.era-timeline');
+            const timelineHeight = timeline && timeline instanceof HTMLElement ? timeline.offsetHeight : 0;
+            const timelineTop = timeline ? parseFloat(getComputedStyle(timeline).top) : 0;
+            const offset = timelineHeight + timelineTop + 20;
+            const targetScroll = currentScroll + caseRect.top - offset;
+            
+            window.scrollTo({
+              top: targetScroll,
+              behavior: 'smooth'
+            });
+          }
+        }, 100);
+      }
+    }
+  }
+  
+  function scrollToStage(eraId, stageNum) {
+    const targetCase = document.getElementById(eraId);
+    if (!targetCase) return;
+    
+    // First switch to the era
+    switchToEra(eraId);
+    
+    // Then find and scroll to the specific stage
+    setTimeout(() => {
+      const stages = targetCase.querySelectorAll('.stage');
+      const stageArray = Array.from(stages);
+      const targetStage = stageArray.find(stage => {
+        const stageNumber = stage.querySelector('.stage-number');
+        return stageNumber && stageNumber.textContent?.trim() === stageNum;
+      });
+      
+      if (targetStage) {
+        targetStage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+    }, 400);
+  }
+  
+  function updateActiveEraFromScroll() {
+    const cases = document.querySelectorAll('.case-study.active');
+    if (cases.length === 0) return;
+    
+    const activeCase = cases[0];
+    const eraId = activeCase.id;
+    
+    // Update active state in timeline
+    const eraRows = document.querySelectorAll('.era-row');
+    eraRows.forEach(r => r.classList.remove('active'));
+    
+    const targetRow = document.querySelector(`.era-row[data-era="${eraId}"]`);
+    if (targetRow) {
+      targetRow.classList.add('active');
+    }
+  }
+  
+  function initEraTimeline() {
+    // Handle era row clicks (switch to era)
+    const eraRows = document.querySelectorAll('.era-row');
+    eraRows.forEach(row => {
+      row.addEventListener('click', (e) => {
+        // Don't trigger if clicking on a stage segment
+        if (e.target instanceof Element && e.target.closest('.stage-segment')) {
+          return;
+        }
+        
+        const eraId = row.getAttribute('data-era');
+        if (eraId) {
+          switchToEra(eraId);
+        }
+      });
+    });
+    
+    // Handle stage segment clicks (scroll to specific stage)
+    const segments = document.querySelectorAll('.era-timeline .stage-segment');
+    segments.forEach(segment => {
+      segment.addEventListener('click', (e) => {
+        e.stopPropagation(); // Prevent era row click
+        const eraId = segment.getAttribute('data-era');
+        const stageNum = segment.getAttribute('data-stage');
+        
+        if (eraId && stageNum) {
+          scrollToStage(eraId, stageNum);
+        }
+      });
+    });
+    
+    // Watch for scroll to update active era and hide timeline when past conclusion
+    let scrollTimeout;
+    const timeline = document.querySelector('.era-timeline');
+    const conclusionHeading = Array.from(document.querySelectorAll('h2')).find(h => 
+      h.textContent.includes('Conclusion: The Lesson of History')
+    );
+    
+    function checkTimelineVisibility() {
+      if (!timeline || !conclusionHeading) return;
+      
+      const conclusionTop = conclusionHeading.getBoundingClientRect().top;
+      const timelineBottom = timeline.getBoundingClientRect().bottom;
+      const navHeight = 7 * 16; // 7rem in pixels
+      
+      // Hide timeline when conclusion section reaches the sticky position
+      if (conclusionTop <= navHeight + 20) {
+        timeline.classList.add('hidden');
+      } else {
+        timeline.classList.remove('hidden');
+      }
+    }
+    
+    window.addEventListener('scroll', () => {
+      clearTimeout(scrollTimeout);
+      scrollTimeout = setTimeout(() => {
+        updateActiveEraFromScroll();
+        checkTimelineVisibility();
+      }, 100);
+    }, { passive: true });
+    
+    // Initial check
+    checkTimelineVisibility();
+    
+    // Initialize with China active (without scrolling on page load)
+    switchToEra('china', false);
+  }
+  
+  // Initialize on load
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initEraTimeline);
+  } else {
+    initEraTimeline();
+  }
+</script>
+
+<style>
+  .era-timeline {
+    position: sticky;
+    top: 7rem; /* 96px - below nav (64px) + ticker (32px) + 1 more rem for margin */
+    z-index: 40; /* Below navigation (z-50) and ticker */
+    margin: 2rem 0;
+    padding: 1rem;
+    background: #f8f9fa;
+    border-radius: 0.5rem;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    backdrop-filter: blur(10px);
+    transition: opacity 0.3s ease, transform 0.3s ease;
+  }
+  
+  .era-timeline.hidden {
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(-10px);
+  }
+  
+  @media (max-width: 768px) {
+    .era-timeline {
+      top: 5.5rem; /* Slightly less on mobile if nav/ticker are smaller */
+    }
+  }
+  
+  :global(.dark) .era-timeline {
+    background: #1a1a1a;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+  }
+  
+  .era-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 0.75rem;
+    gap: 1rem;
+    cursor: pointer;
+    padding: 0.5rem;
+    border-radius: 0.375rem;
+    transition: background-color 0.2s ease;
+  }
+  
+  .era-row:hover {
+    background-color: rgba(0,0,0,0.05);
+  }
+  
+  :global(.dark) .era-row:hover {
+    background-color: rgba(255,255,255,0.05);
+  }
+  
+  .era-row.active {
+    background-color: rgba(102, 126, 234, 0.1);
+    border-left: 3px solid #667eea;
+  }
+  
+  :global(.dark) .era-row.active {
+    background-color: rgba(102, 126, 234, 0.2);
+  }
+  
+  .era-row:last-child {
+    margin-bottom: 0;
+  }
+  
+  .era-label {
+    min-width: 200px;
+    flex-shrink: 0;
+  }
+  
+  .era-title {
+    font-weight: 600;
+    font-size: 0.9em;
+    color: #2c3e50;
+    margin-bottom: 0.125rem;
+  }
+  
+  .era-years {
+    font-size: 0.75em;
+    color: #666;
+    font-style: italic;
+  }
+  
+  :global(.dark) .era-title {
+    color: #e0e0e0;
+  }
+  
+  :global(.dark) .era-years {
+    color: #999;
+  }
+  
+  .era-bar {
+    flex: 1;
+    display: flex;
+    min-height: 3rem;
+    border-radius: 0.25rem;
+    overflow: hidden;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+  }
+  
+  .stage-segment {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    transition: all 0.2s ease;
+    border-right: 1px solid rgba(255,255,255,0.2);
+  }
+  
+  .stage-label-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 0.125rem;
+  }
+  
+  .stage-segment.crisis {
+    /* Crisis stages override with full opacity */
+  }
+  
+  .stage-segment.outcome {
+    /* Outcome stages override with lighter opacity */
+  }
+  
+  .stage-segment:last-child {
+    border-right: none;
+  }
+  
+  .stage-segment:hover {
+    transform: scaleY(1.1);
+    z-index: 10;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  }
+  
+  .stage-segment.crisis {
+    font-weight: bold;
+  }
+  
+  .stage-label {
+    font-size: 0.7em;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    text-align: center;
+    padding: 0 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    line-height: 1.2;
+  }
+  
+  .stage-year-range {
+    font-size: 0.6em;
+    color: white;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+    text-align: center;
+    font-style: italic;
+    padding: 0 0.25rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    opacity: 0.9;
+    line-height: 1.1;
+  }
+  
+  .stage-segment.outcome .stage-label,
+  .stage-segment.outcome .stage-year-range {
+    color: #333;
+    text-shadow: 0 1px 1px rgba(255,255,255,0.5);
+  }
+  
+  :global(.dark) .stage-segment.outcome .stage-label,
+  :global(.dark) .stage-segment.outcome .stage-year-range {
+    color: #e0e0e0;
+  }
+  
+  @media (max-width: 768px) {
+    .era-row {
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+    
+    .era-label {
+      min-width: auto;
+      width: 100%;
+      text-align: center;
+    }
+    
+    .era-bar {
+      min-height: 2.5rem;
+    }
+    
+    .stage-label {
+      font-size: 0.65em;
+    }
+    
+    .stage-year-range {
+      font-size: 0.55em;
+    }
+  }
+</style>
+

@@ -26,6 +26,12 @@ const pageDescription = 'Test and improve your reaction time and decision-making
           <button id="start-btn" class="start-button">Start</button>
 
           <div id="game-area" tabindex="0">
+            <div id="touch-areas" class="touch-areas-container">
+              <div id="touch-left" class="touch-area">←</div>
+              <div id="touch-right" class="touch-area">→</div>
+            </div>
+            <div id="keyboard-hint" class="keyboard-hint">Keyboard users press left or right arrow</div>
+            <div id="reaction-hint" class="reaction-hint">Wait for the square to turn green and then click or tap as soon as it does</div>
             <div id="square"></div>
             <div id="result"></div>
             <div id="stats"></div>
@@ -109,7 +115,12 @@ const pageDescription = 'Test and improve your reaction time and decision-making
             session2Select = document.getElementById('session2') as HTMLSelectElement,
             compareBtn = document.getElementById('compare-btn')!,
             compareChart = (document.getElementById('compare-chart') as HTMLCanvasElement).getContext('2d')!,
-            compareStats = document.getElementById('compare-stats')!;
+            compareStats = document.getElementById('compare-stats')!,
+            touchAreasContainer = document.getElementById('touch-areas')!,
+            touchLeft = document.getElementById('touch-left')!,
+            touchRight = document.getElementById('touch-right')!,
+            keyboardHint = document.getElementById('keyboard-hint')!,
+            reactionHint = document.getElementById('reaction-hint')!;
 
       const MAX_TRIALS = 10;
       let waiting = false, ready = false, running = false, currentMode = 'reaction',
@@ -209,6 +220,16 @@ const pageDescription = 'Test and improve your reaction time and decision-making
         (startBtn as HTMLButtonElement).blur();
         running = true; waiting = false; ready = false; session = [];
         saveTrigger.style.display = 'none';
+        // Show/hide touch areas, keyboard hint, and reaction hint based on mode
+        if (currentMode === 'decision') {
+          touchAreasContainer.style.display = 'flex';
+          keyboardHint.style.display = 'block';
+          reactionHint.style.display = 'none';
+        } else {
+          touchAreasContainer.style.display = 'none';
+          keyboardHint.style.display = 'none';
+          reactionHint.style.display = 'block';
+        }
         showReady();
       }
 
@@ -217,6 +238,10 @@ const pageDescription = 'Test and improve your reaction time and decision-making
         if (timer !== null) clearTimeout(timer);
         resultEl.textContent = "✅ Round complete!";
         saveTrigger.style.display = 'inline-block';
+        // Hide touch areas, keyboard hint, and reaction hint when session ends
+        touchAreasContainer.style.display = 'none';
+        keyboardHint.style.display = 'none';
+        reactionHint.style.display = 'none';
       }
 
       function openSaveModal() {
@@ -344,10 +369,69 @@ const pageDescription = 'Test and improve your reaction time and decision-making
           modeButtons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
           currentMode = (btn as HTMLElement).dataset.mode!;
+          // Show/hide touch areas, keyboard hint, and reaction hint based on mode
+          if (currentMode === 'decision') {
+            touchAreasContainer.style.display = 'flex';
+            keyboardHint.style.display = 'block';
+            reactionHint.style.display = 'none';
+          } else {
+            touchAreasContainer.style.display = 'none';
+            keyboardHint.style.display = 'none';
+            reactionHint.style.display = 'block';
+          }
         });
       });
 
+      // Touch event handlers for decision mode
+      touchLeft.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (currentMode === 'decision' && running) {
+          handleResponse('left');
+        }
+      });
+
+      touchLeft.addEventListener('touchend', (e) => {
+        e.preventDefault();
+      });
+
+      touchRight.addEventListener('touchstart', (e) => {
+        e.preventDefault();
+        if (currentMode === 'decision' && running) {
+          handleResponse('right');
+        }
+      });
+
+      touchRight.addEventListener('touchend', (e) => {
+        e.preventDefault();
+      });
+
+      // Also handle mouse clicks on touch areas for hybrid devices
+      touchLeft.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        if (currentMode === 'decision' && running) {
+          handleResponse('left');
+        }
+      });
+
+      touchRight.addEventListener('mousedown', (e) => {
+        e.preventDefault();
+        if (currentMode === 'decision' && running) {
+          handleResponse('right');
+        }
+      });
+
       populateSessionDropdowns();
+
+      // Initialize touch areas, keyboard hint, and reaction hint visibility based on current mode
+      if (currentMode === 'decision') {
+        touchAreasContainer.style.display = 'flex';
+        keyboardHint.style.display = 'block';
+        reactionHint.style.display = 'none';
+      } else {
+        touchAreasContainer.style.display = 'none';
+        keyboardHint.style.display = 'none';
+        reactionHint.style.display = 'block';
+      }
     })();
   </script>
 
@@ -515,6 +599,92 @@ const pageDescription = 'Test and improve your reaction time and decision-making
       align-items: center;
       justify-content: center;
       outline: none;
+      position: relative;
+    }
+
+    .touch-areas-container {
+      display: none;
+      position: relative;
+      width: 100%;
+      max-width: 600px;
+      margin-bottom: 1rem;
+      flex-direction: row;
+      gap: 1rem;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .touch-area {
+      flex: 1;
+      min-height: 120px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 48px;
+      font-weight: bold;
+      background: rgba(102, 126, 234, 0.1);
+      border: 3px solid rgba(102, 126, 234, 0.3);
+      border-radius: 12px;
+      color: rgba(102, 126, 234, 0.6);
+      user-select: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    :global(.dark) .touch-area {
+      background: rgba(129, 140, 248, 0.1);
+      border-color: rgba(129, 140, 248, 0.3);
+      color: rgba(129, 140, 248, 0.6);
+    }
+
+    .touch-area:active {
+      background: rgba(102, 126, 234, 0.2);
+      border-color: rgba(102, 126, 234, 0.5);
+      color: rgba(102, 126, 234, 0.9);
+      transform: scale(0.95);
+    }
+
+    :global(.dark) .touch-area:active {
+      background: rgba(129, 140, 248, 0.2);
+      border-color: rgba(129, 140, 248, 0.5);
+      color: rgba(129, 140, 248, 0.9);
+    }
+
+    .touch-area:hover {
+      background: rgba(102, 126, 234, 0.15);
+      border-color: rgba(102, 126, 234, 0.4);
+    }
+
+    :global(.dark) .touch-area:hover {
+      background: rgba(129, 140, 248, 0.15);
+      border-color: rgba(129, 140, 248, 0.4);
+    }
+
+    .keyboard-hint {
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    :global(.dark) .keyboard-hint {
+      color: rgb(156, 163, 175);
+    }
+
+    .reaction-hint {
+      display: none;
+      text-align: center;
+      font-size: 0.9rem;
+      color: #7f8c8d;
+      margin-bottom: 0.5rem;
+      font-style: italic;
+    }
+
+    :global(.dark) .reaction-hint {
+      color: rgb(156, 163, 175);
     }
 
     #square {
@@ -783,6 +953,16 @@ const pageDescription = 'Test and improve your reaction time and decision-making
 
       .reaction-container {
         padding: 20px;
+      }
+
+      .touch-areas-container {
+        flex-direction: row;
+        gap: 0.5rem;
+      }
+
+      .touch-area {
+        min-height: 100px;
+        font-size: 36px;
       }
     }
   </style>

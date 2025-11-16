@@ -1,0 +1,80 @@
+---
+interface Props {
+  title: string;
+  timeframe: string;
+  variant: 'china' | 'france' | 'french-revolution' | 'civil-war' | 'america';
+  class?: string;
+}
+
+const { title, timeframe, variant, class: className = '' } = Astro.props;
+---
+
+<div class:list={['case-header', variant, className]}>
+  <h2>{title}</h2>
+  <div class="timeframe">{timeframe}</div>
+</div>
+
+<style>
+  .case-header {
+    text-align: center;
+    margin-bottom: 0.75rem;
+    padding: 0.75rem;
+    border-radius: 0.375rem;
+  }
+  
+  .case-header.china {
+    background: linear-gradient(135deg, #f093fb20 0%, #f5576c20 100%);
+    border-left: 5px solid #f5576c;
+  }
+  
+  .case-header.france {
+    background: linear-gradient(135deg, #4facfe20 0%, #00f2fe20 100%);
+    border-left: 5px solid #00f2fe;
+  }
+  
+  .case-header.french-revolution {
+    background: linear-gradient(135deg, #a8edea20 0%, #fed6e320 100%);
+    border-left: 5px solid #a8edea;
+  }
+  
+  .case-header.civil-war {
+    background: linear-gradient(135deg, #43e97b20 0%, #38f9d720 100%);
+    border-left: 5px solid #38f9d7;
+  }
+  
+  .case-header.america {
+    background: linear-gradient(135deg, #fa709a20 0%, #fee14020 100%);
+    border-left: 5px solid #fa709a;
+  }
+  
+  .case-header h2 {
+    font-size: 1.8em;
+    margin-bottom: 0.5rem;
+    color: #2c3e50;
+  }
+  
+  .case-header .timeframe {
+    font-size: 1em;
+    color: #666;
+    font-style: italic;
+  }
+  
+  :global(.dark) .case-header h2 {
+    color: #e0e0e0;
+  }
+  
+  :global(.dark) .case-header .timeframe {
+    color: #999;
+  }
+  
+  @media (max-width: 768px) {
+    .case-header h2 {
+      font-size: 2em;
+    }
+    
+    .case-header .timeframe {
+      font-size: 1.1em;
+    }
+  }
+</style>
+

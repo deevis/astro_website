@@ -33,5 +33,5 @@ python/news_aggregator/news_feed_env/
 python/news_aggregator/__pycache__/
 
 public/news_feeds/
-
+tmp/
 astro-website.tar

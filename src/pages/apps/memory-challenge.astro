@@ -104,15 +104,16 @@ const pageDescription = 'Test your memory by tapping numbers in order';
       oscillator.connect(gainNode);
       gainNode.connect(audioContext.destination);
       
-      oscillator.frequency.value = 200;
+      oscillator.frequency.value = 120; // Lower starting pitch
       oscillator.type = 'sawtooth';
       
+      const duration = 0.7; // Longer duration
       gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
-      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.3);
+      gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + duration);
       
       oscillator.start(audioContext.currentTime);
-      oscillator.frequency.exponentialRampToValueAtTime(100, audioContext.currentTime + 0.3);
-      oscillator.stop(audioContext.currentTime + 0.3);
+      oscillator.frequency.exponentialRampToValueAtTime(60, audioContext.currentTime + duration); // Lower ending pitch
+      oscillator.stop(audioContext.currentTime + duration);
     }
 
     function playRoundComplete() {
@@ -164,27 +165,10 @@ const pageDescription = 'Test your memory by tapping numbers in order';
       btn.addEventListener('click', () => selectMode((btn as HTMLElement).dataset.mode!));
     });
 
-    document.getElementById('readyBtn')!.addEventListener('click', startCountdown);
-
-    function startCountdown() {
+    document.getElementById('readyBtn')!.addEventListener('click', () => {
       document.getElementById('readyScreen')!.style.display = 'none';
-      countdownEl.style.display = 'block';
-      let count = 3;
-      countdownEl.textContent = String(count);
-      playBeep();
-
-      const countdownTimer = setInterval(() => {
-        count--;
-        if (count > 0) {
-          countdownEl.textContent = String(count);
-          playBeep();
-        } else {
-          clearInterval(countdownTimer);
-          countdownEl.style.display = 'none';
-          startGame();
-        }
-      }, 1000);
-    }
+      startGame();
+    });
 
     function startGame() {
       score = 0;
@@ -271,31 +255,44 @@ const pageDescription = 'Test your memory by tapping numbers in order';
 
       console.log('Circles generated:', circles);
 
-      // Countdown before showing numbers
-      if (roundNumber > 1) {
-        // Quick 3-beep countdown for rounds after the first
-        let beepCount = 0;
-        const beepInterval = setInterval(() => {
+      // Countdown before showing numbers (for every round)
+      showRoundCountdown();
+    }
+
+    function showRoundCountdown() {
+      let count = 3;
+      
+      // Clear canvas and show first number
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      drawCountdownNumber(count);
+      playBeep();
+      
+      const countdownInterval = setInterval(() => {
+        count--;
+        if (count > 0) {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          drawCountdownNumber(count);
           playBeep();
-          beepCount++;
-          if (beepCount >= 3) {
-            clearInterval(beepInterval);
-            // Show numbers briefly
-            showNumbers();
-            setTimeout(() => {
-              hideNumbers();
-              isPlaying = true;
-            }, currentDuration * 1000);
-          }
-        }, 300);
-      } else {
-        // First round, no countdown needed (already did the big countdown)
-        showNumbers();
-        setTimeout(() => {
-          hideNumbers();
-          isPlaying = true;
-        }, currentDuration * 1000);
-      }
+        } else {
+          clearInterval(countdownInterval);
+          // After countdown, show the circles
+          showNumbers();
+          setTimeout(() => {
+            hideNumbers();
+            isPlaying = true;
+          }, currentDuration * 1000);
+        }
+      }, 950); // 0.95 seconds between each number
+    }
+
+    function drawCountdownNumber(number: number) {
+      // Draw the number in the center of the canvas
+      const isDark = document.documentElement.classList.contains('dark');
+      ctx.fillStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.font = 'bold 120px sans-serif';
+      ctx.textAlign = 'center';
+      ctx.textBaseline = 'middle';
+      ctx.fillText(String(number), canvas.width / 2, canvas.height / 2);
     }
 
     function showNumbers() {
@@ -346,6 +343,95 @@ const pageDescription = 'Test your memory by tapping numbers in order';
       });
     }
 
+    function showSkullAndCrossbones() {
+      // First reveal all numbers
+      showNumbers();
+      
+      const isDark = document.documentElement.classList.contains('dark');
+      const centerX = canvas.width / 2;
+      const centerY = canvas.height / 2;
+      const size = 150;
+      
+      // Set transparency for the overlay
+      ctx.globalAlpha = 0.85;
+      
+      // Draw skull
+      ctx.fillStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.strokeStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.lineWidth = 4;
+      
+      // Skull head (circle)
+      ctx.beginPath();
+      ctx.arc(centerX, centerY - size * 0.1, size * 0.4, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Eye sockets
+      ctx.fillStyle = isDark ? '#1f2937' : '#000';
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX + size * 0.15, centerY - size * 0.15, size * 0.08, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Nose (triangle)
+      ctx.fillStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.beginPath();
+      ctx.moveTo(centerX, centerY - size * 0.05);
+      ctx.lineTo(centerX - size * 0.08, centerY + size * 0.05);
+      ctx.lineTo(centerX + size * 0.08, centerY + size * 0.05);
+      ctx.closePath();
+      ctx.fill();
+      
+      // Mouth (teeth)
+      ctx.beginPath();
+      ctx.rect(centerX - size * 0.12, centerY + size * 0.1, size * 0.24, size * 0.15);
+      ctx.fill();
+      ctx.fillStyle = isDark ? '#1f2937' : '#000';
+      // Draw teeth gaps
+      for (let i = 0; i < 4; i++) {
+        ctx.beginPath();
+        ctx.rect(centerX - size * 0.12 + (i * size * 0.06), centerY + size * 0.1, size * 0.02, size * 0.15);
+        ctx.fill();
+      }
+      
+      // Crossbones
+      ctx.strokeStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      ctx.lineWidth = 8;
+      ctx.lineCap = 'round';
+      
+      // First bone (top-left to bottom-right)
+      ctx.beginPath();
+      ctx.moveTo(centerX - size * 0.5, centerY + size * 0.3);
+      ctx.lineTo(centerX + size * 0.5, centerY - size * 0.3);
+      ctx.stroke();
+      
+      // Second bone (top-right to bottom-left)
+      ctx.beginPath();
+      ctx.moveTo(centerX + size * 0.5, centerY + size * 0.3);
+      ctx.lineTo(centerX - size * 0.5, centerY - size * 0.3);
+      ctx.stroke();
+      
+      // Bone ends (circles)
+      ctx.fillStyle = isDark ? '#f3f4f6' : '#2c3e50';
+      const boneEndSize = size * 0.12;
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.5, centerY + size * 0.3, boneEndSize, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX + size * 0.5, centerY - size * 0.3, boneEndSize, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX + size * 0.5, centerY + size * 0.3, boneEndSize, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.beginPath();
+      ctx.arc(centerX - size * 0.5, centerY - size * 0.3, boneEndSize, 0, Math.PI * 2);
+      ctx.fill();
+      
+      // Reset transparency
+      ctx.globalAlpha = 1.0;
+    }
+
     function checkClick(x: number, y: number) {
       if (!isPlaying) {
         console.log('Not playing, ignoring click');
@@ -393,11 +479,14 @@ const pageDescription = 'Test your memory by tapping numbers in order';
             lives--;
             updateLives();
             
+            // Show skull and crossbones
+            showSkullAndCrossbones();
+            
             if (lives <= 0) {
-              gameOver();
+              setTimeout(() => gameOver(), 3000);
             } else {
-              // Restart round
-              setTimeout(() => startRound(), 1500);
+              // Restart round - wait longer before next round
+              setTimeout(() => startRound(), 3000);
             }
           }
           break;

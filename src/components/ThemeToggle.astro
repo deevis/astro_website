@@ -160,7 +160,7 @@
     // Test if the button is actually clickable
     console.log('🧪 Testing button properties:');
     console.log('  - Button tagName:', themeToggleBtn.tagName);
-    console.log('  - Button disabled:', (themeToggleBtn as HTMLButtonElement).disabled);
+    console.log('  - Button disabled:', themeToggleBtn.disabled);
     console.log('  - Button style.display:', themeToggleBtn.style.display);
     console.log('  - Button style.visibility:', themeToggleBtn.style.visibility);
     console.log('  - Button style.pointerEvents:', themeToggleBtn.style.pointerEvents);
@@ -169,20 +169,27 @@
     console.log('✅ Theme toggle initialization completed');
 
     // Add a test function to window for manual testing
-    (window as any).testThemeToggle = function() {
+    window.testThemeToggle = function() {
       console.log('🧪 Manual theme toggle test triggered');
-      clickHandler({preventDefault: () => {}});
+      clickHandler({preventDefault: function() {}});
     };
     console.log('💡 You can test manually by running: testThemeToggle() in console');
   }
 
-  // Try multiple initialization methods to ensure it works
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initThemeToggle);
+  // Prevent multiple initializations
+  if (window.themeToggleInitialized) {
+    console.log('Theme toggle already initialized, skipping...');
   } else {
-    initThemeToggle();
-  }
+    window.themeToggleInitialized = true;
 
-  // Also try after a short delay as fallback
-  setTimeout(initThemeToggle, 100);
+    // Try multiple initialization methods to ensure it works
+    if (document.readyState === 'loading') {
+      document.addEventListener('DOMContentLoaded', initThemeToggle);
+    } else {
+      initThemeToggle();
+    }
+
+    // Also try after a short delay as fallback
+    setTimeout(initThemeToggle, 100);
+  }
 </script>
