@@ -4,13 +4,14 @@ ENV PNPM_HOME="/pnpm"
 ENV PATH="$PNPM_HOME:$PATH"
 RUN corepack enable
 
-# Install Python, cron, git, and other system dependencies
+# Install Python, cron, git, vim, and other system dependencies
 RUN apt-get update && apt-get install -y \
     python3 \
     python3-pip \
     python3-venv \
     cron \
     git \
+    vim \
     && rm -rf /var/lib/apt/lists/*
 
 # Media stage - these layers will be cached and reused across builds
@@ -92,6 +93,9 @@ RUN echo "0 */2 * * * cd /app && /opt/news_feed_env/bin/python python/news_aggre
 RUN echo '#!/bin/bash\n\
 # Start cron daemon\n\
 cron\n\
+\n\
+# Update Bitcoin OP_RETURN data on startup in background (non-blocking)\n\
+/app/scripts/update-bitcoin-opreturn-data.sh >> /var/log/bitcoin_opreturn_cron.log 2>&1 &\n\
 \n\
 # Start the main application\n\
 exec pnpm start\n\

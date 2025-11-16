@@ -1,16 +1,29 @@
 #!/bin/bash
-# Update Bitcoin OP_RETURN data submodule
-# This script updates the bitcoin_large_op_returns submodule to pull the latest data
+# Update Bitcoin OP_RETURN data directly in dist
+# This script clones/updates the deevis/bitcoin_large_op_returns repo in dist
 
-cd /app/public/html_showcase/bitcoin_large_op_return_explorer || exit 1
+DIST_DIR="/app/dist/html_showcase/bitcoin_large_op_return_explorer"
+REPO_URL="https://github.com/deevis/bitcoin_large_op_returns.git"
+TARGET_DIR="$DIST_DIR/bitcoin_large_op_returns"
 
-# Initialize submodule if not already initialized
-if [ ! -d "bitcoin_large_op_returns/.git" ]; then
-    git submodule update --init bitcoin_large_op_returns || exit 1
+# Ensure dist directory exists
+if [ ! -d "$DIST_DIR" ]; then
+    echo "Error: Dist directory does not exist: $DIST_DIR"
+    exit 1
 fi
 
-# Update submodule to latest (no credentials needed for public repo)
-git submodule update --remote bitcoin_large_op_returns
+cd "$DIST_DIR" || exit 1
+
+# Clone if doesn't exist, otherwise pull
+if [ ! -d "$TARGET_DIR/.git" ]; then
+    echo "Cloning bitcoin_large_op_returns repository..."
+    rm -rf "$TARGET_DIR"  # Remove any existing directory
+    git clone --depth 1 "$REPO_URL" "$TARGET_DIR" || exit 1
+else
+    echo "Updating bitcoin_large_op_returns repository..."
+    cd "$TARGET_DIR" || exit 1
+    git pull origin main || exit 1
+fi
 
 exit $?
 
