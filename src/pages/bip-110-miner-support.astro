@@ -1,0 +1,641 @@
+---
+import '@fontsource/inter/400.css';
+import '@fontsource/inter/500.css';
+import '@fontsource/inter/600.css';
+import '@fontsource/inter/700.css';
+import Navigation from '../components/Navigation.astro';
+import Footer from '../components/Footer.astro';
+import NewsTicker from '../components/NewsTicker.astro';
+import NewsModal from '../components/NewsModal.astro';
+---
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>BIP 110 Miner Support - Bitcoin</title>
+    <script is:inline>
+      if (
+        localStorage.getItem('color-theme') === 'dark' ||
+        (!('color-theme' in localStorage) &&
+          window.matchMedia('(prefers-color-scheme: dark)').matches)
+      ) {
+        document.documentElement.classList.add('dark');
+      } else {
+        document.documentElement.classList.remove('dark');
+      }
+    </script>
+    
+    <script type="text/javascript" src="https://unpkg.com/vis-timeline@latest/standalone/umd/vis-timeline-graph2d.min.js"></script>
+    <link href="https://unpkg.com/vis-timeline@latest/styles/vis-timeline-graph2d.min.css" rel="stylesheet" type="text/css" />
+    
+    <style is:global>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        :root {
+            --font-sans: 'Inter', system-ui, -apple-system, BlinkMacSystemFont,
+                'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+        }
+        
+        html {
+            font-family: var(--font-sans);
+            scroll-behavior: smooth;
+            zoom: 0.8;
+        }
+        
+        @supports not (zoom: 0.8) {
+            body {
+                transform: scale(0.8);
+                transform-origin: top left;
+                width: 125%;
+                height: 125%;
+            }
+        }
+        
+        body {
+            font-family: var(--font-sans);
+            background: #0a0e27;
+            color: #e0e0e0;
+        }
+        
+        header { position: fixed !important; top: 0 !important; left: 0 !important; right: 0 !important; z-index: 50 !important; }
+        html.dark header [class*="dark:bg-gray-800"] { background-color: rgb(31, 41, 55) !important; }
+        
+        #news-ticker {
+            position: fixed !important;
+            top: 4rem !important;
+            left: 0 !important;
+            right: 0 !important;
+            z-index: 40 !important;
+        }
+        
+        .header {
+            padding: 20px;
+            background: linear-gradient(135deg, #1a1f3a 0%, #0a0e27 100%);
+            border-bottom: 2px solid #00ffff;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.3);
+            margin-top: 10rem;
+            position: relative;
+        }
+        
+        .header-title-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+        }
+        
+        h1 {
+            font-size: 2.5em;
+            text-align: center;
+            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+        
+        .info-button {
+            background: transparent !important;
+            border: none !important;
+            color: rgba(255, 255, 255, 0.5);
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            cursor: pointer;
+            font-size: 1.25em;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s;
+            padding: 0;
+        }
+        
+        .info-button:hover {
+            background: rgba(255, 255, 255, 0.1) !important;
+            color: rgba(255, 255, 255, 0.8);
+            opacity: 1;
+            transform: scale(1.1);
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #888;
+            font-size: 0.9em;
+            margin-top: 10px;
+        }
+        
+        .controls {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 15px 20px;
+            background: #1a1f3a;
+            border-bottom: 1px solid #333;
+            gap: 15px;
+        }
+        
+        .stats-bar {
+            padding: 10px 20px;
+            background: #0f1428;
+            border-bottom: 1px solid #333;
+            display: flex;
+            gap: 30px;
+            justify-content: center;
+            font-size: 0.9em;
+        }
+        
+        .stat { display: flex; align-items: center; gap: 8px; }
+        .stat-value { font-weight: bold; color: #00ffff; }
+        .stat-label { color: #888; }
+        
+        #timeline {
+            height: calc(100vh - 250px);
+            margin: 20px;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 2px solid #00ffff;
+            box-shadow: 0 4px 20px rgba(0, 255, 255, 0.2);
+        }
+        
+        .vis-timeline { background: #0a0e27; border: none; }
+        .vis-item {
+            background: rgba(0, 255, 255, 0.15);
+            border-color: #00ffff;
+            color: #e0e0e0;
+            border-radius: 4px;
+            font-size: 11px;
+            box-shadow: 0 0 8px rgba(0, 255, 255, 0.3);
+        }
+        .vis-item.vis-selected {
+            background: rgba(0, 255, 255, 0.3);
+            border-color: #ff00ff;
+            box-shadow: 0 0 15px rgba(255, 0, 255, 0.6);
+        }
+        .vis-time-axis .vis-text { color: #888; }
+        .vis-time-axis .vis-grid { border-color: #333; }
+        .vis-labelset .vis-label { background: #1a1f3a; color: #e0e0e0; border-color: #333; }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            animation: fadeIn 0.3s;
+        }
+        
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        
+        .modal.active {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .info-modal-content {
+            background: #1a1f3a;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid #00ffff;
+            box-shadow: 0 8px 40px rgba(0, 255, 255, 0.4);
+            position: relative;
+            padding: 30px;
+        }
+        
+        .info-modal-content h2 {
+            color: #00ffff;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+            border-bottom: 2px solid #00ffff;
+            padding-bottom: 10px;
+        }
+        
+        .info-modal-content h3 {
+            color: #00ffff;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        
+        .info-modal-content p, .info-modal-content li {
+            color: #e0e0e0;
+            line-height: 1.7;
+            margin-bottom: 15px;
+        }
+        
+        .info-modal-content ul { margin-left: 20px; }
+        .info-modal-content strong { color: #00ffff; }
+        .info-modal-content code {
+            background: rgba(0, 255, 255, 0.1);
+            padding: 2px 6px;
+            border-radius: 3px;
+            color: #00ffff;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .modal-content {
+            background: #1a1f3a;
+            border-radius: 12px;
+            max-width: 800px;
+            max-height: 90vh;
+            overflow-y: auto;
+            border: 2px solid #00ffff;
+            box-shadow: 0 8px 40px rgba(0, 255, 255, 0.4);
+            position: relative;
+        }
+        
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 15px;
+            font-size: 2em;
+            background: none;
+            border: none;
+            color: #00ffff;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        
+        .modal-close:hover { color: #ff00ff; }
+        
+        .modal-header { padding: 30px 30px 20px 30px; border-bottom: 1px solid #333; }
+        .modal-title { font-size: 1.5em; color: #00ffff; margin-bottom: 10px; }
+        .modal-meta {
+            padding: 20px 30px;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            background: rgba(0, 0, 0, 0.3);
+        }
+        .meta-item { display: flex; flex-direction: column; gap: 5px; }
+        .meta-label { font-size: 0.8em; color: #888; text-transform: uppercase; }
+        .meta-value { font-weight: bold; color: #e0e0e0; }
+        .modal-preview { padding: 30px; }
+        
+        .modal-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 2em;
+            background: rgba(26, 31, 58, 0.9);
+            border: 2px solid #00ffff;
+            color: #00ffff;
+            cursor: pointer;
+            padding: 15px 10px;
+            width: 50px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 8px;
+            z-index: 1002;
+        }
+        .modal-nav:hover { background: rgba(0, 255, 255, 0.2); color: #ff00ff; }
+        .modal-nav-left { left: 20px; }
+        .modal-nav-right { right: 20px; }
+        .modal-nav:disabled { opacity: 0.3; cursor: not-allowed; pointer-events: none; }
+        
+        .coinbase-text {
+            background: #0a0e27;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.85em;
+            word-break: break-all;
+            max-height: 200px;
+            overflow-y: auto;
+            color: #aaa;
+        }
+        
+        .loading { text-align: center; padding: 50px; color: #888; }
+        .loading:after { content: '...'; animation: dots 1.5s steps(4, end) infinite; }
+        @keyframes dots {
+            0%, 20% { content: '.'; }
+            40% { content: '..'; }
+            60%, 100% { content: '...'; }
+        }
+    </style>
+</head>
+<body class="bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <Navigation />
+    <NewsTicker />
+    <div class="header">
+        <div class="header-title-container">
+            <h1>BIP 110 Miner Support</h1>
+            <button class="info-button" onclick="openInfoModal()" title="About BIP 110 Detection &amp; Activation">ℹ️</button>
+        </div>
+        <div class="subtitle">Timeline of blocks signalling support for BIP 110 (Reduced Data Temporary Softfork)</div>
+    </div>
+    
+    <div class="controls">
+        <button onclick="fitTimeline()">Fit All</button>
+    </div>
+    
+    <div class="stats-bar" id="statsBar">
+        <div class="loading">Loading BIP 110 block data</div>
+    </div>
+    
+    <div id="timeline"></div>
+    
+    <div class="modal" id="modal">
+        <button class="modal-nav modal-nav-left" id="modalNavLeft" title="Previous block (←)">‹</button>
+        <button class="modal-nav modal-nav-right" id="modalNavRight" title="Next block (→)">›</button>
+        <div class="modal-content">
+            <button class="modal-close" id="modalCloseBtn">&times;</button>
+            <div class="modal-header">
+                <div class="modal-title" id="modalTitle"></div>
+            </div>
+            <div class="modal-meta" id="modalMeta"></div>
+            <div class="modal-preview" id="modalPreview"></div>
+        </div>
+    </div>
+    
+    <div class="modal" id="infoModal">
+        <div class="info-modal-content">
+            <button class="modal-close" onclick="closeInfoModal()">&times;</button>
+            <h2>About BIP 110 Miner Support</h2>
+            
+            <h3>What is BIP 110?</h3>
+            <p>BIP 110 (Reduced Data Temporary Softfork) is a consensus soft fork proposal that temporarily limits arbitrary data embedding in Bitcoin transactions. It aims to restrict data storage methods (such as inscriptions and large OP_RETURN outputs) while preserving monetary use cases, refocusing Bitcoin on its role as sound money.</p>
+            
+            <h3>How Are Blocks in Support of BIP 110 Detected?</h3>
+            <p>Blocks signalling support for BIP 110 are detected using the <strong>version bits</strong> mechanism (BIP 9). Miners set a specific bit in the block header's version field to indicate readiness for the soft fork:</p>
+            <ul>
+                <li><strong>Bit 4</strong> is assigned to the BIP 110 "reduced_data" deployment</li>
+                <li>When a miner includes bit 4 set in the block version (e.g. <code>0x20792010</code>), that block is counted as signalling support</li>
+                <li>Detection methods may include parsing the block version field and checking for the presence of the deployment bit</li>
+                <li>This page displays blocks that have been identified as signalling BIP 110 support through version bit 4</li>
+            </ul>
+            
+            <h3>How Will the BIP Mechanism Kick In?</h3>
+            <p>BIP 110 uses a modified BIP 9 deployment with several key parameters:</p>
+            <ul>
+                <li><strong>Threshold: 55%</strong> — Only 1109 out of 2016 blocks (55%) need to signal for early activation, compared to 95% for traditional soft forks like SegWit</li>
+                <li><strong>Early activation</strong> — If 55% of blocks in a retarget period signal support, the deployment locks in and activates one retarget period later</li>
+                <li><strong>Mandatory activation</strong> — Regardless of miner support, BIP 110 activates unconditionally at block <strong>965,664</strong> (~September 2026)</li>
+                <li><strong>Mandatory signaling period</strong> — During blocks 961,632 to 963,647, all blocks must signal bit 4 or they are rejected as invalid</li>
+                <li><strong>Temporary deployment</strong> — The rules are enforced for approximately one year (~52,416 blocks), then expire. UTXOs created before activation remain exempt</li>
+            </ul>
+            
+            <p>Once activated, the new consensus rules limit OP_RETURN to 83 bytes, cap data pushes at 256 bytes, and restrict several other data-embedding vectors. The goal is to reduce block space consumption from arbitrary data storage while keeping Bitcoin focused on its monetary function.</p>
+            
+            <p>For full details, see <a href="https://bips.dev/110/" target="_blank" rel="noopener noreferrer" style="color: #00ffff;">BIP 110 on bips.dev</a>.</p>
+        </div>
+    </div>
+    
+    <script is:inline>
+        let timeline;
+        let items;
+        let groups;
+        let allBlocks = [];
+        let currentModalItem = null;
+        
+        async function loadTimelineData() {
+            try {
+                const response = await fetch('/html_showcase/bitcoin_large_op_return_explorer/bitcoin_large_op_returns/bip_blocks/bip-110.jsonl');
+                if (!response.ok) throw new Error('Failed to load BIP 110 data');
+                
+                const text = await response.text();
+                const lines = text.trim().split('\n').filter(line => line.trim());
+                allBlocks = lines.map(line => {
+                    try {
+                        return JSON.parse(line);
+                    } catch (e) {
+                        console.warn('Invalid JSONL line:', line);
+                        return null;
+                    }
+                }).filter(Boolean);
+                
+                allBlocks.sort((a, b) => (a.block_number || 0) - (b.block_number || 0));
+                
+                console.log(`Loaded ${allBlocks.length} BIP 110 blocks`);
+                
+                if (allBlocks.length === 0) {
+                    document.getElementById('statsBar').innerHTML = 
+                        '<div class="stat"><span class="stat-label">Blocks:</span><span class="stat-value">0</span></div>' +
+                        '<div class="stat"><span class="stat-label" style="color: #888;">No blocks signalling BIP 110 yet. Check back as more miners may signal over time.</span></div>';
+                    document.getElementById('timeline').innerHTML = '<div class="loading" style="padding: 100px;">No BIP 110 blocks in dataset yet</div>';
+                    return;
+                }
+                
+                initializeTimeline();
+            } catch (error) {
+                console.error('Error loading BIP 110 data:', error);
+                document.getElementById('statsBar').innerHTML = 
+                    '<div style="color: #ff0000;">Error loading data. Ensure bip-110.jsonl exists.</div>';
+            }
+        }
+        
+        function initializeTimeline() {
+            groups = new vis.DataSet([{
+                id: 'bip110',
+                content: 'BIP 110 Blocks',
+                style: 'background-color: rgba(0, 255, 255, 0.15); border-color: rgba(0, 255, 255, 0.5);'
+            }]);
+            
+            items = new vis.DataSet();
+            
+            const visItems = allBlocks.map(block => {
+                const blockTime = block.block_time ? new Date(block.block_time) : new Date();
+                return {
+                    id: `block_${block.block_number}`,
+                    content: `Block ${block.block_number}`,
+                    start: blockTime,
+                    group: 'bip110',
+                    title: `Block ${block.block_number}\n${blockTime.toLocaleString()}\nMined by: ${block.mined_by || 'Unknown'}`,
+                    block_number: block.block_number,
+                    block_time: block.block_time,
+                    mined_by: block.mined_by,
+                    detection_methods: block.detection_methods || [],
+                    coinbase_text: block.coinbase_text || '',
+                    block_version: block.block_version
+                };
+            });
+            
+            items.add(visItems);
+            
+            const container = document.getElementById('timeline');
+            const options = {
+                groupOrder: 'content',
+                editable: false,
+                orientation: 'top',
+                zoomMin: 1000 * 60 * 60 * 12,
+                zoomMax: 1000 * 60 * 60 * 24 * 365,
+                showCurrentTime: false,
+                stack: false,
+                margin: { item: { horizontal: 80, vertical: 25 } },
+                tooltip: { followMouse: true, overflowMethod: 'cap' },
+                template: function(item, element, data) {
+                    return `<div style="padding: 8px 12px; min-width: 100px; text-align: center;">
+                        <strong>Block ${item.block_number}</strong><br>
+                        <span style="font-size: 0.85em; color: #888;">${item.mined_by || 'Unknown'}</span>
+                    </div>`;
+                },
+                maxHeight: 800,
+                verticalScroll: true,
+                width: '100%',
+                min: new Date(2025, 10, 1),
+                max: new Date(2027, 0, 1)
+            };
+            
+            timeline = new vis.Timeline(container, items, groups, options);
+            
+            timeline.on('select', function(properties) {
+                if (properties.items.length > 0) {
+                    const itemId = properties.items[0];
+                    const blockData = visItems.find(v => v.id === itemId);
+                    if (blockData) openModal(blockData);
+                }
+            });
+            
+            updateStats();
+        }
+        
+        function updateStats() {
+            document.getElementById('statsBar').innerHTML = `
+                <div class="stat">
+                    <span class="stat-label">Blocks Signalling:</span>
+                    <span class="stat-value">${allBlocks.length}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">First Block:</span>
+                    <span class="stat-value">${allBlocks.length > 0 ? allBlocks[0].block_number : '—'}</span>
+                </div>
+                <div class="stat">
+                    <span class="stat-label">Latest Block:</span>
+                    <span class="stat-value">${allBlocks.length > 0 ? allBlocks[allBlocks.length - 1].block_number : '—'}</span>
+                </div>
+            `;
+        }
+        
+        function getFilteredBlocks() {
+            return allBlocks.map(b => ({
+                id: `block_${b.block_number}`,
+                block_number: b.block_number,
+                block_time: b.block_time,
+                mined_by: b.mined_by,
+                detection_methods: b.detection_methods || [],
+                coinbase_text: b.coinbase_text || '',
+                block_version: b.block_version
+            }));
+        }
+        
+        function navigateModal(direction) {
+            if (!currentModalItem) return;
+            const blocks = getFilteredBlocks();
+            const idx = blocks.findIndex(b => b.id === currentModalItem.id);
+            if (idx === -1) return;
+            const nextIdx = direction === 'prev' 
+                ? (idx > 0 ? idx - 1 : blocks.length - 1)
+                : (idx < blocks.length - 1 ? idx + 1 : 0);
+            openModal(blocks[nextIdx]);
+        }
+        
+        function openModal(blockData) {
+            currentModalItem = blockData;
+            const modal = document.getElementById('modal');
+            const title = document.getElementById('modalTitle');
+            const meta = document.getElementById('modalMeta');
+            const preview = document.getElementById('modalPreview');
+            
+            if (timeline) {
+                const blockTime = blockData.block_time ? new Date(blockData.block_time) : new Date();
+                timeline.moveTo(blockTime.getTime());
+                timeline.setSelection([blockData.id]);
+            }
+            
+            title.textContent = `Block ${blockData.block_number}`;
+            
+            meta.innerHTML = `
+                <div class="meta-item">
+                    <div class="meta-label">Block Number</div>
+                    <div class="meta-value">${blockData.block_number}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Date</div>
+                    <div class="meta-value">${blockData.block_time ? new Date(blockData.block_time).toLocaleString() : 'N/A'}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Mined By</div>
+                    <div class="meta-value">${blockData.mined_by || 'Unknown'}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Block Version</div>
+                    <div class="meta-value">${blockData.block_version ? '0x' + blockData.block_version.toString(16) : 'N/A'}</div>
+                </div>
+                ${(blockData.detection_methods && blockData.detection_methods.length) ? `
+                <div class="meta-item" style="grid-column: 1 / -1;">
+                    <div class="meta-label">Detection Methods</div>
+                    <div class="meta-value">${blockData.detection_methods.join(', ')}</div>
+                </div>
+                ` : ''}
+            `;
+            
+            if (blockData.coinbase_text) {
+                const escaped = blockData.coinbase_text
+                    .replace(/&/g, '&amp;')
+                    .replace(/</g, '&lt;')
+                    .replace(/>/g, '&gt;')
+                    .replace(/"/g, '&quot;');
+                preview.innerHTML = `
+                    <h3 style="color: #00ffff; margin-bottom: 10px;">Coinbase Text</h3>
+                    <div class="coinbase-text">${escaped || '(empty)'}</div>
+                `;
+            } else {
+                preview.innerHTML = '<p style="color: #888;">No coinbase text available</p>';
+            }
+            
+            const leftBtn = document.getElementById('modalNavLeft');
+            const rightBtn = document.getElementById('modalNavRight');
+            leftBtn.disabled = allBlocks.length <= 1;
+            rightBtn.disabled = allBlocks.length <= 1;
+            
+            modal.classList.add('active');
+        }
+        
+        function closeModal(event) {
+            if (event) { event.preventDefault(); event.stopPropagation(); }
+            document.getElementById('modal').classList.remove('active');
+            if (timeline) timeline.setSelection([]);
+            currentModalItem = null;
+        }
+        
+        function openInfoModal() { document.getElementById('infoModal').classList.add('active'); }
+        function closeInfoModal() { document.getElementById('infoModal').classList.remove('active'); }
+        function fitTimeline() { if (timeline) timeline.fit(); }
+        
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') {
+                document.getElementById('modal').classList.remove('active');
+                document.getElementById('infoModal').classList.remove('active');
+                if (timeline) timeline.setSelection([]);
+            } else if (document.getElementById('modal').classList.contains('active')) {
+                if (e.key === 'ArrowLeft') { e.preventDefault(); navigateModal('prev'); }
+                else if (e.key === 'ArrowRight') { e.preventDefault(); navigateModal('next'); }
+            }
+        });
+        
+        document.getElementById('modal').addEventListener('click', (e) => {
+            if (e.target.id === 'modal') closeModal();
+        });
+        document.getElementById('infoModal').addEventListener('click', (e) => {
+            if (e.target.id === 'infoModal') closeInfoModal();
+        });
+        
+        document.getElementById('modalCloseBtn').addEventListener('click', closeModal);
+        document.getElementById('modalNavLeft').addEventListener('click', (e) => { e.preventDefault(); navigateModal('prev'); });
+        document.getElementById('modalNavRight').addEventListener('click', (e) => { e.preventDefault(); navigateModal('next'); });
+        
+        loadTimelineData();
+    </script>
+    <Footer />
+    <NewsModal />
+</body>
+</html>

@@ -1,0 +1,470 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = '70,000 BTU Furnace Tier Board';
+const pageDescription = 'Interactive tier board for comparing 70,000 BTU furnaces';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="furnace-wrapper">
+    <div class="furnace-app">
+      <div class="board">
+        <div class="tier" data-tier="S"><h2>🔥 S Tier</h2><div class="tier-content"></div></div>
+        <div class="tier" data-tier="A"><h2>⭐ A Tier</h2><div class="tier-content"></div></div>
+        <div class="tier" data-tier="B"><h2>✔ B Tier</h2><div class="tier-content"></div></div>
+        <div class="tier" data-tier="L"><h2>🕰 Legacy</h2><div class="tier-content"></div></div>
+      </div>
+
+      <div class="sidebar">
+        <div id="selectedName"></div>
+        <div id="detailsHint" class="hint">Select a furnace to inspect details.</div>
+        <div id="details"></div>
+
+        <div class="controls">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:10px;color:#e5e7eb;font-weight:600">
+            <span aria-hidden="true">⚙️</span>
+            <span>Settings</span>
+          </div>
+          <label>Gas Price ($ / therm)
+            <input id="gasPrice" type="number" value="1.40" step="0.05">
+          </label>
+          <label>Annual Heating Degree Days (HDD)
+            <input id="hdd" type="number" value="6000" step="250">
+          </label>
+          <label>Annual Heat Demand (BTU)
+            <input id="annualBTU" type="number" value="70000000">
+          </label>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+  const furnaces = [
+    {
+      id: -1,
+      name: 'Lennox G32Q3/4-100-2 (2001)',
+      tier: 'L',
+      afue: 0.80,
+      afueLabel: '≈80%',
+      stages: 'Single-Stage',
+      blower: 'PSC (Non-ECM)',
+      btu: '≈80,000 BTU nominal',
+      price: 'Sunk cost (installed 2001)',
+      img: 'https://upload.wikimedia.org/wikipedia/commons/3/3f/Ford_Model_T_1925.jpg',
+      priceRationale: 'Extremely durable and mechanically simple, but noisy and inefficient by modern standards.'
+    },
+
+    /* ===== S‑TIER ===== */
+    {
+      id: 1,
+      name: 'Lennox SLP99V',
+      tier: 'S',
+      afue: 0.99,
+      afueLabel: '99%',
+      stages: 'Fully Modulating',
+      blower: 'Variable-Speed ECM',
+      btu: '≈55,000–110,000 BTU (size-dependent)',
+      price: '$8,000+ (unit)',
+      img: 'https://www.lennox.com/dA/46a5db5ec9/slp99v-prod.png',
+      priceRationale: 'Pays for near-max efficiency, ultra-quiet modulation, and best-in-class comfort.'
+    },
+    {
+      id: 2,
+      name: 'Carrier Infinity 98',
+      tier: 'S',
+      afue: 0.985,
+      afueLabel: '98.5%',
+      stages: 'Fully Modulating',
+      blower: 'Greenspeed Variable-Speed ECM',
+      btu: '≈55,000–110,000 BTU (size-dependent)',
+      price: '$7,000+ (unit)',
+      img: 'https://images.carriercms.com/image/upload/v1728566323/carrier/residential-hvac/products/gas-furnaces/infinity-98-gas-furnace-with-greenspeed-intelligence-59MN7.png',
+      priceRationale: 'Premium comfort and efficiency with slightly lower cost than Lennox flagship.'
+    },
+    {
+      id: 10,
+      name: 'Rheem Prestige R98V',
+      tier: 'S',
+      afue: 0.98,
+      afueLabel: '98%',
+      stages: 'Fully Modulating',
+      blower: 'Variable-Speed ECM',
+      btu: '≈55,000–110,000 BTU (size-dependent)',
+      price: '$6,500–$7,500 (unit)',
+      img: 'https://www.pngkit.com/png/detail/209-2092524_the-new-degree-of-comfort-rheem-95-afue.png',
+      priceRationale: 'Rheem’s flagship: true modulation, very high efficiency, and excellent reliability without as much proprietary lock-in as some competitors.'
+    },
+
+    /* ===== A‑TIER ===== */
+    {
+      id: 3,
+      name: 'Carrier Performance 96 (59TP6)',
+      tier: 'A',
+      afue: 0.965,
+      afueLabel: '96.5–96.7%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$3,500–$4,500 (unit)',
+      img: 'https://images.carriercms.com/image/upload/v1684422665/carrier/residential-hvac/products/gas-furnaces/performance-96-gas-furnace-59TP6.png',
+      priceRationale: 'Best Carrier value: strong efficiency and comfort without Infinity-only complexity.'
+    },
+    {
+      id: 4,
+      name: 'Carrier Infinity 96',
+      tier: 'A',
+      afue: 0.967,
+      afueLabel: '96.7%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$4,500+ (unit)',
+      img: 'https://images.carriercms.com/image/upload/v1684422665/carrier/residential-hvac/products/gas-furnaces/infinity-96-gas-furnace-59TN6.png',
+      priceRationale: 'Near-premium comfort and efficiency without full modulation.'
+    },
+    {
+      id: 11,
+      name: 'Rheem Classic Plus R962V',
+      tier: 'A',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$2,800–$3,600 (unit)',
+      img: 'https://www.pngkit.com/png/detail/209-2092524_the-new-degree-of-comfort-rheem-95-afue.png',
+      priceRationale: 'High-efficiency two-stage Rheem with ECM blower. Excellent reliability and value without premium modulation costs.'
+    },
+    {
+      id: 12,
+      name: 'Rheem Prestige R96V',
+      tier: 'A',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Two-Stage (Enhanced Comfort)',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$3,800–$4,800 (unit)',
+      img: 'https://www.pngkit.com/png/detail/209-2092524_the-new-degree-of-comfort-rheem-95-afue.png',
+      priceRationale: 'Prestige-series comfort without full modulation: quieter operation, smoother staging, and strong long-term reliability.'
+    },
+    {
+      id: 13,
+      name: 'Rheem Classic Plus R96T',
+      tier: 'A',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Two-Stage',
+      blower: 'ECM (Constant Torque)',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$2,400–$3,200 (unit)',
+      img: 'https://www.pngkit.com/png/detail/209-2092524_the-new-degree-of-comfort-rheem-95-afue.png',
+      priceRationale: 'High-efficiency Rheem with simpler controls and proven components; excellent value when modulation is unnecessary.'
+    },
+    {
+      id: 5,
+      name: 'Lennox EL297V',
+      tier: 'A',
+      afue: 0.97,
+      afueLabel: '97%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$5,000+ (unit)',
+      img: 'https://www.lennox.com/dA/82574e95dd/el296v-prod.png',
+      priceRationale: 'Elite efficiency and comfort without the cost of full modulation.'
+    },
+    {
+      id: 6,
+      name: 'Lennox ML296UH',
+      tier: 'A',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$2,300 (unit)',
+      img: 'https://www.lennox.com/dA/afd1060aae/ml296v-prod.png',
+      priceRationale: 'Strong efficiency and ECM airflow without premium electronics.'
+    },
+    {
+      id: 7,
+      name: 'MRCOOL Signature 96%',
+      tier: 'A',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Two-Stage',
+      blower: 'Variable-Speed ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$1,800 (unit)',
+      img: 'https://mrcool.com/wp-content/uploads/2023/08/MGD96SE070B4XA-front.png',
+      priceRationale: 'High efficiency at a much lower upfront cost than big-brand competitors.'
+    },
+
+    /* ===== B‑TIER ===== */
+    {
+      id: 8,
+      name: 'Blueridge 96%',
+      tier: 'B',
+      afue: 0.96,
+      afueLabel: '96%',
+      stages: 'Single-Stage',
+      blower: 'ECM',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$1,600 (unit)',
+      img: 'https://images.alpinehomeair.com/320x320/nws/photos/blueridgebg951uhgasfurnace1.jpg',
+      priceRationale: 'Efficient heat at low upfront cost, with fewer comfort features.'
+    },
+    {
+      id: 9,
+      name: 'Blueridge 80%',
+      tier: 'B',
+      afue: 0.80,
+      afueLabel: '80%',
+      stages: 'Single-Stage',
+      blower: 'Multi-Speed',
+      btu: '≈60,000–100,000 BTU (size-dependent)',
+      price: '$1,000 (unit)',
+      img: 'https://images.alpinehomeair.com/320x320/nws/photos/blueridgebg801uhgasfurnace2.jpg',
+      priceRationale: 'Lowest upfront cost, but significantly higher long-term fuel usage.'
+    }
+  ];
+    const details = document.getElementById('details')!;
+    const nameEl = document.getElementById('selectedName')!;
+    const hintEl = document.getElementById('detailsHint')!;
+    const gasPriceInput = document.getElementById('gasPrice') as HTMLInputElement;
+    const annualBTUInput = document.getElementById('annualBTU') as HTMLInputElement;
+
+    function annualFuelCost(f: typeof furnaces[0]) {
+      const gas = +gasPriceInput.value;
+      const btu = +annualBTUInput.value;
+      return ((btu / (100000 * f.afue)) * gas).toFixed(0);
+    }
+
+    function render() {
+      document.querySelectorAll('.tier-content').forEach(t => t.innerHTML = '');
+      furnaces.forEach(f => {
+        const el = document.createElement('div');
+        el.className = 'furnace';
+        el.draggable = true;
+        el.innerHTML = `<img src="${f.img}"><span>${f.name}</span>`;
+        el.onclick = () => showDetails(f);
+        el.addEventListener('dragstart', () => el.classList.add('dragging'));
+        el.addEventListener('dragend', () => el.classList.remove('dragging'));
+        document.querySelector(`.tier[data-tier="${f.tier}"] .tier-content`)?.appendChild(el);
+      });
+    }
+
+    document.querySelectorAll('.tier-content').forEach(container => {
+      container.addEventListener('dragover', e => {
+        e.preventDefault();
+        const dragging = document.querySelector('.dragging');
+        if (!dragging) return;
+        const after = [...container.children].find(c => {
+          const rect = c.getBoundingClientRect();
+          return (e as DragEvent).clientY < rect.top + (c as HTMLElement).offsetHeight / 2;
+        });
+        container.insertBefore(dragging, after || null);
+      });
+    });
+
+    function showDetails(f: typeof furnaces[0]) {
+      nameEl.textContent = f.name;
+      hintEl.style.display = 'none';
+      details.innerHTML = `
+        <img src="${f.img}" style="max-width:100%;margin-bottom:10px">
+        <div class="stat"><strong>AFUE:</strong> ${f.afueLabel}</div>
+        <div class="stat"><strong>Stages:</strong> ${f.stages}</div>
+        <div class="stat"><strong>Blower:</strong> ${f.blower}</div>
+        <div class="stat"><strong>BTU:</strong> ${f.btu}</div>
+        <div class="stat"><strong>Price:</strong> ${f.price}</div>
+        <div class="stat"><strong>Why this price:</strong> ${f.priceRationale}</div>
+        <div class="calc"><strong>Annual Fuel Cost:</strong> ~$${annualFuelCost(f)}</div>`;
+    }
+
+    render();
+  </script>
+
+  <style>
+    .furnace-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      min-height: 100vh;
+      background: #0f172a;
+    }
+
+    .furnace-app {
+      display: grid;
+      grid-template-columns: 3fr 1.3fr;
+      min-height: calc(100vh - 12rem);
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+      color: #e5e7eb;
+    }
+
+    .board {
+      padding: 24px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .tier {
+      background: #111827;
+      border-radius: 14px;
+      padding: 16px;
+      border: 1px solid #374151;
+    }
+
+    .tier h2 {
+      margin: 0 0 12px;
+      font-size: 15px;
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    .tier-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 14px;
+    }
+
+    .furnace {
+      background: linear-gradient(180deg, #1f2937, #111827);
+      border-radius: 12px;
+      padding: 12px;
+      border: 1px solid #374151;
+      display: flex;
+      gap: 12px;
+      align-items: center;
+      cursor: grab;
+      transition: transform .15s ease, border-color .15s ease;
+    }
+
+    .furnace:hover {
+      transform: translateY(-2px);
+      border-color: #38bdf8;
+    }
+
+    .furnace:global(.dragging) {
+      opacity: .5;
+    }
+
+    .furnace img {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      background: #fff;
+      border-radius: 6px;
+    }
+
+    .furnace span {
+      font-size: 14px;
+      font-weight: 500;
+    }
+
+    .sidebar {
+      background: #020617;
+      border-left: 1px solid #374151;
+      padding: 20px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .controls {
+      margin-top: auto;
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 14px;
+      margin-bottom: 20px;
+    }
+
+    .controls label {
+      font-size: 12px;
+      color: #9ca3af;
+      display: block;
+      margin-bottom: 10px;
+    }
+
+    .controls input {
+      width: 100%;
+      margin-top: 4px;
+      background: #020617;
+      border: 1px solid #374151;
+      border-radius: 6px;
+      padding: 6px 8px;
+      color: #e5e7eb;
+    }
+
+    #selectedName {
+      font-size: 18px;
+      font-weight: 600;
+      margin: 10px 0;
+    }
+
+    .stat {
+      font-size: 13px;
+      margin-bottom: 6px;
+    }
+
+    .calc {
+      margin-top: 14px;
+      padding: 12px;
+      background: #020617;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      font-size: 13px;
+    }
+
+    .hint {
+      color: #9ca3af;
+      font-size: 13px;
+    }
+
+    /* Responsive design */
+    @media (max-width: 900px) {
+      .furnace-app {
+        grid-template-columns: 1fr;
+      }
+
+      .sidebar {
+        border-left: none;
+        border-top: 1px solid #374151;
+      }
+
+      .tier-content {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+    }
+
+    @media (max-width: 600px) {
+      .furnace-wrapper {
+        padding-top: 6rem;
+      }
+
+      .board {
+        padding: 16px;
+      }
+
+      .tier-content {
+        grid-template-columns: 1fr;
+      }
+
+      .furnace {
+        padding: 10px;
+      }
+
+      .furnace img {
+        width: 36px;
+        height: 36px;
+      }
+
+      .furnace span {
+        font-size: 13px;
+      }
+    }
+  </style>
+</Layout>

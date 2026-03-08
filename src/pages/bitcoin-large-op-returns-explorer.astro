@@ -259,6 +259,17 @@ import NewsModal from '../components/NewsModal.astro';
             gap: 15px;
         }
         
+        /* Hide spinner controls for jump to block input */
+        #jumpToBlock::-webkit-inner-spin-button,
+        #jumpToBlock::-webkit-outer-spin-button {
+            -webkit-appearance: none;
+            margin: 0;
+        }
+        
+        #jumpToBlock {
+            -moz-appearance: textfield;
+        }
+        
         .filter-chips {
             display: flex;
             gap: 8px;
@@ -443,6 +454,19 @@ import NewsModal from '../components/NewsModal.astro';
         .vis-item.type-pdf, .vis-item.type-7z, .vis-item.type-zip {
             background: rgba(255, 136, 0, 0.15);
             border-color: #ff8800;
+        }
+        
+        /* Aggregated block styling */
+        .vis-item.aggregated {
+            border-style: dashed !important;
+            border-width: 3px !important;
+            box-shadow: 0 0 12px rgba(255, 0, 255, 0.5) !important;
+            font-weight: bold;
+        }
+        
+        .vis-item.aggregated.vis-selected {
+            border-style: solid !important;
+            box-shadow: 0 0 20px rgba(255, 0, 255, 0.8) !important;
         }
         
         .vis-time-axis .vis-text {
@@ -800,14 +824,14 @@ import NewsModal from '../components/NewsModal.astro';
     </div>
     
     <div class="controls">
-        <div class="filter-section">
+        <div class="filter-section" style="display: flex; align-items: center; gap: 15px; flex-wrap: wrap;">
             <strong style="margin-right: 10px;">Filter by Type:</strong>
             <div class="filter-chips" id="filterChips"></div>
-        </div>
-        <div class="button-group">
-            <button onclick="showAllTypes()">Show All</button>
-            <button onclick="clearAllTypes()">Clear All</button>
-            <button onclick="fitTimeline()">Fit All</button>
+            <div class="button-group">
+                <button onclick="showAllTypes()">Show All</button>
+                <button onclick="clearAllTypes()">Clear All</button>
+                <button onclick="fitTimeline()">Fit All</button>
+            </div>
         </div>
     </div>
     
@@ -829,6 +853,13 @@ import NewsModal from '../components/NewsModal.astro';
                        style="flex: 1; min-width: 350px; max-width: 500px; padding: 6px 12px; border-radius: 4px; background: #0f1428; color: #e0e0e0; border: 1px solid #00ffff;"
                        onkeydown="if(event.key === 'Enter') handleSearchEnter(event)">
                 <button onclick="clearSearch()" style="padding: 6px 12px;">Clear</button>
+            </div>
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <strong>Jump to Block:</strong>
+                <input type="number" id="jumpToBlock" placeholder="Block number" 
+                       style="width: 150px; padding: 6px 12px; border-radius: 4px; background: #0f1428; color: #e0e0e0; border: 1px solid #00ffff;"
+                       onkeydown="if(event.key === 'Enter') jumpToBlockNumber()">
+                <button onclick="jumpToBlockNumber()" style="padding: 6px 12px;">Go</button>
             </div>
         </div>
     </div>
@@ -913,11 +944,15 @@ import NewsModal from '../components/NewsModal.astro';
         let items;
         let groups;
         let allData = [];
+        let processedData = []; // Processed data with aggregated blocks
+        let blockGroups = new Map(); // Map of block number -> array of items in that block
+        let aggregatedBlocks = new Map(); // Map of aggregated item id -> array of original items
         let activeFilters = new Set();
         let minSizeBytes = null;
         let maxSizeBytes = null;
         let searchText = '';
         let currentModalItem = null;
+        const AGGREGATION_THRESHOLD = 5; // Aggregate blocks with more than this many items
         
         // Color mapping for file types (with transparency for labels)
         const colorMap = {
@@ -948,6 +983,9 @@ import NewsModal from '../components/NewsModal.astro';
                 allData = await response.json();
                 console.log(`Loaded ${allData.length} OP_RETURN items`);
                 
+                // Process data to aggregate blocks with many items
+                processDataForAggregation();
+                
                 initializeTimeline();
                 
                 // Check for URL parameters to open a specific block
@@ -959,9 +997,67 @@ import NewsModal from '../components/NewsModal.astro';
             }
         }
         
+        // Process data to aggregate blocks with >5 items
+        function processDataForAggregation() {
+            // Group items by block number
+            blockGroups.clear();
+            aggregatedBlocks.clear();
+            
+            allData.forEach(item => {
+                if (!blockGroups.has(item.block)) {
+                    blockGroups.set(item.block, []);
+                }
+                blockGroups.get(item.block).push(item);
+            });
+            
+            // Process each block
+            processedData = [];
+            
+            blockGroups.forEach((blockItems, blockNum) => {
+                if (blockItems.length > AGGREGATION_THRESHOLD) {
+                    // Create aggregated item
+                    const totalSize = blockItems.reduce((sum, item) => sum + item.size, 0);
+                    const typeCounts = {};
+                    blockItems.forEach(item => {
+                        typeCounts[item.type] = (typeCounts[item.type] || 0) + 1;
+                    });
+                    
+                    // Use the earliest timestamp from the block
+                    const timestamps = blockItems.map(item => item.timestamp);
+                    const earliestTimestamp = Math.min(...timestamps);
+                    
+                    // Determine dominant type (most common)
+                    const dominantType = Object.entries(typeCounts)
+                        .sort((a, b) => b[1] - a[1])[0][0];
+                    
+                    const aggregatedId = `aggregated_block_${blockNum}`;
+                    const aggregatedItem = {
+                        id: aggregatedId,
+                        block: blockNum,
+                        timestamp: earliestTimestamp,
+                        type: dominantType,
+                        size: totalSize,
+                        isAggregated: true,
+                        itemCount: blockItems.length,
+                        typeBreakdown: typeCounts,
+                        miner: blockItems[0].miner, // Use first item's miner
+                        blockDir: blockItems[0].blockDir
+                    };
+                    
+                    processedData.push(aggregatedItem);
+                    aggregatedBlocks.set(aggregatedId, blockItems);
+                } else {
+                    // Add individual items
+                    processedData.push(...blockItems);
+                }
+            });
+            
+            console.log(`Processed ${processedData.length} items (${aggregatedBlocks.size} aggregated blocks)`);
+        }
+        
         function initializeTimeline() {
-            // Create groups for file types
-            const types = [...new Set(allData.map(d => d.type))].sort();
+            // Create groups for file types (including aggregated)
+            const types = [...new Set(processedData.map(d => d.type))].sort();
             groups = new vis.DataSet(
                 types.map(type => {
                     const color = colorMap[type] || '#666';
@@ -1014,18 +1110,27 @@ import NewsModal from '../components/NewsModal.astro';
                 },
                 template: function(item, element, data) {
                     const sizeKB = (item.size / 1024).toFixed(1);
-                    return `<div style="padding: 4px 8px; min-width: 80px; text-align: center;">
-                        <strong>${item.block}</strong><br>
-                        ${sizeKB}KB<br>
-                        <span style="font-size: 0.85em; text-transform: uppercase;">${item.fileType}</span>
-                    </div>`;
+                    if (item.isAggregated) {
+                        return `<div style="padding: 4px 8px; min-width: 100px; text-align: center;">
+                            <strong>Block ${item.block}</strong><br>
+                            <span style="font-size: 0.9em; color: #ff00ff;">📦 ${item.itemCount} items</span><br>
+                            ${(sizeKB / 1024).toFixed(1)}MB<br>
+                            <span style="font-size: 0.75em; text-transform: uppercase;">Aggregated</span>
+                        </div>`;
+                    } else {
+                        return `<div style="padding: 4px 8px; min-width: 80px; text-align: center;">
+                            <strong>${item.block}</strong><br>
+                            ${sizeKB}KB<br>
+                            <span style="font-size: 0.85em; text-transform: uppercase;">${item.fileType}</span>
+                        </div>`;
+                    }
                 },
                 // Spread items out more
                 maxHeight: 800,
                 verticalScroll: true,
                 width: '100%',
                 min: new Date(2024, 4, 1),  // Start earlier to spread timeline
-                max: new Date(2026, 0, 1)   // End later to spread timeline
+                max: new Date(2027, 0, 1)   // End later to spread timeline (covers all of 2026)
             };
             
             // Create timeline
@@ -1035,9 +1140,18 @@ import NewsModal from '../components/NewsModal.astro';
             timeline.on('select', function(properties) {
                 if (properties.items.length > 0) {
                     const itemId = properties.items[0];
-                    const item = allData.find(d => d.id === itemId);
-                    if (item) {
-                        openModal(item);
+                    // Check if it's an aggregated block
+                    if (aggregatedBlocks.has(itemId)) {
+                        const aggregatedItem = processedData.find(d => d.id === itemId);
+                        if (aggregatedItem) {
+                            openModal(aggregatedItem);
+                        }
+                    } else {
+                        // Find in processed data (could be individual or aggregated)
+                        const item = processedData.find(d => d.id === itemId);
+                        if (item) {
+                            openModal(item);
+                        }
                     }
                 }
             });
@@ -1120,8 +1234,8 @@ import NewsModal from '../components/NewsModal.astro';
         }
         
         function updateItems() {
-            // Filter data by type, size, and search text
-            const filteredData = allData.filter(d => {
+            // Filter processed data by type, size, and search text
+            const filteredData = processedData.filter(d => {
                 // Type filter
                 if (!activeFilters.has(d.type)) return false;
                 
@@ -1129,10 +1243,19 @@ import NewsModal from '../components/NewsModal.astro';
                 if (minSizeBytes !== null && d.size < minSizeBytes) return false;
                 if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
                 
-                // Search text filter (only for text items)
-                if (searchText && d.type === 'text') {
+                // Search text filter (only for text items, and only for non-aggregated)
+                if (searchText && d.type === 'text' && !d.isAggregated) {
                     if (!d.preview) return false;
                     if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                }
+                
+                // For aggregated blocks, check if any items match search
+                if (searchText && d.isAggregated && d.type === 'text') {
+                    const blockItems = aggregatedBlocks.get(d.id) || [];
+                    const hasMatch = blockItems.some(item => 
+                        item.preview && item.preview.toLowerCase().includes(searchText.toLowerCase())
+                    );
+                    if (!hasMatch) return false;
                 }
                 
                 return true;
@@ -1141,14 +1264,16 @@ import NewsModal from '../components/NewsModal.astro';
             // Convert to Vis.js format
             const visItems = filteredData.map(item => ({
                 id: item.id,
-                content: `Block ${item.block}`,
+                content: item.isAggregated ? `Block ${item.block} (${item.itemCount} items)` : `Block ${item.block}`,
                 start: new Date(item.timestamp * 1000),
                 group: item.type,
-                className: `type-${item.type}`,
+                className: item.isAggregated ? `type-${item.type} aggregated` : `type-${item.type}`,
                 title: createTooltip(item),
                 block: item.block,
                 size: item.size,
-                fileType: item.type  // Use fileType instead of type (which is reserved by Vis.js)
+                fileType: item.type,  // Use fileType instead of type (which is reserved by Vis.js)
+                isAggregated: item.isAggregated || false,
+                itemCount: item.itemCount || 1
             }));
             
             items.clear();
@@ -1158,17 +1283,27 @@ import NewsModal from '../components/NewsModal.astro';
         function createTooltip(item) {
             const sizeKB = (item.size / 1024).toFixed(1);
             let tooltip = `Block: ${item.block}\n`;
-            tooltip += `Size: ${sizeKB}KB\n`;
-            tooltip += `Type: ${item.type}\n`;
+            
+            if (item.isAggregated) {
+                tooltip += `Items: ${item.itemCount}\n`;
+                tooltip += `Total Size: ${(sizeKB / 1024).toFixed(1)}MB\n`;
+                tooltip += `Types: ${Object.entries(item.typeBreakdown).map(([t, c]) => `${t}:${c}`).join(', ')}\n`;
+            } else {
+                tooltip += `Size: ${sizeKB}KB\n`;
+                tooltip += `Type: ${item.type}\n`;
+            }
+            
             tooltip += `Miner: ${item.miner}\n`;
             if (item.fee) tooltip += `Fee: ${item.fee} sats\n`;
-            if (item.preview) tooltip += `\n${item.preview}`;
+            if (item.preview && !item.isAggregated) tooltip += `\n${item.preview}`;
             return tooltip;
         }
         
         function updateStats() {
             // Apply ALL filters (type, size, search) to match what's shown on timeline
-            const filteredData = allData.filter(d => {
+            // Use processedData but count actual items (not aggregated)
+            let totalItemCount = 0;
+            const filteredProcessed = processedData.filter(d => {
                 // Type filter
                 if (!activeFilters.has(d.type)) return false;
                 
@@ -1176,13 +1311,47 @@ import NewsModal from '../components/NewsModal.astro';
                 if (minSizeBytes !== null && d.size < minSizeBytes) return false;
                 if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
                 
-                // Search text filter (only for text items)
+                // Search text filter
                 if (searchText && d.type === 'text') {
-                    if (!d.preview) return false;
-                    if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                    if (d.isAggregated) {
+                        const blockItems = aggregatedBlocks.get(d.id) || [];
+                        const hasMatch = blockItems.some(item => 
+                            item.preview && item.preview.toLowerCase().includes(searchText.toLowerCase())
+                        );
+                        if (!hasMatch) return false;
+                        totalItemCount += blockItems.length;
+                    } else {
+                        if (!d.preview) return false;
+                        if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                        totalItemCount += 1;
+                    }
+                } else {
+                    // Count items
+                    if (d.isAggregated) {
+                        totalItemCount += d.itemCount;
+                    } else {
+                        totalItemCount += 1;
+                    }
                 }
                 
                 return true;
+            });
+            
+            // Recalculate with proper item counting
+            const filteredData = [];
+            filteredProcessed.forEach(d => {
+                if (d.isAggregated) {
+                    const blockItems = aggregatedBlocks.get(d.id) || [];
+                    if (searchText && d.type === 'text') {
+                        filteredData.push(...blockItems.filter(item => 
+                            item.preview && item.preview.toLowerCase().includes(searchText.toLowerCase())
+                        ));
+                    } else {
+                        filteredData.push(...blockItems);
+                    }
+                } else {
+                    filteredData.push(d);
+                }
             });
             
             const totalSize = filteredData.reduce((sum, d) => sum + d.size, 0);
@@ -1218,9 +1387,9 @@ import NewsModal from '../components/NewsModal.astro';
             `;
         }
         
-        // Get filtered data (reusable function)
+        // Get filtered data (reusable function) - returns processed items
         function getFilteredData() {
-            return allData.filter(d => {
+            return processedData.filter(d => {
                 // Type filter
                 if (!activeFilters.has(d.type)) return false;
                 
@@ -1228,10 +1397,17 @@ import NewsModal from '../components/NewsModal.astro';
                 if (minSizeBytes !== null && d.size < minSizeBytes) return false;
                 if (maxSizeBytes !== null && d.size > maxSizeBytes) return false;
                 
-                // Search text filter (only for text items)
+                // Search text filter
                 if (searchText && d.type === 'text') {
-                    if (!d.preview) return false;
-                    if (!d.preview.toLowerCase().includes(searchText.toLowerCase())) return false;
+                    if (d.isAggregated) {
+                        const blockItems = aggregatedBlocks.get(d.id) || [];
+                        return blockItems.some(item => 
+                            item.preview && item.preview.toLowerCase().includes(searchText.toLowerCase())
+                        );
+                    } else {
+                        if (!d.preview) return false;
+                        return d.preview.toLowerCase().includes(searchText.toLowerCase());
+                    }
                 }
                 
                 return true;
@@ -1294,14 +1470,21 @@ import NewsModal from '../components/NewsModal.astro';
             const meta = document.getElementById('modalMeta');
             const preview = document.getElementById('modalPreview');
             
-            // Position timeline to show this block
+            // Position timeline to show this block (scroll without changing zoom)
             if (positionTimeline && timeline) {
                 const itemDate = new Date(item.timestamp * 1000);
-                // Set timeline view to show the block with some padding
-                const padding = 1000 * 60 * 60 * 24 * 7; // 7 days padding
-                timeline.setWindow(itemDate.getTime() - padding, itemDate.getTime() + padding);
+                // Move timeline to the item's time without changing zoom level
+                timeline.moveTo(itemDate.getTime());
                 // Select the item on timeline
                 timeline.setSelection([item.id]);
+            }
+            
+            // Handle aggregated blocks differently
+            if (item.isAggregated) {
+                modalContent.classList.add('wide');
+                title.textContent = `Block ${item.block} - ${item.itemCount} Items (Aggregated)`;
+                showAggregatedBlockModal(item);
+                return;
             }
             
             // Make modal wide for text content, normal for media
@@ -1334,6 +1517,10 @@ import NewsModal from '../components/NewsModal.astro';
                 <div class="meta-item">
                     <div class="meta-label">File Type</div>
                     <div class="meta-value">${item.type} (${item.mime})</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Storage Format</div>
+                    <div class="meta-value">${item.storageFormat || 'N/A'}</div>
                 </div>
                 <div class="meta-item">
                     <div class="meta-label">Mined By</div>
@@ -1402,6 +1589,166 @@ import NewsModal from '../components/NewsModal.astro';
             // Update navigation buttons
             updateNavigationButtons();
             
+            modal.classList.add('active');
+        }
+        
+        // Show modal for aggregated blocks
+        function showAggregatedBlockModal(aggregatedItem) {
+            const meta = document.getElementById('modalMeta');
+            const preview = document.getElementById('modalPreview');
+            const blockItems = aggregatedBlocks.get(aggregatedItem.id) || [];
+            
+            // Sort items by timestamp
+            blockItems.sort((a, b) => a.timestamp - b.timestamp);
+            
+            // Meta information
+            const totalSize = blockItems.reduce((sum, item) => sum + item.size, 0);
+            const typeBreakdown = Object.entries(aggregatedItem.typeBreakdown)
+                .map(([type, count]) => `${getTypeLabel(type)}: ${count}`)
+                .join(', ');
+            
+            meta.innerHTML = `
+                <div class="meta-item">
+                    <div class="meta-label">Block Number</div>
+                    <div class="meta-value">${aggregatedItem.block}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Date</div>
+                    <div class="meta-value">${new Date(aggregatedItem.timestamp * 1000).toLocaleString()}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Total Items</div>
+                    <div class="meta-value">${aggregatedItem.itemCount}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Total Size</div>
+                    <div class="meta-value">${(totalSize / 1024 / 1024).toFixed(2)} MB (${totalSize.toLocaleString()} bytes)</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Types Breakdown</div>
+                    <div class="meta-value" style="font-size: 0.9em;">${typeBreakdown}</div>
+                </div>
+                <div class="meta-item">
+                    <div class="meta-label">Mined By</div>
+                    <div class="meta-value">${aggregatedItem.miner}</div>
+                </div>
+            `;
+            
+            // Create paginated table of items
+            let currentPage = 0;
+            const itemsPerPage = 50;
+            const totalPages = Math.ceil(blockItems.length / itemsPerPage);
+            
+            function renderItemsTable(page) {
+                const start = page * itemsPerPage;
+                const end = Math.min(start + itemsPerPage, blockItems.length);
+                const pageItems = blockItems.slice(start, end);
+                
+                let tableHTML = `
+                    <div style="margin-bottom: 20px;">
+                        <h3 style="color: #00ffff; margin-bottom: 15px;">
+                            Items in Block ${aggregatedItem.block} 
+                            <span style="font-size: 0.8em; color: #888;">(Showing ${start + 1}-${end} of ${blockItems.length})</span>
+                        </h3>
+                        <div style="overflow-x: auto;">
+                            <table style="width: 100%; border-collapse: collapse; font-size: 0.9em;">
+                                <thead>
+                                    <tr style="background: rgba(0, 255, 255, 0.1); border-bottom: 2px solid #00ffff;">
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">#</th>
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">Type</th>
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">Size</th>
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">TXID</th>
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">Preview</th>
+                                        <th style="padding: 10px; text-align: left; color: #00ffff;">Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                `;
+                
+                pageItems.forEach((item, idx) => {
+                    const globalIdx = start + idx;
+                    const sizeKB = (item.size / 1024).toFixed(1);
+                    const previewText = item.preview ? 
+                        (item.preview.length > 100 ? item.preview.substring(0, 100) + '...' : item.preview) : 
+                        'N/A';
+                    const rowColor = globalIdx % 2 === 0 ? 'rgba(255, 255, 255, 0.02)' : 'rgba(255, 255, 255, 0.05)';
+                    
+                    tableHTML += `
+                        <tr style="background: ${rowColor}; border-bottom: 1px solid #333;">
+                            <td style="padding: 8px;">${globalIdx + 1}</td>
+                            <td style="padding: 8px;">
+                                <span style="text-transform: uppercase; color: ${colorMap[item.type] || '#888'};">
+                                    ${item.type}
+                                </span>
+                            </td>
+                            <td style="padding: 8px;">${sizeKB} KB</td>
+                            <td style="padding: 8px; font-family: monospace; font-size: 0.85em; word-break: break-all; max-width: 200px;">
+                                ${item.txid.substring(0, 16)}...
+                            </td>
+                            <td style="padding: 8px; max-width: 300px; word-break: break-word; color: #aaa;">
+                                ${escapeHtml(previewText)}
+                            </td>
+                            <td style="padding: 8px;">
+                                <button onclick="openIndividualItem('${item.id}')" 
+                                        style="background: rgba(0, 255, 255, 0.2); border: 1px solid #00ffff; color: #00ffff; padding: 4px 8px; border-radius: 4px; cursor: pointer; font-size: 0.85em;">
+                                    View
+                                </button>
+                            </td>
+                        </tr>
+                    `;
+                });
+                
+                tableHTML += `
+                                </tbody>
+                            </table>
+                        </div>
+                        <div style="margin-top: 20px; display: flex; justify-content: space-between; align-items: center;">
+                            <button onclick="changeAggregatedPage(${Math.max(0, page - 1)})" 
+                                    ${page === 0 ? 'disabled' : ''}
+                                    style="background: rgba(0, 255, 255, 0.2); border: 1px solid #00ffff; color: #00ffff; padding: 8px 16px; border-radius: 4px; cursor: pointer; ${page === 0 ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                ← Previous
+                            </button>
+                            <span style="color: #888;">Page ${page + 1} of ${totalPages}</span>
+                            <button onclick="changeAggregatedPage(${Math.min(totalPages - 1, page + 1)})" 
+                                    ${page >= totalPages - 1 ? 'disabled' : ''}
+                                    style="background: rgba(0, 255, 255, 0.2); border: 1px solid #00ffff; color: #00ffff; padding: 8px 16px; border-radius: 4px; cursor: pointer; ${page >= totalPages - 1 ? 'opacity: 0.5; cursor: not-allowed;' : ''}">
+                                Next →
+                            </button>
+                        </div>
+                    </div>
+                `;
+                
+                preview.innerHTML = tableHTML;
+            }
+            
+            // Store render function for pagination
+            window.changeAggregatedPage = function(newPage) {
+                currentPage = newPage;
+                renderItemsTable(currentPage);
+            };
+            
+            // Function to open individual item
+            window.openIndividualItem = function(itemId) {
+                const individualItem = blockItems.find(item => item.id === itemId);
+                if (individualItem) {
+                    // Close aggregated modal and open individual item modal
+                    closeModal();
+                    setTimeout(() => {
+                        openModal(individualItem, true);
+                    }, 100);
+                }
+            };
+            
+            // Initial render
+            renderItemsTable(0);
+            
+            // Update navigation buttons (disable for aggregated blocks)
+            const leftBtn = document.getElementById('modalNavLeft');
+            const rightBtn = document.getElementById('modalNavRight');
+            leftBtn.disabled = false;
+            rightBtn.disabled = false;
+            
+            const modal = document.getElementById('modal');
             modal.classList.add('active');
         }
         
@@ -1504,19 +1851,37 @@ import NewsModal from '../components/NewsModal.astro';
             let targetItem = null;
             
             if (txidParam && voutParam !== null) {
-                // Most specific: txid + vout
-                targetItem = allData.find(d => 
+                // Most specific: txid + vout - find in allData first
+                const originalItem = allData.find(d => 
                     d.txid === txidParam && 
                     d.vout === parseInt(voutParam)
                 );
-            } else if (blockParam) {
-                // Find by block number (if multiple, prefer the first one or one matching txid if provided)
-                const blockItems = allData.filter(d => d.block === parseInt(blockParam));
-                if (blockItems.length > 0) {
-                    if (txidParam) {
-                        targetItem = blockItems.find(d => d.txid === txidParam) || blockItems[0];
+                if (originalItem) {
+                    // Check if this block is aggregated
+                    const blockNum = originalItem.block;
+                    const aggregatedId = `aggregated_block_${blockNum}`;
+                    if (aggregatedBlocks.has(aggregatedId)) {
+                        targetItem = processedData.find(d => d.id === aggregatedId);
                     } else {
-                        targetItem = blockItems[0];
+                        targetItem = processedData.find(d => d.id === originalItem.id);
+                    }
+                }
+            } else if (blockParam) {
+                const blockNum = parseInt(blockParam);
+                // Check if this block is aggregated
+                const aggregatedId = `aggregated_block_${blockNum}`;
+                if (aggregatedBlocks.has(aggregatedId)) {
+                    targetItem = processedData.find(d => d.id === aggregatedId);
+                } else {
+                    // Find individual item
+                    const blockItems = allData.filter(d => d.block === blockNum);
+                    if (blockItems.length > 0) {
+                        if (txidParam) {
+                            const originalItem = blockItems.find(d => d.txid === txidParam) || blockItems[0];
+                            targetItem = processedData.find(d => d.id === originalItem.id);
+                        } else {
+                            targetItem = processedData.find(d => d.id === blockItems[0].id);
+                        }
                     }
                 }
             }
@@ -1552,6 +1917,48 @@ import NewsModal from '../components/NewsModal.astro';
             
             updateItems();
             updateStats();
+        }
+        
+        // Jump to block
+        function jumpToBlockNumber() {
+            const blockInput = document.getElementById('jumpToBlock');
+            const blockNumber = parseInt(blockInput.value);
+            
+            if (!blockNumber || isNaN(blockNumber)) {
+                alert('Please enter a valid block number');
+                return;
+            }
+            
+            // Check if this block is aggregated
+            const aggregatedId = `aggregated_block_${blockNumber}`;
+            let targetItem = null;
+            
+            if (aggregatedBlocks.has(aggregatedId)) {
+                targetItem = processedData.find(d => d.id === aggregatedId);
+            } else {
+                // Find individual item
+                const blockItem = allData.find(d => d.block === blockNumber);
+                if (blockItem) {
+                    targetItem = processedData.find(d => d.id === blockItem.id);
+                }
+            }
+            
+            if (!targetItem) {
+                alert(`Block ${blockNumber} not found in the dataset`);
+                return;
+            }
+            
+            // Ensure the item type is visible
+            if (!activeFilters.has(targetItem.type)) {
+                activeFilters.add(targetItem.type);
+                updateFilterChips();
+                updateItems();
+            }
+            
+            // Small delay to ensure timeline has updated
+            setTimeout(() => {
+                openModal(targetItem, true);
+            }, 100);
         }
         
         // Handle Enter key press on search input
