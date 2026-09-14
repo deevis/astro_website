@@ -126,6 +126,7 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
         this.articles = [];
         this.filteredArticles = [];
         this.allArticles = []; // Full dataset including historical months
+        this.currentAggregatePath = null;
         this.historicalDataLoaded = false;
         this.historicalDataLoading = false;
         this.init();
@@ -191,48 +192,66 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
 
       async findAllAggregateFiles() {
         try {
-          // Try to load index.json first to get list of all aggregates
-          const cacheBuster = `?t=${Date.now()}`;
-          const indexResponse = await fetch('/news_feeds/index.json' + cacheBuster, {
-            headers: {
-              'Cache-Control': 'no-cache',
-              'Pragma': 'no-cache'
+          const files = new Set();
+          const cacheBuster = '?t=' + Date.now();
+          const noCacheHeaders = {
+            'Cache-Control': 'no-cache',
+            'Pragma': 'no-cache'
+          };
+
+          // Start from index.json when present, but don't trust it as complete.
+          try {
+            const indexResponse = await fetch('/news_feeds/index.json' + cacheBuster, {
+              headers: noCacheHeaders
+            });
+            if (indexResponse.ok) {
+              const indexData = await indexResponse.json();
+              const aggregates = indexData.aggregates_index && indexData.aggregates_index.aggregates;
+              if (Array.isArray(aggregates)) {
+                aggregates.forEach(agg => {
+                  if (agg && agg.path) {
+                    files.add(agg.path);
+                  }
+                });
+              }
+            }
+          } catch (e) {
+            console.log('News aggregate index not available, probing monthly files');
+          }
+
+          // Probe every month from the first archive year through the current year
+          // so a stale index cannot hide newer (or older) monthly files.
+          const currentYear = new Date().getFullYear();
+          const probePaths = [];
+          for (let year = 2025; year <= currentYear; year++) {
+            for (let month = 1; month <= 12; month++) {
+              const mm = String(month).padStart(2, '0');
+              const path = '/news_feeds/' + year + '/aggregate_' + year + '_' + mm + '.json';
+              if (!files.has(path)) {
+                probePaths.push(path);
+              }
+            }
+          }
+
+          const probeResults = await Promise.all(probePaths.map(async (path) => {
+            try {
+              const testResponse = await fetch(path, {
+                method: 'HEAD',
+                headers: noCacheHeaders
+              });
+              return testResponse.ok ? path : null;
+            } catch (e) {
+              return null;
+            }
+          }));
+
+          probeResults.forEach(path => {
+            if (path) {
+              files.add(path);
             }
           });
-          
-          if (indexResponse.ok) {
-            const indexData = await indexResponse.json();
-            if (indexData.aggregates_index && indexData.aggregates_index.aggregates) {
-              // Return paths sorted by month (newest first)
-              return indexData.aggregates_index.aggregates
-                .sort((a, b) => b.month.localeCompare(a.month))
-                .map(agg => agg.path);
-            }
-          }
-          
-          // Fallback: try to discover aggregates manually
-          const months = ['10', '09', '08', '07', '06'];
-          const currentYear = new Date().getFullYear();
-          const aggregateFiles = [];
-          
-          for (const month of months) {
-            const path = `/news_feeds/${currentYear}/aggregate_${currentYear}_${month}.json`;
-            try {
-              const testResponse = await fetch(path, { 
-                method: 'HEAD',
-                headers: {
-                  'Cache-Control': 'no-cache',
-                  'Pragma': 'no-cache'
-                }
-              });
-              if (testResponse.ok) {
-                aggregateFiles.push(path);
-              }
-            } catch (e) {
-              // Skip if file doesn't exist
-            }
-          }
-          
+
+          const aggregateFiles = Array.from(files).sort((a, b) => b.localeCompare(a));
           return aggregateFiles.length > 0 ? aggregateFiles : null;
         } catch (error) {
           console.error('Error finding aggregate files:', error);
@@ -261,6 +280,14 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
           }
           const data = await response.json();
           
+          // Remember which monthly file latest.json already covers so we don't skip the wrong archive
+          if (data.monthly_aggregate && data.monthly_aggregate.month) {
+            const monthParts = String(data.monthly_aggregate.month).split('-');
+            if (monthParts.length === 2) {
+              this.currentAggregatePath = '/news_feeds/' + monthParts[0] + '/aggregate_' + monthParts[0] + '_' + monthParts[1] + '.json';
+            }
+          }
+
           // Use active articles for initial display, but also store all articles from current month
           const currentMonthArticles = data.active_articles || [];
           if (data.monthly_aggregate && data.monthly_aggregate.articles) {
@@ -307,8 +334,10 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
               return;
             }
             
-            // Skip the first file (current month) as we already have it
-            const historicalFiles = aggregateFiles.slice(1);
+            // Skip only the month already loaded from latest.json, not whichever file happens to be first
+            const historicalFiles = this.currentAggregatePath
+              ? aggregateFiles.filter(path => path !== this.currentAggregatePath)
+              : aggregateFiles;
             
             if (historicalFiles.length === 0) {
               this.historicalDataLoaded = true;
@@ -316,7 +345,7 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
               return;
             }
             
-            const cacheBuster = `?t=${Date.now()}`;
+            const cacheBuster = '?t=' + Date.now();
             const historicalArticles = [];
             
             // Load historical aggregates
@@ -337,13 +366,22 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
                   }
                 }
               } catch (error) {
-                console.warn(`Error loading historical aggregate ${filePath}:`, error);
+                console.warn('Error loading historical aggregate ' + filePath + ':', error);
                 // Continue loading other aggregates even if one fails
               }
             }
             
-            // Merge historical articles with current month articles
-            this.allArticles.push(...historicalArticles);
+            // Merge historical articles with current month articles, dropping duplicates
+            const seenIds = new Set(this.allArticles.map(article => article.story_id).filter(Boolean));
+            historicalArticles.forEach(article => {
+              if (article.story_id && seenIds.has(article.story_id)) {
+                return;
+              }
+              if (article.story_id) {
+                seenIds.add(article.story_id);
+              }
+              this.allArticles.push(article);
+            });
             
             // Sort all articles by first_seen date (newest first)
             this.allArticles.sort((a, b) => {
@@ -445,15 +483,21 @@ const pageDescription = "Stay updated with the latest news in Bitcoin, Software 
 
         // Apply search filter with whole word matching
         if (hasSearchTerm) {
-          filtered = filtered.filter(article => 
-            this.containsWholeWord(article.title, searchTerm) ||
-            this.containsWholeWord(article.content_sample, searchTerm) ||
-            article.sources.some(s => 
-              this.containsWholeWord(s.name, searchTerm) ||
-              (s.author && this.containsWholeWord(s.author, searchTerm))
-            ) ||
-            article.tags.some(tag => this.containsWholeWord(tag, searchTerm))
-          );
+          filtered = filtered.filter(article => {
+            const sources = Array.isArray(article.sources) ? article.sources : [];
+            const tags = Array.isArray(article.tags) ? article.tags : [];
+            return (
+              this.containsWholeWord(article.title, searchTerm) ||
+              this.containsWholeWord(article.content_sample, searchTerm) ||
+              this.containsWholeWord(article.url, searchTerm) ||
+              sources.some(s => 
+                this.containsWholeWord(s.name, searchTerm) ||
+                (s.author && this.containsWholeWord(s.author, searchTerm)) ||
+                this.containsWholeWord(s.url, searchTerm)
+              ) ||
+              tags.some(tag => this.containsWholeWord(tag, searchTerm))
+            );
+          });
         }
 
         // Apply category filter

@@ -1,0 +1,112 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'JWT Decoder';
+const pageDescription = 'Decode JSON Web Token header and payload in the browser. Signature is not verified.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="tool-wrap">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <header class="tool-head">
+        <p class="tool-kicker">Developer tools</p>
+        <h1>JWT decoder</h1>
+        <p>Inspect header and payload. Expiry is shown; the signature is <strong>not</strong> verified.</p>
+      </header>
+
+      <div class="tool-card">
+        <label class="label" for="token">Token</label>
+        <textarea id="token" class="field mono" rows="6" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.…"></textarea>
+        <p id="error" class="error" hidden></p>
+        <p id="expiry" class="expiry"></p>
+        <div class="split">
+          <div>
+            <p class="label">Header</p>
+            <pre id="header" class="mono pane">—</pre>
+          </div>
+          <div>
+            <p class="label">Payload</p>
+            <pre id="payload" class="mono pane">—</pre>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const tokenEl = document.getElementById('token') as HTMLTextAreaElement;
+    const headerEl = document.getElementById('header')!;
+    const payloadEl = document.getElementById('payload')!;
+    const errorEl = document.getElementById('error')!;
+    const expiryEl = document.getElementById('expiry')!;
+
+    function b64urlJson(part: string) {
+      const padded = part.replace(/-/g, '+').replace(/_/g, '/') + '='.repeat((4 - (part.length % 4)) % 4);
+      const json = new TextDecoder().decode(Uint8Array.from(atob(padded), (c) => c.charCodeAt(0)));
+      return JSON.parse(json);
+    }
+
+    function pretty(value: unknown) {
+      return JSON.stringify(value, null, 2);
+    }
+
+    function decode() {
+      const raw = tokenEl.value.trim();
+      errorEl.hidden = true;
+      expiryEl.textContent = '';
+      if (!raw) {
+        headerEl.textContent = '—';
+        payloadEl.textContent = '—';
+        return;
+      }
+      const parts = raw.split('.');
+      if (parts.length < 2) {
+        errorEl.hidden = false;
+        errorEl.textContent = 'A JWT has at least two base64url segments.';
+        return;
+      }
+      try {
+        const header = b64urlJson(parts[0]);
+        const payload = b64urlJson(parts[1]);
+        headerEl.textContent = pretty(header);
+        payloadEl.textContent = pretty(payload);
+        if (typeof payload.exp === 'number') {
+          const exp = new Date(payload.exp * 1000);
+          const expired = exp.getTime() < Date.now();
+          expiryEl.textContent = expired
+            ? `Expired ${exp.toISOString()}`
+            : `Expires ${exp.toISOString()}`;
+          expiryEl.className = `expiry ${expired ? 'bad' : 'ok'}`;
+        }
+      } catch {
+        errorEl.hidden = false;
+        errorEl.textContent = 'Could not decode that token.';
+      }
+    }
+
+    tokenEl.addEventListener('input', decode);
+  </script>
+
+  <style>
+    .tool-wrap { padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh; background: #f8fafc; }
+    :global(.dark) .tool-wrap { background: rgb(3, 7, 18); }
+    .tool-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #2563eb; margin-bottom: 6px; }
+    .tool-head { margin-bottom: 1.5rem; }
+    .tool-head h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
+    .tool-head p { color: #6b7280; }
+    .tool-card { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.25rem 1.5rem; }
+    :global(.dark) .tool-card { background: rgb(17, 24, 39); border-color: rgb(31, 41, 55); }
+    .label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; }
+    .field { width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; background: #f8fafc; }
+    :global(.dark) .field { background: rgb(31, 41, 55); border-color: rgb(55, 65, 81); color: #f3f4f6; }
+    .mono { font-family: ui-monospace, Menlo, monospace; font-size: 0.82rem; }
+    .split { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 12px; }
+    .pane { background: #f8fafc; border-radius: 10px; padding: 10px; overflow: auto; min-height: 10rem; white-space: pre-wrap; }
+    :global(.dark) .pane { background: rgb(31, 41, 55); }
+    .error { color: #dc2626; font-size: 13px; margin-top: 8px; }
+    .expiry { font-size: 13px; margin-top: 8px; font-weight: 600; }
+    .expiry.ok { color: #059669; }
+    .expiry.bad { color: #dc2626; }
+    @media (max-width: 700px) { .split { grid-template-columns: 1fr; } }
+  </style>
+</Layout>

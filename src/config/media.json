@@ -1,6 +1,64 @@
 {
   "mediaItems": [
     {
+      "id": "youtube-20",
+      "title": "Psychedelic Cloudlapse 2026 09 12",
+      "description": "Psychedelic cloud timelapse from September 12, 2026",
+      "type": "youtube",
+      "videoId": "1wnH3r9dZUE",
+      "thumb": "https://img.youtube.com/vi/1wnH3r9dZUE/mqdefault.jpg",
+      "tags": [
+        "timelapse",
+        "clouds",
+        "psychedelic",
+        "nature"
+      ]
+    },
+    {
+      "id": "video-4",
+      "title": "Monkey Hacker Programming",
+      "description": "Monkey hacker programming like a mad genius with scrolling information on screens",
+      "type": "video",
+      "src": "/images/gallery/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.mp4",
+      "thumb": "/thumbnails/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.jpg",
+      "tags": [
+        "AI generated",
+        "monkey",
+        "hacker",
+        "programming",
+        "humor"
+      ]
+    },
+    {
+      "id": "youtube-6",
+      "title": "Mountain Cloudlapse",
+      "description": "Timelapse of clouds moving over mountains",
+      "type": "youtube",
+      "videoId": "sNWNOsmLz6I",
+      "thumb": "https://img.youtube.com/vi/sNWNOsmLz6I/mqdefault.jpg",
+      "tags": [
+        "timelapse",
+        "clouds",
+        "mountains",
+        "nature"
+      ]
+    },
+    {
+      "id": "youtube-16",
+      "title": "Stairway to Heaven 02 - In the style of Frida Kahlo and Jeff Koons",
+      "description": "Second AI generated artwork combining styles of Frida Kahlo and Jeff Koons",
+      "type": "youtube",
+      "videoId": "RGZAYaDad3U",
+      "thumb": "https://img.youtube.com/vi/RGZAYaDad3U/mqdefault.jpg",
+      "tags": [
+        "AI",
+        "Disco Diffusion",
+        "Kahlo",
+        "Koons",
+        "stairway"
+      ]
+    },
+    {
       "id": "image-11",
       "title": "Human-Powered Companies of the Future",
       "description": "Concept illustration of human-powered companies in the future",
@@ -25,36 +83,6 @@
         "software development",
         "technical debt",
         "AI generated"
-      ]
-    },
-    {
-      "id": "video-4",
-      "title": "Monkey Hacker Programming",
-      "description": "Monkey hacker programming like a mad genius with scrolling information on screens",
-      "type": "video",
-      "src": "/images/gallery/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.mp4",
-      "thumb": "/thumbnails/monkey_hacker_is_programming_like_a_mad_genius_the_screens_have_information_scrolling_on_them_and_t_zvtiygm5wqm4tlsz438o_1.jpg",
-      "tags": [
-        "AI generated",
-        "monkey",
-        "hacker",
-        "programming",
-        "humor"
-      ]
-    },
-    {
-      "id": "video-15",
-      "title": "Bitcoin is Salvation",
-      "description": "Symbolic visualization portraying Bitcoin as salvation",
-      "type": "video",
-      "src": "/images/gallery/bitcoin is salvation.mp4",
-      "thumb": "/thumbnails/bitcoin is salvation.jpg",
-      "tags": [
-        "AI generated",
-        "bitcoin",
-        "salvation",
-        "cryptocurrency",
-        "symbolic"
       ]
     },
     {
@@ -186,6 +214,21 @@
       ]
     },
     {
+      "id": "video-15",
+      "title": "Bitcoin is Salvation",
+      "description": "Symbolic visualization portraying Bitcoin as salvation",
+      "type": "video",
+      "src": "/images/gallery/bitcoin is salvation.mp4",
+      "thumb": "/thumbnails/bitcoin is salvation.jpg",
+      "tags": [
+        "AI generated",
+        "bitcoin",
+        "salvation",
+        "cryptocurrency",
+        "symbolic"
+      ]
+    },
+    {
       "id": "image-12",
       "title": "Coffee Cup Galaxy",
       "description": "An old-fashioned diner counter with a cup of coffee, where the milk swirling inside forms the Milky Way galaxy",
@@ -280,20 +323,6 @@
         "timelapse",
         "clouds",
         "Salt Lake",
-        "nature"
-      ]
-    },
-    {
-      "id": "youtube-6",
-      "title": "Mountain Cloudlapse",
-      "description": "Timelapse of clouds moving over mountains",
-      "type": "youtube",
-      "videoId": "sNWNOsmLz6I",
-      "thumb": "https://img.youtube.com/vi/sNWNOsmLz6I/mqdefault.jpg",
-      "tags": [
-        "timelapse",
-        "clouds",
-        "mountains",
         "nature"
       ]
     },
@@ -409,21 +438,6 @@
         "Disco Diffusion",
         "Cloud City",
         "Kinkade"
-      ]
-    },
-    {
-      "id": "youtube-16",
-      "title": "Stairway to Heaven 02 - In the style of Frida Kahlo and Jeff Koons",
-      "description": "Second AI generated artwork combining styles of Frida Kahlo and Jeff Koons",
-      "type": "youtube",
-      "videoId": "RGZAYaDad3U",
-      "thumb": "https://img.youtube.com/vi/RGZAYaDad3U/mqdefault.jpg",
-      "tags": [
-        "AI",
-        "Disco Diffusion",
-        "Kahlo",
-        "Koons",
-        "stairway"
       ]
     },
     {

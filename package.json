@@ -11,7 +11,9 @@
     "preview": "astro preview",
     "astro": "astro",
     "generate-thumbnails": "node scripts/generate-thumbnails.js",
-    "optimize-article-images": "node scripts/optimize-article-images.js"
+    "optimize-article-images": "node scripts/optimize-article-images.js",
+    "optimize-carousel-thumbs": "node scripts/optimize-carousel-thumbs.js",
+    "test:retirement": "node scripts/test-retirement-planner.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.3",

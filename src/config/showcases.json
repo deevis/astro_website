@@ -1,30 +1,75 @@
 {
     "showcases":  [
       {
-        "title": "Bitcoin Large OP Return Explorer",
-        "description": "A comprehensive explorer for large OP_RETURN transactions on the Bitcoin blockchain. Features a timeline of transactions with detailed metadata, a search function, and a filter system to help you find the information you need.",
-        "href": "html_showcase/bitcoin_large_op_return_explorer/index.html",
-        "image": "html_showcase/bitcoin_large_op_return_explorer/thumb.png",
-        "tags": ["Bitcoin", "explorer", "OP_RETURN", "blockchain"]
+        "title": "PHASEFORM — Phased Antenna Array",
+        "description": "Explore the anatomy of a phased-array antenna. Explode eight hardware layers, inspect every subsystem, and steer a beam through the physics of phase.",
+        "href": "html_showcase/phased_antenna_array/index.html",
+        "image": "html_showcase/phased_antenna_array/thumb.png",
+        "category": "science",
+        "tags": ["phased array", "antenna", "physics", "radar", "educational", "interactive", "3D"]
+      },
+      {
+        "title": "Little Planet Worlds",
+        "description": "A self-contained 3D adventure on a tiny living planet. Wander forests, villages, deserts and glaciers as Pineapple Monster or Explorer, gather, craft, build a home, and find passages to stranger worlds.",
+        "href": "html_showcase/little_planet_worlds/index.html",
+        "image": "html_showcase/little_planet_worlds/thumb.png",
+        "category": "game",
+        "tags": ["game", "3D", "WebGL", "adventure", "crafting", "exploration", "interactive"]
+      },
+      {
+        "title": "COLLAPSE",
+        "description": "Build a civilization, corrupt its institutions, and turn the wheel of history. A playable historical strategy campaign of cities, councils, divine powers, and the long arc from founding to fall.",
+        "href": "html_showcase/collapse/index.html",
+        "image": "html_showcase/collapse/thumb.png",
+        "category": "game",
+        "tags": ["game", "strategy", "history", "civilization", "campaign", "interactive"]
+      },
+      {
+        "title": "The Wheel of Empires: Anacyclosis Simulator",
+        "description": "Polybius's seven-stage cycle of civilizations, as an interactive essay. Step or auto-play each regime, make dynastic choices in a generational saga, and read period newspapers as monarchies, republics, and mobs rise and fall.",
+        "href": "html_showcase/wheel_of_empires_anacyclosis_simulator/index.html",
+        "image": "html_showcase/wheel_of_empires_anacyclosis_simulator/thumb.png",
+        "category": "article",
+        "publishDate": "2025-11-16",
+        "author": "Darren Hicks",
+        "tags": ["history", "article", "politics", "educational", "interactive", "Polybius", "anacyclosis"]
+      },
+      {
+        "title": "Helios: Solar Cycles & Extreme Events Explorer",
+        "description": "Interactive chronology of solar cycles, Miyake events, and historic superflares. Explore Gleissberg, Suess, and Hallstatt oscillations alongside tree-ring radiocarbon spikes and polar ice-core records, with search, filters, and a navigable energy-scale timeline.",
+        "href": "html_showcase/helios_solar_cycles_extreme_events_explorer/index.html",
+        "image": "html_showcase/helios_solar_cycles_extreme_events_explorer/thumb.png",
+        "category": "science",
+        "tags": ["astronomy", "solar cycles", "data visualization", "interactive", "educational", "Miyake events"]
+      },
+      { "title": "Water Cycle Simulation",
+        "description": "Closed hydrologic cycle across ocean, valleys, and mountains. Day/night temperature, orographic rainfall, evaporation, condensation, and downhill runoff with conserved water.",
+        "href": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/index.html",
+        "image": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/thumb.png",
+        "category": "simulation",
+        "tags": ["simulation", "weather", "hydrology", "rainfall", "educational", "interactive"]
       },
       {
         "title": "Supply & Demand Economic Simulator",
         "description": "Comprehensive economic simulation showcasing market dynamics in a closed economy with 50 agents. Features real-time supply and demand curves, multiple economic scenarios (scarcity, abundance, tech boom, demand surge), market interventions (price floors/ceilings, taxes, subsidies), and a money printer mechanism. Watch producers, consumers, and traders interact through order books with detailed agent statistics, wealth inequality tracking, and exportable simulation data.",
         "href": "html_showcase/supply_and_demand/index.html",
         "image": "html_showcase/supply_and_demand/thumb.png",
+        "category": "simulation",
         "tags": ["economics", "simulation", "supply and demand", "market dynamics", "educational", "interactive", "economic policy", "agent-based modeling", "market interventions"]
       },
       {
         "title": "Galton Box Physics Simulation",
-        "description": "Interactive physics simulation of Sir Francis Galton's bean machine demonstrating the Central Limit Theorem. Features real-time parameter adjustment for gravity, friction, bounce, ball/peg sizes, and spacing. Includes trail visualization, statistical tracking, and educational modal explaining the mathematical principles behind normal distribution emergence from random processes.",
+        "description": "Interactive physics simulation of Sir Francis Galton's bean machine demonstrating the Central Limit Theorem. Features delta-time collisions, live binomial overlay, mean/σ comparison to theory, presets from ideal to chaotic, and adjustable gravity, bounce, geometry, and drop rate.",
         "href": "html_showcase/galton_box_simulation/index.html",
         "image": "html_showcase/galton_box_simulation/thumb.png",
+        "category": "science",
         "tags": ["physics simulation", "statistics", "Central Limit Theorem", "educational", "interactive", "mathematics", "normal distribution", "Galton Box"]
       },
       { "title": "Bitcoin Strategic Reserve - US States Progress",
         "description": "The current progress of the Bitcoin Strategic Reserve in the United States (as of May 7, 2025)",
         "href": "html_showcase/bitcoin_strategic_reserve_us_states_progress/index.html",
         "image": "html_showcase/bitcoin_strategic_reserve_us_states_progress/thumb.png",
+        "category": "science",
         "tags": ["Bitcoin", "strategic reserve", "US states", "interactive", "infographic"]
       },
       { 
@@ -32,6 +77,7 @@
         "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
         "href": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/index.html",
         "image": "html_showcase/geo_economic_simulator_claude_3.5_sonnet/thumb.png",
+        "category": "simulation",
         "tags": ["Claude 3.5 Sonnet", "simulation", "economics", "data visualization"]
       },
       {
@@ -39,26 +85,23 @@
         "description": "Comprehensive Social Security benefits calculator with break-even analysis. Input your earnings history to see monthly benefits at different retirement ages (62-70), compare lifetime totals with COLA adjustments, and analyze investment scenarios. Features detailed year-by-year projections, visual break-even point detection, and CSV export for financial planning.",
         "href": "html_showcase/social_security_calculator/index.html",
         "image": "html_showcase/social_security_calculator/thumb.png",
+        "category": "science",
         "tags": ["social security", "benefits calculator", "retirement planning", "break-even analysis", "financial modeling"]
       },
       {
         "title": "Last Stack Standing - Money Printer Simulation",
-        "description": "Educational simulation demonstrating how the ability to create money provides unfair advantages in competitive environments. Compare fair play vs. money printer modes through dice-based chip games with escalating stakes. Features real-time visualization of win distributions and chip flow analysis across multiple game simulations.",
+        "description": "Monte Carlo table-stakes experiment: equal starting stacks, dice decide each round, and the last stack wins. Compare fair play with a money-printer that recapitalizes Player 1 using newly created chips. Sweep bailout counts to map win rate, inequality, wealth share, and inflation with confidence intervals.",
         "href": "html_showcase/last_stack_standing/index.html",
         "image": "html_showcase/last_stack_standing/thumb.png",
+        "category": "simulation",
         "tags": ["economics", "simulation", "game theory", "inequality", "educational", "money printing", "statistical analysis"]
-      },
-      { "title": "Water Cycle Simulation - Claude 3.5 Sonnet",
-        "description": "A simulation of rainfall and evaporation across various altitudes.",
-        "href": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/index.html",
-        "image": "html_showcase/water_cycle_simulation_claude_3.5_sonnet/thumb.png",
-        "tags": ["Claude 3.5 Sonnet", "simulation", "weather", "rainfall"]
       },
        {
           "title": "3D Interactive PhotoCube",
           "description": "A WebGL-powered 3D photocube with interactive controls and animations.",
           "href": "html_showcase/webgl_photocube/index.html",
           "image": "html_showcase/webgl_photocube/thumb.png",
+          "category": "graphics",
           "tags": ["3D", "WebGL", "interactive", "photos"]
         },
         {
@@ -66,6 +109,7 @@
           "description": "Walk around through a WebGL rendered world built of your own Photos and Art",
           "href": "html_showcase/fps/index.html",
           "image": "html_showcase/fps/thumb.png",
+          "category": "graphics",
           "tags": ["3D", "WebGL", "FPS", "photos"]
       },        
         {
@@ -73,6 +117,7 @@
           "description": "Learn how a series of random outcomes can generate a fractal pattern.",
           "href": "html_showcase/sierpinski_generator/index.html",
           "image": "html_showcase/sierpinski_generator/thumb.png",
+          "category": "science",
           "tags": ["mathematics", "fractal", "interactive"]
         },
         {
@@ -80,6 +125,7 @@
           "description": "A WebGL-powered Array of 3D photocubes with interactive controls and animations.",
           "href": "html_showcase/webgl_photocube_multi/index.html",
           "image": "html_showcase/webgl_photocube_multi/thumb.png",
+          "category": "graphics",
           "tags": ["3D", "WebGL", "interactive", "photos"]
         },
         { 
@@ -87,6 +133,8 @@
           "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
           "href": "html_showcase/geo_economic_simulator_gemini_pro/index.html",
           "image": "html_showcase/geo_economic_simulator_gemini_pro/thumb.png",
+          "category": "simulation",
+          "homepage": false,
           "tags": ["Gemini Pro", "simulation", "economics", "data visualization"]
         },
         { 
@@ -94,20 +142,40 @@
           "description": "A simulation of a global economy over time, with a focus on the relationship between GDP, population, and resource availability.",
           "href": "html_showcase/geo_economic_simulator_manus/index.html",
           "image": "html_showcase/geo_economic_simulator_manus/thumb.png",
+          "category": "simulation",
+          "homepage": false,
           "tags": ["Manus", "simulation", "economics", "data visualization"]
         },
           {
-          "title": "CryptoQuote Generator",
-          "description": "Create your own CryptoQuote puzzles",
+          "title": "Cryptoquote",
+          "description": "Newspaper-style cryptogram game: decode substitution-cipher quotes, play a daily puzzle, or encrypt your own and share it.",
           "href": "html_showcase/cryptoquote_generator/index.html",
           "image": "html_showcase/cryptoquote_generator/thumb.png",
-          "tags": ["game", "puzzle", "cryptography"]
+          "category": "game",
+          "tags": ["game", "puzzle", "cryptography", "interactive", "educational"]
+        },
+        {
+          "title": "Sudoku",
+          "description": "Classic 9×9 Sudoku. Difficulty is how many squares you start with — Easy through Expert — with a daily puzzle, notes, and hints.",
+          "href": "html_showcase/sudoku/index.html",
+          "image": "html_showcase/sudoku/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "sudoku", "interactive", "educational"]
+        },
+        {
+          "title": "Logic Grid",
+          "description": "Classic magazine logic problems: four people, three attributes, and a handful of clues. Easy through Nightmare.",
+          "href": "html_showcase/logic_grid/index.html",
+          "image": "html_showcase/logic_grid/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "logic", "deduction", "interactive", "educational"]
         },
         {
           "title": "Massive Tree Viewer",
           "description": "Interactive particle system with physics simulation using Canvas API.",
           "href": "html_showcase/tree_viewer/index.html",
           "image": "html_showcase/tree_viewer/thumb.png",
+          "category": "graphics",
           "tags": ["data visualization", "canvas", "interactive"]
         },
         {
@@ -115,6 +183,7 @@
           "description": "Interactive particle system with physics simulation using Canvas API.",
           "href": "html_showcase/interactive_particles/index.html",
           "image": "html_showcase/interactive_particles/thumb.png",
+          "category": "graphics",
           "tags": ["canvas", "physics", "animation"]
         },
        {
@@ -122,6 +191,7 @@
             "description": "WebGL Shader Demonstration with lots of configurable tweaks to play with.",
             "href": "html_showcase/gl_shaders/index.html",
             "image": "html_showcase/gl_shaders/thumb.png",
+            "category": "graphics",
             "tags": ["WebGL", "shaders", "interactive"]
         },
         {
@@ -129,6 +199,7 @@
           "description": "Complex SVG animations with morphing and path animations.",
           "href": "html_showcase/svg_animations/index.html",
           "image": "html_showcase/svg_animations/thumb.png",
+          "category": "graphics",
           "tags": ["SVG", "animation", "graphics"]
         }
         ]

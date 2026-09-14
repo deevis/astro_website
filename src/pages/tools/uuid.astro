@@ -1,0 +1,128 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'UUID Generator';
+const pageDescription = 'Generate UUID v4 and v7 identifiers in the browser.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="tool-wrap">
+    <div class="container mx-auto px-4 max-w-3xl">
+      <header class="tool-head">
+        <p class="tool-kicker">Developer tools</p>
+        <h1>UUID generator</h1>
+        <p>v4 (random) and v7 (time-ordered). Generated locally with <code>crypto.getRandomValues</code>.</p>
+      </header>
+
+      <div class="tool-card">
+        <div class="controls">
+          <label>
+            <span class="label">Version</span>
+            <select id="version" class="field">
+              <option value="v4">v4 — random</option>
+              <option value="v7">v7 — Unix epoch ms + random</option>
+            </select>
+          </label>
+          <label>
+            <span class="label">Count</span>
+            <input id="count" class="field" type="number" min="1" max="100" value="5" />
+          </label>
+          <button type="button" id="generate" class="btn-primary">Generate</button>
+        </div>
+        <div class="format-row">
+          <label><input type="checkbox" id="uppercase" /> Uppercase</label>
+          <label><input type="checkbox" id="nohyphen" /> No hyphens</label>
+        </div>
+        <textarea id="output" class="field mono" rows="8" readonly></textarea>
+        <div class="actions">
+          <button type="button" id="copy" class="btn-secondary">Copy</button>
+          <span id="copy-status" class="status"></span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const $ = (id: string) => document.getElementById(id) as HTMLInputElement;
+
+    function bytes(n: number) {
+      const buf = new Uint8Array(n);
+      crypto.getRandomValues(buf);
+      return buf;
+    }
+
+    function hex(buf: Uint8Array) {
+      return [...buf].map((b) => b.toString(16).padStart(2, '0')).join('');
+    }
+
+    function formatUuid(raw: string, upper: boolean, noHyphen: boolean) {
+      let out = noHyphen ? raw.replace(/-/g, '') : raw;
+      return upper ? out.toUpperCase() : out;
+    }
+
+    function uuidV4() {
+      const b = bytes(16);
+      b[6] = (b[6] & 0x0f) | 0x40;
+      b[8] = (b[8] & 0x3f) | 0x80;
+      const h = hex(b);
+      return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+    }
+
+    function uuidV7() {
+      const b = bytes(16);
+      const ms = BigInt(Date.now());
+      const time = ms.toString(16).padStart(12, '0');
+      for (let i = 0; i < 6; i++) b[i] = parseInt(time.slice(i * 2, i * 2 + 2), 16);
+      b[6] = (b[6] & 0x0f) | 0x70;
+      b[8] = (b[8] & 0x3f) | 0x80;
+      const h = hex(b);
+      return `${h.slice(0, 8)}-${h.slice(8, 12)}-${h.slice(12, 16)}-${h.slice(16, 20)}-${h.slice(20)}`;
+    }
+
+    function generate() {
+      const n = Math.min(100, Math.max(1, Number($('count').value) || 1));
+      const version = ($('version') as unknown as HTMLSelectElement).value;
+      const upper = $('uppercase').checked;
+      const noHyphen = $('nohyphen').checked;
+      const lines = Array.from({ length: n }, () => formatUuid(version === 'v7' ? uuidV7() : uuidV4(), upper, noHyphen));
+      (document.getElementById('output') as HTMLTextAreaElement).value = lines.join('\n');
+    }
+
+    document.getElementById('generate')?.addEventListener('click', generate);
+    ['version', 'count', 'uppercase', 'nohyphen'].forEach((id) => {
+      document.getElementById(id)?.addEventListener('change', generate);
+    });
+    document.getElementById('copy')?.addEventListener('click', async () => {
+      const text = (document.getElementById('output') as HTMLTextAreaElement).value;
+      await navigator.clipboard.writeText(text);
+      const status = document.getElementById('copy-status')!;
+      status.textContent = 'Copied';
+      setTimeout(() => { status.textContent = ''; }, 1500);
+    });
+    generate();
+  </script>
+
+  <style>
+    .tool-wrap { padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh; background: #f8fafc; }
+    :global(.dark) .tool-wrap { background: rgb(3, 7, 18); }
+    .tool-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #2563eb; margin-bottom: 6px; }
+    .tool-head { margin-bottom: 1.5rem; }
+    .tool-head h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
+    .tool-head p { color: #6b7280; }
+    .tool-card { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.25rem 1.5rem; }
+    :global(.dark) .tool-card { background: rgb(17, 24, 39); border-color: rgb(31, 41, 55); }
+    .controls { display: grid; grid-template-columns: 1fr 7rem auto; gap: 12px; align-items: end; margin-bottom: 12px; }
+    .label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; }
+    .field { width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; background: #f8fafc; }
+    :global(.dark) .field { background: rgb(31, 41, 55); border-color: rgb(55, 65, 81); color: #f3f4f6; }
+    .mono { font-family: ui-monospace, Menlo, monospace; font-size: 0.9rem; }
+    textarea.field { min-height: 12rem; resize: vertical; }
+    .format-row { display: flex; gap: 16px; margin-bottom: 10px; font-size: 14px; }
+    .btn-primary, .btn-secondary { border-radius: 10px; padding: 10px 14px; font-weight: 700; cursor: pointer; border: none; }
+    .btn-primary { background: #2563eb; color: white; }
+    .btn-secondary { background: #e5e7eb; color: #111827; margin-top: 10px; }
+    :global(.dark) .btn-secondary { background: rgb(55, 65, 81); color: #f3f4f6; }
+    .status { margin-left: 10px; font-size: 13px; color: #059669; }
+    @media (max-width: 640px) { .controls { grid-template-columns: 1fr; } }
+  </style>
+</Layout>

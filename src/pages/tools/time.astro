@@ -1,0 +1,498 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import { WORLD_LAND_PATH } from '../../data/world-land-path';
+
+const pageTitle = 'Time Converter';
+const pageDescription = 'Convert ISO 8601, Unix timestamps, and wall times across timezones. Everything stays in your browser.';
+
+const commonZones = [
+  'UTC',
+  'America/Denver',
+  'America/Los_Angeles',
+  'America/Chicago',
+  'America/New_York',
+  'America/Sao_Paulo',
+  'Europe/London',
+  'Europe/Paris',
+  'Europe/Berlin',
+  'Africa/Johannesburg',
+  'Asia/Dubai',
+  'Asia/Kolkata',
+  'Asia/Singapore',
+  'Asia/Tokyo',
+  'Australia/Sydney',
+  'Pacific/Auckland',
+];
+
+const worldCities = [
+  { zone: 'America/Los_Angeles', city: 'Los Angeles', lat: 34.05, lng: -118.24, label: 'left' },
+  { zone: 'America/Denver', city: 'Denver', lat: 39.74, lng: -104.99, label: 'top' },
+  { zone: 'America/Chicago', city: 'Chicago', lat: 41.88, lng: -87.63, label: 'bottom' },
+  { zone: 'America/New_York', city: 'New York', lat: 40.71, lng: -74.01, label: 'right' },
+  { zone: 'America/Sao_Paulo', city: 'São Paulo', lat: -23.55, lng: -46.63, label: 'right' },
+  { zone: 'Europe/London', city: 'London', lat: 51.51, lng: -0.13, label: 'left' },
+  { zone: 'Europe/Paris', city: 'Paris', lat: 48.86, lng: 2.35, label: 'bottom' },
+  { zone: 'Europe/Berlin', city: 'Berlin', lat: 52.52, lng: 13.41, label: 'right' },
+  { zone: 'Africa/Johannesburg', city: 'Johannesburg', lat: -26.2, lng: 28.04, label: 'right' },
+  { zone: 'Asia/Dubai', city: 'Dubai', lat: 25.2, lng: 55.27, label: 'top' },
+  { zone: 'Asia/Kolkata', city: 'Kolkata', lat: 22.57, lng: 88.36, label: 'bottom' },
+  { zone: 'Asia/Singapore', city: 'Singapore', lat: 1.35, lng: 103.82, label: 'left' },
+  { zone: 'Asia/Tokyo', city: 'Tokyo', lat: 35.68, lng: 139.69, label: 'right' },
+  { zone: 'Australia/Sydney', city: 'Sydney', lat: -33.87, lng: 151.21, label: 'left' },
+  { zone: 'Pacific/Auckland', city: 'Auckland', lat: -36.85, lng: 174.76, label: 'left' },
+];
+
+const meridians = [-150, -120, -90, -60, -30, 0, 30, 60, 90, 120, 150].map((lng) => ((lng + 180) / 360) * 1000);
+const parallels = [60, 30, 0, -30].map((lat) => ((90 - lat) / 180) * 500);
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="tool-wrap">
+    <div class="container mx-auto px-4 max-w-6xl">
+      <header class="tool-head">
+        <p class="tool-kicker">Developer tools</p>
+        <h1>Time converter</h1>
+        <p>Paste an ISO 8601 string, a Unix timestamp, or a wall clock — see UTC, local, epoch, and any IANA timezone.</p>
+      </header>
+
+      <div class="tool-card">
+        <div class="now-row">
+          <div>
+            <p class="label">Now</p>
+            <p id="live-now" class="mono now-value">—</p>
+          </div>
+          <button type="button" id="use-now" class="btn-primary">Use now</button>
+        </div>
+
+        <label class="label" for="instant-input">ISO 8601, RFC 3339, or Unix seconds / milliseconds</label>
+        <input id="instant-input" class="field mono" placeholder="2026-09-06T21:14:00Z  or  1757193240" autocomplete="off" />
+        <p id="parse-error" class="error" hidden>Could not parse that value.</p>
+
+        <div class="out-grid" id="instant-out"></div>
+      </div>
+
+      <div class="tool-card">
+        <h2>Timezone converter</h2>
+        <p class="hint">Interpret a wall time in one zone and show it in another. DST is handled via IANA zones.</p>
+        <div class="tz-form">
+          <label>
+            <span class="label">Wall time</span>
+            <input id="wall-input" class="field mono" type="datetime-local" step="1" />
+          </label>
+          <label>
+            <span class="label">From</span>
+            <select id="zone-from" class="field"></select>
+          </label>
+          <label>
+            <span class="label">To</span>
+            <select id="zone-to" class="field"></select>
+          </label>
+        </div>
+        <p id="tz-result" class="tz-result mono">—</p>
+      </div>
+
+      <div class="tool-card world-card">
+        <h2>World clock</h2>
+        <p class="hint">Live local times on an equirectangular map. Hover a city for the full date and GMT offset; click to use it as the converter target.</p>
+        <div class="world-stage" id="world-stage">
+          <svg class="world-svg" viewBox="0 0 1000 430" role="img" aria-label="World map with local times">
+            <rect class="world-ocean" width="1000" height="430" />
+            <g class="world-graticule" aria-hidden="true">
+              {meridians.map((x) => <line x1={x} y1="0" x2={x} y2="430" />)}
+              {parallels.map((y) => <line x1="0" y1={y} x2="1000" y2={y} />)}
+            </g>
+            <path class="world-land" d={WORLD_LAND_PATH} />
+            <g id="world-pins"></g>
+          </svg>
+          <div id="world-tooltip" class="world-tooltip" hidden></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script define:vars={{ commonZones, worldCities }}>
+    const $ = (id) => document.getElementById(id);
+
+    function getTimeZoneOffsetMs(date, timeZone) {
+      const parts = Object.fromEntries(
+        new Intl.DateTimeFormat('en-US', {
+          timeZone,
+          hourCycle: 'h23',
+          year: 'numeric',
+          month: '2-digit',
+          day: '2-digit',
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit',
+        }).formatToParts(date).filter((p) => p.type !== 'literal').map((p) => [p.type, p.value])
+      );
+      const asUTC = Date.UTC(+parts.year, +parts.month - 1, +parts.day, +parts.hour, +parts.minute, +parts.second);
+      return asUTC - date.getTime();
+    }
+
+    function zonedLocalToDate(naive, timeZone) {
+      const utcGuess = new Date(naive + 'Z');
+      if (Number.isNaN(utcGuess.getTime())) return null;
+      const first = new Date(utcGuess.getTime() - getTimeZoneOffsetMs(utcGuess, timeZone));
+      return new Date(utcGuess.getTime() - getTimeZoneOffsetMs(first, timeZone));
+    }
+
+    function formatInZone(date, timeZone) {
+      return new Intl.DateTimeFormat('en-CA', {
+        timeZone,
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        second: '2-digit',
+        hourCycle: 'h23',
+        timeZoneName: 'shortOffset',
+      }).format(date);
+    }
+
+    function clockTime(date, timeZone) {
+      return new Intl.DateTimeFormat('en-GB', {
+        timeZone,
+        hour: '2-digit',
+        minute: '2-digit',
+        hourCycle: 'h23',
+      }).format(date);
+    }
+
+    function zoneDetails(date, timeZone) {
+      const parts = Object.fromEntries(
+        new Intl.DateTimeFormat('en-US', {
+          timeZone,
+          weekday: 'long',
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+          hour: 'numeric',
+          minute: '2-digit',
+          second: '2-digit',
+          timeZoneName: 'longOffset',
+          hourCycle: 'h12',
+        }).formatToParts(date).map((p) => [p.type, p.value])
+      );
+      const longName = new Intl.DateTimeFormat('en-US', { timeZone, timeZoneName: 'long' })
+        .formatToParts(date)
+        .find((p) => p.type === 'timeZoneName')?.value;
+      const dateLine = `${parts.weekday}, ${parts.month} ${parts.day}, ${parts.year}`;
+      const timeLine = `${parts.hour}:${parts.minute}:${parts.second} ${parts.dayPeriod}`;
+      const offset = parts.timeZoneName || '';
+      return { dateLine, timeLine, offset, longName: longName && longName !== offset ? longName : '' };
+    }
+
+    function parseInstant(raw) {
+      const t = raw.trim();
+      if (!t) return null;
+      if (/^-?\d+(\.\d+)?$/.test(t)) {
+        const n = Number(t);
+        const ms = Math.abs(n) < 1e12 ? n * 1000 : n;
+        const d = new Date(ms);
+        return Number.isNaN(d.getTime()) ? null : d;
+      }
+      const d = new Date(t);
+      return Number.isNaN(d.getTime()) ? null : d;
+    }
+
+    function allZones() {
+      try {
+        return Intl.supportedValuesOf('timeZone');
+      } catch {
+        return commonZones;
+      }
+    }
+
+    function fillZoneSelect(select, preferred) {
+      const zones = allZones();
+      select.innerHTML = zones.map((z) => `<option value="${z}">${z}</option>`).join('');
+      select.value = zones.includes(preferred) ? preferred : 'UTC';
+    }
+
+    function renderInstant(date) {
+      const unix = Math.floor(date.getTime() / 1000);
+      const rows = [
+        ['ISO 8601 (UTC)', date.toISOString()],
+        ['Unix seconds', String(unix)],
+        ['Unix milliseconds', String(date.getTime())],
+        ['UTC', date.toUTCString()],
+        ['Local', date.toString()],
+        ['Locale', date.toLocaleString(undefined, { dateStyle: 'full', timeStyle: 'long' })],
+      ];
+      $('instant-out').innerHTML = rows.map(([k, v]) => (
+        `<div class="out-row"><strong class="out-label">${k}:</strong> <code class="out-value">${v}</code></div>`
+      )).join('');
+    }
+
+    function project(lat, lng) {
+      return {
+        x: ((lng + 180) / 360) * 1000,
+        y: ((90 - lat) / 180) * 500,
+      };
+    }
+
+    function labelOffset(anchor) {
+      if (anchor === 'left') return { x: -8, y: 4, anchor: 'end' };
+      if (anchor === 'right') return { x: 8, y: 4, anchor: 'start' };
+      if (anchor === 'top') return { x: 0, y: -14, anchor: 'middle' };
+      return { x: 0, y: 18, anchor: 'middle' };
+    }
+
+    function pinTemplate(city) {
+      const { x, y } = project(city.lat, city.lng);
+      const off = labelOffset(city.label);
+      const timeDy = city.label === 'bottom' ? 13 : city.label === 'top' ? -13 : 13;
+      return `<g class="world-pin" data-zone="${city.zone}" data-city="${city.city}" transform="translate(${x.toFixed(1)} ${y.toFixed(1)})" tabindex="0" role="button" aria-label="${city.city}">
+        <circle class="world-halo" r="10" />
+        <circle class="world-dot" r="4.2" />
+        <text class="world-pin-city" x="${off.x}" y="${off.y}" text-anchor="${off.anchor}">${city.city}</text>
+        <text class="world-pin-time" x="${off.x}" y="${off.y + timeDy}" text-anchor="${off.anchor}">—</text>
+      </g>`;
+    }
+
+    function showTooltip(pin, date) {
+      const tip = $('world-tooltip');
+      const stage = $('world-stage');
+      const zone = pin.dataset.zone;
+      const city = pin.dataset.city;
+      const details = zoneDetails(date, zone);
+      tip.hidden = false;
+      tip.innerHTML = `
+        <p class="tip-city">${city}</p>
+        <p class="tip-zone">${zone.replace(/_/g, ' ')}</p>
+        <p class="tip-date">${details.dateLine}</p>
+        <p class="tip-time">${details.timeLine}</p>
+        <p class="tip-offset">${details.offset}${details.longName ? ` · ${details.longName}` : ''}</p>
+      `;
+      const stageBox = stage.getBoundingClientRect();
+      const pinBox = pin.getBoundingClientRect();
+      let left = pinBox.left - stageBox.left + pinBox.width / 2;
+      let top = pinBox.top - stageBox.top - 12;
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+      const tipBox = tip.getBoundingClientRect();
+      if (tipBox.right > stageBox.right - 8) {
+        left -= tipBox.right - stageBox.right + 8;
+      }
+      if (tipBox.left < stageBox.left + 8) {
+        left += stageBox.left + 8 - tipBox.left;
+      }
+      if (tipBox.top < stageBox.top + 8) {
+        top = pinBox.bottom - stageBox.top + 12;
+      }
+      tip.style.left = `${left}px`;
+      tip.style.top = `${top}px`;
+    }
+
+    function hideTooltip() {
+      $('world-tooltip').hidden = true;
+    }
+
+    let worldDate = new Date();
+    let activePin = null;
+
+    function updateWorldTimes(date) {
+      worldDate = date;
+      document.querySelectorAll('#world-pins .world-pin').forEach((pin) => {
+        pin.querySelector('.world-pin-time').textContent = clockTime(date, pin.dataset.zone);
+      });
+      if (activePin && !$('world-tooltip').hidden) showTooltip(activePin, date);
+    }
+
+    function mountWorldPins() {
+      const layer = $('world-pins');
+      layer.innerHTML = worldCities.map(pinTemplate).join('');
+      layer.querySelectorAll('.world-pin').forEach((pin) => {
+        pin.addEventListener('pointerenter', () => {
+          activePin = pin;
+          showTooltip(pin, worldDate);
+        });
+        pin.addEventListener('pointerleave', () => {
+          if (activePin === pin) activePin = null;
+          hideTooltip();
+        });
+        pin.addEventListener('focus', () => {
+          activePin = pin;
+          showTooltip(pin, worldDate);
+        });
+        pin.addEventListener('blur', () => {
+          if (activePin === pin) activePin = null;
+          hideTooltip();
+        });
+        pin.addEventListener('click', () => {
+          $('zone-to').value = pin.dataset.zone;
+          convertZones();
+        });
+      });
+    }
+
+    function toDatetimeLocalValue(date) {
+      const pad = (n) => String(n).padStart(2, '0');
+      return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}:${pad(date.getSeconds())}`;
+    }
+
+    function convertZones() {
+      try {
+        const wall = $('wall-input').value;
+        if (!wall) {
+          $('tz-result').textContent = '—';
+          return;
+        }
+        const naive = wall.length === 16 ? `${wall}:00` : wall;
+        const from = $('zone-from').value || 'UTC';
+        const to = $('zone-to').value || 'UTC';
+        const date = zonedLocalToDate(naive, from);
+        if (!date) {
+          $('tz-result').textContent = 'Could not convert that wall time.';
+          return;
+        }
+        $('tz-result').textContent = `${formatInZone(date, from)}  →  ${formatInZone(date, to)}`;
+      } catch {
+        $('tz-result').textContent = 'Could not convert that wall time.';
+      }
+    }
+
+    const localZone = Intl.DateTimeFormat().resolvedOptions().timeZone || 'UTC';
+    fillZoneSelect($('zone-from'), localZone);
+    fillZoneSelect($('zone-to'), 'UTC');
+
+    let current = new Date();
+    $('instant-input').value = current.toISOString();
+    $('wall-input').value = toDatetimeLocalValue(current);
+    renderInstant(current);
+    mountWorldPins();
+    updateWorldTimes(current);
+    convertZones();
+
+    $('instant-input').addEventListener('input', () => {
+      const parsed = parseInstant($('instant-input').value);
+      $('parse-error').hidden = !!parsed || !$('instant-input').value.trim();
+      if (!parsed) return;
+      current = parsed;
+      renderInstant(current);
+      updateWorldTimes(current);
+    });
+
+    $('use-now').addEventListener('click', () => {
+      current = new Date();
+      $('instant-input').value = current.toISOString();
+      $('wall-input').value = toDatetimeLocalValue(current);
+      $('parse-error').hidden = true;
+      renderInstant(current);
+      updateWorldTimes(current);
+      convertZones();
+    });
+
+    ['wall-input', 'zone-from', 'zone-to'].forEach((id) => {
+      $(id).addEventListener('input', convertZones);
+      $(id).addEventListener('change', convertZones);
+    });
+
+    function tickNow() {
+      $('live-now').textContent = `${new Date().toISOString()}  ·  ${localZone}`;
+    }
+    tickNow();
+    setInterval(tickNow, 250);
+    setInterval(() => {
+      const typed = $('instant-input').value.trim();
+      const parsed = parseInstant(typed);
+      if (parsed && Math.abs(parsed.getTime() - Date.now()) < 2000) {
+        current = new Date();
+        updateWorldTimes(current);
+      }
+    }, 1000);
+  </script>
+
+  <style is:global>
+    .tool-wrap { padding-top: 8rem; padding-bottom: 4rem; min-height: 100vh; background: #f8fafc; }
+    .dark .tool-wrap { background: rgb(3, 7, 18); }
+    .tool-wrap .tool-head { margin-bottom: 1.5rem; }
+    .tool-wrap .tool-kicker { font-size: 11px; font-weight: 700; letter-spacing: 0.18em; text-transform: uppercase; color: #2563eb; margin-bottom: 6px; }
+    .tool-wrap .tool-head h1 { font-size: 2rem; font-weight: 800; margin-bottom: 6px; }
+    .tool-wrap .tool-head p, .tool-wrap .hint { color: #6b7280; }
+    .dark .tool-wrap .tool-head p, .dark .tool-wrap .hint { color: #9ca3af; }
+    .tool-wrap .tool-card { background: white; border: 1px solid #e5e7eb; border-radius: 16px; padding: 1.25rem 1.5rem; margin-bottom: 1rem; }
+    .dark .tool-wrap .tool-card { background: rgb(17, 24, 39); border-color: rgb(31, 41, 55); }
+    .tool-wrap .tool-card h2 { font-size: 1.15rem; font-weight: 700; margin-bottom: 4px; }
+    .tool-wrap .label { display: block; font-size: 12px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: #9ca3af; margin-bottom: 6px; }
+    .tool-wrap .field { width: 100%; border: 1px solid #e5e7eb; border-radius: 10px; padding: 10px 12px; background: #f8fafc; }
+    .dark .tool-wrap .field { background: rgb(31, 41, 55); border-color: rgb(55, 65, 81); color: #f3f4f6; }
+    .tool-wrap .mono { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 0.92rem; }
+    .tool-wrap .now-row { display: flex; justify-content: space-between; align-items: center; gap: 12px; margin-bottom: 16px; }
+    .tool-wrap .now-value { font-size: 0.95rem; }
+    .tool-wrap .btn-primary { background: #2563eb; color: white; border: none; border-radius: 10px; padding: 8px 14px; font-weight: 700; cursor: pointer; white-space: nowrap; }
+    .tool-wrap .btn-primary:hover { background: #1d4ed8; }
+    .tool-wrap .error { color: #dc2626; font-size: 13px; margin-top: 6px; }
+    .tool-wrap .out-grid { margin-top: 14px; display: grid; gap: 0; }
+    .tool-wrap .out-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem 0.55rem;
+      align-items: baseline;
+      padding: 0.55rem 0;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 0.95rem;
+      line-height: 1.45;
+    }
+    .dark .tool-wrap .out-row { border-bottom-color: rgb(55, 65, 81); }
+    .tool-wrap .out-row:last-child { border-bottom: 0; }
+    .tool-wrap .out-label { font-weight: 700; color: inherit; }
+    .tool-wrap .out-value {
+      font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+      font-size: 0.9rem;
+      overflow-wrap: anywhere;
+      color: #374151;
+    }
+    .dark .tool-wrap .out-value { color: #e5e7eb; }
+    .tool-wrap .tz-form { display: grid; grid-template-columns: 1.2fr 1fr 1fr; gap: 12px; margin: 12px 0; }
+    .tool-wrap .tz-result { font-size: 1rem; font-weight: 600; padding: 10px 0; }
+    .tool-wrap .world-card { overflow: hidden; }
+    .tool-wrap .world-stage { position: relative; margin-top: 14px; border-radius: 14px; overflow: hidden; }
+    .tool-wrap .world-svg { display: block; width: 100%; height: auto; background: #0b3a5b; }
+    .dark .tool-wrap .world-svg { background: #071e33; }
+    .tool-wrap .world-ocean { fill: #0b3a5b; }
+    .dark .tool-wrap .world-ocean { fill: #071e33; }
+    .tool-wrap .world-land { fill: #7eb3c9; stroke: #5a97ae; stroke-width: 0.4; }
+    .dark .tool-wrap .world-land { fill: #1e4d68; stroke: #2a6482; }
+    .tool-wrap .world-graticule line { stroke: rgba(255,255,255,0.08); stroke-width: 0.6; }
+    .tool-wrap .world-pin { cursor: pointer; outline: none; }
+    .tool-wrap .world-halo { fill: rgba(96, 165, 250, 0.22); }
+    .tool-wrap .world-dot { fill: #fbbf24; stroke: #fff; stroke-width: 1.2; }
+    .tool-wrap .world-pin:hover .world-dot, .tool-wrap .world-pin:focus .world-dot { fill: #f59e0b; }
+    .tool-wrap .world-pin-city, .tool-wrap .world-pin-time {
+      fill: #f8fafc;
+      font-size: 11px;
+      paint-order: stroke;
+      stroke: rgba(7, 30, 51, 0.85);
+      stroke-width: 3px;
+      stroke-linejoin: round;
+      pointer-events: none;
+    }
+    .tool-wrap .world-pin-city { font-weight: 700; }
+    .tool-wrap .world-pin-time { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-size: 10px; font-weight: 600; }
+    .tool-wrap .world-tooltip {
+      position: absolute;
+      transform: translate(-50%, -100%);
+      min-width: 16rem;
+      max-width: 22rem;
+      padding: 10px 12px;
+      border-radius: 12px;
+      background: rgba(15, 23, 42, 0.96);
+      color: #f8fafc;
+      box-shadow: 0 12px 32px rgba(0,0,0,0.35);
+      pointer-events: none;
+      z-index: 2;
+    }
+    .tool-wrap .tip-city { font-weight: 800; font-size: 0.95rem; }
+    .tool-wrap .tip-zone { font-size: 11px; color: #93c5fd; margin: 2px 0 8px; }
+    .tool-wrap .tip-date, .tool-wrap .tip-time, .tool-wrap .tip-offset { font-size: 12px; line-height: 1.45; color: #e5e7eb; }
+    .tool-wrap .tip-time { font-family: ui-monospace, SFMono-Regular, Menlo, monospace; font-weight: 700; color: #fbbf24; }
+    @media (max-width: 800px) {
+      .tool-wrap .tz-form { grid-template-columns: 1fr; }
+      .tool-wrap .now-row { flex-direction: column; align-items: flex-start; }
+      .tool-wrap .world-pin-city, .tool-wrap .world-pin-time { font-size: 9px; }
+    }
+  </style>
+</Layout>

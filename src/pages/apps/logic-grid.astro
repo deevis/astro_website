@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Logic Grid';
+const pageDescription = 'Classic magazine logic-grid puzzles. Cross out what isn’t true until each person matches one value per category — uniquely.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/logic_grid/logic-grid.css" />
+  <div class="lg-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="lg-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/logic_grid/logic-grid.js"></script>
+</Layout>

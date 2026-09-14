@@ -1,84 +1,92 @@
 ---
+import { apps, bitcoinResources, developerTools } from '../config/catalog';
+import { showcases } from '../config/showcases.json';
+import { homeGameSlides, type ShowcaseItem } from '../lib/showcases';
+
 const currentYear = new Date().getFullYear();
+const gameLinks = homeGameSlides(showcases as ShowcaseItem[]);
+
+const siteLinks = [
+  { href: '/', text: 'Home' },
+  { href: '/articles', text: 'Articles' },
+  { href: '/playground', text: 'Playground' },
+  { href: '/news', text: 'News' },
+  { href: '/gallery', text: 'Gallery' },
+  { href: '/about', text: 'About Me' },
+  { href: 'https://www.redbubble.com/people/ai-depot/shop', text: 'Shop', external: true },
+];
+
+const connectLinks = [
+  { href: '/contact', text: 'Contact Me' },
+  { href: 'https://www.linkedin.com/in/darrenhicks/', text: 'LinkedIn', external: true },
+  { href: 'https://github.com/deevis', text: 'GitHub', external: true },
+  { href: 'https://stackoverflow.com/users/59075/darren-hicks', text: 'Stack Overflow', external: true },
+  { href: 'https://www.hackerrank.com/profile/darren_hicks', text: 'HackerRank', external: true },
+  { href: 'https://x.com/deevis', text: 'Twitter', external: true },
+  { href: 'https://www.instagram.com/deepdream_inception/', text: 'Instagram', external: true },
+];
+
+const headingClass = 'text-sm font-semibold uppercase tracking-wide text-primary-600 dark:text-primary-300 mb-3';
+const footerLink = 'block text-sm py-0.5 text-gray-700 dark:text-gray-300 hover:text-primary-500 dark:hover:text-primary-300 transition-colors';
 ---
 
 <script src="/js/dbh-dev-console.js" is:inline></script>
-<footer class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white py-12 transition-colors duration-200">
+<footer class="bg-gray-100 dark:bg-gray-900 text-gray-900 dark:text-white py-10 transition-colors duration-200">
   <div class="container mx-auto px-4">
-    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+    <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-x-6 gap-y-8">
       <div>
-        <h3 class="text-xl font-bold mb-4">Contact</h3>
-        <p class="mb-2">Email: me@darrenhicks.dev</p>
-        <p>Location: Salt Lake City, Utah</p>
-        
-        <h3 class="text-xl font-bold mb-4 mt-8">Shop</h3>
-        <div class="space-y-2">
-          <a href="https://www.redbubble.com/people/ai-depot/shop" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">AI Depot on Redbubble</a>
-        </div>
+        <h3 class={headingClass}>Site</h3>
+        {siteLinks.map((item) => (
+          item.external ? (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" class={footerLink}>{item.text}</a>
+          ) : (
+            <a href={item.href} class={footerLink}>{item.text}</a>
+          )
+        ))}
       </div>
-      
+
       <div>
-        <h3 class="text-xl font-bold mb-4">Connect</h3>
-        <div class="space-y-2">
-          <a href="/contact" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Contact Me</a>
-          <a href="https://www.linkedin.com/in/darrenhicks/" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">LinkedIn</a>
-          <a href="https://github.com/deevis" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">GitHub</a>
-          <a href="https://stackoverflow.com/users/59075/darren-hicks" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Stack Overflow</a>
-          <a href="https://www.hackerrank.com/profile/darren_hicks" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">HackerRank</a>
-          <a href="https://x.com/deevis" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Twitter</a>
-          <a href="https://www.instagram.com/deepdream_inception/" target="_blank" rel="noopener noreferrer" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Instagram</a>
-        </div>
+        <h3 class={headingClass}>Games</h3>
+        {gameLinks.map((game) => (
+          <a href={game.href} class={footerLink}>{game.title}</a>
+        ))}
       </div>
-      
+
       <div>
-        <h3 class="text-xl font-bold mb-4">Quick Links</h3>
-        <div class="space-y-2">
-          <a href="/" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Home</a>
-          <a href="/articles" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Articles</a>
-          
-          <div class="ml-0">
-            <p class="text-primary-600 dark:text-primary-300 font-semibold mb-1">Developer Tools</p>
-            <div class="ml-4 space-y-1">
-              <a href="/language-showdown" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Language Showdown</a>
-              <a href="/tools/base64" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Base64 Encoder/Decoder</a>
-              <a href="/tools/string-escape" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">String Escape/Unescape</a>
-              <a href="/tools/json-formatter" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">JSON Formatter/Converter</a>
-              <a href="/tools/qr-code" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">QR Code Generator/Scanner</a>
-              <a href="/tools/hex-converter" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Hex Converter (OP_RETURN)</a>
-            </div>
-          </div>
-          
-          <div class="ml-0">
-            <p class="text-primary-600 dark:text-primary-300 font-semibold mb-1">Bitcoin</p>
-            <div class="ml-4 space-y-1">
-              <a href="/bitcoin-tutorial" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Bitcoin Tutorial</a>
-              <a href="/bitcoin-blockchain-tutorial" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Bitcoin Blockchain Tutorial</a>
-              <a href="/bitcoin-hardware-wallet-showdown" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Hardware Wallet Showdown</a>
-              <a href="/bitcoin-dca-what-if" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Bitcoin DCA Scenarios</a>
-              <a href="/bitcoin-resources" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Bitcoin Resources</a>
-              <a href="/bitcoin-large-op-returns-explorer" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Large OP_RETURN Explorer</a>
-              <a href="/bip-110-miner-support" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">BIP 110 Miner Support</a>
-            </div>
-          </div>
-          
-          <div class="ml-0">
-            <p class="text-primary-600 dark:text-primary-300 font-semibold mb-1">Apps</p>
-            <div class="ml-4 space-y-1">
-              <a href="/apps/pink-noise-generator" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Pink Noise Generator</a>
-              <a href="/apps/reaction-trainer" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Reaction Trainer</a>
-              <a href="/apps/memory-challenge" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Memory Challenge</a>
-              <a href="/apps/furnace-tier-list" class="block hover:text-primary-400 dark:hover:text-primary-300 text-sm transition-colors">Furnace Tier List</a>
-            </div>
-          </div>
-          <a href="/gallery" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Gallery</a>
-          <a href="/showcase" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">HTML Showcase</a>
-          <a href="/about" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">About Me</a>
-          <a href="https://www.redbubble.com/people/ai-depot/shop" class="block hover:text-primary-400 dark:hover:text-primary-300 transition-colors">Shop</a>
-        </div>
+        <h3 class={headingClass}>Apps</h3>
+        {apps.map((item) => (
+          <a href={item.href} class={footerLink}>{item.title}</a>
+        ))}
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Developer Tools</h3>
+        {developerTools.map((item) => (
+          <a href={item.href} class={footerLink}>{item.title}</a>
+        ))}
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Bitcoin</h3>
+        {bitcoinResources.map((item) => (
+          <a href={item.href} class={footerLink}>{item.title}</a>
+        ))}
+      </div>
+
+      <div>
+        <h3 class={headingClass}>Connect</h3>
+        {connectLinks.map((item) => (
+          item.external ? (
+            <a href={item.href} target="_blank" rel="noopener noreferrer" class={footerLink}>{item.text}</a>
+          ) : (
+            <a href={item.href} class={footerLink}>{item.text}</a>
+          )
+        ))}
       </div>
     </div>
-    
-    <div class="mt-8 pt-8 border-t border-gray-300 dark:border-gray-800 text-center">
+
+    <div class="mt-8 pt-6 border-t border-gray-300 dark:border-gray-800 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 text-sm text-gray-600 dark:text-gray-400">
+      <p>me@darrenhicks.dev · Salt Lake City, Utah</p>
       <p>&copy; {currentYear} Darren Hicks. All rights reserved.</p>
     </div>
   </div>

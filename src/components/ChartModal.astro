@@ -60,7 +60,19 @@
         document.head.appendChild(script);
       });
       
-      Promise.all([loadChartJs, loadDateAdapter]).then(() => {
+      const loadZoomFix = new Promise((resolve) => {
+        if ((window as any).Chart?.helpers?.__cssZoomHoverPatched) {
+          resolve(true);
+          return;
+        }
+        const script = document.createElement('script');
+        script.src = '/js/chartjs-css-zoom-fix.js?v=2';
+        script.onload = () => resolve(true);
+        script.onerror = () => resolve(true);
+        document.head.appendChild(script);
+      });
+
+      Promise.all([loadChartJs, loadDateAdapter, loadZoomFix]).then(() => {
         // Add small delay to ensure adapters are registered
         setTimeout(() => {
           renderChart(chartData);
@@ -333,6 +345,11 @@
         options: {
           responsive: true,
           maintainAspectRatio: false,
+          interaction: {
+            mode: 'index',
+            axis: 'x',
+            intersect: false
+          },
           scales: {
             y: {
               type: chartData.yAxisType || 'linear',
@@ -413,7 +430,7 @@
           },
           elements: { 
             line: { tension: 0.15 },
-            point: { radius: 0, hitRadius: 5, hoverRadius: 3 }
+            point: { radius: 0, hitRadius: 12, hoverRadius: 4 }
           }
         }
       });

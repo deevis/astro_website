@@ -1,0 +1,682 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Tier List';
+const pageDescription =
+  'Drag competing items into S through D. Start from furnaces, economic systems, or a civic-decay template — or build your own list in the browser.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="tl-wrap">
+    <header class="tl-top">
+      <div class="tl-heading">
+        <h1 id="pack-title">Tier List</h1>
+        <p id="pack-subtitle">Rank anything with a name, a picture, and an argument.</p>
+        <p id="pack-prompt" class="tl-prompt" hidden></p>
+      </div>
+      <div class="tl-toolbar">
+        <label class="tl-pack-picker">
+          <span>List</span>
+          <select id="pack-select" aria-label="Choose a list"></select>
+        </label>
+        <div class="tl-tabs" role="tablist" aria-label="List mode">
+          <button type="button" class="tl-tab is-active" id="view-rank" role="tab" aria-selected="true">Rank</button>
+          <button type="button" class="tl-tab" id="view-manage" role="tab" aria-selected="false">Manage</button>
+        </div>
+        <button type="button" class="tl-btn" id="new-pack-btn">New list</button>
+        <button type="button" class="tl-btn" id="customize-btn" hidden>Customize</button>
+        <button type="button" class="tl-btn" id="export-btn">Export</button>
+        <button type="button" class="tl-btn" id="import-btn">Import</button>
+        <input id="import-file" type="file" accept="application/json,.json" hidden />
+        <button type="button" class="tl-btn" id="reset-btn">Reset</button>
+      </div>
+    </header>
+
+    <div id="rank-view" class="tl-app">
+      <div id="board" class="tl-board"></div>
+
+      <aside class="tl-sidebar">
+        <div id="selected-name" class="tl-selected-name"></div>
+        <p id="details-hint" class="tl-hint">Select an item to inspect details.</p>
+        <div id="move-wrap" class="tl-move"></div>
+        <div id="item-actions" class="tl-item-actions"></div>
+        <div id="details"></div>
+
+        <div id="furnace-controls" class="tl-controls" hidden>
+          <div class="tl-controls-title">Fuel cost</div>
+          <label>Gas price ($ / therm)
+            <input id="gas-price" type="number" value="1.40" step="0.05" />
+          </label>
+          <label>Annual heat demand (BTU)
+            <input id="annual-btu" type="number" value="70000000" step="1000000" />
+          </label>
+        </div>
+      </aside>
+    </div>
+
+    <div id="manage-view" class="tl-manage" hidden>
+      <div id="manage-root"></div>
+    </div>
+  </div>
+
+  <dialog id="item-editor" class="tl-dialog">
+    <form id="item-editor-form">
+      <h2 id="item-editor-title">Item</h2>
+      <input type="hidden" id="edit-id" />
+      <label><span>Name</span><input id="edit-name" required maxlength="120" /></label>
+      <div class="tl-dialog-row">
+        <label><span>Emoji</span><input id="edit-emoji" maxlength="8" placeholder="🔥" /></label>
+        <label><span>Accent</span><input id="edit-accent" type="color" value="#38bdf8" /></label>
+      </div>
+      <label><span>Image URL</span><input id="edit-image" type="url" placeholder="https://…" /></label>
+      <label><span>Link</span><input id="edit-link" type="url" placeholder="https://…" /></label>
+      <label><span>Description</span><textarea id="edit-description" rows="5"></textarea></label>
+      <label><span>Tags (comma-separated)</span><input id="edit-tags" /></label>
+      <div id="edit-extra" class="tl-edit-extra"></div>
+      <div class="tl-dialog-actions">
+        <button type="button" class="tl-btn" id="editor-cancel">Cancel</button>
+        <button type="submit" class="tl-btn tl-btn-primary">Save</button>
+      </div>
+    </form>
+  </dialog>
+
+  <dialog id="new-pack-dialog" class="tl-dialog">
+    <form id="new-pack-form">
+      <h2>New list</h2>
+      <label><span>Title</span><input id="new-pack-title" required maxlength="80" placeholder="Pizza toppings" /></label>
+      <label><span>Subtitle</span><input id="new-pack-subtitle" maxlength="200" placeholder="Optional" /></label>
+      <div class="tl-dialog-actions">
+        <button type="button" class="tl-btn" id="new-pack-cancel">Cancel</button>
+        <button type="submit" class="tl-btn tl-btn-primary">Create</button>
+      </div>
+    </form>
+  </dialog>
+
+  <script>
+    import { initTierList } from '../../scripts/tier-list';
+    initTierList();
+  </script>
+
+  <style is:global>
+    .tl-wrap [hidden],
+    .tl-dialog [hidden] {
+      display: none !important;
+    }
+
+    .tl-wrap {
+      padding: 7.5rem 1.25rem 3rem;
+      min-height: 100vh;
+      background: #0f172a;
+      color: #e5e7eb;
+      font-family: Inter, system-ui, -apple-system, Segoe UI, Roboto, sans-serif;
+    }
+
+    .tl-top {
+      max-width: 1400px;
+      margin: 0 auto 1.25rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem 1.5rem;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .tl-heading h1 {
+      margin: 0;
+      font-size: 1.75rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .tl-heading p {
+      margin: 0.35rem 0 0;
+      color: #94a3b8;
+      font-size: 0.95rem;
+      max-width: 46rem;
+    }
+
+    .tl-prompt {
+      color: #cbd5e1 !important;
+    }
+
+    .tl-toolbar {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: end;
+    }
+
+    .tl-pack-picker {
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+      font-size: 0.75rem;
+      color: #94a3b8;
+    }
+
+    .tl-pack-picker select,
+    .tl-btn,
+    .tl-controls input,
+    .tl-move select,
+    .tl-dialog input,
+    .tl-dialog textarea,
+    .tl-dialog select {
+      background: #020617;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      color: #e5e7eb;
+      padding: 0.45rem 0.7rem;
+      font: inherit;
+    }
+
+    .tl-pack-picker select {
+      min-width: 16rem;
+    }
+
+    .tl-btn {
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .tl-btn:hover {
+      border-color: #38bdf8;
+    }
+
+    .tl-btn-primary {
+      background: #0369a1;
+      border-color: #0284c7;
+    }
+
+    .tl-btn-danger {
+      color: #fca5a5;
+      border-color: #7f1d1d;
+    }
+
+    .tl-app {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: minmax(0, 3fr) minmax(260px, 1.2fr);
+      gap: 0;
+      min-height: calc(100vh - 16rem);
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      overflow: hidden;
+      background: #020617;
+    }
+
+    .tl-board {
+      padding: 1.25rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      background: #0f172a;
+    }
+
+    .tl-tier {
+      background: #111827;
+      border-radius: 14px;
+      padding: 0.9rem 1rem 1rem;
+      border: 1px solid #374151;
+    }
+
+    .tl-tier-unranked {
+      border-style: dashed;
+      background: #0b1220;
+    }
+
+    .tl-tier h2 {
+      margin: 0 0 0.75rem;
+      font-size: 0.92rem;
+      font-weight: 600;
+      color: #f9fafb;
+    }
+
+    .tl-tier-content {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+      gap: 0.75rem;
+      min-height: 3.5rem;
+    }
+
+    .tl-card {
+      background: linear-gradient(180deg, #1f2937, #111827);
+      border-radius: 12px;
+      padding: 0.7rem 0.8rem;
+      border: 1px solid #374151;
+      display: flex;
+      gap: 0.7rem;
+      align-items: center;
+      cursor: grab;
+      text-align: left;
+      color: inherit;
+      font: inherit;
+      width: 100%;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+
+    .tl-card:hover,
+    .tl-card.is-selected {
+      transform: translateY(-2px);
+      border-color: #38bdf8;
+    }
+
+    .tl-card.is-dragging {
+      opacity: 0.45;
+    }
+
+    .tl-card img,
+    .tl-glyph,
+    .tl-hero img,
+    .tl-hero .tl-glyph {
+      width: 44px;
+      height: 44px;
+      object-fit: contain;
+      border-radius: 8px;
+      flex-shrink: 0;
+    }
+
+    .tl-card img,
+    .tl-hero img {
+      background: #fff;
+    }
+
+    .tl-glyph {
+      display: grid;
+      place-items: center;
+      font-size: 1.2rem;
+      color: #fff;
+    }
+
+    .tl-card span {
+      font-size: 0.9rem;
+      font-weight: 500;
+    }
+
+    .tl-sidebar {
+      background: #020617;
+      border-left: 1px solid #1f2937;
+      padding: 1.15rem 1.15rem 1.5rem;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .tl-selected-name {
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: #f8fafc;
+    }
+
+    .tl-hint {
+      color: #9ca3af;
+      font-size: 0.9rem;
+      margin: 0;
+    }
+
+    .tl-hero {
+      margin-bottom: 0.35rem;
+    }
+
+    .tl-hero img,
+    .tl-hero .tl-glyph {
+      width: 72px;
+      height: 72px;
+      font-size: 1.8rem;
+    }
+
+    .tl-desc {
+      font-size: 0.9rem;
+      line-height: 1.5;
+      color: #cbd5e1;
+      margin: 0 0 0.5rem;
+      white-space: pre-wrap;
+    }
+
+    .tl-stat {
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+      color: #e2e8f0;
+    }
+
+    .tl-link {
+      color: #7dd3fc;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .tl-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tl-tags span {
+      font-size: 0.72rem;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 999px;
+      padding: 0.15rem 0.5rem;
+      color: #cbd5e1;
+    }
+
+    .tl-calc {
+      margin-top: 0.5rem;
+      padding: 0.75rem;
+      background: #0f172a;
+      border-radius: 10px;
+      border: 1px solid #374151;
+      font-size: 0.88rem;
+    }
+
+    .tl-move label,
+    .tl-controls label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .tl-item-actions,
+    .tl-dialog-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+    }
+
+    .tl-controls {
+      margin-top: auto;
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 12px;
+      padding: 0.9rem;
+    }
+
+    .tl-controls-title {
+      font-weight: 700;
+      margin-bottom: 0.6rem;
+    }
+
+    .tl-controls label {
+      margin-bottom: 0.65rem;
+    }
+
+    .tl-dialog {
+      width: min(32rem, calc(100vw - 2rem));
+      border: 1px solid #374151;
+      border-radius: 16px;
+      background: #0f172a;
+      color: #e5e7eb;
+      padding: 0;
+    }
+
+    .tl-dialog::backdrop {
+      background: rgb(2 6 23 / 0.72);
+    }
+
+    .tl-dialog form {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+      padding: 1.15rem;
+    }
+
+    .tl-dialog h2 {
+      margin: 0;
+      font-size: 1.15rem;
+    }
+
+    .tl-dialog label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .tl-dialog textarea {
+      resize: vertical;
+      min-height: 5rem;
+    }
+
+    .tl-dialog-row {
+      display: grid;
+      grid-template-columns: 1fr 7rem;
+      gap: 0.6rem;
+    }
+
+    .tl-edit-extra {
+      display: flex;
+      flex-direction: column;
+      gap: 0.7rem;
+    }
+
+    .tl-dialog-actions {
+      justify-content: flex-end;
+      margin-top: 0.35rem;
+    }
+
+    .tl-tabs {
+      display: flex;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+
+    .tl-tab {
+      background: #020617;
+      border: none;
+      color: #94a3b8;
+      padding: 0.45rem 0.9rem;
+      font: inherit;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .tl-tab.is-active {
+      background: #1e293b;
+      color: #f8fafc;
+    }
+
+    .tl-manage {
+      max-width: 1400px;
+      margin: 0 auto;
+      background: #0f172a;
+      border: 1px solid #1f2937;
+      border-radius: 16px;
+      padding: 1.25rem;
+    }
+
+    .tl-manage-grid {
+      display: grid;
+      gap: 1rem;
+    }
+
+    .tl-panel {
+      background: #111827;
+      border: 1px solid #374151;
+      border-radius: 14px;
+      padding: 1rem 1.1rem 1.15rem;
+    }
+
+    .tl-panel h2 {
+      margin: 0 0 0.85rem;
+      font-size: 1rem;
+    }
+
+    .tl-panel-head {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 0.85rem;
+    }
+
+    .tl-panel-head h2 {
+      margin: 0;
+    }
+
+    .tl-banner {
+      background: #0b1220;
+      border: 1px dashed #475569;
+      border-radius: 12px;
+      padding: 0.9rem 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.75rem;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .tl-banner p {
+      margin: 0;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+
+    .tl-form-grid {
+      display: grid;
+      gap: 0.7rem;
+    }
+
+    .tl-form-grid label,
+    .tl-inline-add label {
+      display: flex;
+      flex-direction: column;
+      gap: 0.3rem;
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .tl-form-grid input,
+    .tl-form-grid textarea,
+    .tl-inline-add input,
+    .tl-table input,
+    .tl-table select {
+      background: #020617;
+      border: 1px solid #374151;
+      border-radius: 8px;
+      color: #e5e7eb;
+      padding: 0.45rem 0.7rem;
+      font: inherit;
+    }
+
+    .tl-form-grid textarea {
+      min-height: 4.5rem;
+      resize: vertical;
+    }
+
+    .tl-check {
+      flex-direction: row !important;
+      align-items: center;
+      gap: 0.5rem !important;
+    }
+
+    .tl-table-wrap {
+      overflow-x: auto;
+    }
+
+    .tl-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.88rem;
+    }
+
+    .tl-table th {
+      text-align: left;
+      color: #94a3b8;
+      font-weight: 600;
+      font-size: 0.75rem;
+      padding: 0.4rem 0.5rem;
+      border-bottom: 1px solid #374151;
+    }
+
+    .tl-table td {
+      padding: 0.45rem 0.5rem;
+      border-bottom: 1px solid #1f2937;
+      vertical-align: middle;
+    }
+
+    .tl-table tr.is-selected td {
+      background: #0f172a;
+    }
+
+    .tl-item-cell {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .tl-item-cell .tl-glyph,
+    .tl-item-cell img {
+      width: 32px;
+      height: 32px;
+      font-size: 0.95rem;
+    }
+
+    .tl-row-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.35rem;
+    }
+
+    .tl-btn-sm {
+      padding: 0.25rem 0.5rem;
+      font-size: 0.75rem;
+    }
+
+    .tl-inline-add {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(8rem, 1fr)) auto;
+      gap: 0.5rem;
+      align-items: end;
+      margin-top: 0.75rem;
+    }
+
+    .tl-empty {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      margin: 0.25rem 0 0;
+    }
+
+    .tl-muted {
+      color: #94a3b8;
+      font-size: 0.8rem;
+    }
+
+    @media (max-width: 900px) {
+      .tl-app {
+        grid-template-columns: 1fr;
+      }
+
+      .tl-sidebar {
+        border-left: none;
+        border-top: 1px solid #1f2937;
+      }
+
+      .tl-tier-content {
+        grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      }
+
+      .tl-pack-picker select {
+        min-width: 12rem;
+      }
+    }
+
+    @media (max-width: 600px) {
+      .tl-wrap {
+        padding-top: 6rem;
+      }
+
+      .tl-tier-content {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</Layout>

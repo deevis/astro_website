@@ -158,64 +158,45 @@ const eras: Era[] = [
 </div>
 
 <script>
+  function getStickyOffset() {
+    const timeline = document.querySelector('.era-timeline');
+    const timelineHeight = timeline instanceof HTMLElement ? timeline.offsetHeight : 0;
+    const timelineTop = timeline ? parseFloat(getComputedStyle(timeline).top) || 0 : 0;
+    return timelineHeight + timelineTop + 20;
+  }
+
+  function scrollWithStickyOffset(element) {
+    // Native scrollIntoView respects visual layout; scroll-margin keeps the
+    // target below the sticky nav + timeline instead of hiding under them.
+    element.style.scrollMarginTop = `${getStickyOffset()}px`;
+    element.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   function switchToEra(eraId, shouldScroll = true) {
     const cases = document.querySelectorAll('.case-study');
     const eraRows = document.querySelectorAll('.era-row');
+    const targetCase = document.getElementById(eraId);
+    const alreadyActive = targetCase?.classList.contains('active');
     
-    // Remove active from all cases and era rows
-    cases.forEach(c => c.classList.remove('active'));
-    eraRows.forEach(r => r.classList.remove('active'));
-    
-    // Activate the correct era row
-    const targetRow = document.querySelector(`.era-row[data-era="${eraId}"]`);
-    if (targetRow) {
-      targetRow.classList.add('active');
+    if (!alreadyActive) {
+      cases.forEach(c => c.classList.remove('active'));
+      eraRows.forEach(r => r.classList.remove('active'));
+      
+      const targetRow = document.querySelector(`.era-row[data-era="${eraId}"]`);
+      if (targetRow) {
+        targetRow.classList.add('active');
+      }
+      
+      if (targetCase) {
+        targetCase.classList.add('active');
+      }
     }
     
-    // Show the correct case
-    const targetCase = document.getElementById(eraId);
-    if (targetCase) {
-      targetCase.classList.add('active');
-      
-      // Only scroll if explicitly requested (not on initial page load)
-      if (shouldScroll) {
-        // Scroll to the case header, accounting for sticky timeline
-        setTimeout(() => {
-          const caseHeader = targetCase.querySelector('.case-header');
-          const timeline = document.querySelector('.era-timeline');
-          
-          if (caseHeader) {
-            // Get the timeline height and top offset
-            const timelineHeight = timeline && timeline instanceof HTMLElement ? timeline.offsetHeight : 0;
-            const timelineTop = timeline ? parseFloat(getComputedStyle(timeline).top) : 0;
-            const offset = timelineHeight + timelineTop + 20; // Add 20px for spacing
-            
-            // Calculate the target scroll position
-            const headerRect = caseHeader.getBoundingClientRect();
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const targetScroll = currentScroll + headerRect.top - offset;
-            
-            window.scrollTo({
-              top: targetScroll,
-              behavior: 'smooth'
-            });
-          } else {
-            // Fallback: scroll to case start
-            const caseRect = targetCase.getBoundingClientRect();
-            const currentScroll = window.pageYOffset || document.documentElement.scrollTop;
-            const timeline = document.querySelector('.era-timeline');
-            const timelineHeight = timeline && timeline instanceof HTMLElement ? timeline.offsetHeight : 0;
-            const timelineTop = timeline ? parseFloat(getComputedStyle(timeline).top) : 0;
-            const offset = timelineHeight + timelineTop + 20;
-            const targetScroll = currentScroll + caseRect.top - offset;
-            
-            window.scrollTo({
-              top: targetScroll,
-              behavior: 'smooth'
-            });
-          }
-        }, 100);
-      }
+    if (shouldScroll && targetCase) {
+      setTimeout(() => {
+        const caseHeader = targetCase.querySelector('.case-header');
+        scrollWithStickyOffset(caseHeader || targetCase);
+      }, 100);
     }
   }
   
@@ -223,22 +204,26 @@ const eras: Era[] = [
     const targetCase = document.getElementById(eraId);
     if (!targetCase) return;
     
-    // First switch to the era
-    switchToEra(eraId);
+    const wasHidden = !targetCase.classList.contains('active');
+    switchToEra(eraId, false);
     
-    // Then find and scroll to the specific stage
-    setTimeout(() => {
+    const doScroll = () => {
       const stages = targetCase.querySelectorAll('.stage');
-      const stageArray = Array.from(stages);
-      const targetStage = stageArray.find(stage => {
+      const targetStage = Array.from(stages).find(stage => {
         const stageNumber = stage.querySelector('.stage-number');
-        return stageNumber && stageNumber.textContent?.trim() === stageNum;
+        return stageNumber && stageNumber.textContent?.trim() === String(stageNum);
       });
       
       if (targetStage) {
-        targetStage.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        scrollWithStickyOffset(targetStage);
       }
-    }, 400);
+    };
+
+    if (wasHidden) {
+      setTimeout(doScroll, 100);
+    } else {
+      doScroll();
+    }
   }
   
   function updateActiveEraFromScroll() {

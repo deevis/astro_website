@@ -70,7 +70,7 @@
     </style>
 </head>
 <body>
-    <h1>U.S. States Progress Toward Strategic Bitcoin Reserves (May 7, 2025)</h1>
+    <h1>U.S. States Progress Toward Strategic Bitcoin Reserves (September 5, 2026)</h1>
     <div id="map">
         <!-- SVG map with detailed paths from SimpleMaps -->
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 959 593">
@@ -500,118 +500,106 @@
 
         // State data with progress and details
         const stateData = {
-            'AL': { progress: 2, details: 'Two bills (SB 283, HB 482) propose investing up to 10% of public funds in cryptocurrencies with a market cap over $750 billion (primarily Bitcoin). Both are under House committee review. State Auditor Andrew Sorrell supports the initiative, citing regional momentum.' },
-            'AK': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'AZ': { progress: 0, details: 'HB2749 signed into law on May 7, 2025, by Governor Katie Hobbs, secures unclaimed digital assets and establishes a Bitcoin Reserve Fund using proceeds from unclaimed property sales. SB 1025 (Arizona Strategic Bitcoin Reserve Act), allowing up to 10% of public funds in Bitcoin, passed the House (31-25) on April 28, 2025, but was vetoed by Hobbs on May 2, 2025, due to concerns over investment risks in volatile assets like Bitcoin. SB 1373 (Digital Assets Strategic Reserve), focusing on seized crypto assets and up to 10% investment in digital assets, passed the House Committee of the Whole and awaits the governor’s decision. Arizona’s progress is mixed, with HB2749 enacted but limited in scope, SB 1025 vetoed, and SB 1373 still under consideration.' },
-            'AR': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. However, Arkansas passed the Arkansas Data Centers Act in 2023, supporting cryptocurrency mining.' },
-            'CA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. California has strict regulations on crypto businesses, including the Digital Financial Assets Law effective 2025.' },
-            'CO': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Colorado accepts crypto for tax payments and has a pro-crypto governor.' },
-            'CT': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'DC': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'DE': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Delaware amended its corporate law in 2017 to allow blockchain records.' },
-            'FL': { progress: 3, details: 'A Strategic Bitcoin Reserve bill allowing up to 10% of general, investment, and rainy day funds to be allocated to Bitcoin failed to pass the committee review process. Florida has withdrawn from pursuing a state-level reserve. CFO Jimmy Patronis requested a feasibility study for cryptocurrency in state retirement funds.' },
-            'GA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Atlanta is a growing fintech hub with some crypto activity.' },
-            'HI': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Hawaii has a history of strict crypto regulations.' },
-            'ID': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'IL': { progress: 2, details: 'House Bill 1844, introduced by Rep. John Cabello, proposes a Strategic Bitcoin Reserve as a special fund to hold Bitcoin for a minimum of five years. The bill is under review.' },
-            'IN': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'IA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'KS': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Kansas recognizes blockchain-based digital signatures as legally valid.' },
-            'KY': { progress: 2, details: 'A bill proposes investing state retirement funds in cryptocurrencies with market caps over $750 billion (effectively Bitcoin). The State Investment Commission would manage investments through secure custody or exchange-traded products. The bill is under review.' },
-            'LA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Louisiana passed a pro-crypto resolution in 2021 and exempted crypto from certain taxes.' },
-            'ME': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'MD': { progress: 2, details: 'Delegate Caylin Young’s Strategic Bitcoin Reserve Act proposes using funds seized from gambling violations to invest in Bitcoin. The bill is under review.' },
-            'MA': { progress: 2, details: 'A bill targets the state’s $8.8 billion Rainy Day fund for Bitcoin investment. It is under legislative review.' },
-            'MI': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Detroit has a growing tech scene with some crypto activity.' },
-            'MN': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'MS': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'MO': { progress: 2, details: 'House Bill 1217, introduced by Rep. Ben Keathley, seeks to establish a Bitcoin Strategic Reserve Fund to hold Bitcoin as an inflation hedge. The bill is under review.' },
-            'MT': { progress: 3, details: 'A bill proposing up to $50 million in investments across Bitcoin, digital assets, stablecoins, and precious metals passed committee review but failed to secure enough votes in the first chamber.' },
-            'NE': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Nebraska passed the Financial Innovation Act in 2021 supporting blockchain innovation.' },
-            'NV': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Nevada has strong pro-blockchain laws and is a hub for crypto mining.' },
-            'NH': { progress: 0, details: 'HB 302, signed into law by Governor Ayotte, creates the nation’s first Bitcoin & Digital Assets Reserve Fund. It allows the Treasurer to buy Bitcoin or digital assets with a market cap over $500 billion, caps holdings at 5% of state funds, mandates U.S.-regulated custody, and takes effect 60 days after passage.' },
-            'NJ': { progress: 4, details: 'Jersey City Mayor Steven Fulop hinted in July 2024 at allocating pension funds to Bitcoin ETFs, but no formal state-level reserve legislation has been reported.' },
-            'NM': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'NY': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. New York has strict crypto regulations, including the BitLicense.' },
-            'NC': { progress: 2, details: 'The Digital Assets Investment Act passed the House on April 30, 2025, allowing the state treasurer to invest up to 5% of certain funds in approved cryptocurrencies. The bill is now under Senate consideration.' },
-            'ND': { progress: 2, details: 'Three bills were introduced; two failed, but one proposing Bitcoin and crypto investments is under committee review.' },
-            'OH': { progress: 2, details: 'The Ohio Bitcoin Reserve Act, proposed by Rep. Derek Merrin, establishes a Bitcoin fund in the state treasury, allowing the Treasurer to purchase Bitcoin. The bill is under review and expected to be refined in 2025.' },
-            'OK': { progress: 3, details: 'House Bill 1203 passed the House (77–15) but failed in the Senate Revenue and Taxation Committee (6–5 vote). It proposed allocating up to 10% of state funds to Bitcoin.' },
-            'OR': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'PA': { progress: 2, details: 'A bill proposes allocating up to 10% of the state’s $7 billion treasury funds to Bitcoin. It is under review.' },
-            'RI': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'SC': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'SD': { progress: 3, details: 'A Bitcoin reserve bill failed to garner a majority of votes in the House or Senate.' },
-            'TN': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Tennessee has a history of crypto engagement, including a 2022 bill allowing crypto investments.' },
-            'TX': { progress: 2, details: 'A bill proposed by Rep. Giovanni Capriglione allows the state to accept taxes, fees, and donations in Bitcoin to build a reserve, with at least 1% of unencumbered general revenue allocated. It is under review.' },
-            'UT': { progress: 1, details: 'The "Blockchain and Digital Innovation Amendments" bill (H.B. 230), introduced by Rep. Jordan Teuscher, passed a House committee (8-1 vote). It allows up to 10% of state funds to be invested in crypto assets with a market cap over $500 billion (effectively Bitcoin). The bill is progressing toward a full vote.' },
-            'VT': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Vermont recognizes blockchain records as legally valid.' },
-            'VA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Virginia passed a 2022 bill allowing banks to custody crypto and is home to MicroStrategy, a major Bitcoin holder.' },
-            'WA': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve. Washington has strict regulations on crypto businesses.' },
-            'WV': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'WI': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
-            'WY': { progress: 3, details: 'A bill to create a Bitcoin reserve was introduced but failed to pass committee review. Wyoming remains active in crypto-friendly policies.' }
-        };
+    'AL': { progress: 2, details: 'SB 283 and companion bills (including HB 482) proposed investing a limited share of public funds in cryptocurrencies with a market cap over $750 billion (effectively Bitcoin). As of 2026 the measures remain at committee stage and have not been enacted. State Auditor Andrew Sorrell has publicly supported the concept.' },
+    'AK': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Alaska’s Rep. Nick Begich is a lead sponsor of the federal American Reserve Modernization Act of 2026, but that is a congressional bill, not a state reserve.' },
+    'AZ': { progress: 0, details: 'HB 2749, signed May 7, 2025 by Gov. Katie Hobbs (effective Sept. 26, 2025), creates a Bitcoin and Digital Assets Reserve Fund for unclaimed/seized digital assets, airdrops, and staking rewards. It does not authorize open-market purchases with general funds. More ambitious bills were vetoed: SB 1025 (Arizona Strategic Bitcoin Reserve Act, up to 10% of public funds) on May 2, 2025, plus later SB 1373 and SB 2324. Arizona therefore has an enacted but narrow unclaimed-asset reserve, not a funded treasury Bitcoin program. No on-chain state BTC holdings reported.' },
+    'AR': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Arkansas remains crypto-adjacent via the 2023 Arkansas Data Centers Act supporting mining.' },
+    'CA': { progress: 4, details: 'No Strategic Bitcoin Reserve bill enacted. California’s Digital Financial Assets Law and related business-licensing rules remain the dominant state framework. AB 1052 (Bitcoin Rights Act, 2025) addressed self-custody rights, not a state reserve.' },
+    'CO': { progress: 4, details: 'No Strategic Bitcoin Reserve legislation. Colorado continues to accept crypto for some tax payments (converted to fiat) and is generally crypto-permissive at the executive level.' },
+    'CT': { progress: 3, details: 'Public Act 25-66 (HB 7082), signed by Gov. Ned Lamont on June 30, 2025, prohibits the state and its political subdivisions from accepting virtual currency as payment and from purchasing, holding, investing in, or establishing a virtual-currency reserve. This is the clearest state-level statutory ban on a Bitcoin reserve.' },
+    'DC': { progress: 4, details: 'No known legislation or proposals for a Strategic Bitcoin Reserve.' },
+    'DE': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Delaware remains a corporate/blockchain-records jurisdiction rather than a public-funds Bitcoin buyer.' },
+    'FL': { progress: 3, details: '2025 bills HB 487 and SB 550 (up to 10% of selected public funds in Bitcoin) were indefinitely postponed and withdrawn. 2026 revival: HB 1039 (Strategic Cryptocurrency Reserve outside the treasury / later assigned toward SBA administration) advanced through committees and died on the House Second Reading Calendar on March 13, 2026. Companion SB 1038 / SB 1040 died in Senate appropriations after a Banking and Insurance committee substitute. Florida has now failed two consecutive sessions.' },
+    'GA': { progress: 3, details: 'SB 178 and SB 228 (2025–2026) would have let the State Depository Board authorize the treasurer to invest up to 5% of a fund in Bitcoin, with custody and lending rules. Both stalled in Senate Banking and Financial Institutions after February 2025 referral and expired without passage at the end of the 2025–2026 session.' },
+    'HI': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Hawaii’s Digital Currency Innovation Lab sunset in 2024; the state historically ran a restrictive crypto regime.' },
+    'ID': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation enacted or advanced.' },
+    'IL': { progress: 2, details: 'HB 1844 (Strategic Bitcoin Reserve Act, Rep. John Cabello) would create a special treasury fund to hold donated/gifted Bitcoin for at least five years. Introduced Jan. 28, 2025 and still pending in House Rules as of mid-2026. Later 2026 filings include HB 5621 / S 3743 (Community Bitcoin Reserve Act, Altgeld site concept) and S 3672 (local-government digital-asset investment disclosures). None enacted.' },
+    'IN': { progress: 4, details: 'No state Strategic Bitcoin Reserve. HB 1042 (2026) was enacted to require certain public retirement and deferred-comp plans to offer a self-directed brokerage window that includes at least one cryptocurrency option — participant-directed, not a treasury reserve. Earlier HB 1037 (pension allocation concept) did not become a state reserve law.' },
+    'IA': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation.' },
+    'KS': { progress: 2, details: 'S 352 (2026) would create a Bitcoin and Digital Assets Reserve Fund and set procedures for abandoned digital assets. The bill was pending during the 2026 session and had not been enacted as of the latest NCSL/CryptoSlate snapshots.' },
+    'KY': { progress: 2, details: 'A reserve-style proposal would let the State Investment Commission put a limited slice of eligible funds into large-cap crypto (effectively Bitcoin) via secure custody or ETPs. That reserve bill has not been enacted. Separately, HB 701 (Bitcoin Rights / blockchain digital assets), signed March 24, 2025, protects self-custody, nodes, and related activity — it is not a treasury reserve.' },
+    'LA': { progress: 4, details: 'No Strategic Bitcoin Reserve legislation. Louisiana has older pro-crypto resolutions, some tax treatment, and a reported pilot around Bitcoin payments for state services.' },
+    'ME': { progress: 4, details: 'No Strategic Bitcoin Reserve bill. LD 1308 (2025) proposed a digital-assets working group rather than a funded reserve.' },
+    'MD': { progress: 2, details: 'Delegate Caylin Young’s earlier seized-gambling-funds concept continued in 2026 as HB 51, the Strategic Digital Asset Reserve Act, authorizing the treasurer to invest certain gambling-enforcement proceeds into cryptocurrency. Still pending; not enacted.' },
+    'MA': { progress: 2, details: 'S.1967 (Bitcoin Strategic Reserve) and S.2008 (purchasing-power / digital-asset hedge language, including the Rainy Day fund concept) remain pending in the 2025–2026 session. No enactment.' },
+    'MI': { progress: 1, details: 'HB 4087 (Rep. Bryan Posthumus) would let the treasurer invest up to 10% of the general fund and Budget Stabilization Fund in cryptocurrency, with custody/ETP rules. Introduced Feb. 13, 2025. The House discharged the committee and placed the bill on second reading in Sept. 2025 and again on March 19, 2026, then re-referred it to Communications and Technology. Separate HB 4510 would allow limited retirement-system crypto ETP exposure. Not enacted. State retirement systems have previously held small Bitcoin ETF positions.' },
+    'MN': { progress: 2, details: 'HF 2308 (Minnesota Bitcoin Act) was introduced in 2025 proposing a state Bitcoin framework. It has not been enacted.' },
+    'MS': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation.' },
+    'MO': { progress: 2, details: '2025 HB 1217 (Rep. Ben Keathley) died in committee. 2026 HB 2080, a second-attempt Bitcoin Strategic Reserve Fund allowing the treasurer to receive, invest, and hold Bitcoin with a five-year hold, was referred to House Commerce in February 2026 and remains unenacted.' },
+    'MT': { progress: 3, details: 'HB 429 (up to $50 million across Bitcoin, other digital assets, stablecoins, and precious metals) failed in the 2025 session after committee progress but insufficient first-chamber support. No 2026 enactment.' },
+    'NE': { progress: 4, details: 'No Strategic Bitcoin Reserve. Nebraska’s 2025 Digital Asset Mining Act and the earlier Financial Innovation Act are industry/mining statutes, not a treasury Bitcoin program.' },
+    'NV': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Nevada remains mining- and blockchain-friendly on the industry side.' },
+    'NH': { progress: 0, details: 'HB 302, signed by Gov. Kelly Ayotte on May 6, 2025 (Chapter 4; RSA 6:8-d effective July 5, 2025), is the first U.S. state law authorizing a treasurer-managed strategic reserve in precious metals and digital assets with prior-year average market cap over $500 billion (only Bitcoin qualifies). Cap: 5% of total public funds. Custody may be direct, a qualified custodian, or a registered ETP. Eligible sources include the general fund and revenue stabilization fund. No confirmed on-chain treasury BTC purchase as of August 2026. A separate 2026 attempt to issue Bitcoin-collateralized municipal bonds via the Business Finance Authority was rejected.' },
+    'NJ': { progress: 4, details: 'No state-level Strategic Bitcoin Reserve legislation. 2024 Jersey City pension-ETF comments did not produce a statewide reserve statute.' },
+    'NM': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. (Roswell has been discussed in municipal-donation contexts; that is not a state reserve.)' },
+    'NY': { progress: 4, details: 'No Strategic Bitcoin Reserve legislation. BitLicense remains the defining, restrictive state crypto framework.' },
+    'NC': { progress: 1, details: 'H 92, the NC Digital Assets Investments Act, passed the House 71–44 on April 30, 2025 and was referred to Senate Rules on May 1, 2025, where it remained pending through mid-2026. It would let the treasurer invest up to 5% of designated funds in qualifying digital assets after a third-party risk assessment, and study a seized-asset reserve. Companion S 327 (Bitcoin Reserve and Investment Act, up to 10% with cold-storage/multisig rules) stayed in Senate Rules after a March 2025 first reading. Neither enacted. Separately, HB 920 (virtual-currency kiosk consumer protection) became law in July 2026 and is not a reserve statute.' },
+    'ND': { progress: 3, details: 'HCR 3001 (2025 Bitcoin reserve study resolution) failed on the floor. No reserve law enacted. North Dakota did enact other digital-asset/unclaimed-property updates that do not create a treasury Bitcoin reserve.' },
+    'OH': { progress: 2, details: 'Multiple 2025–2026 bills remain pending in the 136th General Assembly: HB 18 (Ohio Strategic Cryptocurrency Reserve Act — treasurer interim-fund digital assets plus retirement ETP language), SB 57 (Bitcoin Reserve Act — treasury Bitcoin fund and crypto payments), plus related unclaimed-digital-asset and blockchain bills. None enacted as of mid-2026. Earlier Merrin “Ohio Bitcoin Reserve Act” language was superseded by this wave.' },
+    'OK': { progress: 3, details: 'HB 1203 (Strategic Bitcoin Reserve Act) passed the House 77–15 in 2025 then failed in the Senate Revenue and Taxation Committee 6–5 on April 14, 2025. Follow-on 2026 vehicles (HB 1891 treasurer precious-metals/digital-assets authority; SB 1985 retirement-fund Bitcoin cap) expired or stalled without enactment. Oklahoma is the clearest “passed one chamber, died in the other” case.' },
+    'OR': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation.' },
+    'PA': { progress: 3, details: 'HB 2664 (Bitcoin Strategic Reserve Act; up to 10% of covered treasury funds, plus retirement ETP language) was referred to House Finance in November 2024 and expired without enactment. No successor reserve statute had become law by mid-2026.' },
+    'RI': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation.' },
+    'SC': { progress: 2, details: 'H. 4256 (Strategic Digital Assets Reserve Act, 126th Session) would authorize the treasurer to invest certain state funds in digital assets, including Bitcoin, and to adopt custody policies. Still in committee / unenacted as of mid-2026.' },
+    'SD': { progress: 3, details: '2025 HB 1202 (add Bitcoin to permissible state investments) was deferred past the short session and died. 2026 HB 1155 (up to 10% of eligible funds via direct holdings, custodians, or ETPs; Rep. Logan Manhart) was referred to Commerce and Energy and later expired/failed without enactment.' },
+    'TN': { progress: 3, details: 'The Tennessee Strategic Bitcoin Reserve Act (HB 1695 / SB 2639, 114th GA) would have allowed the treasurer to invest general-fund and rainy-day money in Bitcoin (10% fund cap, 5% per year, secure custody/ETP). HB 1695 was taken off notice in the Finance subcommittee on April 15, 2026 and is tracked as dead. Not enacted.' },
+    'TX': { progress: 0, details: 'SB 21 (Strategic Bitcoin Reserve and Investment Act), signed by Gov. Greg Abbott June 20–22, 2025 and effective immediately, creates Fund 1018 outside the state treasury under the Comptroller. Eligible assets need a $500B 24-month average market cap (only Bitcoin qualifies). Companion HB 4488 protects the fund from treasury sweeps. The Legislature appropriated $10 million. Texas bought about $5 million of BlackRock IBIT on Nov. 20, 2025 and later deployed the full $10 million into IBIT as a placeholder. A Strategic Bitcoin Reserve Advisory Committee was named May 28, 2026 and an RFP for custody/liquidity was issued; as of Sept. 1, 2026 no custodian award had converted the ETF sleeve into directly held BTC. Texas is the only state with a funded reserve.' },
+    'UT': { progress: 3, details: 'H.B. 230 (Blockchain and Digital Innovation Amendments), signed March 25, 2025 and effective May 7, 2025, is law — but the public-funds / Bitcoin reserve investment authority was removed before final passage. Enacted HB 230 covers self-custody, node/protocol rights, money-transmitter exemptions, and mining zoning. Utah is therefore crypto-rights friendly without a strategic reserve.' },
+    'VT': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Vermont continues to recognize blockchain records in business law.' },
+    'VA': { progress: 3, details: 'SB 557 (Commonwealth Strategic Cryptocurrency Reserve Fund, with an advisory committee) failed in the 2026 session. Virginia still has 2022 bank-custody authorization and is home to Strategy (MicroStrategy), but has no state Bitcoin reserve.' },
+    'WA': { progress: 4, details: 'No known Strategic Bitcoin Reserve legislation. Washington retains a relatively strict crypto-business regulatory posture.' },
+    'WV': { progress: 2, details: 'The Inflation Protection Act (2025 SB 458 concept refiled as 2026 SB 143, Sen. Chris Rose) would let the Board of Treasury Investments put a portion of public funds into precious metals, digital assets above a $750 billion prior-year average market cap (effectively Bitcoin), and approved stablecoins, with a discussed 10% cap. Referred to Banking and Insurance then Finance. Not enacted as of the latest available status.' },
+    'WI': { progress: 4, details: 'No Strategic Bitcoin Reserve legislation. The State of Wisconsin Investment Board previously disclosed a large Bitcoin ETF position and fully divested in Q1 2025. That was a pension/investment-board trade, not a statutory reserve.' },
+    'WY': { progress: 3, details: 'A 2025 Bitcoin reserve bill failed committee review. Wyoming remains one of the most crypto-infrastructure-friendly states (SPDI banks, WyoPay stable token launched 2025) but has not enacted a treasury Bitcoin reserve. Sen. Cynthia Lummis continues to lead the federal BITCOIN Act.' }
+};
 
-        // Color mapping
-        const colors = {
-            0: '#00FF00', // Legislation Passed
-            1: '#ADD8E6', // Legislation Advanced
-            2: '#FFFF00', // Legislation Introduced/Under Review
-            3: '#FF0000', // Legislation Failed or Vetoed
-            4: {
-                cryptophilic: '#B0B0B0', // Lighter grey for cryptophilic states with no activity
-                cryptophobic: '#808080'  // Default grey for cryptophobic states with no activity
-            }
-        };
+const colors = {
+    0: '#00FF00', // Legislation Passed
+    1: '#ADD8E6', // Legislation Advanced
+    2: '#FFFF00', // Legislation Introduced/Under Review
+    3: '#FF0000', // Legislation Failed or Vetoed
+    4: {
+        cryptophilic: '#B0B0B0',
+        cryptophobic: '#808080'
+    }
+};
 
-        // Updated progress labels to handle cryptophilic/cryptophobic distinction
-        const progressLabels = {
-            0: 'Legislation Passed',
-            1: 'Legislation Advanced',
-            2: 'Legislation Introduced/Under Review',
-            3: 'Legislation Failed or Vetoed',
-            4: {
-                cryptophilic: 'No Reported Activity (Cryptophilic)',
-                cryptophobic: 'No Reported Activity (Cryptophobic)'
-            }
-        };
+const progressLabels = {
+    0: 'Legislation Passed',
+    1: 'Legislation Advanced',
+    2: 'Legislation Introduced/Under Review',
+    3: 'Legislation Failed or Vetoed',
+    4: {
+        cryptophilic: 'No Reported Activity (Cryptophilic)',
+        cryptophobic: 'No Reported Activity (Cryptophobic)'
+    }
+};
 
-        // Categorize states with no activity as cryptophilic or cryptophobic
-        const cryptoStance = {
-            'AK': 'cryptophobic',
-            'AR': 'cryptophilic',
-            'CA': 'cryptophobic',
-            'CO': 'cryptophilic',
-            'CT': 'cryptophobic',
-            'DE': 'cryptophilic',
-            'GA': 'cryptophilic',
-            'HI': 'cryptophobic',
-            'ID': 'cryptophobic',
-            'IN': 'cryptophobic',
-            'IA': 'cryptophobic',
-            'KS': 'cryptophilic',
-            'LA': 'cryptophilic',
-            'ME': 'cryptophobic',
-            'MI': 'cryptophilic',
-            'MN': 'cryptophobic',
-            'MS': 'cryptophobic',
-            'NE': 'cryptophilic',
-            'NV': 'cryptophilic',
-            'NJ': 'cryptophilic',
-            'NM': 'cryptophobic',
-            'NY': 'cryptophobic',
-            'OR': 'cryptophobic',
-            'RI': 'cryptophobic',
-            'SC': 'cryptophobic',
-            'TN': 'cryptophilic',
-            'VT': 'cryptophilic',
-            'VA': 'cryptophilic',
-            'WA': 'cryptophobic',
-            'WV': 'cryptophobic',
-            'WI': 'cryptophobic'
-        };
-
+const cryptoStance = {
+    'AK': 'cryptophobic',
+    'AR': 'cryptophilic',
+    'CA': 'cryptophobic',
+    'CO': 'cryptophilic',
+    'DE': 'cryptophilic',
+    'HI': 'cryptophobic',
+    'ID': 'cryptophobic',
+    'IN': 'cryptophilic',
+    'IA': 'cryptophobic',
+    'LA': 'cryptophilic',
+    'ME': 'cryptophobic',
+    'MS': 'cryptophobic',
+    'NE': 'cryptophilic',
+    'NV': 'cryptophilic',
+    'NJ': 'cryptophilic',
+    'NM': 'cryptophobic',
+    'NY': 'cryptophobic',
+    'OR': 'cryptophobic',
+    'RI': 'cryptophobic',
+    'VT': 'cryptophilic',
+    'WA': 'cryptophobic',
+    'WI': 'cryptophilic',
+    'DC': 'cryptophobic'
+};
         // Apply colors to states, overriding inline styles
         Object.keys(stateData).forEach(state => {
             const element = document.getElementById(state);

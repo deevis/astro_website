@@ -34,7 +34,11 @@ const formattedDate = date ? new Date(date).toLocaleDateString('en-US', {
     <div class="overflow-hidden">
       <img 
         src={image} 
-        alt={imageAlt} 
+        alt={imageAlt}
+        width="720"
+        height="405"
+        loading="lazy"
+        decoding="async"
         class="w-full aspect-video object-cover object-top transition-transform duration-300 hover:scale-105"
       />
     </div>

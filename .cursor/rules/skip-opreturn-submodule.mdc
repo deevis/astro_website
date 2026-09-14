@@ -1,0 +1,10 @@
+---
+description: Do not repo-wide search the bitcoin OP_RETURN explorer submodule
+alwaysApply: true
+---
+
+# Large submodule: skip in repo-wide search
+
+`public/html_showcase/bitcoin_large_op_return_explorer` is a huge nested repository. Do not Grep, Glob, or otherwise search the whole workspace without excluding it.
+
+When searching, constrain `path` to the relevant tree (`src/`, `scripts/`, `public/` minus that folder) or exclude that directory. Do not "grep everything" from the repo root.

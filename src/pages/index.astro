@@ -1,150 +1,159 @@
 ---
 import Layout from '../layouts/Layout.astro';
-import Navigation from '../components/Navigation.astro';
-import Footer from '../components/Footer.astro';
-import CardCarousel from '../components/CardCarousel.astro';
-import Card from '../components/Card.astro';
-import MediaCard from '../components/MediaCard.astro';
-// import { projects } from '../config/projects.json'; // Commented out
+import HomeSlider from '../components/home/HomeSlider.astro';
+import GalleryAccent from '../components/home/GalleryAccent.astro';
+import HomeJumpNav from '../components/home/HomeJumpNav.astro';
 import { showcases } from '../config/showcases.json';
 import { mediaItems } from '../config/media.json';
+import { apps, bitcoinResources } from '../config/catalog';
+import { homeGameSlides, playgroundHref, cardAsset, homepageShowcases, interactiveArticles, type ShowcaseItem } from '../lib/showcases';
 import { getCollection } from 'astro:content';
 
-// Get all articles from the content collection and sort by date
 const articles = await getCollection('articles');
-const sortedArticles = articles.sort((a, b) => 
-  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-);
+const writingItems = [
+  ...articles.map((article) => ({
+    href: `/articles/${article.slug}`,
+    title: article.data.title,
+    description: article.data.description,
+    publishDate: article.data.publishDate,
+    interactive: false,
+  })),
+  ...interactiveArticles(showcases as ShowcaseItem[]).map((item) => ({
+    href: playgroundHref(item.href),
+    title: item.title.replace(/:.*$/, ''),
+    description: item.description,
+    publishDate: item.publishDate ?? '1970-01-01',
+    interactive: true,
+  })),
+]
+  .sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime())
+  .slice(0, 3);
 
-// Get first 3 articles
-const firstThreeArticles = sortedArticles.slice(0, 3);
+const galleryPool = mediaItems;
 
-// Get first 3 HTML showcases
-const firstThreeShowcases = showcases.slice(0, 3);
+const gameSlides = homeGameSlides(showcases as ShowcaseItem[]);
 
-// Get first 6 gallery items
-const firstSixGalleryItems = mediaItems.slice(0, 6);
+const playgroundSlides = homepageShowcases(showcases as ShowcaseItem[])
+  .filter((item) => item.category !== 'game')
+  .map((item) => ({
+    title: item.title.replace(/:.*$/, ''),
+    tagline: item.description,
+    href: playgroundHref(item.href),
+    image: cardAsset(item.image),
+  }));
+
+const appSlides = apps.map((app) => ({
+  title: app.title,
+  tagline: app.tagline,
+  href: app.href,
+  image: cardAsset(app.image),
+}));
+
+const bitcoinSlides = bitcoinResources.map((item) => ({
+  title: item.title,
+  tagline: item.tagline,
+  href: item.href,
+}));
 ---
 
-<Layout title="Professional Portfolio">
-  <main class="pt-24 pb-8">
-    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+<Layout title="Darren Hicks" description="Personal workshop of games, simulations, Bitcoin tools, and writing from a software architect who learns by building.">
+  <main class="pt-24 pb-12">
+    <section class="pt-16 pb-8 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8">
+        <div class="max-w-4xl mx-auto text-center">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+            I build things that are interesting
+            <small class="text-sm text-gray-500 dark:text-gray-400">(to me...)</small>
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300">
+            Games, simulations, apps, developer tools - hope you find something you like.
+          </p>
+        </div>
+      </div>
+    </section>
 
-      <!-- Hero Section -->
-      <section class="pt-16 pb-8 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900">
-        <div class="container mx-auto px-4 md:px-6 lg:px-8">
-          <div class="max-w-4xl lg:max-w-5xl mx-auto text-center">
-            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-              Code. Create. Experiment. Repeat.
-            </h1>
-            <p class="text-xl text-gray-600 dark:text-gray-300 mb-6">
-              Building interactive simulations and seamless system integrations - from economic models to data architectures, educational experiments to enterprise platforms
-            </p>
-            <div class="flex justify-center gap-3">
-              <a
-                href="/showcase"
-                class="px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
-              >
-                View Showcases
-              </a>
-              <a
-                href="/contact"
-                class="px-4 py-2 border border-primary-600 text-primary-600 rounded-lg hover:bg-primary-50 transition-colors"
-              >
-                Get in Touch
-              </a>
+    <HomeJumpNav />
+
+    <div class="container mx-auto px-4 md:px-6 lg:px-8">
+      <HomeSlider
+        sectionId="games"
+        title="Games"
+        blurb="Playable things. Today’s pick starts at the left — scroll for the rest."
+        items={gameSlides}
+        salt={0}
+        variant="poster"
+        eagerCount={4}
+      />
+
+      <div class="border-t border-gray-100 dark:border-dark-700">
+        <HomeSlider
+          sectionId="playground"
+          title="Playground"
+          blurb="Experiments, simulations, and visual toys."
+          moreHref="/playground"
+          moreLabel="Browse everything →"
+          items={playgroundSlides}
+          salt={1}
+          variant="poster"
+        />
+      </div>
+
+      <div class="border-t border-gray-100 dark:border-dark-700">
+        <div class="grid lg:grid-cols-[minmax(0,1fr)_minmax(16rem,18rem)] gap-6 items-start">
+          <HomeSlider
+            sectionId="apps"
+            title="Applications"
+            blurb="Utilities that live in the browser."
+            items={appSlides}
+            salt={3}
+            variant="poster"
+          />
+          <div class="pt-10">
+            <GalleryAccent items={galleryPool} caption="From the gallery" />
+          </div>
+        </div>
+      </div>
+
+      <div class="border-t border-gray-100 dark:border-dark-700">
+        <HomeSlider
+          sectionId="bitcoin"
+          title="Bitcoin workshop"
+          blurb="Tutorials, historical calculators, wallet comparisons, and on-chain explorers."
+          moreHref="/bitcoin-resources"
+          moreLabel="Resource library →"
+          items={bitcoinSlides}
+          salt={7}
+          variant="compact"
+        />
+      </div>
+
+      <section id="articles" class="py-12 scroll-mt-28 border-t border-gray-100 dark:border-dark-700">
+        <div class="grid lg:grid-cols-[minmax(0,1.7fr)_minmax(16rem,0.8fr)] gap-6 items-start">
+          <div>
+            <div class="flex items-end justify-between mb-5">
+              <h2 class="text-2xl md:text-3xl font-bold">Latest articles</h2>
+              <a href="/articles" class="text-sm text-primary-600 dark:text-primary-400 hover:underline">All articles →</a>
+            </div>
+            <div class="divide-y divide-gray-100 dark:divide-dark-700 border border-gray-200 dark:border-dark-700 rounded-2xl bg-white dark:bg-dark-800 overflow-hidden">
+              {writingItems.map((item) => (
+                <a href={item.href} class="block p-5 hover:bg-gray-50 dark:hover:bg-dark-900 transition-colors">
+                  <div class="flex items-center gap-2">
+                    <time class="text-xs text-gray-400" datetime={item.publishDate}>
+                      {new Date(item.publishDate).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' })}
+                    </time>
+                    {item.interactive && (
+                      <span class="text-[10px] font-semibold uppercase tracking-[0.14em] text-primary-600 dark:text-primary-400">Interactive</span>
+                    )}
+                  </div>
+                  <h3 class="font-semibold text-gray-900 dark:text-white mt-1">{item.title}</h3>
+                  <p class="text-sm text-gray-500 dark:text-gray-400 mt-1 line-clamp-2">{item.description}</p>
+                </a>
+              ))}
             </div>
           </div>
+          <GalleryAccent items={galleryPool} caption="Another from the gallery" />
         </div>
       </section>
-
-    <!-- Latest Articles -->
-    <section class="py-8 bg-gray-50 dark:bg-dark-900">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
-        <h1 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Latest Articles</h1>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {firstThreeArticles.map((article) => (
-            <Card 
-              title={article.data.title}
-              description={article.data.description}
-              image={article.data.image.src}
-              imageAlt={article.data.image.alt}
-              href={`/articles/${article.slug}`}
-              date={article.data.publishDate}
-              author={article.data.author}
-              tags={article.data.tags}
-            />
-          ))}
-        </div>
-        <div class="mt-4 text-center">
-          <a href="/articles" class="text-primary-600 dark:text-primary-400 hover:underline">View All Articles →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured HTML Showcases -->
-    <section class="py-8 bg-white dark:bg-dark-800">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Featured HTML Showcases</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4 md:gap-6">
-          {firstThreeShowcases.map((showcase) => (
-            <Card 
-              title={showcase.title}
-              description={showcase.description}
-              image={showcase.image}
-              imageAlt={showcase.title}
-              href={showcase.href}
-              tags={showcase.tags}
-            />
-          ))}
-        </div>
-        <div class="mt-4 text-center">
-          <a href="/showcase" class="text-primary-600 dark:text-primary-400 hover:underline">View All Showcases →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Featured Gallery Items -->
-    <section class="py-8 bg-gray-50 dark:bg-dark-900">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
-        <h2 class="text-2xl md:text-3xl font-bold mb-4 md:mb-6">Media Gallery</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
-          {firstSixGalleryItems.map((item) => (
-            <MediaCard
-              id={item.id}
-              title={item.title}
-              description={item.description}
-              type={item.type}
-              src={item.src}
-              videoId={item.videoId}
-              thumb={item.thumb}
-              tags={item.tags}
-            />
-          ))}
-        </div>
-        <div class="mt-4 text-center">
-          <a href="/gallery" class="text-primary-600 dark:text-primary-400 hover:underline">View Full Gallery →</a>
-        </div>
-      </div>
-    </section>
-
-    <!-- Skills Overview -->
-    <section class="py-8 bg-white dark:bg-dark-800">
-      <div class="container mx-auto px-4 md:px-6 lg:px-8">
-        <h2 class="text-3xl md:text-4xl font-bold text-center mb-6 dark:text-white">Technical Expertise</h2>
-        <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 md:gap-6">
-          <div class="text-center">
-            <div class="text-lg font-bold text-primary-600 dark:text-primary-400">Data Visualization<br/>& Interactive Simulations</div>
-          </div>
-          <div class="text-center">
-            <div class="text-lg font-bold text-primary-600 dark:text-primary-400">Performance Optimization<br/>Specialist</div>
-          </div>
-          <div class="text-center">
-            <div class="text-lg font-bold text-primary-600 dark:text-primary-400">System Integration<br/>Architect</div>
-          </div>
-        </div>
-      </div>
-    </section>
     </div>
-    </main>
+  </main>
 </Layout>

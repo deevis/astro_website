@@ -1,16 +1,104 @@
 {
   "aggregates_index": {
     "version": "2.0",
-    "generated_at": "2025-10-16T05:34:16.074737+00:00",
-    "total_aggregates": 5,
+    "generated_at": "2026-09-10T09:01:02.321451+00:00",
+    "total_aggregates": 16,
     "aggregates": [
+      {
+        "filename": "aggregate_2026_09.json",
+        "month": "2026-09",
+        "path": "/news_feeds/2026/aggregate_2026_09.json",
+        "total_articles": 157,
+        "active_articles_count": 157,
+        "is_current": true
+      },
+      {
+        "filename": "aggregate_2026_08.json",
+        "month": "2026-08",
+        "path": "/news_feeds/2026/aggregate_2026_08.json",
+        "total_articles": 3338,
+        "active_articles_count": 251,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_07.json",
+        "month": "2026-07",
+        "path": "/news_feeds/2026/aggregate_2026_07.json",
+        "total_articles": 3335,
+        "active_articles_count": 283,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_06.json",
+        "month": "2026-06",
+        "path": "/news_feeds/2026/aggregate_2026_06.json",
+        "total_articles": 3558,
+        "active_articles_count": 282,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_05.json",
+        "month": "2026-05",
+        "path": "/news_feeds/2026/aggregate_2026_05.json",
+        "total_articles": 3747,
+        "active_articles_count": 246,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_04.json",
+        "month": "2026-04",
+        "path": "/news_feeds/2026/aggregate_2026_04.json",
+        "total_articles": 3790,
+        "active_articles_count": 308,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_03.json",
+        "month": "2026-03",
+        "path": "/news_feeds/2026/aggregate_2026_03.json",
+        "total_articles": 1077,
+        "active_articles_count": 265,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_02.json",
+        "month": "2026-02",
+        "path": "/news_feeds/2026/aggregate_2026_02.json",
+        "total_articles": 3898,
+        "active_articles_count": 324,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2026_01.json",
+        "month": "2026-01",
+        "path": "/news_feeds/2026/aggregate_2026_01.json",
+        "total_articles": 4134,
+        "active_articles_count": 312,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2025_12.json",
+        "month": "2025-12",
+        "path": "/news_feeds/2025/aggregate_2025_12.json",
+        "total_articles": 4050,
+        "active_articles_count": 293,
+        "is_current": false
+      },
+      {
+        "filename": "aggregate_2025_11.json",
+        "month": "2025-11",
+        "path": "/news_feeds/2025/aggregate_2025_11.json",
+        "total_articles": 2063,
+        "active_articles_count": 244,
+        "is_current": false
+      },
       {
         "filename": "aggregate_2025_10.json",
         "month": "2025-10",
         "path": "/news_feeds/2025/aggregate_2025_10.json",
-        "total_articles": 485,
-        "active_articles_count": 362,
-        "is_current": true
+        "total_articles": 2050,
+        "active_articles_count": 335,
+        "is_current": false
       },
       {
         "filename": "aggregate_2025_09.json",

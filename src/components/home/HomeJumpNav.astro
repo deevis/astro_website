@@ -1,0 +1,120 @@
+---
+import ToolsPicker from './ToolsPicker.astro';
+
+const links = [
+  { href: '#games', label: 'Games' },
+  { href: '#playground', label: 'Playground' },
+  { href: '#apps', label: 'Apps' },
+  { href: '#bitcoin', label: 'Bitcoin' },
+  { href: '#articles', label: 'Articles' },
+];
+
+const badgeClass =
+  'home-jump-link px-3 py-1 rounded-full bg-white/80 dark:bg-dark-800 border border-gray-200 dark:border-dark-700 text-gray-600 dark:text-gray-300 hover:border-primary-400';
+---
+
+<nav
+  id="home-jump-nav"
+  class="sticky z-[45] border-b border-gray-200/80 dark:border-dark-700 bg-white dark:bg-gray-950"
+  aria-label="Jump to"
+>
+  <div class="container mx-auto px-4 md:px-6 lg:px-8 py-2.5">
+    <div class="flex flex-wrap justify-center gap-2 text-sm">
+      <ToolsPicker />
+      {links.map((link) => (
+        <a href={link.href} class={badgeClass} data-jump={link.href.slice(1)}>
+          {link.label}
+        </a>
+      ))}
+    </div>
+  </div>
+</nav>
+
+<style is:global>
+  #home-jump-nav {
+    top: var(--site-chrome-height, 6.5rem);
+  }
+
+  #games,
+  #apps,
+  #bitcoin,
+  #playground,
+  #articles {
+    scroll-margin-top: calc(var(--site-chrome-height, 6.5rem) + var(--home-jump-nav-height, 3.5rem) + 0.75rem);
+  }
+
+  .home-jump-link.is-active {
+    border-color: rgb(96 165 250);
+    color: rgb(37 99 235);
+    background: rgb(239 246 255);
+  }
+
+  :is(.dark) .home-jump-link.is-active {
+    border-color: rgb(96 165 250);
+    color: rgb(147 197 253);
+    background: rgb(17 24 39);
+  }
+</style>
+
+<script>
+  const nav = document.getElementById('home-jump-nav');
+  const jumpLinks = [...document.querySelectorAll<HTMLAnchorElement>('.home-jump-link')];
+
+  function layoutJumpNav() {
+    const header = document.querySelector('header');
+    const ticker = document.getElementById('news-ticker');
+    const tickerVisible = ticker && !document.documentElement.classList.contains('ticker-hidden');
+    let chrome = 104;
+    if (tickerVisible) {
+      chrome = Math.ceil(ticker.offsetTop + ticker.offsetHeight);
+    } else if (header) {
+      chrome = Math.ceil(header.offsetHeight);
+    }
+    document.documentElement.style.setProperty('--site-chrome-height', `${chrome}px`);
+    if (nav) {
+      document.documentElement.style.setProperty('--home-jump-nav-height', `${nav.offsetHeight}px`);
+    }
+  }
+
+  function setActive(id: string | null) {
+    jumpLinks.forEach((link) => {
+      link.classList.toggle('is-active', link.dataset.jump === id);
+    });
+  }
+
+  layoutJumpNav();
+  window.addEventListener('resize', layoutJumpNav);
+  window.addEventListener('news-ticker-change', layoutJumpNav);
+  if ('ResizeObserver' in window) {
+    if (nav) new ResizeObserver(layoutJumpNav).observe(nav);
+    const ticker = document.getElementById('news-ticker');
+    const header = document.querySelector('header');
+    if (ticker) new ResizeObserver(layoutJumpNav).observe(ticker);
+    if (header) new ResizeObserver(layoutJumpNav).observe(header);
+  }
+  document.fonts?.ready?.then(layoutJumpNav);
+
+  const sections = jumpLinks
+    .map((link) => document.getElementById(link.dataset.jump ?? ''))
+    .filter((section): section is HTMLElement => !!section);
+
+  if (sections.length && 'IntersectionObserver' in window) {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const visible = entries
+          .filter((entry) => entry.isIntersecting)
+          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)[0];
+        if (visible?.target.id) setActive(visible.target.id);
+      },
+      {
+        rootMargin: '-30% 0px -55% 0px',
+        threshold: [0.1, 0.25, 0.5],
+      }
+    );
+    sections.forEach((section) => observer.observe(section));
+  }
+
+  jumpLinks.forEach((link) => {
+    link.addEventListener('click', () => setActive(link.dataset.jump ?? null));
+  });
+</script>

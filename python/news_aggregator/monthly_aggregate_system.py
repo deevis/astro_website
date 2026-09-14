@@ -441,6 +441,9 @@ class MonthlyAggregateSystem:
         latest_path = os.path.join(self.base_directory, 'latest.json')
         with open(latest_path, 'w', encoding='utf-8') as f:
             json.dump(latest_data, f, indent=2, ensure_ascii=False)
+
+        # Keep the discovery index in sync so /news search can find every month
+        self.update_index()
         
         # Update dist directory if it exists
         self._update_dist_files(aggregate, active_articles_list)
@@ -450,6 +453,68 @@ class MonthlyAggregateSystem:
         logger.info(f"   Saved to: {path}")
         
         return path
+
+    def update_index(self) -> str:
+        """Rebuild index.json from every monthly aggregate on disk."""
+        index_data = []
+        if not os.path.isdir(self.base_directory):
+            logger.warning(f"Feeds directory not found: {self.base_directory}")
+            return ""
+
+        current_month = datetime.now(timezone.utc).strftime('%Y-%m')
+
+        for year_name in sorted(os.listdir(self.base_directory)):
+            year_dir = os.path.join(self.base_directory, year_name)
+            if not os.path.isdir(year_dir) or not year_name.isdigit():
+                continue
+
+            for filename in os.listdir(year_dir):
+                if not (filename.startswith('aggregate_') and filename.endswith('.json')):
+                    continue
+
+                aggregate_path = os.path.join(year_dir, filename)
+                try:
+                    with open(aggregate_path, 'r', encoding='utf-8') as f:
+                        data = json.load(f)
+
+                    agg = data.get('monthly_aggregate') or {}
+                    month = agg.get('month')
+                    if not month:
+                        month_token = filename.replace('aggregate_', '').replace('.json', '')
+                        parts = month_token.split('_')
+                        month = f"{parts[0]}-{parts[1]}" if len(parts) >= 2 else month_token
+
+                    articles = agg.get('articles', [])
+                    index_data.append({
+                        'filename': filename,
+                        'month': month,
+                        'path': f"/news_feeds/{year_name}/{filename}",
+                        'total_articles': agg.get('total_articles', agg.get('total_stories', len(articles))),
+                        'active_articles_count': agg.get(
+                            'active_articles_count',
+                            agg.get('active_stories', sum(1 for article in articles if article.get('is_active')))
+                        ),
+                        'is_current': month == current_month
+                    })
+                except Exception as e:
+                    logger.error(f"Error indexing {aggregate_path}: {e}")
+
+        index_data.sort(key=lambda item: item['month'], reverse=True)
+        index = {
+            'aggregates_index': {
+                'version': '2.0',
+                'generated_at': datetime.now(timezone.utc).isoformat(),
+                'total_aggregates': len(index_data),
+                'aggregates': index_data
+            }
+        }
+
+        index_path = os.path.join(self.base_directory, 'index.json')
+        with open(index_path, 'w', encoding='utf-8') as f:
+            json.dump(index, f, indent=2, ensure_ascii=False)
+
+        logger.info(f"Index updated: {index_path} ({len(index_data)} aggregates)")
+        return index_path
     
     def _update_dist_files(self, aggregate: Dict, active_articles: List[Dict]):
         """Update dist directory for production serving"""
@@ -480,6 +545,12 @@ class MonthlyAggregateSystem:
             os.makedirs(os.path.dirname(dist_latest), exist_ok=True)
             with open(dist_latest, 'w', encoding='utf-8') as f:
                 json.dump(latest_data, f, indent=2, ensure_ascii=False)
+
+            index_src = os.path.join(self.base_directory, 'index.json')
+            if os.path.exists(index_src):
+                dist_index = os.path.join(dist_base, "news_feeds", "index.json")
+                with open(index_src, 'r', encoding='utf-8') as src, open(dist_index, 'w', encoding='utf-8') as dest:
+                    dest.write(src.read())
             
             logger.info(f"   Dist files updated: {dist_aggregate}")
     

@@ -273,12 +273,12 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
     </div>
   </div>
 
-  <!-- Load QR code libraries from CDN with fallback -->
-  <script is:inline src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js" 
-    onload="console.log('✓ QRCode library loaded from cdnjs')"
-    onerror="console.error('✗ Failed to load QRCode from cdnjs, trying fallback...'); 
-             var script = document.createElement('script'); 
-             script.src = 'https://unpkg.com/qrcodejs@1.0.0/qrcode.min.js';
+  <!-- node-qrcode 1.5.1 still ships a browser bundle; 1.5.2+ dropped build/. -->
+  <script is:inline src="https://cdn.jsdelivr.net/npm/qrcode@1.5.1/build/qrcode.min.js"
+    onload="console.log('✓ QRCode library loaded from jsdelivr')"
+    onerror="console.error('✗ Failed to load QRCode from jsdelivr, trying fallback...');
+             var script = document.createElement('script');
+             script.src = 'https://unpkg.com/qrcode@1.5.1/build/qrcode.min.js';
              script.onload = function() { console.log('✓ QRCode library loaded from unpkg fallback'); };
              script.onerror = function() { console.error('✗ All QRCode library sources failed'); };
              document.head.appendChild(script);">
@@ -288,42 +288,35 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
     onerror="console.error('✗ jsQR library failed to load')">
   </script>
 
-  <script is:inline>
-    // Debug library loading status
-    setTimeout(function() {
-      console.log('=== Library Loading Status ===');
-      console.log('QRCode available:', typeof QRCode !== 'undefined');
-      console.log('jsQR available:', typeof jsQR !== 'undefined');
-      if (typeof QRCode !== 'undefined') {
-        console.log('QRCode.CorrectLevel:', QRCode.CorrectLevel);
-      }
-    }, 500);
-  </script>
-
   <script>
-    // Wait for libraries to load
+    const QR_SIZE = 400;
+    const QR_MARGIN_MODULES = 4;
+
+    function qrLibraryReady() {
+      return typeof (window as any).QRCode?.toCanvas === 'function';
+    }
+
     function waitForLibraries() {
       return new Promise<void>((resolve) => {
-        if (typeof (window as any).QRCode !== 'undefined') {
-          console.log('QRCode library ready');
+        if (qrLibraryReady()) {
           resolve();
-        } else {
-          console.log('Waiting for QRCode library...');
-          const checkInterval = setInterval(() => {
-            if (typeof (window as any).QRCode !== 'undefined') {
-              console.log('QRCode library loaded');
-              clearInterval(checkInterval);
-              resolve();
-            }
-          }, 100);
-          
-          // Timeout after 5 seconds
-          setTimeout(() => {
-            clearInterval(checkInterval);
-            console.error('QRCode library load timeout');
-            resolve(); // Resolve anyway to not block initialization
-          }, 5000);
+          return;
         }
+
+        const checkInterval = setInterval(() => {
+          if (qrLibraryReady()) {
+            clearInterval(checkInterval);
+            resolve();
+          }
+        }, 100);
+
+        setTimeout(() => {
+          clearInterval(checkInterval);
+          if (!qrLibraryReady()) {
+            console.error('QRCode library load timeout');
+          }
+          resolve();
+        }, 5000);
       });
     }
 
@@ -358,10 +351,8 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
 
     // Initialize after libraries load
     waitForLibraries().then(() => {
-      librariesReady = typeof (window as any).QRCode !== 'undefined';
-      if (librariesReady) {
-        console.log('All libraries ready, QR code generation enabled');
-      } else {
+      librariesReady = qrLibraryReady();
+      if (!librariesReady) {
         console.error('Failed to load QR code library - generation will not work');
       }
     });
@@ -415,97 +406,57 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
 
     qrInput?.addEventListener('input', updateCharCount);
 
-    // Generate QR Code using pure canvas implementation
     function generateQRCode(text: string) {
-      // Check if library is loaded
-      if (typeof (window as any).QRCode === 'undefined') {
+      if (!qrLibraryReady()) {
         showNotification('QR Code library failed to load. Please refresh the page.', 'error');
-        console.error('QRCode library not found on window object. Available window properties:', Object.keys(window).filter(k => k.toLowerCase().includes('qr')));
         return;
       }
 
-      try {
-        // Clear any existing QR code
-        const existingQR = qrCanvasContainer?.querySelector('.qrcode-container');
-        if (existingQR) {
-          existingQR.remove();
-        }
+      // H (30%) ~190 chars, M (15%) ~370 chars, L (7%) ~2000 chars
+      let errorCorrectionLevel: 'L' | 'M' | 'H' = 'M';
+      let levelName = 'Medium (M)';
+      let levelDescription = '15% recovery - up to 370 chars';
 
-        // Hide canvas, show container
-        qrCanvas.style.display = 'none';
-        
-        // Create container for QR code
-        const qrContainer = document.createElement('div');
-        qrContainer.className = 'qrcode-container';
-        qrContainer.style.display = 'flex';
-        qrContainer.style.justifyContent = 'center';
-        qrContainer.style.alignItems = 'center';
-        
-        // Determine optimal error correction based on text length
-        // H (30% correction) = max ~190 chars, M (15%) = ~370 chars, L (7%) = ~2000 chars
-        let correctLevel = (window as any).QRCode.CorrectLevel.M; // Medium is good default
-        let levelName = 'Medium (M)';
-        let levelDescription = '15% recovery - up to 370 chars';
-        
-        if (text.length <= 190) {
-          correctLevel = (window as any).QRCode.CorrectLevel.H; // High for short text
-          levelName = 'High (H)';
-          levelDescription = '30% recovery - maximum protection';
-        } else if (text.length > 370) {
-          correctLevel = (window as any).QRCode.CorrectLevel.L; // Low for long text
-          levelName = 'Low (L)';
-          levelDescription = '7% recovery - up to 2,000 chars';
-        }
-        
-        // Update error correction display
-        if (ecLevel) ecLevel.textContent = levelName;
-        if (ecDescription) ecDescription.textContent = levelDescription;
-        if (errorCorrectionInfo) errorCorrectionInfo.classList.remove('hidden');
-        
-        // Generate QR code
-        const qrcode = new (window as any).QRCode(qrContainer, {
-          text: text,
-          width: 256,
-          height: 256,
-          colorDark: '#000000',
-          colorLight: '#ffffff',
-          correctLevel: correctLevel
-        });
-
-        // Insert into container
-        qrCanvasContainer?.appendChild(qrContainer);
-
-        // Wait for image to be generated, then copy to canvas for download
-        setTimeout(() => {
-          const img = qrContainer.querySelector('img') as HTMLImageElement;
-          if (img) {
-            img.onload = () => {
-              qrCanvas.width = 256;
-              qrCanvas.height = 256;
-              const ctx = qrCanvas.getContext('2d');
-              if (ctx) {
-                ctx.drawImage(img, 0, 0);
-              }
-            };
-            // If already loaded
-            if (img.complete) {
-              qrCanvas.width = 256;
-              qrCanvas.height = 256;
-              const ctx = qrCanvas.getContext('2d');
-              if (ctx) {
-                ctx.drawImage(img, 0, 0);
-              }
-            }
-          }
-        }, 100);
-
-        qrPlaceholder?.classList.add('hidden');
-        if (downloadBtn) downloadBtn.disabled = false;
-        showNotification('QR code generated successfully!', 'success');
-      } catch (error) {
-        console.error('QR code generation error:', error);
-        showNotification('Error generating QR code: ' + (error as Error).message, 'error');
+      if (text.length <= 190) {
+        errorCorrectionLevel = 'H';
+        levelName = 'High (H)';
+        levelDescription = '30% recovery - maximum protection';
+      } else if (text.length > 370) {
+        errorCorrectionLevel = 'L';
+        levelName = 'Low (L)';
+        levelDescription = '7% recovery - up to 2,000 chars';
       }
+
+      if (ecLevel) ecLevel.textContent = levelName;
+      if (ecDescription) ecDescription.textContent = levelDescription;
+      if (errorCorrectionInfo) errorCorrectionInfo.classList.remove('hidden');
+
+      (window as any).QRCode.toCanvas(
+        qrCanvas,
+        text,
+        {
+          width: QR_SIZE,
+          margin: QR_MARGIN_MODULES,
+          errorCorrectionLevel,
+          color: {
+            dark: '#000000',
+            light: '#ffffff',
+          },
+        },
+        (error: Error | null) => {
+          if (error) {
+            console.error('QR code generation error:', error);
+            showNotification('Error generating QR code: ' + error.message, 'error');
+            return;
+          }
+
+          qrPlaceholder?.classList.add('hidden');
+          qrCanvas.classList.add('visible');
+          qrCanvasContainer?.classList.add('has-qr');
+          if (downloadBtn) downloadBtn.disabled = false;
+          showNotification('QR code generated successfully!', 'success');
+        }
+      );
     }
 
     // Generate QR Code button handler
@@ -952,26 +903,33 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
       height: 256px;
     }
 
-    .qrcode-container {
+    .qr-canvas-container.has-qr {
+      width: auto;
+      height: auto;
+      background: #ffffff;
+      padding: 16px;
       border-radius: 8px;
       box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-      overflow: hidden;
-    }
-
-    .qrcode-container img,
-    .qrcode-container canvas {
-      display: block !important;
-      border-radius: 8px;
+      line-height: 0;
     }
 
     #qr-canvas {
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
       display: none;
     }
 
     #qr-canvas.visible {
       display: block;
+      width: 400px !important;
+      height: 400px !important;
+      image-rendering: pixelated;
+      image-rendering: crisp-edges;
+    }
+
+    @media (max-width: 480px) {
+      #qr-canvas.visible {
+        width: 260px !important;
+        height: 260px !important;
+      }
     }
 
     .qr-placeholder {
@@ -986,7 +944,8 @@ const pageDescription = 'Generate QR codes from text and scan QR codes using ima
       color: #a0aec0;
     }
 
-    .qr-placeholder.hidden {
+    .qr-placeholder.hidden,
+    .qr-canvas-container.has-qr .qr-placeholder {
       display: none;
     }
 

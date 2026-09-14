@@ -98,14 +98,12 @@
       }
     }
 
-    // Set initial theme based on localStorage or system preference
+    // Dark is the default for first-time visitors; only an explicit light choice opts out
     const currentTheme = localStorage.getItem('color-theme');
-    const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-    const shouldBeDark = currentTheme === 'dark' || (!currentTheme && systemPrefersDark);
+    const shouldBeDark = currentTheme !== 'light';
     
     console.log('Initial theme detection:', {
       currentTheme,
-      systemPrefersDark,
       shouldBeDark,
       currentlyDark: document.documentElement.classList.contains('dark')
     });

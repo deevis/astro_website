@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', async () => {
   // --- Load Dependencies ---
   try {
     await loadScript('https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js');
+    await loadScript('/js/chartjs-css-zoom-fix.js?v=2');
     await loadScript('https://cdn.jsdelivr.net/npm/chartjs-adapter-date-fns@3.0.0/dist/chartjs-adapter-date-fns.bundle.min.js');
     await loadScript('/js/bitcoin-pricing-models.js');
   } catch (error) {
@@ -137,6 +138,7 @@ document.addEventListener('DOMContentLoaded', async () => {
           maintainAspectRatio: false,
           interaction: {
             mode: 'index',
+            axis: 'x',
             intersect: false,
           },
           scales: {
@@ -157,13 +159,26 @@ document.addEventListener('DOMContentLoaded', async () => {
           },
           elements: {
             point: {
-              radius: 0
+              radius: 0,
+              hitRadius: 12,
+              hoverRadius: 4
             }
           },
           plugins: {
             tooltip: {
+              enabled: true,
               mode: 'index',
-              intersect: false
+              axis: 'x',
+              intersect: false,
+              callbacks: {
+                label: function(context) {
+                  const value = context.parsed && context.parsed.y;
+                  if (value == null || Number.isNaN(value)) return;
+                  return context.dataset.label + ': $' + Number(value).toLocaleString(undefined, {
+                    maximumFractionDigits: 2
+                  });
+                }
+              }
             }
           }
         }

@@ -7,24 +7,21 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import NewsTicker from '../components/NewsTicker.astro';
 import NewsModal from '../components/NewsModal.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Bitcoin OP_RETURN Timeline - Vis.js</title>
+    <GoogleAnalytics />
     <script is:inline>
-      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      if (
-        localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark');
-      } else {
+      if (localStorage.getItem('color-theme') === 'light') {
         document.documentElement.classList.remove('dark');
+      } else {
+        document.documentElement.classList.add('dark');
       }
     </script>
     
@@ -204,13 +201,11 @@ import NewsModal from '../components/NewsModal.astro';
         }
         
         h1 {
-            font-size: 2.5em;
+            font-size: 2.25em;
+            font-weight: 600;
             text-align: center;
-            background: linear-gradient(90deg, #00ffff, #ff00ff, #ffff00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            background-clip: text;
-            margin-bottom: 10px;
+            color: #f1f5f9;
+            letter-spacing: -0.02em;
             margin: 0;
         }
         

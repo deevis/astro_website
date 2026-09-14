@@ -59,6 +59,9 @@ COPY python/news_aggregator/ ./python/news_aggregator/
 
 # Copy remaining config files
 COPY *.js *.json *.mjs *.astro ./.gitignore* ./
+# PUBLIC_ vars are inlined at build time
+ARG PUBLIC_GA_MEASUREMENT_ID
+ENV PUBLIC_GA_MEASUREMENT_ID=$PUBLIC_GA_MEASUREMENT_ID
 # Build the application
 RUN pnpm build
 

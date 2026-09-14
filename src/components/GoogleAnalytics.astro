@@ -1,0 +1,19 @@
+---
+const measurementId = import.meta.env.PUBLIC_GA_MEASUREMENT_ID;
+const enabled =
+  Boolean(measurementId) &&
+  /^G-[A-Z0-9]+$/.test(measurementId) &&
+  import.meta.env.PROD;
+const gtagSrc = enabled
+  ? `https://www.googletagmanager.com/gtag/js?id=${measurementId}`
+  : '';
+const gtagInline = enabled
+  ? `window.dataLayer = window.dataLayer || [];
+function gtag(){dataLayer.push(arguments);}
+gtag('js', new Date());
+gtag('config', '${measurementId}');`
+  : '';
+---
+
+{enabled && <script is:inline async src={gtagSrc}></script>}
+{enabled && <script is:inline set:html={gtagInline} />}

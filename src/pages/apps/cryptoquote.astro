@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Cryptoquote';
+const pageDescription = 'Decode substitution-cipher quotes. Play a daily puzzle, create your own, and share it.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/cryptoquote_generator/cryptoquote.css" />
+  <div class="cq-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="cq-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/cryptoquote_generator/cryptoquote.js"></script>
+</Layout>

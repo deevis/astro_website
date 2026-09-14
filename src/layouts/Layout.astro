@@ -8,20 +8,23 @@ import Navigation from '../components/Navigation.astro';
 import Footer from '../components/Footer.astro';
 import NewsTicker from '../components/NewsTicker.astro';
 import NewsModal from '../components/NewsModal.astro';
+import GoogleAnalytics from '../components/GoogleAnalytics.astro';
 
 interface Props {
   title: string;
   description?: string;
+  naturalScale?: boolean;
 }
 
 const { 
   title,
+  naturalScale = false,
   description = "Professional portfolio and consulting services"
 } = Astro.props;
 ---
 
 <!doctype html>
-<html lang="en">
+<html lang="en" class:list={["dark", { "natural-scale": naturalScale }]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -29,16 +32,13 @@ const {
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="generator" content={Astro.generator} />
     <title>{title}</title>
+    <GoogleAnalytics />
     <script is:inline>
-      // On page load or when changing themes, best to add inline in `head` to avoid FOUC
-      if (
-        localStorage.getItem('color-theme') === 'dark' ||
-        (!('color-theme' in localStorage) &&
-          window.matchMedia('(prefers-color-scheme: dark)').matches)
-      ) {
-        document.documentElement.classList.add('dark');
-      } else {
+      if (localStorage.getItem('color-theme') === 'light') {
         document.documentElement.classList.remove('dark');
+      }
+      if (localStorage.getItem('news-ticker') === 'off') {
+        document.documentElement.classList.add('ticker-hidden');
       }
     </script>
     <link 
@@ -69,12 +69,15 @@ const {
   html {
     font-family: var(--font-sans);
     scroll-behavior: smooth;
-    zoom: 0.8; /* Chrome zoom equivalent */
+  }
+
+  html:not(.natural-scale) {
+    zoom: 0.8; /* Preserve the existing site scale outside full-size tools. */
   }
   
   /* Fallback for browsers that don't support zoom */
   @supports not (zoom: 0.8) {
-    body {
+    html:not(.natural-scale) body {
       transform: scale(0.8);
       transform-origin: top left;
       width: 125%; /* Compensate for the scale */
@@ -85,5 +88,13 @@ const {
   /* Adjust for fixed news ticker */
   main.pt-24 {
     padding-top: 8rem; /* 128px = 96px (original pt-24) + 32px (ticker height) */
+  }
+
+  html.ticker-hidden #news-ticker {
+    display: none !important;
+  }
+
+  html.ticker-hidden main.pt-24 {
+    padding-top: 6rem;
   }
 </style>

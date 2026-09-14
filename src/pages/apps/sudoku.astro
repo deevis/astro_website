@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Sudoku';
+const pageDescription = 'Classic 9×9 Sudoku with Easy, Medium, Hard, and Expert boards. Play a daily puzzle or a fresh unique grid.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/sudoku/sudoku.css" />
+  <div class="su-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="su-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/sudoku/sudoku.js"></script>
+</Layout>

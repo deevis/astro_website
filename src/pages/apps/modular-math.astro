@@ -1,0 +1,901 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Modular Math';
+const pageDescription = 'Train remainder fluency with clocks, weekdays, and wrap-around arithmetic.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <div class="mm-wrapper">
+    <div class="container mx-auto px-4">
+      <main class="mm-container">
+        <div id="mmRoot">
+
+          <div id="mmSplash">
+            <p class="mm-kicker">Game of the day</p>
+            <h1 class="mm-title">Modular Math</h1>
+            <p class="mm-subtitle">Remainders, clocks, and wrap-around arithmetic — how fast can you find 47 mod 12?</p>
+
+            <div class="mm-demo" aria-hidden="true">
+              <span class="mm-demo-eq">47 ≡ <strong>11</strong> (mod 12)</span>
+              <span class="mm-demo-note">12 × 3 = 36, leftover 11</span>
+            </div>
+
+            <div class="mm-mode-grid" id="mmModes">
+              <button type="button" class="mm-mode" data-mode="easy">
+                <span class="mm-mode-name">Easy</span>
+                <span class="mm-mode-desc">Small numbers · friendly moduli</span>
+                <span class="mm-mode-best" data-best="easy"></span>
+              </button>
+              <button type="button" class="mm-mode" data-mode="standard">
+                <span class="mm-mode-name">Standard</span>
+                <span class="mm-mode-desc">Two-digit wraps · mixed moduli</span>
+                <span class="mm-mode-best" data-best="standard"></span>
+              </button>
+              <button type="button" class="mm-mode" data-mode="clock">
+                <span class="mm-mode-name">Clock</span>
+                <span class="mm-mode-desc">Hours and weekdays</span>
+                <span class="mm-mode-best" data-best="clock"></span>
+              </button>
+              <button type="button" class="mm-mode" data-mode="blitz">
+                <span class="mm-mode-name">Blitz</span>
+                <span class="mm-mode-desc">45 seconds · as many as you can</span>
+                <span class="mm-mode-best" data-best="blitz"></span>
+              </button>
+            </div>
+          </div>
+
+          <div id="mmGame" hidden>
+            <div class="mm-hud">
+              <div class="mm-hud-item">
+                <span class="mm-hud-label">Score</span>
+                <span class="mm-hud-value" id="mmScore">0</span>
+              </div>
+              <div class="mm-hud-item">
+                <span class="mm-hud-label" id="mmHudMidLabel">Lives</span>
+                <span class="mm-hud-value mm-lives" id="mmHudMid"><span class="mm-life on"></span><span class="mm-life on"></span><span class="mm-life on"></span></span>
+              </div>
+              <div class="mm-hud-item" id="mmHudRoundWrap">
+                <span class="mm-hud-label">Question</span>
+                <span class="mm-hud-value" id="mmHudRound">1/8</span>
+              </div>
+              <div class="mm-hud-item">
+                <span class="mm-hud-label">Streak</span>
+                <span class="mm-hud-value" id="mmStreak">0</span>
+              </div>
+            </div>
+            <div class="mm-progress" id="mmProgress" hidden>
+              <div class="mm-progress-fill" id="mmProgressFill"></div>
+            </div>
+
+            <p class="mm-prompt" id="mmPrompt"></p>
+            <p class="mm-equation" id="mmEquation"></p>
+            <p class="mm-hint" id="mmHint"></p>
+
+            <div class="mm-play" id="mmPlay">
+              <div class="mm-ring-wrap" id="mmRingWrap" hidden>
+                <svg viewBox="0 0 180 180" class="mm-ring" id="mmRing" role="group" aria-label="Click a remainder on the clock"></svg>
+                <p class="mm-ring-caption" id="mmRingCaption">Tap a mark on the clock</p>
+              </div>
+              <div id="mmAnswerArea"></div>
+            </div>
+            <p class="mm-feedback" id="mmFeedback"></p>
+
+            <div class="mm-footer">
+              <button type="button" class="mm-quit" id="mmQuit">← Back to modes</button>
+              <span class="mm-kbd-hint">Keys 0–9 · Enter · Esc</span>
+            </div>
+          </div>
+
+          <div id="mmResults" hidden>
+            <p class="mm-kicker" id="mmResultsKicker">Round over</p>
+            <h2 class="mm-title mm-title-sm" id="mmResultsTitle">Nice work</h2>
+            <p class="mm-results-score" id="mmResultsScore"></p>
+            <p class="mm-subtitle" id="mmResultsDetail"></p>
+            <div class="mm-results-actions">
+              <button type="button" class="mm-btn-primary" id="mmAgain">Play again</button>
+              <button type="button" class="mm-btn-ghost" id="mmHome">Mode select</button>
+            </div>
+          </div>
+
+        </div>
+      </main>
+    </div>
+  </div>
+
+  <script>
+    (() => {
+      type Mode = 'easy' | 'standard' | 'clock' | 'blitz';
+      type Kind = 'mod' | 'clock' | 'weekday';
+
+      interface Problem {
+        kind: Kind;
+        prompt: string;
+        equation: string;
+        hint: string;
+        answer: number;
+        modulus: number;
+        remainder: number;
+        choices?: string[];
+      }
+
+      const $ = (id: string) => document.getElementById(id)!;
+      const splash = $('mmSplash');
+      const game = $('mmGame');
+      const results = $('mmResults');
+      const promptEl = $('mmPrompt');
+      const equationEl = $('mmEquation');
+      const hintEl = $('mmHint');
+      const answerArea = $('mmAnswerArea');
+      const feedbackEl = $('mmFeedback');
+      const scoreEl = $('mmScore');
+      const streakEl = $('mmStreak');
+      const hudMid = $('mmHudMid');
+      const hudMidLabel = $('mmHudMidLabel');
+      const ringWrap = $('mmRingWrap');
+      const ring = $('mmRing');
+      const ringCaption = $('mmRingCaption');
+      const playEl = $('mmPlay');
+      const hudRound = $('mmHudRound');
+      const hudRoundWrap = $('mmHudRoundWrap');
+      const progress = $('mmProgress');
+      const progressFill = $('mmProgressFill');
+
+      const STORAGE = 'modular-math-bests';
+      const DAYS = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+      const DAY_SHORT = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'];
+
+      const state = {
+        mode: 'easy' as Mode,
+        score: 0,
+        streak: 0,
+        lives: 3,
+        remaining: 8,
+        total: 8,
+        correct: 0,
+        asked: 0,
+        blitzEnds: 0,
+        timer: 0 as number,
+        locked: false,
+        problem: null as Problem | null,
+        typed: '',
+      };
+
+      function loadBests(): Record<Mode, number> {
+        try {
+          return { easy: 0, standard: 0, clock: 0, blitz: 0, ...JSON.parse(localStorage.getItem(STORAGE) || '{}') };
+        } catch {
+          return { easy: 0, standard: 0, clock: 0, blitz: 0 };
+        }
+      }
+
+      function saveBest(mode: Mode, score: number) {
+        const bests = loadBests();
+        if (score > (bests[mode] || 0)) {
+          bests[mode] = score;
+          localStorage.setItem(STORAGE, JSON.stringify(bests));
+        }
+        paintBests();
+      }
+
+      function paintBests() {
+        const bests = loadBests();
+        document.querySelectorAll<HTMLElement>('[data-best]').forEach((el) => {
+          const mode = el.dataset.best as Mode;
+          el.textContent = bests[mode] ? `Best ${bests[mode]}` : '';
+        });
+      }
+
+      function randInt(min: number, max: number) {
+        return min + Math.floor(Math.random() * (max - min + 1));
+      }
+
+      function pick<T>(arr: T[]): T {
+        return arr[Math.floor(Math.random() * arr.length)];
+      }
+
+      function makeModProblem(n: number, m: number): Problem {
+        const r = ((n % m) + m) % m;
+        return {
+          kind: 'mod',
+          prompt: 'Find the remainder',
+          equation: `${n} ≡ ? (mod ${m})`,
+          hint: `${m} × ${Math.floor(n / m)} = ${m * Math.floor(n / m)}`,
+          answer: r,
+          modulus: m,
+          remainder: r,
+        };
+      }
+
+      function makeClockProblem(): Problem {
+        const hour = randInt(1, 12);
+        const add = randInt(3, 28);
+        const raw = (hour + add) % 12;
+        const answer = raw === 0 ? 12 : raw;
+        return {
+          kind: 'clock',
+          prompt: '12-hour clock',
+          equation: `It's ${hour}:00. Add ${add} hours.`,
+          hint: `(${hour} + ${add}) mod 12  →  12 stays 12`,
+          answer,
+          modulus: 12,
+          remainder: raw,
+        };
+      }
+
+      function makeWeekdayProblem(): Problem {
+        const start = randInt(0, 6);
+        const add = randInt(2, 20);
+        const answer = (start + add) % 7;
+        return {
+          kind: 'weekday',
+          prompt: 'Day of the week',
+          equation: `${DAYS[start]} + ${add} days`,
+          hint: `(${start} + ${add}) mod 7`,
+          answer,
+          modulus: 7,
+          remainder: answer,
+          choices: DAY_SHORT,
+        };
+      }
+
+      function nextProblem(): Problem {
+        if (state.mode === 'clock') {
+          return Math.random() < 0.55 ? makeClockProblem() : makeWeekdayProblem();
+        }
+        const easyMods = [2, 3, 4, 5, 6, 10];
+        const stdMods = [3, 4, 5, 6, 7, 8, 9, 11, 12, 15, 16];
+        const m = state.mode === 'easy' ? pick(easyMods) : pick(stdMods);
+        const n = state.mode === 'easy' ? randInt(m + 1, m * 8) : randInt(m + 5, m * 14);
+        const problem = makeModProblem(n, m);
+        if (state.mode !== 'easy') {
+          problem.hint = `0 ≤ remainder < ${m}`;
+        }
+        return problem;
+      }
+
+      function ringPoint(index: number, count: number, radius: number) {
+        const angle = ((index / count) * Math.PI * 2) - Math.PI / 2;
+        return { x: 90 + Math.cos(angle) * radius, y: 90 + Math.sin(angle) * radius };
+      }
+
+      function tickValue(problem: Problem, index: number) {
+        if (problem.kind === 'clock') return index === 0 ? 12 : index;
+        return index;
+      }
+
+      function drawRing(problem: Problem, reveal?: { guess: number; ok: boolean }) {
+        const m = problem.modulus;
+        if (problem.kind === 'weekday' || m < 2 || m > 16) {
+          ringWrap.hidden = true;
+          ring.innerHTML = '';
+          return;
+        }
+        ringWrap.hidden = false;
+        ringCaption.textContent = problem.kind === 'clock' ? 'Tap the hour' : 'Tap a mark, or type';
+        const fontSize = m > 12 ? 10 : m > 8 ? 11 : 13;
+        const ticks = Array.from({ length: m }, (_, i) => {
+          const value = tickValue(problem, i);
+          const inner = ringPoint(i, m, 48);
+          const outer = ringPoint(i, m, 60);
+          const label = ringPoint(i, m, 74);
+          const isCorrect = reveal && value === problem.answer;
+          const isGuess = reveal && !reveal.ok && value === reveal.guess;
+          const stroke = isCorrect ? '#059669' : isGuess ? '#dc2626' : 'currentColor';
+          const width = isCorrect || isGuess ? 4 : 2;
+          const labelFill = isCorrect ? '#059669' : isGuess ? '#dc2626' : 'currentColor';
+          return `
+            <g class="mm-tick" data-val="${value}" role="button" tabindex="0" aria-label="${problem.kind === 'clock' ? `Hour ${value}` : `Remainder ${value}`}">
+              <circle class="mm-tick-hit" cx="${label.x}" cy="${label.y}" r="14" />
+              <line x1="${inner.x}" y1="${inner.y}" x2="${outer.x}" y2="${outer.y}" stroke="${stroke}" stroke-width="${width}" stroke-linecap="round" />
+              <text x="${label.x}" y="${label.y}" dy="0.35em" text-anchor="middle" font-size="${fontSize}" font-weight="700" fill="${labelFill}">${value}</text>
+            </g>`;
+        }).join('');
+        const center = reveal ? String(problem.answer) : '?';
+        ring.innerHTML = `
+          <circle class="mm-ring-track" cx="90" cy="90" r="54" fill="none" stroke-width="8" />
+          ${ticks}
+          <text x="90" y="90" dy="0.35em" text-anchor="middle" font-size="22" font-weight="800" fill="currentColor">${center}</text>
+        `;
+      }
+
+      function renderAnswerControls(problem: Problem) {
+        state.typed = '';
+        playEl.classList.toggle('mm-play--choices', Boolean(problem.choices));
+        game.classList.toggle('mm-game--choices', Boolean(problem.choices));
+        if (problem.kind === 'weekday' && problem.choices) {
+          answerArea.innerHTML = `<div class="mm-days">${problem.choices.map((label, i) =>
+            `<button type="button" class="mm-day" data-val="${i}">${label}</button>`
+          ).join('')}</div>`;
+          answerArea.querySelectorAll<HTMLButtonElement>('.mm-day').forEach((btn) => {
+            btn.addEventListener('click', () => submit(Number(btn.dataset.val)));
+          });
+          return;
+        }
+        const rangeNote = problem.kind === 'clock' ? 'Hours wrap 1–12' : `Remainder is 0–${problem.modulus - 1}`;
+        answerArea.innerHTML = `
+          <div class="mm-typed is-empty" id="mmTyped" aria-live="polite">?</div>
+          <div class="mm-pad">
+            ${[1,2,3,4,5,6,7,8,9].map((key) =>
+              `<button type="button" class="mm-key" data-key="${key}" aria-label="${key}">${key}</button>`
+            ).join('')}
+            <button type="button" class="mm-key mm-key-back" data-key="⌫" aria-label="Backspace">Del</button>
+            <button type="button" class="mm-key" data-key="0" aria-label="0">0</button>
+            <button type="button" class="mm-key mm-key-go" data-key="Go" aria-label="Submit">Go</button>
+          </div>
+          <p class="mm-pad-note">${rangeNote}</p>
+        `;
+        answerArea.querySelectorAll<HTMLButtonElement>('.mm-key').forEach((btn) => {
+          btn.addEventListener('click', () => handleKey(String(btn.dataset.key)));
+        });
+      }
+
+      function handleKey(key: string) {
+        if (state.locked) return;
+        if (key === '⌫') {
+          state.typed = state.typed.slice(0, -1);
+        } else if (key === 'Go') {
+          if (state.typed !== '') submit(Number(state.typed));
+          return;
+        } else {
+          if (state.typed.length < 3) state.typed += key;
+        }
+        const typed = $('mmTyped');
+        if (typed) {
+          typed.textContent = state.typed === '' ? '?' : state.typed;
+          typed.classList.toggle('is-empty', state.typed === '');
+        }
+      }
+
+      function showFeedback(ok: boolean, message: string) {
+        feedbackEl.textContent = message;
+        feedbackEl.className = `mm-feedback ${ok ? 'ok' : 'bad'}`;
+      }
+
+      function validRange(problem: Problem) {
+        if (problem.kind === 'clock') return { min: 1, max: 12 };
+        if (problem.kind === 'weekday') return { min: 0, max: 6 };
+        return { min: 0, max: problem.modulus - 1 };
+      }
+
+      function submit(value: number) {
+        const problem = state.problem;
+        if (!problem || state.locked) return;
+        const range = validRange(problem);
+        if (value < range.min || value > range.max) {
+          showFeedback(false, `Stay in range: ${range.min}–${range.max}`);
+          feedbackEl.className = 'mm-feedback warn';
+          return;
+        }
+        state.locked = true;
+        state.asked += 1;
+        const ok = value === problem.answer;
+        if (ok) {
+          state.correct += 1;
+          state.streak += 1;
+          const bonus = 1 + Math.floor(state.streak / 3);
+          state.score += state.mode === 'blitz' ? 1 : 10 * bonus;
+          showFeedback(true, 'Correct');
+        } else {
+          state.streak = 0;
+          if (state.mode !== 'blitz') state.lives -= 1;
+          const shown = problem.kind === 'weekday' ? DAYS[problem.answer] : String(problem.answer);
+          showFeedback(false, `Answer was ${shown}`);
+        }
+        drawRing(problem, { guess: value, ok });
+        if (problem.choices) {
+          answerArea.querySelectorAll<HTMLButtonElement>('.mm-day').forEach((btn) => {
+            const val = Number(btn.dataset.val);
+            if (val === problem.answer) btn.classList.add('is-correct');
+            else if (!ok && val === value) btn.classList.add('is-wrong');
+          });
+        }
+        paintHud();
+        if (state.mode !== 'blitz') state.remaining -= 1;
+        const delay = ok ? 550 : 900;
+        if (state.mode !== 'blitz' && (state.lives <= 0 || state.remaining <= 0)) {
+          window.setTimeout(endRound, delay);
+          return;
+        }
+        window.setTimeout(() => {
+          state.locked = false;
+          deal();
+        }, delay);
+      }
+
+      function paintHud() {
+        scoreEl.textContent = String(state.score);
+        streakEl.textContent = String(state.streak);
+        if (state.mode === 'blitz') {
+          hudMidLabel.textContent = 'Time';
+          const left = Math.max(0, Math.ceil((state.blitzEnds - Date.now()) / 1000));
+          hudMid.className = 'mm-hud-value';
+          hudMid.textContent = `${left}s`;
+          hudRoundWrap.hidden = true;
+          progress.hidden = true;
+        } else {
+          hudMidLabel.textContent = 'Lives';
+          hudMid.className = 'mm-hud-value mm-lives';
+          hudMid.innerHTML = [0, 1, 2].map((i) => `<span class="mm-life${i < state.lives ? ' on' : ''}"></span>`).join('');
+          hudRoundWrap.hidden = false;
+          progress.hidden = false;
+          const currentQ = state.locked ? Math.max(1, state.asked) : Math.min(state.asked + 1, state.total);
+          hudRound.textContent = `${currentQ}/${state.total}`;
+          progressFill.style.width = `${Math.min(100, (state.asked / state.total) * 100)}%`;
+        }
+      }
+
+      function deal() {
+        const problem = nextProblem();
+        state.problem = problem;
+        promptEl.textContent = problem.prompt;
+        equationEl.textContent = problem.equation;
+        hintEl.textContent = problem.hint;
+        feedbackEl.textContent = '';
+        feedbackEl.className = 'mm-feedback';
+        drawRing(problem);
+        renderAnswerControls(problem);
+        paintHud();
+      }
+
+      function start(mode: Mode) {
+        state.mode = mode;
+        state.score = 0;
+        state.streak = 0;
+        state.lives = 3;
+        state.correct = 0;
+        state.asked = 0;
+        state.total = mode === 'easy' ? 8 : mode === 'clock' ? 10 : 12;
+        state.remaining = state.total;
+        state.locked = false;
+        splash.hidden = true;
+        results.hidden = true;
+        game.hidden = false;
+        if (state.timer) window.clearInterval(state.timer);
+        if (mode === 'blitz') {
+          state.blitzEnds = Date.now() + 45_000;
+          state.timer = window.setInterval(() => {
+            paintHud();
+            if (Date.now() >= state.blitzEnds) {
+              window.clearInterval(state.timer);
+              endRound();
+            }
+          }, 200);
+        }
+        deal();
+      }
+
+      function endRound() {
+        if (state.timer) window.clearInterval(state.timer);
+        const previousBest = loadBests()[state.mode] || 0;
+        saveBest(state.mode, state.score);
+        game.hidden = true;
+        results.hidden = false;
+        const accuracy = state.asked ? Math.round((state.correct / state.asked) * 100) : 0;
+        $('mmResultsKicker').textContent = state.mode === 'blitz' ? 'Time' : state.lives <= 0 ? 'Out of lives' : 'Round complete';
+        $('mmResultsTitle').textContent = state.score > previousBest ? 'New best' : 'Round over';
+        $('mmResultsScore').textContent = String(state.score);
+        $('mmResultsDetail').textContent = `${state.correct} correct · ${accuracy}% accuracy`;
+      }
+
+      function backToModes() {
+        if (state.timer) window.clearInterval(state.timer);
+        game.hidden = true;
+        results.hidden = true;
+        splash.hidden = false;
+      }
+
+      document.getElementById('mmModes')?.addEventListener('click', (event) => {
+        const btn = (event.target as HTMLElement).closest<HTMLElement>('[data-mode]');
+        if (btn?.dataset.mode) start(btn.dataset.mode as Mode);
+      });
+      $('mmQuit').addEventListener('click', backToModes);
+      $('mmHome').addEventListener('click', backToModes);
+      $('mmAgain').addEventListener('click', () => start(state.mode));
+
+      ring.addEventListener('click', (event) => {
+        const tick = (event.target as Element).closest<SVGElement>('[data-val]');
+        if (tick?.dataset.val != null) submit(Number(tick.dataset.val));
+      });
+      ring.addEventListener('keydown', (event) => {
+        const tick = (event.target as Element).closest<SVGElement>('[data-val]');
+        if (!tick || (event.key !== 'Enter' && event.key !== ' ')) return;
+        event.preventDefault();
+        submit(Number(tick.dataset.val));
+      });
+
+      window.addEventListener('keydown', (event) => {
+        if (game.hidden) return;
+        if (event.key === 'Escape') backToModes();
+        if (state.problem?.kind === 'weekday') return;
+        if (/^[0-9]$/.test(event.key)) handleKey(event.key);
+        if (event.key === 'Backspace') {
+          event.preventDefault();
+          handleKey('⌫');
+        }
+        if (event.key === 'Enter') handleKey('Go');
+      });
+
+      paintBests();
+    })();
+  </script>
+
+  <style is:global>
+    .mm-wrapper {
+      padding-top: 8rem;
+      padding-bottom: 4rem;
+      min-height: 100vh;
+      background: #f8fafc;
+    }
+    .mm-wrapper [hidden] { display: none !important; }
+    .mm-game--choices .mm-kbd-hint { visibility: hidden; }
+    .dark .mm-wrapper { background: rgb(3, 7, 18); }
+
+    .mm-container {
+      max-width: 760px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 16px;
+      padding: 40px 32px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .dark .mm-container {
+      background: rgb(17, 24, 39);
+      box-shadow: none;
+      border: 1px solid rgb(31, 41, 55);
+    }
+
+    .mm-kicker {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: #2563eb;
+      margin-bottom: 8px;
+    }
+    .mm-title {
+      text-align: center;
+      font-size: 2.25rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+    .mm-title-sm { font-size: 1.75rem; }
+    .mm-subtitle {
+      text-align: center;
+      color: #6b7280;
+      max-width: 34rem;
+      margin: 0 auto 24px;
+    }
+    .dark .mm-subtitle { color: #9ca3af; }
+
+    .mm-demo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      margin: 0 auto 28px;
+      padding: 14px 18px;
+      border-radius: 12px;
+      background: #eff6ff;
+      max-width: 22rem;
+    }
+    .dark .mm-demo { background: rgba(37, 99, 235, 0.12); }
+    .mm-demo-eq { font-family: ui-monospace, monospace; font-size: 1.25rem; }
+    .mm-demo-eq strong { color: #2563eb; }
+    .mm-demo-note { font-size: 12px; color: #6b7280; }
+
+    .mm-mode-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+    .mm-mode {
+      text-align: left;
+      border: 1px solid #e5e7eb;
+      background: #fff;
+      border-radius: 12px;
+      padding: 16px;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease;
+    }
+    .dark .mm-mode {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+    }
+    .mm-mode:hover {
+      transform: translateY(-2px);
+      border-color: #60a5fa;
+    }
+    .mm-mode-name { display: block; font-weight: 800; font-size: 17px; color: #1d4ed8; }
+    .dark .mm-mode-name { color: #93c5fd; }
+    .mm-mode[data-mode="blitz"] .mm-mode-name { color: #b45309; }
+    .dark .mm-mode[data-mode="blitz"] .mm-mode-name { color: #fbbf24; }
+    .mm-mode-desc { display: block; font-size: 13px; color: #6b7280; margin-top: 4px; }
+    .mm-mode-best { display: block; font-size: 12px; font-weight: 700; color: #b45309; margin-top: 6px; min-height: 1em; }
+
+    .mm-hud {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 12px;
+      flex-wrap: wrap;
+    }
+    .mm-hud-item {
+      min-width: 84px;
+      text-align: center;
+      background: #f8fafc;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 8px 12px;
+    }
+    .dark .mm-hud-item {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+    }
+    .mm-hud-label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #9ca3af;
+    }
+    .mm-hud-value {
+      font-size: 20px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      letter-spacing: 0.04em;
+    }
+
+    .mm-progress {
+      height: 8px;
+      max-width: 420px;
+      margin: 0 auto 18px;
+      border-radius: 999px;
+      background: #e5e7eb;
+      overflow: hidden;
+    }
+    .dark .mm-progress { background: rgb(75, 85, 99); }
+    .mm-lives {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 6px;
+      min-height: 1.25em;
+      letter-spacing: 0;
+    }
+    .mm-life {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #d1d5db;
+    }
+    .dark .mm-life { background: rgb(75, 85, 99); }
+    .mm-life.on { background: #2563eb; }
+    .mm-progress-fill {
+      height: 100%;
+      width: 0;
+      border-radius: inherit;
+      background: #2563eb;
+      transition: width 0.25s ease;
+    }
+
+    .mm-prompt {
+      text-align: center;
+      font-size: 12px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: #9ca3af;
+      margin-bottom: 6px;
+    }
+    .mm-equation {
+      text-align: center;
+      font-family: ui-monospace, monospace;
+      font-size: 1.7rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .mm-hint {
+      text-align: center;
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 16px;
+      min-height: 1.2em;
+    }
+
+    .mm-play {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: 20px;
+      justify-items: center;
+      margin: 0 auto;
+      max-width: 560px;
+    }
+    @media (min-width: 700px) {
+      .mm-play:not(.mm-play--choices) {
+        grid-template-columns: minmax(180px, 1fr) 220px;
+        align-items: center;
+      }
+    }
+
+    .mm-ring-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 6px;
+    }
+    .mm-ring {
+      width: 200px;
+      height: 200px;
+      color: #374151;
+      overflow: visible;
+    }
+    .dark .mm-ring { color: #e5e7eb; }
+    .mm-ring-track { stroke: #e5e7eb; }
+    .dark .mm-ring-track { stroke: #374151; }
+    .mm-tick { cursor: pointer; }
+    .mm-tick-hit { fill: transparent; }
+    .mm-tick:hover .mm-tick-hit { fill: rgba(37, 99, 235, 0.16); }
+    .mm-tick:focus { outline: none; }
+    .mm-tick:focus-visible .mm-tick-hit {
+      fill: rgba(37, 99, 235, 0.22);
+      stroke: #2563eb;
+      stroke-width: 2;
+    }
+    .mm-ring-caption {
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 0;
+      text-align: center;
+      max-width: 200px;
+    }
+
+    #mmAnswerArea { width: 100%; max-width: 240px; }
+    .mm-play--choices #mmAnswerArea { max-width: 420px; }
+
+    .mm-typed {
+      text-align: center;
+      font-size: 2rem;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      min-height: 3rem;
+      margin: 0 auto 10px;
+      padding: 6px 12px;
+      border-radius: 12px;
+      border: 1px solid #bfdbfe;
+      background: #eff6ff;
+      color: #2563eb;
+    }
+    .mm-typed.is-empty { color: #93c5fd; }
+    .dark .mm-typed {
+      background: rgba(37, 99, 235, 0.12);
+      border-color: rgb(55, 65, 81);
+      color: #93c5fd;
+    }
+    .dark .mm-typed.is-empty { color: #64748b; }
+
+    .mm-pad {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+      width: 100%;
+    }
+    .mm-key, .mm-day {
+      border: 1px solid #e5e7eb;
+      background: #f8fafc;
+      color: #111827;
+      border-radius: 10px;
+      padding: 12px 0;
+      font-weight: 700;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      user-select: none;
+      touch-action: manipulation;
+    }
+    .dark .mm-key, .dark .mm-day {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+      color: #f3f4f6;
+    }
+    .mm-key:hover, .mm-day:hover { border-color: #60a5fa; }
+    .mm-key:active, .mm-day:active { transform: scale(0.97); }
+    .mm-key:focus-visible, .mm-day:focus-visible {
+      outline: 2px solid #2563eb;
+      outline-offset: 2px;
+    }
+    .mm-key-go {
+      background: #2563eb;
+      border-color: #2563eb;
+      color: #fff;
+    }
+    .mm-key-go:hover { background: #1d4ed8; border-color: #1d4ed8; }
+    .dark .mm-key-go { background: #2563eb; border-color: #2563eb; color: #fff; }
+    .mm-key-back { color: #6b7280; }
+    .dark .mm-key-back { color: #9ca3af; }
+    .mm-pad-note {
+      text-align: center;
+      font-size: 12px;
+      color: #9ca3af;
+      margin: 10px 0 0;
+    }
+
+    .mm-days {
+      display: grid;
+      grid-template-columns: repeat(7, minmax(0, 1fr));
+      gap: 8px;
+      width: 100%;
+    }
+    .mm-day { font-size: 13px; padding: 14px 2px; }
+    .mm-day.is-correct { border-color: #059669; color: #059669; background: rgba(5, 150, 105, 0.12); }
+    .mm-day.is-wrong { border-color: #dc2626; color: #dc2626; background: rgba(220, 38, 38, 0.12); }
+
+    .mm-feedback {
+      text-align: center;
+      min-height: 1.4em;
+      font-weight: 700;
+      margin-top: 14px;
+    }
+    .mm-feedback.ok { color: #059669; }
+    .mm-feedback.bad { color: #dc2626; }
+    .mm-feedback.warn { color: #d97706; }
+
+    .mm-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+      margin-top: 18px;
+    }
+    .mm-kbd-hint {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+    .mm-quit, .mm-btn-ghost {
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      font-weight: 600;
+      cursor: pointer;
+      padding: 8px 10px;
+      border-radius: 8px;
+    }
+    .mm-quit:hover { color: #ef4444; }
+
+    .mm-results-score {
+      text-align: center;
+      font-size: 3rem;
+      font-weight: 800;
+      color: #2563eb;
+      margin: 8px 0 4px;
+    }
+    .mm-results-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      margin-top: 20px;
+    }
+    .mm-btn-primary {
+      background: #2563eb;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 10px 18px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .mm-btn-primary:hover { background: #1d4ed8; }
+
+    @media (max-width: 640px) {
+      .mm-container { padding: 24px 16px; }
+      .mm-mode-grid { grid-template-columns: 1fr; }
+      .mm-equation { font-size: 1.35rem; }
+      .mm-days { grid-template-columns: repeat(4, 1fr); }
+      .mm-ring { width: 168px; height: 168px; }
+      .mm-kbd-hint { display: none; }
+      .mm-hud-item { min-width: 72px; padding: 8px 10px; }
+    }
+  </style>
+</Layout>

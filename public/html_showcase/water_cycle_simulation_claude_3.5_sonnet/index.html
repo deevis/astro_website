@@ -3,976 +3,1603 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Water Cycle Simulation</title>
+    <title>Hydrologic Cycle</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
+        :root {
+            --bg: #071016;
+            --bg-elevated: #0c151c;
+            --panel: #101a22;
+            --panel-2: #15222c;
+            --border: #243440;
+            --border-strong: #3a5566;
+            --text: #e8f1f6;
+            --muted: #8aa0ae;
+            --faint: #627888;
+            --sky: #6ec3f0;
+            --sky-soft: rgba(110, 195, 240, 0.14);
+            --water: #3b9ee0;
+            --moss: #6fbf84;
+            --sun: #ffc14a;
+            --ok: #5ee0b5;
+            --danger: #f07178;
+            --shadow: 0 18px 50px rgba(0, 0, 0, 0.42);
+            --radius: 14px;
+            --header-h: 56px;
+            --sidebar-w: 286px;
+            --stats-w: 312px;
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            background: var(--bg);
+            color: var(--text);
+            font-family: "IBM Plex Sans", "Segoe UI", sans-serif;
+            color-scheme: dark;
+        }
+
         body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 20px;
-            background-color: #f0f5ff;
-            overflow-x: hidden;
+            background:
+                radial-gradient(900px 460px at 8% -12%, rgba(110, 195, 240, 0.12), transparent 55%),
+                radial-gradient(720px 380px at 100% 0%, rgba(111, 191, 132, 0.07), transparent 50%),
+                var(--bg);
         }
-        
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        
-        h1 {
-            text-align: center;
-            color: #2c3e50;
-            margin-bottom: 30px;
-        }
-        
-        .simulation {
-            position: relative;
-            width: 100%;
-            height: 500px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+
+        button, input { font-family: inherit; }
+        button { cursor: pointer; }
+        .mono { font-family: "IBM Plex Mono", ui-monospace, monospace; }
+
+        .app {
+            height: 100%;
+            height: 100dvh;
+            display: grid;
+            grid-template-rows: auto minmax(0, 1fr);
             overflow: hidden;
-            background: linear-gradient(to bottom, #87CEEB, #4682B4);
-            transition: background 3s;
         }
-        
-        .controls {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .control-row {
+
+        header.app-header {
             display: flex;
-            flex-wrap: wrap;
-            margin-bottom: 10px;
+            align-items: center;
+            gap: 16px;
+            padding: 6px 16px;
+            min-height: var(--header-h);
+            border-bottom: 1px solid var(--border);
+            background: rgba(7, 16, 22, 0.9);
+            backdrop-filter: blur(16px);
+            z-index: 40;
         }
-        
-        .control-group {
+
+        .brand {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            min-width: 0;
+            flex-shrink: 1;
+        }
+
+        .brand-mark {
+            width: 38px;
+            height: 38px;
+            border-radius: 10px;
+            display: grid;
+            place-items: center;
+            background: linear-gradient(180deg, #1a3344, #0d1820);
+            border: 1px solid #3d6a82;
+            color: var(--sky);
+            flex-shrink: 0;
+        }
+
+        .brand h1 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 16px;
+            font-weight: 650;
+            letter-spacing: 0.01em;
+            line-height: 1.15;
+        }
+
+        .brand p {
+            font-size: 11px;
+            color: var(--muted);
+            margin-top: 2px;
+        }
+
+        .live-pills {
+            display: flex;
+            gap: 8px;
             flex: 1;
-            min-width: 250px;
-            margin: 0 10px 10px 0;
+            min-width: 0;
+            overflow: auto hidden;
+            padding: 2px 0;
         }
-        
-        .control-group label {
+
+        .pill {
             display: flex;
-            justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #34495e;
+            flex-direction: column;
+            min-width: 84px;
+            padding: 6px 10px;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            background: rgba(16, 26, 34, 0.88);
+            flex: 0 0 auto;
         }
-        
-        .control-group input {
-            width: 100%;
+
+        .pill span {
+            font-size: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.08em;
+            color: var(--faint);
         }
-        
-        .value-display {
-            color: #7f8c8d;
+
+        .pill strong {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
             font-size: 13px;
+            font-weight: 600;
         }
-        
-        .reset-btn {
-            padding: 8px 16px;
-            background-color: #3498db;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
-            transition: background-color 0.3s;
-        }
-        
-        .reset-btn:hover {
-            background-color: #2980b9;
-        }
-        
-        .cloud {
-            position: absolute;
-            top: 20px;
-            width: 100%;
-            height: 60px;
+
+        .header-actions {
             display: flex;
-            justify-content: space-around;
+            align-items: center;
+            gap: 6px;
+            flex-shrink: 0;
         }
-        
-        .cloud-part {
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 7px;
+            height: 36px;
+            padding: 0 12px;
+            border-radius: 10px;
+            border: 1px solid var(--border);
+            background: var(--panel-2);
+            color: var(--text);
+            font-size: 13px;
+            font-weight: 600;
+            transition: border-color 0.15s ease, background 0.15s ease, transform 0.15s ease;
+            white-space: nowrap;
+        }
+
+        .btn:hover { border-color: var(--border-strong); background: #1c3340; }
+        .btn:active { transform: translateY(1px); }
+        .btn.primary { background: var(--sky); border-color: transparent; color: #08202c; }
+        .btn.primary:hover { background: #8ad4f5; }
+        .btn.ghost { background: transparent; }
+        .btn.danger { color: var(--danger); }
+        .btn.icon { width: 36px; padding: 0; }
+        .btn.active {
+            background: var(--sky-soft);
+            border-color: rgba(110, 195, 240, 0.45);
+            color: var(--sky);
+        }
+        .mobile-only { display: none; }
+
+        .workspace {
+            display: grid;
+            grid-template-columns: var(--sidebar-w) minmax(0, 1fr) var(--stats-w);
+            min-height: 0;
             position: relative;
-            height: 100%;
-            background-color: rgba(255, 255, 255, 0.8);
-            border-radius: 20px;
-            box-shadow: 0 5px 10px rgba(0, 0, 0, 0.1);
         }
-        
-        .ground {
-            position: absolute;
-            bottom: 0;
-            width: 100%;
+
+        .sidebar, .stats-panel {
+            min-height: 0;
+            overflow: auto;
+            background: rgba(10, 18, 24, 0.78);
+            padding: 16px;
+        }
+
+        .sidebar { border-right: 1px solid var(--border); }
+        .stats-panel { border-left: 1px solid var(--border); }
+
+        .stage {
+            min-width: 0;
+            min-height: 0;
+            padding: 14px;
             display: flex;
         }
-        
-        .terrain {
-            position: relative;
-            border-top-right-radius: 5px;
-            background-color: #8B4513;
-        }
-        
-        .pool {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background-color: rgba(30, 144, 255, 0.7);
-            border-top-left-radius: 5px;
-            border-top-right-radius: 5px;
-            transition: height 0.5s;
-        }
-        
-        .raindrop {
-            position: absolute;
-            width: 2px;
-            height: 10px;
-            background-color: #1E90FF;
-            border-radius: 0 0 2px 2px;
-        }
-        
-        .vapor {
-            position: absolute;
-            width: 3px;
-            height: 3px;
-            background-color: rgba(200, 200, 200, 0.7);
-            border-radius: 50%;
-        }
-        
-        .downflow {
-            position: absolute;
-            width: 5px;
-            height: 5px;
-            background-color: rgba(30, 144, 255, 0.9);
-            border-radius: 50%;
-        }
-        
-        .metrics {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-        }
-        
-        .metrics-title {
-            font-weight: bold;
-            margin-bottom: 10px;
-            color: #2c3e50;
-        }
-        
-        .metrics-container {
-            display: flex;
-            flex-wrap: wrap;
-        }
-        
-        .metric {
+
+        .stage-frame {
             flex: 1;
-            min-width: 150px;
-            margin-right: 15px;
+            min-height: 0;
+            border: 1px solid var(--border);
+            border-radius: var(--radius);
+            background: #071018;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            position: relative;
+        }
+
+        canvas#scene {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+
+        .stage-hint {
+            position: absolute;
+            left: 14px;
+            bottom: 12px;
+            font-size: 11px;
+            color: rgba(232, 241, 246, 0.55);
+            pointer-events: none;
+            letter-spacing: 0.02em;
+            text-shadow: 0 1px 8px rgba(0, 0, 0, 0.45);
+        }
+
+        .section {
+            background: var(--panel);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 10px 12px 8px;
             margin-bottom: 10px;
         }
-        
-        .metric-label {
+
+        .section h3 {
+            font-size: 11px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 10px;
+        }
+
+        .presets {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 6px;
+        }
+
+        .ctrl { display: block; margin-bottom: 8px; }
+
+        .ctrl-label {
             display: flex;
             justify-content: space-between;
-            margin-bottom: 5px;
-            font-size: 14px;
-            color: #34495e;
-        }
-        
-        .metric-bar-container {
-            width: 100%;
-            height: 15px;
-            background-color: #ecf0f1;
-            border-radius: 10px;
-            overflow: hidden;
-        }
-        
-        .metric-bar {
-            height: 100%;
-            border-radius: 10px;
-            transition: width 0.5s;
-        }
-        
-        .time-indicator {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-        
-        .temperature-indicator {
-            position: absolute;
-            top: 45px;
-            right: 20px;
-            padding: 5px 10px;
-            border-radius: 15px;
-            font-size: 14px;
-            font-weight: bold;
-            color: white;
-            background-color: rgba(0, 0, 0, 0.4);
-        }
-        
-        .sun-moon {
-            position: absolute;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            top: 30px;
-            transition: left 3s, background-color 3s, box-shadow 3s;
-        }
-        
-        .debug-info {
-            margin-top: 20px;
-            padding: 15px;
-            background-color: #fff;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            font-family: monospace;
+            align-items: baseline;
             font-size: 12px;
-            white-space: pre;
-            overflow-x: auto;
+            color: var(--muted);
+            margin-bottom: 5px;
+        }
+
+        .ctrl-label strong {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 12px;
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        input[type="range"] {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 100%;
+            height: 4px;
+            background: #2a3d4a;
+            border-radius: 99px;
+            outline: none;
+        }
+
+        input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--sky);
+            border: 2px solid #0b1a22;
+            cursor: pointer;
+        }
+
+        input[type="range"]::-moz-range-thumb {
+            width: 14px;
+            height: 14px;
+            border-radius: 50%;
+            background: var(--sky);
+            border: 2px solid #0b1a22;
+            cursor: pointer;
+        }
+
+        .switch-row {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 10px;
+            font-size: 13px;
+            color: var(--text);
+            margin-bottom: 8px;
+        }
+
+        .switch-row input { accent-color: var(--sky); width: 16px; height: 16px; }
+
+        .hint {
+            font-size: 11px;
+            color: var(--faint);
+            line-height: 1.45;
+            margin-top: 4px;
+        }
+
+        .stats-head {
+            display: flex;
+            align-items: baseline;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 10px;
+        }
+
+        .stats-head h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 18px;
+            font-weight: 650;
+        }
+
+        .stack {
+            display: flex;
+            height: 18px;
+            border-radius: 99px;
+            overflow: hidden;
+            background: #0c141a;
+            border: 1px solid var(--border);
+            margin-bottom: 12px;
+        }
+
+        .stack i { display: block; height: 100%; }
+
+        .budget-row {
+            display: grid;
+            grid-template-columns: 12px 1fr auto auto;
+            gap: 8px;
+            align-items: center;
+            font-size: 12px;
+            padding: 5px 0;
+            color: var(--muted);
+        }
+
+        .budget-row b {
+            width: 8px;
+            height: 8px;
+            border-radius: 2px;
+            display: block;
+        }
+
+        .budget-row strong {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            color: var(--text);
+            font-weight: 500;
+            font-size: 12px;
+        }
+
+        .budget-row em {
+            font-style: normal;
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 11px;
+            color: var(--faint);
+        }
+
+        .process {
+            display: flex;
+            justify-content: space-between;
+            gap: 10px;
+            padding: 8px 0;
+            border-bottom: 1px solid rgba(36, 52, 64, 0.7);
+            font-size: 12px;
+        }
+
+        .process:last-child { border-bottom: 0; }
+
+        .process span { color: var(--muted); }
+        .process strong {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-weight: 500;
+        }
+
+        .closed {
+            margin-top: 12px;
+            padding: 10px 12px;
+            border-radius: 10px;
+            background: rgba(94, 224, 181, 0.08);
+            border: 1px solid rgba(94, 224, 181, 0.22);
+            color: #cfece3;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .closed.bad {
+            background: rgba(240, 113, 120, 0.08);
+            border-color: rgba(240, 113, 120, 0.28);
+            color: #f3c6c9;
+        }
+
+        .kbd {
+            font-family: "IBM Plex Mono", ui-monospace, monospace;
+            font-size: 10px;
+            border: 1px solid var(--border);
+            border-bottom-width: 2px;
+            border-radius: 4px;
+            padding: 1px 5px;
+            color: var(--muted);
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            z-index: 80;
+            background: rgba(0, 0, 0, 0.62);
+            backdrop-filter: blur(8px);
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+
+        .modal.open { display: flex; }
+
+        .modal-card {
+            width: min(680px, 100%);
+            max-height: min(86vh, 820px);
+            overflow: auto;
+            background: var(--bg-elevated);
+            border: 1px solid var(--border-strong);
+            border-radius: 18px;
+            box-shadow: var(--shadow);
+            padding: 28px 28px 32px;
+            position: relative;
+        }
+
+        .modal-card h2 {
+            font-family: Fraunces, Georgia, serif;
+            font-size: 26px;
+            font-weight: 650;
+            margin-bottom: 8px;
+        }
+
+        .modal-card h3 {
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 0.06em;
+            color: var(--sky);
+            margin: 18px 0 8px;
+        }
+
+        .modal-card p, .modal-card li {
+            font-size: 14px;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .modal-card ul { padding-left: 18px; }
+        .modal-card li { margin: 6px 0; }
+        .modal-card .close {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+        }
+
+        ::-webkit-scrollbar { width: 8px; height: 8px; }
+        ::-webkit-scrollbar-thumb { background: #334056; border-radius: 99px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+
+        @media (max-width: 1180px) {
+            .workspace { grid-template-columns: var(--sidebar-w) minmax(0, 1fr); }
+            .stats-panel {
+                position: absolute;
+                right: 0;
+                top: 0;
+                bottom: 0;
+                width: min(var(--stats-w), 100%);
+                transform: translateX(110%);
+                transition: transform 0.2s ease;
+                z-index: 30;
+                border-left: 1px solid var(--border-strong);
+                box-shadow: var(--shadow);
+            }
+            .stats-panel.open { transform: none; }
+            .mobile-only { display: inline-flex; }
+        }
+
+        @media (max-width: 840px) {
+            .workspace { grid-template-columns: 1fr; }
+            .sidebar {
+                position: absolute;
+                left: 0;
+                top: 0;
+                bottom: 0;
+                width: min(var(--sidebar-w), 92vw);
+                transform: translateX(-110%);
+                transition: transform 0.2s ease;
+                z-index: 30;
+                border-right: 1px solid var(--border-strong);
+                box-shadow: var(--shadow);
+            }
+            .sidebar.open { transform: none; }
+            .brand p { display: none; }
+            .live-pills { display: none; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>Water Cycle Simulation</h1>
-        
-        <div class="simulation" id="simulation">
-            <div class="cloud" id="cloud"></div>
-            <div class="ground" id="ground"></div>
-            <div class="time-indicator" id="timeIndicator">Day</div>
-            <div class="temperature-indicator" id="temperatureIndicator">25°C</div>
-            <div class="sun-moon" id="sunMoon"></div>
-        </div>
-        
-        <div class="controls">
-            <div class="control-row">
-                <div class="control-group">
-                    <label>
-                        Time Speed
-                        <span class="value-display" id="timeSpeedValue">1.0x</span>
-                    </label>
-                    <input type="range" id="timeSpeed" min="0.1" max="5" step="0.1" value="1">
+    <div class="app">
+        <header class="app-header">
+            <div class="brand">
+                <div class="brand-mark" aria-hidden="true">
+                    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+                        <path d="M10 3.2c2.2 3.2 4.6 5.4 4.6 8.1A4.6 4.6 0 0 1 10 16.9 4.6 4.6 0 0 1 5.4 11.3C5.4 8.6 7.8 6.4 10 3.2Z" stroke="currentColor" stroke-width="1.4" fill="rgba(110,195,240,0.18)"/>
+                        <path d="M7.2 11.4c.4 1.6 1.5 2.4 2.8 2.4" stroke="currentColor" stroke-width="1.2" stroke-linecap="round"/>
+                    </svg>
                 </div>
-                
-                <div class="control-group">
-                    <label>
-                        Day Temperature
-                        <span class="value-display" id="dayTempValue">25°C</span>
-                    </label>
-                    <input type="range" id="dayTemp" min="10" max="40" step="1" value="25">
-                </div>
-                
-                <div class="control-group">
-                    <label>
-                        Night Temperature
-                        <span class="value-display" id="nightTempValue">15°C</span>
-                    </label>
-                    <input type="range" id="nightTemp" min="0" max="30" step="1" value="15">
+                <div>
+                    <h1>Hydrologic Cycle</h1>
+                    <p>Closed-system rain, runoff, and evaporation</p>
                 </div>
             </div>
-            
-            <div class="control-row">
-                <div class="control-group">
-                    <label>
-                        Evaporation Rate
-                        <span class="value-display" id="evapRateValue">1.0x</span>
-                    </label>
-                    <input type="range" id="evapRate" min="0.1" max="3" step="0.1" value="1">
+
+            <div class="live-pills">
+                <div class="pill"><span>Clock</span><strong id="pillClock">06:00</strong></div>
+                <div class="pill"><span>Sky</span><strong id="pillSky">Dawn</strong></div>
+                <div class="pill"><span>Sea air</span><strong id="pillTemp">26°C</strong></div>
+                <div class="pill"><span>Peak air</span><strong id="pillPeak">12°C</strong></div>
+                <div class="pill"><span>Clouds</span><strong id="pillCloud">14%</strong></div>
+            </div>
+
+            <div class="header-actions">
+                <button class="btn mobile-only" id="btnControls" type="button">Controls</button>
+                <button class="btn mobile-only" id="btnStats" type="button">Budget</button>
+                <button class="btn" id="btnPause" type="button">Pause</button>
+                <button class="btn" id="btnReset" type="button">Reset</button>
+                <button class="btn ghost" id="btnHelp" type="button">How it works</button>
+            </div>
+        </header>
+
+        <div class="workspace">
+            <aside class="sidebar" id="sidebar">
+                <div class="section">
+                    <h3>Climate presets</h3>
+                    <div class="presets">
+                        <button class="btn" data-preset="temperate" type="button">Temperate</button>
+                        <button class="btn" data-preset="desert" type="button">Desert</button>
+                        <button class="btn" data-preset="monsoon" type="button">Monsoon</button>
+                        <button class="btn" data-preset="alpine" type="button">Alpine</button>
+                    </div>
                 </div>
-                
-                <div class="control-group">
-                    <label>
-                        Altitude Modifier
-                        <span class="value-display" id="altModValue">1.0x</span>
+
+                <div class="section">
+                    <h3>Atmosphere</h3>
+                    <label class="ctrl">
+                        <span class="ctrl-label">Time speed <strong id="valSpeed">1.0×</strong></span>
+                        <input id="speed" type="range" min="0.25" max="8" step="0.25" value="1">
                     </label>
-                    <input type="range" id="altMod" min="0.5" max="2" step="0.1" value="1">
+                    <label class="ctrl">
+                        <span class="ctrl-label">Day temperature <strong id="valDay">26°C</strong></span>
+                        <input id="dayTemp" type="range" min="-5" max="48" step="1" value="26">
+                    </label>
+                    <label class="ctrl">
+                        <span class="ctrl-label">Night temperature <strong id="valNight">14°C</strong></span>
+                        <input id="nightTemp" type="range" min="-15" max="32" step="1" value="14">
+                    </label>
+                    <label class="ctrl">
+                        <span class="ctrl-label">Wind <strong id="valWind">1.0×</strong></span>
+                        <input id="wind" type="range" min="0" max="2.5" step="0.1" value="1">
+                    </label>
+                    <p class="hint">Wind carries vapor inland so the mountains can wring it out as rain and snow.</p>
                 </div>
-                
-                <div class="control-group">
-                    <label>
-                        Total Water
-                        <span class="value-display" id="totalWaterValue">1000 units</span>
+
+                <div class="section">
+                    <h3>Hydrology</h3>
+                    <label class="ctrl">
+                        <span class="ctrl-label">Evaporation <strong id="valEvap">1.0×</strong></span>
+                        <input id="evap" type="range" min="0.2" max="2.5" step="0.1" value="1">
                     </label>
-                    <input type="range" id="totalWater" min="500" max="2000" step="100" value="1000">
+                    <label class="ctrl">
+                        <span class="ctrl-label">Orographic lift <strong id="valOro">1.0×</strong></span>
+                        <input id="oro" type="range" min="0.4" max="2.4" step="0.1" value="1">
+                    </label>
+                    <label class="ctrl">
+                        <span class="ctrl-label">Total water <strong id="valWater">1000</strong></span>
+                        <input id="water" type="range" min="400" max="2000" step="50" value="1000">
+                    </label>
+                    <p class="hint">Higher orographic lift cools air faster with altitude and biases rainfall onto the peaks.</p>
+                </div>
+
+                <div class="section">
+                    <h3>Display</h3>
+                    <label class="switch-row">
+                        Process labels
+                        <input id="labels" type="checkbox" checked>
+                    </label>
+                    <label class="switch-row">
+                        Snow below 0°C
+                        <input id="snow" type="checkbox" checked>
+                    </label>
+                    <p class="hint"><span class="kbd">Space</span> pause · <span class="kbd">R</span> reset · <span class="kbd">L</span> labels</p>
+                </div>
+            </aside>
+
+            <div class="stage">
+                <div class="stage-frame">
+                    <canvas id="scene"></canvas>
+                    <div class="stage-hint">Ocean on the left · peaks on the right · water is conserved</div>
                 </div>
             </div>
-            
-            <button class="reset-btn" id="resetBtn">Reset Simulation</button>
-        </div>
-        
-        <div class="metrics">
-            <div class="metrics-title">Water Distribution</div>
-            <div class="metrics-container">
-                <div class="metric">
-                    <div class="metric-label">
-                        <span>Cloud Water</span>
-                        <span id="cloudWaterValue">0 units</span>
-                    </div>
-                    <div class="metric-bar-container">
-                        <div class="metric-bar" id="cloudWaterBar" style="width: 0%; background-color: #ecf0f1;"></div>
-                    </div>
+
+            <aside class="stats-panel" id="stats">
+                <div class="stats-head">
+                    <h2>Water budget</h2>
+                    <span class="mono" id="budgetTotal" style="font-size:12px;color:var(--muted)">1000</span>
                 </div>
-                
-                <div class="metric">
-                    <div class="metric-label">
-                        <span>Rain Water</span>
-                        <span id="rainWaterValue">0 units</span>
-                    </div>
-                    <div class="metric-bar-container">
-                        <div class="metric-bar" id="rainWaterBar" style="width: 0%; background-color: #3498db;"></div>
-                    </div>
+                <div class="stack" id="stack"></div>
+                <div id="budgetRows"></div>
+
+                <div class="section" style="margin-top:14px">
+                    <h3>Process rates</h3>
+                    <div class="process"><span>Evaporation</span><strong id="rateEvap">0 /s</strong></div>
+                    <div class="process"><span>Condensation</span><strong id="rateCond">0 /s</strong></div>
+                    <div class="process"><span>Precipitation</span><strong id="ratePrecip">0 /s</strong></div>
+                    <div class="process"><span>Runoff</span><strong id="rateRunoff">0 /s</strong></div>
                 </div>
-                
-                <div class="metric">
-                    <div class="metric-label">
-                        <span>Pool Water</span>
-                        <span id="poolWaterValue">0 units</span>
-                    </div>
-                    <div class="metric-bar-container">
-                        <div class="metric-bar" id="poolWaterBar" style="width: 0%; background-color: #2980b9;"></div>
-                    </div>
+
+                <div class="closed" id="closedNote">
+                    Closed system — every unit is ocean, lake, cloud, vapor, rain, or stream.
                 </div>
-                
-                <div class="metric">
-                    <div class="metric-label">
-                        <span>Evaporating Water</span>
-                        <span id="evapWaterValue">0 units</span>
-                    </div>
-                    <div class="metric-bar-container">
-                        <div class="metric-bar" id="evapWaterBar" style="width: 0%; background-color: #bdc3c7;"></div>
-                    </div>
-                </div>
-            </div>
+            </aside>
         </div>
     </div>
-    
+
+    <div class="modal" id="help" role="dialog" aria-labelledby="helpTitle">
+        <div class="modal-card">
+            <button class="btn icon close" id="helpClose" type="button" aria-label="Close">×</button>
+            <h2 id="helpTitle">How the cycle works</h2>
+            <p>This is a closed hydrologic toy model. Water never leaves the scene. Heat, wind, and mountain lift decide how quickly it moves between ocean, air, clouds, rain, lakes, and downhill streams.</p>
+            <h3>The four processes</h3>
+            <ul>
+                <li><strong style="color:#e8f1f6">Evaporation</strong> — Warm water surfaces shed vapor. The ocean dominates because it has the largest area. Night and freezing air nearly shut it off.</li>
+                <li><strong style="color:#e8f1f6">Condensation</strong> — Vapor rises, drifts inland, and cools. Higher orographic lift steepens the lapse rate, so air reaching the peaks condenses faster.</li>
+                <li><strong style="color:#e8f1f6">Precipitation</strong> — Clouds rain (or snow) once they are wet enough. Cold air needs less saturation to precipitate, and mountains receive a larger share.</li>
+                <li><strong style="color:#e8f1f6">Runoff</strong> — Alpine and valley lakes spill over their downhill rims, toward the coast, then back into the ocean.</li>
+            </ul>
+            <h3>What to try</h3>
+            <ul>
+                <li>Desert: hot days, little water, weak rain.</li>
+                <li>Monsoon: a packed atmosphere and heavy orographic storms.</li>
+                <li>Alpine: below-freezing nights and snow on the peaks.</li>
+            </ul>
+        </div>
+    </div>
+
     <script>
-        // Configuration
-        const NUM_TERRAINS = 5;
-        const CLOUD_PARTS = 5;
-        const DAY_DURATION = 60000; // 60 seconds for a full day/night cycle
-        const MAX_RAINDROPS = 100;
-        const MAX_VAPORS = 200;
-        const MAX_DOWNFLOWS = 50;
-        
-        // State variables
-        let simulationState = {
-            isDay: true,
-            temperature: 25,
-            dayTemperature: 25,
-            nightTemperature: 15,
-            evaporationRate: 1.0,
-            altitudeModifier: 1.0,
-            timeSpeed: 1.0,
-            totalWater: 1000,
-            time: 0,
-            dayTime: 0,
-            cloudWater: 500,
-            rainWater: 0,
-            poolWaters: Array(NUM_TERRAINS).fill(100),
-            evaporatingWater: 0,
-            raindrops: [],
-            vapors: [],
-            downflows: [],
-            poolOverflows: Array(NUM_TERRAINS-1).fill(false)
+    (() => {
+        const canvas = document.getElementById("scene");
+        const ctx = canvas.getContext("2d");
+
+        const OCEAN_NY = 0.738;
+        const DAY_MS = 38000;
+        const COLORS = {
+            ocean: "#2f86c9",
+            coast: "#4aa3d8",
+            valley: "#3d96c8",
+            alpine: "#8ec8ea",
+            cloud: "#d9e6f0",
+            vapor: "#b7c8d4",
+            rain: "#6ec3f0",
+            runoff: "#3dd0c8"
         };
-        
-        // Elements
-        const simulation = document.getElementById('simulation');
-        const cloud = document.getElementById('cloud');
-        const ground = document.getElementById('ground');
-        const timeIndicator = document.getElementById('timeIndicator');
-        const temperatureIndicator = document.getElementById('temperatureIndicator');
-        const sunMoon = document.getElementById('sunMoon');
-        
-        // Control elements
-        const timeSpeedSlider = document.getElementById('timeSpeed');
-        const timeSpeedValue = document.getElementById('timeSpeedValue');
-        const dayTempSlider = document.getElementById('dayTemp');
-        const dayTempValue = document.getElementById('dayTempValue');
-        const nightTempSlider = document.getElementById('nightTemp');
-        const nightTempValue = document.getElementById('nightTempValue');
-        const evapRateSlider = document.getElementById('evapRate');
-        const evapRateValue = document.getElementById('evapRateValue');
-        const altModSlider = document.getElementById('altMod');
-        const altModValue = document.getElementById('altModValue');
-        const totalWaterSlider = document.getElementById('totalWater');
-        const totalWaterValue = document.getElementById('totalWaterValue');
-        const resetBtn = document.getElementById('resetBtn');
-        
-        // Metrics elements
-        const cloudWaterValue = document.getElementById('cloudWaterValue');
-        const cloudWaterBar = document.getElementById('cloudWaterBar');
-        const rainWaterValue = document.getElementById('rainWaterValue');
-        const rainWaterBar = document.getElementById('rainWaterBar');
-        const poolWaterValue = document.getElementById('poolWaterValue');
-        const poolWaterBar = document.getElementById('poolWaterBar');
-        const evapWaterValue = document.getElementById('evapWaterValue');
-        const evapWaterBar = document.getElementById('evapWaterBar');
-        
-        // Create clouds
-        function setupClouds() {
-            cloud.innerHTML = '';
-            const cloudWidth = 100 / CLOUD_PARTS;
-            
-            for (let i = 0; i < CLOUD_PARTS; i++) {
-                const cloudPart = document.createElement('div');
-                cloudPart.className = 'cloud-part';
-                cloudPart.style.width = cloudWidth + '%';
-                cloud.appendChild(cloudPart);
-            }
-        }
-        
-        // Create terrain
-        function setupTerrain() {
-            ground.innerHTML = '';
-            const terrainWidth = 100 / NUM_TERRAINS;
-            
-            for (let i = 0; i < NUM_TERRAINS; i++) {
-                const terrain = document.createElement('div');
-                terrain.className = 'terrain';
-                terrain.style.width = terrainWidth + '%';
-                
-                // Height increases from left to right
-                const heightPercent = 15 + i * 10;
-                terrain.style.height = heightPercent + '%';
-                
-                // Create water pool for each terrain
-                const pool = document.createElement('div');
-                pool.className = 'pool';
-                pool.id = `pool-${i}`;
-                pool.style.height = '0%';
-                
-                terrain.appendChild(pool);
-                ground.appendChild(terrain);
-            }
-        }
-        
-        // Update cloud appearance based on water content
-        function updateClouds() {
-            const cloudParts = document.querySelectorAll('.cloud-part');
-            const waterPerPart = simulationState.cloudWater / CLOUD_PARTS;
-            const maxWaterPerPart = simulationState.totalWater / (CLOUD_PARTS * 2);
-            
-            cloudParts.forEach((part, index) => {
-                const opacity = Math.min(0.8, 0.3 + (waterPerPart / maxWaterPerPart) * 0.5);
-                part.style.backgroundColor = `rgba(255, 255, 255, ${opacity})`;
-                
-                // Make cloud parts bigger based on water content
-                const baseHeight = 60;
-                const extraHeight = Math.min(40, (waterPerPart / maxWaterPerPart) * 40);
-                part.style.height = (baseHeight + extraHeight) + 'px';
-                
-                // Add some variation to cloud parts
-                const variation = Math.sin(simulationState.time / 1000 + index) * 10;
-                part.style.top = variation + 'px';
-            });
-        }
-        
-        // Update pools based on water content
-        function updatePools() {
-            for (let i = 0; i < NUM_TERRAINS; i++) {
-                const pool = document.getElementById(`pool-${i}`);
-                const terrain = pool.parentElement;
-                const terrainHeight = parseInt(terrain.style.height);
-                
-                // Calculate how much of the pool is filled horizontally vs vertically
-                const terrainWidth = terrain.offsetWidth;
-                const maxHorizontalWater = terrainWidth * 10; // Arbitrary scaling factor
-                
-                let poolHeight;
-                if (simulationState.poolWaters[i] <= maxHorizontalWater) {
-                    // Water spreads horizontally first
-                    const widthPercent = (simulationState.poolWaters[i] / maxHorizontalWater) * 100;
-                    pool.style.width = Math.min(100, widthPercent) + '%';
-                    poolHeight = '10%'; // Small fixed height while spreading horizontally
-                } else {
-                    // Then it grows vertically
-                    pool.style.width = '100%'; // Full width
-                    const extraWater = simulationState.poolWaters[i] - maxHorizontalWater;
-                    const maxVerticalWater = terrainHeight * terrainWidth * 0.8; // Another scaling factor
-                    const heightPercent = 10 + (extraWater / maxVerticalWater) * 90; // Start from 10%
-                    poolHeight = Math.min(95, heightPercent) + '%'; // Cap at 95% to always see some terrain
-                }
-                
-                pool.style.height = poolHeight;
-                
-                // Check for overflow
-                if (i < NUM_TERRAINS - 1) { // Skip the last (lowest) terrain
-                    const heightPercent = parseInt(poolHeight);
-                    simulationState.poolOverflows[i] = heightPercent > 40; // Arbitrary threshold for overflow
-                }
-            }
-        }
-        
-        // Create a raindrop
-        function createRaindrop() {
-            if (simulationState.raindrops.length >= MAX_RAINDROPS || simulationState.cloudWater <= 0) return;
-            
-            // Only create a raindrop if there's enough water in the cloud
-            if (simulationState.cloudWater < 5) return;
-            
-            const cloudParts = document.querySelectorAll('.cloud-part');
-            const randomPart = Math.floor(Math.random() * cloudParts.length);
-            const cloudPart = cloudParts[randomPart];
-            
-            const waterAmount = 2 + Math.random() * 3; // 2-5 units of water
-            if (simulationState.cloudWater >= waterAmount) {
-                simulationState.cloudWater -= waterAmount;
-                simulationState.rainWater += waterAmount;
-                
-                const raindrop = document.createElement('div');
-                raindrop.className = 'raindrop';
-                
-                // Position the raindrop under a random position in the cloud
-                const cloudRect = cloudPart.getBoundingClientRect();
-                const simulationRect = simulation.getBoundingClientRect();
-                
-                const leftPos = cloudRect.left - simulationRect.left + Math.random() * cloudRect.width;
-                raindrop.style.left = leftPos + 'px';
-                raindrop.style.top = (cloudRect.bottom - simulationRect.top) + 'px';
-                
-                // Make raindrop size proportional to water amount
-                raindrop.style.height = (waterAmount * 2 + 6) + 'px';
-                raindrop.style.width = (waterAmount * 0.5 + 1.5) + 'px';
-                
-                // Store raindrop data
-                const raindropData = {
-                    element: raindrop,
-                    x: leftPos,
-                    y: cloudRect.bottom - simulationRect.top,
-                    speed: 1 + Math.random() * 2,
-                    waterAmount: waterAmount,
-                    targetTerrain: Math.floor(leftPos / (simulationRect.width / NUM_TERRAINS))
-                };
-                
-                simulationState.raindrops.push(raindropData);
-                simulation.appendChild(raindrop);
-            }
-        }
-        
-        // Update raindrops
-        function updateRaindrops() {
-            for (let i = simulationState.raindrops.length - 1; i >= 0; i--) {
-                const raindrop = simulationState.raindrops[i];
-                raindrop.y += raindrop.speed * simulationState.timeSpeed * 5;
-                raindrop.element.style.top = raindrop.y + 'px';
-                
-                // Check if raindrop has reached the ground or a pool
-                const terrains = document.querySelectorAll('.terrain');
-                const targetTerrain = terrains[raindrop.targetTerrain];
-                const targetPool = targetTerrain.querySelector('.pool');
-                
-                const terrainRect = targetTerrain.getBoundingClientRect();
-                const simulationRect = simulation.getBoundingClientRect();
-                const terrainTop = terrainRect.top - simulationRect.top;
-                
-                if (raindrop.y >= terrainTop) {
-                    // Add water to the pool
-                    simulationState.poolWaters[raindrop.targetTerrain] += raindrop.waterAmount;
-                    simulationState.rainWater -= raindrop.waterAmount;
-                    
-                    // Remove the raindrop
-                    simulation.removeChild(raindrop.element);
-                    simulationState.raindrops.splice(i, 1);
-                }
-            }
-        }
-        
-        // Create water vapor (evaporation)
-        function createVapor(terrainIndex) {
-            if (simulationState.vapors.length >= MAX_VAPORS) return;
-            
-            // Check temperature conditions for evaporation
-            if (simulationState.temperature < 10) return; // Too cold to evaporate
-            
-            // Calculate evaporation rate based on temperature and altitude
-            const baseEvapRate = Math.max(0, (simulationState.temperature - 10) / 30);
-            const altitudeFactor = 1 - (terrainIndex * simulationState.altitudeModifier * 0.1);
-            const evapRate = baseEvapRate * simulationState.evaporationRate * altitudeFactor;
-            
-            // Only create vapor if there's water in the pool
-            if (simulationState.poolWaters[terrainIndex] < 1) return;
-            
-            // Probability check for vapor creation
-            if (Math.random() > evapRate * 0.1) return;
-            
-            const waterAmount = 0.2 + Math.random() * 0.3; // Small amount of water evaporates
-            if (simulationState.poolWaters[terrainIndex] >= waterAmount) {
-                simulationState.poolWaters[terrainIndex] -= waterAmount;
-                simulationState.evaporatingWater += waterAmount;
-                
-                // Get pool position
-                const pool = document.getElementById(`pool-${terrainIndex}`);
-                const poolRect = pool.getBoundingClientRect();
-                const simulationRect = simulation.getBoundingClientRect();
-                
-                const vapor = document.createElement('div');
-                vapor.className = 'vapor';
-                
-                // Position vapor above the pool
-                const leftPos = poolRect.left - simulationRect.left + Math.random() * poolRect.width;
-                const topPos = poolRect.top - simulationRect.top - Math.random() * 10;
-                
-                vapor.style.left = leftPos + 'px';
-                vapor.style.top = topPos + 'px';
-                
-                // Store vapor data
-                const vaporData = {
-                    element: vapor,
-                    x: leftPos,
-                    y: topPos,
-                    speed: 0.5 + Math.random() * 1,
-                    waterAmount: waterAmount,
-                    age: 0,
-                    maxAge: 100 + Math.random() * 100
-                };
-                
-                simulationState.vapors.push(vaporData);
-                simulation.appendChild(vapor);
-            }
-        }
-        
-        // Update water vapor
-        function updateVapors() {
-            for (let i = simulationState.vapors.length - 1; i >= 0; i--) {
-                const vapor = simulationState.vapors[i];
-                
-                // Vapors rise and move slightly sideways
-                vapor.y -= vapor.speed * simulationState.timeSpeed;
-                vapor.x += (Math.sin(vapor.age / 10) * 0.5) * simulationState.timeSpeed;
-                vapor.age += simulationState.timeSpeed;
-                
-                vapor.element.style.top = vapor.y + 'px';
-                vapor.element.style.left = vapor.x + 'px';
-                
-                // Check if vapor has reached the cloud or has lived its full life
-                const cloudRect = cloud.getBoundingClientRect();
-                const simulationRect = simulation.getBoundingClientRect();
-                const cloudBottom = cloudRect.bottom - simulationRect.top;
-                
-                if (vapor.y <= cloudBottom || vapor.age >= vapor.maxAge) {
-                    // Add water to the cloud
-                    simulationState.cloudWater += vapor.waterAmount;
-                    simulationState.evaporatingWater -= vapor.waterAmount;
-                    
-                    // Remove the vapor
-                    simulation.removeChild(vapor.element);
-                    simulationState.vapors.splice(i, 1);
-                }
-            }
-        }
-        
-        // Create downflow (water running downhill)
-        function createDownflow(fromTerrain) {
-            if (simulationState.downflows.length >= MAX_DOWNFLOWS) return;
-            
-            // Only create downflow if there's overflow
-            if (!simulationState.poolOverflows[fromTerrain]) return;
-            
-            const waterAmount = 1 + Math.random() * 2; // 1-3 units of water
-            if (simulationState.poolWaters[fromTerrain] >= waterAmount) {
-                simulationState.poolWaters[fromTerrain] -= waterAmount;
-                simulationState.poolWaters[fromTerrain + 1] += waterAmount;
-                
-                // Get pool positions
-                const fromPool = document.getElementById(`pool-${fromTerrain}`);
-                const toPool = document.getElementById(`pool-${fromTerrain + 1}`);
-                const fromRect = fromPool.getBoundingClientRect();
-                const toRect = toPool.getBoundingClientRect();
-                const simulationRect = simulation.getBoundingClientRect();
-                
-                const downflow = document.createElement('div');
-                downflow.className = 'downflow';
-                
-                // Position at the bottom edge of the upper pool
-                const leftPos = fromRect.right - simulationRect.left;
-                const topPos = fromRect.bottom - simulationRect.top - 5;
-                
-                downflow.style.left = leftPos + 'px';
-                downflow.style.top = topPos + 'px';
-                
-                // Size proportional to water amount
-                downflow.style.width = (waterAmount * 1.5 + 3) + 'px';
-                downflow.style.height = (waterAmount * 1.5 + 3) + 'px';
-                
-                // Store downflow data
-                const downflowData = {
-                    element: downflow,
-                    x: leftPos,
-                    y: topPos,
-                    targetX: toRect.left - simulationRect.left + 10,
-                    targetY: toRect.top - simulationRect.top,
-                    progress: 0,
-                    speed: 0.02 + Math.random() * 0.02
-                };
-                
-                simulationState.downflows.push(downflowData);
-                simulation.appendChild(downflow);
-            }
-        }
-        
-        // Update downflows
-        function updateDownflows() {
-            for (let i = simulationState.downflows.length - 1; i >= 0; i--) {
-                const downflow = simulationState.downflows[i];
-                
-                downflow.progress += downflow.speed * simulationState.timeSpeed;
-                
-                // Use cubic bezier-like curve for realistic water flow
-                const t = downflow.progress;
-                const newX = downflow.x + (downflow.targetX - downflow.x) * t;
-                
-                // Add a slight arc to the path
-                const midY = downflow.y + (downflow.targetY - downflow.y) * 0.5 + 20;
-                const newY = downflow.y * (1 - t) * (1 - t) + midY * 2 * t * (1 - t) + downflow.targetY * t * t;
-                
-                downflow.element.style.left = newX + 'px';
-                downflow.element.style.top = newY + 'px';
-                
-                // Remove when reaching the target
-                if (downflow.progress >= 1) {
-                    simulation.removeChild(downflow.element);
-                    simulationState.downflows.splice(i, 1);
-                }
-            }
-        }
-        
-        // Update metrics display
-        function updateMetrics() {
-            const totalWater = simulationState.cloudWater + simulationState.rainWater + 
-                              simulationState.poolWaters.reduce((a, b) => a + b, 0) + 
-                              simulationState.evaporatingWater;
-            
-            // Update text displays
-            cloudWaterValue.textContent = Math.round(simulationState.cloudWater) + ' units';
-            rainWaterValue.textContent = Math.round(simulationState.rainWater) + ' units';
-            poolWaterValue.textContent = Math.round(simulationState.poolWaters.reduce((a, b) => a + b, 0)) + ' units';
-            evapWaterValue.textContent = Math.round(simulationState.evaporatingWater) + ' units';
-            
-            // Update progress bars
-            cloudWaterBar.style.width = (simulationState.cloudWater / totalWater * 100) + '%';
-            rainWaterBar.style.width = (simulationState.rainWater / totalWater * 100) + '%';
-            poolWaterBar.style.width = (simulationState.poolWaters.reduce((a, b) => a + b, 0) / totalWater * 100) + '%';
-            evapWaterBar.style.width = (simulationState.evaporatingWater / totalWater * 100) + '%';
-        }
-        
-        // Update day/night cycle
-        function updateDayNightCycle() {
-            // Update day/night state
-            simulationState.dayTime += simulationState.timeSpeed;
-            const dayProgress = (simulationState.dayTime % DAY_DURATION) / DAY_DURATION;
-            
-            // Day is from 0.25 to 0.75 of the cycle (to center the sun/moon)
-            simulationState.isDay = dayProgress >= 0.25 && dayProgress < 0.75;
-            
-            // Update sky background
-            if (simulationState.isDay) {
-                const progress = (dayProgress - 0.25) / 0.5; // 0 to 1 during day
-                const brightness = 0.7 + Math.sin(progress * Math.PI) * 0.3; // Brightest at noon
-                simulation.style.background = `linear-gradient(to bottom, 
-                    rgba(135, 206, 235, ${brightness}), 
-                    rgba(70, 130, 180, ${brightness * 0.8}))`;
-            } else {
-                let progress;
-                if (dayProgress < 0.25) {
-                    progress = dayProgress / 0.25; // Dawn approaching
-                } else {
-                    progress = (dayProgress - 0.75) / 0.25; // Dusk passing
-                }
-                simulation.style.background = `linear-gradient(to bottom, 
-                    rgba(25, 25, 112, ${0.9 - progress * 0.3}), 
-                    rgba(0, 0, 50, ${0.9 - progress * 0.3}))`;
-            }
-            
-            // Update temperature based on day/night
-            if (simulationState.isDay) {
-                const dayProgress = (simulationState.dayTime % (DAY_DURATION / 2)) / (DAY_DURATION / 2);
-                simulationState.temperature = simulationState.nightTemperature + 
-                                            (simulationState.dayTemperature - simulationState.nightTemperature) * 
-                                            Math.sin(dayProgress * Math.PI);
-            } else {
-                simulationState.temperature = simulationState.nightTemperature;
-            }
-            
-            // Update sun/moon position
-            const cycleProgress = (simulationState.dayTime % DAY_DURATION) / DAY_DURATION;
-            const angle = cycleProgress * 2 * Math.PI;
-            
-            const radius = simulation.offsetHeight * 0.4;
-            const centerX = simulation.offsetWidth * 0.5;
-            const centerY = simulation.offsetHeight * 0.3;
-            
-            const x = centerX + Math.cos(angle - Math.PI/2) * radius;
-            const y = centerY + Math.sin(angle - Math.PI/2) * radius;
-            
-            sunMoon.style.left = x + 'px';
-            sunMoon.style.top = y + 'px';
-            
-            // Update sun/moon appearance
-            if (simulationState.isDay) {
-                sunMoon.style.backgroundColor = '#FFDB58';
-                sunMoon.style.boxShadow = '0 0 20px rgba(255, 219, 88, 0.8)';
-            } else {
-                sunMoon.style.backgroundColor = '#F5F3CE';
-                sunMoon.style.boxShadow = '0 0 10px rgba(245, 243, 206, 0.5)';
-            }
-            
-            // Update indicators
-            timeIndicator.textContent = simulationState.isDay ? 'Day' : 'Night';
-            temperatureIndicator.textContent = Math.round(simulationState.temperature) + '°C';
-        }
-        
-        // Main update function
-        function update() {
-            simulationState.time += 16 * simulationState.timeSpeed; // 16ms is roughly 60fps
-            
-            // Update day/night cycle
-            updateDayNightCycle();
-            
-            // Balance water in the system
-            balanceWaterSystem();
-            
-            // Create raindrops (both day and night)
-            if (Math.random() < 0.2 * simulationState.timeSpeed) {
-                createRaindrop();
-            }
-            
-            // Create vapors (based on temperature)
-            for (let i = 0; i < NUM_TERRAINS; i++) {
-                if (simulationState.temperature >= 10) { // Only evaporate when warm enough
-                    createVapor(i);
-                }
-            }
-            
-            // Create downflows for each terrain that has overflow
-            for (let i = 0; i < NUM_TERRAINS - 1; i++) {
-                if (simulationState.poolOverflows[i] && Math.random() < 0.2 * simulationState.timeSpeed) {
-                    createDownflow(i);
-                }
-            }
-            
-            // Update existing elements
-            updateClouds();
-            updatePools();
-            updateRaindrops();
-            updateVapors();
-            updateDownflows();
-            updateMetrics();
-            
-            requestAnimationFrame(update);
-        }
-        
-        // Ensure total water in system is conserved
-        function balanceWaterSystem() {
-            const totalWaterInSystem = simulationState.cloudWater + 
-                                     simulationState.rainWater + 
-                                     simulationState.poolWaters.reduce((a, b) => a + b, 0) + 
-                                     simulationState.evaporatingWater;
-            
-            // If there's a significant discrepancy, adjust cloud water
-            if (Math.abs(totalWaterInSystem - simulationState.totalWater) > 1) {
-                const adjustment = simulationState.totalWater - totalWaterInSystem;
-                simulationState.cloudWater += adjustment;
-            }
-        }
-        
-        // Initialize the simulation
-        function initSimulation() {
-            // Reset state
-            simulationState = {
-                isDay: true,
-                temperature: parseInt(dayTempSlider.value),
-                dayTemperature: parseInt(dayTempSlider.value),
-                nightTemperature: parseInt(nightTempSlider.value),
-                evaporationRate: parseFloat(evapRateSlider.value),
-                altitudeModifier: parseFloat(altModSlider.value),
-                timeSpeed: parseFloat(timeSpeedSlider.value),
-                totalWater: parseInt(totalWaterSlider.value),
-                time: 0,
-                dayTime: DAY_DURATION * 0.25, // Start at beginning of day
-                cloudWater: parseInt(totalWaterSlider.value) * 0.5,
-                rainWater: 0,
-                poolWaters: Array(NUM_TERRAINS).fill(parseInt(totalWaterSlider.value) * 0.1),
-                evaporatingWater: 0,
-                raindrops: [],
-                vapors: [],
-                downflows: [],
-                poolOverflows: Array(NUM_TERRAINS-1).fill(false)
+
+        const PROFILE = [
+            [0.00, 0.738], [0.22, 0.738], [0.295, 0.738],
+            [0.328, 0.705], [0.352, 0.688], [0.410, 0.748],
+            [0.462, 0.618], [0.512, 0.608], [0.572, 0.698],
+            [0.632, 0.492], [0.678, 0.408], [0.730, 0.522],
+            [0.788, 0.226], [0.848, 0.352], [0.902, 0.268],
+            [0.952, 0.388], [1.00, 0.452]
+        ];
+
+        const BASINS = [
+            { id: "ocean", name: "Ocean", x0: 0, x1: 0.30, ocean: true, next: null, cap: 1 },
+            { id: "coast", name: "Coastal wetland", x0: 0.352, x1: 0.462, next: "ocean", cap: 0.10 },
+            { id: "valley", name: "Valley lake", x0: 0.512, x1: 0.632, next: "coast", cap: 0.08 },
+            { id: "alpine", name: "Alpine tarn", x0: 0.678, x1: 0.770, next: "valley", cap: 0.05 }
+        ];
+
+        const PRESETS = {
+            temperate: { speed: 1, day: 26, night: 14, evap: 1, oro: 1, wind: 1, water: 1000 },
+            desert: { speed: 1.2, day: 42, night: 12, evap: 1.7, oro: 0.7, wind: 0.55, water: 450 },
+            monsoon: { speed: 1, day: 31, night: 24, evap: 1.45, oro: 1.35, wind: 1.55, water: 1750 },
+            alpine: { speed: 1, day: 8, night: -6, evap: 0.75, oro: 2, wind: 1.25, water: 920 }
+        };
+
+        const params = {
+            speed: 1,
+            day: 26,
+            night: 14,
+            evap: 1,
+            oro: 1,
+            wind: 1,
+            total: 1000,
+            labels: true,
+            snow: true
+        };
+
+        const R = {
+            ocean: 0, coast: 0, valley: 0, alpine: 0,
+            cloud: 0, vapor: 0, rain: 0, runoff: 0
+        };
+
+        const vapors = [];
+        const rains = [];
+        const flows = [];
+        const clouds = [];
+        const splashes = [];
+        let stars = [];
+        let trees = [];
+        let paused = false;
+        let currentPreset = "temperate";
+        let simTime = DAY_MS * 0.27;
+        let lastTs = 0;
+        let W = 1, H = 1, dpr = 1;
+        let seaTemp = 20, peakTemp = 8, sunAlt = 0.4, dayPhase = 0.3;
+        let skyName = "Day";
+        const rateAcc = { evap: 0, cond: 0, precip: 0, runoff: 0 };
+        const rateShow = { evap: 0, cond: 0, precip: 0, runoff: 0 };
+        let rateClock = 0;
+        let uiClock = 0;
+
+        const lerp = (a, b, t) => a + (b - a) * t;
+        const clamp = (v, a, b) => Math.max(a, Math.min(b, v));
+        const smoothstep = (e0, e1, x) => {
+            const t = clamp((x - e0) / (e1 - e0), 0, 1);
+            return t * t * (3 - 2 * t);
+        };
+        const mulberry = (seed) => {
+            let a = seed | 0;
+            return () => {
+                a |= 0; a = a + 0x6D2B79F5 | 0;
+                let t = Math.imul(a ^ a >>> 15, 1 | a);
+                t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+                return ((t ^ t >>> 14) >>> 0) / 4294967296;
             };
-            
-            // Clear any existing elements
-            document.querySelectorAll('.raindrop, .vapor, .downflow').forEach(el => {
-                el.parentNode.removeChild(el);
-            });
-            
-            // Setup UI
-            setupClouds();
-            setupTerrain();
-            updateClouds();
-            updatePools();
-            updateMetrics();
+        };
+        const css = (c, a = 1) => `rgba(${c.r | 0},${c.g | 0},${c.b | 0},${a})`;
+        const mix = (a, b, t) => ({ r: lerp(a.r, b.r, t), g: lerp(a.g, b.g, t), b: lerp(a.b, b.b, t) });
+
+        function terrainNy(nx) {
+            nx = clamp(nx, 0, 1);
+            for (let i = 0; i < PROFILE.length - 1; i++) {
+                const a = PROFILE[i], b = PROFILE[i + 1];
+                if (nx <= b[0]) {
+                    const t = (nx - a[0]) / Math.max(1e-6, b[0] - a[0]);
+                    const s = t * t * (3 - 2 * t);
+                    return lerp(a[1], b[1], s);
+                }
+            }
+            return PROFILE[PROFILE.length - 1][1];
         }
-        
-        // Set up event listeners
-        timeSpeedSlider.addEventListener('input', () => {
-            simulationState.timeSpeed = parseFloat(timeSpeedSlider.value);
-            timeSpeedValue.textContent = simulationState.timeSpeed.toFixed(1) + 'x';
+
+        function farNy(nx) {
+            return terrainNy(clamp(nx * 0.92 + 0.14, 0, 1)) * 0.78 + 0.05;
+        }
+
+        function basinAt(nx) {
+            for (let i = BASINS.length - 1; i >= 0; i--) {
+                const b = BASINS[i];
+                if (nx >= b.x0 && nx <= b.x1) return b;
+            }
+            return BASINS[0];
+        }
+
+        function catchment(nx) {
+            if (nx <= 0.32) return "ocean";
+            if (nx < 0.49) return "coast";
+            if (nx < 0.66) return "valley";
+            return "alpine";
+        }
+
+        function capacity(id) {
+            const b = BASINS.find((x) => x.id === id);
+            if (!b || b.ocean) return params.total;
+            return b.cap * params.total;
+        }
+
+        function basinSurface(b) {
+            if (b.ocean) return OCEAN_NY;
+            let floorNy = 0;
+            let leftNy = terrainNy(b.x0);
+            const samples = 24;
+            for (let i = 0; i <= samples; i++) {
+                const ny = terrainNy(lerp(b.x0, b.x1, i / samples));
+                if (ny > floorNy) floorNy = ny;
+            }
+            const fill = clamp(R[b.id] / Math.max(1, capacity(b.id)), 0, 1.08);
+            const spillNy = leftNy;
+            if (fill <= 0.02) return floorNy - 0.002;
+            return lerp(floorNy, spillNy, Math.min(1, fill));
+        }
+
+        function waterNyAt(nx) {
+            if (nx <= 0.30) return OCEAN_NY;
+            for (const b of BASINS) {
+                if (b.ocean) continue;
+                if (nx >= b.x0 && nx <= b.x1 && R[b.id] > 4) {
+                    const surface = basinSurface(b);
+                    if (terrainNy(nx) >= surface) return surface;
+                }
+            }
+            return null;
+        }
+
+        function localTemp(nx, ny) {
+            const elevKm = Math.max(0, OCEAN_NY - ny) / 0.512 * 3.1;
+            const lapse = 6.5 * (0.85 + 0.15 * params.oro);
+            return seaTemp - elevKm * lapse;
+        }
+
+        function inventory() {
+            let t = R.ocean + R.coast + R.valley + R.alpine + R.cloud + R.vapor + R.rain + R.runoff;
+            for (const p of vapors) t += p.mass;
+            for (const p of rains) t += p.mass;
+            for (const p of flows) t += p.mass;
+            return t;
+        }
+
+        function take(store, amount) {
+            const m = Math.min(amount, Math.max(0, store));
+            return m;
+        }
+
+        function note(kind, mass) {
+            rateAcc[kind] += mass;
+        }
+
+        function seedDecor() {
+            const rnd = mulberry(0xC0FFEE);
+            stars = Array.from({ length: 140 }, () => ({
+                x: rnd(), y: rnd() * 0.62, r: 0.4 + rnd() * 1.3, tw: rnd() * Math.PI * 2
+            }));
+            trees = [];
+            for (let i = 0; i < 26; i++) {
+                const nx = 0.33 + rnd() * 0.54;
+                const ny = terrainNy(nx);
+                if (ny < 0.34 || ny > 0.71) continue;
+                trees.push({
+                    nx, ny, h: 0.028 + rnd() * 0.034,
+                    pine: ny < 0.58, shade: 0.65 + rnd() * 0.35
+                });
+            }
+            clouds.length = 0;
+            for (let i = 0; i < 8; i++) {
+                const puffs = Array.from({ length: 6 + (i % 3) }, (_, k) => ({
+                    ox: (k - 2.4) * 0.018 + (rnd() - 0.5) * 0.01,
+                    oy: (rnd() - 0.55) * 0.016,
+                    s: 0.028 + rnd() * 0.03
+                }));
+                clouds.push({
+                    nx: 0.08 + i * 0.11 + rnd() * 0.03,
+                    ny: 0.11 + rnd() * 0.1,
+                    puffs,
+                    phase: rnd() * Math.PI * 2
+                });
+            }
+        }
+
+        function reset() {
+            vapors.length = 0;
+            rains.length = 0;
+            flows.length = 0;
+            splashes.length = 0;
+            const T = params.total;
+            R.coast = 0.092 * T;
+            R.valley = 0.074 * T;
+            R.alpine = 0.047 * T;
+            R.cloud = 0.16 * T;
+            R.vapor = 0.02 * T;
+            R.rain = 0;
+            R.runoff = 0;
+            R.ocean = T - (R.coast + R.valley + R.alpine + R.cloud + R.vapor);
+            simTime = DAY_MS * 0.28;
+            seedDecor();
+            updateUI(true);
+        }
+
+        function markPreset(name) {
+            currentPreset = name;
+            document.querySelectorAll("[data-preset]").forEach((btn) => {
+                btn.classList.toggle("active", btn.dataset.preset === name);
+            });
+        }
+
+        function applyPreset(name) {
+            const p = PRESETS[name];
+            if (!p) return;
+            params.speed = p.speed; params.day = p.day; params.night = p.night;
+            params.evap = p.evap; params.oro = p.oro; params.wind = p.wind; params.total = p.water;
+            speed.value = p.speed; dayTemp.value = p.day; nightTemp.value = p.night;
+            evap.value = p.evap; oro.value = p.oro; wind.value = p.wind; water.value = p.water;
+            syncSliderLabels();
+            markPreset(name);
+            paused = false;
+            const pauseBtn = document.getElementById("btnPause");
+            if (pauseBtn) {
+                pauseBtn.textContent = "Pause";
+                pauseBtn.classList.remove("active");
+            }
+            reset();
+        }
+
+        function scaleTotal(next) {
+            const cur = inventory();
+            if (cur <= 0) { params.total = next; reset(); return; }
+            const s = next / cur;
+            for (const k of Object.keys(R)) R[k] *= s;
+            vapors.forEach((p) => p.mass *= s);
+            rains.forEach((p) => p.mass *= s);
+            flows.forEach((p) => p.mass *= s);
+            params.total = next;
+        }
+
+        function spawnVapor(nx, ny, mass) {
+            if (mass <= 0.0001) return;
+            if (vapors.length < 420) {
+                vapors.push({
+                    nx, ny, mass,
+                    vx: (Math.random() - 0.35) * 0.02,
+                    vy: -(0.04 + Math.random() * 0.05),
+                    age: 0,
+                    life: 7 + Math.random() * 6,
+                    r: 1.2 + Math.random() * 1.8
+                });
+            } else {
+                R.vapor += mass;
+            }
+        }
+
+        function spawnRain(nx, mass, snowy) {
+            if (mass <= 0.0001) return;
+            if (rains.length < 380) {
+                rains.push({
+                    nx,
+                    ny: 0.08 + Math.random() * 0.12,
+                    mass,
+                    vy: snowy ? 0.09 + Math.random() * 0.06 : 0.22 + Math.random() * 0.12,
+                    snow: snowy,
+                    wob: Math.random() * 6
+                });
+            } else {
+                R[catchment(nx)] += mass;
+            }
+        }
+
+        function spawnFlow(fromId, toId, mass, nx, ny) {
+            if (mass <= 0.0001) return;
+            if (flows.length < 160) {
+                flows.push({ nx, ny, mass, toId, fromId });
+            } else {
+                R[toId] += mass;
+            }
+        }
+
+        function evaporateFrom(id, nx0, nx1, surfaceNy, dt, heat) {
+            const area = Math.max(0.04, nx1 - nx0);
+            const humidity = clamp((R.cloud + R.vapor + vapors.reduce((s, p) => s + p.mass, 0)) / (params.total * 0.42), 0, 1.4);
+            const deficit = clamp(1.05 - humidity, 0.08, 1);
+            const store = R[id];
+            const rate = store * (id === "ocean" ? 0.011 : 0.016) * heat * params.evap * deficit * (0.55 + area * 1.6);
+            const mass = take(store, rate * dt);
+            if (mass <= 0) return;
+            R[id] -= mass;
+            note("evap", mass);
+            const n = Math.min(10, 1 + Math.floor(mass * 3.5));
+            const slice = mass / n;
+            for (let i = 0; i < n; i++) {
+                const nx = lerp(nx0 + 0.01, nx1 - 0.01, Math.random());
+                spawnVapor(nx, surfaceNy - 0.01, slice);
+            }
+        }
+
+        function tickAtmosphere(dt) {
+            simTime += dt * 1000;
+            dayPhase = (simTime % DAY_MS) / DAY_MS;
+            sunAlt = Math.sin((dayPhase - 0.25) * Math.PI * 2);
+            const sun01 = Math.max(0, sunAlt);
+            const lag = Math.pow(sun01, 0.85);
+            seaTemp = params.night + (params.day - params.night) * lag;
+            peakTemp = localTemp(0.79, 0.226);
+
+            if (sunAlt > 0.18) skyName = "Day";
+            else if (sunAlt > 0.02) skyName = dayPhase < 0.5 ? "Dawn" : "Dusk";
+            else if (sunAlt > -0.12) skyName = dayPhase < 0.5 ? "Dawn" : "Dusk";
+            else skyName = "Night";
+
+            const heat = clamp((seaTemp - 1) / 27, 0, 1.35) * (0.22 + 0.78 * sun01);
+
+            evaporateFrom("ocean", 0.02, 0.295, OCEAN_NY, dt, heat);
+            for (const b of BASINS) {
+                if (b.ocean || R[b.id] < 6) continue;
+                const t = localTemp((b.x0 + b.x1) / 2, basinSurface(b));
+                const localHeat = clamp((t - 1) / 27, 0, 1.2) * (0.28 + 0.72 * sun01);
+                evaporateFrom(b.id, b.x0, b.x1, basinSurface(b), dt, localHeat);
+            }
+
+            const condBoost = 0.55 + 0.7 * (1 - clamp((seaTemp - 2) / 30, 0, 1)) + 0.25 * params.oro;
+            if (R.vapor > 0) {
+                const m = take(R.vapor, R.vapor * 0.22 * condBoost * dt);
+                R.vapor -= m;
+                R.cloud += m;
+                note("cond", m);
+            }
+
+            for (let i = vapors.length - 1; i >= 0; i--) {
+                const p = vapors[i];
+                p.age += dt;
+                p.nx += (p.vx + 0.046 * params.wind) * dt;
+                p.ny += p.vy * dt;
+                p.vx += (Math.sin(p.age * 2.2) * 0.01) * dt;
+                p.vy -= 0.006 * dt;
+                if (p.nx > 1.04) p.nx = -0.02;
+                if (p.nx < -0.05) p.nx = 0.2;
+                const cool = localTemp(p.nx, p.ny);
+                const cloudDeck = 0.30 - clamp(seaTemp / 90, 0, 0.1);
+                const should = p.ny < cloudDeck || cool < 4 || p.age > p.life || (p.ny < 0.2 && params.oro > 1.2 && p.nx > 0.55);
+                if (should) {
+                    R.cloud += p.mass;
+                    note("cond", p.mass);
+                    vapors.splice(i, 1);
+                }
+            }
+
+            const cloudMass = R.cloud;
+            const sat = cloudMass / Math.max(1, params.total * 0.36);
+            const threshold = 0.16 + 0.26 * clamp((seaTemp - 4) / 32, 0, 1);
+            if (sat > threshold && cloudMass > 8) {
+                const precip = take(cloudMass, cloudMass * (sat - threshold) * 1.65 * dt);
+                R.cloud -= precip;
+                note("precip", precip);
+                const n = Math.min(18, 2 + Math.floor(precip * 4));
+                const slice = precip / n;
+                for (let i = 0; i < n; i++) {
+                    const cloud = clouds[Math.floor(Math.random() * clouds.length)];
+                    let nx = cloud.nx + (Math.random() - 0.45) * 0.14;
+                    if (Math.random() < 0.35 + 0.28 * params.oro) nx = lerp(nx, 0.78, 0.45 * params.oro);
+                    nx = clamp(nx, 0.04, 0.97);
+                    const snowy = params.snow && localTemp(nx, 0.16) < 0.4;
+                    spawnRain(nx, slice, snowy);
+                }
+            }
+
+            for (let i = rains.length - 1; i >= 0; i--) {
+                const p = rains[i];
+                p.ny += p.vy * dt;
+                if (p.snow) p.nx += Math.sin(simTime * 0.004 + p.wob) * 0.03 * dt;
+                const ground = waterNyAt(p.nx) ?? terrainNy(p.nx);
+                if (p.ny >= ground - 0.006) {
+                    const dest = catchment(p.nx);
+                    R[dest] += p.mass;
+                    splashes.push({ nx: p.nx, ny: ground, t: 0, snow: p.snow });
+                    rains.splice(i, 1);
+                }
+            }
+
+            for (const b of BASINS) {
+                if (b.ocean || !b.next) continue;
+                const cap = capacity(b.id);
+                if (R[b.id] > cap) {
+                    const excess = (R[b.id] - cap) * 0.55 * dt;
+                    const m = take(R[b.id], excess);
+                    R[b.id] -= m;
+                    note("runoff", m);
+                    spawnFlow(b.id, b.next, m, b.x0 + 0.004, basinSurface(b));
+                }
+            }
+
+            for (let i = flows.length - 1; i >= 0; i--) {
+                const p = flows[i];
+                p.nx -= (0.085 + params.wind * 0.01) * dt;
+                p.ny = terrainNy(p.nx) - 0.006;
+                const dest = BASINS.find((b) => b.id === p.toId);
+                if (!dest || p.nx <= dest.x1 - 0.01) {
+                    R[p.toId] += p.mass;
+                    flows.splice(i, 1);
+                }
+            }
+
+            for (let i = splashes.length - 1; i >= 0; i--) {
+                splashes[i].t += dt * 3.2;
+                if (splashes[i].t > 1) splashes.splice(i, 1);
+            }
+
+            for (const c of clouds) {
+                c.nx += 0.012 * params.wind * dt;
+                c.ny += Math.sin(simTime * 0.001 + c.phase) * 0.003 * dt;
+                if (c.nx > 1.12) c.nx = -0.08;
+            }
+
+            rateClock += dt;
+            if (rateClock >= 0.4) {
+                for (const k of Object.keys(rateShow)) {
+                    rateShow[k] = rateAcc[k] / rateClock;
+                    rateAcc[k] = 0;
+                }
+                rateClock = 0;
+            }
+        }
+
+        function resize() {
+            const rect = canvas.parentElement.getBoundingClientRect();
+            dpr = Math.min(2, window.devicePixelRatio || 1);
+            W = Math.max(320, rect.width);
+            H = Math.max(240, rect.height);
+            canvas.width = Math.floor(W * dpr);
+            canvas.height = Math.floor(H * dpr);
+            ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        }
+
+        function X(nx) { return nx * W; }
+        function Y(ny) { return ny * H; }
+
+        function drawSky() {
+            const dayness = smoothstep(-0.1, 0.38, sunAlt);
+            const twilight = Math.exp(-Math.pow(sunAlt * 4.6, 2));
+            const evening = dayPhase > 0.5;
+            const nightTop = { r: 7, g: 11, b: 26 };
+            const nightBot = { r: 16, g: 24, b: 44 };
+            const dayTop = { r: 92, g: 174, b: 226 };
+            const dayBot = { r: 196, g: 224, b: 242 };
+            const dawnTop = { r: 255, g: 146, b: 92 };
+            const duskTop = { r: 255, g: 108, b: 72 };
+            const twTop = evening ? duskTop : dawnTop;
+            let top = mix(nightTop, dayTop, dayness);
+            let bot = mix(nightBot, dayBot, dayness);
+            top = mix(top, twTop, twilight * 0.72);
+            bot = mix(bot, mix(twTop, nightBot, 0.4), twilight * 0.45);
+            const g = ctx.createLinearGradient(0, 0, 0, H);
+            g.addColorStop(0, css(top));
+            g.addColorStop(1, css(bot));
+            ctx.fillStyle = g;
+            ctx.fillRect(0, 0, W, H);
+
+            if (dayness < 0.72) {
+                ctx.save();
+                ctx.globalAlpha = clamp(1 - dayness * 1.25, 0, 0.9);
+                for (const s of stars) {
+                    const tw = 0.45 + 0.55 * Math.sin(simTime * 0.003 + s.tw);
+                    ctx.fillStyle = `rgba(255,255,255,${tw})`;
+                    ctx.beginPath();
+                    ctx.arc(X(s.x), Y(s.y), s.r, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+
+            const dayT = (dayPhase - 0.23) / 0.54;
+            if (sunAlt > -0.18) {
+                const nx = lerp(0.07, 0.93, clamp(dayT, -0.05, 1.05));
+                const ny = 0.62 - Math.sin(clamp(dayT, 0, 1) * Math.PI) * 0.5;
+                const sx = X(nx), sy = Y(ny);
+                const glow = ctx.createRadialGradient(sx, sy, 4, sx, sy, 90);
+                glow.addColorStop(0, `rgba(255, 214, 90, ${0.55 + 0.3 * dayness})`);
+                glow.addColorStop(1, "rgba(255, 160, 60, 0)");
+                ctx.fillStyle = glow;
+                ctx.beginPath();
+                ctx.arc(sx, sy, 90, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#ffd45c";
+                ctx.beginPath();
+                ctx.arc(sx, sy, 16 + 6 * dayness, 0, Math.PI * 2);
+                ctx.fill();
+            }
+
+            let nightT = null;
+            if (dayPhase >= 0.75) nightT = (dayPhase - 0.75) / 0.5;
+            else if (dayPhase < 0.25) nightT = (dayPhase + 0.25) / 0.5;
+            if (nightT != null && sunAlt < 0.12) {
+                const nx = lerp(0.1, 0.9, nightT);
+                const ny = 0.58 - Math.sin(nightT * Math.PI) * 0.42;
+                const mx = X(nx), my = Y(ny);
+                ctx.fillStyle = "rgba(230, 236, 255, 0.14)";
+                ctx.beginPath();
+                ctx.arc(mx, my, 28, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "#eef2d8";
+                ctx.beginPath();
+                ctx.arc(mx, my, 13, 0, Math.PI * 2);
+                ctx.fill();
+                ctx.fillStyle = "rgba(180, 186, 150, 0.35)";
+                ctx.beginPath();
+                ctx.arc(mx - 4, my - 2, 3.2, 0, Math.PI * 2);
+                ctx.arc(mx + 3, my + 4, 2.2, 0, Math.PI * 2);
+                ctx.fill();
+            }
+        }
+
+        function traceTerrain(fn, x0, x1, extra) {
+            ctx.beginPath();
+            const steps = 120;
+            ctx.moveTo(X(x0), Y(1.05));
+            ctx.lineTo(X(x0), Y(fn(x0)));
+            for (let i = 1; i <= steps; i++) {
+                const nx = lerp(x0, x1, i / steps);
+                ctx.lineTo(X(nx), Y(fn(nx) + (extra ? extra(nx) : 0)));
+            }
+            ctx.lineTo(X(x1), Y(1.05));
+            ctx.closePath();
+        }
+
+        function drawLand() {
+            ctx.fillStyle = "#1a2838";
+            traceTerrain(farNy, 0.28, 1);
+            ctx.fill();
+
+            const land = ctx.createLinearGradient(0, Y(0.2), 0, H);
+            land.addColorStop(0, "#cfe3ea");
+            land.addColorStop(0.28, "#7d8f7a");
+            land.addColorStop(0.55, "#5d7a4e");
+            land.addColorStop(1, "#3d4a32");
+            ctx.fillStyle = land;
+            traceTerrain(terrainNy, 0, 1);
+            ctx.fill();
+
+            ctx.save();
+            traceTerrain(terrainNy, 0.6, 1);
+            ctx.clip();
+            const snowline = 0.20 + clamp((seaTemp + 6) / 70, 0, 1) * 0.22;
+            const snow = ctx.createLinearGradient(0, Y(0.14), 0, Y(snowline + 0.08));
+            snow.addColorStop(0, "rgba(255,255,255,0.94)");
+            snow.addColorStop(1, "rgba(255,255,255,0)");
+            ctx.fillStyle = snow;
+            ctx.fillRect(X(0.6), 0, W, Y(snowline + 0.12));
+            ctx.restore();
+
+            ctx.strokeStyle = "rgba(20, 28, 22, 0.28)";
+            ctx.lineWidth = 1.2;
+            ctx.beginPath();
+            for (let i = 0; i <= 120; i++) {
+                const nx = i / 120;
+                const ny = terrainNy(nx);
+                if (i === 0) ctx.moveTo(X(nx), Y(ny));
+                else ctx.lineTo(X(nx), Y(ny));
+            }
+            ctx.stroke();
+        }
+
+        function drawWaterBody(x0, x1, surfaceNy, color, deep) {
+            const steps = 70;
+            ctx.beginPath();
+            for (let i = 0; i <= steps; i++) {
+                const nx = lerp(x0, x1, i / steps);
+                const wave = Math.sin(nx * 42 + simTime * 0.0026) * 0.0032 + Math.sin(nx * 18 + simTime * 0.0011) * 0.0016;
+                const y = Y(surfaceNy + wave);
+                if (i === 0) ctx.moveTo(X(nx), y);
+                else ctx.lineTo(X(nx), y);
+            }
+            for (let i = steps; i >= 0; i--) {
+                const nx = lerp(x0, x1, i / steps);
+                const gy = nx <= 0.30 ? 1.02 : Math.max(surfaceNy, terrainNy(nx));
+                ctx.lineTo(X(nx), Y(gy));
+            }
+            ctx.closePath();
+            const g = ctx.createLinearGradient(0, Y(surfaceNy), 0, Y(Math.min(1, surfaceNy + 0.22)));
+            g.addColorStop(0, color);
+            g.addColorStop(1, deep);
+            ctx.fillStyle = g;
+            ctx.fill();
+            ctx.strokeStyle = "rgba(220, 240, 255, 0.28)";
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            for (let i = 0; i <= steps; i++) {
+                const nx = lerp(x0, x1, i / steps);
+                const wave = Math.sin(nx * 42 + simTime * 0.0026) * 0.0032;
+                if (i === 0) ctx.moveTo(X(nx), Y(surfaceNy + wave));
+                else ctx.lineTo(X(nx), Y(surfaceNy + wave));
+            }
+            ctx.stroke();
+        }
+
+        function drawTrees() {
+            for (const t of trees) {
+                const x = X(t.nx), y = Y(t.ny);
+                const h = t.h * H;
+                ctx.fillStyle = `rgba(42, 32, 24, ${0.7 * t.shade})`;
+                ctx.fillRect(x - 1.2, y - h * 0.22, 2.4, h * 0.22);
+                ctx.fillStyle = t.pine ? `rgba(36, 68, 42, ${0.85 * t.shade})` : `rgba(52, 92, 48, ${0.8 * t.shade})`;
+                if (t.pine) {
+                    for (let k = 0; k < 3; k++) {
+                        ctx.beginPath();
+                        const top = y - h * (0.35 + k * 0.22);
+                        const w = h * (0.16 + k * 0.07);
+                        ctx.moveTo(x, top - h * 0.16);
+                        ctx.lineTo(x + w, top + h * 0.12);
+                        ctx.lineTo(x - w, top + h * 0.12);
+                        ctx.fill();
+                    }
+                } else {
+                    ctx.beginPath();
+                    ctx.ellipse(x, y - h * 0.42, h * 0.22, h * 0.28, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+            }
+        }
+
+        function drawClouds() {
+            const wet = clamp(R.cloud / (params.total * 0.36), 0, 1.4);
+            const night = clamp(1 - smoothstep(-0.05, 0.35, sunAlt), 0, 1);
+            const alpha = 0.22 + wet * 0.55;
+            for (const c of clouds) {
+                ctx.save();
+                ctx.globalAlpha = alpha;
+                for (const p of c.puffs) {
+                    const cx = X(c.nx + p.ox);
+                    const cy = Y(c.ny + p.oy);
+                    const rx = p.s * W * (0.85 + wet * 0.4);
+                    const ry = p.s * H * 1.15 * (0.8 + wet * 0.35);
+                    const g = ctx.createRadialGradient(cx, cy - ry * 0.2, 4, cx, cy, ry);
+                    g.addColorStop(0, night ? "rgba(198,208,222,0.95)" : "rgba(255,255,255,0.96)");
+                    g.addColorStop(1, night ? "rgba(140,152,170,0.15)" : "rgba(210,224,235,0.05)");
+                    ctx.fillStyle = g;
+                    ctx.beginPath();
+                    ctx.ellipse(cx, cy, rx, ry, 0, 0, Math.PI * 2);
+                    ctx.fill();
+                }
+                ctx.restore();
+            }
+        }
+
+        function drawParticles() {
+            for (const p of vapors) {
+                const lift = clamp((OCEAN_NY - p.ny) / 0.6, 0, 1);
+                ctx.fillStyle = `rgba(220, 230, 238, ${0.18 + lift * 0.35})`;
+                ctx.beginPath();
+                ctx.arc(X(p.nx), Y(p.ny), p.r, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (const p of rains) {
+                if (p.snow) {
+                    ctx.fillStyle = "rgba(255,255,255,0.9)";
+                    ctx.beginPath();
+                    ctx.arc(X(p.nx), Y(p.ny), 1.6, 0, Math.PI * 2);
+                    ctx.fill();
+                } else {
+                    ctx.strokeStyle = "rgba(160, 210, 255, 0.72)";
+                    ctx.lineWidth = 1.2;
+                    ctx.beginPath();
+                    ctx.moveTo(X(p.nx), Y(p.ny));
+                    ctx.lineTo(X(p.nx), Y(p.ny + 0.018));
+                    ctx.stroke();
+                }
+            }
+            for (const p of flows) {
+                ctx.fillStyle = "rgba(90, 210, 220, 0.85)";
+                ctx.beginPath();
+                ctx.arc(X(p.nx), Y(p.ny), 2.4, 0, Math.PI * 2);
+                ctx.fill();
+            }
+            for (const s of splashes) {
+                ctx.strokeStyle = s.snow ? `rgba(255,255,255,${1 - s.t})` : `rgba(170,220,255,${1 - s.t})`;
+                ctx.beginPath();
+                ctx.arc(X(s.nx), Y(s.ny), 2 + s.t * 7, 0, Math.PI * 2);
+                ctx.stroke();
+            }
+        }
+
+        function drawLabels() {
+            if (!params.labels) return;
+            ctx.save();
+            ctx.font = '600 12px "IBM Plex Sans", sans-serif';
+            ctx.textAlign = "center";
+            const fade = (v) => 0.28 + clamp(v / 18, 0, 0.7);
+            const items = [
+                { text: "Evaporation", nx: 0.16, ny: 0.62, a: fade(rateShow.evap) },
+                { text: "Condensation", nx: 0.42, ny: 0.17, a: fade(rateShow.cond) },
+                { text: "Precipitation", nx: 0.72, ny: 0.12, a: fade(rateShow.precip) },
+                { text: "Runoff", nx: 0.58, ny: 0.58, a: fade(rateShow.runoff) }
+            ];
+            for (const it of items) {
+                ctx.globalAlpha = it.a;
+                ctx.fillStyle = "rgba(8, 16, 22, 0.45)";
+                const tw = ctx.measureText(it.text).width + 16;
+                const x0 = X(it.nx) - tw / 2, y0 = Y(it.ny) - 10;
+                ctx.beginPath();
+                ctx.moveTo(x0 + 10, y0);
+                ctx.arcTo(x0 + tw, y0, x0 + tw, y0 + 20, 10);
+                ctx.arcTo(x0 + tw, y0 + 20, x0, y0 + 20, 10);
+                ctx.arcTo(x0, y0 + 20, x0, y0, 10);
+                ctx.arcTo(x0, y0, x0 + tw, y0, 10);
+                ctx.closePath();
+                ctx.fill();
+                ctx.fillStyle = "#e8f1f6";
+                ctx.fillText(it.text, X(it.nx), Y(it.ny) + 4);
+            }
+            ctx.restore();
+        }
+
+        function drawStreams() {
+            ctx.save();
+            ctx.lineCap = "round";
+            for (const b of BASINS) {
+                if (b.ocean || !b.next) continue;
+                const fullness = R[b.id] / Math.max(1, capacity(b.id));
+                if (fullness < 0.9) continue;
+                const dest = BASINS.find((x) => x.id === b.next);
+                const xEnd = dest.ocean ? 0.30 : dest.x1 - 0.02;
+                ctx.strokeStyle = `rgba(90, 200, 230, ${0.25 + clamp(fullness - 0.9, 0, 0.4)})`;
+                ctx.lineWidth = 2.2 + (fullness - 0.9) * 8;
+                ctx.beginPath();
+                const steps = 28;
+                for (let i = 0; i <= steps; i++) {
+                    const nx = lerp(b.x0, xEnd, i / steps);
+                    const ny = terrainNy(nx) - 0.005;
+                    if (i === 0) ctx.moveTo(X(nx), Y(ny));
+                    else ctx.lineTo(X(nx), Y(ny));
+                }
+                ctx.stroke();
+            }
+            ctx.restore();
+        }
+
+        function render() {
+            drawSky();
+            drawLand();
+            drawWaterBody(0, 0.305, OCEAN_NY, "rgba(46, 132, 196, 0.92)", "rgba(12, 48, 82, 0.96)");
+            for (const b of BASINS) {
+                if (b.ocean || R[b.id] < 5) continue;
+                drawWaterBody(b.x0, b.x1, basinSurface(b), "rgba(70, 168, 214, 0.9)", "rgba(18, 70, 110, 0.9)");
+            }
+            drawStreams();
+            drawTrees();
+            drawClouds();
+            drawParticles();
+            drawLabels();
+        }
+
+        function clockLabel() {
+            const minutes = Math.floor(dayPhase * 24 * 60);
+            const hh = String(Math.floor(minutes / 60) % 24).padStart(2, "0");
+            const mm = String(minutes % 60).padStart(2, "0");
+            return `${hh}:${mm}`;
+        }
+
+        function fmt(n) { return Math.round(n).toLocaleString(); }
+        function fmtRate(n) { return `${n < 0.05 ? "0.0" : n.toFixed(1)} /s`; }
+
+        const budgetMeta = [
+            ["ocean", "Ocean"], ["coast", "Coastal wetland"], ["valley", "Valley lake"],
+            ["alpine", "Alpine tarn"], ["cloud", "Clouds"], ["vapor", "Vapor"],
+            ["rain", "Rain / snow"], ["runoff", "Streams"]
+        ];
+
+        function reservoirOf(id) {
+            if (id === "vapor") return R.vapor + vapors.reduce((s, p) => s + p.mass, 0);
+            if (id === "rain") return R.rain + rains.reduce((s, p) => s + p.mass, 0);
+            if (id === "runoff") return R.runoff + flows.reduce((s, p) => s + p.mass, 0);
+            return R[id];
+        }
+
+        function updateUI(force) {
+            uiClock++;
+            if (!force && uiClock % 4 !== 0) return;
+            document.getElementById("pillClock").textContent = clockLabel();
+            document.getElementById("pillSky").textContent = skyName;
+            document.getElementById("pillTemp").textContent = `${Math.round(seaTemp)}°C`;
+            document.getElementById("pillPeak").textContent = `${Math.round(peakTemp)}°C`;
+            document.getElementById("pillCloud").textContent = `${Math.round(100 * reservoirOf("cloud") / params.total)}%`;
+            document.getElementById("rateEvap").textContent = fmtRate(rateShow.evap);
+            document.getElementById("rateCond").textContent = fmtRate(rateShow.cond);
+            document.getElementById("ratePrecip").textContent = fmtRate(rateShow.precip);
+            document.getElementById("rateRunoff").textContent = fmtRate(rateShow.runoff);
+
+            const total = inventory();
+            document.getElementById("budgetTotal").textContent = `${fmt(total)} units`;
+            const rows = document.getElementById("budgetRows");
+            const stack = document.getElementById("stack");
+            rows.innerHTML = "";
+            stack.innerHTML = "";
+            for (const [id, name] of budgetMeta) {
+                const v = reservoirOf(id);
+                const pct = total > 0 ? (100 * v / total) : 0;
+                const row = document.createElement("div");
+                row.className = "budget-row";
+                row.innerHTML = `<b style="background:${COLORS[id]}"></b><span>${name}</span><strong>${fmt(v)}</strong><em>${pct.toFixed(0)}%</em>`;
+                rows.appendChild(row);
+                const seg = document.createElement("i");
+                seg.style.width = `${pct}%`;
+                seg.style.background = COLORS[id];
+                stack.appendChild(seg);
+            }
+            const noteEl = document.getElementById("closedNote");
+            const drift = Math.abs(total - params.total);
+            noteEl.classList.toggle("bad", drift > 2);
+            noteEl.textContent = drift > 2
+                ? `Budget drift ${drift.toFixed(1)} units — check particle transfer.`
+                : "Closed system — every unit is ocean, lake, cloud, vapor, rain, or stream.";
+        }
+
+        function loop(ts) {
+            if (!lastTs) lastTs = ts;
+            const raw = Math.min(0.05, (ts - lastTs) / 1000);
+            lastTs = ts;
+            let remain = paused ? 0 : raw * params.speed;
+            while (remain > 0) {
+                const step = Math.min(0.033, remain);
+                tickAtmosphere(step);
+                remain -= step;
+            }
+            render();
+            updateUI(false);
+            requestAnimationFrame(loop);
+        }
+
+        const speed = document.getElementById("speed");
+        const dayTemp = document.getElementById("dayTemp");
+        const nightTemp = document.getElementById("nightTemp");
+        const wind = document.getElementById("wind");
+        const evap = document.getElementById("evap");
+        const oro = document.getElementById("oro");
+        const water = document.getElementById("water");
+
+        function syncSliderLabels() {
+            const spd = Number(speed.value);
+            document.getElementById("valSpeed").textContent = `${spd.toFixed(spd % 1 === 0 || spd * 10 % 1 === 0 ? 1 : 2)}×`;
+            document.getElementById("valDay").textContent = `${dayTemp.value}°C`;
+            document.getElementById("valNight").textContent = `${nightTemp.value}°C`;
+            document.getElementById("valWind").textContent = `${Number(wind.value).toFixed(1)}×`;
+            document.getElementById("valEvap").textContent = `${Number(evap.value).toFixed(1)}×`;
+            document.getElementById("valOro").textContent = `${Number(oro.value).toFixed(1)}×`;
+            document.getElementById("valWater").textContent = water.value;
+        }
+
+        speed.addEventListener("input", () => { params.speed = Number(speed.value); currentPreset = ""; markPreset(""); syncSliderLabels(); });
+        dayTemp.addEventListener("input", () => { params.day = Number(dayTemp.value); markPreset(""); syncSliderLabels(); });
+        nightTemp.addEventListener("input", () => { params.night = Number(nightTemp.value); markPreset(""); syncSliderLabels(); });
+        wind.addEventListener("input", () => { params.wind = Number(wind.value); markPreset(""); syncSliderLabels(); });
+        evap.addEventListener("input", () => { params.evap = Number(evap.value); markPreset(""); syncSliderLabels(); });
+        oro.addEventListener("input", () => { params.oro = Number(oro.value); markPreset(""); syncSliderLabels(); });
+        water.addEventListener("input", () => { scaleTotal(Number(water.value)); markPreset(""); syncSliderLabels(); });
+        document.getElementById("labels").addEventListener("change", (e) => { params.labels = e.target.checked; });
+        document.getElementById("snow").addEventListener("change", (e) => { params.snow = e.target.checked; });
+
+        document.querySelectorAll("[data-preset]").forEach((btn) => {
+            btn.addEventListener("click", () => applyPreset(btn.dataset.preset));
         });
-        
-        dayTempSlider.addEventListener('input', () => {
-            simulationState.dayTemperature = parseInt(dayTempSlider.value);
-            dayTempValue.textContent = simulationState.dayTemperature + '°C';
+
+        const btnPause = document.getElementById("btnPause");
+        btnPause.addEventListener("click", () => {
+            paused = !paused;
+            btnPause.textContent = paused ? "Resume" : "Pause";
+            btnPause.classList.toggle("active", paused);
         });
-        
-        nightTempSlider.addEventListener('input', () => {
-            simulationState.nightTemperature = parseInt(nightTempSlider.value);
-            nightTempValue.textContent = simulationState.nightTemperature + '°C';
+        document.getElementById("btnReset").addEventListener("click", reset);
+
+        const help = document.getElementById("help");
+        document.getElementById("btnHelp").addEventListener("click", () => help.classList.add("open"));
+        document.getElementById("helpClose").addEventListener("click", () => help.classList.remove("open"));
+        help.addEventListener("click", (e) => { if (e.target === help) help.classList.remove("open"); });
+
+        document.getElementById("btnControls").addEventListener("click", () => {
+            document.getElementById("sidebar").classList.toggle("open");
+            document.getElementById("stats").classList.remove("open");
         });
-        
-        evapRateSlider.addEventListener('input', () => {
-            simulationState.evaporationRate = parseFloat(evapRateSlider.value);
-            evapRateValue.textContent = simulationState.evaporationRate.toFixed(1) + 'x';
+        document.getElementById("btnStats").addEventListener("click", () => {
+            document.getElementById("stats").classList.toggle("open");
+            document.getElementById("sidebar").classList.remove("open");
         });
-        
-        altModSlider.addEventListener('input', () => {
-            simulationState.altitudeModifier = parseFloat(altModSlider.value);
-            altModValue.textContent = simulationState.altitudeModifier.toFixed(1) + 'x';
+
+        window.addEventListener("keydown", (e) => {
+            if (e.target.matches("input, textarea")) return;
+            if (e.code === "Space") {
+                e.preventDefault();
+                btnPause.click();
+            } else if (e.key === "r" || e.key === "R") reset();
+            else if (e.key === "l" || e.key === "L") {
+                const box = document.getElementById("labels");
+                box.checked = !box.checked;
+                params.labels = box.checked;
+            } else if (e.key === "Escape") help.classList.remove("open");
         });
-        
-        totalWaterSlider.addEventListener('input', () => {
-            const newTotal = parseInt(totalWaterSlider.value);
-            // Adjust the amount of water proportionally
-            const ratio = newTotal / simulationState.totalWater;
-            
-            simulationState.cloudWater *= ratio;
-            simulationState.rainWater *= ratio;
-            simulationState.poolWaters = simulationState.poolWaters.map(w => w * ratio);
-            simulationState.evaporatingWater *= ratio;
-            
-            simulationState.totalWater = newTotal;
-            totalWaterValue.textContent = simulationState.totalWater + ' units';
-        });
-        
-        resetBtn.addEventListener('click', initSimulation);
-        
-        // Start the simulation
-        initSimulation();
-        update();
+
+        const ro = new ResizeObserver(resize);
+        ro.observe(canvas.parentElement);
+        resize();
+        markPreset("temperate");
+        reset();
+        requestAnimationFrame(loop);
+    })();
     </script>
 </body>
 </html>

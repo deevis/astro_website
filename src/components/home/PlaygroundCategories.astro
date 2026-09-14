@@ -1,0 +1,107 @@
+---
+import Card from '../Card.astro';
+import { playgroundCategories } from '../../config/catalog';
+import { playgroundHref, cardAsset, showcasesInCategory, type ShowcaseItem } from '../../lib/showcases';
+
+interface Props {
+  showcases: ShowcaseItem[];
+}
+
+const { showcases } = Astro.props;
+
+const grouped = playgroundCategories.map((category) => ({
+  ...category,
+  items: showcasesInCategory(showcases, category.id).slice(0, 3),
+}));
+---
+
+<section id="playground" class="py-12 scroll-mt-28">
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-6">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-bold">Playground</h2>
+      <p class="text-gray-600 dark:text-gray-400 mt-1 max-w-2xl">
+        Experiments grouped by what they are, not just the three most recent.
+      </p>
+    </div>
+    <a href="/playground" class="text-primary-600 dark:text-primary-400 hover:underline shrink-0">
+      Browse everything →
+    </a>
+  </div>
+
+  <div class="flex flex-wrap gap-2 mb-6" role="tablist" aria-label="Playground categories">
+    {grouped.map((category, index) => (
+      <button
+        type="button"
+        role="tab"
+        class:list={[
+          'playground-tab px-4 py-2 text-sm rounded-full border transition-colors',
+          index === 0
+            ? 'bg-primary-600 text-white border-primary-600'
+            : 'bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-300 border-gray-200 dark:border-dark-700'
+        ]}
+        data-category={category.id}
+        aria-selected={index === 0 ? 'true' : 'false'}
+      >
+        {category.label}
+      </button>
+    ))}
+  </div>
+
+  {grouped.map((category, index) => (
+    <div
+      class:list={['playground-panel', index === 0 ? '' : 'hidden']}
+      data-panel={category.id}
+      role="tabpanel"
+    >
+      <p class="text-sm text-gray-500 dark:text-gray-400 mb-4">{category.blurb}</p>
+      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
+        {category.items.map((item) => (
+          <Card
+            title={item.title}
+            description={item.description}
+            image={cardAsset(item.image)}
+            imageAlt={item.title}
+            href={playgroundHref(item.href)}
+            tags={item.tags}
+          />
+        ))}
+      </div>
+      <div class="mt-4">
+        <a
+          href={`/playground?category=${category.id}`}
+          class="text-sm text-primary-600 dark:text-primary-400 hover:underline"
+        >
+          All {category.label.toLowerCase()} →
+        </a>
+      </div>
+    </div>
+  ))}
+</section>
+
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+    const tabs = document.querySelectorAll<HTMLButtonElement>('.playground-tab');
+    const panels = document.querySelectorAll<HTMLElement>('.playground-panel');
+    const active = ['bg-primary-600', 'text-white', 'border-primary-600'];
+    const idle = ['bg-white', 'dark:bg-dark-800', 'text-gray-700', 'dark:text-gray-300', 'border-gray-200', 'dark:border-dark-700'];
+
+    function paint() {
+      tabs.forEach((tab) => {
+        const selected = tab.getAttribute('aria-selected') === 'true';
+        active.forEach((cls) => tab.classList.toggle(cls, selected));
+        idle.forEach((cls) => tab.classList.toggle(cls, !selected));
+      });
+    }
+
+    tabs.forEach((tab) => {
+      tab.addEventListener('click', () => {
+        const id = tab.dataset.category;
+        tabs.forEach((other) => other.setAttribute('aria-selected', other === tab ? 'true' : 'false'));
+        panels.forEach((panel) => panel.classList.toggle('hidden', panel.dataset.panel !== id));
+        paint();
+      });
+    });
+
+    paint();
+  });
+</script>

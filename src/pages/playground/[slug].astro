@@ -1,0 +1,84 @@
+---
+import PlaygroundFrame from '../../layouts/PlaygroundFrame.astro';
+import { showcases } from '../../config/showcases.json';
+import { publicAsset, showcaseSlug } from '../../lib/showcases';
+
+export function getStaticPaths() {
+  return showcases.map((showcase) => ({
+    params: { slug: showcaseSlug(showcase.href) },
+    props: { showcase }
+  }));
+}
+
+const { showcase } = Astro.props;
+const src = publicAsset(showcase.href);
+const isArticle = showcase.category === 'article';
+const backHref = isArticle ? '/articles' : '/playground';
+const backLabel = isArticle ? '← Articles' : '← Playground';
+---
+
+<PlaygroundFrame title={`${showcase.title} | ${isArticle ? 'Article' : 'Playground'}`} description={showcase.description}>
+  <div class="playground-toolbar">
+    <a href={backHref} class="toolbar-link">{backLabel}</a>
+    <h1>{showcase.title}</h1>
+    <a href={src} class="toolbar-link standalone" target="_blank" rel="noopener noreferrer">Open standalone</a>
+  </div>
+  <iframe
+    class="playground-frame"
+    src={src}
+    title={showcase.title}
+    allow="fullscreen; pointer-lock; autoplay; clipboard-write; accelerometer; gyroscope"
+    allowfullscreen
+  ></iframe>
+</PlaygroundFrame>
+
+<style>
+  .playground-toolbar {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    height: 40px;
+    padding: 0 14px;
+    border-bottom: 1px solid rgb(229 231 235);
+    background: rgb(249 250 251);
+    flex-shrink: 0;
+  }
+
+  :global(.dark) .playground-toolbar {
+    border-bottom-color: rgb(31 41 55);
+    background: rgb(17 24 39);
+  }
+
+  .playground-toolbar h1 {
+    min-width: 0;
+    flex: 1;
+    font-size: 13px;
+    font-weight: 600;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+
+  .toolbar-link {
+    flex-shrink: 0;
+    font-size: 12px;
+    font-weight: 600;
+    color: rgb(37 99 235);
+  }
+
+  :global(.dark) .toolbar-link {
+    color: rgb(147 197 253);
+  }
+
+  .toolbar-link.standalone {
+    margin-left: auto;
+  }
+
+  .playground-frame {
+    flex: 1;
+    width: 100%;
+    min-height: 0;
+    border: 0;
+    background: #0b1017;
+  }
+</style>

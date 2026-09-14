@@ -1,41 +1,50 @@
 ---
 import ThemeToggle from './ThemeToggle.astro';
+import TickerToggle from './TickerToggle.astro';
+import { apps, bitcoinResources, developerTools } from '../config/catalog';
+import { showcases } from '../config/showcases.json';
+import { homeGameSlides, type ShowcaseItem } from '../lib/showcases';
 
-const links = [
-  { href: '/', text: 'Home' },
-  { href: '/articles', text: 'Articles' },
-  { href: '/news', text: 'News' },
-  // Developer Tools and Bitcoin dropdowns will be handled separately
-  { href: '/gallery', text: 'Gallery' },
-  { href: '/showcase', text: 'HTML Showcase' },
-  { href: '/about', text: 'About Me' },
+interface NavLink {
+  href: string;
+  text: string;
+}
+
+interface NavDropdown {
+  type: 'dropdown';
+  id: string;
+  label: string;
+  items: NavLink[];
+}
+
+interface NavPlain {
+  type: 'link';
+  href: string;
+  text: string;
+}
+
+type NavItem = NavDropdown | NavPlain;
+
+const gameLinks: NavLink[] = homeGameSlides(showcases as ShowcaseItem[]).map((game) => ({
+  href: game.href,
+  text: game.title,
+}));
+
+const navItems: NavItem[] = [
+  { type: 'dropdown', id: 'games', label: 'Games', items: gameLinks },
+  { type: 'link', href: '/playground', text: 'Playground' },
+  { type: 'dropdown', id: 'apps', label: 'Apps', items: apps.map((item) => ({ href: item.href, text: item.title })) },
+  { type: 'dropdown', id: 'devtools', label: 'Developer Tools', items: developerTools.map((item) => ({ href: item.href, text: item.title })) },
+  { type: 'link', href: '/news', text: 'News' },
+  { type: 'dropdown', id: 'bitcoin', label: 'Bitcoin', items: bitcoinResources.map((item) => ({ href: item.href, text: item.title })) },
+  { type: 'link', href: '/gallery', text: 'Gallery' },
+  { type: 'link', href: '/about', text: 'About Me' },
 ];
 
-const developerToolsDropdown = [
-  { href: '/language-showdown', text: 'Language Showdown' },
-  { href: '/tools/base64', text: 'Base64 Encoder/Decoder' },
-  { href: '/tools/string-escape', text: 'String Escape/Unescape' },
-  { href: '/tools/json-formatter', text: 'JSON Formatter/Converter' },
-  { href: '/tools/qr-code', text: 'QR Code Generator/Scanner' },
-  { href: '/tools/hex-converter', text: 'Hex Converter (OP_RETURN)' },
-];
-
-const bitcoinDropdown = [
-  { href: '/bitcoin-tutorial', text: 'Bitcoin Tutorial' },
-  { href: '/bitcoin-blockchain-tutorial', text: 'Bitcoin Blockchain Tutorial' },
-  { href: '/bitcoin-hardware-wallet-showdown', text: 'Hardware Wallet Showdown' },
-  { href: '/bitcoin-dca-what-if', text: 'Bitcoin DCA Scenarios' },
-  { href: '/bitcoin-resources', text: 'Bitcoin Resources' },
-  { href: '/bitcoin-large-op-returns-explorer', text: 'Large OP_RETURN Explorer' },
-  { href: '/bip-110-miner-support', text: 'BIP 110 Miner Support' },
-];
-
-const appsDropdown = [
-  { href: '/apps/pink-noise-generator', text: 'Pink Noise Generator' },
-  { href: '/apps/reaction-trainer', text: 'Reaction Trainer' },
-  { href: '/apps/memory-challenge', text: 'Memory Challenge' },
-  { href: '/apps/furnace-tier-list', text: 'Furnace Tier List' },
-];
+const linkClass = 'text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors';
+const dropItemClass = 'block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg';
+const mobileLinkClass = 'block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors';
+const mobileSubLinkClass = 'block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors';
 ---
 
 <header class="fixed w-full bg-white/80 dark:bg-gray-900/80 backdrop-blur-md shadow-sm z-50">
@@ -43,101 +52,38 @@ const appsDropdown = [
     <div class="flex items-center justify-between">
       <a href="/" class="text-2xl font-bold text-primary-600 dark:text-primary-400">darrenhicks.dev</a>
       
-      <div class="hidden md:flex items-center space-x-8">
-        <a
-          href="/articles"
-          class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-        >
-          Articles
-        </a>
-        
-        <!-- Developer Tools Dropdown -->
-        <div class="relative group">
-          <button
-            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            Developer Tools
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          
-          <!-- Dropdown Menu -->
-          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-            {developerToolsDropdown.map(item => (
-              <a
-                href={item.href}
-                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
-              >
-                {item.text}
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <!-- Bitcoin Dropdown -->
-        <div class="relative group">
-          <button
-            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            Bitcoin
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          
-          <!-- Dropdown Menu -->
-          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-            {bitcoinDropdown.map(item => (
-              <a
-                href={item.href}
-                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
-              >
-                {item.text}
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        <!-- Apps Dropdown -->
-        <div class="relative group">
-          <button
-            class="flex items-center text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            Apps
-            <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-            </svg>
-          </button>
-          
-          <!-- Dropdown Menu -->
-          <div class="absolute left-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
-            {appsDropdown.map(item => (
-              <a
-                href={item.href}
-                class="block px-4 py-3 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-700 hover:text-primary-600 dark:hover:text-primary-400 transition-colors first:rounded-t-lg last:rounded-b-lg"
-              >
-                {item.text}
-              </a>
-            ))}
-          </div>
-        </div>
-        
-        {links.slice(2).map(link => (
-          <a
-            href={link.href}
-            class="text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-          >
-            {link.text}
-          </a>
+      <div class="hidden md:flex items-center space-x-5 lg:space-x-7">
+        {navItems.map((item) => (
+          item.type === 'link' ? (
+            <a href={item.href} class={linkClass}>
+              {item.text}
+            </a>
+          ) : (
+            <div class="relative group">
+              <button class={`flex items-center ${linkClass}`}>
+                {item.label}
+                <svg class="w-4 h-4 ml-1 transition-transform group-hover:rotate-180" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+                </svg>
+              </button>
+              <div class="absolute left-0 mt-2 w-56 max-h-[70vh] overflow-y-auto bg-white dark:bg-gray-800 rounded-lg shadow-lg border border-gray-200 dark:border-gray-700 opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 transform translate-y-1 group-hover:translate-y-0">
+                {item.items.map((entry) => (
+                  <a href={entry.href} class={dropItemClass}>
+                    {entry.text}
+                  </a>
+                ))}
+              </div>
+            </div>
+          )
         ))}
-        <ThemeToggle />
       </div>
 
-      <div class="md:hidden flex items-center space-x-4">
+      <div class="flex items-center gap-1">
+        <TickerToggle />
+        <ThemeToggle />
         <button
           id="mobile-menu-button"
-          class="p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer touch-manipulation"
+          class="md:hidden p-3 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-800 cursor-pointer touch-manipulation"
           type="button"
           aria-label="Toggle mobile menu"
           aria-expanded="false"
@@ -159,112 +105,39 @@ const appsDropdown = [
       </div>
     </div>
 
-    <!-- Mobile Menu -->
     <div
       id="mobile-menu"
       class="hidden md:hidden mt-4 space-y-4"
     >
-      <a
-        href="/articles"
-        class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-      >
-        Articles
-      </a>
-      <a
-        href="/news"
-        class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-      >
-        News
-      </a>
-      
-      <!-- Developer Tools Mobile Dropdown -->
-      <div class="space-y-2">
-        <button
-          id="mobile-devtools-toggle"
-          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
-          type="button"
-          aria-label="Toggle Developer Tools menu"
-          aria-expanded="false"
-        >
-          Developer Tools
-          <svg id="mobile-devtools-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        
-        <div id="mobile-devtools-menu" class="hidden pl-4 space-y-2">
-          {developerToolsDropdown.map(item => (
-            <a
-              href={item.href}
-              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
+      {navItems.map((item) => (
+        item.type === 'link' ? (
+          <a href={item.href} class={mobileLinkClass}>
+            {item.text}
+          </a>
+        ) : (
+          <div class="space-y-2">
+            <button
+              id={`mobile-${item.id}-toggle`}
+              class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
+              type="button"
+              aria-label={`Toggle ${item.label} menu`}
+              aria-expanded="false"
+              data-mobile-dropdown={item.id}
             >
-              {item.text}
-            </a>
-          ))}
-        </div>
-      </div>
-      
-      <!-- Bitcoin Mobile Dropdown -->
-      <div class="space-y-2">
-        <button
-          id="mobile-bitcoin-toggle"
-          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
-          type="button"
-          aria-label="Toggle Bitcoin menu"
-          aria-expanded="false"
-        >
-          Bitcoin
-          <svg id="mobile-bitcoin-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        
-        <div id="mobile-bitcoin-menu" class="hidden pl-4 space-y-2">
-          {bitcoinDropdown.map(item => (
-            <a
-              href={item.href}
-              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {item.text}
-            </a>
-          ))}
-        </div>
-      </div>
-      
-      <!-- Apps Mobile Dropdown -->
-      <div class="space-y-2">
-        <button
-          id="mobile-apps-toggle"
-          class="flex items-center justify-between w-full py-3 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors cursor-pointer touch-manipulation"
-          type="button"
-          aria-label="Toggle Apps menu"
-          aria-expanded="false"
-        >
-          Apps
-          <svg id="mobile-apps-arrow" class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
-          </svg>
-        </button>
-        
-        <div id="mobile-apps-menu" class="hidden pl-4 space-y-2">
-          {appsDropdown.map(item => (
-            <a
-              href={item.href}
-              class="block py-2 text-gray-500 dark:text-gray-400 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-            >
-              {item.text}
-            </a>
-          ))}
-        </div>
-      </div>
-      
-      {links.slice(2).map(link => (
-        <a
-          href={link.href}
-          class="block py-2 text-gray-600 dark:text-gray-300 hover:text-primary-600 dark:hover:text-primary-400 transition-colors"
-        >
-          {link.text}
-        </a>
+              {item.label}
+              <svg id={`mobile-${item.id}-arrow`} class="w-4 h-4 transition-transform pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path>
+              </svg>
+            </button>
+            <div id={`mobile-${item.id}-menu`} class="hidden pl-4 space-y-2">
+              {item.items.map((entry) => (
+                <a href={entry.href} class={mobileSubLinkClass}>
+                  {entry.text}
+                </a>
+              ))}
+            </div>
+          </div>
+        )
       ))}
     </div>
   </nav>
@@ -272,145 +145,49 @@ const appsDropdown = [
 
 <script>
   document.addEventListener('DOMContentLoaded', function() {
-    console.log('Navigation script loaded');
-    
     const button = document.getElementById('mobile-menu-button');
     const menu = document.getElementById('mobile-menu');
-    const devToolsToggle = document.getElementById('mobile-devtools-toggle');
-    const devToolsMenu = document.getElementById('mobile-devtools-menu');
-    const devToolsArrow = document.getElementById('mobile-devtools-arrow');
-    const bitcoinToggle = document.getElementById('mobile-bitcoin-toggle');
-    const bitcoinMenu = document.getElementById('mobile-bitcoin-menu');
-    const bitcoinArrow = document.getElementById('mobile-bitcoin-arrow');
-    const appsToggle = document.getElementById('mobile-apps-toggle');
-    const appsMenu = document.getElementById('mobile-apps-menu');
-    const appsArrow = document.getElementById('mobile-apps-arrow');
-
-    console.log('Elements found:', {
-      button: !!button,
-      menu: !!menu,
-      devToolsToggle: !!devToolsToggle,
-      devToolsMenu: !!devToolsMenu,
-      devToolsArrow: !!devToolsArrow,
-      bitcoinToggle: !!bitcoinToggle,
-      bitcoinMenu: !!bitcoinMenu,
-      bitcoinArrow: !!bitcoinArrow,
-      appsToggle: !!appsToggle,
-      appsMenu: !!appsMenu,
-      appsArrow: !!appsArrow
-    });
 
     function toggleMobileMenu(e) {
-      console.log('toggleMobileMenu called', e.type);
       e.preventDefault();
       e.stopPropagation();
       if (menu) {
         const isHidden = menu.classList.contains('hidden');
-        console.log('Menu currently hidden:', isHidden);
         menu.classList.toggle('hidden');
-        console.log('Menu hidden after toggle:', menu.classList.contains('hidden'));
-        
-        // Update aria-expanded attribute
         if (button) {
           button.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
         }
-        
-        // Add visual debugging - temporarily change button color
-        if (button) {
-          button.style.backgroundColor = isHidden ? 'red' : 'blue';
-          setTimeout(() => {
-            button.style.backgroundColor = '';
-          }, 1000);
-        }
       }
     }
 
-    function toggleDevToolsMenu(e) {
-      console.log('toggleDevToolsMenu called', e.type);
-      e.preventDefault();
-      e.stopPropagation();
-      if (devToolsMenu && devToolsArrow) {
-        const isHidden = devToolsMenu.classList.contains('hidden');
-        devToolsMenu.classList.toggle('hidden');
-        devToolsArrow.classList.toggle('rotate-180');
-        
-        // Update aria-expanded attribute
-        if (devToolsToggle) {
-          devToolsToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-        }
-      }
-    }
+    function bindDropdown(id) {
+      const toggle = document.getElementById(`mobile-${id}-toggle`);
+      const submenu = document.getElementById(`mobile-${id}-menu`);
+      const arrow = document.getElementById(`mobile-${id}-arrow`);
+      if (!toggle || !submenu || !arrow) return;
 
-    function toggleBitcoinMenu(e) {
-      console.log('toggleBitcoinMenu called', e.type);
-      e.preventDefault();
-      e.stopPropagation();
-      if (bitcoinMenu && bitcoinArrow) {
-        const isHidden = bitcoinMenu.classList.contains('hidden');
-        bitcoinMenu.classList.toggle('hidden');
-        bitcoinArrow.classList.toggle('rotate-180');
-        
-        // Update aria-expanded attribute
-        if (bitcoinToggle) {
-          bitcoinToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-        }
+      function toggleMenu(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        const isHidden = submenu.classList.contains('hidden');
+        submenu.classList.toggle('hidden');
+        arrow.classList.toggle('rotate-180');
+        toggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
       }
-    }
 
-    function toggleAppsMenu(e) {
-      console.log('toggleAppsMenu called', e.type);
-      e.preventDefault();
-      e.stopPropagation();
-      if (appsMenu && appsArrow) {
-        const isHidden = appsMenu.classList.contains('hidden');
-        appsMenu.classList.toggle('hidden');
-        appsArrow.classList.toggle('rotate-180');
-        
-        // Update aria-expanded attribute
-        if (appsToggle) {
-          appsToggle.setAttribute('aria-expanded', isHidden ? 'true' : 'false');
-        }
-      }
+      toggle.addEventListener('click', toggleMenu);
+      toggle.addEventListener('touchstart', toggleMenu, { passive: false });
     }
 
     if (button && menu) {
-      console.log('Adding event listeners to hamburger button');
-      // Add both click and touchstart for maximum compatibility
       button.addEventListener('click', toggleMobileMenu);
       button.addEventListener('touchstart', toggleMobileMenu, { passive: false });
-      
-      // Add additional touch events for debugging
-      button.addEventListener('touchend', function(e) {
-        console.log('touchend on button');
-      });
-      
-      console.log('Event listeners added successfully');
-    } else {
-      console.error('Button or menu not found!', { button, menu });
     }
 
-    if (devToolsToggle && devToolsMenu && devToolsArrow) {
-      console.log('Adding event listeners to developer tools toggle');
-      // Add both click and touchstart for maximum compatibility
-      devToolsToggle.addEventListener('click', toggleDevToolsMenu);
-      devToolsToggle.addEventListener('touchstart', toggleDevToolsMenu, { passive: false });
-    }
+    document.querySelectorAll('[data-mobile-dropdown]').forEach((el) => {
+      bindDropdown(el.getAttribute('data-mobile-dropdown'));
+    });
 
-    if (bitcoinToggle && bitcoinMenu && bitcoinArrow) {
-      console.log('Adding event listeners to bitcoin toggle');
-      // Add both click and touchstart for maximum compatibility
-      bitcoinToggle.addEventListener('click', toggleBitcoinMenu);
-      bitcoinToggle.addEventListener('touchstart', toggleBitcoinMenu, { passive: false });
-    }
-
-    if (appsToggle && appsMenu && appsArrow) {
-      console.log('Adding event listeners to apps toggle');
-      // Add both click and touchstart for maximum compatibility
-      appsToggle.addEventListener('click', toggleAppsMenu);
-      appsToggle.addEventListener('touchstart', toggleAppsMenu, { passive: false });
-    }
-
-    // Close mobile menu when clicking outside
     document.addEventListener('click', function(e) {
       if (menu && button && e.target instanceof Element) {
         if (!menu.contains(e.target) && !button.contains(e.target)) {
@@ -419,12 +196,5 @@ const appsDropdown = [
         }
       }
     });
-
-    // Add global touch debugging
-    document.addEventListener('touchstart', function(e) {
-      if (e.target instanceof HTMLElement) {
-        console.log('Global touchstart detected on:', e.target.tagName, e.target.id || e.target.className);
-      }
-    }, { passive: true });
   });
 </script>

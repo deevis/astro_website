@@ -1,0 +1,131 @@
+---
+import { developerToolGroups, developerTools } from '../../config/catalog';
+
+const badgeClass =
+  'px-3 py-1 rounded-full bg-white/80 dark:bg-dark-800 border border-gray-200 dark:border-dark-700 text-gray-600 dark:text-gray-300 hover:border-primary-400';
+
+const groupedTools = developerToolGroups.map((group) => ({
+  ...group,
+  tools: developerTools.filter((tool) => tool.group === group.id),
+}));
+
+const columns = [
+  groupedTools.filter((group) => group.id === 'encode' || group.id === 'time'),
+  groupedTools.filter((group) => group.id === 'data' || group.id === 'reference'),
+];
+---
+
+<button
+  type="button"
+  id="tools-picker-open"
+  class={badgeClass}
+  aria-haspopup="dialog"
+  aria-controls="tools-picker"
+>
+  Developer Tools
+</button>
+
+<dialog
+  id="tools-picker"
+  class="tools-picker"
+  aria-labelledby="tools-picker-title"
+>
+  <div class="tools-picker-panel w-[min(94vw,44rem)] rounded-2xl border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 text-left text-gray-900 dark:text-gray-100 shadow-2xl">
+    <div class="flex items-start justify-between gap-4 px-5 pt-5 pb-3 border-b border-gray-100 dark:border-dark-700">
+      <div>
+        <h2 id="tools-picker-title" class="text-lg font-bold">Developer Tools</h2>
+        <p class="text-xs text-gray-500 dark:text-gray-400 mt-1">Runs in your browser · nothing is uploaded</p>
+      </div>
+      <button
+        type="button"
+        id="tools-picker-close"
+        class="shrink-0 p-1.5 rounded-lg text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-dark-700"
+        aria-label="Close developer tools"
+      >
+        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden="true">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path>
+        </svg>
+      </button>
+    </div>
+    <nav class="grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-5 p-5" aria-label="Developer tools">
+      {columns.map((column) => (
+        <div class="space-y-5">
+          {column.map((group) => (
+            <section>
+              <h3 class="text-[11px] font-semibold uppercase tracking-[0.16em] text-primary-600 dark:text-primary-400 mb-1.5">
+                {group.label}
+              </h3>
+              <div class="space-y-0.5">
+                {group.tools.map((tool) => (
+                  <a
+                    href={tool.href}
+                    class="flex flex-col gap-0.5 rounded-xl px-2.5 py-2 hover:bg-gray-50 dark:hover:bg-dark-900 transition-colors"
+                  >
+                    <span class="font-semibold text-sm text-gray-900 dark:text-white">{tool.title}</span>
+                    <span class="text-xs text-gray-500 dark:text-gray-400">{tool.tagline}</span>
+                  </a>
+                ))}
+              </div>
+            </section>
+          ))}
+        </div>
+      ))}
+    </nav>
+  </div>
+</dialog>
+
+<style is:global>
+  #tools-picker {
+    margin: 0;
+    padding: 1.25rem;
+    width: 100vw;
+    height: 100vh;
+    max-width: none;
+    max-height: none;
+    background: transparent;
+    border: 0;
+  }
+
+  #tools-picker[open] {
+    display: grid;
+    place-items: center;
+  }
+
+  #tools-picker::backdrop {
+    background: rgb(0 0 0 / 0.45);
+    backdrop-filter: blur(4px);
+  }
+</style>
+
+<script>
+  const dialog = document.getElementById('tools-picker') as HTMLDialogElement | null;
+  const panel = dialog?.querySelector('.tools-picker-panel');
+  const openBtn = document.getElementById('tools-picker-open');
+  const closeBtn = document.getElementById('tools-picker-close');
+
+  function openPicker() {
+    if (!dialog?.open) dialog?.showModal();
+  }
+
+  function closePicker() {
+    if (dialog?.open) dialog.close();
+  }
+
+  function clickedOutside(event: Event) {
+    const target = event.target;
+    if (!(target instanceof Node) || !dialog) return false;
+    if (target === dialog) return true;
+    return !!(panel && !panel.contains(target));
+  }
+
+  openBtn?.addEventListener('click', openPicker);
+  closeBtn?.addEventListener('click', closePicker);
+  dialog?.addEventListener('pointerdown', (event) => {
+    if (clickedOutside(event)) closePicker();
+  });
+
+  if (location.hash === '#tools') openPicker();
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#tools') openPicker();
+  });
+</script>

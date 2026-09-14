@@ -1,0 +1,2332 @@
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>The Wheel of Empires | Expanded Anacyclosis & Generational Simulator</title>
+  
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Google Fonts: Cinzel, Playfair Display, Inter, & JetBrains Mono -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;900&family=Cinzel+Decorative:wght@700&family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          colors: {
+            regal: {
+              950: '#07090e',
+              900: '#0f1422',
+              850: '#151c2e',
+              800: '#1b243b',
+              700: '#283655',
+            },
+            gold: {
+              300: '#fde047',
+              400: '#facc15',
+              500: '#eab308',
+              600: '#ca8a04',
+              700: '#a16207',
+            },
+            parchment: {
+              100: '#fbf7ee',
+              200: '#f4ecd8',
+              300: '#e8dbba',
+              800: '#383022',
+              900: '#211c14',
+            }
+          },
+          fontFamily: {
+            serif: ['Cinzel', 'serif'],
+            display: ['"Cinzel Decorative"', 'Cinzel', 'serif'],
+            editorial: ['"Playfair Display"', 'Georgia', 'serif'],
+            sans: ['Inter', 'sans-serif'],
+            mono: ['"JetBrains Mono"', 'monospace'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    html { font-size: 15px; }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar { width: 8px; height: 8px; }
+    ::-webkit-scrollbar-track { background: #07090e; }
+    ::-webkit-scrollbar-thumb { background: #283655; border-radius: 4px; }
+    ::-webkit-scrollbar-thumb:hover { background: #ca8a04; }
+
+    /* Vintage Paper Texture and Newspaper Aesthetics */
+    .newsprint {
+      background-color: #f5eedb;
+      color: #1a1612;
+      background-image: radial-gradient(#d6c7a7 1px, transparent 1px);
+      background-size: 8px 8px;
+    }
+    .newspaper-border {
+      border-top: 3px double #1a1612;
+      border-bottom: 3px double #1a1612;
+    }
+
+    /* Subtle classical glows */
+    .glow-gold { box-shadow: 0 0 25px rgba(234, 179, 8, 0.22); }
+    .glow-crimson { box-shadow: 0 0 25px rgba(220, 38, 38, 0.28); }
+    .glow-emerald { box-shadow: 0 0 25px rgba(16, 185, 129, 0.25); }
+
+    /* Keyframe Animations */
+    @keyframes spinWheel {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+    .animate-spin-slow {
+      animation: spinWheel 160s linear infinite;
+    }
+
+    @keyframes gazetteDrop {
+      from { opacity: 0; transform: translateY(28px) scale(0.97); }
+      to { opacity: 1; transform: none; }
+    }
+    .gazette-enter { animation: gazetteDrop 0.45s ease-out; }
+  </style>
+</head>
+
+<body class="bg-regal-950 text-slate-200 font-sans min-h-screen antialiased selection:bg-gold-500 selection:text-black">
+
+  <script>
+    const SoundBox = {
+      ctx: null,
+      muted: false,
+      init() {
+        if (!this.ctx) {
+          const AudioContext = window.AudioContext || window.webkitAudioContext;
+          if (AudioContext) this.ctx = new AudioContext();
+        }
+        if (this.ctx && this.ctx.state === 'suspended') {
+          this.ctx.resume();
+        }
+      },
+      play(type = 'click') {
+        if (this.muted) return;
+        try {
+          this.init();
+          if (!this.ctx) return;
+          const t = this.ctx.currentTime;
+          const osc = this.ctx.createOscillator();
+          const gain = this.ctx.createGain();
+          osc.connect(gain);
+          gain.connect(this.ctx.destination);
+
+          if (type === 'virtue') {
+            osc.type = 'triangle';
+            osc.frequency.setValueAtTime(523.25, t); // C5
+            osc.frequency.exponentialRampToValueAtTime(1046.5, t + 0.35); // C6
+            gain.gain.setValueAtTime(0.18, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.45);
+            osc.start(t);
+            osc.stop(t + 0.45);
+          } else if (type === 'decay') {
+            osc.type = 'sawtooth';
+            osc.frequency.setValueAtTime(260, t);
+            osc.frequency.exponentialRampToValueAtTime(110, t + 0.35);
+            gain.gain.setValueAtTime(0.2, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.4);
+            osc.start(t);
+            osc.stop(t + 0.4);
+          } else if (type === 'revolution') {
+            osc.type = 'square';
+            osc.frequency.setValueAtTime(140, t);
+            osc.frequency.linearRampToValueAtTime(65, t + 0.5);
+            gain.gain.setValueAtTime(0.28, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.6);
+            osc.start(t);
+            osc.stop(t + 0.6);
+          } else {
+            // Standard crisp click
+            osc.type = 'sine';
+            osc.frequency.setValueAtTime(800, t);
+            gain.gain.setValueAtTime(0.08, t);
+            gain.gain.exponentialRampToValueAtTime(0.001, t + 0.06);
+            osc.start(t);
+            osc.stop(t + 0.06);
+          }
+        } catch(e) {
+          // Audio policy silent catch
+        }
+      }
+    };
+  </script>
+
+  <nav class="sticky top-0 z-40 bg-regal-900/90 backdrop-blur-md border-b border-gold-600/30 px-4 sm:px-8 py-2">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <a href="#hero" class="flex items-center gap-3 group">
+        <div class="w-9 h-9 rounded-xl border border-gold-500/80 bg-regal-850 flex items-center justify-center text-gold-400 font-serif font-bold text-base shadow-sm group-hover:scale-105 transition-transform">
+          VII
+        </div>
+        <div>
+          <span class="font-serif font-bold text-sm sm:text-base tracking-wider text-slate-100 group-hover:text-gold-400 transition-colors block">ANACYCLOSIS</span>
+          <span class="text-[10px] text-gold-500/80 tracking-widest font-mono uppercase block -mt-1">The Expanded 7-Pillar Cycle</span>
+        </div>
+      </a>
+
+      <!-- Desktop Links -->
+      <div class="hidden lg:flex items-center space-x-6 text-xs font-medium">
+        <a href="#cycle-explorer" class="text-slate-300 hover:text-gold-400 transition-colors">7-Stage Wheel</a>
+        <a href="#velocity-lab" class="text-slate-300 hover:text-gold-400 transition-colors">Velocity Sliders</a>
+        <a href="#simulator" class="text-slate-300 hover:text-gold-400 transition-colors">Generational Saga</a>
+        <a href="#period-dispatches" class="text-slate-300 hover:text-gold-400 transition-colors">Historical Gazettes</a>
+        <a href="#theoretical-essay" class="text-slate-300 hover:text-gold-400 transition-colors">Why Socialism Fits</a>
+        <a href="#mixed-constitution" class="text-slate-300 hover:text-gold-400 transition-colors">Rome's Antidote</a>
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex items-center space-x-3">
+        <button onclick="toggleAudioState()" id="audio-toggle-btn" class="px-2.5 py-1.5 rounded-lg border border-slate-700 bg-regal-850 text-slate-300 text-xs font-mono hover:border-gold-500 transition-all flex items-center gap-1.5" title="Toggle Sound">
+          <span id="audio-status-icon">🔊</span>
+          <span class="hidden sm:inline text-[11px]" id="audio-status-text">Audio: ON</span>
+        </button>
+
+        <button onclick="openVideoModal()" class="px-3 py-1.5 rounded-lg border border-red-500/60 bg-red-950/40 text-red-300 hover:bg-red-900/60 text-xs font-serif font-bold tracking-wide flex items-center gap-1.5 shadow-md transition-all">
+          <span>▶</span>
+          <span class="hidden sm:inline">Watch Documentary</span>
+        </button>
+
+        <a href="#simulator" onclick="SoundBox.play('virtue')" class="px-3.5 py-1.5 rounded-lg bg-gold-500 hover:bg-gold-400 text-regal-950 font-serif font-bold text-xs tracking-wider shadow-md transition-all">
+          Begin Saga
+        </a>
+      </div>
+    </div>
+  </nav>
+
+  <header id="hero" class="relative overflow-hidden pt-8 pb-10 border-b border-slate-800 bg-gradient-to-b from-regal-900 via-regal-950 to-regal-950 scroll-mt-20">
+    <div class="absolute inset-0 bg-[radial-gradient(ellipse_70%_60%_at_50%_-10%,rgba(234,179,8,0.12),rgba(255,255,255,0))] pointer-events-none"></div>
+    <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10">
+      
+      <div class="inline-flex items-center gap-2 px-3.5 py-1 rounded-full border border-gold-500/40 bg-regal-850 text-gold-300 text-xs font-mono uppercase tracking-widest mb-4">
+        <span>From Polybius (c. 150 BCE) to the 21st Century</span>
+      </div>
+
+      <h1 class="text-2xl sm:text-3xl lg:text-4xl font-display font-bold text-transparent bg-clip-text bg-gradient-to-r from-slate-100 via-gold-300 to-amber-500 tracking-tight leading-none mb-3">
+        THE WHEEL OF EMPIRES
+      </h1>
+
+      <p class="text-sm sm:text-base text-slate-300 max-w-3xl mx-auto font-light leading-relaxed mb-5">
+        No civilization falls overnight. Polybius revealed that pure regimes perish by their own internal success: virtue breeds ease, ease breeds entitlement, and entitlement invites catastrophe. Explore the complete 7-stage cycle through interactive simulations, generational sagas, historical news dispatches, and constitutional labs.
+      </p>
+
+      <div class="flex flex-wrap items-center justify-center gap-3 sm:gap-4">
+        <a href="#cycle-explorer" onclick="SoundBox.play('click')" class="px-6 py-3 rounded-xl bg-gold-500 hover:bg-gold-400 text-regal-950 font-serif font-bold text-xs sm:text-sm tracking-wider shadow-lg shadow-gold-500/20 transition-all">
+          EXPLORE 7-STAGE WHEEL
+        </a>
+        <a href="#simulator" onclick="SoundBox.play('virtue')" class="px-6 py-3 rounded-xl border border-gold-500/50 bg-regal-850 hover:bg-regal-800 text-gold-300 font-serif font-bold text-xs sm:text-sm tracking-wider transition-all">
+          LAUNCH GENERATIONAL SIMULATOR
+        </a>
+        <button onclick="openVideoModal()" class="px-5 py-3 rounded-xl border border-red-500/50 bg-red-950/30 hover:bg-red-900/40 text-red-300 font-serif text-xs sm:text-sm tracking-wider transition-all flex items-center gap-2">
+          <span>🎬</span> Video Overview
+        </button>
+      </div>
+
+      <!-- Quick Metrics Strip -->
+      <div class="mt-8 grid grid-cols-2 md:grid-cols-4 gap-3 text-left max-w-4xl mx-auto">
+        <div class="p-3.5 rounded-xl border border-slate-800 bg-regal-900/70">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-emerald-400 block">Classical Trio</span>
+          <span class="font-serif font-bold text-sm text-slate-100 mt-0.5 block">One, Few, Many</span>
+          <span class="text-[11px] text-slate-400">Pure regimes start virtuous</span>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-800 bg-regal-900/70">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-amber-400 block">Modern Sub-Phase</span>
+          <span class="font-serif font-bold text-sm text-slate-100 mt-0.5 block">The Welfare State</span>
+          <span class="text-[11px] text-slate-400">Democracy's clientelist slide</span>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-800 bg-regal-900/70">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-red-400 block">The Collapse Point</span>
+          <span class="font-serif font-bold text-sm text-slate-100 mt-0.5 block">Ochlocracy / Terror</span>
+          <span class="text-[11px] text-slate-400">Street tribunals & hyperinflation</span>
+        </div>
+        <div class="p-3.5 rounded-xl border border-slate-800 bg-regal-900/70">
+          <span class="text-[10px] font-mono uppercase tracking-widest text-cyan-400 block">The Antidote</span>
+          <span class="font-serif font-bold text-sm text-slate-100 mt-0.5 block">Mixed Constitution</span>
+          <span class="text-[11px] text-slate-400">Tripartite checks and balances</span>
+        </div>
+      </div>
+
+    </div>
+  </header>
+
+  <section id="cycle-explorer" class="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-4">
+      <div class="inline-block px-3 py-1 rounded bg-gold-500/10 border border-gold-500/30 text-gold-400 text-xs font-mono uppercase tracking-widest mb-2">
+        Interactive Sovereign Diagram
+      </div>
+      <h2 class="text-xl sm:text-2xl font-serif font-bold text-slate-100">
+        The Seven Archetypes of Political Metamorphosis
+      </h2>
+      <p class="text-sm text-slate-400 mt-2">
+        Click any node on the circular path below to highlight the governing structure, inspect its internal decay triggers, and preview its historical manifestations.
+      </p>
+    </div>
+
+    <!-- Main Wheel Interactive Grid -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-5 items-center">
+      
+      <!-- Left Column: SVG Wheel Graphic -->
+      <div class="lg:col-span-7 flex flex-col items-center justify-center relative">
+        <div class="relative w-full max-w-[min(360px,46svh)] aspect-square flex items-center justify-center p-2">
+          
+          <!-- Decorative Background Rings -->
+          <div class="absolute inset-2 rounded-full border border-gold-500/20 pointer-events-none"></div>
+          <div class="absolute inset-8 rounded-full border border-dashed border-slate-700/60 pointer-events-none animate-spin-slow"></div>
+
+          <!-- SVG Directed Cycle Graph -->
+          <svg id="svg-seven-wheel" class="w-full h-full" viewBox="0 0 520 520">
+            <defs>
+              <linearGradient id="grad-gold" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#facc15" />
+                <stop offset="100%" stop-color="#854d0e" />
+              </linearGradient>
+              <linearGradient id="grad-crimson" x1="0%" y1="0%" x2="100%" y2="100%">
+                <stop offset="0%" stop-color="#ef4444" />
+                <stop offset="100%" stop-color="#7f1d1d" />
+              </linearGradient>
+              <filter id="node-glow" x="-20%" y="-20%" width="140%" height="140%">
+                <feGaussianBlur stdDeviation="8" result="blur" />
+                <feComposite in="SourceGraphic" in2="blur" operator="over" />
+              </filter>
+            </defs>
+
+            <!-- 7-point circular trajectory path (R=195, Center=(260, 260)) -->
+            <path d="M 260,65 A 195,195 0 1,1 259.9,65" fill="none" stroke="#283655" stroke-width="4" stroke-dasharray="8,6" />
+
+            <!-- Active glowing indicator bead -->
+            <circle id="wheel-indicator-bead" cx="260" cy="65" r="10" fill="#facc15" filter="url(#node-glow)" class="transition-all duration-700 ease-out" />
+          </svg>
+
+          <!-- 7 Circular Interactive Nodes Positioned Absolutely -->
+          <!-- 0: Monarchy (Top Center) -->
+          <button id="btn-node-0" onclick="selectWheelStage(0)" class="absolute top-[4%] left-1/2 -translate-x-1/2 p-2.5 rounded-2xl bg-regal-900 border-2 border-gold-500 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">👑</span>
+            <span class="text-[11px] font-serif font-bold text-gold-300 block leading-tight">1. Monarchy</span>
+            <span class="text-[9px] text-emerald-400 font-mono block">Virtuous One</span>
+          </button>
+
+          <!-- 1: Tyranny (Top Right) -->
+          <button id="btn-node-1" onclick="selectWheelStage(1)" class="absolute top-[19%] right-[2%] p-2.5 rounded-2xl bg-regal-900 border-2 border-red-500/60 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">🗡️</span>
+            <span class="text-[11px] font-serif font-bold text-red-300 block leading-tight">2. Tyranny</span>
+            <span class="text-[9px] text-red-400 font-mono block">Despotic One</span>
+          </button>
+
+          <!-- 2: Aristocracy (Middle Right) -->
+          <button id="btn-node-2" onclick="selectWheelStage(2)" class="absolute bottom-[35%] right-[-3%] p-2.5 rounded-2xl bg-regal-900 border-2 border-blue-500/60 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">🏛️</span>
+            <span class="text-[11px] font-serif font-bold text-blue-300 block leading-tight">3. Aristocracy</span>
+            <span class="text-[9px] text-emerald-400 font-mono block">Virtuous Few</span>
+          </button>
+
+          <!-- 3: Oligarchy (Bottom Right) -->
+          <button id="btn-node-3" onclick="selectWheelStage(3)" class="absolute bottom-[4%] right-[16%] p-2.5 rounded-2xl bg-regal-900 border-2 border-amber-600/60 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">💰</span>
+            <span class="text-[11px] font-serif font-bold text-amber-300 block leading-tight">4. Oligarchy</span>
+            <span class="text-[9px] text-amber-500 font-mono block">Corrupt Few</span>
+          </button>
+
+          <!-- 4: Democracy (Bottom Left) -->
+          <button id="btn-node-4" onclick="selectWheelStage(4)" class="absolute bottom-[4%] left-[16%] p-2.5 rounded-2xl bg-regal-900 border-2 border-cyan-500/60 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">📜</span>
+            <span class="text-[11px] font-serif font-bold text-cyan-300 block leading-tight">5. Democracy</span>
+            <span class="text-[9px] text-emerald-400 font-mono block">Virtuous Many</span>
+          </button>
+
+          <!-- 5: Socialism/Welfare Bureaucracy (Middle Left) -->
+          <button id="btn-node-5" onclick="selectWheelStage(5)" class="absolute bottom-[35%] left-[-3%] p-2.5 rounded-2xl bg-regal-900 border-2 border-purple-500/70 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-32">
+            <span class="text-base block">⚙️</span>
+            <span class="text-[11px] font-serif font-bold text-purple-300 block leading-tight">6. Welfare State</span>
+            <span class="text-[9px] text-purple-400 font-mono block">Administrative</span>
+          </button>
+
+          <!-- 6: Ochlocracy (Top Left) -->
+          <button id="btn-node-6" onclick="selectWheelStage(6)" class="absolute top-[19%] left-[2%] p-2.5 rounded-2xl bg-regal-900 border-2 border-red-600/70 text-center shadow-lg hover:scale-110 active:scale-95 transition-all group z-10 w-28">
+            <span class="text-base block">🔥</span>
+            <span class="text-[11px] font-serif font-bold text-red-400 block leading-tight">7. Ochlocracy</span>
+            <span class="text-[9px] text-red-500 font-mono block">Mob Rule / Ruin</span>
+          </button>
+
+          <!-- Central Pivot Hub -->
+          <div class="text-center p-3 rounded-full bg-regal-950/95 border border-gold-500/40 w-32 h-32 flex flex-col items-center justify-center shadow-2xl z-0">
+            <span class="text-[9px] font-mono text-gold-500 uppercase tracking-widest">Natural Law</span>
+            <span class="text-xs font-serif font-bold text-slate-100">ANACYCLOSIS</span>
+            <span class="text-[8px] text-slate-400 mt-0.5">Polybius • Book VI</span>
+          </div>
+
+        </div>
+
+        <!-- Wheel Controls -->
+        <div class="mt-4 flex flex-col items-center gap-2">
+          <div class="flex items-center gap-3">
+            <button onclick="cycleStep(-1)" class="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-regal-900 hover:border-gold-400 text-xs font-serif text-slate-300 transition-all">
+              ← Prior Stage
+            </button>
+            <button id="btn-autoplay-wheel" onclick="toggleWheelAutoplay()" class="px-4 py-1.5 rounded-lg border border-gold-500/50 bg-regal-850 hover:bg-regal-800 text-xs font-mono text-gold-400 transition-all">
+              ▶ Play Cycle
+            </button>
+            <button onclick="cycleStep(1)" class="px-3.5 py-1.5 rounded-lg border border-slate-700 bg-regal-900 hover:border-gold-400 text-xs font-serif text-slate-300 transition-all">
+              Next Stage →
+            </button>
+          </div>
+          <p class="text-[10px] font-mono text-slate-500 text-center max-w-sm">
+            Play or step the wheel. Each stage change drops that era's gazette as a broadsheet overlay.
+          </p>
+        </div>
+      </div>
+
+      <!-- Right Column: Stage Deep Dive Card -->
+      <div class="lg:col-span-5">
+        <div id="stage-detail-panel" class="p-4 rounded-3xl bg-regal-900 border-2 border-gold-500/40 shadow-2xl relative transition-all duration-300 max-h-[min(32rem,calc(100svh-11rem))] overflow-y-auto">
+          <!-- Populated dynamically by renderStageDetails() -->
+        </div>
+      </div>
+
+    </div>
+
+    <div id="velocity-lab" class="mt-8 p-4 sm:p-5 rounded-3xl bg-gradient-to-br from-regal-900 via-regal-850 to-regal-950 border border-slate-800 shadow-xl scroll-mt-20">
+      <div class="flex flex-col md:flex-row items-start md:items-center justify-between gap-4 border-b border-slate-800 pb-5 mb-6">
+        <div>
+          <span class="text-xs font-mono text-gold-400 uppercase tracking-widest font-semibold block">Macro Velocity Variables</span>
+          <h3 class="text-lg sm:text-xl font-serif font-bold text-slate-100">
+            What Dictates the Speed of Political Collapse?
+          </h3>
+          <p class="text-xs sm:text-sm text-slate-400 mt-1">
+            Transitions in history are never uniform. Adjust these three structural forces to calculate how rapidly a society moves between pillars.
+          </p>
+        </div>
+        <button onclick="resetVelocitySliders()" class="px-3.5 py-1.5 rounded-xl border border-slate-700 bg-regal-950 hover:border-gold-500 text-xs font-mono text-slate-300 transition-all">
+          Reset Factors
+        </button>
+      </div>
+
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+        <!-- Slider 1: Public Dependency -->
+        <div class="p-4 rounded-2xl bg-regal-950 border border-slate-800/90">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold font-serif text-slate-200">1. Economic Dependency</span>
+            <span id="label-val-dependency" class="text-xs font-mono text-gold-400 font-bold">50%</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-tight mb-3">
+            Fraction of citizens reliant on state subsidies, contracts, or public rations vs independent enterprise.
+          </p>
+          <input type="range" id="input-dependency" min="0" max="100" value="50" oninput="calculateVelocity()" class="w-full accent-gold-500 cursor-pointer">
+          <div class="flex justify-between text-[9px] font-mono text-slate-500 mt-1">
+            <span>Self-Sufficient</span>
+            <span>Total Handouts</span>
+          </div>
+        </div>
+
+        <!-- Slider 2: Cultural Compliance -->
+        <div class="p-4 rounded-2xl bg-regal-950 border border-slate-800/90">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold font-serif text-slate-200">2. Cultural Compliance</span>
+            <span id="label-val-compliance" class="text-xs font-mono text-purple-400 font-bold">45%</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-tight mb-3">
+            Civic conformity & trust in bureaucratic experts vs skepticism, gun ownership, and local autonomy.
+          </p>
+          <input type="range" id="input-compliance" min="0" max="100" value="45" oninput="calculateVelocity()" class="w-full accent-purple-500 cursor-pointer">
+          <div class="flex justify-between text-[9px] font-mono text-slate-500 mt-1">
+            <span>Rebellious Friction</span>
+            <span>Docile Obedience</span>
+          </div>
+        </div>
+
+        <!-- Slider 3: Crisis Pressure -->
+        <div class="p-4 rounded-2xl bg-regal-950 border border-slate-800/90">
+          <div class="flex justify-between items-center mb-2">
+            <span class="text-xs font-bold font-serif text-slate-200">3. Crisis & Scarcity</span>
+            <span id="label-val-crisis" class="text-xs font-mono text-red-400 font-bold">30%</span>
+          </div>
+          <p class="text-[11px] text-slate-400 leading-tight mb-3">
+            External shocks: hyperinflation, famine, lost wars, or supply shortages compressing decades into months.
+          </p>
+          <input type="range" id="input-crisis" min="0" max="100" value="30" oninput="calculateVelocity()" class="w-full accent-red-500 cursor-pointer">
+          <div class="flex justify-between text-[9px] font-mono text-slate-500 mt-1">
+            <span>Bountiful Peace</span>
+            <span>Catastrophic Panic</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Velocity Metric Readout Bar -->
+      <div class="mt-6 p-4 rounded-2xl bg-regal-900 border border-gold-500/30 flex flex-col sm:flex-row items-center justify-between gap-4">
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded-xl bg-gold-500/20 border border-gold-500/40 flex items-center justify-center text-xl font-mono text-gold-400">
+            ⚡
+          </div>
+          <div>
+            <div class="text-xs font-mono text-slate-400 uppercase">Calculated Historical Metamorphosis Velocity</div>
+            <div id="velocity-tier-title" class="font-serif font-bold text-sm text-slate-100">
+              Moderate Cyclical Friction (50–70 Years Per Pillar)
+            </div>
+          </div>
+        </div>
+        <div class="text-right">
+          <span class="text-[10px] font-mono text-slate-400 uppercase block">Transition Multiplier</span>
+          <span id="velocity-multiplier" class="text-lg font-mono font-bold text-gold-400">1.25x Normal Pace</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <section id="simulator" class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t-2 border-gold-600/30 scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-6">
+      <div class="inline-block px-3.5 py-1 rounded-full bg-gold-500/10 border border-gold-500/30 text-gold-300 text-xs font-serif uppercase tracking-widest mb-2">
+        Interactive Historical Chronicle
+      </div>
+      <h2 class="text-xl sm:text-2xl font-serif font-bold text-slate-100">
+        The Generational Saga
+      </h2>
+      <p class="text-sm text-slate-400 mt-2">
+        Experience Anacyclosis not as an abstract theorem, but as the lived reality of your family dynasty across generations. Play or step each beat, make fateful choices as laws dissolve, and read the period gazette when a regime finally falls.
+      </p>
+    </div>
+
+    <!-- Simulator Layout -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+      
+      <!-- Left Column: Dynastic Ledger & Family Vitals -->
+      <div class="lg:col-span-4 space-y-6">
+        
+        <!-- Dynasty Card -->
+        <div class="p-6 rounded-3xl bg-regal-900 border border-slate-800 shadow-xl relative overflow-hidden">
+          <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-4">
+            <div>
+              <span class="text-[10px] font-mono text-gold-400 uppercase tracking-widest block">Dynastic Bloodline</span>
+              <h3 id="saga-dynasty-name" class="font-serif font-bold text-lg text-slate-100">House of Valerius</h3>
+            </div>
+            <button onclick="promptRenameDynasty()" class="text-xs text-slate-400 hover:text-gold-400 font-mono underline">
+              Rename
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-3 text-center mb-5">
+            <div class="p-3 rounded-xl bg-regal-950 border border-slate-800">
+              <span class="text-[10px] font-mono text-slate-400 block uppercase">Timeline</span>
+              <span id="saga-year" class="text-lg font-serif font-bold text-gold-400">Year 0</span>
+              <span class="text-[10px] text-slate-500 block">Founding Era</span>
+            </div>
+            <div class="p-3 rounded-xl bg-regal-950 border border-slate-800">
+              <span class="text-[10px] font-mono text-slate-400 block uppercase">Generation</span>
+              <span id="saga-gen" class="text-lg font-serif font-bold text-cyan-400">Gen I</span>
+              <span id="saga-ancestor-title" class="text-[10px] text-slate-400 block truncate">The Pioneer</span>
+            </div>
+          </div>
+
+          <!-- Dynastic Meters -->
+          <div class="space-y-3.5">
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Family Wealth & Estates</span>
+                <span id="saga-val-wealth" class="font-mono text-gold-400 font-bold">80%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-regal-950 overflow-hidden">
+                <div id="saga-bar-wealth" class="h-full bg-gradient-to-r from-amber-500 to-gold-400 transition-all duration-500" style="width: 80%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Civic Liberty & Speech</span>
+                <span id="saga-val-liberty" class="font-mono text-cyan-400 font-bold">85%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-regal-950 overflow-hidden">
+                <div id="saga-bar-liberty" class="h-full bg-gradient-to-r from-cyan-600 to-cyan-400 transition-all duration-500" style="width: 85%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Political Influence</span>
+                <span id="saga-val-influence" class="font-mono text-emerald-400 font-bold">75%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-regal-950 overflow-hidden">
+                <div id="saga-bar-influence" class="h-full bg-gradient-to-r from-emerald-600 to-emerald-400 transition-all duration-500" style="width: 75%"></div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex justify-between text-xs mb-1">
+                <span class="text-slate-300 font-medium">Dynastic Peril / Extinction Risk</span>
+                <span id="saga-val-peril" class="font-mono text-red-400 font-bold">15%</span>
+              </div>
+              <div class="w-full h-2 rounded-full bg-regal-950 overflow-hidden">
+                <div id="saga-bar-peril" class="h-full bg-gradient-to-r from-red-800 to-red-500 transition-all duration-500" style="width: 15%"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Jump to Starting Point -->
+        <div class="p-5 rounded-2xl bg-regal-900 border border-slate-800 shadow-xl">
+          <span class="text-xs font-serif font-bold text-slate-200 block mb-2.5 uppercase tracking-wider">
+            Choose Founding Regime:
+          </span>
+          <div class="grid grid-cols-3 gap-2 text-center text-xs font-serif">
+            <button onclick="startSagaAt(0)" class="p-2 rounded-xl border border-gold-500/40 bg-regal-950 hover:bg-gold-500/10 text-gold-300 transition-all">
+              <span class="block text-base">👑</span> Monarchy
+            </button>
+            <button onclick="startSagaAt(2)" class="p-2 rounded-xl border border-blue-500/40 bg-regal-950 hover:bg-blue-500/10 text-blue-300 transition-all">
+              <span class="block text-base">🏛️</span> Aristocracy
+            </button>
+            <button onclick="startSagaAt(4)" class="p-2 rounded-xl border border-cyan-500/40 bg-regal-950 hover:bg-cyan-500/10 text-cyan-300 transition-all">
+              <span class="block text-base">📜</span> Democracy
+            </button>
+          </div>
+          <div class="grid grid-cols-2 gap-2 text-center text-xs font-serif mt-2">
+            <button onclick="startSagaAt(5)" class="p-2 rounded-xl border border-purple-500/40 bg-regal-950 hover:bg-purple-500/10 text-purple-300 transition-all">
+              <span class="block text-base">⚙️</span> Welfare State
+            </button>
+            <button onclick="resetSagaFull()" class="p-2 rounded-xl border border-slate-700 bg-regal-850 hover:border-slate-500 text-slate-300 transition-all">
+              ↺ Year 0 Reset
+            </button>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Right Column: Interactive Story Engine & Dilemma Cards -->
+      <div class="lg:col-span-8 space-y-6">
+
+        <!-- Structural Narrative Beat Timeline -->
+        <div class="p-3.5 rounded-2xl bg-regal-900 border border-slate-800 flex items-center justify-between gap-1 overflow-x-auto text-[11px] font-mono">
+          <div id="saga-pill-0" class="flex-1 min-w-[95px] text-center p-2 rounded-lg transition-all">
+            <span class="block text-[9px] text-slate-400">BEAT 1</span>
+            <strong>Good Choice</strong>
+          </div>
+          <div class="text-slate-600">→</div>
+          <div id="saga-pill-1" class="flex-1 min-w-[95px] text-center p-2 rounded-lg transition-all">
+            <span class="block text-[9px] text-slate-400">BEAT 2</span>
+            <strong>Swimmingly</strong>
+          </div>
+          <div class="text-slate-600">→</div>
+          <div id="saga-pill-2" class="flex-1 min-w-[95px] text-center p-2 rounded-lg transition-all">
+            <span class="block text-[9px] text-slate-400">BEAT 3</span>
+            <strong>Problems Arise</strong>
+          </div>
+          <div class="text-slate-600">→</div>
+          <div id="saga-pill-3" class="flex-1 min-w-[95px] text-center p-2 rounded-lg transition-all">
+            <span class="block text-[9px] text-slate-400">BEAT 4</span>
+            <strong>Cracks Showing</strong>
+          </div>
+          <div class="text-slate-600">→</div>
+          <div id="saga-pill-4" class="flex-1 min-w-[95px] text-center p-2 rounded-lg transition-all">
+            <span class="block text-[9px] text-slate-400">BEAT 5</span>
+            <strong>Morphing into...</strong>
+          </div>
+        </div>
+
+        <!-- Main Narrative & Choice Box -->
+        <div class="p-6 sm:p-8 rounded-3xl bg-regal-900/95 border-2 border-gold-500/40 shadow-2xl relative">
+          
+          <!-- Current Regime Header -->
+          <div class="flex flex-wrap items-center justify-between gap-4 border-b border-slate-800 pb-4 mb-6">
+            <div class="flex items-center gap-3">
+              <span id="saga-regime-icon" class="text-2xl sm:text-3xl p-2 rounded-2xl bg-regal-950 border border-gold-500/30">👑</span>
+              <div>
+                <span id="saga-regime-class" class="text-[10px] sm:text-xs font-mono uppercase tracking-widest text-emerald-400 font-bold block">
+                  Virtuous Rule of One
+                </span>
+                <h3 id="saga-regime-title" class="text-xl sm:text-2xl font-serif font-bold text-slate-100">
+                  The Golden Monarchy
+                </h3>
+              </div>
+            </div>
+
+            <button onclick="openCurrentSagaGazette()" class="px-3 py-1.5 rounded-xl border border-amber-600/40 bg-amber-950/20 text-amber-300 hover:bg-amber-900/40 text-xs font-mono flex items-center gap-1.5 transition-all">
+              <span>📰</span> Read Period Gazette
+            </button>
+          </div>
+
+          <!-- Dynamic Story Paragraph & Bullet Points -->
+          <div id="saga-story-content" class="space-y-4">
+            <!-- Dynamic text injected by renderSagaUI() -->
+          </div>
+
+          <!-- Dynastic Dilemma Box -->
+          <div id="saga-dilemma-box" class="mt-5 p-4 rounded-2xl bg-regal-950 border border-slate-800">
+            <!-- Choices injected by renderSagaUI() -->
+          </div>
+
+          <!-- Advance Button Bar -->
+          <div class="mt-5 pt-4 border-t border-slate-800/80 flex flex-col sm:flex-row items-center justify-between gap-3">
+            <span id="saga-beat-status-label" class="text-xs font-mono text-slate-400">
+              Beat 1 of 5 in this Regime
+            </span>
+
+            <div class="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 w-full sm:w-auto">
+              <button id="btn-autoplay-saga" onclick="toggleSagaAutoplay()" class="px-4 py-3.5 rounded-xl border border-gold-500/50 bg-regal-850 hover:bg-regal-800 text-gold-300 font-mono text-xs tracking-wider transition-all">
+                ▶ Play Chronicle
+              </button>
+              <button id="btn-advance-saga" onclick="advanceSagaBeat()" class="w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-regal-950 font-serif font-bold text-xs sm:text-sm tracking-wider shadow-lg shadow-gold-500/20 active:scale-95 transition-all flex items-center justify-center gap-2">
+                <span id="saga-btn-text">Advance: Things Are Going Swimmingly</span>
+                <span>→</span>
+              </button>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- Dynasty Annals Record -->
+        <div class="p-6 rounded-2xl bg-regal-900 border border-slate-800 shadow-xl">
+          <div class="flex items-center justify-between mb-3 border-b border-slate-800 pb-2">
+            <h4 class="font-serif font-bold text-xs uppercase tracking-wider text-slate-200 flex items-center gap-2">
+              <span>📜</span> The Dynastic Annals (<span id="annals-family-tag" class="text-gold-400">House of Valerius</span>)
+            </h4>
+            <span class="text-[10px] font-mono text-slate-500">Historical Deeds Across the Ages</span>
+          </div>
+          <div id="saga-annals-feed" class="space-y-2 max-h-48 overflow-y-auto pr-2 text-xs font-sans text-slate-300">
+            <!-- Log items prepended here -->
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="period-dispatches" class="py-6 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800 scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-6">
+      <div class="inline-block px-3 py-1 rounded bg-amber-500/10 border border-amber-500/30 text-amber-400 text-xs font-mono uppercase tracking-widest mb-2">
+        Archival Media Gallery
+      </div>
+      <h2 class="text-xl sm:text-2xl font-serif font-bold text-slate-100">
+        The Period Dispatches
+      </h2>
+      <p class="text-sm text-slate-400 mt-2">
+        Read how contemporary press, town criers, and party pamphlets framed each political revolution as it unfolded in real time.
+      </p>
+    </div>
+
+    <!-- Newspaper Selector Tabs -->
+    <div class="flex items-center justify-start sm:justify-center gap-2 overflow-x-auto pb-4 mb-8">
+      <button onclick="showNewspaper(0)" id="tab-news-0" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Imperial Gazette
+      </button>
+      <button onclick="showNewspaper(1)" id="tab-news-1" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Continental Tribune
+      </button>
+      <button onclick="showNewspaper(2)" id="tab-news-2" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Citizen's Ledger
+      </button>
+      <button onclick="showNewspaper(3)" id="tab-news-3" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Free Press Courier
+      </button>
+      <button onclick="showNewspaper(4)" id="tab-news-4" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Daily Progressive
+      </button>
+      <button onclick="showNewspaper(5)" id="tab-news-5" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The Metropolitan Chronicle
+      </button>
+      <button onclick="showNewspaper(6)" id="tab-news-6" class="px-3.5 py-2 rounded-xl text-xs font-serif font-bold border transition-all whitespace-nowrap">
+        The National Sentinel
+      </button>
+    </div>
+
+    <!-- Rendered Vintage Newspaper Broadsheet -->
+    <div class="max-w-4xl mx-auto newsprint p-5 sm:p-7 rounded-2xl shadow-2xl border-4 border-[#2b2216] relative overflow-hidden text-stone-900">
+      <div id="newspaper-container">
+        <!-- Injected via renderNewspaperBroadsheet() -->
+      </div>
+    </div>
+  </section>
+
+  <section id="theoretical-essay" class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800 scroll-mt-20">
+    <div class="rounded-3xl border-2 border-gold-600/30 bg-gradient-to-br from-regal-900 via-regal-850 to-regal-950 p-5 sm:p-8 shadow-2xl relative">
+      
+      <div class="max-w-4xl mx-auto">
+        <div class="inline-block px-3 py-1 rounded bg-amber-500/20 text-amber-300 text-xs font-mono font-semibold uppercase tracking-wider mb-4">
+          Theoretical & Historical Synthesis
+        </div>
+
+        <h2 class="text-lg sm:text-2xl font-serif font-bold text-slate-100 leading-tight mb-3">
+          Why Socialism Wasn't in Polybius's Original Wheel—And Why Modern History Inserts It on the Slope
+        </h2>
+
+        <p class="text-sm text-slate-300 leading-relaxed font-light mb-6">
+          When Polybius observed Rome in the second century BCE, the Industrial Revolution had not occurred. Classical thinkers classified governments by <strong class="text-gold-300">Sovereign Architecture</strong> (Who commands the state, and are they virtuous or corrupt?). 19th-century socialists classified governments by <strong class="text-cyan-300">Economic Control</strong> (Who owns the means of production?). Yet once democratic assemblies discovered they could vote to control commerce, the classical and economic cycles merged.
+        </p>
+
+        <!-- 3 Comparison Columns -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+          
+          <div class="p-5 rounded-2xl bg-regal-950 border border-slate-800">
+            <span class="text-2xl block mb-2">🌾</span>
+            <h4 class="font-serif font-bold text-sm text-slate-200">The Ancient Reality</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              Agrarian antiquity lacked mass trade unions, central banks, and corporate monopolies. In Greek <em>poleis</em>, demagogues simply seized land or canceled debts; there was no permanent administrative bureaucracy.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-regal-950 border border-slate-800">
+            <span class="text-2xl block mb-2">📜</span>
+            <h4 class="font-serif font-bold text-sm text-slate-200">The Gracchi Precedent</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              In 133 BCE, Tiberius Gracchus broke constitutional norms to distribute land and grain. His brother Gaius institutionalized subsidized corn rations. This created a clientelist urban mob dependent on state hand-outs, paving the road for Julius Caesar.
+            </p>
+          </div>
+
+          <div class="p-5 rounded-2xl bg-regal-950 border border-slate-800">
+            <span class="text-2xl block mb-2">🏭</span>
+            <h4 class="font-serif font-bold text-sm text-slate-200">The Modern Slope</h4>
+            <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+              Friedrich Hayek (*The Road to Serfdom*) and Alexis de Tocqueville warned that when democracies substitute equality of outcome for equality of law, the state must control all human economic activity—yielding a soft despotism that decays into an iron fist.
+            </p>
+          </div>
+
+        </div>
+
+        <!-- 20th Century Case Studies Table -->
+        <div class="p-6 rounded-2xl bg-regal-950 border border-slate-800/80 mb-8">
+          <h4 class="font-serif font-bold text-base text-gold-400 mb-4 uppercase tracking-wider text-xs">
+            Historical Validation: How Collectivism Relentlessly Re-Enters the Cycle
+          </h4>
+          
+          <div class="space-y-4 text-xs text-slate-300">
+            <div class="border-b border-slate-800 pb-3">
+              <strong class="text-slate-100 font-serif text-sm block">1. The Soviet Union & Maoist China (Ideology to Tyranny)</strong>
+              <p class="text-slate-400 mt-1">
+                Both revolutions promised the abolition of class hierarchy and the establishment of radical worker equality. By eliminating private property and market pricing, central planning required an omnipresent security apparatus (Cheka/NKVD), rapidly mutating into the murderous tyrannies of Stalin and Mao.
+              </p>
+            </div>
+
+            <div class="border-b border-slate-800 pb-3">
+              <strong class="text-slate-100 font-serif text-sm block">2. Venezuela (Democracy to Welfare Populism to Ochlocracy and Despotism)</strong>
+              <p class="text-slate-400 mt-1">
+                Elected in 1998 on promises of oil-funded redistribution and "social missions," Hugo Chávez weaponized clientelism. When oil revenues dwindled, price controls caused starvation; armed street squads (*colectivos*) terrorized dissenters, consolidating Nicolás Maduro's totalitarian hold.
+              </p>
+            </div>
+
+            <div>
+              <strong class="text-slate-100 font-serif text-sm block">3. North Korea: The Full Loop to Hereditary Monarchy</strong>
+              <p class="text-slate-400 mt-1">
+                The most vivid literal realization of Polybius's cycle in modern history. An ostensibly egalitarian Marxist-Leninist collective eliminated private property, concentrated power in the vanguard, and within two generations converted itself into a dynastic hereditary Monarchy (*Mount Paektu Bloodline*) complete with hereditary castes (*Songbun*).
+              </p>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+  </section>
+
+  <section id="mixed-constitution" class="py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto border-t border-slate-800 scroll-mt-20">
+    <div class="text-center max-w-3xl mx-auto mb-8">
+      <div class="inline-block px-3 py-1 rounded bg-cyan-500/10 border border-cyan-500/30 text-cyan-400 text-xs font-mono font-semibold uppercase tracking-wider mb-2">
+        Polybius's Breakthrough Discovery
+      </div>
+      <h2 class="text-xl sm:text-2xl font-serif font-bold text-slate-100">
+        How Rome Broke the Wheel: The Mixed Constitution
+      </h2>
+      <p class="text-sm text-slate-400 mt-2 leading-relaxed">
+        Polybius concluded that every simple regime collapses because it is unchecked. Rome conquered the Mediterranean because its constitution fused all three virtues simultaneously. Adjust the levers below to test whether your Republic can hold equilibrium.
+      </p>
+    </div>
+
+    <!-- 3 Pillars Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+      
+      <!-- Consul -->
+      <div class="p-6 rounded-2xl bg-regal-900 border-2 border-gold-500/40 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-2xl">🦅</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-1 rounded bg-gold-500/20 text-gold-300 uppercase">Monarchical</span>
+          </div>
+          <h3 class="font-serif font-bold text-base text-slate-100">The Two Consuls</h3>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            Executive command of the legions, swift military mobilization, execution of laws, and diplomacy.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-300">
+            <strong class="text-gold-400 font-mono text-[10px] uppercase block">Check on Power:</strong>
+            <p class="text-[11px] text-slate-400 mt-0.5">1-year term limit; mutual veto; reliant on Senate for war financing.</p>
+          </div>
+        </div>
+        <div class="mt-5">
+          <label class="text-[11px] font-mono text-slate-400 block mb-1">Executive Power Lever</label>
+          <input type="range" id="lever-consul" min="10" max="100" value="50" oninput="updateMixedSystem()" class="w-full accent-gold-500 cursor-pointer">
+        </div>
+      </div>
+
+      <!-- Senate -->
+      <div class="p-6 rounded-2xl bg-regal-900 border-2 border-blue-500/40 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-2xl">🏛️</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-1 rounded bg-blue-500/20 text-blue-300 uppercase">Aristocratic</span>
+          </div>
+          <h3 class="font-serif font-bold text-base text-slate-100">The Roman Senate</h3>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            Custody of the state treasury, management of provincial tax revenues, foreign treaties, and courts.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-300">
+            <strong class="text-blue-400 font-mono text-[10px] uppercase block">Check on Power:</strong>
+            <p class="text-[11px] text-slate-400 mt-0.5">Cannot enact statutory law alone; plebeian tribunes possess absolute veto power.</p>
+          </div>
+        </div>
+        <div class="mt-5">
+          <label class="text-[11px] font-mono text-slate-400 block mb-1">Aristocratic Lever</label>
+          <input type="range" id="lever-senate" min="10" max="100" value="50" oninput="updateMixedSystem()" class="w-full accent-blue-500 cursor-pointer">
+        </div>
+      </div>
+
+      <!-- People / Tribunes -->
+      <div class="p-6 rounded-2xl bg-regal-900 border-2 border-cyan-500/40 shadow-xl flex flex-col justify-between">
+        <div>
+          <div class="flex items-center justify-between mb-3">
+            <span class="text-2xl">🗳️</span>
+            <span class="text-[10px] font-mono font-bold px-2 py-1 rounded bg-cyan-500/20 text-cyan-300 uppercase">Democratic</span>
+          </div>
+          <h3 class="font-serif font-bold text-base text-slate-100">Tribunes & Assemblies</h3>
+          <p class="text-xs text-slate-400 mt-2 leading-relaxed">
+            Ratification of treaties, election of magistrates, trials of capital offenses, and the sacrosanct veto.
+          </p>
+          <div class="mt-3 pt-3 border-t border-slate-800 text-xs text-slate-300">
+            <strong class="text-cyan-400 font-mono text-[10px] uppercase block">Check on Power:</strong>
+            <p class="text-[11px] text-slate-400 mt-0.5">Assemblies cannot summon themselves; dependent on Senate for contracts and grain.</p>
+          </div>
+        </div>
+        <div class="mt-5">
+          <label class="text-[11px] font-mono text-slate-400 block mb-1">Popular Power Lever</label>
+          <input type="range" id="lever-people" min="10" max="100" value="50" oninput="updateMixedSystem()" class="w-full accent-cyan-500 cursor-pointer">
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Mixed Republic Equilibrium Monitor -->
+    <div class="p-6 rounded-2xl bg-regal-950 border border-gold-500/40 flex flex-col md:flex-row items-center justify-between gap-6">
+      <div class="max-w-xl">
+        <h4 class="font-serif font-bold text-base text-slate-100">Constitutional Status: <span id="mixed-label-status" class="text-emerald-400 font-sans">Ideal Harmony (Stable Republic)</span></h4>
+        <p id="mixed-label-desc" class="text-xs text-slate-400 mt-1 leading-relaxed">
+          The three branches check one another. No faction can usurp total sovereign authority, pausing Anacyclosis for centuries.
+        </p>
+      </div>
+
+      <div class="flex items-center gap-4 w-full md:w-auto">
+        <div class="text-center px-4 py-2 rounded-xl bg-regal-900 border border-slate-800 min-w-[130px]">
+          <span class="text-[10px] font-mono text-slate-400 uppercase block">Republic Stability</span>
+          <span id="mixed-val-score" class="text-xl font-serif font-bold text-emerald-400">96%</span>
+        </div>
+        <button onclick="resetMixedSliders()" class="px-4 py-2.5 rounded-xl border border-slate-700 bg-regal-900 hover:border-gold-400 text-xs font-mono text-slate-300 transition-all">
+          Re-Equilibrate
+        </button>
+      </div>
+    </div>
+  </section>
+
+  <div id="modal-newspaper" class="fixed inset-0 z-[60] bg-black/80 backdrop-blur-sm hidden items-center justify-center p-3 sm:p-6" role="dialog" aria-modal="true" aria-labelledby="newspaper-modal-title" onclick="if (event.target === this) closeNewspaperDispatch()">
+    <div class="gazette-enter newsprint max-w-3xl w-full max-h-[90vh] overflow-y-auto p-5 sm:p-8 rounded-2xl shadow-2xl border-4 border-[#2b2216] relative text-stone-900">
+      <div class="flex items-center justify-between gap-3 mb-3">
+        <span class="text-[10px] font-mono uppercase tracking-widest text-stone-600">Special Dispatch • Breaking Gazette</span>
+        <button type="button" onclick="closeNewspaperDispatch()" class="w-8 h-8 rounded-full border border-stone-700 bg-[#eae1cb] hover:bg-stone-200 font-bold text-stone-800" aria-label="Close gazette">✕</button>
+      </div>
+      <div id="newspaper-modal-container"></div>
+      <div class="mt-6 pt-4 border-t-2 border-stone-800 flex flex-col sm:flex-row items-center justify-between gap-3">
+        <span id="newspaper-modal-kicker" class="text-[11px] font-mono text-stone-600">A new epoch is unfolding.</span>
+        <button type="button" onclick="closeNewspaperDispatch()" class="px-5 py-2.5 rounded-xl bg-stone-900 text-[#f5eedb] font-serif font-bold text-xs tracking-wider hover:bg-stone-800">
+          Continue the Chronicle →
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div id="modal-video" class="fixed inset-0 z-50 bg-black/85 backdrop-blur-md hidden items-center justify-center p-4 sm:p-6">
+    <div class="bg-regal-900 border-2 border-gold-500 max-w-4xl w-full rounded-3xl p-5 sm:p-7 shadow-2xl relative my-auto">
+      
+      <!-- Close Button -->
+      <button onclick="closeVideoModal()" class="absolute top-4 right-4 w-9 h-9 rounded-full bg-regal-950 border border-slate-700 text-slate-300 hover:text-white hover:border-gold-400 flex items-center justify-center font-bold text-sm z-10">
+        ✕
+      </button>
+
+      <div class="mb-4">
+        <span class="text-xs font-mono text-red-400 uppercase tracking-widest font-semibold block">Educational Mini-Documentary</span>
+        <h3 class="text-lg sm:text-xl font-serif font-bold text-slate-100">
+          Polybius: 7 Cycles of Civilization (Anacyclosis)
+        </h3>
+      </div>
+
+      <!-- YouTube Iframe Embed -->
+      <div class="relative w-full aspect-video rounded-2xl overflow-hidden border border-slate-800 bg-black">
+        <iframe 
+          id="video-iframe" 
+          class="w-full h-full" 
+          src="" 
+          title="Polybius: 7 Cycles of Civilization" 
+          frameborder="0" 
+          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" 
+          allowfullscreen>
+        </iframe>
+      </div>
+
+      <div class="mt-4 flex flex-col sm:flex-row items-center justify-between gap-3 text-xs text-slate-400">
+        <span>If playback is blocked in your environment, <a href="https://www.youtube.com/watch?v=kRA5gC27SbE" target="_blank" rel="noopener noreferrer" class="text-gold-400 underline font-mono">watch directly on YouTube ↗</a></span>
+        <button onclick="closeVideoModal()" class="px-4 py-1.5 rounded-lg border border-slate-700 bg-regal-950 hover:bg-slate-800 text-slate-300 font-mono">
+          Close Player
+        </button>
+      </div>
+
+    </div>
+  </div>
+
+  <footer class="border-t border-slate-800 bg-regal-950 py-8 px-4 sm:px-8 text-center text-xs text-slate-500">
+    <div class="max-w-4xl mx-auto space-y-3">
+      <p class="font-serif tracking-widest text-slate-400 uppercase">ANACYCLOSIS • THE WHEEL OF EMPIRES</p>
+      <p class="leading-relaxed">
+        Synthesized from Polybius (*The Histories*, Book VI), Livy, Thucydides, Alexis de Tocqueville (*Democracy in America*), and Friedrich Hayek (*The Road to Serfdom*).
+      </p>
+      <p class="font-mono text-[11px] text-slate-600">
+        "All human things are subject to decay; Rome herself will one day fall to the wheel." — Scipio Aemilianus to Polybius after the sack of Carthage (146 BCE)
+      </p>
+    </div>
+  </footer>
+
+  <script>
+    const SEVEN_STAGES = [
+      {
+        index: 0,
+        name: "Monarchy",
+        greek: "Basileia (βασιλεία)",
+        icon: "👑",
+        ruler: "The Virtuous One",
+        type: "virtuous",
+        summary: "A benevolent ruler chosen for bravery, restraint, and paternal stewardship of the commonwealth.",
+        parallel: "Numa Pompilius (Rome, 715–673 BCE) or Cyrus the Great.",
+        virtue: 92,
+        liberty: 75,
+        stability: 95,
+        decayCatalyst: "The founding hero passes. His heirs inherit absolute command without the hardship that forged wisdom.",
+        newspaperKey: 0,
+        beats: [
+          {
+            title: "Good Choice: The Crown of Merit",
+            story: "Your family gathers in the central forum as the elders acclaim the new King. He takes no crown of gold, living in a simple tunic and codifying equal laws for all clans. Defenses are built, theft is quelled, and honest trade begins.",
+            bullets: null,
+            dilemma: "How does your ancestor establish the family livelihood?",
+            choices: [
+              { text: "Accept an appointment as royal superintendent of public granaries", effect: { wealth: +15, liberty: +5, influence: +15, peril: -5 } },
+              { text: "Establish an independent caravan trade route with coastal towns", effect: { wealth: +25, liberty: +10, influence: 0, peril: +5 } },
+              { text: "Enlist as an officer in the King's civic defense vanguard", effect: { wealth: +5, liberty: 0, influence: +20, peril: +10 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly",
+            story: "A generation has passed. Granaries are stocked for three seasons, disputes are resolved fairly in open courts, and your family's estate is praised for honest dealings. The King rides among his people without bodyguards.",
+            bullets: null,
+            dilemma: "With your estate treasury swelling, what will you endow?",
+            choices: [
+              { text: "Build a stone aqueduct bringing fresh water to the craftsmen's ward", effect: { wealth: -10, liberty: +10, influence: +20, peril: -5 } },
+              { text: "Purchase fertile vineyard hillsides outside the city gates", effect: { wealth: +20, liberty: 0, influence: +5, peril: 0 } },
+              { text: "Fund a public academy teaching mathematics and civic law", effect: { wealth: -5, liberty: +15, influence: +15, peril: -5 } }
+            ]
+          },
+          {
+            title: "Time Passes... Problems Start to Occur",
+            story: "The revered founder dies. His grandson ascends the throne. Raised within palace walls by flattering courtiers, he views the royal treasury as personal pocket money and royal authority as divine entitlement.",
+            bullets: null,
+            dilemma: "The young King levies a mandatory 'coronation duty' on prominent merchant houses.",
+            choices: [
+              { text: "Pay quietly to protect your household from court suspicion", effect: { wealth: -15, liberty: -5, influence: 0, peril: 0 } },
+              { text: "Meet with elder councilors to draft a respectful petition of restraint", effect: { wealth: -5, liberty: 0, influence: +10, peril: +15 } },
+              { text: "Smuggle half your gold into rural hiding places", effect: { wealth: +10, liberty: -5, influence: -10, peril: +10 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show",
+            story: "Court sycophants whisper poison in the King's ear. Systemic decay is undeniable:",
+            bullets: [
+              "Dissident patricians are quietly poisoned and their country estates seized.",
+              "The King hires foreign barbarian mercenaries to guard the palace against citizens.",
+              "Arbitrary royal decrees supersede ancient common-law customs.",
+              "Tax assessors arrive with armed retinues demanding arbitrary payments."
+            ],
+            dilemma: "A royal decree demands that your family host and provision twelve mercenary guards.",
+            choices: [
+              { text: "Comply obediently to safeguard your children from violent arrest", effect: { wealth: -15, liberty: -15, influence: -5, peril: +5 } },
+              { text: "Secretly finance an underground network of dissident nobles", effect: { wealth: -20, liberty: +5, influence: +15, peril: +25 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... TYRANNY",
+            story: "The mask of paternal benevolence has fully cracked. The ruler cares nothing for justice and everything for his own fear, cruelty, and paranoia. The monarchy is dead—a bloody Despotism has seized the realm!",
+            bullets: null,
+            dilemma: "The tyrant orders a purge of prominent families. How does your dynasty survive?",
+            choices: [
+              { text: "Barricade the estate and swear a secret covenant with noble conspirators", effect: { wealth: -15, liberty: +5, influence: +10, peril: +30 } },
+              { text: "Pay a colossal bribe to the tyrant's chancellor for safe passage into hiding", effect: { wealth: -30, liberty: -15, influence: -20, peril: -10 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 1,
+        name: "Tyranny",
+        greek: "Tyrannis (τυραννίς)",
+        icon: "🗡️",
+        ruler: "The Despotic One",
+        type: "corrupt",
+        summary: "An illegitimate autocracy governed by paranoia, fear, secret police, and plunder for private indulgence.",
+        parallel: "Tarquin the Proud (Rome, ousted 509 BCE) or Dionysius of Syracuse.",
+        virtue: 12,
+        liberty: 10,
+        stability: 30,
+        decayCatalyst: "The tyrant's intolerable arrogance and moral transgressions provoke noble leaders to risk everything in revolt.",
+        newspaperKey: 1,
+        beats: [
+          {
+            title: "Good Choice? Enduring the Iron Hand",
+            story: "Curfews silence the capital. Citizens avert their eyes in the street. Informants take notes in every public tavern. Yet paradoxically, petty street crime is eradicated—fear enforces a terrifying order.",
+            bullets: null,
+            dilemma: "An officer of the tyrant's guard accuses your neighbor of treason.",
+            choices: [
+              { text: "Keep silent and slide silver to the officer to keep your home off the list", effect: { wealth: -15, liberty: -10, influence: 0, peril: -10 } },
+              { text: "Secretly warn the neighbor's family so they can flee across the border", effect: { wealth: -5, liberty: +10, influence: +5, peril: +20 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly (For the Despot)",
+            story: "Monuments to the tyrant rise across the forum. Your family survives by keeping accounts scrupulously secret and avoiding all political speech, burying gold beneath the villa courtyard.",
+            bullets: null,
+            dilemma: "The tyrant demands private loans to build an immense palace pleasure garden.",
+            choices: [
+              { text: "Contribute the gold and receive an exclusive timber concession", effect: { wealth: +15, liberty: -15, influence: +5, peril: +10 } },
+              { text: "Claim poverty and accept a military quartering levy on your barns", effect: { wealth: -10, liberty: +5, influence: -5, peril: +5 } }
+            ]
+          },
+          {
+            title: "Time Passes... Paranoia and Execution",
+            story: "The aging tyrant sees assassins in every shadow. Generals are executed upon returning from victorious campaigns lest they become popular. The nobility realizes no family is safe.",
+            bullets: null,
+            dilemma: "A beloved senator is publicly executed and his daughters stripped of their inheritance.",
+            choices: [
+              { text: "Attend the midnight conspiratorial conclave of allied patricians", effect: { wealth: -10, liberty: +10, influence: +20, peril: +25 } },
+              { text: "Close your shutters and order your house into complete lockdown", effect: { wealth: 0, liberty: -15, influence: -10, peril: +5 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: The Breaking Point",
+            story: "The populace will no longer bear the humiliation:",
+            bullets: [
+              "The tyrant's secret agents are found assassinated in dark alleys.",
+              "Mercenary garrisons refuse to shoot down bread marchers after wages are docked.",
+              "Prominent patrician families issue an open covenant swearing death to tyrants.",
+              "Your family's youth arm themselves with forged shortswords."
+            ],
+            dilemma: "The uprising begins! The tyrant's guard attempts to torch the lower wards.",
+            choices: [
+              { text: "Deploy your family guards to secure the city aqueduct and harbor gates", effect: { wealth: -15, liberty: +20, influence: +25, peril: +20 } },
+              { text: "Finance weapon shipments for the patrician citizen vanguard", effect: { wealth: -20, liberty: +15, influence: +15, peril: +15 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... ARISTOCRACY",
+            story: "The tyrant is killed or flees in disgrace! Before the altars of the gods, the allied nobles swear a solemn oath: never again shall one man rule sovereign over free citizens! A governing Senate takes command!",
+            bullets: null,
+            dilemma: "The new aristocratic order invites your family to take a senatorial seat.",
+            choices: [
+              { text: "Accept the senatorial toga and swear the oath of collective stewardship", effect: { wealth: +15, liberty: +25, influence: +30, peril: -15 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 2,
+        name: "Aristocracy",
+        greek: "Aristokratia (ἀριστοκρατία)",
+        icon: "🏛️",
+        ruler: "The Virtuous Few",
+        type: "virtuous",
+        summary: "Rule by the wisest, most public-spirited nobles who govern for the commonwealth and defend the rule of law.",
+        parallel: "The Early Roman Republic (509–300 BCE) or the Spartan Gerousia.",
+        virtue: 88,
+        liberty: 80,
+        stability: 90,
+        decayCatalyst: "Generations pass. The sons of the liberators inherit power without having bled for it, transforming honor into private entitlement.",
+        newspaperKey: 2,
+        beats: [
+          {
+            title: "Good Choice: Council of the Best Men",
+            story: "The Senate convenes in solemn deliberation. Justice is restored, contracts are enforced equitably, and the noble fathers live frugally, holding civic duty as their highest religion. Your family wears the white toga of senator.",
+            bullets: null,
+            dilemma: "What civic portfolio will your senatorial house direct?",
+            choices: [
+              { text: "Oversee the codification of twelve bronze tablets of universal citizen law", effect: { wealth: 0, liberty: +25, influence: +20, peril: -10 } },
+              { text: "Command republican legions safeguarding frontier agricultural colonies", effect: { wealth: +15, liberty: +10, influence: +25, peril: +10 } },
+              { text: "Supervise public infrastructure, building paved roads and grain silos", effect: { wealth: +10, liberty: +15, influence: +15, peril: -5 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly: The Noble Republic",
+            story: "Taxes are modest and public finances transparent. The common plebeians respect the Senate because senatorial sons fight in the front rank of every war and face double penalties for corruption.",
+            bullets: null,
+            dilemma: "New fertile public lands (*ager publicus*) are conquered from hostile tribes.",
+            choices: [
+              { text: "Distribute the land as small independent homesteads for veteran soldiers", effect: { wealth: -5, liberty: +20, influence: +25, peril: -10 } },
+              { text: "Lease vast tracts to noble consortiums to build export wineries", effect: { wealth: +30, liberty: -5, influence: +10, peril: +5 } }
+            ]
+          },
+          {
+            title: "Time Passes... The Scent of Entitlement",
+            story: "The founding patriots are dust. Their grandsons take their Senate chairs. Having known only luxury and deference from birth, they sneer at the common working classes and view public offices as family assets.",
+            bullets: null,
+            dilemma: "A bill proposes a cap on luxury expenditures and gold banquets for nobles.",
+            choices: [
+              { text: "Vote to enact the sumptuary laws to maintain republican modesty", effect: { wealth: -10, liberty: +10, influence: -10, peril: -5 } },
+              { text: "Vote down the bill: nobles should enjoy the fruits of their heritage", effect: { wealth: +15, liberty: -10, influence: +10, peril: +10 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: The Aristocratic Enclosure",
+            story: "The state is captured by thirty wealthy families:",
+            bullets: [
+              "Senators monopolize judicial benches, acquitting their cousins of all crimes.",
+              "Smallholder yeomen are bought out or foreclosed upon, migrating to urban slums.",
+              "The Senate repeatedly quashes modest proposals for agrarian reform and debt relief.",
+              "Commoners begin boycotting military drafts, shouting curses at senatorial litters."
+            ],
+            dilemma: "A debt-ridden veteran plebeian cannot repay his family mortgage to your bank.",
+            choices: [
+              { text: "Foreclose on his family farm and fold the acreage into your olive empire", effect: { wealth: +25, liberty: -15, influence: +5, peril: +15 } },
+              { text: "Forgive the debt interest and sponsor his election as tribune", effect: { wealth: -15, liberty: +15, influence: +10, peril: -10 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... OLIGARCHY",
+            story: "Virtue has completely evaporated. The Senate is no longer an aristocracy of merit, but an exclusive financial cartel that weaponizes the courts, hoards land, and buys elections!",
+            bullets: null,
+            dilemma: "The plebeians organize a general strike in the forum. What is your cartel's move?",
+            choices: [
+              { text: "Hire armed gladiators and private retainers to break up the gathering", effect: { wealth: -10, liberty: -25, influence: +10, peril: +30 } },
+              { text: "Break ranks with fellow oligarchs and support the popular petition", effect: { wealth: -20, liberty: +20, influence: -10, peril: +15 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 3,
+        name: "Oligarchy",
+        greek: "Oligarchia (ὀλιγαρχία)",
+        icon: "💰",
+        ruler: "The Corrupt Few",
+        type: "corrupt",
+        summary: "Rule by the wealthy financial cartel who manipulate public power purely for monopolistic rent-seeking and exploitation.",
+        parallel: "The Thirty Tyrants (Athens, 404 BCE) or the late French Ancien Régime.",
+        virtue: 15,
+        liberty: 25,
+        stability: 35,
+        decayCatalyst: "The disenfranchised masses find courageous leaders, unite in non-cooperation, and overthrow the cartel.",
+        newspaperKey: 3,
+        beats: [
+          {
+            title: "Good Choice? Consolidating Capital",
+            story: "Your family sits at the high table of the Oligarchy. The laws exist to enforce contracts for the rich, protect monopolistic tariffs, and shield private wealth from public taxation.",
+            bullets: null,
+            dilemma: "A lucrative state monopoly on municipal grain import licenses is up for bid.",
+            choices: [
+              { text: "Bribe the chief magistrate to secure the sole importation monopoly", effect: { wealth: +35, liberty: -15, influence: +15, peril: +15 } },
+              { text: "Advise keeping grain trade competitive to avoid famine insurrections", effect: { wealth: +5, liberty: +10, influence: -10, peril: -10 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly (For the 1%)",
+            story: "Your palatial villa boasts imported marble fountains, while half the urban population lives four families to a room in crumbling tenements. The stock guilds boom as cheap foreign labor keeps wages depressed.",
+            bullets: null,
+            dilemma: "A populist leader begins addressing thousands in the square on wealth inequality.",
+            choices: [
+              { text: "Use state courts to falsely frame him for treason and confiscate his pamphlets", effect: { wealth: +10, liberty: -20, influence: +10, peril: +20 } },
+              { text: "Fund a rival orator to preach factional hatred and divide the mob", effect: { wealth: -10, liberty: -15, influence: +5, peril: +15 } }
+            ]
+          },
+          {
+            title: "Time Passes... Famine Ignites Rage",
+            story: "A severe drought hits the provinces. While commoners starve, the oligarchic syndicate hoards grain silos to drive prices up by 400%. The patience of the multitude snaps.",
+            bullets: null,
+            dilemma: "Starving citizens storm your family's warehouse docks demanding bread.",
+            choices: [
+              { text: "Order private mercenaries to shoot into the crowd to defend your inventory", effect: { wealth: +15, liberty: -25, influence: -5, peril: +35 } },
+              { text: "Throw open the warehouse doors and distribute grain freely to calm the riot", effect: { wealth: -30, liberty: +15, influence: +10, peril: -15 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: The General Strike",
+            story: "The economy halts entirely:",
+            bullets: [
+              "Harbor dockers, bakery workers, and blacksmiths declare an indefinite general strike.",
+              "Mercenary troops refuse to attack when ordered, joining their civilian cousins.",
+              "The populace storms the central debt registry, setting mortgages and ledgers ablaze.",
+              "The oligarchic senate building is encircled by forty thousand citizens chanting for justice."
+            ],
+            dilemma: "The crowd breaks the senate doors. They demand a new constitutional assembly.",
+            choices: [
+              { text: "Surrender monopoly charters and sign the declaration of equal citizen rights", effect: { wealth: -20, liberty: +30, influence: +15, peril: -20 } },
+              { text: "Attempt to escape the capital by armed galley with your family gold", effect: { wealth: -10, liberty: -10, influence: -25, peril: +30 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... CONSTITUTIONAL DEMOCRACY",
+            story: "The oligarchy has collapsed! The people establish a sovereign popular assembly. Every free citizen shall have equal speech (*isegoria*), equal law (*isonomia*), and an equal ballot!",
+            bullets: null,
+            dilemma: "The new Republic opens its first popular elections. How does your family adapt?",
+            choices: [
+              { text: "Run for the citizen magistracy on a platform of constitutional balance and honesty", effect: { wealth: +10, liberty: +35, influence: +25, peril: -15 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 4,
+        name: "Constitutional Democracy",
+        greek: "Demokratia (δημοκρατία)",
+        icon: "📜",
+        ruler: "The Virtuous Many",
+        type: "virtuous",
+        summary: "Rule by the collective citizenry rooted in equality before the law, freedom of speech, rotation of office, and civic duty.",
+        parallel: "Classical Athens (Pericles, c. 450 BCE) or the Early American Republic.",
+        virtue: 85,
+        liberty: 95,
+        stability: 75,
+        decayCatalyst: "Generations grow up expecting benefits without civic sacrifice. Demagogues discover elections can be won by promising handouts funded by punitive taxes.",
+        newspaperKey: 4,
+        beats: [
+          {
+            title: "Good Choice: Equality Before the Law",
+            story: "The assembly gong rings! Thousands of citizens cast voting shards in the open sunlight. The law protects the poorest peasant equally against the richest patrician. Free enterprise and public discourse flourish.",
+            bullets: null,
+            dilemma: "What civic role does your family shoulder in the young democracy?",
+            choices: [
+              { text: "Serve as an unpaid juror on the sovereign popular courts (*dikasteria*)", effect: { wealth: -5, liberty: +25, influence: +15, peril: -10 } },
+              { text: "Build merchant vessels under open competition laws without monopolies", effect: { wealth: +25, liberty: +15, influence: +10, peril: 0 } },
+              { text: "Advise the assembly on military defense treaties", effect: { wealth: +10, liberty: +15, influence: +20, peril: +5 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly: The Golden Civic Age",
+            story: "The arts, philosophy, and sciences reach heights unseen in human memory. Citizens debate in the Agora by day and attend theatrical tragedies by night. Individual liberty and civic pride walk hand in hand.",
+            bullets: null,
+            dilemma: "A wealthy foreign potentate offers a lucrative commercial treaty that curtails citizen speech.",
+            choices: [
+              { text: "Vote against the treaty: principle and free speech exceed financial windfall", effect: { wealth: -10, liberty: +20, influence: +15, peril: -5 } },
+              { text: "Vote for the treaty: the city needs the trade revenue to fund public docks", effect: { wealth: +20, liberty: -10, influence: +5, peril: +5 } }
+            ]
+          },
+          {
+            title: "Time Passes... The Temptation of the Treasury",
+            story: "A new generation comes of age. They never fought for freedom; they view liberty as an entitlement rather than a fragile duty. Ambitious candidates realize they can win elections not by virtue, but by bidding wars with public funds.",
+            bullets: null,
+            dilemma: "A populist orator promises to double citizen theatrical subsidies by taxing commercial warehouses.",
+            choices: [
+              { text: "Take the speaker's rostrum to warn that state bribery will bankrupt the city", effect: { wealth: -5, liberty: +10, influence: -10, peril: +10 } },
+              { text: "Applaud the proposal to maintain favor with the voting majority", effect: { wealth: +5, liberty: -10, influence: +10, peril: -5 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: Factional Bidding",
+            story: "Reasoned debate is replaced by tribal polarization:",
+            bullets: [
+              "Politicians promise endless subsidies and debt cancellations to secure electoral voting blocs.",
+              "Civic associations dissolve; citizens view the state not as a common duty, but as a piggy bank.",
+              "Productive citizens are demonized as 'greedy hoarders' whenever tax revenues fall short.",
+              "Voter turnout collapses as cynicism spreads, leaving governance to organized interest groups."
+            ],
+            dilemma: "A new regulatory commission demands your family submit all private accounts for an 'equity audit.'",
+            choices: [
+              { text: "Comply and pay the punitive assessment to demonstrate your 'civic loyalty'", effect: { wealth: -20, liberty: -15, influence: 0, peril: 0 } },
+              { text: "Fund a coalition of independent craftsmen fighting for small business protections", effect: { wealth: -15, liberty: +15, influence: +10, peril: +15 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... THE WELFARE-ADMINISTRATIVE STATE",
+            story: "The constitutional republic has ceased to exist in practice. A massive permanent bureaucracy now dictates economic production, price caps, and wealth redistribution. Welcome to the Democratic Socialist Bureaucracy!",
+            bullets: null,
+            dilemma: "The state nationalizes major industries. How does your family position itself?",
+            choices: [
+              { text: "Accept an administrative directorship in the new central planning board", effect: { wealth: +15, liberty: -25, influence: +20, peril: +10 } },
+              { text: "Shield your family savings in foreign trade credits beyond government reach", effect: { wealth: +10, liberty: +5, influence: -15, peril: +20 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 5,
+        name: "Democratic Socialism / Welfare State",
+        greek: "Koinonikismos (κοινωνικισμός)",
+        icon: "⚙️",
+        ruler: "The Administrative Bureaucracy",
+        type: "corrupt",
+        summary: "A sprawling redistributive apparatus that substitutes administrative mandates for liberty, breeding entitlement, hyper-inflation, and capital flight.",
+        parallel: "Venezuela (Chávez to Maduro, 1999–present), Weimar Republic economic controls, or late Roman grain doles.",
+        virtue: 35,
+        liberty: 35,
+        stability: 40,
+        decayCatalyst: "As production collapses under price controls and debt monetization, shortages spark riots. Scapegoating gives birth to violent street tribunals.",
+        newspaperKey: 5,
+        beats: [
+          {
+            title: "Good Choice? Security for All",
+            story: "The state guarantees food, housing, and stipends to sixty percent of the populace. Poverty seems eradicated on paper; health clinics open on every boulevard, and celebrations honor collective equality.",
+            bullets: null,
+            dilemma: "The Ministry of Equity requests your family donate three vacant properties to the housing pool.",
+            choices: [
+              { text: "Surrender the properties voluntarily to receive a 'Hero of the People' certificate", effect: { wealth: -20, liberty: -15, influence: +15, peril: -10 } },
+              { text: "File legal appeals claiming the homes house extended working family members", effect: { wealth: 0, liberty: +5, influence: -10, peril: +15 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly (Until the Math Breaks)",
+            story: "A vast administrative class now issues permits for every sack of flour sold. Private investment slows, but government printing presses paper over deficits with newly minted currency.",
+            bullets: null,
+            dilemma: "Mandatory price ceilings on milk and grain make your rural family farms unprofitable.",
+            choices: [
+              { text: "Cease production and sell the cattle on the black market at real market value", effect: { wealth: +20, liberty: -5, influence: -10, peril: +20 } },
+              { text: "Apply for a government operating subsidy and submit to state production quotas", effect: { wealth: -5, liberty: -20, influence: +10, peril: -5 } }
+            ]
+          },
+          {
+            title: "Time Passes... Scarcity and Paralyzing Scapegoats",
+            story: "Supermarket shelves empty. Currency loses half its purchasing power every six months. The government refuses to admit economic errors, blaming 'foreign imperialists,' 'reactionary hoarders,' and 'unpatriotic businesses.'",
+            bullets: null,
+            dilemma: "Neighborhood 'Committees of Vigilance' inspect private pantries for hoarded goods.",
+            choices: [
+              { text: "Bribe the committee captain with coffee and cigarettes to overlook your reserves", effect: { wealth: -10, liberty: -10, influence: 0, peril: -10 } },
+              { text: "Stand on your porch with your sons, refusing entry without a judicial warrant", effect: { wealth: 0, liberty: +15, influence: -5, peril: +30 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: The Breaking Point",
+            story: "Civil order is completely coming apart at the seams:",
+            bullets: [
+              "Hyperinflation destroys all savings; workers demand payment in barter or foreign silver.",
+              "Armed neighborhood defense squads battle black-market smugglers in the streets.",
+              "Judges who rule against state confiscation are publicly denounced and removed by mobs.",
+              "Electrical blackouts and fuel rationing paralyze emergency hospitals and water pumps."
+            ],
+            dilemma: "A massive crowd gathers outside the central grain exchange. Riots erupt!",
+            choices: [
+              { text: "Fortify your family villa with iron gates and hired veteran guards", effect: { wealth: -15, liberty: 0, influence: 0, peril: +25 } },
+              { text: "Flee to your secluded countryside cabin until order returns", effect: { wealth: -20, liberty: +5, influence: -15, peril: -15 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... OCHLOCRACY (Mob Rule)",
+            story: "The administrative apparatus has collapsed under its own delusions. Courts are shuttered, police have disbanded or joined gangs, and ideological mobs rule the streets by guillotine and torch!",
+            bullets: null,
+            dilemma: "Armed street factions demand you pledge loyalty to their factional banner.",
+            choices: [
+              { text: "Hang their red sash on your balcony to deter arsonists", effect: { wealth: -10, liberty: -25, influence: 0, peril: -10 } },
+              { text: "Arm your neighbors into an independent neighborhood defense brigade", effect: { wealth: -15, liberty: +20, influence: +20, peril: +30 } }
+            ]
+          }
+        ]
+      },
+      {
+        index: 6,
+        name: "Ochlocracy",
+        greek: "Ochlokrateia (ὀχλοκρατία)",
+        icon: "🔥",
+        ruler: "The Degenerate Mob / Street Factions",
+        type: "corrupt",
+        summary: "Democracy degraded into mob violence, factional terror, demagoguery, and economic paralysis. Society becomes savage.",
+        parallel: "The French Reign of Terror (1793–1794), late Weimar street warfare (1932), or Rome's gang wars of Clodius & Milo.",
+        virtue: 8,
+        liberty: 12,
+        stability: 8,
+        decayCatalyst: "In utter exhaustion, starvation, and lawlessness, the terrified populace begs for any strongman who can restore physical safety.",
+        newspaperKey: 6,
+        beats: [
+          {
+            title: "Good Choice? Surviving the Tempest",
+            story: "There are no magistrates, no laws, and no contracts. The city belongs to whoever controls the intersection today. Your family survives behind barred windows, rationing candles and dried beans.",
+            bullets: null,
+            dilemma: "A street tribunal accuses your family of 'bourgeois sympathies.'",
+            choices: [
+              { text: "Recite revolutionary slogans and donate your last silver coin to their militia", effect: { wealth: -25, liberty: -20, influence: 0, peril: -15 } },
+              { text: "Brandish rifles from the upper window and warn them you will shoot to kill", effect: { wealth: 0, liberty: +10, influence: 0, peril: +35 } }
+            ]
+          },
+          {
+            title: "Things Are Going Swimmingly (For Demagogues and Gangs)",
+            story: "Demagogues execute former officials in the public fountains to roar of approval. Anyone who urges calm or moderation is lynched as a traitor. Absolute freedom has become absolute savagery.",
+            bullets: null,
+            dilemma: "An armed gang sets fire to the public library and municipal deed archives.",
+            choices: [
+              { text: "Risk your life to smuggle ancient historical codices into your cellar", effect: { wealth: -5, liberty: +20, influence: +10, peril: +25 } },
+              { text: "Stay hidden and preserve your family's water barrels", effect: { wealth: 0, liberty: -10, influence: -10, peril: -10 } }
+            ]
+          },
+          {
+            title: "Time Passes... Society Devours Itself",
+            story: "Farmers stop bringing crops to the city because carts are instantly seized by armed bands. Pestilence breaks out. The populace, starving and terrified, realizes their 'emancipation' has destroyed their civilization.",
+            bullets: null,
+            dilemma: "A victorious general approaches the city gates with three disciplined frontier legions.",
+            choices: [
+              { text: "Send a secret courier offering funds to supply the general's troops upon entry", effect: { wealth: -15, liberty: -10, influence: +25, peril: +10 } },
+              { text: "Keep total silence, awaiting the outcome of the battle", effect: { wealth: 0, liberty: 0, influence: -10, peril: 0 } }
+            ]
+          },
+          {
+            title: "The Cracks Are Starting to Show: The Cry for a Savior",
+            story: "The mob's bloodlust is replaced by total exhaustion:",
+            bullets: [
+              "Thousands line the avenues weeping, begging for order, food, and security.",
+              "Street demagogues flee in panic or are handed over to the incoming legionnaires by their own mobs.",
+              "The general's cavalry enters without firing a shot, immediately hanging looters from lampposts.",
+              "Bread wagons and water convoys move through the city center under armed guard."
+            ],
+            dilemma: "The General addresses the shivering populace from the steps of the temple.",
+            choices: [
+              { text: "Cheer thunderously: 'Hail our King, Savior of the State!'", effect: { wealth: +10, liberty: -25, influence: +15, peril: -20 } },
+              { text: "Weep in silence for the fallen Republic that died of its own hubris", effect: { wealth: -5, liberty: +10, influence: -10, peril: +10 } }
+            ]
+          },
+          {
+            title: "The Government is Morphing into... MONARCHY (The Wheel Completes!)",
+            story: "Anacyclosis has run its full course! Out of the smoking ruins of mob terror, the victorious commander is crowned Sovereign King! Laws are re-established, the calendar resets to Year 0, and the cycle begins anew!",
+            bullets: null,
+            dilemma: "The new King commissions your family to help rebuild the burned forum libraries.",
+            choices: [
+              { text: "Swear fealty to the new King and lead the reconstruction of the realm", effect: { wealth: +30, liberty: +15, influence: +35, peril: -25 } }
+            ]
+          }
+        ]
+      }
+    ];
+
+    const NEWSPAPERS = [
+      {
+        paper: "The Imperial Gazette",
+        dateline: "Vol. LXXIV • City of the Sun • Year 74 of the Royal House",
+        headline: "SUMPTUARY LEVY EXPANDED: SUN GATE MONUMENT RISES AS HARVEST DWINDLES",
+        subhead: "Grand Vizier Declares Murmurs of Discontent Treasonous Against Crown",
+        quote: "“Loyalty to the King is the first duty of every subject. Those who whisper against the sovereign's wisdom will find their answers from the royal lictors.” — High Chamberlain Vane",
+        story: "Yesterday His Majesty signed the Third Royal Assessment decree on provincial harvests to complete the colossal Sun Gate Monument. Responding to merchant petitions regarding bread prices, the court reiterated that all commerce is held by grace of the Crown.",
+        ticker: "Grain Rations: -20% • Royal Treasury: +450,000 Solidi • Mercenary Vanguard Levy: Fully Funded"
+      },
+      {
+        paper: "The Continental Tribune",
+        dateline: "Morning Broadside • 509 BCE • Year of the Liberation",
+        headline: "CITADEL FALLS: COUNCIL OF NOBLE MAGISTRATES DISSOLVES TYRANT'S THRONE",
+        subhead: "Solemn Oath Sworn: Never Again Shall One Sovereign Command Free Citizens",
+        quote: "“The blood of our slaughtered kin cries out no longer in vain. Let the tyrant flee into exile; Rome belongs to her people and her laws!” — Lucius Junius Brutus",
+        story: "At the third hour of dawn, the Allied Patrician Guard breached the inner garden gate of the palace. King Tarquin's foreign retainers were disarmed without quarter. Meeting at the temple of Jupiter, twenty noble leaders formed an enduring governing Senate.",
+        ticker: "Despot Palace: Confiscated • Citizen Debt: Abolished • Republican Senate: 300 Seats Established"
+      },
+      {
+        paper: "The Citizen's Ledger",
+        dateline: "Commercial & Political Record • No. 412 • Year 280 of the Republic",
+        headline: "PUBLIC COMMONS ENCLOSED: SENATORIAL SYNDICATE ACQUIRES 400 LEAGUES",
+        subhead: "Eviction Notices Served to Tenant Farmers; Senator Valerius Defends Consolidation",
+        quote: "“Capital consolidation is vital for imperial expansion. Smallholders lack the resources to produce export olive oil at scale.” — Senator Marcus Valerius",
+        story: "The High Magistracy yesterday ratified the private auction of the Ager Publicus grasslands to a consortium of twelve senatorial families. Protesting tenant veterans were dispersed by mounted lictors. The Senate subsequently tabled all debtor relief petitions.",
+        ticker: "Land Concentration: Top 1% owns 78% • Urban Slum Migration: +40% • Senatorial Dividends: +22%"
+      },
+      {
+        paper: "The Free Press Courier",
+        dateline: "Special Edition • The Pnyx • Year 450 BCE",
+        headline: "GREAT CHARTER RATIFIED: SOVEREIGNTY RESTORED TO POPULAR ASSEMBLY",
+        subhead: "General Strike Paralyzes Oligarchs; Equal Ballots and Free Speech Codified",
+        quote: "“Our constitution is called a democracy because power is in the hands not of a minority, but of the whole people.” — Pericles",
+        story: "Following ten days of general strikes in the harbor wards, the oligarchic senate has formally capitulated. Henceforth, all public magistrates must stand for annual election, and no citizen may be executed without a trial by popular jury. Celebrations continue into dawn.",
+        ticker: "Assembly Quorum: 6,000 Citizens • Monopolies Abolished: 100% • Civic Happiness Index: All-Time High"
+      },
+      {
+        paper: "The Daily Progressive",
+        dateline: "Metro Edition • National Bureaucracy • Year 42 of the Social Compact",
+        headline: "UNIVERSAL EQUITY BILL PASSES: 40 NEW COMMISSIONS TO MANAGE COMMERCE",
+        subhead: "Profit Caps Fixed at 6%; Food & Housing Vouchers Expanded to 60% of Populace",
+        quote: "“True freedom is freedom from market anxiety. The state guarantees every child an equal ration from cradle to grave.” — High Commissioner Vance",
+        story: "By narrow legislative margin, the assembly ratified the Economic Harmonization Act. Forty state directorates will now oversee prices, wages, and property allocation. Warnings from merchant guilds regarding capital flight were drowned out by roars from the galleries.",
+        ticker: "State Payroll: 62% of Workforce • National Debt: 240% GDP • Money Supply Growth: +28% Annually"
+      },
+      {
+        paper: "The Metropolitan Chronicle",
+        dateline: "Late Evening Bulletin • Capital Enclosure • Year of Emergency Decrees",
+        headline: "BREAD RIOTS ENGULF COMMERCE WARD: POLICE RETREAT TO FORTIFIED PRECINCTS",
+        subhead: "Vigilance Committees Raid Granaries; Courts Suspended After Judges Lynched",
+        quote: "“We have printed paper until the mills break, yet there is no milk! The hoarders must pay with their blood!” — Street Tribune Felix",
+        story: "Chaos reigned across the central avenues today as hyperinflation rendered currency worthless. Armed mobs of the People's Redistributive Union stormed the central grain exchange. Municipal police stood down. Blackouts plunge the capital into complete darkness tonight.",
+        ticker: "Inflation: +1,200% • Bread Ration: Suspended • Street Clashes: 14 Wards Under Militia Barricades"
+      },
+      {
+        paper: "The National Sentinel",
+        dateline: "Special Military Dispatch • Year 1 of the Restoration",
+        headline: "GENERAL KARR ENTERS CAPITAL: MARTIAL STABILITY COUNCIL ESTABLISHED",
+        subhead: "Street Demagogues Rounded Up; Sovereign Order Re-established by Legion Command",
+        quote: "“The terror is over. The gangs are disarmed. Society shall have bread, law, and peace under one crown.” — General Aurelius Karr",
+        story: "At 6:00 AM, the First Legion entered the capital gates without resistance. Exhausted citizens threw laurel leaves at the cavalry as mobile kitchens began distributing bread. By decree, the chaotic assembly is dissolved and all sovereign authority consolidated in the King.",
+        ticker: "Street Gangs Disbanded: 100% • Food Convoys Moving: 200 Trucks Daily • Cycle Status: Monarchy Restored"
+      }
+    ];
+
+    /* App State */
+    const State = {
+      activeWheelStage: 0,
+      sagaRegimeIndex: 0,
+      sagaBeatIndex: 0,
+      sagaYear: 0,
+      sagaGen: 1,
+      dynastyName: "House of Valerius",
+      wealth: 80,
+      liberty: 85,
+      influence: 75,
+      peril: 15,
+      wheelAutoplayTimer: null,
+      sagaAutoplayTimer: null,
+      wheelPlaying: false,
+      sagaPlaying: false,
+      newspaperOpen: false,
+      ancestorTitles: [
+        "The Pioneer", "The Statesman", "The High Magistrate", 
+        "The Dissident", "The Reformer", "The Exile", "The Survivor", "The Founder"
+      ]
+    };
+
+    /* Audio Toggle */
+    function toggleAudioState() {
+      SoundBox.muted = !SoundBox.muted;
+      const icon = document.getElementById('audio-status-icon');
+      const text = document.getElementById('audio-status-text');
+      if (SoundBox.muted) {
+        icon.innerText = '🔇';
+        text.innerText = 'Audio: OFF';
+      } else {
+        icon.innerText = '🔊';
+        text.innerText = 'Audio: ON';
+        SoundBox.play('click');
+      }
+    }
+
+    /* Wheel & Detail Navigation */
+    function selectWheelStage(idx) {
+      SoundBox.play('click');
+      State.activeWheelStage = idx;
+      renderWheelVisuals();
+      renderStageDetails();
+    }
+
+    function cycleStep(dir, fromAutoplay = false) {
+      if (!fromAutoplay) SoundBox.play('click');
+      const leaving = SEVEN_STAGES[State.activeWheelStage];
+      State.activeWheelStage = (State.activeWheelStage + dir + 7) % 7;
+      const arriving = SEVEN_STAGES[State.activeWheelStage];
+      renderWheelVisuals();
+      renderStageDetails();
+      const dispatchStage = dir >= 0 ? leaving : arriving;
+      openNewspaperDispatch(dispatchStage.newspaperKey, {
+        kicker: dir >= 0
+          ? `The ${leaving.name} order breaks. ${arriving.icon} ${arriving.name} takes the wheel.`
+          : `${arriving.icon} ${arriving.name} — the period press reports.`
+      });
+    }
+
+    function updateWheelPlayButton() {
+      const btn = document.getElementById('btn-autoplay-wheel');
+      if (!btn) return;
+      if (State.wheelPlaying) {
+        btn.innerHTML = '⏸ Pause Cycle';
+        btn.className = 'px-4 py-1.5 rounded-lg border border-gold-500 bg-gold-500 hover:bg-gold-400 text-xs font-mono text-black font-semibold transition-all';
+      } else {
+        btn.innerHTML = '▶ Play Cycle';
+        btn.className = 'px-4 py-1.5 rounded-lg border border-gold-500/50 bg-regal-850 hover:bg-regal-800 text-xs font-mono text-gold-400 transition-all';
+      }
+    }
+
+    function stopWheelTimer() {
+      if (State.wheelAutoplayTimer) {
+        clearInterval(State.wheelAutoplayTimer);
+        State.wheelAutoplayTimer = null;
+      }
+    }
+
+    function startWheelTimer() {
+      stopWheelTimer();
+      State.wheelAutoplayTimer = setInterval(() => {
+        if (State.newspaperOpen) return;
+        cycleStep(1, true);
+      }, 5200);
+    }
+
+    function toggleWheelAutoplay() {
+      if (State.wheelPlaying) {
+        State.wheelPlaying = false;
+        stopWheelTimer();
+        updateWheelPlayButton();
+        return;
+      }
+      stopSagaPlayback();
+      SoundBox.play('click');
+      State.wheelPlaying = true;
+      updateWheelPlayButton();
+      cycleStep(1, true);
+      startWheelTimer();
+    }
+
+    function stopWheelPlayback() {
+      State.wheelPlaying = false;
+      stopWheelTimer();
+      updateWheelPlayButton();
+    }
+
+    function renderWheelVisuals() {
+      // 7 positions along circle R=195, Center=(260, 260)
+      // Angles: -90, -38.57, +12.85, +64.28, +115.71, +167.14, +218.57 deg
+      const coords = [
+        { x: 260, y: 65 },  // 0: Monarchy
+        { x: 412, y: 138 }, // 1: Tyranny
+        { x: 450, y: 303 }, // 2: Aristocracy
+        { x: 345, y: 436 }, // 3: Oligarchy
+        { x: 175, y: 436 }, // 4: Democracy
+        { x: 70, y: 303 },  // 5: Welfare State
+        { x: 108, y: 138 }  // 6: Ochlocracy
+      ];
+
+      const bead = document.getElementById('wheel-indicator-bead');
+      if (bead && coords[State.activeWheelStage]) {
+        bead.setAttribute('cx', coords[State.activeWheelStage].x);
+        bead.setAttribute('cy', coords[State.activeWheelStage].y);
+      }
+
+      // Highlight active node button
+      for (let i = 0; i < 7; i++) {
+        const btn = document.getElementById(`btn-node-${i}`);
+        if (!btn) continue;
+        if (i === State.activeWheelStage) {
+          btn.classList.add('ring-4', 'ring-gold-400', 'scale-110', 'z-20');
+        } else {
+          btn.classList.remove('ring-4', 'ring-gold-400', 'scale-110', 'z-20');
+        }
+      }
+    }
+
+    function renderStageDetails() {
+      const stage = SEVEN_STAGES[State.activeWheelStage];
+      const panel = document.getElementById('stage-detail-panel');
+      const isVirtuous = stage.type === 'virtuous';
+
+      panel.innerHTML = `
+        <div class="flex items-center justify-between border-b border-slate-800 pb-3 mb-3">
+          <div class="flex items-center gap-2.5">
+            <span class="text-xl p-1.5 rounded-xl bg-regal-950 border border-slate-700">${stage.icon}</span>
+            <div>
+              <span class="text-[10px] font-mono uppercase tracking-widest ${isVirtuous ? 'text-emerald-400' : 'text-red-400'} font-bold">
+                Stage ${stage.index + 1} of 7 • ${isVirtuous ? 'Virtuous Order' : 'Corrupted Pathology'}
+              </span>
+              <h3 class="text-lg font-serif font-bold text-slate-100">${stage.name}</h3>
+              <span class="text-xs text-gold-400 font-serif italic">${stage.greek}</span>
+            </div>
+          </div>
+          <span class="text-[11px] font-mono px-2.5 py-1 rounded-full border ${isVirtuous ? 'border-emerald-500/50 bg-emerald-500/10 text-emerald-300' : 'border-red-500/50 bg-red-500/10 text-red-300'}">
+            ${stage.ruler}
+          </span>
+        </div>
+
+        <p class="text-xs text-slate-300 leading-relaxed mb-3">
+          ${stage.summary}
+        </p>
+
+        <!-- Metric Bars -->
+        <div class="space-y-1.5 mb-3 p-2.5 rounded-xl bg-regal-950 border border-slate-800">
+          <div>
+            <div class="flex justify-between text-[11px] mb-0.5">
+              <span class="text-slate-400">Civic Virtue & Rule of Law</span>
+              <span class="font-mono text-emerald-400 font-bold">${stage.virtue}%</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-regal-900 overflow-hidden">
+              <div class="h-full bg-emerald-500" style="width: ${stage.virtue}%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-[11px] mb-0.5">
+              <span class="text-slate-400">Individual Liberty & Speech</span>
+              <span class="font-mono text-cyan-400 font-bold">${stage.liberty}%</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-regal-900 overflow-hidden">
+              <div class="h-full bg-cyan-500" style="width: ${stage.liberty}%"></div>
+            </div>
+          </div>
+
+          <div>
+            <div class="flex justify-between text-[11px] mb-0.5">
+              <span class="text-slate-400">Institutional Stability</span>
+              <span class="font-mono text-gold-400 font-bold">${stage.stability}%</span>
+            </div>
+            <div class="w-full h-1.5 rounded-full bg-regal-900 overflow-hidden">
+              <div class="h-full bg-gold-500" style="width: ${stage.stability}%"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Failure Trigger Note -->
+        <div class="p-2.5 rounded-xl bg-regal-850 border border-slate-800 text-xs mb-3">
+          <strong class="text-amber-400 font-mono block text-[10px] uppercase">Internal Collapse Trigger:</strong>
+          <p class="text-slate-300 mt-1">${stage.decayCatalyst}</p>
+        </div>
+
+        <div class="p-2.5 rounded-xl bg-regal-950 border border-slate-800 text-[11px] text-slate-400 mb-3">
+          <strong class="text-slate-200 block font-serif">Historical Manifestation:</strong>
+          <span>${stage.parallel}</span>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="startSagaAt(${stage.index}); document.getElementById('simulator').scrollIntoView();" class="w-full py-2.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 hover:brightness-110 text-regal-950 font-serif font-bold text-xs tracking-wider shadow-md transition-all">
+            Launch Saga in ${stage.name} →
+          </button>
+          <button onclick="openNewspaperDispatch(${stage.newspaperKey}, { silent: true })" class="px-3.5 py-2.5 rounded-xl border border-slate-700 bg-regal-950 hover:border-gold-400 text-slate-300 text-xs font-mono transition-all">
+            Gazette
+          </button>
+        </div>
+      `;
+    }
+
+    /* Macro Velocity Sliders */
+    function calculateVelocity() {
+      const dep = parseInt(document.getElementById('input-dependency').value, 10);
+      const comp = parseInt(document.getElementById('input-compliance').value, 10);
+      const cri = parseInt(document.getElementById('input-crisis').value, 10);
+
+      document.getElementById('label-val-dependency').innerText = `${dep}%`;
+      document.getElementById('label-val-compliance').innerText = `${comp}%`;
+      document.getElementById('label-val-crisis').innerText = `${cri}%`;
+
+      // Velocity formula: High dependency + high compliance + high crisis = lightning rapid collapse
+      const rawIndex = (dep * 0.4) + (comp * 0.3) + (cri * 0.5);
+      const multiplier = (rawIndex / 40).toFixed(2);
+
+      const titleEl = document.getElementById('velocity-tier-title');
+      const multEl = document.getElementById('velocity-multiplier');
+
+      multEl.innerText = `${multiplier}x Standard Rate`;
+
+      if (rawIndex < 35) {
+        titleEl.innerText = "Centuries-Long Inertia (High resistance, decentralized, slow decay)";
+        titleEl.className = "font-serif font-bold text-sm text-emerald-400";
+      } else if (rawIndex < 65) {
+        titleEl.innerText = "Generational Rhythm (40–60 Years Per Pillar; typical classical pace)";
+        titleEl.className = "font-serif font-bold text-sm text-gold-400";
+      } else if (rawIndex < 85) {
+        titleEl.innerText = "Compressed Accelerated Slide (15–25 Years; acute institutional rot)";
+        titleEl.className = "font-serif font-bold text-sm text-amber-400";
+      } else {
+        titleEl.innerText = "Flash Totalitarian Collapse (5–10 Years; panic, dependency, and force)";
+        titleEl.className = "font-serif font-bold text-sm text-red-400";
+      }
+    }
+
+    function resetVelocitySliders() {
+      SoundBox.play('click');
+      document.getElementById('input-dependency').value = 50;
+      document.getElementById('input-compliance').value = 45;
+      document.getElementById('input-crisis').value = 30;
+      calculateVelocity();
+    }
+
+    /* Generational Simulator Engine */
+    function renderSagaUI() {
+      const stage = SEVEN_STAGES[State.sagaRegimeIndex];
+      const beat = stage.beats[State.sagaBeatIndex];
+
+      // Counters
+      document.getElementById('saga-year').innerText = `Year ${State.sagaYear}`;
+      document.getElementById('saga-gen').innerText = `Gen ${romanize(State.sagaGen)}`;
+      document.getElementById('saga-dynasty-name').innerText = State.dynastyName;
+      document.getElementById('annals-family-tag').innerText = State.dynastyName;
+      
+      const roleIdx = (State.sagaGen - 1) % State.ancestorTitles.length;
+      document.getElementById('saga-ancestor-title').innerText = State.ancestorTitles[roleIdx];
+
+      // Bars
+      setMeterBar('saga-bar-wealth', 'saga-val-wealth', State.wealth);
+      setMeterBar('saga-bar-liberty', 'saga-val-liberty', State.liberty);
+      setMeterBar('saga-bar-influence', 'saga-val-influence', State.influence);
+      setMeterBar('saga-bar-peril', 'saga-val-peril', State.peril);
+
+      // Pills
+      for (let i = 0; i < 5; i++) {
+        const pill = document.getElementById(`saga-pill-${i}`);
+        if (!pill) continue;
+        if (i === State.sagaBeatIndex) {
+          pill.className = "flex-1 min-w-[95px] text-center p-2 rounded-lg bg-gold-500 text-regal-950 font-bold shadow-md";
+        } else if (i < State.sagaBeatIndex) {
+          pill.className = "flex-1 min-w-[95px] text-center p-2 rounded-lg bg-regal-850 text-emerald-400 border border-emerald-500/30";
+        } else {
+          pill.className = "flex-1 min-w-[95px] text-center p-2 rounded-lg bg-regal-950 text-slate-500";
+        }
+      }
+
+      // Regime Headers
+      document.getElementById('saga-regime-icon').innerText = stage.icon;
+      document.getElementById('saga-regime-class').innerText = `${stage.ruler} • ${stage.type.toUpperCase()}`;
+      document.getElementById('saga-regime-class').className = `text-[10px] sm:text-xs font-mono uppercase tracking-widest font-bold block ${stage.type === 'virtuous' ? 'text-emerald-400' : 'text-red-400'}`;
+      document.getElementById('saga-regime-title').innerText = `${stage.name} Epoch`;
+
+      // Story Content
+      const storyContainer = document.getElementById('saga-story-content');
+      let bulletsHTML = '';
+      if (beat.bullets) {
+        bulletsHTML = `
+          <div class="p-4 rounded-xl bg-red-950/20 border border-red-500/30 my-3">
+            <span class="text-xs font-mono text-red-400 font-bold block mb-2 uppercase">Systemic Decay Indicators:</span>
+            <ul class="space-y-1 text-xs text-slate-300">
+              ${beat.bullets.map(b => `<li class="flex items-start gap-2"><span class="text-red-400 mt-0.5">•</span><span>${b}</span></li>`).join('')}
+            </ul>
+          </div>
+        `;
+      }
+
+      storyContainer.innerHTML = `
+        <div class="space-y-2">
+          <div class="inline-block px-3 py-1 rounded bg-regal-850 border border-slate-700 text-xs font-mono text-gold-400">
+            Beat ${State.sagaBeatIndex + 1}: ${beat.title}
+          </div>
+          <p class="text-sm text-slate-200 leading-relaxed font-light">
+            ${beat.story}
+          </p>
+          ${bulletsHTML}
+        </div>
+      `;
+
+      // Dilemmas
+      const dilemmaContainer = document.getElementById('saga-dilemma-box');
+      dilemmaContainer.innerHTML = `
+        <span class="text-xs font-mono text-gold-400 uppercase tracking-wider block font-semibold mb-1.5">
+          ⚡ Family Dynasty Dilemma
+        </span>
+        <p class="text-xs text-slate-300 mb-3">${beat.dilemma}</p>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+          ${beat.choices.map((c, idx) => `
+            <button onclick="handleDilemmaChoice(${idx})" class="text-left p-3 rounded-xl border border-slate-800 bg-regal-900 hover:border-gold-500 hover:bg-gold-500/10 text-xs text-slate-200 transition-all flex flex-col justify-between group">
+              <span class="font-medium group-hover:text-gold-300">${c.text}</span>
+              <div class="mt-2 text-[10px] font-mono text-slate-400 flex flex-wrap gap-2">
+                <span>Wealth ${formatModifier(c.effect.wealth)}</span>
+                <span>•</span>
+                <span>Liberty ${formatModifier(c.effect.liberty)}</span>
+                <span>•</span>
+                <span>Risk ${formatModifier(c.effect.peril)}</span>
+              </div>
+            </button>
+          `).join('')}
+        </div>
+      `;
+
+      // Advance Button
+      const statusLabel = document.getElementById('saga-beat-status-label');
+      const btnText = document.getElementById('saga-btn-text');
+      const btn = document.getElementById('btn-advance-saga');
+
+      statusLabel.innerText = `Beat ${State.sagaBeatIndex + 1} of 5 in ${stage.name}`;
+
+      if (State.sagaBeatIndex < 4) {
+        const nextBeat = stage.beats[State.sagaBeatIndex + 1];
+        btnText.innerText = `Advance: ${nextBeat.title.split(':')[0]}`;
+        btn.className = "w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-gold-500 to-amber-500 hover:from-gold-400 hover:to-amber-400 text-regal-950 font-serif font-bold text-xs sm:text-sm tracking-wider shadow-lg shadow-gold-500/20 active:scale-95 transition-all flex items-center justify-center gap-2";
+      } else {
+        const nextStageIdx = (State.sagaRegimeIndex + 1) % 7;
+        const nextStage = SEVEN_STAGES[nextStageIdx];
+        btnText.innerText = `THE REVOLUTION OCCURS: Transform into ${nextStage.name}!`;
+        btn.className = "w-full sm:w-auto px-7 py-3.5 rounded-xl bg-gradient-to-r from-red-600 to-amber-600 hover:from-red-500 hover:to-amber-500 text-white font-serif font-bold text-xs sm:text-sm tracking-wider shadow-lg shadow-red-600/30 active:scale-95 transition-all flex items-center justify-center gap-2";
+      }
+    }
+
+    function handleDilemmaChoice(choiceIdx) {
+      SoundBox.play('click');
+      const stage = SEVEN_STAGES[State.sagaRegimeIndex];
+      const beat = stage.beats[State.sagaBeatIndex];
+      const choice = beat.choices[choiceIdx];
+
+      State.wealth = clamp(State.wealth + choice.effect.wealth);
+      State.liberty = clamp(State.liberty + choice.effect.liberty);
+      State.influence = clamp(State.influence + choice.effect.influence);
+      State.peril = clamp(State.peril + choice.effect.peril);
+
+      appendSagaAnnals(`Year ${State.sagaYear} [${stage.name} • Gen ${romanize(State.sagaGen)}]: "${choice.text}" (Wealth: ${State.wealth}%, Peril: ${State.peril}%)`);
+      advanceSagaBeat();
+    }
+
+    function advanceSagaBeat(fromAutoplay = false) {
+      const currentStage = SEVEN_STAGES[State.sagaRegimeIndex];
+
+      if (State.sagaBeatIndex < 4) {
+        State.sagaBeatIndex++;
+        State.sagaYear += 20;
+        if (State.sagaBeatIndex === 2 || State.sagaBeatIndex === 4) {
+          State.sagaGen++;
+        }
+
+        if (State.sagaBeatIndex >= 2) {
+          if (!fromAutoplay) SoundBox.play('decay');
+          State.peril = clamp(State.peril + 10);
+        } else if (!fromAutoplay) {
+          SoundBox.play('virtue');
+        }
+        renderSagaUI();
+        return;
+      }
+
+      SoundBox.play('revolution');
+      const nextIdx = (State.sagaRegimeIndex + 1) % 7;
+      const nextStage = SEVEN_STAGES[nextIdx];
+
+      appendSagaAnnals(`⚠️ HISTORICAL SEA-CHANGE (Year ${State.sagaYear}): The ${currentStage.name} order collapses! Society transforms into ${nextStage.name}!`);
+
+      State.sagaRegimeIndex = nextIdx;
+      State.sagaBeatIndex = 0;
+      State.sagaYear += 15;
+      State.sagaGen++;
+
+      State.liberty = nextStage.liberty;
+      State.peril = Math.round(100 - nextStage.stability);
+
+      renderSagaUI();
+      openNewspaperDispatch(currentStage.newspaperKey, {
+        silent: true,
+        kicker: `The ${currentStage.name} has fallen. ${nextStage.icon} ${nextStage.name} begins.`
+      });
+    }
+
+    function updateSagaPlayButton() {
+      const btn = document.getElementById('btn-autoplay-saga');
+      if (!btn) return;
+      if (State.sagaPlaying) {
+        btn.innerText = '⏸ Pause Chronicle';
+        btn.className = 'px-4 py-3.5 rounded-xl border border-gold-500 bg-gold-500 hover:bg-gold-400 text-black font-mono text-xs tracking-wider font-semibold transition-all';
+      } else {
+        btn.innerText = '▶ Play Chronicle';
+        btn.className = 'px-4 py-3.5 rounded-xl border border-gold-500/50 bg-regal-850 hover:bg-regal-800 text-gold-300 font-mono text-xs tracking-wider transition-all';
+      }
+    }
+
+    function stopSagaTimer() {
+      if (State.sagaAutoplayTimer) {
+        clearInterval(State.sagaAutoplayTimer);
+        State.sagaAutoplayTimer = null;
+      }
+    }
+
+    function startSagaTimer() {
+      stopSagaTimer();
+      State.sagaAutoplayTimer = setInterval(() => {
+        if (State.newspaperOpen) return;
+        advanceSagaBeat(true);
+      }, 6500);
+    }
+
+    function toggleSagaAutoplay() {
+      if (State.sagaPlaying) {
+        stopSagaPlayback();
+        return;
+      }
+      stopWheelPlayback();
+      SoundBox.play('virtue');
+      State.sagaPlaying = true;
+      updateSagaPlayButton();
+      advanceSagaBeat(true);
+      startSagaTimer();
+    }
+
+    function stopSagaPlayback() {
+      State.sagaPlaying = false;
+      stopSagaTimer();
+      updateSagaPlayButton();
+    }
+
+    function openCurrentSagaGazette() {
+      const stage = SEVEN_STAGES[State.sagaRegimeIndex];
+      openNewspaperDispatch(stage.newspaperKey, {
+        silent: true,
+        kicker: `${stage.icon} ${stage.name} — the living period gazette.`
+      });
+    }
+
+    function startSagaAt(regimeIdx) {
+      SoundBox.play('click');
+      State.sagaRegimeIndex = regimeIdx;
+      State.sagaBeatIndex = 0;
+      State.sagaYear += 25;
+      State.sagaGen++;
+
+      const stage = SEVEN_STAGES[regimeIdx];
+      State.liberty = stage.liberty;
+      State.peril = Math.round(100 - stage.stability);
+
+      appendSagaAnnals(`Year ${State.sagaYear}: Dynasty adapts to the rise of ${stage.name}.`);
+      renderSagaUI();
+      showNewspaper(stage.newspaperKey);
+    }
+
+    function resetSagaFull() {
+      SoundBox.play('virtue');
+      stopSagaPlayback();
+      State.sagaRegimeIndex = 0;
+      State.sagaBeatIndex = 0;
+      State.sagaYear = 0;
+      State.sagaGen = 1;
+      State.wealth = 80;
+      State.liberty = 85;
+      State.influence = 75;
+      State.peril = 15;
+      document.getElementById('saga-annals-feed').innerHTML = '';
+      appendSagaAnnals(`Year 0: Cycle initialized. ${State.dynastyName} begins in the Golden Monarchy.`);
+      renderSagaUI();
+      showNewspaper(0);
+    }
+
+    function promptRenameDynasty() {
+      const entered = window.prompt("Enter your Dynastic Family Name (e.g., Clan Scipio, House of Gracchus):", State.dynastyName);
+      if (entered && entered.trim().length > 0) {
+        State.dynastyName = entered.trim();
+        SoundBox.play('virtue');
+        renderSagaUI();
+      }
+    }
+
+    function appendSagaAnnals(msg) {
+      const feed = document.getElementById('saga-annals-feed');
+      if (!feed) return;
+      const el = document.createElement('div');
+      el.className = "p-2 rounded bg-regal-950 border border-slate-800/90 font-mono text-[11px] text-slate-300";
+      el.innerText = msg;
+      feed.prepend(el);
+    }
+
+    /* Newspaper Broadsheet Renderer */
+    function buildNewspaperHTML(index) {
+      const paper = NEWSPAPERS[index];
+      return `
+        <div class="text-center border-b-2 border-stone-800 pb-3 mb-4">
+          <div class="text-[10px] font-mono uppercase tracking-widest text-stone-700">${paper.dateline}</div>
+          <h2 id="newspaper-modal-title" class="text-xl sm:text-2xl font-editorial font-bold uppercase tracking-tight text-stone-900 mt-1">
+            ${paper.paper}
+          </h2>
+          <div class="newspaper-border py-1 my-2 flex justify-between text-[10px] font-mono text-stone-700">
+            <span>PRICE: TWO COINS</span>
+            <span>OFFICIAL TRANSCRIPT OF CURRENT AFFAIRS</span>
+            <span>CIRCULATION: 24,000 COPIES</span>
+          </div>
+        </div>
+
+        <div class="mb-4">
+          <h3 class="text-lg sm:text-xl font-editorial font-bold leading-tight text-stone-900">
+            ${paper.headline}
+          </h3>
+          <h4 class="text-xs sm:text-sm font-sans font-semibold text-stone-700 mt-1 italic">
+            ${paper.subhead}
+          </h4>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-12 gap-6 items-start">
+          <div class="md:col-span-8 text-xs sm:text-sm font-editorial leading-relaxed text-stone-800 space-y-3">
+            <p class="first-letter:text-2xl first-letter:font-bold first-letter:float-left first-letter:mr-2 first-letter:font-editorial">
+              ${paper.story}
+            </p>
+          </div>
+
+          <div class="md:col-span-4 p-3.5 bg-[#eae1cb] border border-stone-700 rounded-lg space-y-2 text-xs">
+            <span class="text-[9px] font-mono text-stone-600 uppercase font-bold block">Witness / Magistrate Quote</span>
+            <p class="font-editorial italic text-stone-900 leading-snug">
+              ${paper.quote}
+            </p>
+          </div>
+        </div>
+
+        <div class="mt-6 pt-2 border-t border-stone-700 flex flex-col sm:flex-row items-center justify-between text-[10px] font-mono text-stone-700 gap-2">
+          <span><strong>ECONOMIC TICKER:</strong> ${paper.ticker}</span>
+          <span>ARCHIVAL REPRINT</span>
+        </div>
+      `;
+    }
+
+    function highlightNewspaperTab(index) {
+      for (let i = 0; i < 7; i++) {
+        const tab = document.getElementById(`tab-news-${i}`);
+        if (!tab) continue;
+        if (i === index) {
+          tab.className = "px-3.5 py-2 rounded-xl text-xs font-serif font-bold border border-gold-500 bg-gold-500 text-regal-950 shadow-md whitespace-nowrap";
+        } else {
+          tab.className = "px-3.5 py-2 rounded-xl text-xs font-serif font-bold border border-slate-700 bg-regal-900 text-slate-400 hover:border-slate-500 whitespace-nowrap";
+        }
+      }
+    }
+
+    function renderNewspaperBroadsheet(index) {
+      const box = document.getElementById('newspaper-container');
+      if (!box) return;
+      box.innerHTML = buildNewspaperHTML(index);
+    }
+
+    function showNewspaper(index) {
+      highlightNewspaperTab(index);
+      renderNewspaperBroadsheet(index);
+    }
+
+    function openNewspaperDispatch(index, opts = {}) {
+      highlightNewspaperTab(index);
+      renderNewspaperBroadsheet(index);
+
+      const modal = document.getElementById('modal-newspaper');
+      const sheet = modal.querySelector('.newsprint');
+      const body = document.getElementById('newspaper-modal-container');
+      const kicker = document.getElementById('newspaper-modal-kicker');
+      body.innerHTML = buildNewspaperHTML(index);
+      kicker.innerText = opts.kicker || 'A new epoch is unfolding.';
+
+      if (sheet) {
+        sheet.classList.remove('gazette-enter');
+        void sheet.offsetWidth;
+        sheet.classList.add('gazette-enter');
+      }
+
+      State.newspaperOpen = true;
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      if (!opts.silent) SoundBox.play('revolution');
+    }
+
+    function closeNewspaperDispatch() {
+      if (!State.newspaperOpen) return;
+      State.newspaperOpen = false;
+      const modal = document.getElementById('modal-newspaper');
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+      SoundBox.play('click');
+      if (State.wheelPlaying) startWheelTimer();
+      if (State.sagaPlaying) startSagaTimer();
+    }
+
+    function scrollToNewspaper() {
+      openCurrentSagaGazette();
+    }
+
+    /* Mixed Constitution Lab */
+    function updateMixedSystem() {
+      const c = parseInt(document.getElementById('lever-consul').value, 10);
+      const s = parseInt(document.getElementById('lever-senate').value, 10);
+      const p = parseInt(document.getElementById('lever-people').value, 10);
+
+      const mean = (c + s + p) / 3;
+      const variance = (Math.pow(c - mean, 2) + Math.pow(s - mean, 2) + Math.pow(p - mean, 2)) / 3;
+      const deviation = Math.sqrt(variance);
+
+      const score = Math.max(12, Math.round(100 - (deviation * 1.6)));
+      const scoreEl = document.getElementById('mixed-val-score');
+      const labelEl = document.getElementById('mixed-label-status');
+      const descEl = document.getElementById('mixed-label-desc');
+
+      scoreEl.innerText = `${score}%`;
+
+      if (deviation < 15) {
+        scoreEl.className = "text-xl font-serif font-bold text-emerald-400";
+        labelEl.className = "text-emerald-400 font-sans font-bold";
+        labelEl.innerText = "Harmonious Mixed Republic (Wheel Paused)";
+        descEl.innerText = "Consuls, Senate, and Assemblies check one another. No faction can consolidate total power; Anacyclosis is paused.";
+      } else if (c > s + 25 && c > p + 25) {
+        scoreEl.className = "text-xl font-serif font-bold text-red-400";
+        labelEl.className = "text-red-400 font-sans font-bold";
+        labelEl.innerText = "Consular Despotism (Slide toward Tyranny)";
+        descEl.innerText = "Executive generals control the legions without senatorial oversight. Caesar or Sulla marches on the capital.";
+      } else if (s > c + 25 && s > p + 25) {
+        scoreEl.className = "text-xl font-serif font-bold text-amber-400";
+        labelEl.className = "text-amber-400 font-sans font-bold";
+        labelEl.innerText = "Patrician Capture (Slide toward Oligarchy)";
+        descEl.innerText = "The Senate hoards land and revenue, ignoring tribunes. Severe wealth disparity prepares popular rebellion.";
+      } else if (p > c + 25 && p > s + 25) {
+        scoreEl.className = "text-xl font-serif font-bold text-purple-400";
+        labelEl.className = "text-purple-400 font-sans font-bold";
+        labelEl.innerText = "Demagogic Excess (Slide toward Ochlocracy)";
+        descEl.innerText = "Street assemblies disregard procedural law to vote for treasury plunder. Violence breaks out in the forum.";
+      } else {
+        scoreEl.className = "text-xl font-serif font-bold text-yellow-400";
+        labelEl.className = "text-yellow-400 font-sans font-bold";
+        labelEl.innerText = "Factional Friction & Polarization";
+        descEl.innerText = "Constitutional checks are straining. Factions are clashing, though institutional guardrails still hold.";
+      }
+    }
+
+    function resetMixedSliders() {
+      SoundBox.play('click');
+      document.getElementById('lever-consul').value = 50;
+      document.getElementById('lever-senate').value = 50;
+      document.getElementById('lever-people').value = 50;
+      updateMixedSystem();
+    }
+
+    /* Video Modal */
+    function openVideoModal() {
+      SoundBox.play('click');
+      const modal = document.getElementById('modal-video');
+      const iframe = document.getElementById('video-iframe');
+      iframe.src = "https://www.youtube.com/embed/kRA5gC27SbE?autoplay=1";
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+    }
+
+    function closeVideoModal() {
+      SoundBox.play('click');
+      const modal = document.getElementById('modal-video');
+      const iframe = document.getElementById('video-iframe');
+      iframe.src = "";
+      modal.classList.add('hidden');
+      modal.classList.remove('flex');
+    }
+
+    /* Helpers */
+    function setMeterBar(barId, valId, val) {
+      const bar = document.getElementById(barId);
+      const label = document.getElementById(valId);
+      if (bar) bar.style.width = `${val}%`;
+      if (label) label.innerText = `${val}%`;
+    }
+
+    function formatModifier(n) {
+      return n >= 0 ? `+${n}%` : `${n}%`;
+    }
+
+    function clamp(val) {
+      return Math.max(5, Math.min(100, val));
+    }
+
+    function romanize(num) {
+      const map = { M:1000, CM:900, D:500, CD:400, C:100, XC:90, L:50, XL:40, X:10, IX:9, V:5, IV:4, I:1 };
+      let str = '';
+      for (let k in map) {
+        while (num >= map[k]) {
+          str += k;
+          num -= map[k];
+        }
+      }
+      return str || 'I';
+    }
+
+    /* On Load */
+    window.addEventListener('DOMContentLoaded', () => {
+      renderWheelVisuals();
+      renderStageDetails();
+      calculateVelocity();
+      renderSagaUI();
+      showNewspaper(0);
+      updateMixedSystem();
+      appendSagaAnnals(`Year 0: Cycle initialized. ${State.dynastyName} established under the Virtuous Monarchy.`);
+    });
+
+    window.addEventListener('keydown', (event) => {
+      if (event.key === 'Escape') {
+        if (State.newspaperOpen) closeNewspaperDispatch();
+        const videoModal = document.getElementById('modal-video');
+        if (videoModal && !videoModal.classList.contains('hidden')) closeVideoModal();
+      }
+    });
+  </script>
+</body>
+</html>

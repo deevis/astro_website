@@ -1,0 +1,46 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import RetirementPlanner from '../../components/retirement-planner/RetirementPlanner.svelte';
+
+const pageTitle = 'Retirement Planner';
+const pageDescription =
+  'Privacy-first retirement planner: Social Security, IRAs, brokerage, CDs, bonds, HYSA, crypto, projections, and Monte Carlo — data stays in your browser.';
+---
+
+<Layout title={pageTitle} description={pageDescription} naturalScale>
+  <div class="min-h-screen bg-gradient-to-b from-gray-50/80 to-white dark:from-gray-950 dark:to-gray-950 pb-10" style="padding-top: 8rem;">
+    <div class="w-full max-w-none px-4 sm:px-6 lg:px-8 xl:px-10 2xl:px-12">
+      <RetirementPlanner client:load />
+
+      <footer class="mt-10 border-t border-gray-200 dark:border-gray-800 pt-8 space-y-4 text-sm text-gray-500 dark:text-gray-400">
+        <div class="grid gap-6 md:grid-cols-2 xl:grid-cols-3">
+          <div>
+            <h2 class="font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Your data stays local</h2>
+            <p class="leading-relaxed">
+              Your plan is computed and stored in your browser (localStorage). Plan details are not sent to
+              a server. Live price lookups and chart libraries require an internet connection. Use Export to back up your plan as a JSON file, and Import to restore it.
+            </p>
+          </div>
+          <div>
+            <h2 class="font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Methodology</h2>
+            <p class="leading-relaxed">
+              Deterministic projections use your expected returns; Monte Carlo bootstraps equity
+              years from historical S&P calendar returns (1986–2025) with down-year persistence and a
+              hard cap matching observed history (max 3 consecutive losses). Social Security estimates
+              follow the SSA's AIME and PIA formulas. RMDs use the SECURE 2.0 start ages and Uniform
+              Lifetime Table.
+            </p>
+          </div>
+          <div>
+            <h2 class="font-semibold text-gray-700 dark:text-gray-300 mb-1.5">Disclaimer</h2>
+            <p class="leading-relaxed">
+              This tool is for education and exploration only. It simplifies taxes and market behavior and
+              is not financial, tax, or investment advice. Consult a qualified professional before making
+              retirement decisions.
+            </p>
+          </div>
+        </div>
+      </footer>
+    </div>
+  </div>
+</Layout>

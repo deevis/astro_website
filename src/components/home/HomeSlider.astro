@@ -1,0 +1,391 @@
+---
+export interface SlideItem {
+  title: string;
+  tagline: string;
+  href: string;
+  description?: string;
+  cta?: string;
+  bullets?: string[];
+  image?: string;
+}
+
+interface Props {
+  sectionId: string;
+  title: string;
+  blurb?: string;
+  moreHref?: string;
+  moreLabel?: string;
+  items: SlideItem[];
+  salt?: number;
+  variant?: 'poster' | 'compact';
+  eagerCount?: number;
+}
+
+const {
+  sectionId,
+  title,
+  blurb,
+  moreHref,
+  moreLabel,
+  items,
+  salt = 0,
+  variant = 'compact',
+  eagerCount = 0,
+} = Astro.props;
+
+const isPoster = variant === 'poster';
+const slideWidth = isPoster ? 'w-[min(72vw,16.5rem)]' : 'w-[min(80vw,18rem)]';
+---
+
+<section id={sectionId} class="py-10 scroll-mt-28" data-home-slider-section>
+  <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
+    <div>
+      <h2 class="text-2xl md:text-3xl font-bold">{title}</h2>
+      {blurb && <p class="text-gray-600 dark:text-gray-400 mt-1 max-w-2xl">{blurb}</p>}
+    </div>
+    {moreHref && moreLabel && (
+      <a href={moreHref} class="text-primary-600 dark:text-primary-400 hover:underline shrink-0">{moreLabel}</a>
+    )}
+  </div>
+
+  <div class="relative">
+    <button
+      type="button"
+      class="home-slider-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 md:-translate-x-3 z-10 hidden md:flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-200 hover:border-primary-400"
+      aria-label={`Previous ${title}`}
+    >
+      <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+    </button>
+    <button
+      type="button"
+      class="home-slider-next absolute right-0 top-1/2 -translate-y-1/2 translate-x-1 md:translate-x-3 z-10 hidden md:flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-200 hover:border-primary-400"
+      aria-label={`Next ${title}`}
+    >
+      <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+    </button>
+
+    <div
+      class="home-slider relative flex gap-4 overflow-x-auto pb-2 mx-2 md:mx-12 [scrollbar-width:none] [-ms-overflow-style:none] [&::-webkit-scrollbar]:hidden overscroll-x-contain"
+      data-home-slider
+      data-salt={salt}
+    >
+      {items.map((item, index) => (
+        isPoster && item.image ? (
+          <article class:list={['home-slide shrink-0 rounded-2xl border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 overflow-hidden', slideWidth]}>
+            <a href={item.href} class="group block h-full" title={item.tagline}>
+              <div class="relative aspect-[3/2] overflow-hidden bg-gray-100 dark:bg-dark-900">
+                <img
+                  src={item.image}
+                  alt=""
+                  width="720"
+                  height="480"
+                  class="home-slide-thumb w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  loading={index < eagerCount ? 'eager' : 'lazy'}
+                  fetchpriority={index < eagerCount ? 'high' : 'low'}
+                  decoding="async"
+                />
+                <p class="home-slide-kicker absolute top-2 left-2 m-0 px-2 py-0.5 rounded-full bg-primary-600 text-white text-[10px] font-semibold uppercase tracking-[0.14em] empty:hidden"></p>
+                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
+                  <p class="text-sm text-white leading-snug">{item.tagline}</p>
+                </div>
+              </div>
+              <h3 class="px-3 py-2.5 text-base font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+            </a>
+          </article>
+        ) : (
+          <article class:list={['home-slide shrink-0 rounded-2xl border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800', slideWidth]}>
+            <a href={item.href} class="flex flex-col h-full p-5" title={item.tagline}>
+              <p class="home-slide-kicker text-xs font-semibold uppercase tracking-[0.16em] text-primary-600 dark:text-primary-400 mb-2 empty:hidden"></p>
+              <h3 class="text-lg font-bold text-gray-900 dark:text-white mb-1">{item.title}</h3>
+              <p class="text-sm text-gray-600 dark:text-gray-300">{item.tagline}</p>
+            </a>
+          </article>
+        )
+      ))}
+    </div>
+  </div>
+</section>
+
+<script>
+  function utcDayNumber() {
+    const now = new Date();
+    return Math.floor(Date.UTC(now.getFullYear(), now.getMonth(), now.getDate()) / 86_400_000);
+  }
+
+  type SliderState = {
+    scroller: HTMLElement;
+    slides: HTMLElement[];
+    count: number;
+    todayIndex: number;
+    wrapping: boolean;
+    parked: boolean;
+    animFrame: number;
+    lastLeft: number;
+    lastDirection: -1 | 1;
+    scrollTimer: number;
+  };
+
+  type SliderSection = HTMLElement & { _homeSlider?: SliderState };
+
+  const EDGE = 4;
+
+  function setWidth(state: SliderState) {
+    return state.slides[state.count].offsetLeft - state.slides[0].offsetLeft;
+  }
+
+  function origin(state: SliderState) {
+    return state.slides[0].offsetLeft;
+  }
+
+  function viewport(state: SliderState) {
+    const start = origin(state);
+    return {
+      left: state.scroller.scrollLeft + start,
+      right: state.scroller.scrollLeft + start + state.scroller.clientWidth,
+    };
+  }
+
+  function startAlign(state: SliderState, slide: HTMLElement) {
+    return slide.offsetLeft - origin(state);
+  }
+
+  function endAlign(state: SliderState, slide: HTMLElement) {
+    return slide.offsetLeft + slide.offsetWidth - origin(state) - state.scroller.clientWidth;
+  }
+
+  function setScroll(scroller: HTMLElement, left: number) {
+    scroller.style.scrollBehavior = 'auto';
+    scroller.scrollLeft = left;
+  }
+
+  function park(state: SliderState) {
+    const start = state.slides[state.count + state.todayIndex];
+    if (!start) return;
+    setScroll(state.scroller, startAlign(state, start));
+    state.lastLeft = state.scroller.scrollLeft;
+    state.lastDirection = -1;
+    state.parked = true;
+  }
+
+  function normalize(state: SliderState) {
+    if (state.wrapping) return;
+    const width = setWidth(state);
+    if (width <= 0) return;
+    const left = state.scroller.scrollLeft;
+    if (left < width) {
+      state.wrapping = true;
+      setScroll(state.scroller, left + width);
+      state.wrapping = false;
+    } else if (left >= width * 2) {
+      state.wrapping = true;
+      setScroll(state.scroller, left - width);
+      state.wrapping = false;
+    }
+  }
+
+  function animateTo(state: SliderState, to: number) {
+    if (state.animFrame) cancelAnimationFrame(state.animFrame);
+    state.scroller.style.scrollBehavior = 'auto';
+    const from = state.scroller.scrollLeft;
+    const dist = to - from;
+    if (Math.abs(dist) < 1) {
+      state.wrapping = false;
+      normalize(state);
+      return;
+    }
+
+    state.wrapping = true;
+    const started = performance.now();
+    const duration = 280;
+    const tick = (now: number) => {
+      const t = Math.min(1, (now - started) / duration);
+      const ease = 1 - (1 - t) * (1 - t);
+      setScroll(state.scroller, from + dist * ease);
+      if (t < 1) {
+        state.animFrame = requestAnimationFrame(tick);
+      } else {
+        state.animFrame = 0;
+        state.wrapping = false;
+        normalize(state);
+        state.lastLeft = state.scroller.scrollLeft;
+      }
+    };
+    state.animFrame = requestAnimationFrame(tick);
+  }
+
+  function fullyVisible(state: SliderState, slide: HTMLElement, view = viewport(state)) {
+    const left = slide.offsetLeft;
+    const right = left + slide.offsetWidth;
+    return left >= view.left - EDGE && right <= view.right + EDGE;
+  }
+
+  function stepTarget(state: SliderState, direction: -1 | 1) {
+    const view = viewport(state);
+    if (direction > 0) {
+      const clipped = state.slides.find((slide) => {
+        const left = slide.offsetLeft;
+        const right = left + slide.offsetWidth;
+        return left < view.right - EDGE && right > view.right + EDGE;
+      });
+      if (clipped) return endAlign(state, clipped);
+
+      let rightmost: HTMLElement | null = null;
+      for (const slide of state.slides) {
+        if (!fullyVisible(state, slide, view)) continue;
+        if (!rightmost || slide.offsetLeft > rightmost.offsetLeft) rightmost = slide;
+      }
+      const from = rightmost ?? state.slides[0];
+      const next = state.slides[Math.min(state.slides.indexOf(from) + 1, state.slides.length - 1)];
+      return endAlign(state, next);
+    }
+
+    const clipped = [...state.slides].reverse().find((slide) => {
+      const left = slide.offsetLeft;
+      const right = left + slide.offsetWidth;
+      return left < view.left - EDGE && right > view.left + EDGE;
+    });
+    if (clipped) return startAlign(state, clipped);
+
+    let leftmost: HTMLElement | null = null;
+    for (const slide of state.slides) {
+      if (!fullyVisible(state, slide, view)) continue;
+      if (!leftmost || slide.offsetLeft < leftmost.offsetLeft) leftmost = slide;
+    }
+    const from = leftmost ?? state.slides[0];
+    const prev = state.slides[Math.max(state.slides.indexOf(from) - 1, 0)];
+    return startAlign(state, prev);
+  }
+
+  function idleTarget(state: SliderState, direction: -1 | 1) {
+    const view = viewport(state);
+    if (direction > 0) {
+      let pick: HTMLElement | null = null;
+      for (const slide of state.slides) {
+        const left = slide.offsetLeft;
+        const right = left + slide.offsetWidth;
+        if (right <= view.left + EDGE || left >= view.right - EDGE) continue;
+        const visible = Math.min(right, view.right) - Math.max(left, view.left);
+        if (visible >= slide.offsetWidth / 2) pick = slide;
+      }
+      return endAlign(state, pick ?? state.slides[state.slides.length - 1]);
+    }
+
+    let pick: HTMLElement | null = null;
+    for (const slide of state.slides) {
+      const left = slide.offsetLeft;
+      const right = left + slide.offsetWidth;
+      if (right <= view.left + EDGE || left >= view.right - EDGE) continue;
+      const visible = Math.min(right, view.right) - Math.max(left, view.left);
+      if (visible >= slide.offsetWidth / 2) {
+        pick = slide;
+        break;
+      }
+    }
+    return startAlign(state, pick ?? state.slides[0]);
+  }
+
+  function step(state: SliderState, direction: -1 | 1) {
+    if (setWidth(state) <= 0) return;
+    if (state.animFrame) cancelAnimationFrame(state.animFrame);
+    state.lastDirection = direction;
+    animateTo(state, stepTarget(state, direction));
+  }
+
+  function snapIdle(state: SliderState) {
+    if (state.wrapping || state.animFrame) return;
+    const to = idleTarget(state, state.lastDirection);
+    if (Math.abs(to - state.scroller.scrollLeft) < 2) return;
+    animateTo(state, to);
+  }
+
+  function setupSlider(section: SliderSection) {
+    const scroller = section.querySelector<HTMLElement>('[data-home-slider]');
+    const prev = section.querySelector<HTMLButtonElement>('.home-slider-prev');
+    const next = section.querySelector<HTMLButtonElement>('.home-slider-next');
+    if (!scroller) return;
+
+    const originals = [...scroller.querySelectorAll<HTMLElement>('.home-slide')];
+    if (originals.length === 0) return;
+
+    if (scroller.dataset.looped !== '1') {
+      const prefix = document.createDocumentFragment();
+      const suffix = document.createDocumentFragment();
+      originals.forEach((slide) => {
+        prefix.appendChild(slide.cloneNode(true));
+        suffix.appendChild(slide.cloneNode(true));
+      });
+      scroller.insertBefore(prefix, originals[0]);
+      scroller.appendChild(suffix);
+      scroller.dataset.looped = '1';
+    }
+
+    const slides = [...scroller.querySelectorAll<HTMLElement>('.home-slide')];
+    const count = Math.round(slides.length / 3);
+    const salt = Number(scroller.dataset.salt || '0');
+    const todayIndex = ((utcDayNumber() + salt) % count + count) % count;
+
+    for (let copy = 0; copy < 3; copy++) {
+      const today = slides[copy * count + todayIndex];
+      const kicker = today.querySelector('.home-slide-kicker');
+      if (kicker) kicker.textContent = 'Today';
+      today.classList.add('border-primary-400', 'dark:border-primary-500');
+    }
+
+    const state: SliderState = {
+      scroller,
+      slides,
+      count,
+      todayIndex,
+      wrapping: false,
+      parked: false,
+      animFrame: 0,
+      lastLeft: scroller.scrollLeft,
+      lastDirection: -1,
+      scrollTimer: 0,
+    };
+    section._homeSlider = state;
+
+    const tryPark = () => {
+      if (state.parked || setWidth(state) <= 0) return;
+      park(state);
+    };
+    requestAnimationFrame(() => requestAnimationFrame(tryPark));
+    const ro = new ResizeObserver(tryPark);
+    ro.observe(scroller);
+
+    if (scroller.dataset.scrollBound !== '1') {
+      scroller.dataset.scrollBound = '1';
+      scroller.addEventListener('scroll', () => {
+        const current = section._homeSlider;
+        if (!current) return;
+        const left = current.scroller.scrollLeft;
+        if (!current.wrapping) {
+          const delta = left - current.lastLeft;
+          if (Math.abs(delta) > 1) current.lastDirection = delta > 0 ? 1 : -1;
+          normalize(current);
+        }
+        current.lastLeft = current.scroller.scrollLeft;
+        if (current.wrapping) return;
+        window.clearTimeout(current.scrollTimer);
+        current.scrollTimer = window.setTimeout(() => snapIdle(current), 90);
+      }, { passive: true });
+    }
+
+    if (prev) {
+      prev.onclick = (event) => {
+        event.preventDefault();
+        const current = section._homeSlider;
+        if (current) step(current, -1);
+      };
+    }
+    if (next) {
+      next.onclick = (event) => {
+        event.preventDefault();
+        const current = section._homeSlider;
+        if (current) step(current, 1);
+      };
+    }
+  }
+
+  document.querySelectorAll<HTMLElement>('[data-home-slider-section]').forEach(setupSlider);
+</script>

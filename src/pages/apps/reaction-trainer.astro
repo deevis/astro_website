@@ -10,79 +10,124 @@ const pageDescription = 'Test and improve your reaction time and decision-making
     <div class="container mx-auto px-4">
       <main class="reaction-container">
         <header class="app-header">
-          <h1 class="page-title">Reaction & Decision Time Trainer</h1>
-          <div class="tab-buttons">
-            <button class="tab-select active" id="play-tab-btn">Play</button>
-            <button class="tab-select" id="compare-tab-btn">Compare Sessions</button>
+          <h1 class="page-title">Reaction &amp; Decision Trainer</h1>
+          <div class="tab-buttons" role="tablist">
+            <button class="tab-select active" id="play-tab-btn" role="tab" aria-selected="true">Play</button>
+            <button class="tab-select" id="compare-tab-btn" role="tab" aria-selected="false">History &amp; Compare</button>
           </div>
         </header>
 
+        <!-- ============ PLAY TAB ============ -->
         <div id="play-tab">
-          <div id="mode-buttons">
-            <button class="mode-btn active" data-mode="reaction">Reaction Only</button>
-            <button class="mode-btn" data-mode="decision">Decision (← / →)</button>
-            <button id="info-btn">ℹ️</button>
-          </div>
-          <button id="start-btn" class="start-button">Start</button>
-
-          <div id="game-area" tabindex="0">
-            <div id="touch-areas" class="touch-areas-container">
-              <div id="touch-left" class="touch-area">←</div>
-              <div id="touch-right" class="touch-area">→</div>
+          <div class="mode-row">
+            <div class="mode-toggle" id="mode-buttons">
+              <button class="mode-btn active" data-mode="reaction">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+                Reaction
+              </button>
+              <button class="mode-btn" data-mode="decision">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M8 3 4 7l4 4"/><path d="M4 7h16"/><path d="m16 21 4-4-4-4"/><path d="M20 17H4"/></svg>
+                Decision
+              </button>
             </div>
-            <div id="keyboard-hint" class="keyboard-hint">Keyboard users press left or right arrow</div>
-            <div id="reaction-hint" class="reaction-hint">Wait for the square to turn green and then click or tap as soon as it does</div>
-            <div id="square"></div>
-            <div id="result"></div>
-            <div id="stats"></div>
-            <canvas id="chart" width="300" height="150"></canvas>
-            <button id="save-session-trigger">💾 Save Session</button>
+            <button id="info-btn" aria-label="How to play">?</button>
+          </div>
+
+          <div class="pb-row" id="pb-row"></div>
+
+          <!-- Trial progress -->
+          <div class="trial-dots" id="trial-dots" aria-hidden="true"></div>
+
+          <!-- Arena -->
+          <div id="arena" class="arena state-idle" tabindex="0" role="button" aria-label="Reaction test area">
+            <div class="arena-divider" id="arena-divider"></div>
+            <div class="arena-content">
+              <div class="arena-icon" id="arena-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" aria-hidden="true"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>
+              </div>
+              <div class="arena-main" id="arena-main">Tap to start</div>
+              <div class="arena-sub" id="arena-sub">or press Space</div>
+            </div>
+          </div>
+
+          <!-- Stats -->
+          <div class="stats-grid" id="stats-grid" style="display:none">
+            <div class="stat-card"><span class="stat-label">Last</span><span class="stat-value" id="stat-last">—</span></div>
+            <div class="stat-card"><span class="stat-label">Average</span><span class="stat-value" id="stat-avg">—</span></div>
+            <div class="stat-card"><span class="stat-label">Best</span><span class="stat-value" id="stat-best">—</span></div>
+            <div class="stat-card"><span class="stat-label">Consistency</span><span class="stat-value" id="stat-sd">—</span></div>
+          </div>
+
+          <div class="rating-banner" id="rating-banner" style="display:none"></div>
+
+          <canvas id="chart" style="display:none"></canvas>
+
+          <div class="session-actions" id="session-actions" style="display:none">
+            <button id="save-session-trigger" class="btn-green">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><path d="M17 21v-8H7v8"/><path d="M7 3v5h8"/></svg>
+              Save Session
+            </button>
+            <button id="retry-btn" class="btn-purple">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+              Go Again
+            </button>
           </div>
         </div>
 
+        <!-- ============ COMPARE TAB ============ -->
         <div id="compare-tab">
-          <h2 class="compare-title">Compare Previous Sessions</h2>
+          <h2 class="compare-title">Session History</h2>
           <div class="compare-controls">
-            <label>Comparison Type:</label>
+            <label for="compare-type">Mode</label>
             <select id="compare-type">
-              <option value="reaction">Reaction Only</option>
-              <option value="decision">Decision (A/L)</option>
+              <option value="reaction">Reaction</option>
+              <option value="decision">Decision</option>
             </select>
           </div>
-          <div class="compare-controls">
-            <label>Session 1:</label>
-            <select id="session1"></select>
-            <label>Session 2:</label>
-            <select id="session2"></select>
-            <button id="compare-btn">Compare</button>
+          <div id="session-table"></div>
+          <div class="compare-controls compare-pickers" id="compare-pickers">
+            <div class="picker">
+              <label for="session1"><span class="dot dot-green"></span>Session A</label>
+              <select id="session1"></select>
+            </div>
+            <div class="picker">
+              <label for="session2"><span class="dot dot-blue"></span>Session B</label>
+              <select id="session2"></select>
+            </div>
           </div>
-          <canvas id="compare-chart" width="350" height="200"></canvas>
+          <canvas id="compare-chart"></canvas>
           <div id="compare-stats"></div>
-          <div class="legend">
-            <span class="legend-green"></span>Session 1
-            <span class="legend-blue"></span>Session 2
-          </div>
+          <p id="no-sessions" class="no-sessions" style="display:none">No saved sessions yet. Play a round and save it to see it here.</p>
         </div>
 
+        <!-- Save modal -->
         <div id="session-name-modal" class="modal">
           <div class="modal-content">
             <h2>Save Session</h2>
-            <p>Enter your name (optional):</p>
-            <input type="text" id="session-name" placeholder="Your name"/>
+            <p>Enter a name for this session (optional):</p>
+            <input type="text" id="session-name" placeholder="Your name" maxlength="30" />
             <div class="modal-buttons">
-              <button id="save-session-btn">Save</button>
-              <button id="cancel-save-btn">Cancel</button>
+              <button id="save-session-btn" class="btn-green">Save</button>
+              <button id="cancel-save-btn" class="btn-ghost">Cancel</button>
             </div>
           </div>
         </div>
 
+        <!-- Info modal -->
         <div id="info-modal" class="modal">
           <div class="modal-content">
             <h2>How to Play</h2>
-            <p><strong>Reaction Only:</strong> Wait for the white square to turn <span style="color:#0f0;">green</span>, then press the <b>spacebar</b> (or <b>left-click</b>) as fast as you can. Too early = fail.</p>
-            <p><strong>Decision (← / →):</strong> The square will turn green and display <b>←</b> or <b>→</b>. Press the matching arrow key (or click <b>left/right mouse button</b>) quickly. Wrong direction or early = fail.</p>
-            <p>Each round has 10 trials. After completing a round, you can optionally save your session.</p>
-            <button id="close-info">Got it!</button>
+            <p><strong>⚡ Reaction:</strong> Wait for the panel to turn <span class="text-green">green</span>, then tap it (or press <kbd>Space</kbd>) as fast as you can. Tapping early counts as a false start.</p>
+            <p><strong>⇄ Decision:</strong> When the panel turns green it shows an arrow. Press the matching <kbd>←</kbd>/<kbd>→</kbd> arrow key, or <kbd>A</kbd>/<kbd>D</kbd>. On touch devices, tap the matching <b>left or right half</b> of the panel instead. Wrong side or early input = fail.</p>
+            <p>Each round is 10 trials. Your average, best time, and consistency are tracked, and you can save sessions to compare progress over time.</p>
+            <div class="rating-table">
+              <div><span class="rt-time">&lt; 200 ms</span><span>Exceptional</span></div>
+              <div><span class="rt-time">200–250 ms</span><span>Excellent</span></div>
+              <div><span class="rt-time">250–300 ms</span><span>Good</span></div>
+              <div><span class="rt-time">300–375 ms</span><span>Average</span></div>
+              <div><span class="rt-time">&gt; 375 ms</span><span>Keep practicing!</span></div>
+            </div>
+            <button id="close-info" class="btn-purple">Got it!</button>
           </div>
         </div>
       </main>
@@ -91,347 +136,569 @@ const pageDescription = 'Test and improve your reaction time and decision-making
 
   <script>
     (() => {
-      const square = document.getElementById('square')!,
-            resultEl = document.getElementById('result')!,
-            statsEl = document.getElementById('stats')!,
-            chartCanvas = document.getElementById('chart') as HTMLCanvasElement,
-            ctx = chartCanvas.getContext('2d')!,
-            startBtn = document.getElementById('start-btn')!,
-            infoBtn = document.getElementById('info-btn')!,
-            infoModal = document.getElementById('info-modal')!,
-            closeInfo = document.getElementById('close-info')!,
-            modeButtons = document.querySelectorAll('.mode-btn'),
-            modal = document.getElementById('session-name-modal')!,
-            saveBtn = document.getElementById('save-session-btn')!,
-            cancelSaveBtn = document.getElementById('cancel-save-btn')!,
-            saveTrigger = document.getElementById('save-session-trigger')!,
-            sessionInput = document.getElementById('session-name') as HTMLInputElement,
-            compareType = document.getElementById('compare-type') as HTMLSelectElement,
-            compareTab = document.getElementById('compare-tab')!,
-            playTab = document.getElementById('play-tab')!,
-            playTabBtn = document.getElementById('play-tab-btn')!,
-            compareTabBtn = document.getElementById('compare-tab-btn')!,
-            session1Select = document.getElementById('session1') as HTMLSelectElement,
-            session2Select = document.getElementById('session2') as HTMLSelectElement,
-            compareBtn = document.getElementById('compare-btn')!,
-            compareChart = (document.getElementById('compare-chart') as HTMLCanvasElement).getContext('2d')!,
-            compareStats = document.getElementById('compare-stats')!,
-            touchAreasContainer = document.getElementById('touch-areas')!,
-            touchLeft = document.getElementById('touch-left')!,
-            touchRight = document.getElementById('touch-right')!,
-            keyboardHint = document.getElementById('keyboard-hint')!,
-            reactionHint = document.getElementById('reaction-hint')!;
+      const $ = (id: string) => document.getElementById(id)!;
+
+      const arena = $('arena');
+      const arenaMain = $('arena-main');
+      const arenaSub = $('arena-sub');
+      const arenaIcon = $('arena-icon');
+      const arenaDivider = $('arena-divider');
+      const trialDots = $('trial-dots');
+      const statsGrid = $('stats-grid');
+      const ratingBanner = $('rating-banner');
+      const chartCanvas = $('chart') as HTMLCanvasElement;
+      const chartCtx = chartCanvas.getContext('2d')!;
+      const sessionActions = $('session-actions');
+      const pbRow = $('pb-row');
 
       const MAX_TRIALS = 10;
-      let waiting = false, ready = false, running = false, currentMode = 'reaction',
-          expectDirection: string | null = null, startTime = 0, 
-          session: Array<{time: number, fail: boolean, direction?: string}> = [], 
-          timer: number | null = null;
+      type Trial = { time: number; fail: boolean; direction?: string };
 
-      function drawChart() {
-        ctx.clearRect(0, 0, chartCanvas.width, chartCanvas.height);
-        ctx.strokeStyle = '#0f0';
-        ctx.beginPath();
-        session.forEach((t, i) => {
-          const x = (i / (MAX_TRIALS - 1)) * chartCanvas.width;
-          const y = chartCanvas.height - (Math.min(t.time || 0, 1000) / 1000) * chartCanvas.height;
-          if (t.fail) {
-            ctx.fillStyle = '#f00';
-            ctx.fillRect(x - 3, chartCanvas.height - 10, 6, 6);
-          } else {
-            ctx.lineTo(x, y);
-          }
-        });
-        ctx.stroke();
-        updateStats();
+      type Phase = 'idle' | 'waiting' | 'go' | 'between' | 'done';
+      let phase: Phase = 'idle';
+      let currentMode: 'reaction' | 'decision' = 'reaction';
+      let expectDirection: 'left' | 'right' = 'left';
+      let startTime = 0;
+      let session: Trial[] = [];
+      let goTimer: number | null = null;
+      let betweenTimer: number | null = null;
+
+      const SESSIONS_KEY = 'reactionSessions';
+      const PB_KEY = 'reactionPersonalBests';
+
+      const vibrate = (pattern: number | number[]) => {
+        if ('vibrate' in navigator) { try { navigator.vibrate(pattern); } catch { /* unsupported */ } }
+      };
+
+      // Primary input is touch (phone/tablet) vs keyboard+mouse (desktop)
+      const touchPrimary = window.matchMedia('(pointer: coarse)').matches;
+      const decisionHint = touchPrimary ? 'tap the side matching the arrow' : 'use ← / → or A / D keys';
+
+      // ---------- Personal bests ----------
+      function getPBs(): Record<string, number> {
+        try { return JSON.parse(localStorage.getItem(PB_KEY) || '{}'); } catch { return {}; }
       }
 
-      function updateStats() {
-        const valid = session.filter(s => !s.fail);
-        if (!valid.length) { statsEl.textContent = ''; return; }
-        const mean = valid.reduce((a, b) => a + b.time, 0) / valid.length;
-        const sd = Math.sqrt(valid.reduce((a, b) => a + (b.time - mean) ** 2, 0) / valid.length);
-        statsEl.textContent = `Avg: ${mean.toFixed(1)} ms | SD: ${sd.toFixed(1)} | ${valid.length}/${session.length}`;
+      function renderPB() {
+        const pbs = getPBs();
+        const pb = pbs[currentMode];
+        pbRow.innerHTML = pb
+          ? `🏆 Personal best (${currentMode}): <strong>${pb.toFixed(0)} ms</strong>`
+          : `No personal best yet — play a round!`;
       }
 
-      function randomDelay() { return 1000 + Math.random() * 2000; }
+      function maybeUpdatePB(avg: number): boolean {
+        const pbs = getPBs();
+        if (!pbs[currentMode] || avg < pbs[currentMode]) {
+          pbs[currentMode] = avg;
+          localStorage.setItem(PB_KEY, JSON.stringify(pbs));
+          return true;
+        }
+        return false;
+      }
 
-      function showReady() {
-        if (session.length >= MAX_TRIALS) { endSession(); return; }
-        waiting = true; ready = false;
-        square.classList.remove('ready');
-        square.style.background = '#fff';
-        square.textContent = '';
-        resultEl.textContent = 'Wait for it...';
-        const delay = randomDelay();
-        if (timer !== null) clearTimeout(timer);
-        timer = window.setTimeout(() => {
-          if (currentMode === 'reaction') {
-            square.style.background = '#0f0';
-            startTime = performance.now();
-          } else {
+      // ---------- Trial dots ----------
+      function renderDots() {
+        trialDots.innerHTML = '';
+        for (let i = 0; i < MAX_TRIALS; i++) {
+          const dot = document.createElement('span');
+          dot.className = 'dot-trial';
+          if (i < session.length) dot.classList.add(session[i].fail ? 'fail' : 'ok');
+          else if (i === session.length && phase !== 'idle' && phase !== 'done') dot.classList.add('current');
+          trialDots.appendChild(dot);
+        }
+      }
+
+      // ---------- Arena state ----------
+      function setArena(state: 'idle' | 'waiting' | 'go' | 'fail' | 'success' | 'done', main: string, sub: string, icon?: string) {
+        arena.className = `arena state-${state}`;
+        arenaMain.textContent = main;
+        arenaSub.textContent = sub;
+        if (icon !== undefined) {
+          arenaIcon.style.display = icon ? '' : 'none';
+          if (icon) arenaIcon.innerHTML = icon;
+        }
+        arenaDivider.style.display = (touchPrimary && currentMode === 'decision' && (state === 'waiting' || state === 'go')) ? '' : 'none';
+      }
+
+      const BOLT_ICON = `<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M13 2 3 14h7l-1 8 10-12h-7l1-8z"/></svg>`;
+
+      // ---------- Game flow ----------
+      function startSession() {
+        session = [];
+        phase = 'waiting';
+        statsGrid.style.display = 'none';
+        ratingBanner.style.display = 'none';
+        chartCanvas.style.display = 'none';
+        sessionActions.style.display = 'none';
+        scheduleGo();
+        renderDots();
+      }
+
+      function scheduleGo() {
+        setArena('waiting', 'Wait for green…',
+          currentMode === 'decision'
+            ? (touchPrimary ? 'then tap the side the arrow points to' : 'then press ← / → or A / D')
+            : 'then tap as fast as you can', '');
+        const delay = 1200 + Math.random() * 2300;
+        if (goTimer !== null) clearTimeout(goTimer);
+        goTimer = window.setTimeout(() => {
+          if (phase !== 'waiting') return;
+          phase = 'go';
+          if (currentMode === 'decision') {
             expectDirection = Math.random() > 0.5 ? 'left' : 'right';
-            square.style.background = '#0f0';
-            square.textContent = expectDirection === 'left' ? '←' : '→';
-            startTime = performance.now();
+            setArena('go', expectDirection === 'left' ? '←' : '→',
+              touchPrimary ? 'Tap the matching side!' : 'Press the matching key!', '');
+          } else {
+            setArena('go', 'TAP!', '', '');
           }
-          waiting = false; ready = true;
-          square.classList.add('ready');
+          startTime = performance.now();
         }, delay);
       }
 
-      function handleResponse(direction: string) {
-        const now = performance.now();
-        if (!running) return;
-        if (waiting && !ready) {
-          if (timer !== null) clearTimeout(timer);
-          session.push({ time: 0, fail: true });
-          resultEl.textContent = 'Too soon!';
-          drawChart();
-          waiting = false; ready = false;
-          square.classList.remove('ready');
-          setTimeout(showReady, 1000);
+      function recordTrial(trial: Trial, message: string, subMessage: string) {
+        session.push(trial);
+        renderDots();
+        phase = 'between';
+        if (trial.fail) {
+          vibrate([60, 40, 60]);
+          setArena('fail', message, subMessage, '');
+        } else {
+          vibrate(15);
+          setArena('success', message, subMessage, '');
+        }
+        if (betweenTimer !== null) clearTimeout(betweenTimer);
+        betweenTimer = window.setTimeout(() => {
+          if (session.length >= MAX_TRIALS) endSession();
+          else { phase = 'waiting'; scheduleGo(); renderDots(); }
+        }, 1100);
+      }
+
+      function handleInput(direction: 'left' | 'right' | 'any') {
+        if (phase === 'idle' || phase === 'done') {
+          startSession();
           return;
         }
-        if (ready) {
-          square.classList.remove('ready');
-          const time = now - startTime;
+        if (phase === 'between') return;
+        if (phase === 'waiting') {
+          if (goTimer !== null) clearTimeout(goTimer);
+          recordTrial({ time: 0, fail: true }, 'Too soon!', 'Wait for green next time');
+          return;
+        }
+        if (phase === 'go') {
+          const time = performance.now() - startTime;
           if (currentMode === 'reaction') {
-            resultEl.textContent = `Reaction: ${time.toFixed(0)} ms`;
-            session.push({ time, fail: false });
+            recordTrial({ time, fail: false }, `${time.toFixed(0)} ms`, quickRating(time));
           } else {
-            if (direction === expectDirection) {
-              const arrow = expectDirection === 'left' ? '←' : '→';
-              resultEl.textContent = `${arrow}: ${time.toFixed(0)} ms`;
-              session.push({ time, fail: false, direction: expectDirection });
+            if (direction === expectDirection || direction === 'any') {
+              // 'any' (space) is not valid in decision mode
+              if (direction === 'any') {
+                recordTrial({ time: 0, fail: true }, touchPrimary ? 'Tap a side!' : 'Use ← / → or A / D!', '');
+              } else {
+                recordTrial({ time, fail: false, direction }, `${time.toFixed(0)} ms`, quickRating(time));
+              }
             } else {
-              resultEl.textContent = 'Wrong direction!';
-              session.push({ time: 0, fail: true });
+              recordTrial({ time: 0, fail: true }, 'Wrong side!', `It was ${expectDirection === 'left' ? '←' : '→'}`);
             }
           }
-          drawChart();
-          ready = false; waiting = false;
-          setTimeout(showReady, 1000);
         }
       }
 
-      function startSession() {
-        if (running) return;
-        (startBtn as HTMLButtonElement).blur();
-        running = true; waiting = false; ready = false; session = [];
-        saveTrigger.style.display = 'none';
-        // Show/hide touch areas, keyboard hint, and reaction hint based on mode
-        if (currentMode === 'decision') {
-          touchAreasContainer.style.display = 'flex';
-          keyboardHint.style.display = 'block';
-          reactionHint.style.display = 'none';
-        } else {
-          touchAreasContainer.style.display = 'none';
-          keyboardHint.style.display = 'none';
-          reactionHint.style.display = 'block';
-        }
-        showReady();
+      function quickRating(t: number): string {
+        if (t < 200) return 'Exceptional!';
+        if (t < 250) return 'Excellent';
+        if (t < 300) return 'Good';
+        if (t < 375) return 'Average';
+        return 'Keep practicing';
+      }
+
+      function calcStats(sess: Trial[]) {
+        const valid = sess.filter(s => !s.fail);
+        if (!valid.length) return { avg: 0, sd: 0, best: 0, count: 0 };
+        const mean = valid.reduce((a, b) => a + b.time, 0) / valid.length;
+        const sd = Math.sqrt(valid.reduce((a, b) => a + (b.time - mean) ** 2, 0) / valid.length);
+        const best = Math.min(...valid.map(v => v.time));
+        return { avg: mean, sd, best, count: valid.length };
       }
 
       function endSession() {
-        running = false; waiting = false; ready = false;
-        if (timer !== null) clearTimeout(timer);
-        resultEl.textContent = "✅ Round complete!";
-        saveTrigger.style.display = 'inline-block';
-        // Hide touch areas, keyboard hint, and reaction hint when session ends
-        touchAreasContainer.style.display = 'none';
-        keyboardHint.style.display = 'none';
-        reactionHint.style.display = 'none';
+        phase = 'done';
+        const { avg, sd, best, count } = calcStats(session);
+        renderDots();
+
+        setArena('done', 'Round complete!', 'Tap to play again', BOLT_ICON);
+
+        if (count > 0) {
+          $('stat-last').textContent = `${(session.filter(s => !s.fail).pop()?.time ?? 0).toFixed(0)} ms`;
+          $('stat-avg').textContent = `${avg.toFixed(0)} ms`;
+          $('stat-best').textContent = `${best.toFixed(0)} ms`;
+          $('stat-sd').textContent = `±${sd.toFixed(0)} ms`;
+          statsGrid.style.display = '';
+
+          const isPB = maybeUpdatePB(avg);
+          renderPB();
+          ratingBanner.style.display = '';
+          ratingBanner.textContent = isPB
+            ? `🏆 New personal best! Average ${avg.toFixed(0)} ms — ${quickRating(avg)}`
+            : `${quickRating(avg)} — average ${avg.toFixed(0)} ms over ${count}/${MAX_TRIALS} valid trials`;
+          if (isPB) vibrate([30, 50, 30, 50, 80]);
+
+          chartCanvas.style.display = '';
+          drawSessionChart();
+        } else {
+          ratingBanner.style.display = '';
+          ratingBanner.textContent = 'No valid trials — wait for green before tapping!';
+        }
+        sessionActions.style.display = '';
+        $('save-session-trigger').style.display = count > 0 ? '' : 'none';
       }
 
-      function openSaveModal() {
-        modal.style.display = 'flex';
-        sessionInput.value = '';
+      // ---------- Charts (HiDPI aware) ----------
+      function setupCanvas(canvas: HTMLCanvasElement, cssH: number): { W: number, H: number, ctx: CanvasRenderingContext2D } {
+        const dpr = window.devicePixelRatio || 1;
+        const cssW = canvas.clientWidth || canvas.parentElement!.clientWidth;
+        canvas.style.height = `${cssH}px`;
+        canvas.width = Math.round(cssW * dpr);
+        canvas.height = Math.round(cssH * dpr);
+        const ctx = canvas.getContext('2d')!;
+        ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+        return { W: cssW, H: cssH, ctx };
       }
 
-      function cancelSave() {
-        modal.style.display = 'none';
+      function isDark() { return document.documentElement.classList.contains('dark'); }
+
+      function chartColors() {
+        return isDark()
+          ? { grid: 'rgba(255,255,255,0.08)', text: '#9ca3af', axis: 'rgba(255,255,255,0.2)', avg: '#c084fc' }
+          : { grid: 'rgba(0,0,0,0.06)', text: '#7f8c8d', axis: 'rgba(0,0,0,0.15)', avg: '#764ba2' };
       }
 
-      function saveSession() {
-        const name = sessionInput.value.trim() || 'Anonymous';
-        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
-        data.push({ name, mode: currentMode, date: new Date().toISOString(), session });
-        localStorage.setItem('reactionSessions', JSON.stringify(data));
-        modal.style.display = 'none';
-        saveTrigger.style.display = 'none';
-        resultEl.textContent = "💾 Session saved!";
-        populateSessionDropdowns();
-      }
+      function drawSeries(ctx: CanvasRenderingContext2D, sess: Trial[], W: number, H: number, pad: {l:number,r:number,t:number,b:number}, maxMs: number, color: string) {
+        const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+        const xFor = (i: number) => pad.l + (sess.length === 1 ? pw / 2 : (i / (sess.length - 1)) * pw);
+        const yFor = (ms: number) => pad.t + ph - (Math.min(ms, maxMs) / maxMs) * ph;
 
-      function populateSessionDropdowns() {
-        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
-        const type = compareType.value;
-        const filtered = data.filter((s: any) => s.mode === type);
-        [session1Select, session2Select].forEach(sel => {
-          sel.innerHTML = '';
-          filtered.forEach((s: any, i: number) => {
-            const opt = document.createElement('option');
-            opt.value = String(data.indexOf(s));
-            opt.textContent = `${s.name} (${new Date(s.date).toLocaleString()})`;
-            sel.appendChild(opt);
-          });
+        // line through valid points
+        ctx.strokeStyle = color;
+        ctx.lineWidth = 2.5;
+        ctx.lineJoin = 'round';
+        ctx.beginPath();
+        let started = false;
+        sess.forEach((t, i) => {
+          if (t.fail) return;
+          const x = xFor(i), y = yFor(t.time);
+          if (!started) { ctx.moveTo(x, y); started = true; } else ctx.lineTo(x, y);
+        });
+        ctx.stroke();
+
+        // points
+        sess.forEach((t, i) => {
+          const x = xFor(i);
+          if (t.fail) {
+            ctx.fillStyle = '#ef4444';
+            ctx.beginPath();
+            const y = pad.t + ph;
+            ctx.moveTo(x - 5, y - 5); ctx.lineTo(x + 5, y + 5);
+            ctx.moveTo(x + 5, y - 5); ctx.lineTo(x - 5, y + 5);
+            ctx.strokeStyle = '#ef4444';
+            ctx.lineWidth = 2.5;
+            ctx.stroke();
+          } else {
+            ctx.fillStyle = color;
+            ctx.beginPath();
+            ctx.arc(x, yFor(t.time), 4.5, 0, Math.PI * 2);
+            ctx.fill();
+          }
         });
       }
 
-      function calcStats(sess: Array<{time: number, fail: boolean}>) {
-        const valid = sess.filter(s => !s.fail);
-        if (!valid.length) return { avg: 0, sd: 0 };
-        const mean = valid.reduce((a, b) => a + b.time, 0) / valid.length;
-        const sd = Math.sqrt(valid.reduce((a, b) => a + (b.time - mean) ** 2, 0) / valid.length);
-        return { avg: mean, sd };
+      function drawFrame(ctx: CanvasRenderingContext2D, W: number, H: number, pad: {l:number,r:number,t:number,b:number}, maxMs: number) {
+        const col = chartColors();
+        const pw = W - pad.l - pad.r, ph = H - pad.t - pad.b;
+        ctx.clearRect(0, 0, W, H);
+        ctx.font = '11px Inter, sans-serif';
+        ctx.fillStyle = col.text;
+        ctx.textAlign = 'right';
+        ctx.textBaseline = 'middle';
+        const steps = 4;
+        for (let s = 0; s <= steps; s++) {
+          const ms = (maxMs / steps) * s;
+          const y = pad.t + ph - (ms / maxMs) * ph;
+          ctx.strokeStyle = s === 0 ? col.axis : col.grid;
+          ctx.beginPath();
+          ctx.moveTo(pad.l, y);
+          ctx.lineTo(pad.l + pw, y);
+          ctx.stroke();
+          ctx.fillText(`${ms.toFixed(0)}`, pad.l - 6, y);
+        }
       }
 
-      function compareSessions() {
-        const data = JSON.parse(localStorage.getItem('reactionSessions') || '[]');
-        const s1 = data[parseInt(session1Select.value)], s2 = data[parseInt(session2Select.value)];
-        if (!s1 || !s2) return;
-        const maxLen = Math.max(s1.session.length, s2.session.length);
-        compareChart.clearRect(0, 0, 350, 200);
-        compareChart.strokeStyle = "#555";
-        compareChart.beginPath(); compareChart.moveTo(0, 199); compareChart.lineTo(350, 199); compareChart.stroke();
-        // Green
-        compareChart.beginPath(); compareChart.strokeStyle = '#0f0';
-        s1.session.forEach((t: any, i: number) => {
-          const x = i / maxLen * 350; const y = 200 - (Math.min(t.time || 0, 1000) / 1000) * 200;
-          compareChart.lineTo(x, y);
-        }); compareChart.stroke();
-        // Blue
-        compareChart.beginPath(); compareChart.strokeStyle = '#0af';
-        s2.session.forEach((t: any, i: number) => {
-          const x = i / maxLen * 350; const y = 200 - (Math.min(t.time || 0, 1000) / 1000) * 200;
-          compareChart.lineTo(x, y);
-        }); compareChart.stroke();
-        const stats1 = calcStats(s1.session), stats2 = calcStats(s2.session);
-        compareStats.textContent =
-          `${s1.mode.toUpperCase()} MODE | ` +
-          `${s1.name} 🟩 Avg: ${stats1.avg.toFixed(1)} ms (±${stats1.sd.toFixed(1)}) | ` +
-          `${s2.name} 🟦 Avg: ${stats2.avg.toFixed(1)} ms (±${stats2.sd.toFixed(1)})`;
+      function drawSessionChart() {
+        const { W, H, ctx } = setupCanvas(chartCanvas, 190);
+        const pad = { l: 40, r: 12, t: 12, b: 20 };
+        const validTimes = session.filter(s => !s.fail).map(s => s.time);
+        const maxMs = Math.max(400, Math.ceil((Math.max(...validTimes, 300) * 1.15) / 100) * 100);
+        drawFrame(ctx, W, H, pad, maxMs);
+
+        // average line
+        const { avg } = calcStats(session);
+        if (avg > 0) {
+          const col = chartColors();
+          const ph = H - pad.t - pad.b;
+          const y = pad.t + ph - (Math.min(avg, maxMs) / maxMs) * ph;
+          ctx.strokeStyle = col.avg;
+          ctx.setLineDash([5, 4]);
+          ctx.lineWidth = 1.5;
+          ctx.beginPath();
+          ctx.moveTo(pad.l, y);
+          ctx.lineTo(W - pad.r, y);
+          ctx.stroke();
+          ctx.setLineDash([]);
+        }
+
+        drawSeries(ctx, session, W, H, pad, maxMs, '#10b981');
+
+        // x labels
+        const col = chartColors();
+        ctx.fillStyle = col.text;
+        ctx.textAlign = 'center';
+        ctx.textBaseline = 'top';
+        ctx.fillText('trial 1', pad.l + 14, H - pad.b + 6);
+        ctx.fillText(`trial ${session.length}`, W - pad.r - 16, H - pad.b + 6);
       }
 
-      // Event handlers
+      // ---------- Input wiring ----------
+      arena.addEventListener('pointerdown', (e) => {
+        e.preventDefault();
+        if (phase === 'idle' || phase === 'done') {
+          // any pointer can start a session
+          handleInput('any');
+          return;
+        }
+        if (currentMode === 'decision') {
+          // Mid-round decision input: touch/pen taps pick a side; mouse clicks
+          // are ignored — keyboard (← / → or A / D) is the desktop input.
+          if (e.pointerType === 'mouse') return;
+          const rect = arena.getBoundingClientRect();
+          handleInput(e.clientX - rect.left < rect.width / 2 ? 'left' : 'right');
+        } else {
+          handleInput('any');
+        }
+      });
+
+      arena.addEventListener('contextmenu', e => e.preventDefault());
+
       window.addEventListener('keydown', e => {
-        if (currentMode === 'reaction' && e.code === 'Space') { 
-          e.preventDefault(); 
-          handleResponse('any'); 
-        }
-        else if (currentMode === 'decision') {
-          if (e.code === 'ArrowLeft') { 
-            e.preventDefault();
-            handleResponse('left'); 
-          }
-          else if (e.code === 'ArrowRight') { 
-            e.preventDefault();
-            handleResponse('right'); 
-          }
-        }
-      });
-
-      // Mouse click handlers
-      square.addEventListener('mousedown', e => {
-        e.preventDefault();
-        if (currentMode === 'reaction') {
-          if (e.button === 0) { // Left click
-            handleResponse('any');
-          }
+        const t = e.target as HTMLElement;
+        if (t && (t.tagName === 'INPUT' || t.tagName === 'SELECT' || t.tagName === 'TEXTAREA')) return;
+        if ($('play-tab').style.display === 'none') return;
+        if (e.code === 'Space') {
+          e.preventDefault();
+          if (currentMode === 'reaction' || phase === 'idle' || phase === 'done') handleInput('any');
         } else if (currentMode === 'decision') {
-          if (e.button === 0) { // Left click
-            handleResponse('left');
-          } else if (e.button === 2) { // Right click
-            handleResponse('right');
-          }
+          if (e.code === 'ArrowLeft' || e.code === 'KeyA') { e.preventDefault(); handleInput('left'); }
+          else if (e.code === 'ArrowRight' || e.code === 'KeyD') { e.preventDefault(); handleInput('right'); }
         }
       });
 
-      // Prevent context menu on right-click
-      square.addEventListener('contextmenu', e => {
-        e.preventDefault();
-      });
-
-      startBtn.onclick = startSession;
-      saveBtn.onclick = saveSession;
-      cancelSaveBtn.onclick = cancelSave;
-      saveTrigger.onclick = openSaveModal;
-      infoBtn.onclick = () => infoModal.style.display = 'flex';
-      closeInfo.onclick = () => infoModal.style.display = 'none';
-      compareType.onchange = populateSessionDropdowns;
-      compareBtn.onclick = compareSessions;
-      playTabBtn.onclick = () => { compareTab.style.display = 'none'; playTab.style.display = 'block'; };
-      compareTabBtn.onclick = () => { compareTab.style.display = 'block'; playTab.style.display = 'none'; populateSessionDropdowns(); };
-
+      // ---------- Mode switching ----------
+      const modeButtons = document.querySelectorAll<HTMLButtonElement>('.mode-btn');
       modeButtons.forEach(btn => {
         btn.addEventListener('click', () => {
+          if (btn.dataset.mode === currentMode) return;
           modeButtons.forEach(b => b.classList.remove('active'));
           btn.classList.add('active');
-          currentMode = (btn as HTMLElement).dataset.mode!;
-          // Show/hide touch areas, keyboard hint, and reaction hint based on mode
-          if (currentMode === 'decision') {
-            touchAreasContainer.style.display = 'flex';
-            keyboardHint.style.display = 'block';
-            reactionHint.style.display = 'none';
-          } else {
-            touchAreasContainer.style.display = 'none';
-            keyboardHint.style.display = 'none';
-            reactionHint.style.display = 'block';
-          }
+          currentMode = btn.dataset.mode as 'reaction' | 'decision';
+          resetToIdle();
+          renderPB();
         });
       });
 
-      // Touch event handlers for decision mode
-      touchLeft.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (currentMode === 'decision' && running) {
-          handleResponse('left');
-        }
-      });
-
-      touchLeft.addEventListener('touchend', (e) => {
-        e.preventDefault();
-      });
-
-      touchRight.addEventListener('touchstart', (e) => {
-        e.preventDefault();
-        if (currentMode === 'decision' && running) {
-          handleResponse('right');
-        }
-      });
-
-      touchRight.addEventListener('touchend', (e) => {
-        e.preventDefault();
-      });
-
-      // Also handle mouse clicks on touch areas for hybrid devices
-      touchLeft.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        if (currentMode === 'decision' && running) {
-          handleResponse('left');
-        }
-      });
-
-      touchRight.addEventListener('mousedown', (e) => {
-        e.preventDefault();
-        if (currentMode === 'decision' && running) {
-          handleResponse('right');
-        }
-      });
-
-      populateSessionDropdowns();
-
-      // Initialize touch areas, keyboard hint, and reaction hint visibility based on current mode
-      if (currentMode === 'decision') {
-        touchAreasContainer.style.display = 'flex';
-        keyboardHint.style.display = 'block';
-        reactionHint.style.display = 'none';
-      } else {
-        touchAreasContainer.style.display = 'none';
-        keyboardHint.style.display = 'none';
-        reactionHint.style.display = 'block';
+      function resetToIdle() {
+        phase = 'idle';
+        session = [];
+        if (goTimer !== null) clearTimeout(goTimer);
+        if (betweenTimer !== null) clearTimeout(betweenTimer);
+        statsGrid.style.display = 'none';
+        ratingBanner.style.display = 'none';
+        chartCanvas.style.display = 'none';
+        sessionActions.style.display = 'none';
+        setArena('idle', 'Tap to start',
+          currentMode === 'decision' ? decisionHint : 'or press Space', BOLT_ICON);
+        renderDots();
       }
+
+      $('retry-btn').addEventListener('click', () => startSession());
+
+      // ---------- Save session ----------
+      const modal = $('session-name-modal');
+      const sessionInput = $('session-name') as HTMLInputElement;
+
+      $('save-session-trigger').addEventListener('click', () => {
+        modal.style.display = 'flex';
+        sessionInput.value = '';
+        setTimeout(() => sessionInput.focus(), 50);
+      });
+      $('cancel-save-btn').addEventListener('click', () => { modal.style.display = 'none'; });
+      modal.addEventListener('click', e => { if (e.target === modal) modal.style.display = 'none'; });
+      sessionInput.addEventListener('keydown', e => {
+        if (e.key === 'Enter') doSave();
+        if (e.key === 'Escape') modal.style.display = 'none';
+      });
+      $('save-session-btn').addEventListener('click', doSave);
+
+      function getSessions(): any[] {
+        try { return JSON.parse(localStorage.getItem(SESSIONS_KEY) || '[]'); } catch { return []; }
+      }
+
+      function doSave() {
+        const name = sessionInput.value.trim() || 'Anonymous';
+        const data = getSessions();
+        data.push({ name, mode: currentMode, date: new Date().toISOString(), session });
+        localStorage.setItem(SESSIONS_KEY, JSON.stringify(data));
+        modal.style.display = 'none';
+        $('save-session-trigger').style.display = 'none';
+        ratingBanner.textContent = `💾 Session saved as "${name}"`;
+        populateCompareUI();
+      }
+
+      // ---------- Info modal ----------
+      const infoModal = $('info-modal');
+      $('info-btn').addEventListener('click', () => { infoModal.style.display = 'flex'; });
+      $('close-info').addEventListener('click', () => { infoModal.style.display = 'none'; });
+      infoModal.addEventListener('click', e => { if (e.target === infoModal) infoModal.style.display = 'none'; });
+
+      // ---------- Tabs ----------
+      const playTab = $('play-tab'), compareTab = $('compare-tab');
+      const playTabBtn = $('play-tab-btn'), compareTabBtn = $('compare-tab-btn');
+
+      playTabBtn.addEventListener('click', () => switchTab(true));
+      compareTabBtn.addEventListener('click', () => switchTab(false));
+
+      function switchTab(toPlay: boolean) {
+        playTab.style.display = toPlay ? 'block' : 'none';
+        compareTab.style.display = toPlay ? 'none' : 'block';
+        playTabBtn.classList.toggle('active', toPlay);
+        compareTabBtn.classList.toggle('active', !toPlay);
+        playTabBtn.setAttribute('aria-selected', String(toPlay));
+        compareTabBtn.setAttribute('aria-selected', String(!toPlay));
+        if (!toPlay) populateCompareUI();
+        else if (phase === 'idle') resetToIdle();
+      }
+
+      // ---------- Compare tab ----------
+      const compareType = $('compare-type') as HTMLSelectElement;
+      const session1Select = $('session1') as HTMLSelectElement;
+      const session2Select = $('session2') as HTMLSelectElement;
+      const compareChartEl = $('compare-chart') as HTMLCanvasElement;
+      const compareStats = $('compare-stats');
+      const sessionTable = $('session-table');
+      const noSessions = $('no-sessions');
+
+      compareType.addEventListener('change', populateCompareUI);
+      session1Select.addEventListener('change', drawCompare);
+      session2Select.addEventListener('change', drawCompare);
+
+      function populateCompareUI() {
+        const data = getSessions();
+        const filtered = data
+          .map((s: any, i: number) => ({ ...s, _idx: i }))
+          .filter((s: any) => s.mode === compareType.value);
+
+        const hasAny = filtered.length > 0;
+        noSessions.style.display = hasAny ? 'none' : '';
+        $('compare-pickers').style.display = hasAny ? '' : 'none';
+        compareChartEl.style.display = hasAny ? '' : 'none';
+        compareStats.style.display = hasAny ? '' : 'none';
+        sessionTable.innerHTML = '';
+        if (!hasAny) return;
+
+        // session list with stats + delete
+        filtered.slice().reverse().forEach((s: any) => {
+          const { avg, sd, count } = calcStats(s.session);
+          const row = document.createElement('div');
+          row.className = 'session-row';
+          row.innerHTML = `
+            <div class="session-info">
+              <span class="session-name">${escapeHtml(s.name)}</span>
+              <span class="session-date">${new Date(s.date).toLocaleString()}</span>
+            </div>
+            <div class="session-metrics">
+              <span><b>${avg.toFixed(0)}</b> ms avg</span>
+              <span>±${sd.toFixed(0)}</span>
+              <span>${count}/${s.session.length} ok</span>
+            </div>`;
+          const del = document.createElement('button');
+          del.className = 'session-delete';
+          del.setAttribute('aria-label', 'Delete session');
+          del.textContent = '×';
+          del.addEventListener('click', () => {
+            const all = getSessions();
+            all.splice(s._idx, 1);
+            localStorage.setItem(SESSIONS_KEY, JSON.stringify(all));
+            populateCompareUI();
+          });
+          row.appendChild(del);
+          sessionTable.appendChild(row);
+        });
+
+        [session1Select, session2Select].forEach((sel, si) => {
+          sel.innerHTML = '';
+          filtered.forEach((s: any) => {
+            const opt = document.createElement('option');
+            opt.value = String(s._idx);
+            opt.textContent = `${s.name} — ${new Date(s.date).toLocaleDateString()} ${new Date(s.date).toLocaleTimeString([], {hour:'2-digit', minute:'2-digit'})}`;
+            sel.appendChild(opt);
+          });
+          const pick = Math.max(0, filtered.length - 1 - si);
+          if (filtered[pick]) sel.value = String(filtered[pick]._idx);
+        });
+
+        drawCompare();
+      }
+
+      function drawCompare() {
+        const data = getSessions();
+        const s1 = data[parseInt(session1Select.value)];
+        const s2 = data[parseInt(session2Select.value)];
+        if (!s1 || !s2) return;
+
+        const { W, H, ctx } = setupCanvas(compareChartEl, 220);
+        const pad = { l: 40, r: 12, t: 12, b: 20 };
+        const allTimes = [...s1.session, ...s2.session].filter((t: Trial) => !t.fail).map((t: Trial) => t.time);
+        const maxMs = Math.max(400, Math.ceil((Math.max(...allTimes, 300) * 1.15) / 100) * 100);
+        drawFrame(ctx, W, H, pad, maxMs);
+        drawSeries(ctx, s1.session, W, H, pad, maxMs, '#10b981');
+        drawSeries(ctx, s2.session, W, H, pad, maxMs, '#3b82f6');
+
+        const st1 = calcStats(s1.session), st2 = calcStats(s2.session);
+        const diff = st1.avg && st2.avg ? st2.avg - st1.avg : 0;
+        const diffText = !st1.avg || !st2.avg ? '' :
+          diff < 0 ? ` — B is ${Math.abs(diff).toFixed(0)} ms faster` :
+          diff > 0 ? ` — A is ${diff.toFixed(0)} ms faster` : ' — dead even!';
+        compareStats.innerHTML =
+          `<span class="cmp-a">${escapeHtml(s1.name)}: <b>${st1.avg.toFixed(0)} ms</b> (±${st1.sd.toFixed(0)})</span>` +
+          `<span class="cmp-b">${escapeHtml(s2.name)}: <b>${st2.avg.toFixed(0)} ms</b> (±${st2.sd.toFixed(0)})</span>` +
+          `<span class="cmp-diff">${diffText}</span>`;
+      }
+
+      function escapeHtml(s: string) {
+        return s.replace(/[&<>"']/g, ch => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[ch]!));
+      }
+
+      // redraw charts on resize
+      let resizeTimer: number | null = null;
+      window.addEventListener('resize', () => {
+        if (resizeTimer !== null) clearTimeout(resizeTimer);
+        resizeTimer = window.setTimeout(() => {
+          if (chartCanvas.style.display !== 'none' && session.length) drawSessionChart();
+          if (compareTab.style.display !== 'none') drawCompare();
+        }, 150);
+      });
+
+      // init
+      resetToIdle();
+      renderPB();
     })();
   </script>
 
@@ -449,9 +716,11 @@ const pageDescription = 'Test and improve your reaction time and decision-making
 
     .reaction-container {
       background: white;
-      border-radius: 12px;
+      border-radius: 16px;
       padding: 40px;
       box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+      max-width: 760px;
+      margin: 0 auto;
     }
 
     :global(.dark) .reaction-container {
@@ -461,15 +730,13 @@ const pageDescription = 'Test and improve your reaction time and decision-making
 
     .app-header {
       text-align: center;
-      margin-bottom: 2rem;
+      margin-bottom: 1.5rem;
     }
 
     .page-title {
       font-size: 36px;
       font-weight: 700;
-      text-align: center;
       margin-bottom: 20px;
-      color: #2c3e50;
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -484,300 +751,418 @@ const pageDescription = 'Test and improve your reaction time and decision-making
     }
 
     .tab-buttons {
-      display: flex;
-      justify-content: center;
-      gap: 10px;
-      margin-top: 15px;
+      display: inline-flex;
+      background: #e9ecef;
+      border-radius: 10px;
+      padding: 4px;
+      gap: 4px;
     }
 
+    :global(.dark) .tab-buttons { background: rgb(31, 41, 55); }
+
     .tab-select {
-      padding: 10px 20px;
+      padding: 9px 22px;
       border: none;
       border-radius: 8px;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      background: #e9ecef;
+      background: transparent;
       color: #495057;
       transition: all 0.2s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    :global(.dark) .tab-select {
-      background: rgb(55, 65, 81);
-      color: rgb(209, 213, 219);
-    }
+    :global(.dark) .tab-select { color: rgb(209, 213, 219); }
 
     .tab-select.active {
       background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+      box-shadow: 0 2px 6px rgba(102, 126, 234, 0.4);
     }
 
-    .tab-select:hover:not(.active) {
-      background: #dee2e6;
+    /* ---------- Mode row ---------- */
+    .mode-row {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 10px;
     }
 
-    :global(.dark) .tab-select:hover:not(.active) {
-      background: rgb(75, 85, 99);
+    .mode-toggle {
+      display: inline-flex;
+      background: #f1f3f5;
+      border-radius: 12px;
+      padding: 4px;
+      gap: 4px;
     }
 
-    #mode-buttons {
-      margin: 1rem;
-      text-align: center;
-    }
+    :global(.dark) .mode-toggle { background: rgb(31, 41, 55); }
 
     .mode-btn {
-      padding: 0.6rem 1.2rem;
-      margin: 0.3rem;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 20px;
       border: none;
-      border-radius: 6px;
-      font-size: 1rem;
-      background: #e9ecef;
-      color: #2c3e50;
+      border-radius: 9px;
+      font-size: 15px;
+      font-weight: 600;
+      background: transparent;
+      color: #495057;
       cursor: pointer;
       transition: all 0.2s;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
     }
 
-    :global(.dark) .mode-btn {
-      background: rgb(55, 65, 81);
-      color: rgb(209, 213, 219);
-    }
+    .mode-btn svg { width: 18px; height: 18px; }
+
+    :global(.dark) .mode-btn { color: rgb(209, 213, 219); }
 
     .mode-btn.active {
-      background: #0f0;
-      color: #000;
-      font-weight: bold;
+      background: white;
+      color: #667eea;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.12);
     }
 
-    .mode-btn:hover:not(.active) {
-      background: #dee2e6;
-    }
-
-    :global(.dark) .mode-btn:hover:not(.active) {
-      background: rgb(75, 85, 99);
+    :global(.dark) .mode-btn.active {
+      background: rgb(55, 65, 81);
+      color: #a5b4fc;
     }
 
     #info-btn {
-      background: #0af;
-      border: none;
+      background: transparent;
+      border: 2px solid #cbd5e1;
       border-radius: 50%;
-      color: #fff;
-      font-size: 1.2rem;
-      width: 32px;
-      height: 32px;
-      margin-left: 0.5rem;
+      color: #64748b;
+      font-size: 15px;
+      font-weight: 700;
+      width: 34px;
+      height: 34px;
       cursor: pointer;
       transition: all 0.2s;
-    }
-
-    #info-btn:hover {
-      background: #09f;
-    }
-
-    .start-button {
-      display: block;
-      margin: 0 auto 2rem;
-      padding: 12px 32px;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 8px;
-      font-size: 16px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.1);
-    }
-
-    .start-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(0,0,0,0.15);
-    }
-
-    #game-area {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      outline: none;
-      position: relative;
-    }
-
-    .touch-areas-container {
-      display: none;
-      position: relative;
-      width: 100%;
-      max-width: 600px;
-      margin-bottom: 1rem;
-      flex-direction: row;
-      gap: 1rem;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .touch-area {
-      flex: 1;
-      min-height: 120px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 48px;
-      font-weight: bold;
-      background: rgba(102, 126, 234, 0.1);
-      border: 3px solid rgba(102, 126, 234, 0.3);
-      border-radius: 12px;
-      color: rgba(102, 126, 234, 0.6);
-      user-select: none;
-      cursor: pointer;
-      transition: all 0.2s ease;
       touch-action: manipulation;
     }
 
-    :global(.dark) .touch-area {
-      background: rgba(129, 140, 248, 0.1);
-      border-color: rgba(129, 140, 248, 0.3);
-      color: rgba(129, 140, 248, 0.6);
+    #info-btn:hover {
+      border-color: #667eea;
+      color: #667eea;
     }
 
-    .touch-area:active {
-      background: rgba(102, 126, 234, 0.2);
-      border-color: rgba(102, 126, 234, 0.5);
-      color: rgba(102, 126, 234, 0.9);
-      transform: scale(0.95);
-    }
+    :global(.dark) #info-btn { border-color: rgb(75, 85, 99); color: rgb(156, 163, 175); }
+    :global(.dark) #info-btn:hover { border-color: #818cf8; color: #818cf8; }
 
-    :global(.dark) .touch-area:active {
-      background: rgba(129, 140, 248, 0.2);
-      border-color: rgba(129, 140, 248, 0.5);
-      color: rgba(129, 140, 248, 0.9);
-    }
-
-    .touch-area:hover {
-      background: rgba(102, 126, 234, 0.15);
-      border-color: rgba(102, 126, 234, 0.4);
-    }
-
-    :global(.dark) .touch-area:hover {
-      background: rgba(129, 140, 248, 0.15);
-      border-color: rgba(129, 140, 248, 0.4);
-    }
-
-    .keyboard-hint {
-      display: none;
+    .pb-row {
       text-align: center;
-      font-size: 0.9rem;
+      font-size: 14px;
       color: #7f8c8d;
-      margin-bottom: 0.5rem;
-      font-style: italic;
+      margin-bottom: 14px;
+      min-height: 20px;
     }
 
-    :global(.dark) .keyboard-hint {
-      color: rgb(156, 163, 175);
+    :global(.dark) .pb-row { color: rgb(156, 163, 175); }
+
+    /* ---------- Trial dots ---------- */
+    .trial-dots {
+      display: flex;
+      justify-content: center;
+      gap: 8px;
+      margin-bottom: 14px;
     }
 
-    .reaction-hint {
-      display: none;
-      text-align: center;
-      font-size: 0.9rem;
-      color: #7f8c8d;
-      margin-bottom: 0.5rem;
-      font-style: italic;
+    .dot-trial {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+      background: #e1e8ed;
+      transition: all 0.25s ease;
     }
 
-    :global(.dark) .reaction-hint {
-      color: rgb(156, 163, 175);
+    :global(.dark) .dot-trial { background: rgb(55, 65, 81); }
+
+    .dot-trial.ok { background: #10b981; }
+    .dot-trial.fail { background: #ef4444; }
+    .dot-trial.current {
+      background: #a5b4fc;
+      transform: scale(1.3);
+      animation: dot-pulse 1s ease-in-out infinite;
     }
 
-    #square {
-      width: 150px;
-      height: 150px;
-      background: #fff;
-      border-radius: 8px;
-      margin: 2rem;
+    @keyframes dot-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.45; }
+    }
+
+    /* ---------- Arena ---------- */
+    .arena {
+      position: relative;
+      width: 100%;
+      height: 300px;
+      border-radius: 16px;
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 64px;
-      font-weight: bold;
-      color: #000;
+      cursor: pointer;
       user-select: none;
-      transition: background 0.2s ease;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      -webkit-user-select: none;
+      touch-action: manipulation;
+      -webkit-tap-highlight-color: transparent;
+      transition: background 0.15s ease, box-shadow 0.3s ease;
+      outline: none;
+      overflow: hidden;
+      margin-bottom: 18px;
     }
 
-    #square.ready {
-      animation: pulse 1s infinite;
+    .arena:focus-visible {
+      box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.5);
     }
 
-    @keyframes pulse {
-      0% { box-shadow: 0 0 5px 2px rgba(0,255,0,0.5); }
-      50% { box-shadow: 0 0 15px 6px rgba(0,255,0,0.7); }
-      100% { box-shadow: 0 0 5px 2px rgba(0,255,0,0.5); }
+    .arena-content {
+      text-align: center;
+      pointer-events: none;
+      padding: 0 16px;
     }
 
-    #result {
-      font-size: 1.2rem;
-      margin: 0.5rem;
-      color: #2c3e50;
-      font-weight: 600;
+    .arena-icon svg {
+      width: 44px;
+      height: 44px;
+      margin: 0 auto 10px;
+      display: block;
     }
 
-    :global(.dark) #result {
-      color: rgb(243, 244, 246);
+    .arena-main {
+      font-size: clamp(30px, 7vw, 52px);
+      font-weight: 800;
+      line-height: 1.15;
     }
 
-    #stats {
-      font-size: 0.95rem;
-      margin-bottom: 1rem;
-      color: #7f8c8d;
+    .arena-sub {
+      font-size: 15px;
+      font-weight: 500;
+      opacity: 0.75;
+      margin-top: 8px;
+      min-height: 20px;
     }
 
-    :global(.dark) #stats {
-      color: rgb(156, 163, 175);
-    }
-
-    canvas {
-      background: #f8f9fa;
-      border-radius: 6px;
-      margin: 1rem 0;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    :global(.dark) canvas {
-      background: rgb(31, 41, 55);
-    }
-
-    #save-session-trigger {
+    .arena-divider {
       display: none;
-      margin-top: 0.8rem;
-      padding: 10px 20px;
-      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      position: absolute;
+      left: 50%;
+      top: 10%;
+      bottom: 10%;
+      width: 2px;
+      background: currentColor;
+      opacity: 0.25;
+      pointer-events: none;
+    }
+
+    .state-idle {
+      background: linear-gradient(135deg, #eef1f7 0%, #e4e7f2 100%);
+      color: #4c51bf;
+      border: 2px dashed rgba(102, 126, 234, 0.45);
+    }
+
+    :global(.dark) .state-idle {
+      background: linear-gradient(135deg, rgb(31, 41, 55) 0%, rgb(24, 32, 47) 100%);
+      color: #a5b4fc;
+      border-color: rgba(129, 140, 248, 0.4);
+    }
+
+    .state-waiting {
+      background: linear-gradient(135deg, #fca5a5 0%, #ef4444 100%);
+      color: #7f1d1d;
+    }
+
+    :global(.dark) .state-waiting {
+      background: linear-gradient(135deg, #b91c1c 0%, #7f1d1d 100%);
+      color: #fecaca;
+    }
+
+    .state-go {
+      background: linear-gradient(135deg, #4ade80 0%, #16a34a 100%);
+      color: #052e16;
+      animation: go-glow 1.2s ease-in-out infinite;
+    }
+
+    :global(.dark) .state-go {
+      background: linear-gradient(135deg, #22c55e 0%, #15803d 100%);
+      color: #f0fdf4;
+    }
+
+    @keyframes go-glow {
+      0%, 100% { box-shadow: 0 0 12px 2px rgba(34, 197, 94, 0.4); }
+      50% { box-shadow: 0 0 30px 8px rgba(34, 197, 94, 0.65); }
+    }
+
+    .state-fail {
+      background: linear-gradient(135deg, #fee2e2 0%, #fecaca 100%);
+      color: #b91c1c;
+      animation: shake 0.35s ease;
+    }
+
+    :global(.dark) .state-fail {
+      background: linear-gradient(135deg, rgb(69, 26, 26) 0%, rgb(88, 28, 28) 100%);
+      color: #fca5a5;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20% { transform: translateX(-8px); }
+      40% { transform: translateX(8px); }
+      60% { transform: translateX(-5px); }
+      80% { transform: translateX(5px); }
+    }
+
+    .state-success {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+      color: #065f46;
+    }
+
+    :global(.dark) .state-success {
+      background: linear-gradient(135deg, rgb(6, 44, 34) 0%, rgb(6, 59, 44) 100%);
+      color: #6ee7b7;
+    }
+
+    .state-done {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
       color: white;
+    }
+
+    /* ---------- Stats ---------- */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+      margin-bottom: 14px;
+    }
+
+    @media (max-width: 560px) {
+      .stats-grid { grid-template-columns: repeat(2, 1fr); }
+    }
+
+    .stat-card {
+      background: #f8f9fa;
+      border: 1px solid #e9ecef;
+      border-radius: 12px;
+      padding: 12px 8px;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    :global(.dark) .stat-card {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+    }
+
+    .stat-label {
+      font-size: 12px;
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: #9ca3af;
+    }
+
+    .stat-value {
+      font-size: 22px;
+      font-weight: 800;
+      font-variant-numeric: tabular-nums;
+      color: #2c3e50;
+    }
+
+    :global(.dark) .stat-value { color: rgb(243, 244, 246); }
+
+    .rating-banner {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #4c51bf;
+      background: rgba(102, 126, 234, 0.08);
+      border: 1px solid rgba(102, 126, 234, 0.25);
+      border-radius: 10px;
+      padding: 10px 16px;
+      margin-bottom: 14px;
+    }
+
+    :global(.dark) .rating-banner {
+      color: #a5b4fc;
+      background: rgba(129, 140, 248, 0.08);
+      border-color: rgba(129, 140, 248, 0.3);
+    }
+
+    canvas#chart, canvas#compare-chart {
+      display: block;
+      width: 100%;
+      background: #f8f9fa;
+      border-radius: 12px;
+      border: 1px solid #e9ecef;
+      margin-bottom: 14px;
+    }
+
+    :global(.dark) canvas#chart, :global(.dark) canvas#compare-chart {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+    }
+
+    .session-actions {
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .btn-green, .btn-purple {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 11px 22px;
       border: none;
-      border-radius: 8px;
+      border-radius: 9px;
+      font-size: 14px;
+      font-weight: 600;
+      color: white;
+      cursor: pointer;
+      transition: transform 0.15s ease, box-shadow 0.2s ease;
+      touch-action: manipulation;
+    }
+
+    .btn-green svg, .btn-purple svg { width: 16px; height: 16px; }
+
+    .btn-green { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+    .btn-purple { background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); }
+
+    .btn-green:hover, .btn-purple:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+    }
+
+    .btn-ghost {
+      padding: 11px 20px;
+      border: none;
+      border-radius: 9px;
+      background: transparent;
+      color: #6b7280;
       font-size: 14px;
       font-weight: 600;
       cursor: pointer;
-      transition: all 0.2s;
     }
 
-    #save-session-trigger:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(16, 185, 129, 0.3);
-    }
+    .btn-ghost:hover { background: rgba(0,0,0,0.05); }
+    :global(.dark) .btn-ghost { color: rgb(156, 163, 175); }
+    :global(.dark) .btn-ghost:hover { background: rgba(255,255,255,0.06); }
 
+    /* ---------- Modals ---------- */
     .modal {
-      background: rgba(0, 0, 0, 0.85);
-      color: #fff;
+      background: rgba(0, 0, 0, 0.7);
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      inset: 0;
       display: none;
       align-items: center;
       justify-content: center;
-      flex-direction: column;
-      text-align: center;
       padding: 1rem;
       z-index: 1000;
     }
@@ -786,9 +1171,11 @@ const pageDescription = 'Test and improve your reaction time and decision-making
       background: white;
       color: #2c3e50;
       padding: 2rem;
-      border-radius: 12px;
-      max-width: 500px;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.3);
+      border-radius: 14px;
+      max-width: 480px;
+      width: 100%;
+      box-shadow: 0 20px 50px rgba(0,0,0,0.35);
+      text-align: center;
     }
 
     :global(.dark) .modal-content {
@@ -798,23 +1185,71 @@ const pageDescription = 'Test and improve your reaction time and decision-making
 
     .modal-content h2 {
       color: #667eea;
-      margin-top: 0;
+      margin: 0 0 12px;
+      font-size: 22px;
+      font-weight: 700;
     }
 
-    :global(.dark) .modal-content h2 {
-      color: #818cf8;
+    :global(.dark) .modal-content h2 { color: #818cf8; }
+
+    .modal-content p {
+      font-size: 14px;
+      line-height: 1.6;
+      text-align: left;
+      margin: 0 0 10px;
     }
+
+    .modal-content kbd {
+      display: inline-block;
+      padding: 1px 6px;
+      border-radius: 4px;
+      border: 1px solid #d1d5db;
+      border-bottom-width: 2px;
+      background: #f9fafb;
+      font-size: 12px;
+      font-family: inherit;
+    }
+
+    :global(.dark) .modal-content kbd {
+      background: rgb(31, 41, 55);
+      border-color: rgb(75, 85, 99);
+    }
+
+    .text-green { color: #16a34a; font-weight: 700; }
+
+    .rating-table {
+      margin: 14px 0;
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      overflow: hidden;
+      font-size: 13px;
+    }
+
+    :global(.dark) .rating-table { border-color: rgb(55, 65, 81); }
+
+    .rating-table > div {
+      display: flex;
+      justify-content: space-between;
+      padding: 7px 14px;
+    }
+
+    .rating-table > div:nth-child(odd) { background: #f8f9fa; }
+    :global(.dark) .rating-table > div:nth-child(odd) { background: rgb(31, 41, 55); }
+
+    .rt-time { font-variant-numeric: tabular-nums; font-weight: 600; }
 
     .modal-content input {
       font-size: 1rem;
-      padding: 0.5rem;
+      padding: 10px 14px;
       border: 2px solid #e1e8ed;
-      border-radius: 6px;
+      border-radius: 8px;
       width: 100%;
       max-width: 300px;
       background: #f8f9fa;
       color: #2c3e50;
     }
+
+    .modal-content input:focus { outline: none; border-color: #667eea; }
 
     :global(.dark) .modal-content input {
       background: rgb(31, 41, 55);
@@ -826,62 +1261,50 @@ const pageDescription = 'Test and improve your reaction time and decision-making
       display: flex;
       gap: 10px;
       justify-content: center;
-      margin-top: 1rem;
+      margin-top: 1.2rem;
     }
 
-    .modal-content button {
-      margin-top: 0.5rem;
-      padding: 0.5rem 1rem;
-      background: #667eea;
-      color: #fff;
-      border: none;
-      border-radius: 5px;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .modal-content button:hover {
-      background: #5568d3;
-    }
-
-    #compare-tab {
-      display: none;
-      text-align: center;
-    }
+    /* ---------- Compare tab ---------- */
+    #compare-tab { display: none; }
 
     .compare-title {
       font-size: 24px;
       font-weight: 700;
       color: #2c3e50;
-      margin-bottom: 1.5rem;
+      margin-bottom: 1.2rem;
+      text-align: center;
     }
 
-    :global(.dark) .compare-title {
-      color: rgb(243, 244, 246);
-    }
+    :global(.dark) .compare-title { color: rgb(243, 244, 246); }
 
     .compare-controls {
-      margin: 1rem 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      gap: 10px;
+      margin: 0 0 1rem;
+      flex-wrap: wrap;
     }
 
     .compare-controls label {
-      margin: 0 0.5rem;
       color: #2c3e50;
       font-weight: 600;
+      font-size: 14px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
     }
 
-    :global(.dark) .compare-controls label {
-      color: rgb(209, 213, 219);
-    }
+    :global(.dark) .compare-controls label { color: rgb(209, 213, 219); }
 
     .compare-controls select {
-      margin: 0.5rem;
-      padding: 0.4rem 0.8rem;
+      padding: 8px 12px;
       border: 2px solid #e1e8ed;
-      border-radius: 6px;
+      border-radius: 8px;
       background: #f8f9fa;
       color: #2c3e50;
       font-size: 14px;
+      max-width: 100%;
     }
 
     :global(.dark) .compare-controls select {
@@ -890,81 +1313,123 @@ const pageDescription = 'Test and improve your reaction time and decision-making
       color: rgb(243, 244, 246);
     }
 
-    .compare-controls button {
-      padding: 0.5rem 1.5rem;
-      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-      color: white;
-      border: none;
-      border-radius: 6px;
+    .compare-pickers {
+      gap: 20px;
+    }
+
+    .picker {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      align-items: flex-start;
+    }
+
+    .dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      display: inline-block;
+    }
+
+    .dot-green { background: #10b981; }
+    .dot-blue { background: #3b82f6; }
+
+    #session-table {
+      max-width: 560px;
+      margin: 0 auto 1.2rem;
+    }
+
+    .session-row {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 14px;
+      border: 1px solid #e9ecef;
+      border-radius: 10px;
+      margin-bottom: 8px;
+      background: #f8f9fa;
+    }
+
+    :global(.dark) .session-row {
+      background: rgb(31, 41, 55);
+      border-color: rgb(55, 65, 81);
+    }
+
+    .session-info {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      text-align: left;
+      min-width: 0;
+    }
+
+    .session-name {
+      font-weight: 700;
       font-size: 14px;
-      font-weight: 600;
-      cursor: pointer;
-      transition: all 0.2s;
-    }
-
-    .compare-controls button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 8px rgba(102, 126, 234, 0.3);
-    }
-
-    #compare-stats {
-      margin-top: 0.5rem;
-      font-size: 0.9rem;
-      color: #7f8c8d;
-    }
-
-    :global(.dark) #compare-stats {
-      color: rgb(156, 163, 175);
-    }
-
-    .legend {
-      font-size: 0.85rem;
-      margin-top: 0.5rem;
       color: #2c3e50;
     }
 
-    :global(.dark) .legend {
-      color: rgb(209, 213, 219);
+    :global(.dark) .session-name { color: rgb(243, 244, 246); }
+
+    .session-date {
+      font-size: 12px;
+      color: #9ca3af;
     }
 
-    .legend span {
-      display: inline-block;
-      width: 12px;
-      height: 12px;
-      margin-right: 6px;
-      border-radius: 3px;
+    .session-metrics {
+      display: flex;
+      gap: 12px;
+      font-size: 13px;
+      color: #6b7280;
+      font-variant-numeric: tabular-nums;
+      flex-wrap: wrap;
+      justify-content: flex-end;
     }
 
-    .legend-green {
-      background: #0f0;
+    :global(.dark) .session-metrics { color: rgb(156, 163, 175); }
+
+    .session-delete {
+      border: none;
+      background: transparent;
+      color: #9ca3af;
+      font-size: 20px;
+      line-height: 1;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 6px;
     }
 
-    .legend-blue {
-      background: #0af;
-      margin-left: 1rem;
+    .session-delete:hover { color: #ef4444; background: rgba(239, 68, 68, 0.08); }
+
+    #compare-stats {
+      margin: 0.6rem 0;
+      font-size: 0.9rem;
+      color: #6b7280;
+      display: flex;
+      justify-content: center;
+      gap: 18px;
+      flex-wrap: wrap;
+      text-align: center;
+    }
+
+    :global(.dark) #compare-stats { color: rgb(156, 163, 175); }
+
+    .cmp-a b { color: #10b981; }
+    .cmp-b b { color: #3b82f6; }
+    .cmp-diff { font-weight: 600; }
+
+    .no-sessions {
+      text-align: center;
+      color: #9ca3af;
+      font-size: 15px;
+      padding: 2rem 0;
     }
 
     @media (max-width: 600px) {
-      #square {
-        width: 100px;
-        height: 100px;
-        font-size: 48px;
-      }
-
-      .reaction-container {
-        padding: 20px;
-      }
-
-      .touch-areas-container {
-        flex-direction: row;
-        gap: 0.5rem;
-      }
-
-      .touch-area {
-        min-height: 100px;
-        font-size: 36px;
-      }
+      .reaction-container { padding: 24px 16px; }
+      .arena { height: 260px; }
+      .page-title { font-size: 28px; }
+      .mode-btn { padding: 9px 14px; font-size: 14px; }
     }
   </style>
 </Layout>
-

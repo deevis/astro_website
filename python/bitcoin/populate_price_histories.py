@@ -2,7 +2,7 @@
 """
 Bitcoin Price History Updater
 Fetches current Bitcoin price from CoinGecko API and updates price_data.csv files
-Also populates missing days within the last 60 days
+Also appends every missing day from the last CSV date through today
 """
 
 import csv
@@ -272,32 +272,40 @@ class BitcoinPriceUpdater:
             logger.error(f"Error reading existing dates from CSV file {file_path}: {e}")
             return existing_dates
     
-    def get_missing_dates(self, file_path: str, days_back: int = 60) -> List[str]:
-        """Get list of missing dates within the last specified number of days"""
-        existing_dates = self.get_existing_dates(file_path)
-        
-        # Generate all dates for the last N days
+    def get_missing_dates(self, file_path: str) -> List[str]:
+        """Get every date after the last CSV entry through today (inclusive)."""
+        latest_date_str = self.get_latest_entry_date(file_path)
         today = datetime.now(timezone.utc).date()
-        all_dates = []
-        
-        for i in range(days_back):
-            date = today - timedelta(days=i)
-            date_str = date.strftime('%Y-%m-%d')
-            all_dates.append(date_str)
-        
-        # Find missing dates
+
+        if latest_date_str is None:
+            logger.warning(f"No existing dates found in {file_path}; skipping backfill")
+            return []
+
+        try:
+            latest_date = datetime.strptime(latest_date_str, '%Y-%m-%d').date()
+        except ValueError as e:
+            logger.error(f"Invalid latest date {latest_date_str} in {file_path}: {e}")
+            return []
+
+        if latest_date >= today:
+            logger.info(f"{file_path} is already up to date through {latest_date_str}")
+            return []
+
+        # Today is written separately via the current-price endpoint
         missing_dates = []
-        for date_str in all_dates:
-            if date_str not in existing_dates:
-                missing_dates.append(date_str)
-        
-        # Sort missing dates in ascending order (oldest first)
-        missing_dates.sort()
-        
-        logger.info(f"Found {len(missing_dates)} missing dates in the last {days_back} days")
+        current = latest_date + timedelta(days=1)
+        while current < today:
+            missing_dates.append(current.strftime('%Y-%m-%d'))
+            current += timedelta(days=1)
+
+        end_date = (today - timedelta(days=1)).strftime('%Y-%m-%d')
+        logger.info(
+            f"Found {len(missing_dates)} dates to append after {latest_date_str} "
+            f"through {end_date}"
+        )
         if missing_dates:
             logger.info(f"Missing dates: {missing_dates}")
-        
+
         return missing_dates
     
     def get_latest_entry_date(self, file_path: str) -> Optional[str]:
@@ -337,8 +345,17 @@ class BitcoinPriceUpdater:
                 logger.info(f"Entry for {date} already exists in {file_path}")
                 return True
                 
-            # Append new entry
+            # Ensure the file ends with a newline so the new row is not concatenated
+            with open(file_path, 'rb') as file:
+                file.seek(0, os.SEEK_END)
+                needs_newline = file.tell() > 0
+                if needs_newline:
+                    file.seek(-1, os.SEEK_END)
+                    needs_newline = file.read(1) not in (b'\n', b'\r')
+
             with open(file_path, 'a', newline='', encoding='utf-8') as file:
+                if needs_newline:
+                    file.write('\n')
                 writer = csv.writer(file)
                 writer.writerow([date, price, 'coingecko'])
                 
@@ -349,9 +366,9 @@ class BitcoinPriceUpdater:
             logger.error(f"Error updating CSV file {file_path}: {e}")
             return False
     
-    def populate_missing_dates(self, days_back: int = 60) -> bool:
-        """Populate missing dates in all CSV files within the specified number of days"""
-        logger.info(f"Starting to populate missing dates within the last {days_back} days...")
+    def populate_missing_dates(self) -> bool:
+        """Append every missing day from the last CSV date through today."""
+        logger.info("Starting to populate missing dates from the last CSV entry through today...")
         
         success_count = 0
         total_files = len(self.file_paths)
@@ -360,7 +377,7 @@ class BitcoinPriceUpdater:
             logger.info(f"Processing file: {file_path}")
             
             # Get missing dates for this file
-            missing_dates = self.get_missing_dates(file_path, days_back)
+            missing_dates = self.get_missing_dates(file_path)
             
             if not missing_dates:
                 logger.info(f"No missing dates found for {file_path}")
@@ -396,8 +413,8 @@ class BitcoinPriceUpdater:
         """Update all CSV files with current Bitcoin price and populate missing dates"""
         logger.info("Starting comprehensive update process...")
         
-        # First, populate missing dates
-        missing_dates_success = self.populate_missing_dates(60)
+        # First, populate missing dates from the last CSV entry through today
+        missing_dates_success = self.populate_missing_dates()
         
         # Then, update with current price
         current_price_success = self.update_current_price()
@@ -481,7 +498,7 @@ def main():
     
     # Configure rate limiting for CoinGecko free tier
     # Free tier: 10-30 calls per minute, recommended 6-10 second delays
-    rate_limit_delay = 10.0  # 10 seconds between API calls
+    rate_limit_delay = 9.0  # 9 seconds between API calls
     max_retries = 5          # Maximum retry attempts
     
     updater = BitcoinPriceUpdater(rate_limit_delay=rate_limit_delay, max_retries=max_retries)

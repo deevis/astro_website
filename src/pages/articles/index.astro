@@ -1,17 +1,36 @@
 ---
 import Layout from '../../layouts/Layout.astro';
-import Navigation from '../../components/Navigation.astro';
-import Footer from '../../components/Footer.astro';
 import { getCollection } from 'astro:content';
+import { showcases } from '../../config/showcases.json';
+import { interactiveArticles, playgroundHref, cardAsset, type ShowcaseItem } from '../../lib/showcases';
 
-// Get all articles from the content collection and sort by date
 const articles = await getCollection('articles');
-const sortedArticles = articles.sort((a, b) => 
-  new Date(b.data.publishDate).getTime() - new Date(a.data.publishDate).getTime()
-);
+const writingItems = [
+  ...articles.map((article) => ({
+    href: `/articles/${article.slug}`,
+    title: article.data.title,
+    description: article.data.description,
+    imageSrc: article.data.image.src,
+    imageAlt: article.data.image.alt,
+    author: article.data.author,
+    publishDate: article.data.publishDate,
+    tags: article.data.tags || [],
+    interactive: false,
+  })),
+  ...interactiveArticles(showcases as ShowcaseItem[]).map((item) => ({
+    href: playgroundHref(item.href),
+    title: item.title,
+    description: item.description,
+    imageSrc: cardAsset(item.image),
+    imageAlt: item.title,
+    author: item.author,
+    publishDate: item.publishDate ?? '1970-01-01',
+    tags: item.tags || [],
+    interactive: true,
+  })),
+].sort((a, b) => new Date(b.publishDate).getTime() - new Date(a.publishDate).getTime());
 
-// Extract all unique tags
-const allTags = [...new Set(sortedArticles.flatMap(article => article.data.tags || []))].sort();
+const allTags = [...new Set(writingItems.flatMap((item) => item.tags))].sort();
 ---
 
 <Layout title="Articles | Professional Portfolio">
@@ -66,23 +85,23 @@ const allTags = [...new Set(sortedArticles.flatMap(article => article.data.tags 
       </div>
       
       <div id="articles-grid" class="space-y-6">
-        {sortedArticles.map((article) => {
-          const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-US', {
+        {writingItems.map((item) => {
+          const formattedDate = new Date(item.publishDate).toLocaleDateString('en-US', {
             year: 'numeric',
             month: 'long',
             day: 'numeric'
           });
           return (
-            <div class="article-card" data-tags={article.data.tags?.join(',')}>
-              <a href={`/articles/${article.slug}`} class="block group">
+            <div class="article-card" data-tags={item.tags.join(',')}>
+              <a href={item.href} class="block group">
                 <div class="bg-white dark:bg-dark-800 rounded-lg shadow-sm overflow-hidden hover:shadow-md transition-shadow duration-200">
                   <div class="flex flex-col md:flex-row gap-4 md:gap-6 p-4 md:p-6">
                     <!-- Image -->
                     <div class="flex-shrink-0 w-full md:w-48 lg:w-64">
                       <div class="overflow-hidden rounded-md">
                         <img 
-                          src={article.data.image.src} 
-                          alt={article.data.image.alt} 
+                          src={item.imageSrc} 
+                          alt={item.imageAlt} 
                           class="w-full h-48 md:h-40 lg:h-48 object-cover object-top transition-transform duration-300 group-hover:scale-105"
                         />
                       </div>
@@ -91,25 +110,31 @@ const allTags = [...new Set(sortedArticles.flatMap(article => article.data.tags 
                     <!-- Content -->
                     <div class="flex-1 min-w-0">
                       <h2 class="text-xl md:text-2xl font-bold mb-2 group-hover:text-blue-600 dark:group-hover:text-blue-400 transition-colors">
-                        {article.data.title}
+                        {item.title}
                       </h2>
-                      {(article.data.author || article.data.publishDate) && (
+                      {(item.author || item.publishDate) && (
                         <div class="flex items-center gap-2 text-sm text-gray-600 dark:text-gray-400 mb-3">
-                          {article.data.author && <span>{article.data.author}</span>}
-                          {article.data.author && article.data.publishDate && <span>•</span>}
-                          {article.data.publishDate && (
-                            <time datetime={article.data.publishDate}>
+                          {item.author && <span>{item.author}</span>}
+                          {item.author && item.publishDate && <span>•</span>}
+                          {item.publishDate && (
+                            <time datetime={item.publishDate}>
                               {formattedDate}
                             </time>
+                          )}
+                          {item.interactive && (
+                            <>
+                              <span>•</span>
+                              <span class="text-xs font-semibold uppercase tracking-[0.14em] text-primary-600 dark:text-primary-400">Interactive</span>
+                            </>
                           )}
                         </div>
                       )}
                       <p class="text-gray-700 dark:text-gray-300 mb-3 line-clamp-2 md:line-clamp-3">
-                        {article.data.description}
+                        {item.description}
                       </p>
-                      {article.data.tags && article.data.tags.length > 0 && (
+                      {item.tags.length > 0 && (
                         <div class="flex flex-wrap gap-2">
-                          {article.data.tags.map(tag => (
+                          {item.tags.map(tag => (
                             <span class="card-tag text-xs px-2 py-1 bg-gray-100 dark:bg-dark-700 rounded-full cursor-pointer hover:bg-gray-200 dark:hover:bg-dark-600 transition-colors" data-tag={tag}>
                               {tag}
                             </span>
