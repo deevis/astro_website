@@ -31,6 +31,10 @@ pnpm-debug.log*
 
 python/news_aggregator/news_feed_env/
 python/news_aggregator/__pycache__/
+python/retirement_planner/__pycache__/
+python/retirement_planner/node_modules/
+python/retirement_planner/venv/
+python/retirement_planner/package-lock.json
 
 public/news_feeds/
 tmp/
