@@ -142,6 +142,7 @@
   $: displayGrid = gridSpec ?? gridPreview;
   $: gridDoneCount = gridCells.filter((c) => c.status === 'done').length;
   $: gridBestKey = bestGridCellKey(gridCells);
+  $: gridCellByKey = new Map(gridCells.map((c) => [`${c.row}:${c.col}`, c]));
 
   function summarizePreRetirementSalary(plan: typeof $planStore) {
     const asOf = new Date();
@@ -335,8 +336,8 @@
     return `${best.row}:${best.col}`;
   }
 
-  function gridCellAt(row: number, col: number): GridCellView | undefined {
-    return gridCells.find((c) => c.row === row && c.col === col);
+  function patchGridCell(index: number, patch: Partial<GridCellView>) {
+    gridCells = gridCells.map((cell, j) => (j === index ? { ...cell, ...patch } : cell));
   }
 
   function gridCellFill(cell: GridCellView | undefined): string {
@@ -477,11 +478,10 @@
     await tick();
 
     try {
-      for (let i = 0; i < gridCells.length; i++) {
+      for (let i = 0; i < spec.cells.length; i++) {
         if (currentRun !== runId) return;
-        const pending = gridCells[i]!;
-        gridCells[i] = { ...pending, status: 'running' };
-        gridCells = gridCells;
+        const pending = spec.cells[i]!;
+        patchGridCell(i, { status: 'running' });
         await tick();
         const variant = applyGridScenario(plan, pending.scenario);
         const mc = await runMonteCarlo(variant, {
@@ -495,8 +495,7 @@
         });
         if (currentRun !== runId) return;
         const ending = summarizeEndingBalances(mc.endingBalances);
-        gridCells[i] = {
-          ...pending,
+        patchGridCell(i, {
           status: 'done',
           successRate: mc.successRate,
           meetsThreshold: mc.meetsThreshold,
@@ -505,8 +504,7 @@
           p75Ending: ending.p75,
           meanEnding: ending.mean,
           stdevEnding: ending.stdev,
-        };
-        gridCells = gridCells;
+        });
         progress = (i + 1) * runs;
         await tick();
       }
@@ -1236,6 +1234,7 @@
         {/if}
       </p>
       <div class="overflow-x-auto">
+        {#key gridCells.map((cell) => `${cell.status}:${cell.successRate ?? ''}`).join('|')}
         <table class="min-w-full border-collapse text-xs">
           <thead>
             <tr>
@@ -1291,7 +1290,7 @@
                   {/if}
                 </th>
                 {#each displayGrid.cols as col, c}
-                  {@const cell = gridCellAt(r, c)}
+                  {@const cell = gridCellByKey.get(`${r}:${c}`)}
                   {@const isBest = gridBestKey === `${r}:${c}`}
                   {@const spendAxis = spendAxisOf(row, col)}
                   {@const isBaselineCross = !!(row.isDefault && col.isDefault)}
@@ -1359,6 +1358,7 @@
             {/each}
           </tbody>
         </table>
+        {/key}
       </div>
       {#if gridDoneCount > 0}
         <p class="text-[11px] text-gray-500">

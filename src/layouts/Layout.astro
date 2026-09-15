@@ -24,7 +24,7 @@ const {
 ---
 
 <!doctype html>
-<html lang="en" class:list={["dark", { "natural-scale": naturalScale }]}>
+<html lang="en" class:list={["dark", "ticker-hidden", { "natural-scale": naturalScale }]}>
   <head>
     <meta charset="UTF-8" />
     <meta name="description" content={description} />
@@ -37,8 +37,8 @@ const {
       if (localStorage.getItem('color-theme') === 'light') {
         document.documentElement.classList.remove('dark');
       }
-      if (localStorage.getItem('news-ticker') === 'off') {
-        document.documentElement.classList.add('ticker-hidden');
+      if (localStorage.getItem('news-ticker') === 'on') {
+        document.documentElement.classList.remove('ticker-hidden');
       }
     </script>
     <link 

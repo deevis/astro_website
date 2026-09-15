@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
 @import url("../assets/css/puzzle-history.css");
+@import url("../assets/css/puzzle-tutorial.css");
 
 :root {
   --cq-bg: #0c1118;
@@ -625,14 +626,84 @@ button {
 }
 
 .cq-freq-chip {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 4px;
+  min-width: 40px;
   border: 1px solid var(--cq-border);
   background: var(--cq-bg-2);
   color: var(--cq-text);
   border-radius: 8px;
-  padding: 5px 8px;
+  padding: 5px 6px;
   font-family: var(--cq-mono);
   font-size: 12px;
   font-weight: 600;
+}
+
+.cq-freq-top {
+  display: flex;
+  align-items: baseline;
+  justify-content: center;
+  gap: 3px;
+  line-height: 1.1;
+}
+
+.cq-freq-chip small {
+  color: var(--cq-muted);
+  font-weight: 500;
+  margin-left: 0;
+  font-size: 10px;
+}
+
+.cq-freq-map {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 1.55em;
+  border-radius: 5px;
+  border: 1px dashed var(--cq-border);
+  background: transparent;
+  font-size: 13px;
+  font-weight: 700;
+  line-height: 1;
+  color: transparent;
+}
+
+.cq-freq-chip.mapped {
+  background: var(--cq-teal-soft);
+  border-color: rgba(94, 200, 197, 0.4);
+}
+
+.cq-freq-chip.mapped .cq-freq-map {
+  color: var(--cq-teal);
+  border-style: solid;
+  border-color: rgba(94, 200, 197, 0.45);
+  background: rgba(12, 17, 24, 0.35);
+}
+
+.cq-freq-chip.given {
+  background: var(--cq-ok-soft);
+  border-color: rgba(61, 214, 140, 0.4);
+}
+
+.cq-freq-chip.given .cq-freq-map {
+  color: var(--cq-ok);
+  border-style: solid;
+  border-color: rgba(61, 214, 140, 0.5);
+  background: rgba(12, 17, 24, 0.35);
+}
+
+.cq-freq-chip.wrong {
+  background: var(--cq-danger-soft);
+  border-color: rgba(240, 113, 120, 0.45);
+}
+
+.cq-freq-chip.wrong .cq-freq-map {
+  color: var(--cq-danger);
+  border-style: solid;
+  border-color: rgba(240, 113, 120, 0.55);
+  background: rgba(12, 17, 24, 0.35);
 }
 
 .cq-freq-chip.selected {
@@ -641,10 +712,21 @@ button {
   color: var(--cq-gold);
 }
 
-.cq-freq-chip small {
-  color: var(--cq-muted);
-  font-weight: 500;
-  margin-left: 4px;
+.cq-freq-chip.selected small {
+  color: rgba(224, 184, 78, 0.75);
+}
+
+.cq-freq-chip.selected .cq-freq-map {
+  border-color: rgba(224, 184, 78, 0.45);
+}
+
+.cq-freq-chip.selected.mapped .cq-freq-map,
+.cq-freq-chip.selected.given .cq-freq-map {
+  color: var(--cq-gold);
+}
+
+.cq-freq-chip.selected.wrong .cq-freq-map {
+  color: var(--cq-danger);
 }
 
 .cq-alpha {
@@ -676,8 +758,9 @@ button {
 }
 
 .cq-hint {
-  margin-top: 10px;
-  font-size: 12px;
+  margin: 12px 8px 0;
+  font-size: 13px;
+  line-height: 1.45;
   color: var(--cq-muted);
   text-align: center;
 }
@@ -838,7 +921,7 @@ button {
 
 .cq-win-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 16px 0;
 }

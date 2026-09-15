@@ -5,6 +5,7 @@
   const MUTE_KEY = "cryptoquote-muted";
   const DIFF_KEY = "cryptoquote-difficulty";
   const PROGRESS_KEY = "cryptoquote-progress-v1";
+  const HINT_COOLDOWN_MS = 15000;
 
   const QUOTES = [
     { id: "franklin-knowledge", text: "An investment in knowledge pays the best interest.", author: "Benjamin Franklin", tag: "Wisdom" },
@@ -85,6 +86,8 @@
   let toastTimer = null;
   let audioCtx = null;
   let stats = loadStats();
+  let tutorialSavedDiff = null;
+  let autoTutorialArmed = true;
 
   function dateKey(d = new Date()) {
     const y = d.getFullYear();
@@ -343,6 +346,20 @@
     } catch { /* ignore */ }
   }
 
+  function playVictory() {
+    tone(523, 0.12);
+    setTimeout(() => tone(659, 0.12), 90);
+    setTimeout(() => tone(784, 0.18), 180);
+  }
+
+  function celebrateSolve(selector, done) {
+    playVictory();
+    const cells = root.querySelectorAll(selector);
+    const api = ph();
+    if (api?.celebrate) api.celebrate(cells, done);
+    else if (typeof done === "function") done();
+  }
+
   function toast(msg) {
     const el = root.querySelector(".cq-toast");
     if (!el) return;
@@ -363,8 +380,8 @@
           </div>
         </div>
         <div class="cq-header-actions">
-          <button class="cq-icon-btn" id="cq-help" title="How to play" aria-label="How to play">${ICONS.help}</button>
-          ${game ? `<button class="cq-icon-btn" id="cq-share-head" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
+          <button class="cq-icon-btn" id="cq-help" title="Tutorial" aria-label="Open tutorial">${ICONS.help}</button>
+          ${game && !isTutorial() ? `<button class="cq-icon-btn" id="cq-share-head" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
           <button class="cq-icon-btn" id="cq-mute" title="Toggle sound" aria-label="Toggle sound">${muted ? ICONS.mute : ICONS.sound}</button>
         </div>
       </header>
@@ -372,7 +389,8 @@
   }
 
   function bindChrome() {
-    root.querySelector("#cq-help")?.addEventListener("click", showHelp);
+    root.querySelector("#cq-help")?.addEventListener("click", startTutorial);
+    root.querySelector("#cq-tutorial")?.addEventListener("click", startTutorial);
     root.querySelector("#cq-share-head")?.addEventListener("click", copyPuzzleLink);
     root.querySelector("#cq-mute")?.addEventListener("click", () => {
       muted = !muted;
@@ -456,6 +474,7 @@
         <div class="cq-view">
           <div class="cq-splash">
             <div class="cq-hero">
+              <button type="button" class="cq-tut-btn" id="cq-tutorial" title="Tutorial" aria-label="Open tutorial">?</button>
               <h2>Decode the quote.</h2>
               <p>Every letter stands for another. Punctuation stays put, and no letter ever encodes as itself. Crack the mapping, reveal the line, and claim the author.</p>
             </div>
@@ -518,7 +537,7 @@
       </div>
     `;
     bindChrome();
-    root.querySelector("#cq-how")?.addEventListener("click", showHelp);
+    root.querySelector("#cq-how")?.addEventListener("click", startTutorial);
     root.querySelector("#cq-history")?.addEventListener("click", openHistory);
     root.querySelector("#cq-calendar")?.addEventListener("click", openDailyCalendar);
     root.querySelectorAll("[data-diff]").forEach((btn) => {
@@ -634,6 +653,7 @@
       elapsed: 0,
       hintsUsed: 0,
       checksUsed: 0,
+      lastHintAt: 0,
       wrong: new Set(),
       solved: false,
       dailyDate: source === "daily" ? (dailyDate || dateKey()) : ""
@@ -643,7 +663,8 @@
     game.cursor = first;
     game.selected = letterAt(first)?.cipher || null;
     view = "play";
-    ph()?.setHash(sharePayload());
+    if (source === "tutorial") ph()?.clearHash();
+    else ph()?.setHash(sharePayload());
   }
 
   function beginPuzzle(quote, seed, source, dailyDate, review) {
@@ -709,8 +730,8 @@
 
   function scoreNow() {
     const api = ph();
-    if (api) return api.score100(currentElapsed(), game.checksUsed);
-    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, game.checksUsed - 1) * 10);
+    if (api) return api.score100(currentElapsed(), game.checksUsed, game.hintsUsed);
+    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, game.checksUsed - 1) * 10 - (game.hintsUsed || 0) * 10);
   }
 
   function currentElapsed() {
@@ -720,7 +741,8 @@
   }
 
   function persistProgress() {
-    if (!game || game.solved) {
+    if (!game || game.tutorial || game.source === "tutorial") return;
+    if (game.solved) {
       localStorage.removeItem(PROGRESS_KEY);
       return;
     }
@@ -734,6 +756,7 @@
       elapsed: currentElapsed(),
       hintsUsed: game.hintsUsed,
       checksUsed: game.checksUsed,
+      lastHintAt: game.lastHintAt || 0,
       dailyDate: game.dailyDate || ""
     }));
   }
@@ -752,6 +775,7 @@
       game.startedAt = Date.now();
       game.hintsUsed = p.hintsUsed || 0;
       game.checksUsed = p.checksUsed || 0;
+      game.lastHintAt = p.lastHintAt || 0;
       const first = firstOpenIndex();
       game.cursor = first;
       game.selected = letterAt(first)?.cipher || null;
@@ -797,7 +821,7 @@
 
     root.innerHTML = `
       <div class="cq-app">
-        ${headerHtml(game.source === "daily" ? `Daily · ${prettyDay(game.dailyDate || dateKey())}` : game.quote.tag || "Puzzle")}
+        ${headerHtml(game.source === "tutorial" ? "Guided tutorial" : game.source === "daily" ? `Daily · ${prettyDay(game.dailyDate || dateKey())}` : game.quote.tag || "Puzzle")}
         <div class="cq-view">
           <div class="cq-hud">
             <div class="cq-hud-item"><span class="lbl">Time</span><span class="val" id="cq-time">${formatTime(currentElapsed())}</span></div>
@@ -809,7 +833,7 @@
               ${game.source === "daily" ? `<button class="cq-btn" id="cq-next-bar">Next puzzle</button>` : ""}
               <button class="cq-btn ghost" id="cq-quit">Menu</button>
               ` : `
-              <button class="cq-btn" id="cq-hint">${ICONS.hint} Hint</button>
+              <button class="cq-btn" id="cq-hint"${hintCooldownLeft() > 0 ? " disabled" : ""}>${ICONS.hint} ${hintButtonLabel()}</button>
               <button class="cq-btn" id="cq-check">Check</button>
               <button class="cq-btn ghost" id="cq-quit">Menu</button>
               `}
@@ -822,11 +846,28 @@
               <div class="cq-lines">${renderWords(authorWords)}</div>
             </div>
           </div>
+          <div class="cq-hint">Click a cipher letter, then type its replacement. Backspace clears. No letter maps to itself.</div>
           <div class="cq-helpers">
             <div class="cq-panel">
               <h3>Letter frequency</h3>
               <div class="cq-freq">
-                ${freq.map((ch) => `<button type="button" class="cq-freq-chip ${game.selected === ch ? "selected" : ""}" data-sel="${ch}">${ch}<small>${counts[ch]}</small></button>`).join("")}
+                ${freq.map((ch) => {
+                  const guess = game.guesses[ch] || "";
+                  const cls = [
+                    "cq-freq-chip",
+                    game.selected === ch ? "selected" : "",
+                    guess ? "mapped" : "",
+                    game.given.has(ch) ? "given" : "",
+                    game.wrong.has(ch) ? "wrong" : ""
+                  ].filter(Boolean).join(" ");
+                  const label = guess
+                    ? `Cipher ${ch} mapped to ${guess}, ${counts[ch]} times`
+                    : `Cipher ${ch}, ${counts[ch]} times`;
+                  return `<button type="button" class="${cls}" data-sel="${ch}" aria-label="${label}">
+                    <span class="cq-freq-top">${ch}<small>${counts[ch]}</small></span>
+                    <span class="cq-freq-map">${guess}</span>
+                  </button>`;
+                }).join("")}
               </div>
             </div>
             <div class="cq-panel">
@@ -834,7 +875,6 @@
               <div class="cq-alpha">
                 ${ALPHA.split("").map((ch) => `<button type="button" class="${used.has(ch) ? "used" : ""}" data-type="${ch}">${ch}</button>`).join("")}
               </div>
-              <div class="cq-hint">Click a cipher letter, then type its replacement. Backspace clears. No letter maps to itself.</div>
             </div>
             <div class="cq-kb" aria-hidden="true">
               ${["QWERTYUIOP", "ASDFGHJKL", "ZXCVBNM"].map((row, r) => `
@@ -866,6 +906,7 @@
     bindPlay();
     if (!game.solved) startTimer();
     root.querySelector("#cq-board")?.focus();
+    pt()?.refresh?.();
   }
 
   function escapeHtml(s) {
@@ -874,6 +915,10 @@
 
   function bindPlay() {
     root.querySelector("#cq-quit")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -893,6 +938,10 @@
       beginPuzzle(q, (Math.random() * 0xffffffff) >>> 0, "random");
     });
     root.querySelector("#cq-menu-bar")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       view = "splash";
       game = null;
       render();
@@ -1020,6 +1069,10 @@
     }
     if (key === "Escape") {
       e.preventDefault();
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -1027,8 +1080,35 @@
     }
   }
 
+  function hintCooldownLeft() {
+    if (!game?.lastHintAt) return 0;
+    return Math.max(0, HINT_COOLDOWN_MS - (Date.now() - game.lastHintAt));
+  }
+
+  function hintButtonLabel() {
+    const wait = Math.ceil(hintCooldownLeft() / 1000);
+    return wait > 0 ? `Hint ${wait}s` : "Hint";
+  }
+
+  function syncHintButton() {
+    const btn = root.querySelector("#cq-hint");
+    if (!btn) return;
+    const wait = Math.ceil(hintCooldownLeft() / 1000);
+    const label = wait > 0 ? `Hint ${wait}s` : "Hint";
+    const state = `${wait}|${label}`;
+    btn.disabled = wait > 0;
+    if (btn.dataset.state === state) return;
+    btn.dataset.state = state;
+    btn.innerHTML = `${ICONS.hint} ${label}`;
+  }
+
   function giveHint() {
     if (!game || game.solved) return;
+    const left = hintCooldownLeft();
+    if (left > 0) {
+      toast(`Wait ${Math.ceil(left / 1000)}s for another hint`);
+      return;
+    }
     const cells = allLetterCells();
     const counts = letterCounts(game.quoteCipher + game.authorCipher);
     const candidate = Object.keys(counts)
@@ -1036,6 +1116,7 @@
       .sort((a, b) => counts[b] - counts[a])[0];
     if (!candidate) return;
     game.hintsUsed += 1;
+    game.lastHintAt = Date.now();
     game.given.add(candidate);
     game.guesses[candidate] = game.decode[candidate];
     game.wrong.delete(candidate);
@@ -1074,6 +1155,16 @@
   }
 
   function onSolved() {
+    if (isTutorial()) {
+      const elapsed = currentElapsed();
+      game.solved = true;
+      game.elapsed = elapsed;
+      stopTimer();
+      pt()?.stop("finished");
+      toast("Practice quote decoded. That’s the whole game.");
+      celebrateSolve(".cq-cell", renderPlay);
+      return;
+    }
     const elapsed = currentElapsed();
     game.solved = true;
     game.elapsed = elapsed;
@@ -1106,12 +1197,10 @@
       score,
       time,
       checks: game.checksUsed,
+      hints: game.hintsUsed,
       share: sharePayload()
     });
-    tone(523, 0.12);
-    setTimeout(() => tone(659, 0.12), 90);
-    setTimeout(() => tone(784, 0.18), 180);
-    showWin(score, time);
+    celebrateSolve(".cq-cell", () => showWin(score, time));
   }
 
   function showWin(score, time) {
@@ -1127,6 +1216,7 @@
           <div><b>${formatTime(time)}</b><span>Time</span></div>
           <div><b>${score}/100</b><span>Score</span></div>
           <div><b>${game.checksUsed}</b><span>Checks</span></div>
+          <div><b>${game.hintsUsed}</b><span>Hints</span></div>
         </div>
         <div class="cq-modal-actions">
           <button class="cq-btn gold" id="cq-next">Next puzzle</button>
@@ -1148,10 +1238,147 @@
     });
     overlay.querySelector("#cq-menu-win")?.addEventListener("click", () => {
       overlay = null;
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       view = "splash";
       game = null;
       render();
     });
+  }
+
+  function pt() {
+    return window.PuzzleTutorial || null;
+  }
+
+  function isTutorial() {
+    return !!(game && (game.tutorial || game.source === "tutorial"));
+  }
+
+  function restoreTutorialDiff() {
+    if (tutorialSavedDiff != null) {
+      difficulty = tutorialSavedDiff;
+      tutorialSavedDiff = null;
+    }
+  }
+
+  function leaveTutorial() {
+    restoreTutorialDiff();
+    overlay?.remove();
+    overlay = null;
+    stopTimer();
+    game = null;
+    view = "splash";
+    if (pt()?.isActive()) {
+      pt().stop("skip");
+      return;
+    }
+    renderSplash();
+  }
+
+  function beginTutorialPuzzle() {
+    overlay?.remove();
+    overlay = null;
+    if (tutorialSavedDiff == null) tutorialSavedDiff = difficulty;
+    difficulty = "easy";
+    startFromQuote(
+      { id: "tutorial", text: "Knowledge itself is power.", author: "Francis Bacon", tag: "Tutorial" },
+      20260914,
+      "tutorial"
+    );
+    game.tutorial = true;
+    renderPlay();
+  }
+
+  function startTutorial() {
+    const api = pt();
+    if (!api) {
+      showHelp();
+      return;
+    }
+    if (game && !isTutorial()) persistProgress();
+    overlay?.remove();
+    overlay = null;
+    stopTimer();
+    if (!(view === "splash" && !game)) {
+      game = null;
+      view = "splash";
+      renderSplash();
+    }
+    const host = root.querySelector(".cq-app");
+    if (!host) return;
+    api.start({
+      host,
+      getHost: () => root.querySelector(".cq-app") || root,
+      gameId: "cryptoquote",
+      onDone: (reason) => {
+        if (reason === "finished") return;
+        restoreTutorialDiff();
+        overlay?.remove();
+        overlay = null;
+        stopTimer();
+        game = null;
+        view = "splash";
+        renderSplash();
+      },
+      steps: [
+        {
+          title: "Decode the quote",
+          body: "Each cipher letter stands for one plaintext letter — the same everywhere. Punctuation is real, and no letter ever encodes as itself. Let’s walk through a short practice quote.",
+          placement: "center",
+          nextLabel: "Start"
+        },
+        {
+          title: "The cipher",
+          body: "Letters under the blanks are the cipher. Your guesses go on the blanks above. Same cipher letter, same answer, everywhere it appears.",
+          selector: "#cq-board",
+          onEnter: () => beginTutorialPuzzle()
+        },
+        {
+          title: "Free letters",
+          body: "Gold letters are given. They’re already decoded, and they never change. Use them as anchors.",
+          selector: (host) => [...host.querySelectorAll("#cq-board .cq-cell.given")]
+        },
+        {
+          title: "Pick a letter",
+          body: "Tap any blank cipher letter to select every copy of it. Then type — or tap — the plaintext letter you think it is.",
+          selector: (host) => host.querySelector("#cq-board .cq-cell.selected:not(.given)")
+            || host.querySelector("#cq-board .cq-cell:not(.given)"),
+          advanceOn: "target"
+        },
+        {
+          title: "Fill it in",
+          body: "Use the plaintext letters here (or your keyboard). Backspace clears. All copies of that cipher fill in together.",
+          selector: (host) => {
+            const kb = host.querySelector(".cq-kb");
+            if (kb && kb.offsetParent) return kb;
+            return host.querySelector(".cq-alpha")?.closest(".cq-panel") || host.querySelector(".cq-alpha");
+          }
+        },
+        {
+          title: "Frequency",
+          body: "English is lumpy: E, T, A, O, I, N show up a lot. THE, AND, short words, and apostrophes are strong clues.",
+          selector: (host) => host.querySelector(".cq-freq")?.closest(".cq-panel") || host.querySelector(".cq-freq")
+        },
+        {
+          title: "Hint and Check",
+          body: "Hint reveals one true mapping. Check flags guesses that don’t match the quote — it doesn’t auto-correct. Score is out of 100.",
+          selector: "#cq-hint, #cq-check",
+          nextLabel: "Got it"
+        }
+      ]
+    });
+  }
+
+  function maybeAutoTutorial() {
+    if (!autoTutorialArmed) return;
+    autoTutorialArmed = false;
+    const api = pt();
+    if (!api || api.seen("cryptoquote")) return;
+    window.setTimeout(() => {
+      if (view === "splash" && !game) startTutorial();
+    }, 450);
   }
 
   function showHelp() {
@@ -1167,7 +1394,7 @@
           <li>Select a letter, then type what you think it is. All copies fill in.</li>
           <li>English patterns help: THE, AND, short words, apostrophes, and letter frequency.</li>
           <li>Hint reveals one mapping. Check flags guesses that don't match the quote.</li>
-          <li>Score is out of 100. Five minutes and one Check (or none) is perfect; every extra five minutes or extra Check costs 10. Copy the share link to send this exact cipher.</li>
+          <li>Score is out of 100. Five minutes and one Check (or none) is perfect; every extra five minutes, extra Check, or Hint costs 10. Copy the share link to send this exact cipher.</li>
         </ol>
         <div class="cq-modal-actions">
           <button class="cq-btn gold" id="cq-help-close">Got it</button>
@@ -1186,6 +1413,7 @@
       const s = root.querySelector("#cq-score");
       if (t) t.textContent = formatTime(currentElapsed());
       if (s) s.textContent = String(scoreNow());
+      syncHintButton();
     }, 250);
   }
 
@@ -1201,10 +1429,14 @@
 
   document.addEventListener("keydown", (e) => {
     if (view !== "play" || !game) return;
+    if (pt()?.isActive() && e.key === "Escape") return;
     const tag = (e.target && e.target.tagName) || "";
     if (tag === "TEXTAREA" || tag === "INPUT") return;
     onKey(e);
   });
 
-  if (!tryShare()) renderSplash();
+  if (!tryShare()) {
+    renderSplash();
+    maybeAutoTutorial();
+  }
 })();

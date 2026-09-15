@@ -8,6 +8,7 @@
   const DIFFS = ["easy", "medium", "hard", "expert"];
   const GIVEN_COUNTS = { easy: 40, medium: 32, hard: 26, expert: 22 };
   const DIFF_LABEL = { easy: "Easy", medium: "Medium", hard: "Hard", expert: "Expert" };
+  const HINT_COOLDOWN_MS = 15000;
 
   const ICONS = {
     daily: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
@@ -34,6 +35,31 @@
   let toastTimer = null;
   let audioCtx = null;
   let stats = loadStats();
+  let tutorialSavedDiff = null;
+  let autoTutorialArmed = true;
+
+  const TUTORIAL_PUZZLE = [
+    5, 3, 0, 0, 7, 0, 0, 0, 0,
+    6, 0, 0, 1, 9, 5, 0, 0, 0,
+    0, 9, 8, 0, 0, 0, 0, 6, 0,
+    8, 0, 0, 0, 6, 0, 0, 0, 3,
+    4, 0, 0, 8, 0, 3, 0, 0, 1,
+    7, 0, 0, 0, 2, 0, 0, 0, 6,
+    0, 6, 0, 0, 0, 0, 2, 8, 0,
+    0, 0, 0, 4, 1, 9, 0, 0, 5,
+    0, 0, 0, 0, 8, 0, 0, 7, 9
+  ];
+  const TUTORIAL_SOLUTION = [
+    5, 3, 4, 6, 7, 8, 9, 1, 2,
+    6, 7, 2, 1, 9, 5, 3, 4, 8,
+    1, 9, 8, 3, 2, 4, 5, 6, 7,
+    8, 5, 9, 7, 6, 1, 4, 2, 3,
+    4, 2, 6, 8, 5, 3, 7, 9, 1,
+    7, 1, 3, 9, 2, 4, 8, 5, 6,
+    9, 6, 1, 5, 3, 7, 2, 8, 4,
+    2, 8, 7, 4, 1, 9, 6, 3, 5,
+    3, 4, 5, 2, 8, 6, 1, 7, 9
+  ];
 
   const PEERS = buildPeers();
 
@@ -217,6 +243,20 @@
     } catch { /* ignore */ }
   }
 
+  function playVictory() {
+    tone(523, 0.12);
+    setTimeout(() => tone(659, 0.12), 90);
+    setTimeout(() => tone(784, 0.18), 180);
+  }
+
+  function celebrateSolve(selector, done) {
+    playVictory();
+    const cells = root.querySelectorAll(selector);
+    const api = ph();
+    if (api?.celebrate) api.celebrate(cells, done);
+    else if (typeof done === "function") done();
+  }
+
   function toast(msg) {
     const el = root.querySelector(".su-toast");
     if (!el) return;
@@ -237,8 +277,8 @@
           </div>
         </div>
         <div class="su-header-actions">
-          <button class="su-icon-btn" id="su-help" title="How to play" aria-label="How to play">${ICONS.help}</button>
-          ${game ? `<button class="su-icon-btn" id="su-share" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
+          <button class="su-icon-btn" id="su-help" title="Tutorial" aria-label="Open tutorial">${ICONS.help}</button>
+          ${game && !isTutorial() ? `<button class="su-icon-btn" id="su-share" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
           <button class="su-icon-btn" id="su-mute" title="Toggle sound" aria-label="Toggle sound">${muted ? ICONS.mute : ICONS.sound}</button>
         </div>
       </header>
@@ -246,7 +286,8 @@
   }
 
   function bindChrome() {
-    root.querySelector("#su-help")?.addEventListener("click", showHelp);
+    root.querySelector("#su-help")?.addEventListener("click", startTutorial);
+    root.querySelector("#su-tutorial")?.addEventListener("click", startTutorial);
     root.querySelector("#su-share")?.addEventListener("click", copyPuzzleLink);
     root.querySelector("#su-mute")?.addEventListener("click", () => {
       muted = !muted;
@@ -415,23 +456,51 @@
     return solved;
   }
 
+  function clueCount(grid) {
+    let n = 0;
+    for (let i = 0; i < 81; i++) if (grid[i]) n += 1;
+    return n;
+  }
+
+  function digToTarget(puzzle, rnd, givenTarget) {
+    const order = fisherYates(
+      [...Array(81).keys()].filter((i) => puzzle[i]),
+      rnd
+    );
+    for (const i of order) {
+      if (clueCount(puzzle) <= givenTarget) break;
+      const saved = puzzle[i];
+      puzzle[i] = 0;
+      if (countSolutions(puzzle, 2) !== 1) puzzle[i] = saved;
+    }
+  }
+
   function generatePuzzle(seed, givenTarget) {
-    const rnd = mulberry32(seed >>> 0);
-    const solution = fillComplete(rnd);
-    const puzzle = solution.slice();
-    const order = fisherYates([...Array(81).keys()], rnd);
+    let best = null;
+    const solutionTries = givenTarget <= 22 ? 12 : givenTarget <= 26 ? 8 : 4;
+    const shuffles = givenTarget <= 22 ? 10 : givenTarget <= 26 ? 5 : 2;
+    const punchFloor = Math.max(givenTarget + 18, 36);
 
-    for (let k = 0; k < 81 - givenTarget; k++) {
-      puzzle[order[k]] = 0;
+    for (let attempt = 0; attempt < solutionTries; attempt++) {
+      const rnd = mulberry32((seed + attempt * 0x9e3779b9) >>> 0);
+      const solution = fillComplete(rnd);
+      for (let s = 0; s < shuffles; s++) {
+        const puzzle = solution.slice();
+        const order = fisherYates([...Array(81).keys()], rnd);
+
+        for (let k = 0; k < 81 - punchFloor; k++) puzzle[order[k]] = 0;
+        for (let k = 81 - punchFloor - 1; k >= 0 && countSolutions(puzzle, 2) !== 1; k--) {
+          puzzle[order[k]] = solution[order[k]];
+        }
+
+        digToTarget(puzzle, rnd, givenTarget);
+
+        const given = clueCount(puzzle);
+        if (!best || given < best.given) best = { puzzle: puzzle.slice(), solution, given };
+        if (given <= givenTarget) return best;
+      }
     }
-
-    let restore = 81 - givenTarget - 1;
-    while (restore >= 0 && countSolutions(puzzle, 2) !== 1) {
-      puzzle[order[restore]] = solution[order[restore]];
-      restore -= 1;
-    }
-
-    return { puzzle, solution, given: puzzle.filter(Boolean).length };
+    return best;
   }
 
   function dailySeed(day = dateKey()) {
@@ -496,6 +565,7 @@
         <div class="su-view">
           <div class="su-splash">
             <div class="su-hero">
+              <button type="button" class="su-tut-btn" id="su-tutorial" title="Tutorial" aria-label="Open tutorial">?</button>
               <h2>Fill the grid.</h2>
               <p>Every row, column, and 3×3 box must contain 1–9 once. Difficulty is how many squares you start with — the rest is pencil, pattern, and patience.</p>
             </div>
@@ -553,7 +623,7 @@
       </div>
     `;
     bindChrome();
-    root.querySelector("#su-how")?.addEventListener("click", showHelp);
+    root.querySelector("#su-how")?.addEventListener("click", startTutorial);
     root.querySelector("#su-history")?.addEventListener("click", openHistory);
     root.querySelector("#su-calendar")?.addEventListener("click", openDailyCalendar);
     root.querySelectorAll("[data-diff]").forEach((btn) => {
@@ -595,6 +665,7 @@
       startedAt: Date.now(),
       elapsed: 0,
       hintsUsed: 0,
+      lastHintAt: 0,
       checksUsed: 0,
       wrong: new Set(),
       solved: false,
@@ -602,7 +673,8 @@
       dailyDate: source === "daily" ? (dailyDate || dateKey()) : ""
     };
     view = "play";
-    ph()?.setHash(sharePayload());
+    if (source === "tutorial") ph()?.clearHash();
+    else ph()?.setHash(sharePayload());
   }
 
   function beginPuzzle(seed, source, dailyDate, review) {
@@ -683,8 +755,8 @@
 
   function scoreNow() {
     const api = ph();
-    if (api) return api.score100(currentElapsed(), game.checksUsed);
-    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, game.checksUsed - 1) * 10);
+    if (api) return api.score100(currentElapsed(), game.checksUsed, game.hintsUsed);
+    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, game.checksUsed - 1) * 10 - (game.hintsUsed || 0) * 10);
   }
 
   function currentElapsed() {
@@ -694,7 +766,8 @@
   }
 
   function persistProgress() {
-    if (!game || game.solved) {
+    if (!game || game.tutorial || game.source === "tutorial") return;
+    if (game.solved) {
       localStorage.removeItem(PROGRESS_KEY);
       return;
     }
@@ -709,6 +782,7 @@
       given: [...game.given],
       elapsed: currentElapsed(),
       hintsUsed: game.hintsUsed,
+      lastHintAt: game.lastHintAt || 0,
       checksUsed: game.checksUsed,
       givenCount: game.givenCount,
       dailyDate: game.dailyDate || ""
@@ -729,6 +803,7 @@
       game.elapsed = p.elapsed || 0;
       game.startedAt = Date.now();
       game.hintsUsed = p.hintsUsed || 0;
+      game.lastHintAt = p.lastHintAt || 0;
       game.checksUsed = p.checksUsed || 0;
       persistProgress();
       renderPlay();
@@ -784,7 +859,7 @@
 
     root.innerHTML = `
       <div class="su-app">
-        ${headerHtml(game.source === "daily" ? `Daily · ${prettyDay(game.dailyDate || dateKey())} · ${DIFF_LABEL[difficulty]}` : `${DIFF_LABEL[difficulty]} puzzle`)}
+        ${headerHtml(game.source === "tutorial" ? "Guided tutorial" : game.source === "daily" ? `Daily · ${prettyDay(game.dailyDate || dateKey())} · ${DIFF_LABEL[difficulty]}` : `${DIFF_LABEL[difficulty]} puzzle`)}
         <div class="su-view">
           <div class="su-hud">
             <div class="su-hud-item"><span class="lbl">Time</span><span class="val" id="su-time">${formatTime(currentElapsed())}</span></div>
@@ -797,7 +872,7 @@
               <button class="su-btn ghost" id="su-quit">Menu</button>
               ` : `
               <button class="su-btn ${notesMode ? "active" : ""}" id="su-notes">${ICONS.pencil} Notes</button>
-              <button class="su-btn" id="su-hint">${ICONS.hint} Hint</button>
+              ${hintButtonHtml()}
               <button class="su-btn" id="su-check">Check</button>
               <button class="su-btn ghost" id="su-quit">Menu</button>
               `}
@@ -824,7 +899,7 @@
           <div class="su-solved-bar">
             <div class="su-solved-copy">
               <strong>Solved.</strong>
-              <span>${formatTime(Math.round(game.elapsed))} · ${scoreNow()}/100 · ${game.checksUsed} check${game.checksUsed === 1 ? "" : "s"} · ${DIFF_LABEL[difficulty]}</span>
+              <span>${formatTime(Math.round(game.elapsed))} · ${scoreNow()}/100 · ${game.hintsUsed} hint${game.hintsUsed === 1 ? "" : "s"} · ${game.checksUsed} check${game.checksUsed === 1 ? "" : "s"} · ${DIFF_LABEL[difficulty]}</span>
             </div>
             <div class="su-solved-actions">
               ${game.source === "daily" ? `<button class="su-btn gold" id="su-again-bar">Play again</button>` : `<button class="su-btn gold" id="su-next-winbar">Next puzzle</button>`}
@@ -840,10 +915,15 @@
     bindPlay();
     if (!game.solved) startTimer();
     root.querySelector("#su-board")?.focus({ preventScroll: true });
+    pt()?.refresh?.();
   }
 
   function bindPlay() {
     root.querySelector("#su-quit")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -861,6 +941,10 @@
       beginPuzzle((Math.random() * 0xffffffff) >>> 0, "random");
     });
     root.querySelector("#su-menu-bar")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       view = "splash";
       game = null;
       render();
@@ -942,8 +1026,38 @@
     renderPlay();
   }
 
+  function hintCooldownLeft() {
+    if (!game?.lastHintAt) return 0;
+    return Math.max(0, HINT_COOLDOWN_MS - (Date.now() - game.lastHintAt));
+  }
+
+  function hintButtonHtml() {
+    const left = hintCooldownLeft();
+    const wait = left > 0 ? Math.ceil(left / 1000) : 0;
+    const label = wait ? `Hint ${wait}s` : "Hint";
+    return `<button class="su-btn" id="su-hint"${wait ? " disabled" : ""}>${ICONS.hint} ${label}</button>`;
+  }
+
+  function syncHintButton() {
+    const btn = root.querySelector("#su-hint");
+    if (!btn) return;
+    const left = hintCooldownLeft();
+    const wait = left > 0 ? Math.ceil(left / 1000) : 0;
+    const label = wait ? `Hint ${wait}s` : "Hint";
+    const state = `${wait}|${label}`;
+    btn.disabled = wait > 0;
+    if (btn.dataset.state === state) return;
+    btn.dataset.state = state;
+    btn.innerHTML = `${ICONS.hint} ${label}`;
+  }
+
   function giveHint() {
     if (!game || game.solved) return;
+    const left = hintCooldownLeft();
+    if (left > 0) {
+      toast(`Wait ${Math.ceil(left / 1000)}s for another hint`);
+      return;
+    }
     const empties = [];
     for (let i = 0; i < 81; i++) {
       if (!game.given.has(i) && game.grid[i] !== game.solution[i]) empties.push(i);
@@ -952,6 +1066,7 @@
     empties.sort((a, b) => candidateCount(a) - candidateCount(b));
     const i = empties[0];
     game.hintsUsed += 1;
+    game.lastHintAt = Date.now();
     game.grid[i] = game.solution[i];
     game.notes[i] = 0;
     game.given.add(i);
@@ -1030,6 +1145,10 @@
     }
     if (key === "Escape") {
       e.preventDefault();
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -1038,6 +1157,16 @@
   }
 
   function onSolved() {
+    if (isTutorial()) {
+      const elapsed = currentElapsed();
+      game.solved = true;
+      game.elapsed = elapsed;
+      stopTimer();
+      pt()?.stop("finished");
+      toast("Practice grid solved. That’s the whole game.");
+      celebrateSolve(".su-cell", renderPlay);
+      return;
+    }
     const elapsed = currentElapsed();
     game.solved = true;
     game.elapsed = elapsed;
@@ -1070,12 +1199,10 @@
       score,
       time,
       checks: game.checksUsed,
+      hints: game.hintsUsed,
       share: sharePayload()
     });
-    tone(523, 0.12);
-    setTimeout(() => tone(659, 0.12), 90);
-    setTimeout(() => tone(784, 0.18), 180);
-    showWin(score, time);
+    celebrateSolve(".su-cell", () => showWin(score, time));
   }
 
   function showWin(score, time) {
@@ -1090,6 +1217,7 @@
           <div><b>${formatTime(time)}</b><span>Time</span></div>
           <div><b>${score}/100</b><span>Score</span></div>
           <div><b>${game.checksUsed}</b><span>Checks</span></div>
+          <div><b>${game.hintsUsed}</b><span>Hints</span></div>
         </div>
         <div class="su-modal-actions">
           <button class="su-btn gold" id="su-next">Next puzzle</button>
@@ -1108,10 +1236,135 @@
     overlay.querySelector("#su-again-win")?.addEventListener("click", playAgain);
     overlay.querySelector("#su-menu-win")?.addEventListener("click", () => {
       overlay = null;
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       view = "splash";
       game = null;
       render();
     });
+  }
+
+  function pt() {
+    return window.PuzzleTutorial || null;
+  }
+
+  function isTutorial() {
+    return !!(game && (game.tutorial || game.source === "tutorial"));
+  }
+
+  function restoreTutorialDiff() {
+    if (tutorialSavedDiff != null) {
+      difficulty = tutorialSavedDiff;
+      tutorialSavedDiff = null;
+    }
+  }
+
+  function leaveTutorial() {
+    restoreTutorialDiff();
+    overlay?.remove();
+    overlay = null;
+    stopTimer();
+    game = null;
+    view = "splash";
+    if (pt()?.isActive()) {
+      pt().stop("skip");
+      return;
+    }
+    renderSplash();
+  }
+
+  function beginTutorialPuzzle() {
+    overlay?.remove();
+    overlay = null;
+    if (tutorialSavedDiff == null) tutorialSavedDiff = difficulty;
+    difficulty = "easy";
+    startFromGenerated(20260914, "tutorial", TUTORIAL_PUZZLE.slice(), TUTORIAL_SOLUTION.slice(), TUTORIAL_PUZZLE.filter(Boolean).length);
+    game.tutorial = true;
+    game.selected = 2;
+    renderPlay();
+  }
+
+  function startTutorial() {
+    const api = pt();
+    if (!api) {
+      showHelp();
+      return;
+    }
+    if (game && !isTutorial()) persistProgress();
+    overlay?.remove();
+    overlay = null;
+    stopTimer();
+    if (!(view === "splash" && !game)) {
+      game = null;
+      view = "splash";
+      renderSplash();
+    }
+    const host = root.querySelector(".su-app");
+    if (!host) return;
+    api.start({
+      host,
+      getHost: () => root.querySelector(".su-app") || root,
+      gameId: "sudoku",
+      onDone: (reason) => {
+        if (reason === "finished") return;
+        restoreTutorialDiff();
+        overlay?.remove();
+        overlay = null;
+        stopTimer();
+        game = null;
+        view = "splash";
+        renderSplash();
+      },
+      steps: [
+        {
+          title: "Fill the grid",
+          body: "Every row, column, and 3×3 box must contain 1–9 once. Difficulty is how many squares you start with. Let’s try a practice board.",
+          placement: "center",
+          nextLabel: "Start"
+        },
+        {
+          title: "The board",
+          body: "Nine boxes make the 9×9 grid. Dark numbers are given — they stay locked. Empty squares are yours.",
+          selector: "#su-board",
+          onEnter: () => beginTutorialPuzzle()
+        },
+        {
+          title: "Pick a square",
+          body: "This empty square can only be 4. Tap it to select it — the row, column, and box light up as a reminder.",
+          selector: '.su-cell[data-i="2"]',
+          advanceOn: "target"
+        },
+        {
+          title: "Place a digit",
+          body: "Tap 4 — or type it. Shift+digit, or Notes, pencils candidates instead of committing.",
+          selector: '.su-pad [data-n="4"]',
+          advanceOn: "target"
+        },
+        {
+          title: "Notes",
+          body: "Notes mode lets you mark candidates in a square. Toggle it here, then tap digits to pencil them in.",
+          selector: "#su-notes"
+        },
+        {
+          title: "Hint and Check",
+          body: "Hint fills one correct square, costs 10 points, and waits 15 seconds between uses. Check flags entries that don’t match the unique solution — it doesn’t auto-correct. Score is out of 100.",
+          selector: "#su-hint, #su-check",
+          nextLabel: "Got it"
+        }
+      ]
+    });
+  }
+
+  function maybeAutoTutorial() {
+    if (!autoTutorialArmed) return;
+    autoTutorialArmed = false;
+    const api = pt();
+    if (!api || api.seen("sudoku")) return;
+    window.setTimeout(() => {
+      if (view === "splash" && !game) startTutorial();
+    }, 450);
   }
 
   function showHelp() {
@@ -1125,9 +1378,9 @@
           <li>Place digits 1–9 so each row, column, and 3×3 box has every digit once.</li>
           <li>Difficulty is the number of starting squares: Easy 40, Medium 32, Hard 26, Expert 22.</li>
           <li>Select a square, then type or tap a digit. Given squares stay locked.</li>
-          <li>Notes (or Shift + digit) pencil candidates. Hint fills one correct square.</li>
+          <li>Notes (or Shift + digit) pencil candidates. Hint fills one correct square, at most once every 15 seconds.</li>
           <li>Check flags entries that don’t match the unique solution — it doesn’t auto-correct.</li>
-          <li>Score is out of 100. Five minutes and one Check (or none) is perfect; every extra five minutes or extra Check costs 10. Copy the share link to send this exact board.</li>
+          <li>Score is out of 100. Five minutes and one Check (or none) is perfect; every extra five minutes, extra Check, or Hint costs 10. Copy the share link to send this exact board.</li>
         </ol>
         <div class="su-modal-actions">
           <button class="su-btn gold" id="su-help-close">Got it</button>
@@ -1146,6 +1399,7 @@
       const s = root.querySelector("#su-score");
       if (t) t.textContent = formatTime(currentElapsed());
       if (s) s.textContent = String(scoreNow());
+      syncHintButton();
     }, 250);
   }
 
@@ -1161,10 +1415,14 @@
 
   document.addEventListener("keydown", (e) => {
     if (view !== "play" || !game) return;
+    if (pt()?.isActive() && e.key === "Escape") return;
     const tag = (e.target && e.target.tagName) || "";
     if (tag === "TEXTAREA" || tag === "INPUT") return;
     onKey(e);
   });
 
-  if (!tryShare()) renderSplash();
+  if (!tryShare()) {
+    renderSplash();
+    maybeAutoTutorial();
+  }
 })();

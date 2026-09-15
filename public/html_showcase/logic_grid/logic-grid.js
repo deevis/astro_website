@@ -3,7 +3,6 @@
   const MUTE_KEY = "logic-grid-muted";
   const DIFF_KEY = "logic-grid-difficulty";
   const PROGRESS_KEY = "logic-grid-progress-v1";
-  const SET_KEY = "logic-grid-set-mode";
 
   const SIZE = 4;
   const ALL = 0xf;
@@ -11,6 +10,7 @@
   const DIFFS = ["easy", "medium", "hard", "nightmare"];
   const CLUE_COUNTS = { easy: 8, medium: 7, hard: 6, nightmare: 5 };
   const DIFF_LABEL = { easy: "Easy", medium: "Medium", hard: "Hard", nightmare: "Nightmare" };
+  const HINT_COOLDOWN_MS = 15000;
 
   const ICONS = {
     daily: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg>',
@@ -236,13 +236,14 @@
   let view = "splash";
   let difficulty = DIFFS.includes(localStorage.getItem(DIFF_KEY) || "") ? localStorage.getItem(DIFF_KEY) : "medium";
   let muted = localStorage.getItem(MUTE_KEY) === "1";
-  let setMode = localStorage.getItem(SET_KEY) === "1";
   let timerId = null;
   let toastTimer = null;
   let audioCtx = null;
   let pressTimer = null;
   let longFired = false;
   let stats = loadStats();
+  let tutorialSavedDiff = null;
+  let autoTutorialArmed = true;
 
   function dateKey(d = new Date()) {
     const y = d.getFullYear();
@@ -447,9 +448,23 @@
     } catch { /* ignore */ }
   }
 
+  function playVictory() {
+    tone(523, 0.12);
+    setTimeout(() => tone(659, 0.12), 90);
+    setTimeout(() => tone(784, 0.18), 180);
+  }
+
+  function celebrateSolve(selector, done) {
+    playVictory();
+    const cells = root.querySelectorAll(selector);
+    const api = ph();
+    if (api?.celebrate) api.celebrate(cells, done);
+    else if (typeof done === "function") done();
+  }
+
   function toast(msg) {
     const el = root.querySelector(".lg-toast");
-    if (!el) return;
+    if (!el || typeof msg !== "string") return;
     el.textContent = msg;
     el.classList.add("show");
     clearTimeout(toastTimer);
@@ -997,8 +1012,8 @@
           </div>
         </div>
         <div class="lg-header-actions">
-          <button class="lg-icon-btn" id="lg-help" title="How to play" aria-label="How to play">${ICONS.help}</button>
-          ${game ? `<button class="lg-icon-btn" id="lg-share" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
+          <button class="lg-icon-btn" id="lg-help" title="Tutorial" aria-label="Open tutorial">${ICONS.help}</button>
+          ${game && !isTutorial() ? `<button class="lg-icon-btn" id="lg-share" title="Copy share link" aria-label="Copy share link">${ICONS.share}</button>` : ""}
           <button class="lg-icon-btn" id="lg-mute" title="Toggle sound" aria-label="Toggle sound">${muted ? ICONS.mute : ICONS.sound}</button>
         </div>
       </header>
@@ -1006,7 +1021,8 @@
   }
 
   function bindChrome() {
-    root.querySelector("#lg-help")?.addEventListener("click", showHelp);
+    root.querySelector("#lg-help")?.addEventListener("click", startTutorial);
+    root.querySelector("#lg-tutorial")?.addEventListener("click", startTutorial);
     root.querySelector("#lg-share")?.addEventListener("click", copyPuzzleLink);
     root.querySelector("#lg-mute")?.addEventListener("click", () => {
       muted = !muted;
@@ -1037,6 +1053,7 @@
         <div class="lg-view">
           <div class="lg-splash">
             <div class="lg-hero">
+              <button type="button" class="lg-tut-btn" id="lg-tutorial" title="Tutorial" aria-label="Open tutorial">?</button>
               <h2>Logic Grid</h2>
               <p>The old magazine deduction puzzle — four people, three attributes, and a handful of clues. Eliminate until only the truth remains.</p>
             </div>
@@ -1094,7 +1111,7 @@
       </div>
     `;
     bindChrome();
-    root.querySelector("#lg-how")?.addEventListener("click", showHelp);
+    root.querySelector("#lg-how")?.addEventListener("click", startTutorial);
     root.querySelector("#lg-history")?.addEventListener("click", openHistory);
     root.querySelector("#lg-calendar")?.addEventListener("click", openDailyCalendar);
     root.querySelectorAll("[data-diff]").forEach((btn) => {
@@ -1151,6 +1168,7 @@
       startedAt: Date.now(),
       elapsed: 0,
       hintsUsed: 0,
+      lastHintAt: 0,
       checksUsed: 0,
       wrong: new Set(),
       undo: [],
@@ -1158,7 +1176,8 @@
       dailyDate: source === "daily" ? (dailyDate || dateKey()) : ""
     };
     view = "play";
-    ph()?.setHash(sharePayload());
+    if (source === "tutorial") ph()?.clearHash();
+    else ph()?.setHash(sharePayload());
   }
 
   function fillSolvedBoard() {
@@ -1176,7 +1195,7 @@
     game.solved = true;
     game.elapsed = Number(review.time) || 0;
     game.checksUsed = Number(review.checks) || 1;
-    game.hintsUsed = 0;
+    game.hintsUsed = Number(review.hints) || 0;
     game.wrong = new Set();
     game.usedClues = game.clues.map(() => true);
     game.undo = [];
@@ -1189,6 +1208,7 @@
 
   function resetPuzzle(message = "Started over.") {
     if (!game) return;
+    const note = typeof message === "string" && message ? message : "Started over.";
     const board = blankBoard(game.clues);
     game.elim = board.elim;
     game.confirmed = board.confirmed;
@@ -1198,14 +1218,18 @@
     game.startedAt = Date.now();
     game.elapsed = 0;
     game.hintsUsed = 0;
+    game.lastHintAt = 0;
     game.checksUsed = 0;
     game.wrong = new Set();
     game.undo = [];
     game.solved = false;
     persistProgress();
-    renderPlay();
-    toast(message);
-    tone(320, 0.08, "sine", 0.05);
+    window.setTimeout(() => {
+      if (!game) return;
+      renderPlay();
+      toast(note);
+      tone(320, 0.08, "sine", 0.05);
+    }, 0);
   }
 
   function beginPuzzle(seed, source, dailyDate, review) {
@@ -1297,10 +1321,14 @@
     renderPlay();
   }
 
+  function hintsForScore() {
+    return Math.max(0, game?.hintsUsed | 0);
+  }
+
   function scoreNow() {
     const api = ph();
-    if (api) return api.score100(currentElapsed(), checksForScore());
-    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, checksForScore() - 1) * 10);
+    if (api) return api.score100(currentElapsed(), checksForScore(), hintsForScore());
+    return Math.max(0, 100 - Math.max(0, Math.ceil(currentElapsed() / 300) - 1) * 10 - Math.max(0, checksForScore() - 1) * 10 - hintsForScore() * 10);
   }
 
   function currentElapsed() {
@@ -1310,7 +1338,8 @@
   }
 
   function persistProgress() {
-    if (!game || game.solved) {
+    if (!game || game.tutorial || game.source === "tutorial") return;
+    if (game.solved) {
       localStorage.removeItem(PROGRESS_KEY);
       return;
     }
@@ -1326,7 +1355,8 @@
       locked: game.locked,
       usedClues: game.usedClues,
       elapsed: currentElapsed(),
-      hintsUsed: game.hintsUsed,
+      hintsUsed: hintsForScore(),
+      lastHintAt: game.lastHintAt || 0,
       checksUsed: game.checksUsed,
       selected: game.selected,
       dailyDate: game.dailyDate || ""
@@ -1355,6 +1385,7 @@
         startedAt: Date.now(),
         elapsed: p.elapsed || 0,
         hintsUsed: p.hintsUsed || 0,
+        lastHintAt: p.lastHintAt || 0,
         checksUsed: p.checksUsed || 0,
         wrong: new Set(),
         undo: [],
@@ -1409,7 +1440,7 @@
 
     root.innerHTML = `
       <div class="lg-app">
-        ${headerHtml(game.source === "daily" ? `Daily · ${formatPrettyDate(dailyAt)} · ${DIFF_LABEL[difficulty]}` : `${DIFF_LABEL[difficulty]} puzzle`)}
+        ${headerHtml(game.source === "tutorial" ? "Guided tutorial" : game.source === "daily" ? `Daily · ${formatPrettyDate(dailyAt)} · ${DIFF_LABEL[difficulty]}` : `${DIFF_LABEL[difficulty]} puzzle`)}
         <div class="lg-view">
           <div class="lg-hud">
             <div class="lg-hud-item"><span class="lbl">Time</span><span class="val" id="lg-time">${formatTime(currentElapsed())}</span></div>
@@ -1421,9 +1452,8 @@
               ${game.source === "daily" ? `<button class="lg-btn" id="lg-next">Next puzzle</button>` : ""}
               <button class="lg-btn ghost" id="lg-quit">Menu</button>
               ` : `
-              <button class="lg-btn ${setMode ? "active" : ""}" id="lg-set">${setMode ? "Setting" : "Ruling out"}</button>
               <button class="lg-btn" id="lg-undo">${ICONS.undo} Undo</button>
-              <button class="lg-btn" id="lg-hint">${ICONS.hint} Hint</button>
+              ${hintButtonHtml()}
               <button class="lg-btn" id="lg-check">Check</button>
               <button class="lg-btn" id="lg-reset">${ICONS.reset} Reset</button>
               <button class="lg-btn ghost" id="lg-quit">Menu</button>
@@ -1453,7 +1483,7 @@
           <div class="lg-solved-bar">
             <div class="lg-solved-copy">
               <strong>Deduced.</strong>
-              <span>${formatTime(Math.round(game.elapsed))} · ${scoreNow()}/100 · ${game.checksUsed} check${game.checksUsed === 1 ? "" : "s"} · ${DIFF_LABEL[difficulty]}</span>
+              <span>${formatTime(Math.round(game.elapsed))} · ${scoreNow()}/100 · ${game.checksUsed} check${game.checksUsed === 1 ? "" : "s"} · ${hintsForScore()} hint${hintsForScore() === 1 ? "" : "s"} · ${DIFF_LABEL[difficulty]}</span>
             </div>
             <div class="lg-solved-actions">
               ${game.source === "daily" ? `<button class="lg-btn gold" id="lg-again-bar">Play again</button>` : `<button class="lg-btn gold" id="lg-next-bar">Next puzzle</button>`}
@@ -1462,7 +1492,7 @@
               <button class="lg-btn ghost" id="lg-menu-win">Menu</button>
             </div>
           </div>
-          ` : `<p class="lg-play-hint">${setMode ? "Tap a remaining option to lock it in for this box only. Switch back to cross off one at a time." : "Tap to rule a possibility out. Hold — or switch to Setting — to lock in an answer in that box. Hit Check when you think you’re done."}</p>`}
+          ` : `<p class="lg-play-hint">Tap to rule a possibility out. Hold to lock in an answer in that box. Hit Check when you think you’re done.</p>`}
         </div>
         <div class="lg-toast"></div>
       </div>
@@ -1470,11 +1500,16 @@
     bindChrome();
     bindPlay();
     if (!game.solved) startTimer();
+    pt()?.refresh?.();
   }
 
   function bindPlay() {
     let pointerHandled = false;
     root.querySelector("#lg-quit")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -1487,6 +1522,10 @@
       beginPuzzle((Math.random() * 0xffffffff) >>> 0, "random");
     });
     root.querySelector("#lg-menu-win")?.addEventListener("click", () => {
+      if (isTutorial()) {
+        leaveTutorial();
+        return;
+      }
       view = "splash";
       game = null;
       renderSplash();
@@ -1496,13 +1535,8 @@
     root.querySelector("#lg-again-bar")?.addEventListener("click", playAgain);
     root.querySelector("#lg-hint")?.addEventListener("click", giveHint);
     root.querySelector("#lg-check")?.addEventListener("click", checkBoard);
-    root.querySelector("#lg-reset")?.addEventListener("click", resetPuzzle);
+    root.querySelector("#lg-reset")?.addEventListener("click", () => resetPuzzle());
     root.querySelector("#lg-undo")?.addEventListener("click", undo);
-    root.querySelector("#lg-set")?.addEventListener("click", () => {
-      setMode = !setMode;
-      localStorage.setItem(SET_KEY, setMode ? "1" : "0");
-      renderPlay();
-    });
     root.querySelectorAll("[data-clue]").forEach((el) => {
       el.addEventListener("click", () => {
         const i = Number(el.getAttribute("data-clue"));
@@ -1531,16 +1565,14 @@
         if (longFired) return;
         if (e.button && e.button !== 0) return;
         pointerHandled = true;
-        if (setMode) confirmCell(p, c, v);
-        else toggleElim(p, c, v);
+        toggleElim(p, c, v);
       });
       btn.addEventListener("click", () => {
         if (pointerHandled) {
           pointerHandled = false;
           return;
         }
-        if (setMode) confirmCell(p, c, v);
-        else toggleElim(p, c, v);
+        toggleElim(p, c, v);
       });
       btn.addEventListener("pointercancel", () => clearTimeout(pressTimer));
     });
@@ -1592,8 +1624,41 @@
     afterBoardChange();
   }
 
+  function hintCooldownLeft() {
+    if (!game?.lastHintAt) return 0;
+    return Math.max(0, HINT_COOLDOWN_MS - (Date.now() - game.lastHintAt));
+  }
+
+  function hintButtonHtml() {
+    const wait = Math.ceil(hintCooldownLeft() / 1000);
+    const label = wait ? `Hint ${wait}s` : "Hint";
+    return `<button class="lg-btn" id="lg-hint"${wait ? " disabled" : ""}>${ICONS.hint} ${label}</button>`;
+  }
+
+  function syncHintButton() {
+    const btn = root.querySelector("#lg-hint");
+    if (!btn) return;
+    const wait = Math.ceil(hintCooldownLeft() / 1000);
+    const label = wait ? `Hint ${wait}s` : "Hint";
+    const state = `${wait}|${label}`;
+    btn.disabled = wait > 0;
+    if (btn.dataset.state === state) return;
+    btn.dataset.state = state;
+    btn.innerHTML = `${ICONS.hint} ${label}`;
+  }
+
+  function chargeHint() {
+    game.hintsUsed = hintsForScore() + 1;
+    game.lastHintAt = Date.now();
+  }
+
   function giveHint() {
     if (!game || game.solved) return;
+    const left = hintCooldownLeft();
+    if (left > 0) {
+      toast(`Next hint in ${Math.ceil(left / 1000)}s.`);
+      return;
+    }
     for (let p = 0; p < SIZE; p++) {
       for (let c = 0; c < 3; c++) {
         if (game.locked[p][c]) continue;
@@ -1602,7 +1667,7 @@
           pushUndo();
           game.confirmed[p][c] = -1;
           game.elim[p][c] &= ~(1 << truth);
-          game.hintsUsed += 1;
+          chargeHint();
           game.wrong.delete(`${p}-${c}`);
           game.selected = { p, c };
           tone(660, 0.1, "triangle", 0.06);
@@ -1634,7 +1699,7 @@
     if (best) {
       pushUndo();
       game.elim[best.p][best.c] |= 1 << best.v;
-      game.hintsUsed += 1;
+      chargeHint();
       game.selected = { p: best.p, c: best.c };
       tone(660, 0.1, "triangle", 0.06);
       afterBoardChange();
@@ -1649,7 +1714,7 @@
         game.confirmed[p][c] = truth;
         game.elim[p][c] = ALL & ~(1 << truth);
         game.locked[p][c] = true;
-        game.hintsUsed += 1;
+        chargeHint();
         game.selected = { p, c };
         tone(660, 0.1, "triangle", 0.06);
         afterBoardChange();
@@ -1693,6 +1758,16 @@
   }
 
   function onSolved() {
+    if (isTutorial()) {
+      const elapsed = currentElapsed();
+      game.solved = true;
+      game.elapsed = elapsed;
+      stopTimer();
+      pt()?.stop("finished");
+      toast("Practice grid deduced. That’s the whole game.");
+      celebrateSolve(".lg-cell", renderPlay);
+      return;
+    }
     const elapsed = currentElapsed();
     game.solved = true;
     game.elapsed = elapsed;
@@ -1725,12 +1800,141 @@
       score,
       time,
       checks: game.checksUsed,
+      hints: hintsForScore(),
       share: sharePayload()
     });
-    tone(523, 0.12);
-    setTimeout(() => tone(659, 0.12), 90);
-    setTimeout(() => tone(784, 0.18), 180);
+    celebrateSolve(".lg-cell", renderPlay);
+  }
+
+  function pt() {
+    return window.PuzzleTutorial || null;
+  }
+
+  function isTutorial() {
+    return !!(game && (game.tutorial || game.source === "tutorial"));
+  }
+
+  function restoreTutorialDiff() {
+    if (tutorialSavedDiff != null) {
+      difficulty = tutorialSavedDiff;
+      tutorialSavedDiff = null;
+    }
+  }
+
+  function leaveTutorial() {
+    restoreTutorialDiff();
+    stopTimer();
+    game = null;
+    view = "splash";
+    if (pt()?.isActive()) {
+      pt().stop("skip");
+      return;
+    }
+    renderSplash();
+  }
+
+  function beginTutorialPuzzle() {
+    if (tutorialSavedDiff == null) tutorialSavedDiff = difficulty;
+    difficulty = "easy";
+    let puzzle = null;
+    for (const seed of [20260914, 11, 42, 99, 123456, 7]) {
+      puzzle = generatePuzzle(seed);
+      if (puzzle) break;
+    }
+    if (!puzzle) {
+      restoreTutorialDiff();
+      toast("Could not build a practice grid.");
+      throw new Error("tutorial");
+    }
+    startFromGenerated(puzzle, "tutorial");
+    game.tutorial = true;
     renderPlay();
+  }
+
+  function startTutorial() {
+    const api = pt();
+    if (!api) {
+      showHelp();
+      return;
+    }
+    if (game && !isTutorial()) persistProgress();
+    stopTimer();
+    if (!(view === "splash" && !game)) {
+      game = null;
+      view = "splash";
+      renderSplash();
+    }
+    const host = root.querySelector(".lg-app");
+    if (!host) return;
+    api.start({
+      host,
+      getHost: () => root.querySelector(".lg-app") || root,
+      gameId: "logic-grid",
+      onDone: (reason) => {
+        if (reason === "finished") return;
+        restoreTutorialDiff();
+        stopTimer();
+        game = null;
+        view = "splash";
+        renderSplash();
+      },
+      steps: [
+        {
+          title: "Cross out what isn’t true",
+          body: "Four people, each with one value in every category. The clues describe the only story that fits. Let’s walk through a practice grid.",
+          placement: "center",
+          nextLabel: "Start"
+        },
+        {
+          title: "The clues",
+          body: "Read these first. Tap a clue once you’ve used it so you can see what’s left. Easy puzzles also lock a few true facts onto the grid.",
+          selector: ".lg-clues",
+          onEnter: () => beginTutorialPuzzle()
+        },
+        {
+          title: "The grid",
+          body: "Each row is a person. Each column is a category. Every possibility starts in play until you rule it out.",
+          selector: ".lg-board"
+        },
+        {
+          title: "Rule one out",
+          body: "Tap a remaining option to cross it off. If a clue says someone isn’t in the straw hat, tap straw in that row.",
+          selector: (host) => {
+            const open = [...host.querySelectorAll(".lg-chip")].find((el) =>
+              !el.classList.contains("out") && !el.closest(".lg-cell")?.classList.contains("ready")
+            );
+            return open || host.querySelector(".lg-chip:not(.out)");
+          },
+          advanceOn: "target"
+        },
+        {
+          title: "Lock an answer",
+          body: "Hold a remaining option to lock it in for that box only. You still have to cross that value off for everyone else.",
+          selector: (host) => {
+            const open = [...host.querySelectorAll(".lg-chip")].find((el) =>
+              !el.classList.contains("out") && !el.closest(".lg-cell")?.classList.contains("ready")
+            );
+            return open || host.querySelector(".lg-chip:not(.out)");
+          }
+        },
+        {
+          title: "Check when you’re done",
+          body: "Check is how you finish. It also highlights mistakes once; those marks clear when you change the board. Hint rules out one wrong option (−10, 15s cooldown). Score is out of 100.",
+          selector: "#lg-hint, #lg-check",
+          nextLabel: "Got it"
+        }
+      ]
+    });
+  }
+
+  function maybeAutoTutorial() {
+    if (!autoTutorialArmed) return;
+    autoTutorialArmed = false;
+    const api = pt();
+    if (!api || api.seen("logic-grid")) return;
+    window.setTimeout(() => {
+      if (view === "splash" && !game) startTutorial();
+    }, 450);
   }
 
   function showHelp() {
@@ -1742,10 +1946,10 @@
         <h2>How to play</h2>
         <ol>
           <li>These are the old magazine “logic problems”: four people, each with one value in every category.</li>
-          <li>Read the clues. Tap a possibility to rule it out. Hold (or use Setting) to rule out the rest in that box.</li>
-          <li>Each value is used once. Settling a box does not cross that value off for anyone else — that is still yours to do. Hold or Setting locks in an answer in that box only.</li>
-          <li>Tap clues you’ve already used. Check is how you finish — it also highlights mistakes once, and those marks clear when you change the board. Hint rules out one wrong option. Reset starts this same puzzle over.</li>
-          <li>Score is out of 100. Five minutes and one Check is perfect; every extra five minutes or extra Check costs 10. Copy the share link to send this exact grid.</li>
+          <li>Read the clues. Tap a possibility to rule it out. Hold to rule out the rest in that box.</li>
+          <li>Each value is used once. Settling a box does not cross that value off for anyone else — that is still yours to do. Hold locks in an answer in that box only.</li>
+          <li>Tap clues you’ve already used. Check is how you finish — it also highlights mistakes once, and those marks clear when you change the board. Hint rules out one wrong option, costs 10, and waits 15 seconds between uses. Reset starts this same puzzle over.</li>
+          <li>Score is out of 100. Five minutes and one Check is perfect; every extra five minutes, extra Check, or Hint costs 10. Copy the share link to send this exact grid.</li>
           <li>Easy 8 and Medium 7 can be finished by elimination. Hard 6 may need one short “what if.” Nightmare 5 is still unique, but the clues will not nail a path — you have to branch.</li>
         </ol>
         <div class="lg-modal-actions">
@@ -1765,6 +1969,7 @@
       const s = root.querySelector("#lg-score");
       if (t) t.textContent = formatTime(currentElapsed());
       if (s) s.textContent = String(scoreNow());
+      syncHintButton();
     }, 250);
   }
 
@@ -1781,7 +1986,13 @@
   document.addEventListener("keydown", (e) => {
     if (view !== "play" || !game) return;
     if (root.querySelector(".lg-overlay")) return;
+    if (pt()?.isActive() && e.key === "Escape") return;
     if (e.key === "Escape") {
+      if (isTutorial()) {
+        persistProgress();
+        leaveTutorial();
+        return;
+      }
       persistProgress();
       view = "splash";
       game = null;
@@ -1792,5 +2003,8 @@
     }
   });
 
-  if (!tryShare()) renderSplash();
+  if (!tryShare()) {
+    renderSplash();
+    maybeAutoTutorial();
+  }
 })();

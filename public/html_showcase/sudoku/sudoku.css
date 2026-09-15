@@ -1,5 +1,6 @@
 @import url("https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,650&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap");
 @import url("../assets/css/puzzle-history.css");
+@import url("../assets/css/puzzle-tutorial.css");
 
 :root {
   --su-bg: #0c1118;
@@ -480,6 +481,17 @@ button {
 .su-btn:disabled {
   opacity: 0.45;
   cursor: default;
+  pointer-events: none;
+}
+
+.su-btn:disabled:hover {
+  border-color: var(--su-border);
+  background: var(--su-elev);
+}
+
+#su-hint {
+  min-width: 7.6rem;
+  justify-content: center;
 }
 
 .su-btn.gold {
@@ -730,7 +742,7 @@ button {
 
 .su-win-stats {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
   gap: 8px;
   margin: 16px 0;
 }

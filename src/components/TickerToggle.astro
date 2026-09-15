@@ -5,12 +5,12 @@
   id="ticker-toggle"
   type="button"
   class="p-2 rounded-lg text-gray-500 hover:bg-gray-100 dark:text-gray-400 dark:hover:bg-gray-700"
-  aria-label="Hide news ticker"
-  aria-pressed="true"
+  aria-label="Show news ticker"
+  aria-pressed="false"
 >
   <svg
     id="ticker-toggle-on-icon"
-    class="w-5 h-5"
+    class="hidden w-5 h-5"
     fill="none"
     stroke="currentColor"
     stroke-width="1.8"
@@ -21,7 +21,7 @@
   </svg>
   <svg
     id="ticker-toggle-off-icon"
-    class="hidden w-5 h-5"
+    class="w-5 h-5"
     fill="none"
     stroke="currentColor"
     stroke-width="1.8"
@@ -40,13 +40,15 @@
     return document.documentElement.classList.contains('ticker-hidden');
   }
 
-  function applyTickerVisibility(hidden: boolean) {
+  function applyTickerVisibility(hidden: boolean, persist = true) {
     const button = document.getElementById('ticker-toggle');
     const onIcon = document.getElementById('ticker-toggle-on-icon');
     const offIcon = document.getElementById('ticker-toggle-off-icon');
 
     document.documentElement.classList.toggle('ticker-hidden', hidden);
-    localStorage.setItem(STORAGE_KEY, hidden ? 'off' : 'on');
+    if (persist) {
+      localStorage.setItem(STORAGE_KEY, hidden ? 'off' : 'on');
+    }
 
     onIcon?.classList.toggle('hidden', hidden);
     offIcon?.classList.toggle('hidden', !hidden);
@@ -65,7 +67,7 @@
     if (!button || button.dataset.bound === '1') return;
     button.dataset.bound = '1';
 
-    applyTickerVisibility(localStorage.getItem(STORAGE_KEY) === 'off');
+    applyTickerVisibility(localStorage.getItem(STORAGE_KEY) !== 'on', false);
     button.addEventListener('click', () => applyTickerVisibility(!tickerIsHidden()));
   }
 

@@ -1,0 +1,187 @@
+.pt-root {
+  --pt-gold: var(--cq-gold, var(--su-gold, var(--lg-gold, #e0b84e)));
+  --pt-gold-deep: var(--cq-gold-deep, var(--su-gold-deep, var(--lg-gold-deep, #c4922a)));
+  --pt-elev: var(--cq-elev, var(--su-elev, var(--lg-elev, #17202c)));
+  --pt-elev-2: var(--cq-elev-2, var(--su-elev-2, var(--lg-elev-2, #1c2735)));
+  --pt-text: var(--cq-text, var(--su-text, var(--lg-text, #e8eef6)));
+  --pt-muted: var(--cq-muted, var(--su-muted, var(--lg-muted, #8b9bb0)));
+  --pt-border: var(--cq-border, var(--su-border, var(--lg-border, #2a384a)));
+  --pt-sans: var(--cq-sans, var(--su-sans, var(--lg-sans, "IBM Plex Sans", "Segoe UI", sans-serif)));
+  --pt-serif: var(--cq-serif, var(--su-serif, var(--lg-serif, Fraunces, Georgia, serif)));
+  --pt-shadow: var(--cq-shadow, var(--su-shadow, var(--lg-shadow, 0 22px 50px rgba(0, 0, 0, 0.42))));
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  font-family: var(--pt-sans);
+  color: var(--pt-text);
+}
+
+.pt-card {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  width: min(360px, calc(100vw - 24px));
+  background: var(--pt-elev);
+  border: 1px solid var(--pt-border);
+  border-radius: 16px;
+  padding: 16px 16px 14px;
+  box-shadow: var(--pt-shadow);
+  pointer-events: auto;
+  z-index: 2;
+}
+
+.pt-card.anchored {
+  transform: none;
+}
+
+.pt-kicker {
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--pt-gold);
+  margin-bottom: 6px;
+}
+
+.pt-card h3 {
+  font-family: var(--pt-serif);
+  margin: 0 0 8px;
+  font-size: 1.25rem;
+  font-weight: 650;
+  letter-spacing: -0.02em;
+}
+
+.pt-card p {
+  margin: 0;
+  color: var(--pt-muted);
+  font-size: 14px;
+  line-height: 1.55;
+}
+
+.pt-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  justify-content: flex-end;
+  margin-top: 14px;
+}
+
+.pt-btn {
+  border: 1px solid var(--pt-border);
+  background: var(--pt-elev-2);
+  color: var(--pt-text);
+  border-radius: 10px;
+  padding: 8px 12px;
+  font-size: 13px;
+  font-weight: 650;
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.pt-btn:hover {
+  border-color: var(--pt-gold);
+}
+
+.pt-btn.gold {
+  border-color: rgba(224, 184, 78, 0.5);
+  background: linear-gradient(180deg, var(--pt-gold), var(--pt-gold-deep));
+  color: #1a1408;
+}
+
+.pt-btn.ghost {
+  background: transparent;
+  color: var(--pt-muted);
+}
+
+.pt-dim {
+  opacity: 0.28 !important;
+  pointer-events: none !important;
+  filter: saturate(0.65);
+  transition: opacity 0.15s ease;
+}
+
+.pt-lit {
+  position: relative;
+  z-index: 3;
+  overflow: visible !important;
+  outline: 2px solid var(--cq-gold, var(--su-gold, var(--lg-gold, #e0b84e))) !important;
+  outline-offset: 3px !important;
+  animation: pt-glow 1.6s ease-in-out infinite;
+}
+
+.cq-paper.pt-lit,
+.su-paper.pt-lit,
+.lg-clues.pt-lit,
+.lg-board.pt-lit,
+.cq-panel.pt-lit,
+.su-panel.pt-lit {
+  outline-offset: 4px !important;
+}
+
+.lg-board.pt-lit {
+  border-radius: 16px;
+}
+
+.cq-cell.pt-lit,
+.su-cell.pt-lit,
+.lg-chip.pt-lit,
+.su-pad button.pt-lit,
+.cq-btn.pt-lit,
+.su-btn.pt-lit,
+.lg-btn.pt-lit {
+  outline-offset: -2px !important;
+}
+
+@keyframes pt-glow {
+  50% {
+    outline-color: rgba(224, 184, 78, 0.55);
+  }
+}
+
+.cq-hero,
+.su-hero,
+.lg-hero {
+  position: relative;
+  padding-right: 48px;
+  padding-left: 48px;
+}
+
+.cq-tut-btn,
+.su-tut-btn,
+.lg-tut-btn {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  border: 1px solid rgba(224, 184, 78, 0.45);
+  background: linear-gradient(180deg, var(--cq-gold, var(--su-gold, var(--lg-gold, #e0b84e))), var(--cq-gold-deep, var(--su-gold-deep, var(--lg-gold-deep, #c4922a))));
+  color: #1a1408;
+  font-family: var(--cq-serif, var(--su-serif, var(--lg-serif, Georgia, serif)));
+  font-size: 1.35rem;
+  font-weight: 650;
+  line-height: 1;
+  display: grid;
+  place-items: center;
+  box-shadow: 0 8px 18px rgba(224, 184, 78, 0.28);
+  z-index: 2;
+}
+
+.cq-tut-btn:hover,
+.su-tut-btn:hover,
+.lg-tut-btn:hover {
+  transform: translateY(-1px);
+}
+
+@media (max-width: 520px) {
+  .cq-tut-btn,
+  .su-tut-btn,
+  .lg-tut-btn {
+    width: 38px;
+    height: 38px;
+    font-size: 1.2rem;
+  }
+}

@@ -20,12 +20,14 @@
     }
   };
 
-  function score100(elapsedSec, checks) {
+  function score100(elapsedSec, checks, hints) {
     const elapsed = Math.max(0, Number(elapsedSec) || 0);
     const nChecks = Math.max(0, Math.floor(Number(checks) || 0));
+    const nHints = Math.max(0, Math.floor(Number(hints) || 0));
     const timePenalty = Math.max(0, Math.ceil(elapsed / 300) - 1) * 10;
     const checkPenalty = Math.max(0, nChecks - 1) * 10;
-    return Math.max(0, Math.min(100, 100 - timePenalty - checkPenalty));
+    const hintPenalty = nHints * 10;
+    return Math.max(0, Math.min(100, 100 - timePenalty - checkPenalty - hintPenalty));
   }
 
   function load() {
@@ -87,6 +89,7 @@
       score: Math.round(Number(entry.score) || 0),
       time: Math.round(Number(entry.time) || 0),
       checks: Math.max(0, Math.floor(Number(entry.checks) || 0)),
+      hints: Math.max(0, Math.floor(Number(entry.hints) || 0)),
       share: entry.share || null
     };
     rows.unshift(item);
@@ -215,7 +218,7 @@
         <div class="ph-head">
           <div>
             <h2 id="ph-title">History</h2>
-            <p>Scores are out of 100. Five minutes and one Check is a perfect 100 — every extra five minutes, or extra Check, costs 10.</p>
+            <p>Scores are out of 100. Five minutes and one Check is a perfect 100 — every extra five minutes, extra Check, or Hint costs 10.</p>
           </div>
           <button type="button" class="ph-close" data-ph="close" aria-label="Close">×</button>
         </div>
@@ -274,6 +277,7 @@
               <div><b>${row.score}</b><span>Score</span></div>
               <div><b>${formatTime(row.time)}</b><span>Time</span></div>
               <div><b>${row.checks}</b><span>Check${row.checks === 1 ? "" : "s"}</span></div>
+              <div><b>${row.hints || 0}</b><span>Hint${(row.hints || 0) === 1 ? "" : "s"}</span></div>
             </div>
             <div class="ph-row-actions">
               <button type="button" class="ph-btn gold" data-replay="${escapeAttr(row.id)}" ${canShare ? "" : "disabled"}>Replay</button>
@@ -501,6 +505,39 @@
     return escapeHtml(value).replace(/'/g, "&#39;");
   }
 
+  function celebrate(cells, onDone) {
+    const list = Array.from(cells || []).filter(Boolean);
+    const finish = () => {
+      if (typeof onDone === "function") onDone();
+    };
+    if (!list.length) {
+      finish();
+      return;
+    }
+
+    list.forEach((el) => el.classList.remove("ph-win-flash"));
+    const reduced = window.matchMedia?.("(prefers-reduced-motion: reduce)")?.matches;
+    if (reduced) {
+      list.forEach((el) => el.classList.add("ph-win-flash"));
+      window.setTimeout(finish, 280);
+      return;
+    }
+
+    const boxes = list.map((el) => ({ el, r: el.getBoundingClientRect() }));
+    const minTop = Math.min(...boxes.map((b) => b.r.top));
+    const minLeft = Math.min(...boxes.map((b) => b.r.left));
+    const span = Math.max(1, ...boxes.map((b) => (b.r.top - minTop) + (b.r.left - minLeft)));
+    const waveMs = 560;
+    const flashMs = 720;
+    let maxDelay = 0;
+    boxes.forEach(({ el, r }) => {
+      const delay = Math.round((((r.top - minTop) + (r.left - minLeft)) / span) * waveMs);
+      maxDelay = Math.max(maxDelay, delay);
+      window.setTimeout(() => el.classList.add("ph-win-flash"), delay);
+    });
+    window.setTimeout(finish, maxDelay + flashMs);
+  }
+
   window.PuzzleHistory = {
     GAMES,
     CAL_ICON,
@@ -520,6 +557,7 @@
     copy,
     formatTime,
     open,
-    openCalendar
+    openCalendar,
+    celebrate
   };
 })();
