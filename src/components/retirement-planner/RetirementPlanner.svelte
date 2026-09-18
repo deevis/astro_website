@@ -327,13 +327,17 @@
 <style>
   :global(.retirement-planner button:focus-visible), :global(.retirement-planner select:focus-visible) { outline: 2px solid #2563eb; outline-offset: 3px; }
   :global(.retirement-planner button:disabled) { opacity: 0.5; cursor: not-allowed; }
-  :global(.retirement-planner button:not(.flow-step)) { min-height: 40px; }
+  :global(.retirement-planner button:not(.flow-step):not(.btn-compact)) { min-height: 40px; }
 
   :global(.retirement-planner .btn-primary) {
     @apply px-3 py-1.5 rounded-lg text-sm font-medium bg-primary-600 text-white hover:bg-primary-700 transition-colors;
   }
   :global(.retirement-planner .btn-secondary) {
     @apply px-3 py-1.5 rounded-lg text-sm font-medium bg-gray-100 dark:bg-gray-800 text-gray-800 dark:text-gray-200 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors;
+  }
+  :global(.retirement-planner .btn-compact) {
+    min-height: 0;
+    @apply px-2 py-0.5 rounded-md text-[11px] font-medium leading-tight;
   }
   :global(.retirement-planner .btn-danger) {
     @apply px-3 py-1.5 rounded-lg text-sm font-medium text-red-700 dark:text-red-400 hover:bg-red-50 dark:hover:bg-red-950/40 transition-colors;

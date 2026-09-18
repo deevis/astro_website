@@ -1,0 +1,747 @@
+---
+import { gameGenres, type GameEntry } from '../../config/catalog';
+
+interface Props {
+  games: GameEntry[];
+  startIndex: number;
+}
+
+const { games, startIndex } = Astro.props;
+const featured = games[startIndex] ?? games[0];
+const genres = gameGenres.filter((genre) => games.some((game) => game.genre === genre.id));
+const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre.label]));
+---
+
+<section
+  id="game-select"
+  class="game-select pb-20"
+  data-start-index={startIndex}
+  tabindex="-1"
+  aria-label="Game select"
+>
+  <div class="container mx-auto px-4 md:px-6 lg:px-8">
+    <div class="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4 mb-6">
+      <div class="flex flex-wrap gap-2" role="group" aria-label="Filter games by type">
+        <button
+          type="button"
+          class="genre-filter is-active px-3 py-1.5 text-sm rounded-full border border-primary-600 bg-primary-600 text-white"
+          data-genre=""
+        >
+          All
+        </button>
+      {genres.map((genre) => (
+        <button
+          type="button"
+          class="genre-filter px-3 py-1.5 text-sm rounded-full border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 hover:border-primary-400 dark:hover:border-primary-500 transition-colors"
+          data-genre={genre.id}
+        >
+          {genre.label}
+        </button>
+      ))}
+    </div>
+    <button
+      type="button"
+      id="game-surprise"
+      class="self-start lg:self-auto text-sm text-primary-600 dark:text-primary-400 hover:underline"
+    >
+      Surprise me →
+    </button>
+  </div>
+
+  <div class="grid lg:grid-cols-[minmax(0,1.4fr)_minmax(18rem,0.85fr)] gap-6 items-stretch mb-8">
+    <div class="game-billboard-scene">
+      <div class="game-billboard" data-billboard>
+        <img
+          data-art
+          src={featured.image}
+          alt=""
+          width="960"
+          height="640"
+          class="game-billboard-art"
+        />
+        <p
+          data-today-badge
+          class="absolute top-3 left-3 m-0 px-2.5 py-1 rounded-full bg-primary-600 text-white text-[10px] font-semibold uppercase tracking-[0.16em]"
+        >
+          Today’s pick
+        </p>
+      </div>
+    </div>
+
+    <div class="flex flex-col justify-center rounded-2xl border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 p-6 md:p-8">
+      <p class="text-xs font-semibold uppercase tracking-[0.16em] text-primary-600 dark:text-primary-400 mb-3">
+        <span data-index-label>{String(startIndex + 1).padStart(2, '0')}</span>
+        <span class="text-gray-400 dark:text-gray-500"> / {String(games.length).padStart(2, '0')}</span>
+        <span class="mx-2 text-gray-300 dark:text-gray-600">·</span>
+        <span data-genre-label>{genreLabel[featured.genre]}</span>
+      </p>
+      <h2 data-title class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white leading-tight">
+        {featured.title}
+      </h2>
+      <p data-tagline class="mt-2 text-lg text-gray-600 dark:text-gray-300">
+        {featured.tagline}
+      </p>
+      <p data-description class="mt-4 text-sm text-gray-500 dark:text-gray-400 leading-relaxed">
+        {featured.description}
+      </p>
+      <ul data-bullets class="mt-4 space-y-1.5 text-sm text-gray-600 dark:text-gray-300">
+        {featured.bullets.map((bullet) => (
+          <li class="flex gap-2">
+            <span class="mt-1.5 h-1.5 w-1.5 rounded-full bg-primary-500 shrink-0"></span>
+            <span>{bullet}</span>
+          </li>
+        ))}
+      </ul>
+      <div class="mt-6 flex flex-wrap items-center gap-4">
+        <a
+          data-play
+          href={featured.href}
+          class="inline-flex items-center justify-center px-5 py-2.5 rounded-full bg-primary-600 text-white text-sm font-semibold hover:bg-primary-700 transition-colors"
+        >
+          {featured.playLabel}
+        </a>
+        <p class="text-xs text-gray-400 dark:text-gray-500 hidden md:block">
+          Hover or arrow keys browse · Enter plays
+        </p>
+      </div>
+    </div>
+  </div>
+  </div>
+
+  <div class="relative mt-2 overflow-x-hidden">
+    <button
+      type="button"
+      class="game-nav-btn hidden md:flex left-0 md:left-4"
+      data-dir="-1"
+      aria-label="Previous game"
+    >
+      <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7" /></svg>
+    </button>
+    <button
+      type="button"
+      class="game-nav-btn hidden md:flex right-0 md:right-4"
+      data-dir="1"
+      aria-label="Next game"
+    >
+      <svg class="w-5 h-5 pointer-events-none" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7" /></svg>
+    </button>
+
+    <div class="game-coverflow" data-coverflow>
+      {games.map((game, index) => (
+        <a
+          href={game.href}
+          class:list={['game-cover', { 'is-active': index === startIndex }]}
+          data-index={index}
+          data-id={game.id}
+          aria-current={index === startIndex ? 'true' : undefined}
+        >
+          <img
+            src={game.image}
+            alt=""
+            width="480"
+            height="320"
+            loading={Math.abs(index - startIndex) < 3 ? 'eager' : 'lazy'}
+            decoding="async"
+          />
+          <span class="game-cover-caption">{game.title}</span>
+        </a>
+      ))}
+    </div>
+  </div>
+</section>
+
+<script type="application/json" id="games-index-data" set:html={JSON.stringify(games)} />
+
+<style>
+  .game-select:focus {
+    outline: none;
+  }
+
+  .game-billboard-scene {
+    perspective: 1100px;
+    overflow: hidden;
+    border-radius: 1rem;
+  }
+
+  .game-billboard {
+    position: relative;
+    overflow: hidden;
+    border-radius: 1rem;
+    border: 1px solid rgb(229 231 235);
+    background: rgb(243 244 246);
+    transform-style: preserve-3d;
+    transition: transform 0.18s ease-out;
+    min-height: 16rem;
+  }
+
+  :global(.dark) .game-billboard {
+    border-color: #374151;
+    background: #111827;
+  }
+
+  .game-billboard-art {
+    display: block;
+    width: 100%;
+    height: 100%;
+    aspect-ratio: 3 / 2;
+    object-fit: cover;
+    object-position: top;
+    transition: opacity 0.25s ease, filter 0.25s ease;
+  }
+
+  .game-billboard.is-swapping .game-billboard-art {
+    opacity: 0.35;
+    filter: blur(6px);
+  }
+
+  .game-nav-btn {
+    position: absolute;
+    top: 50%;
+    z-index: 30;
+    align-items: center;
+    justify-content: center;
+    width: 2.5rem;
+    height: 2.5rem;
+    margin-top: -1.25rem;
+    border-radius: 9999px;
+    border: 1px solid rgb(229 231 235);
+    background: white;
+    color: rgb(55 65 81);
+  }
+
+  :global(.dark) .game-nav-btn {
+    border-color: #374151;
+    background: #1f2937;
+    color: rgb(229 231 235);
+  }
+
+  .game-nav-btn:hover {
+    border-color: rgb(96 165 250);
+  }
+
+  .game-coverflow {
+    display: flex;
+    gap: 0.75rem;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    padding: 0.25rem 14vw 1rem;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .game-coverflow::-webkit-scrollbar {
+    display: none;
+  }
+
+  .game-cover {
+    position: relative;
+    flex: 0 0 72%;
+    max-width: 18rem;
+    aspect-ratio: 3 / 2;
+    border-radius: 1rem;
+    overflow: hidden;
+    border: 1px solid rgb(229 231 235);
+    background: rgb(243 244 246);
+    scroll-snap-align: center;
+    transform-origin: center center;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease;
+  }
+
+  :global(.dark) .game-cover {
+    border-color: #374151;
+    background: #111827;
+  }
+
+  .game-cover img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: top;
+  }
+
+  .game-cover-caption {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    padding: 1.5rem 0.65rem 0.5rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: white;
+    background: linear-gradient(to top, rgb(0 0 0 / 0.72), transparent);
+  }
+
+  .game-cover:focus {
+    outline: none;
+  }
+
+  .game-cover.is-active {
+    border-color: rgb(37 99 235);
+    box-shadow: 0 0 0 2px rgb(37 99 235 / 0.35);
+  }
+
+  .game-cover.is-filtered {
+    display: none;
+  }
+
+  @media (min-width: 768px) {
+    .game-coverflow {
+      display: block;
+      position: relative;
+      height: 17rem;
+      overflow: visible;
+      perspective: 1100px;
+      transform-style: preserve-3d;
+      padding: 0 4rem;
+      scroll-snap-type: none;
+    }
+
+    .game-cover {
+      position: absolute;
+      left: 50%;
+      top: 1rem;
+      flex: none;
+      width: 16.5rem;
+      max-width: none;
+      margin-left: -8.25rem;
+      scroll-snap-align: unset;
+      transition:
+        transform 0.55s cubic-bezier(0.22, 1, 0.36, 1),
+        opacity 0.4s ease,
+        filter 0.4s ease,
+        border-color 0.2s ease,
+        box-shadow 0.2s ease;
+      transform-style: preserve-3d;
+      cursor: pointer;
+    }
+
+    .game-cover.is-filtered {
+      display: block;
+      opacity: 0 !important;
+      pointer-events: none !important;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .game-billboard,
+    .game-billboard-art,
+    .game-cover {
+      transition: none;
+    }
+  }
+</style>
+
+<script>
+  type GameGenre = 'adventure' | 'strategy' | 'puzzle' | 'trainer';
+
+  type GameRecord = {
+    id: string;
+    title: string;
+    tagline: string;
+    description: string;
+    href: string;
+    playLabel: string;
+    bullets: string[];
+    image?: string;
+    genre: GameGenre;
+  };
+
+  const root = document.getElementById('game-select');
+  const dataEl = document.getElementById('games-index-data');
+  if (root && dataEl) {
+    const games = JSON.parse(dataEl.textContent || '[]') as GameRecord[];
+    const covers = [...root.querySelectorAll<HTMLAnchorElement>('.game-cover')];
+    const genreButtons = [...root.querySelectorAll<HTMLButtonElement>('.genre-filter')];
+    const coverflow = root.querySelector<HTMLElement>('[data-coverflow]');
+    const billboard = root.querySelector<HTMLElement>('[data-billboard]');
+    const art = root.querySelector<HTMLImageElement>('[data-art]');
+    const todayBadge = root.querySelector<HTMLElement>('[data-today-badge]');
+    const indexLabel = root.querySelector<HTMLElement>('[data-index-label]');
+    const genreLabel = root.querySelector<HTMLElement>('[data-genre-label]');
+    const titleEl = root.querySelector<HTMLElement>('[data-title]');
+    const taglineEl = root.querySelector<HTMLElement>('[data-tagline]');
+    const descriptionEl = root.querySelector<HTMLElement>('[data-description]');
+    const bulletsEl = root.querySelector<HTMLElement>('[data-bullets]');
+    const playEl = root.querySelector<HTMLAnchorElement>('[data-play]');
+    const surpriseBtn = document.getElementById('game-surprise');
+
+    const genreNames: Record<GameGenre, string> = {
+      adventure: 'Adventure',
+      strategy: 'Strategy',
+      puzzle: 'Puzzle',
+      trainer: 'Trainer',
+    };
+
+    const startIndex = Number(root.dataset.startIndex || '0');
+    let selected = Number.isFinite(startIndex) ? startIndex : 0;
+    let genreFilter: GameGenre | '' = '';
+    let swapping = false;
+    let scrolling = false;
+    let hoverTimer = 0;
+    let followTimer = 0;
+    let hoverIndex: number | null = null;
+    let hoverCoolUntil = 0;
+    let lastPointer: { x: number; y: number } | null = null;
+    const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    const desktop = window.matchMedia('(min-width: 768px)');
+    const fineHover = window.matchMedia('(hover: hover) and (pointer: fine)');
+    const hoverStepMs = 2000;
+
+    const hashId = window.location.hash.replace(/^#/, '');
+    if (hashId) {
+      const hashed = games.findIndex((game) => game.id === hashId);
+      if (hashed >= 0) selected = hashed;
+    }
+
+    function visibleIndexes() {
+      return games
+        .map((_, index) => index)
+        .filter((index) => !genreFilter || games[index].genre === genreFilter);
+    }
+
+    function wrapOffset(index: number, current: number, count: number) {
+      if (count <= 0) return 0;
+      let offset = index - current;
+      const half = count / 2;
+      if (offset > half) offset -= count;
+      if (offset < -half) offset += count;
+      return offset;
+    }
+
+    function isDesktop() {
+      return desktop.matches;
+    }
+
+    function canHoverBrowse() {
+      return fineHover.matches && isDesktop();
+    }
+
+    function coverFromPoint(x: number, y: number) {
+      const stack = document.elementsFromPoint(x, y);
+      for (const node of stack) {
+        if (!(node instanceof Element)) continue;
+        const cover = node.closest('.game-cover');
+        if (
+          cover instanceof HTMLAnchorElement &&
+          root.contains(cover) &&
+          !cover.classList.contains('is-filtered')
+        ) {
+          return cover;
+        }
+      }
+      return null;
+    }
+
+    function isVisuallyCentered(cover: HTMLAnchorElement) {
+      if (!coverflow) return false;
+      const flow = coverflow.getBoundingClientRect();
+      const box = cover.getBoundingClientRect();
+      if (box.width < 8) return false;
+      const flowMid = flow.left + flow.width / 2;
+      const coverMid = box.left + box.width / 2;
+      return Math.abs(coverMid - flowMid) < box.width * 0.4;
+    }
+
+    function followPointer() {
+      if (!lastPointer || !canHoverBrowse()) return;
+      const cover = coverFromPoint(lastPointer.x, lastPointer.y);
+      if (!cover) return;
+      scheduleHoverSelect(Number(cover.dataset.index));
+    }
+
+    function clearHoverCooldown() {
+      hoverCoolUntil = 0;
+      window.clearTimeout(hoverTimer);
+      window.clearTimeout(followTimer);
+    }
+
+    function scheduleHoverSelect(index: number) {
+      if (!Number.isFinite(index) || !visibleIndexes().includes(index)) return;
+      const cover = covers[index];
+      if (index === selected) {
+        hoverIndex = index;
+        window.clearTimeout(hoverTimer);
+        if (cover && isVisuallyCentered(cover)) clearHoverCooldown();
+        return;
+      }
+      if (hoverIndex === index) return;
+      hoverIndex = index;
+      window.clearTimeout(hoverTimer);
+      const wait = Math.max(80, hoverCoolUntil - Date.now());
+      hoverTimer = window.setTimeout(() => {
+        if (hoverIndex !== index) return;
+        select(index);
+      }, wait);
+    }
+
+    function layoutCovers() {
+      const visible = visibleIndexes();
+      const currentVisible = visible.indexOf(selected);
+
+      covers.forEach((cover, index) => {
+        const filtered = !visible.includes(index);
+        cover.classList.toggle('is-filtered', filtered);
+        cover.classList.toggle('is-active', index === selected);
+        if (index === selected) cover.setAttribute('aria-current', 'true');
+        else cover.removeAttribute('aria-current');
+
+        if (!isDesktop()) {
+          cover.style.transform = '';
+          cover.style.opacity = '';
+          cover.style.zIndex = '';
+          cover.style.filter = '';
+          cover.style.pointerEvents = filtered ? 'none' : '';
+          return;
+        }
+
+        if (filtered || currentVisible < 0) {
+          cover.style.opacity = '0';
+          cover.style.pointerEvents = 'none';
+          cover.style.zIndex = '0';
+          return;
+        }
+
+        const offset = wrapOffset(visible.indexOf(index), currentVisible, visible.length);
+        const abs = Math.abs(offset);
+        if (abs > 2) {
+          cover.style.opacity = '0';
+          cover.style.pointerEvents = 'none';
+          cover.style.zIndex = '0';
+          cover.style.transform = 'translateX(0) scale(0.4)';
+          return;
+        }
+
+        const x = offset * 12.4;
+        const rot = offset * -32;
+        const z = offset === 0 ? 90 : -24 - abs * 36;
+        const scale = offset === 0 ? 1 : Math.max(0.7, 0.9 - abs * 0.1);
+        cover.style.transform = reduceMotion
+          ? `translateX(${x}rem) scale(${scale})`
+          : `translateX(${x}rem) rotateY(${rot}deg) translateZ(${z}px) scale(${scale})`;
+        cover.style.opacity = offset === 0 ? '1' : String(Math.max(0.35, 0.78 - abs * 0.14));
+        cover.style.filter = offset === 0 ? 'none' : 'saturate(0.78)';
+        cover.style.zIndex = String(20 - abs);
+        cover.style.pointerEvents = 'auto';
+      });
+    }
+
+    function renderDetails() {
+      const game = games[selected];
+      if (!game) return;
+
+      if (art && art.getAttribute('src') !== game.image) {
+        if (reduceMotion) {
+          art.src = game.image || '';
+        } else {
+          swapping = true;
+          billboard?.classList.add('is-swapping');
+          window.setTimeout(() => {
+            art.src = game.image || '';
+            billboard?.classList.remove('is-swapping');
+            swapping = false;
+          }, 160);
+        }
+      }
+
+      if (todayBadge) todayBadge.classList.toggle('hidden', selected !== startIndex);
+      if (indexLabel) indexLabel.textContent = String(selected + 1).padStart(2, '0');
+      if (genreLabel) genreLabel.textContent = genreNames[game.genre];
+      if (titleEl) titleEl.textContent = game.title;
+      if (taglineEl) taglineEl.textContent = game.tagline;
+      if (descriptionEl) descriptionEl.textContent = game.description;
+      if (playEl) {
+        playEl.href = game.href;
+        playEl.textContent = game.playLabel;
+      }
+      if (bulletsEl) {
+        bulletsEl.replaceChildren(
+          ...game.bullets.map((bullet) => {
+            const item = document.createElement('li');
+            item.className = 'flex gap-2';
+            const dot = document.createElement('span');
+            dot.className = 'mt-1.5 h-1.5 w-1.5 rounded-full bg-primary-500 shrink-0';
+            const text = document.createElement('span');
+            text.textContent = bullet;
+            item.append(dot, text);
+            return item;
+          })
+        );
+        bulletsEl.classList.toggle('hidden', game.bullets.length === 0);
+      }
+
+      const nextHash = `#${game.id}`;
+      if (window.location.hash !== nextHash) {
+        history.replaceState(null, '', nextHash);
+      }
+    }
+
+    function select(index: number, fromScroll = false) {
+      const visible = visibleIndexes();
+      if (!visible.includes(index)) return;
+      selected = index;
+      hoverCoolUntil = Date.now() + hoverStepMs;
+      layoutCovers();
+      renderDetails();
+      if (!fromScroll && !isDesktop()) {
+        scrolling = true;
+        covers[index]?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth', inline: 'center', block: 'nearest' });
+        window.setTimeout(() => {
+          scrolling = false;
+        }, 360);
+      }
+      if (canHoverBrowse() && document.activeElement !== covers[index]) {
+        covers[index]?.focus({ preventScroll: true });
+      }
+      if (canHoverBrowse() && lastPointer) {
+        window.clearTimeout(followTimer);
+        followTimer = window.setTimeout(followPointer, hoverStepMs);
+      }
+    }
+
+    function step(direction: number) {
+      const visible = visibleIndexes();
+      if (!visible.length) return;
+      const at = visible.indexOf(selected);
+      const next = visible[(at + direction + visible.length) % visible.length];
+      select(next);
+    }
+
+    function setGenre(next: GameGenre | '') {
+      genreFilter = next;
+      genreButtons.forEach((button) => {
+        const active = (button.dataset.genre || '') === next;
+        button.classList.toggle('is-active', active);
+        button.classList.toggle('bg-primary-600', active);
+        button.classList.toggle('text-white', active);
+        button.classList.toggle('border-primary-600', active);
+        button.classList.toggle('bg-white', !active);
+        button.classList.toggle('dark:bg-dark-800', !active);
+      });
+      const visible = visibleIndexes();
+      if (!visible.includes(selected) && visible[0] !== undefined) {
+        select(visible[0]);
+      } else {
+        layoutCovers();
+        if (!isDesktop()) covers[selected]?.scrollIntoView({ inline: 'center', block: 'nearest' });
+      }
+    }
+
+    covers.forEach((cover) => {
+      cover.addEventListener('click', (event) => {
+        const index = Number(cover.dataset.index);
+        if (index === selected) return;
+        event.preventDefault();
+        select(index);
+      });
+      cover.addEventListener('pointerenter', (event) => {
+        if (!canHoverBrowse() || event.pointerType === 'touch') return;
+        lastPointer = { x: event.clientX, y: event.clientY };
+        scheduleHoverSelect(Number(cover.dataset.index));
+      });
+    });
+
+    coverflow?.addEventListener('pointermove', (event) => {
+      if (!canHoverBrowse() || event.pointerType === 'touch') return;
+      lastPointer = { x: event.clientX, y: event.clientY };
+      const cover = coverFromPoint(event.clientX, event.clientY);
+      if (!cover) return;
+      scheduleHoverSelect(Number(cover.dataset.index));
+    });
+
+    coverflow?.addEventListener('pointerleave', (event) => {
+      const next = event.relatedTarget;
+      if (next instanceof Node && coverflow.contains(next)) return;
+      lastPointer = null;
+      hoverIndex = null;
+      window.clearTimeout(hoverTimer);
+      window.clearTimeout(followTimer);
+    });
+
+    genreButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        const value = (button.dataset.genre || '') as GameGenre | '';
+        setGenre(genreFilter === value ? '' : value);
+      });
+    });
+
+    root.querySelectorAll<HTMLButtonElement>('[data-dir]').forEach((button) => {
+      button.addEventListener('click', () => step(Number(button.dataset.dir)));
+      button.addEventListener('pointerenter', (event) => {
+        if (!canHoverBrowse() || event.pointerType === 'touch') return;
+        window.clearTimeout(hoverTimer);
+        window.clearTimeout(followTimer);
+        const dir = Number(button.dataset.dir);
+        const tick = () => {
+          step(dir);
+          followTimer = window.setTimeout(tick, hoverStepMs);
+        };
+        hoverTimer = window.setTimeout(tick, hoverStepMs);
+      });
+      button.addEventListener('pointerleave', () => {
+        window.clearTimeout(hoverTimer);
+        window.clearTimeout(followTimer);
+      });
+    });
+
+    surpriseBtn?.addEventListener('click', () => {
+      const visible = visibleIndexes().filter((index) => index !== selected);
+      const pool = visible.length ? visible : visibleIndexes();
+      if (!pool.length) return;
+      select(pool[Math.floor(Math.random() * pool.length)]);
+    });
+
+    billboard?.addEventListener('pointermove', (event) => {
+      if (!isDesktop() || reduceMotion || swapping) return;
+      const box = billboard.getBoundingClientRect();
+      const x = (event.clientX - box.left) / box.width - 0.5;
+      const y = (event.clientY - box.top) / box.height - 0.5;
+      billboard.style.transform = `rotateY(${x * 10}deg) rotateX(${-y * 8}deg)`;
+    });
+    billboard?.addEventListener('pointerleave', () => {
+      billboard.style.transform = '';
+    });
+
+    coverflow?.addEventListener('scroll', () => {
+      if (isDesktop() || scrolling) return;
+      const mid = (coverflow.scrollLeft || 0) + coverflow.clientWidth / 2;
+      let closest = selected;
+      let closestDist = Infinity;
+      covers.forEach((cover, index) => {
+        if (cover.classList.contains('is-filtered')) return;
+        const center = cover.offsetLeft + cover.offsetWidth / 2;
+        const dist = Math.abs(center - mid);
+        if (dist < closestDist) {
+          closestDist = dist;
+          closest = index;
+        }
+      });
+      if (closest !== selected) select(closest, true);
+    });
+
+    window.addEventListener('keydown', (event) => {
+      const target = event.target;
+      if (target instanceof HTMLInputElement || target instanceof HTMLTextAreaElement || target instanceof HTMLSelectElement) {
+        return;
+      }
+      if (event.key === 'ArrowRight') {
+        event.preventDefault();
+        step(1);
+      } else if (event.key === 'ArrowLeft') {
+        event.preventDefault();
+        step(-1);
+      } else if (event.key === 'Enter' && !(target instanceof HTMLAnchorElement) && !(target instanceof HTMLButtonElement)) {
+        event.preventDefault();
+        playEl?.click();
+      }
+    });
+
+    desktop.addEventListener('change', layoutCovers);
+    window.addEventListener('resize', layoutCovers);
+
+    layoutCovers();
+    renderDetails();
+    if (!isDesktop()) {
+      covers[selected]?.scrollIntoView({ inline: 'center', block: 'nearest' });
+    }
+  }
+</script>

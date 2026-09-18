@@ -12,6 +12,15 @@ export const playgroundCategories: {
   { id: 'graphics', label: 'Graphics', blurb: 'WebGL, canvas, shaders, and particle toys.' },
 ];
 
+export type GameGenre = 'adventure' | 'strategy' | 'puzzle' | 'trainer';
+
+export const gameGenres: { id: GameGenre; label: string; blurb: string }[] = [
+  { id: 'adventure', label: 'Adventure', blurb: 'Worlds to wander.' },
+  { id: 'strategy', label: 'Strategy', blurb: 'Cities, councils, consequences.' },
+  { id: 'puzzle', label: 'Puzzle', blurb: 'Quiet concentration.' },
+  { id: 'trainer', label: 'Trainer', blurb: 'Reflexes, memory, and math.' },
+];
+
 export interface GameEntry {
   id: string;
   title: string;
@@ -21,9 +30,26 @@ export interface GameEntry {
   playLabel: string;
   bullets: string[];
   image?: string;
+  genre: GameGenre;
 }
 
 export const games: GameEntry[] = [
+  {
+    id: 'paper-puppet',
+    title: 'Paper Puppet',
+    tagline: 'Pull a few strings.',
+    description:
+      'A paper character, some real-world rules, and your move. Walk, jump, pose the skeleton, go limp, and dodge obstacles.',
+    href: '/playground/paper_puppet',
+    image: '/html_showcase/paper_puppet/thumb.png',
+    playLabel: 'Play Paper Puppet',
+    genre: 'adventure',
+    bullets: [
+      'Walk, jump, and double jump',
+      'Pose the skeleton, then drop it as ragdoll',
+      'Obstacles, environments, and custom .puppet.json models',
+    ],
+  },
   {
     id: 'little-planet-worlds',
     title: 'Little Planet Worlds',
@@ -33,6 +59,7 @@ export const games: GameEntry[] = [
     href: '/playground/little_planet_worlds',
     image: '/html_showcase/little_planet_worlds/thumb.png',
     playLabel: 'Play Little Planet Worlds',
+    genre: 'adventure',
     bullets: [
       'WASD wander, double jump, globe map waypoints',
       'Inventory, crafting, and chapter missions',
@@ -48,6 +75,7 @@ export const games: GameEntry[] = [
     href: '/playground/collapse',
     image: '/html_showcase/collapse/thumb.png',
     playLabel: 'Play COLLAPSE',
+    genre: 'strategy',
     bullets: [
       'Turn-based campaign on a living map',
       'Buildings, research, factions, and council debates',
@@ -63,6 +91,7 @@ export const games: GameEntry[] = [
     href: '/apps/modular-math',
     image: '/images/games/modular-math.png',
     playLabel: 'Play Modular Math',
+    genre: 'trainer',
     bullets: [
       'See numbers wrap a modulus like hours on a clock',
       'Easy, Standard, Clock, and timed Blitz modes',
@@ -77,6 +106,7 @@ export const games: GameEntry[] = [
     href: '/apps/memory-challenge',
     image: '/images/games/memory-challenge.png',
     playLabel: 'Play Memory Challenge',
+    genre: 'trainer',
     bullets: ['Four difficulties', 'Lives and streaks', 'How far can you go?'],
   },
   {
@@ -87,6 +117,7 @@ export const games: GameEntry[] = [
     href: '/apps/reaction-trainer',
     image: '/images/games/reaction-trainer.png',
     playLabel: 'Play Reaction Trainer',
+    genre: 'trainer',
     bullets: ['Reaction and decision modes', 'Session history', 'Consistency scoring'],
   },
   {
@@ -97,6 +128,7 @@ export const games: GameEntry[] = [
     href: '/apps/cryptoquote',
     image: '/html_showcase/cryptoquote_generator/thumb.png',
     playLabel: 'Play Cryptoquote',
+    genre: 'puzzle',
     bullets: ['Daily puzzle', 'Create and share', 'Classic substitution ciphers'],
   },
   {
@@ -107,6 +139,7 @@ export const games: GameEntry[] = [
     href: '/apps/sudoku',
     image: '/html_showcase/sudoku/thumb.png',
     playLabel: 'Play Sudoku',
+    genre: 'puzzle',
     bullets: ['Easy, Medium, Hard, Expert', 'Daily puzzle', 'Notes, hints, and a unique grid'],
   },
   {
@@ -118,6 +151,7 @@ export const games: GameEntry[] = [
     href: '/apps/logic-grid',
     image: '/html_showcase/logic_grid/thumb.png',
     playLabel: 'Play Logic Grid',
+    genre: 'puzzle',
     bullets: ['Easy 8, Medium 7, Hard 6, Nightmare 5', 'Daily puzzle', 'Hats, stalls, bands, mascots, and more'],
   },
 ];

@@ -2,8 +2,6 @@
 import ThemeToggle from './ThemeToggle.astro';
 import TickerToggle from './TickerToggle.astro';
 import { apps, bitcoinResources, developerTools } from '../config/catalog';
-import { showcases } from '../config/showcases.json';
-import { homeGameSlides, type ShowcaseItem } from '../lib/showcases';
 
 interface NavLink {
   href: string;
@@ -25,13 +23,8 @@ interface NavPlain {
 
 type NavItem = NavDropdown | NavPlain;
 
-const gameLinks: NavLink[] = homeGameSlides(showcases as ShowcaseItem[]).map((game) => ({
-  href: game.href,
-  text: game.title,
-}));
-
 const navItems: NavItem[] = [
-  { type: 'dropdown', id: 'games', label: 'Games', items: gameLinks },
+  { type: 'link', href: '/games', text: 'Games' },
   { type: 'link', href: '/playground', text: 'Playground' },
   { type: 'dropdown', id: 'apps', label: 'Apps', items: apps.map((item) => ({ href: item.href, text: item.title })) },
   { type: 'dropdown', id: 'devtools', label: 'Developer Tools', items: developerTools.map((item) => ({ href: item.href, text: item.title })) },

@@ -25,6 +25,7 @@
   } from '../lib/forensicChart';
   import { compareRothOnOff, type PolicyComparisonResult } from '../lib/policyComparison';
   import { readyForProjection } from '../lib/planHealth';
+  import { buildScenarioStory } from '../lib/scenarioStory';
   import {
     BIRTH_MONTH_LABELS,
     remainingWorkYears,
@@ -81,6 +82,7 @@
   let expandedAge: number | null = null;
   let confirmOpen = false;
   let jsonOpen = false;
+  let storyOpen = false;
   let jsonText = '';
   let jsonCopied = false;
   let jsonCopyTimer: ReturnType<typeof setTimeout> | undefined;
@@ -99,6 +101,7 @@
   let gridLockedBitcoinId: BitcoinGridChoiceId = 'hold';
   let gridSpec: GridSpec | null = null;
   let gridCells: GridCellView[] = [];
+  let gridCollapsed = false;
   let spendTip: {
     x: number;
     y: number;
@@ -143,6 +146,8 @@
   $: gridDoneCount = gridCells.filter((c) => c.status === 'done').length;
   $: gridBestKey = bestGridCellKey(gridCells);
   $: gridCellByKey = new Map(gridCells.map((c) => [`${c.row}:${c.col}`, c]));
+  $: hasGridResults = gridCells.some((c) => c.status === 'done');
+  $: scenarioStory = selectedCase ? buildScenarioStory(selectedCase) : null;
 
   function summarizePreRetirementSalary(plan: typeof $planStore) {
     const asOf = new Date();
@@ -247,6 +252,7 @@
     forensicChart?.destroy();
     if (jsonCopyTimer) clearTimeout(jsonCopyTimer);
     spendTip = null;
+    storyOpen = false;
   });
 
   async function startRun(override: { liquidateBitcoin?: boolean; hysaFraction?: number } = {}) {
@@ -264,8 +270,10 @@
     expandedAge = null;
     closeCharts();
     jsonOpen = false;
+    storyOpen = false;
     scenarioTab = 'failures';
     runKind = 'single';
+    gridCollapsed = true;
 
     try {
       let plan = structuredClone(get(planStore));
@@ -464,6 +472,7 @@
     error = '';
     running = true;
     runKind = 'grid';
+    gridCollapsed = false;
     const plan = structuredClone(get(planStore));
     const spec = buildMonteCarloGrid(plan, {
       inelastic: gridInelastic,
@@ -841,9 +850,17 @@
     return 'Primary';
   }
 
+  function storyToneClass(tone: string): string {
+    if (tone === 'good') return 'text-emerald-800 dark:text-emerald-300';
+    if (tone === 'warn') return 'text-amber-800 dark:text-amber-300';
+    if (tone === 'bad') return 'text-red-700 dark:text-red-400';
+    return '';
+  }
+
   function openScenarioJson() {
     if (!selectedCase || !result) return;
     closeCharts();
+    storyOpen = false;
     jsonText = JSON.stringify(
       scenarioExportPayload(selectedCase, {
         tab: scenarioTab,
@@ -856,9 +873,20 @@
     jsonOpen = true;
   }
 
+  function closeStory() {
+    storyOpen = false;
+  }
+
   function closeJson() {
     jsonOpen = false;
     jsonCopied = false;
+  }
+
+  function openScenarioStory() {
+    if (!selectedCase) return;
+    closeCharts();
+    jsonOpen = false;
+    storyOpen = true;
   }
 
   async function copyScenarioJson() {
@@ -884,6 +912,7 @@
   async function openScenarioCharts() {
     if (!selectedCase) return;
     jsonOpen = false;
+    storyOpen = false;
     forensicCatalog = buildForensicSeries(selectedCase.timeline);
     const available = new Set(forensicCatalog.map((s) => s.id));
     forensicEnabledIds = forensicEnabledIds.filter((id) => available.has(id));
@@ -1142,7 +1171,20 @@
     {/if}
   </div>
 
-  {#if displayGrid}
+  {#if gridCollapsed && hasGridResults}
+    <div
+      class="flex flex-wrap items-center justify-between gap-3 rounded-lg border border-gray-200 dark:border-gray-700 bg-gray-50/80 dark:bg-gray-900/40 px-4 py-3"
+    >
+      <p class="text-sm text-gray-600 dark:text-gray-400">
+        Scenario grid results are hidden while you inspect this simulation.
+      </p>
+      <button type="button" class="btn-secondary btn-compact" on:click={() => (gridCollapsed = false)}>
+        Show grid results ({gridDoneCount} of {GRID_CELL_COUNT})
+      </button>
+    </div>
+  {/if}
+
+  {#if displayGrid && !gridCollapsed}
     <div class="rounded-lg border border-gray-200 dark:border-gray-700 p-4 space-y-3">
       <div>
         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Scenario grid</h3>
@@ -1623,20 +1665,27 @@
                     1
                   )}%</span
                 >
-                <div class="ml-auto flex flex-wrap gap-2">
+                <div class="ml-auto flex flex-wrap gap-1.5">
                   <button
                     type="button"
-                    class="btn-secondary px-2.5 py-1 text-xs"
+                    class="btn-secondary btn-compact"
                     on:click={openScenarioCharts}
                   >
                     View Charts
                   </button>
                   <button
                     type="button"
-                    class="btn-secondary px-2.5 py-1 text-xs"
+                    class="btn-secondary btn-compact"
                     on:click={openScenarioJson}
                   >
                     View JSON
+                  </button>
+                  <button
+                    type="button"
+                    class="btn-secondary btn-compact"
+                    on:click={openScenarioStory}
+                  >
+                    View Story
                   </button>
                 </div>
               </div>
@@ -2120,6 +2169,64 @@
       ></textarea>
       <div class="flex justify-end border-t border-gray-100 dark:border-gray-800 px-5 py-3">
         <button type="button" class="btn-secondary" on:click={closeJson}>Close</button>
+      </div>
+    </div>
+  </div>
+{/if}
+
+{#if storyOpen && scenarioStory}
+  <div
+    class="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50"
+    role="presentation"
+    on:click|self={closeStory}
+    on:keydown={(e) => e.key === 'Escape' && closeStory()}
+  >
+    <div
+      class="max-h-[90dvh] overflow-hidden flex flex-col w-full max-w-[105rem] rounded-xl border border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900 shadow-xl"
+      use:dialogFocus={closeStory}
+      tabindex="-1"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="mc-story-title"
+    >
+      <div class="border-b border-gray-100 dark:border-gray-800 px-5 py-4">
+        <h3 id="mc-story-title" class="text-lg font-semibold text-gray-900 dark:text-white">
+          {scenarioStory.heading}
+        </h3>
+        <p class="mt-1 text-sm text-gray-600 dark:text-gray-400">
+          Each year is a chapter: conversions, sales, premiums, and other key moves on this path.
+        </p>
+      </div>
+      <div class="flex-1 min-h-0 overflow-y-auto px-5 py-4 space-y-5">
+        <div class="space-y-1.5 text-sm text-gray-700 dark:text-gray-300">
+          {#each scenarioStory.intro as item}
+            <p class={storyToneClass(item.tone)}>{item.text}</p>
+          {/each}
+        </div>
+        {#each scenarioStory.chapters as chapter, i}
+          <article class="rounded-lg border border-gray-200 dark:border-gray-700 p-3 space-y-2">
+            <div class="flex items-baseline justify-between gap-3">
+              <h4 class="text-sm font-semibold text-gray-900 dark:text-white">
+                Chapter {i + 1} · {chapter.title}
+              </h4>
+              <span class="text-[11px] text-gray-500 shrink-0">{chapter.lines.length} notes</span>
+            </div>
+            <p class="text-xs text-gray-500 dark:text-gray-400">{chapter.summary}</p>
+            <ul class="space-y-1 text-sm text-gray-800 dark:text-gray-200">
+              {#each chapter.lines as item}
+                <li class={storyToneClass(item.tone)}>{item.text}</li>
+              {/each}
+            </ul>
+          </article>
+        {/each}
+        <div class="space-y-1.5 text-sm text-gray-600 dark:text-gray-400 border-t border-gray-100 dark:border-gray-800 pt-3">
+          {#each scenarioStory.closer as item}
+            <p class={storyToneClass(item.tone)}>{item.text}</p>
+          {/each}
+        </div>
+      </div>
+      <div class="flex justify-end border-t border-gray-100 dark:border-gray-800 px-5 py-3">
+        <button type="button" class="btn-secondary" on:click={closeStory}>Close</button>
       </div>
     </div>
   </div>

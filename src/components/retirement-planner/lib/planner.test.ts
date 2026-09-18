@@ -20,13 +20,14 @@ import {
   spendGridTargets,
 } from './monteCarloGrid';
 import { computeAnnualTax, socialSecurityTaxableFraction } from './tax/federalTaxEngine';
-import { runMonteCarloBatch, runMonteCarloAsync, makeReturnSampler, createRng, summarizeEndingBalances } from './monteCarloCore';
+import { runMonteCarloBatch, runMonteCarloAsync, makeReturnSampler, createRng, summarizeEndingBalances, type FailureCase } from './monteCarloCore';
 import { runMonteCarlo, cancelMonteCarlo } from './monteCarlo';
 import { parseImportedPlan, exportPlanJson, savePlan, loadPlan, STORAGE_KEY } from './persistence';
 import { rmdStartAge, requiredMinimumDistribution } from './rmd';
 import { parseEarningsText, computePersonBenefits } from './socialSecurity';
 import { analyzeRamp } from './rampAnalysis';
 import { readyForProjection } from './planHealth';
+import { buildScenarioStory } from './scenarioStory';
 
 const TEST_AS_OF = new Date(2026, 0, 1);
 
@@ -619,5 +620,75 @@ test('already-retired ages produce no leftover salary even before the next birth
   const asOf = new Date(2026, 0, 15);
   assert.equal(remainingWorkYears(58, 58, 5, asOf), 0);
   assert.equal(workFractionInCalendarYear(58, 58, 5, asOf, 2026), 0);
+});
+
+test('scenario story chapters cover Roth conversions, sales, and insurance', () => {
+  const scenario: FailureCase = {
+    kind: 'average',
+    runIndex: 3,
+    depletedAge: null,
+    firstShortfallAge: null,
+    endingBalance: 2_000_000,
+    peakPortfolio: 2_100_000,
+    peakAge: 70,
+    maxDrawdownPct: 0.12,
+    earlyRetirementCumulative: 0.2,
+    earlyRetirementYears: 5,
+    worstYear: { age: 62, portfolioReturn: -0.08 },
+    bestYear: { age: 68, portfolioReturn: 0.18 },
+    longestNegativeStreak: 1,
+    recessionYears: 2,
+    boomYears: 3,
+    circumstances: ['Middle of the pack.'],
+    timeline: [
+      {
+        age: 58,
+        calendarYear: 2027,
+        portfolio: 1_800_000,
+        portfolioReturn: 0.07,
+        marketReturn: 0.08,
+        bitcoinReturn: null,
+        cryptoReturn: null,
+        goldReturn: null,
+        silverReturn: null,
+        marketContribution: 0.06,
+        bitcoinContribution: 0,
+        cryptoContribution: 0,
+        goldContribution: 0,
+        silverContribution: 0,
+        withdrawal: 40000,
+        shortfall: 0,
+        expenses: 90000,
+        incomePlusSs: 50000,
+        contributions: 0,
+        rmd: 0,
+        rothConversion: 80000,
+        estimatedTax: 18000,
+        downYear: false,
+        expenseCut: 0,
+        spend: { general: 70000, travel: 5000, healthInsurance: 15000, total: 90000 },
+        accountsStart: [
+          { id: 'btc', type: 'bitcoin', label: 'Bitcoin', owner: 'primary', balanceUsd: 100000, units: 1, priceUsd: 100000 },
+        ],
+        accountsEnd: [
+          { id: 'btc', type: 'bitcoin', label: 'Bitcoin', owner: 'primary', balanceUsd: 60000, units: 0.5, priceUsd: 120000 },
+        ],
+        events: [
+          { kind: 'RothConversion', age: 58, calendarYear: 2027, policyId: 'roth', reason: 'Fill 22% bracket', amount: 80000, estimatedTax: 17600 },
+          { kind: 'AthHarvestSale', age: 58, calendarYear: 2027, policyId: 'ath-harvest-policy', reason: 'Near ATH', accountId: 'btc', accountType: 'bitcoin', grossUsd: 60000, gainUsd: 10000, taxUsd: 1500, netUsd: 58500, unitsSold: 0.5, priceUsd: 120000 },
+          { kind: 'Income', age: 58, calendarYear: 2027, policyId: 'engine', reason: 'Salary', amount: 50000, label: 'Salary' },
+        ],
+      },
+    ],
+  };
+  const story = buildScenarioStory(scenario);
+  assert.equal(story.chapters.length, 1);
+  const text = [story.heading, ...story.intro, ...story.chapters[0]!.lines, ...story.closer].map((l) => typeof l === 'string' ? l : l.text).join('\n');
+  assert.match(text, /Roth conversions moved/);
+  assert.match(text, /traditional accounts into Roth/);
+  assert.match(text, /0\.5 BTC/);
+  assert.match(text, /\$120,000/);
+  assert.match(text, /Health insurance premiums/);
+  assert.match(text, /Salary/);
 });
 

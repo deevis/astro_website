@@ -924,6 +924,7 @@
     });
     for (const clue of dropOrder) {
       if (list.length <= target) break;
+      if (!dropHardFirst && clue.type === "is" && list.some((c) => c.type === "not" || c.type === "not_link")) continue;
       const next = list.filter((c) => !sameClue(c, clue));
       if (uniqueEnoughToDrop(next)) list = next;
     }
@@ -986,9 +987,53 @@
     if (pool.length < CLUE_COUNTS[difficulty] + 3) return null;
 
     const target = CLUE_COUNTS[difficulty];
-    const clues = dropToTarget(pool, target, rnd) || greedyMix(pool, target, rnd);
-    if (!clues || countSolutions(clues) !== 1 || !acceptsDifficulty(clues)) return null;
+    let clues = dropToTarget(pool, target, rnd) || greedyMix(pool, target, rnd);
+    if (!clues) return null;
+    clues = preferPositiveClues(clues, sol, pool, sc);
+    if (countSolutions(clues) !== 1 || !acceptsDifficulty(clues)) return null;
     return { scenario: sc, solution: sol, clues };
+  }
+
+  function positiveVersion(clue, sol) {
+    if (clue.type === "not") {
+      return { type: "is", person: clue.person, cat: clue.cat, val: sol[clue.cat][clue.person] };
+    }
+    if (clue.type === "not_link") {
+      let whoHas = -1;
+      for (let p = 0; p < SIZE; p++) {
+        if (sol[clue.aCat][p] === clue.aVal) whoHas = p;
+      }
+      if (whoHas < 0) return clue;
+      return {
+        type: "link",
+        aCat: clue.aCat,
+        aVal: clue.aVal,
+        bCat: clue.bCat,
+        bVal: sol[clue.bCat][whoHas]
+      };
+    }
+    return clue;
+  }
+
+  function preferPositiveClues(clues, sol, pool, sc) {
+    if (difficulty === "hard" || difficulty === "nightmare") return clues;
+    const target = CLUE_COUNTS[difficulty];
+    let next = clues.map((clue) => positiveVersion(clue, sol));
+    next = uniqueByText(next, sc);
+    if (next.length < target) {
+      const have = new Set(next.map(clueKey));
+      for (const clue of pool) {
+        if (next.length >= target) break;
+        const upgraded = positiveVersion(clue, sol);
+        if (have.has(clueKey(upgraded))) continue;
+        if (upgraded.type === "not" || upgraded.type === "not_link") continue;
+        next.push(upgraded);
+        have.add(clueKey(upgraded));
+      }
+    }
+    if (next.length !== target) return clues;
+    if (countSolutions(next) !== 1 || !acceptsDifficulty(next)) return clues;
+    return next;
   }
 
   function generatePuzzle(seed) {
@@ -1139,23 +1184,16 @@
     return Array.from({ length: SIZE }, () => Array.from({ length: 3 }, () => fill));
   }
 
-  function blankBoard(clues) {
-    const elim = emptyGrid(0);
-    const confirmed = emptyGrid(-1);
-    const locked = emptyGrid(false);
-    if (difficulty === "easy") {
-      for (const clue of clues) {
-        if (clue.type !== "is") continue;
-        confirmed[clue.person][clue.cat] = clue.val;
-        locked[clue.person][clue.cat] = true;
-        elim[clue.person][clue.cat] = ALL & ~(1 << clue.val);
-      }
-    }
-    return { elim, confirmed, locked };
+  function blankBoard() {
+    return {
+      elim: emptyGrid(0),
+      confirmed: emptyGrid(-1),
+      locked: emptyGrid(false)
+    };
   }
 
   function startFromGenerated(puzzle, source, dailyDate) {
-    const board = blankBoard(puzzle.clues);
+    const board = blankBoard();
     game = {
       seed: puzzle.seed,
       source,
@@ -1209,7 +1247,7 @@
   function resetPuzzle(message = "Started over.") {
     if (!game) return;
     const note = typeof message === "string" && message ? message : "Started over.";
-    const board = blankBoard(game.clues);
+    const board = blankBoard();
     game.elim = board.elim;
     game.confirmed = board.confirmed;
     game.locked = board.locked;
@@ -1306,13 +1344,30 @@
     return n;
   }
 
-  function isSolved() {
+  function maskBit(m) {
+    for (let v = 0; v < SIZE; v++) if (m === (1 << v)) return v;
+    return -1;
+  }
+
+  function readAssignment() {
+    const rows = [Array(SIZE), Array(SIZE), Array(SIZE)];
     for (let p = 0; p < SIZE; p++) {
       for (let c = 0; c < 3; c++) {
-        if (cellMask(p, c) !== (1 << game.solution[c][p])) return false;
+        const m = cellMask(p, c);
+        if (!isSingleMask(m)) return null;
+        rows[c][p] = maskBit(m);
       }
     }
-    return true;
+    for (let c = 0; c < 3; c++) {
+      if (new Set(rows[c]).size !== SIZE) return null;
+    }
+    return rows;
+  }
+
+  function isSolved() {
+    const asg = readAssignment();
+    if (!asg) return false;
+    return game.clues.every((clue) => clueHolds(clue, asg[0], asg[1], asg[2]));
   }
 
   function afterBoardChange() {
@@ -1749,7 +1804,15 @@
     persistProgress();
     renderPlay();
     if (mistakes === 0) {
-      toast(filledCount() === 12 ? "Every box is filled, but it isn’t the unique story. Keep looking." : filledCount() === 0 ? "Nothing to check yet." : "No mistakes so far.");
+      if (filledCount() === 12) {
+        toast(readAssignment()
+          ? "That filling contradicts a clue."
+          : "Two people share a value. Each option is used once.");
+      } else if (filledCount() === 0) {
+        toast("Nothing to check yet.");
+      } else {
+        toast("No mistakes so far.");
+      }
       tone(500, 0.08);
     } else {
       toast(`${mistakes} cell${mistakes === 1 ? " looks" : "s look"} wrong.`);
@@ -1887,7 +1950,7 @@
         },
         {
           title: "The clues",
-          body: "Read these first. Tap a clue once you’ve used it so you can see what’s left. Easy puzzles also lock a few true facts onto the grid.",
+          body: "Read these first. Tap a clue once you’ve used it so you can see what’s left. Easy puzzles start with a few very direct clues instead of filling the grid for you.",
           selector: ".lg-clues",
           onEnter: () => beginTutorialPuzzle()
         },

@@ -8,6 +8,7 @@ const gameLinks = homeGameSlides(showcases as ShowcaseItem[]);
 
 const siteLinks = [
   { href: '/', text: 'Home' },
+  { href: '/games', text: 'Games' },
   { href: '/articles', text: 'Articles' },
   { href: '/playground', text: 'Playground' },
   { href: '/news', text: 'News' },
@@ -47,6 +48,7 @@ const footerLink = 'block text-sm py-0.5 text-gray-700 dark:text-gray-300 hover:
 
       <div>
         <h3 class={headingClass}>Games</h3>
+        <a href="/games" class={footerLink}>All games</a>
         {gameLinks.map((game) => (
           <a href={game.href} class={footerLink}>{game.title}</a>
         ))}

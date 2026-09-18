@@ -1,550 +1,216 @@
-<html>
-  <head>
-    <style>
-      * { margin: 0; padding: 0; }
-      body, html { 
-        width: 100%;
-        height: 100%;
-        overflow: hidden;
-        font-family: Arial, sans-serif;
-      }
-      canvas {
-        display: block;
-      }
-      #controlPanel {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 15px;
-        border-radius: 8px;
-      }
-      #statsPanel {
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: rgba(0, 0, 0, 0.7);
-        color: white;
-        padding: 15px;
-        border-radius: 8px;
-        font-size: 14px;
-      }
-      .stat-row {
-        margin: 5px 0;
-        display: flex;
-        justify-content: space-between;
-      }
-      .stat-label {
-        margin-right: 15px;
-      }
-      button {
-        background: #4CAF50;
-        border: none;
-        color: white;
-        padding: 8px 16px;
-        border-radius: 4px;
-        cursor: pointer;
-        margin: 5px;
-      }
-      button:hover {
-        background: #45a049;
-      }
-      button:disabled {
-        background: #cccccc;
-        cursor: not-allowed;
-      }
-      #stopBtn {
-        background: #f44336;
-      }
-      #stopBtn:hover {
-        background: #da190b;
-      }
-      #clearBtn {
-        background: #2196F3;
-      }
-      #clearBtn:hover {
-        background: #0b7dda;
-      }
-      input {
-        padding: 6px;
-        margin: 5px;
-        border-radius: 4px;
-        border: 1px solid #ddd;
-        width: 100px;
-      }
-      label {
-        display: block;
-        margin: 5px;
-      }
-      #controlWrapper {
-        position: fixed;
-        top: 20px;
-        left: 20px;
-        background: rgba(40, 40, 40, 0.9);
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        min-width: 300px;
-      }
-      .title-row {
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        margin-bottom: 15px;
-      }
-      h1 {
-        margin: 0;
-        font-size: 24px;
-        font-weight: normal;
-      }      .info-icon {
-        cursor: pointer;
-        font-size: 24px;
-        margin-left: 10px;
-        color: #2196F3;
-        vertical-align: middle;
-      }
-      .modal {
-        display: none;
-        position: fixed;
-        top: 0;
-        left: 0;
-        width: 100%;
-        height: 100%;
-        background-color: rgba(0, 0, 0, 0.5);
-        z-index: 1000;
-      }
-      .modal-content {
-        position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        background: rgb(30, 30, 30);
-        color: white;
-        padding: 25px;
-        border-radius: 8px;
-        max-width: 600px;
-        width: 80%;
-        box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-      }
-      .close-button {
-        position: absolute;
-        top: 10px;
-        right: 10px;
-        cursor: pointer;
-        font-size: 24px;
-        color: #999;
-      }
-      .close-button:hover {
-        color: white;
-      }
-      h1 {
-        margin: 0;
-        font-size: 24px;
-      }
-      .step {
-        margin: 10px 0;
-      }      
-    </style>
-  </head>
-  <body>
-    <script src="/js/dbh-dev-console.js"></script>
-    <div id="canvasWrapper">
-        <canvas id="myCanvas"></canvas>
-    </div>    
-    <div id="controlWrapper">
-        <div class="title-row">
-          <h1>Sierpinski Triangle Generator</h1>
-          <span class="info-icon" onclick="toggleModal()">ⓘ</span>
-        </div>
-        <label>
-          Points to draw:
-          <input type="number" id="iterationCount" value="10000" min="1" max="1000000">
-        </label>
-        <div>
-          <button id="startBtn">Start</button>
-          <button id="stopBtn">Stop</button>
-          <button id="clearBtn">Clear</button>
-          <button id="tutorialBtn">Run Tutorial</button>
-        </div>
-      </div>
-    
-      <div id="infoModal" class="modal">
-        <div class="modal-content">
-          <span class="close-button" onclick="toggleModal()">×</span>
-          <h3>How It Works:</h3>
-          <div class="step">1. It starts with a single point at the Red vertex (top).</div>
-          <div class="step">2. At each step one of the three vertices is chosen at random, and the next point is generated midway between the current point and the new vertex that was chosen.</div>
-          <div class="step">3. The new point is colored based on the new Vertex (Red for top, Green for left, Blue for right).</div>
-          <div class="step">Try the Tutorial button to see this process in slow motion!</div>
-        </div>
-      </div>    <div id="statsPanel">
-      <h3 style="margin-bottom: 10px">Point Statistics</h3>
-      <div id="stats"></div>
-      <div class="stat-row" style="margin-top: 10px">
-        <span class="stat-label">Total Points:</span>
-        <span id="totalPointsDisplay">0</span>
-      </div>
-    </div>
-  </body>
-  <script>
-    var canvas = document.getElementById("myCanvas");
-    var ctx = canvas.getContext("2d");
-    var totalPoints = 0;
-    var pointStats = {
-      1: 0,
-      2: 0,
-      3: 0
-    };
-    var isRunning = false;
-    var animationId = null;
-    
-    // Control elements
-    const startBtn = document.getElementById('startBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const clearBtn = document.getElementById('clearBtn');
-    const iterationInput = document.getElementById('iterationCount');
-    const tutorialBtn = document.getElementById('tutorialBtn');
-    tutorialBtn.addEventListener('click', startTutorial);
-    let tutorialMode = false;
-
-    // Modal control functions
-    function toggleModal() {
-        const modal = document.getElementById('infoModal');
-        if (modal.style.display === "block") {
-            modal.style.display = "none";
-        } else {
-            modal.style.display = "block";
-        }
-    }
-
-    // Close modal when clicking outside
-    window.addEventListener('click', function(event) {
-        const modal = document.getElementById('infoModal');
-        if (event.target === modal) {
-            modal.style.display = "none";
-        }
-    });
-
-    function drawTracer(point) {
-        ctx.beginPath();
-        ctx.arc(point[0], point[1], 5, 0, 2 * Math.PI);
-        ctx.strokeStyle = 'yellow';
-        ctx.lineWidth = 2;
-        ctx.stroke();
-    }
-
-    function startTutorial() {
-        if (isRunning) return;
-        clearCanvas();
-        tutorialMode = true;
-        isRunning = true;
-        startBtn.disabled = true;
-        stopBtn.disabled = false;
-        tutorialBtn.disabled = true;
-        runTutorial();
-    }
-
-    function runTutorial() {
-        let pointCount = 0;
-        let delay = 500; // Start with 0.5 seconds
-        let currentPoint = [p1[0], p1[1]]; // Current point location
-        let points = []; // Array to store all points and their colors
-
-        function drawNextPoint() {
-            if (!isRunning) {
-                tutorialComplete();
-                return;
-            }
-
-            // Get new point position and color
-            rand = Math.random();
-            let targetPoint, color;
-            if (rand > 0.6666) {
-                targetPoint = p1;
-                color = 'red';
-                pointStats[1]++;
-            } else if (rand > 0.3333) {
-                targetPoint = p2;
-                color = 'green';
-                pointStats[2]++;
-            } else {
-                targetPoint = p3;
-                color = 'blue';
-                pointStats[3]++;
-            }
-
-            // Calculate midpoint
-            currentPoint = [
-                (currentPoint[0] + targetPoint[0]) / 2,
-                (currentPoint[1] + targetPoint[1]) / 2
-            ];
-
-            // Store the point and its color
-            points.push({
-                x: currentPoint[0],
-                y: currentPoint[1],
-                color: color
-            });
-
-            // Clear canvas and redraw everything
-            ctx.clearRect(0, 0, canvas.width, canvas.height);
-            
-            // Draw all stored points
-            points.forEach(point => {
-                ctx.fillStyle = point.color;
-                ctx.fillRect(point.x, point.y, 1, 1);
-            });
-            
-            // Draw initial vertices and numbers
-            drawInitialPoints();
-
-            // Draw tracer for first 30 points
-            if (pointCount < 3000) {
-                ctx.beginPath();
-                ctx.arc(currentPoint[0], currentPoint[1], 5, 0, 2 * Math.PI);
-                ctx.strokeStyle = color;  // Use the same color as the point
-                ctx.lineWidth = 2;
-                ctx.stroke();
-            }
-
-            pointCount++;
-            totalPoints++;
-            updateStats();
-
-            // Continue if we haven't reached 10000 points
-            if (pointCount < 2000 && isRunning) {
-                // Reduce delay by 0.01 seconds until we reach 0.01 seconds
-                delay = delay - 10;
-                if (delay > 0) {
-                    setTimeout(drawNextPoint, delay);
-                } else {
-                    setTimeout(drawNextPoint, 0);
-                    
-                }
-            } else {
-                tutorialComplete();
-            }
-        }
-
-        drawNextPoint();
-    }
-
-    function tutorialComplete() {
-        isRunning = false;
-        tutorialMode = false;
-        startBtn.disabled = false;
-        stopBtn.disabled = true;
-        tutorialBtn.disabled = false;
-    }
-
-        // Input validation
-    iterationInput.addEventListener('change', function() {
-        let value = parseInt(this.value);
-        if (isNaN(value) || value < 1) {
-            this.value = 10000;
-        } else if (value > 1000000) {
-            this.value = 1000000;
-        }
-    });
-    startBtn.addEventListener('click', startAnimation);
-    stopBtn.addEventListener('click', stopAnimation);
-    clearBtn.addEventListener('click', clearCanvas);
-    
-    function startAnimation() {
-        if (!isRunning && !tutorialMode) {
-            isRunning = true;
-            startBtn.disabled = true;
-            stopBtn.disabled = false;
-            tutorialBtn.disabled = true;
-            computePoints();
-        }
-    }
-    
-    function stopAnimation() {
-      isRunning = false;
-      startBtn.disabled = false;
-      stopBtn.disabled = true;
-      if (animationId) {
-        clearTimeout(animationId);
-        animationId = null;
-      }
-    }
-    
-    function clearCanvas() {
-        stopAnimation();
-        tutorialMode = false;
-        tutorialBtn.disabled = false;
-        ctx.clearRect(0, 0, canvas.width, canvas.height);
-        canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-        pointStats = {1: 0, 2: 0, 3: 0};
-        totalPoints = 0;
-        p = [p1[0], p1[1]];
-        drawInitialPoints();
-        updateStats();
-    }
-
-    
-    function updateStats() {
-        const statsDiv = document.getElementById('stats');
-        const total = Object.values(pointStats).reduce((a, b) => a + b, 0) || 1;
-        
-        const pointLabels = {
-            1: 'Red',
-            2: 'Green',
-            3: 'Blue'
-        };
-        
-        statsDiv.innerHTML = Object.entries(pointStats).map(([point, count]) => `
-            <div class="stat-row">
-                <span class="stat-label">${pointLabels[point]}:</span>
-                <span>${count} (${((count / total) * 100).toFixed(1)}%)</span>
-            </div>
-        `).join('');
-        
-        document.getElementById('totalPointsDisplay').textContent = total;
-    }
-    
-    function resizeCanvas() {
-      canvas.width = window.innerWidth;
-      canvas.height = window.innerHeight;
-      canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-      
-      // Reset points based on new canvas size
-      p1 = [canvas.width/2, 20];
-      p2 = [20, canvas.height - 20];
-      p3 = [canvas.width - 20, canvas.height - 20];
-      
-      // Reset current point to top
-      p = [p1[0], p1[1]];
-      
-      // Reset stats
-      pointStats = {1: 0, 2: 0, 3: 0};
-      totalPoints = 0;
-      
-      // Clear canvas
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
-      
-      // Draw initial points and numbers
-      drawInitialPoints();
-      
-      updateStats();
-    }
-
-    function drawInitialPoints() {
-      // Draw points
-      drawPoint(p1, "red");
-      drawPoint(p2, "green");
-      drawPoint(p3, "blue");
-      
-      // Draw numbers
-      ctx.font = "20px Arial";
-      ctx.fillStyle = "white";
-      ctx.textAlign = "center";
-      ctx.textBaseline = "middle";
-      
-      // Position numbers slightly offset from points
-      ctx.fillText("1", p1[0], p1[1] - 20);
-      ctx.fillText("2", p2[0] - 20, p2[1] - 20);
-      ctx.fillText("3", p3[0] + 20, p3[1] - 20);
-    }
-
-    function drawPoint(point, color) {
-      ctx.beginPath();
-      ctx.arc(point[0], point[1], 5, 0, 2 * Math.PI);
-      ctx.fillStyle = color;
-      ctx.fill();
-    }
-
-    // Initialize canvas size
-    resizeCanvas();
-
-    // Add resize event listener
-    window.addEventListener('resize', debounce(resizeCanvas, 250));
-
-    // Debounce function to prevent excessive resize calls
-    function debounce(func, wait) {
-      let timeout;
-      return function executedFunction(...args) {
-        const later = () => {
-          clearTimeout(timeout);
-          func(...args);
-        };
-        clearTimeout(timeout);
-        timeout = setTimeout(later, wait);
-      };
-    }
-
-    function drawPixel(point, r, g, b, a) {
-        x = parseInt(point[0]);
-        y = parseInt(point[1]);
-        var index = (x + y * canvas.width) * 4;
-        canvasData.data[index + 0] = r;
-        canvasData.data[index + 1] = g;
-        canvasData.data[index + 2] = b;
-        canvasData.data[index + 3] = a;
-    }
-
-    function updateCanvas() {
-        ctx.putImageData(canvasData, 0, 0);
-        drawInitialPoints(); // Redraw points and numbers on top
-    }
-    
-    var canvasData = ctx.getImageData(0, 0, canvas.width, canvas.height);
-    var p = [p1[0], p1[1]];
-
-    function jumpMidway(to_point) {
-        p[0] = (p[0] + to_point[0])/2;
-        p[1] = (p[1] + to_point[1])/2;        
-    }
-
-    function computePoints() {
-        const totalRequested = parseInt(iterationInput.value) || 10000;
-        const chunkSize = 10000; // Process in chunks of 10000 points
-        let processed = 0;
-        
-        function processChunk() {
-            if (!isRunning) return; // Stop if animation was cancelled
-            
-            const currentChunk = Math.min(chunkSize, totalRequested - processed);
-            
-            for (var i = 0; i < currentChunk; i++) {
-                rand = Math.random();
-                if (rand > 0.6666) {
-                    jumpMidway(p1);
-                    drawPixel(p,255,0,0,255);
-                    pointStats[1]++;
-                } else if (rand > 0.3333) {
-                    jumpMidway(p2);
-                    drawPixel(p,0,255,0,255);
-                    pointStats[2]++;
-                } else {
-                    jumpMidway(p3);
-                    drawPixel(p,0,0,255,255);
-                    pointStats[3]++;
-                }
-            }
-            
-            processed += currentChunk;
-            totalPoints += currentChunk;
-            
-            updateCanvas();
-            updateStats();
-            
-            if (processed < totalRequested && isRunning) {
-                animationId = setTimeout(processChunk, 10);
-            } else {
-                isRunning = false;
-                startBtn.disabled = false;
-                stopBtn.disabled = true;
-            }
-        }
-        
-        processChunk();
-    }
-
-
-    // Initialize button states
-    stopBtn.disabled = true;
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#080e13">
+<meta name="description" content="A small rule. A random choice. An unexpected universe. Explore eight living fractals in an interactive, narrated chaos-game studio.">
+<title>Emergence — Sierpiński & the Chaos Game</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='14' fill='%23080e13'/%3E%3Cpath d='M32 8 44 29H20ZM18 32 30 53H6ZM46 32 58 53H34Z' fill='%2374e2c6'/%3E%3C/svg%3E">
+<style>
+:root{color-scheme:dark;--bg:#080e13;--panel:#10181f;--line:#253039;--muted:#91a4af;--text:#e7efed;--mint:#85e8c8;--gold:#e9c48b;--serif:Georgia,'Times New Roman',serif;--sans:Inter,'Segoe UI',system-ui,sans-serif;--mono:'SFMono-Regular',Consolas,monospace}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--text);font:13px/1.5 var(--sans)}button,input,select{font:inherit}button{cursor:pointer;color:inherit}button,input,select,a{-webkit-tap-highlight-color:transparent}button:focus-visible,input:focus-visible,select:focus-visible,a:focus-visible,summary:focus-visible,canvas:focus-visible{outline:2px solid var(--mint);outline-offset:4px}button:disabled{opacity:.4;cursor:default}button{border:1px solid var(--line);background:#141f26;border-radius:7px;padding:8px 12px;transition:background .16s,border-color .16s}button:hover:not(:disabled){background:#21313a;border-color:#50616c}button svg{width:16px;height:16px;vertical-align:middle;flex:none;stroke:currentColor;fill:none;stroke-width:1.6;stroke-linecap:round;stroke-linejoin:round}button .ico{display:inline-flex}a{color:var(--mint);text-underline-offset:3px}.app{height:100dvh;min-height:670px;max-width:1920px;margin:auto;display:flex;flex-direction:column;padding:0 27px 12px}.masthead{height:65px;display:flex;align-items:center;justify-content:space-between;flex-shrink:0;border-bottom:1px solid var(--line);gap:16px}.brand{display:flex;align-items:center;gap:12px}.brand-mark{width:28px;height:28px;fill:var(--mint)}.wordmark{font-size:15px;letter-spacing:.27em;font-weight:550}.edition{border-left:1px solid var(--line);padding-left:17px;margin-left:7px;color:var(--muted);font-size:11px;letter-spacing:.05em}.top-actions{display:flex;gap:8px;align-items:center}.quiet{background:transparent;border-color:transparent;color:var(--muted)}.quiet:hover:not(:disabled){color:var(--text)}.action{display:inline-flex;align-items:center;justify-content:center;gap:7px}.primary{background:var(--mint);color:#0c2924;border-color:var(--mint);font-weight:650}.primary:hover:not(:disabled){background:#abf3db;border-color:#abf3db}.intro{padding:19px 0 17px;display:flex;justify-content:space-between;align-items:center;gap:24px;flex-shrink:0}.intro h1{font:normal clamp(24px,2.55vw,37px)/1.12 var(--serif);letter-spacing:-.035em;margin:0}.intro h1 em{font-weight:normal;color:var(--mint)}.intro p{color:var(--muted);margin:7px 0 0;font-size:12px}.intro-aside{text-align:right;font:10px/1.8 var(--mono);letter-spacing:.09em;color:#82919c}.intro-aside span{display:block;color:var(--gold)}.workspace{display:grid;grid-template-columns:minmax(0,1fr) 298px;gap:18px;min-height:0;flex:1}.universe{display:flex;flex-direction:column;min-width:0;min-height:0}.stage{position:relative;min-height:300px;flex:1;isolation:isolate;overflow:hidden;border:1px solid #28333b;border-radius:12px;background:#080f16;box-shadow:inset 0 0 80px #010509}.stage:fullscreen,.stage.immersive{width:100vw;height:100dvh;border:none;border-radius:0;flex:none}.stage.immersive{position:fixed;inset:0;z-index:90}.stage:fullscreen .stage-toolbar,.stage.immersive .stage-toolbar{bottom:25px}.stage canvas{display:block;width:100%;height:100%;touch-action:none;cursor:grab}.stage canvas:active{cursor:grabbing}.stage-head{position:absolute;top:20px;left:23px;right:22px;display:flex;justify-content:space-between;gap:15px;pointer-events:none}.eyebrow{text-transform:uppercase;letter-spacing:.16em;font-size:9px;color:var(--muted);font-weight:600}.stage-name{font:normal 19px var(--serif);margin-top:4px;letter-spacing:-.025em}.live-tag{display:flex;align-items:center;gap:7px;font:10px var(--mono);color:var(--mint)}.live-dot{width:5px;height:5px;border-radius:50%;background:currentColor;box-shadow:0 0 9px currentColor}.stage-sub{position:absolute;left:23px;top:82px;font:10px var(--mono);color:#80939f;pointer-events:none}.stage-sub span{color:#b7cacd}.zoom-tools{display:flex;flex-direction:column;gap:5px;position:absolute;right:15px;top:90px}.icon-btn{width:32px;height:32px;padding:6px;display:inline-flex;align-items:center;justify-content:center;background:#0d1720cc}.zoom-label{font:9px var(--mono);color:#a4b8c3;text-align:center;padding:3px}.stage-toolbar{display:flex;align-items:center;justify-content:space-between;gap:12px;position:absolute;left:16px;right:16px;bottom:15px;flex-wrap:wrap;pointer-events:none}.transport,.view-actions{display:flex;align-items:center;gap:5px;padding:5px;background:#0b141ceb;border:1px solid #2c3943;border-radius:10px;backdrop-filter:blur(16px);pointer-events:auto}.transport button{height:33px;min-width:32px;border:none;background:transparent;padding:6px 10px}.transport #playBtn{background:var(--mint);color:#10382c;min-width:78px}.transport #stepBtn{color:#c1cdd2;font:11px var(--mono)}.transport .divider{width:1px;height:17px;background:var(--line);margin:0 3px}.view-actions button{border:none;background:transparent}.canvas-hint{position:absolute;bottom:76px;left:24px;font:9px var(--mono);color:#8397a4;pointer-events:none}.story-badge{position:absolute;bottom:80px;right:20px;background:#152922e8;border:1px solid #426554;color:#a7e8c4;border-radius:5px;padding:5px 9px;font:10px var(--mono);pointer-events:none}.story-badge:empty{display:none}.collection-head{display:flex;align-items:center;justify-content:space-between;margin:12px 0 8px;color:var(--muted);font-size:9px;letter-spacing:.14em;text-transform:uppercase}.collection-head button{font-size:9px;padding:0;border:0;letter-spacing:.06em}.gallery{display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:7px;flex-shrink:0;padding-bottom:2px}.preset{position:relative;min-width:0;overflow:hidden;border-radius:7px;padding:0;background:#0d151d;border:1px solid #273039;text-align:left}.preset:hover:not(:disabled){background:#111e27}.preset.active{border-color:var(--mint);background:#10231f}.preset canvas{width:100%;height:57px;display:block;opacity:.9}.preset-caption{display:flex;justify-content:space-between;align-items:center;padding:4px 7px 6px;font-size:9px;white-space:nowrap;gap:4px}.preset.active .preset-caption{color:var(--mint)}.preset-number{font:8px var(--mono);color:#7d949e}.sidebar{min-height:0;overflow-y:auto;scrollbar-width:thin;scrollbar-color:#3e505c transparent;padding:0 3px 0 1px}.tabs{display:flex;border-bottom:1px solid var(--line);margin-bottom:15px;gap:21px;position:sticky;top:0;background:var(--bg);z-index:4}.tab{padding:9px 0 11px;border:none;border-radius:0;background:none;color:var(--muted);font-size:11px;position:relative}.tab.active{color:var(--mint)}.tab.active:after{content:'';position:absolute;height:2px;background:var(--mint);bottom:-1px;left:0;right:0}.tab:hover:not(:disabled){background:none;border-color:transparent}.panel[hidden]{display:none}.specimen-top{display:flex;align-items:center;justify-content:space-between;gap:8px}.specimen-number{font:10px var(--mono);color:var(--gold)}.specimen-title{font:25px/1.1 var(--serif);letter-spacing:-.03em;margin:5px 0 9px}.specimen-desc{color:#9eafb9;font-size:12px;line-height:1.65;margin:0 0 13px}.rule-pill{display:inline-block;padding:5px 8px;border:1px solid #2e413e;border-radius:4px;background:#14221f;color:#b8d9cb;font:10px var(--mono)}.section{margin-top:17px;border-top:1px solid var(--line);padding-top:15px}.section-title{font-size:9px;text-transform:uppercase;letter-spacing:.16em;font-weight:600;color:#b3c2c9;margin:0 0 12px}.field{margin:10px 0 13px}.label-line{display:flex;align-items:center;justify-content:space-between;gap:9px;font-size:11px;margin-bottom:6px;color:#b6c7ce}.label-line output,.mono{font:10px var(--mono);color:var(--gold);font-variant-numeric:tabular-nums}.range-ends{display:flex;justify-content:space-between;color:#718793;font-size:8px;margin-top:2px}.field input[type=range]{display:block;width:100%;height:14px;accent-color:var(--mint);cursor:pointer;margin:0}.field small{display:block;color:#8499a5;font-size:10px;line-height:1.5;margin-top:6px}select,input[type=text],input[type=number]{color:#cedcde;border:1px solid #30404a;background:#111c24;border-radius:5px;padding:6px 8px;max-width:100%;outline-offset:2px}.select-line{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:11px;color:#b6c7ce;margin:10px 0}.select-line select{max-width:62%;font-size:10px}.palettes{display:flex;gap:6px}.swatch{height:26px;width:100%;border:2px solid transparent;padding:3px;border-radius:5px;background:none}.swatch span{display:block;height:100%;width:100%;border-radius:2px}.swatch.active{border-color:var(--mint)}.checks{display:flex;gap:13px;flex-wrap:wrap;color:#a3b6c0;font-size:10px}.checks label{cursor:pointer;display:flex;align-items:center;gap:4px}.checks input{accent-color:var(--mint);margin:0}.seed-line{display:flex;gap:6px}.seed-line input{width:100%;min-width:0;font:10px var(--mono)}.seed-line button{flex:none;padding:4px 8px;font-size:10px}.stats{display:flex;gap:15px;align-items:center;margin:15px 0 6px}.stat-value{font:23px var(--serif);font-variant-numeric:tabular-nums}.stat-label{color:var(--muted);font-size:9px;margin-top:1px}.mini-chart{display:flex;align-items:end;gap:4px;height:25px;flex:1;margin-left:12px}.mini-chart i{display:block;min-height:2px;flex:1;border-radius:2px 2px 0 0;background:var(--mint)}details{margin:12px 0;color:#91a8b3;font-size:11px}summary{cursor:pointer;list-style-position:outside;margin-left:12px;color:#b1c7cd;font-size:10px}details p{line-height:1.65;margin:9px 0}details ol{padding-left:19px;line-height:1.65}details li{margin-bottom:4px}.formula{font:11px/1.6 var(--mono);padding:9px;background:#121d24;color:#bdd7d6;border-radius:5px;overflow-wrap:anywhere}.reference-list{font-size:10px}.footer{display:flex;align-items:center;justify-content:space-between;gap:10px;padding-top:10px;color:#6f8793;font:9px var(--mono);flex-shrink:0}.footer span:last-child{color:#8aa69c}kbd{border:1px solid #35434b;border-radius:3px;padding:1px 4px;font:9px var(--mono);color:#9eb2bd}.story-hero{width:46px;height:46px;border:1px solid #405b52;border-radius:50%;display:grid;place-items:center;color:var(--mint);margin:21px 0}.story-hero svg{width:21px;fill:none;stroke:currentColor;stroke-width:1.2}.story-heading{font:29px/1.12 var(--serif);letter-spacing:-.035em;margin:12px 0;color:#e5eeeb}.story-copy{font-size:13px;line-height:1.85;color:#a6bac1;min-height:124px;margin:13px 0 19px}.story-copy strong{color:#def3e8;font-weight:500}.story-progress{display:flex;gap:5px;margin:18px 0}.story-progress button{height:3px;border:0;border-radius:3px;flex:1;padding:0;background:#293740;position:relative}.story-progress button:before{content:'';position:absolute;inset:-8px 0}.story-progress button.done{background:#46695c}.story-progress button.current{background:var(--mint)}.story-topline{display:flex;align-items:center;justify-content:space-between;color:var(--gold);font:10px var(--mono)}.story-nav{display:flex;gap:7px;margin:14px 0}.story-nav button{flex:1;font-size:11px}.voice-button{font-size:10px;display:flex;align-items:center;gap:6px;border-color:#30443e;background:#13211e;color:#add9c5;padding:7px 9px}.voice-button[aria-pressed=true]{border-color:var(--mint);color:var(--mint)}.story-note{font-size:10px;line-height:1.7;color:#7e96a3;margin-top:19px}.story-note p{margin:8px 0}.story-milestone{border-left:2px solid #436452;padding:8px 12px;margin:18px 0;color:#b6d3c5;font-size:11px}.story-milestone b{display:block;font:22px var(--serif);color:var(--gold);margin-bottom:4px}.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,12px);background:#172831;color:#d8eeea;border:1px solid #526b6c;padding:11px 18px;border-radius:8px;font-size:12px;z-index:150;opacity:0;pointer-events:none;max-width:min(500px,90vw);transition:opacity .2s,transform .2s}.toast.show{opacity:1;transform:translate(-50%,0)}dialog{color:var(--text);background:#101c24;border:1px solid #3b515d;border-radius:12px;padding:24px;max-width:560px;width:90vw;max-height:85dvh;overflow:auto}dialog::backdrop{background:#000a;backdrop-filter:blur(6px)}dialog h2{font:27px var(--serif);margin:0 0 13px}dialog p{color:#a9bbc3;line-height:1.7}dialog .close{float:right;margin:-10px -10px 5px 5px}.shortcut-list{display:grid;grid-template-columns:1fr auto;gap:9px;font-size:12px;color:#b3c7cf}.shortcut-list kbd{text-align:center}#shareText{width:100%;margin:10px 0 13px;font:10px var(--mono);background:#071016;color:#c8d9dd;border:1px solid #344b56;padding:10px;border-radius:6px;resize:vertical}.sr-only{position:absolute;left:-9999px;width:1px;height:1px;overflow:hidden}.mobile-story{display:none}
+@media(min-width:1600px){.workspace{grid-template-columns:minmax(0,1fr) 330px;gap:23px}.sidebar{padding:0 7px}.specimen-desc{font-size:13px}.preset canvas{height:69px}.preset-caption{font-size:10px}.app{padding-left:35px;padding-right:35px}}
+@media(max-height:800px) and (min-width:861px){.app{min-height:610px}.masthead{height:52px}.intro{padding:13px 0}.intro h1{font-size:28px}.preset canvas{height:43px}.gallery{gap:6px}.stage-head{top:16px}.section{margin-top:13px;padding-top:11px}}
+@media(max-width:1100px){.app{padding-left:17px;padding-right:17px}.workspace{grid-template-columns:minmax(0,1fr) 267px;gap:13px}.edition{display:none}.gallery{display:flex;overflow-x:auto;scrollbar-width:thin;padding-bottom:6px}.preset{min-width:88px;flex:1}.intro-aside{display:none}.stage-head{left:18px}.canvas-hint{font-size:8px}.stage-sub{left:18px}}
+@media(max-width:860px){.app{height:auto;min-height:100dvh;padding:0 14px 12px}.masthead{height:56px}.wordmark{font-size:12px;letter-spacing:.21em}.brand-mark{width:23px}.top-actions .button-text{display:none}.top-actions{gap:2px}.top-actions button{padding:8px}.intro{padding:18px 0}.intro h1{font-size:29px}.intro p{font-size:11px;max-width:290px}.workspace{display:flex;flex-direction:column;gap:19px}.universe{flex:none}.stage{height:clamp(350px,57dvh,620px);flex:none}.sidebar{overflow:visible;padding:0 3px}.tabs{position:static}.panel#studioPanel{display:grid;grid-template-columns:1fr 1fr;gap:0 25px}.panel#studioPanel[hidden]{display:none}.specimen{grid-column:1}.appearance{grid-row:1 / span 2;grid-column:2}.advanced{grid-column:2}.math-details{grid-column:1/-1}.footer{padding-top:20px;font-size:8px}.footer .desktop-shortcuts{display:none}.story-copy{min-height:0}.story-heading{font-size:30px}.story-note{margin-bottom:18px}.mobile-story{display:block}.story-panel{max-width:560px;margin:0 auto}.stage-sub{top:73px}.zoom-tools{top:100px}.canvas-hint{bottom:72px}.stage-toolbar{left:10px;right:10px;bottom:10px;gap:6px}.transport{gap:1px}.transport button{padding:6px 8px}.view-actions{gap:1px}.stage-head{left:17px;right:15px}.stage-name{font-size:18px}}
+@media(max-width:480px){.panel#studioPanel{display:block}.intro h1{font-size:26px}.intro .primary{font-size:10px;padding:9px 10px;max-width:103px;line-height:1.3}.stage-head .live-tag{font-size:9px}.stage-toolbar .view-actions{padding:4px}.stage-toolbar .icon-btn{width:29px;height:29px}.stage-toolbar .transport{padding:4px}.transport #playBtn{min-width:66px;font-size:11px}.canvas-hint{left:16px;font-size:8px}.stage-sub{font-size:9px}.stage{min-height:370px}.stage-head{gap:5px}.stage-name{font-size:17px}.story-badge{font-size:8px;bottom:96px;right:15px}.footer{align-items:start}.preset{min-width:84px}.brand{gap:8px}.top-actions button{padding:6px}.intro{gap:9px}}
+@media(max-width:860px){body.story-mode .app{height:100dvh;min-height:0;overflow:hidden}body.story-mode .intro,body.story-mode .footer,body.story-mode .collection-head,body.story-mode .gallery,body.story-mode .tabs,body.story-mode .story-hero,body.story-mode .story-milestone,body.story-mode .story-note{display:none}body.story-mode .workspace{flex:1;min-height:0;gap:12px;padding:12px 0}body.story-mode .universe{flex:1;min-height:240px}body.story-mode .stage{height:100%;min-height:240px;flex:1}body.story-mode .sidebar{flex:none;max-height:37dvh;overflow-y:auto;padding:0 5px}body.story-mode .story-topline{font-size:9px}body.story-mode .story-progress{margin:12px 0}body.story-mode .story-heading{font-size:23px;margin:9px 0}body.story-mode .story-copy{font-size:12px;line-height:1.65;margin:9px 0 12px;min-height:0}body.story-mode .story-nav{position:sticky;bottom:0;padding:7px 0;margin:0;background:var(--bg)}body.story-mode #storyExit{padding-top:4px;padding-bottom:4px}body.story-mode .canvas-hint{display:none}body.story-mode .masthead{height:47px;flex-shrink:0}}
+@media(prefers-reduced-motion:reduce){*,*:before,*:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+</style>
+</head>
+<body>
+<div class="app" id="app">
+ <header class="masthead">
+  <div class="brand"><svg class="brand-mark" viewBox="0 0 32 32" aria-hidden="true"><path d="M16 2 23 14H9ZM8 16 15 28H1ZM24 16 31 28H17Z"/></svg><span class="wordmark">EMERGENCE</span><span class="edition">THE CHAOS GAME COLLECTION</span></div>
+  <nav class="top-actions" aria-label="Tools"><button class="action quiet" id="soundBtn" aria-pressed="false" title="Enable ambient sound"><span data-icon="sound"></span><span class="button-text">Sound off</span></button><button class="action quiet" id="helpBtn" title="About and keyboard shortcuts"><span data-icon="info"></span></button><button class="action" id="shareBtn"><span data-icon="share"></span><span class="button-text">Share view</span></button></nav>
+ </header>
+ <section class="intro" aria-label="Introduction"><div><h1>Order, <em>one dot at a time.</em></h1><p>A simple rule. A random choice. Something extraordinary.</p></div><div class="intro-aside">AN EXPLORATION OF BEAUTIFUL CONSEQUENCES<span>08 SYSTEMS · ENDLESS POSSIBILITIES</span></div><button class="primary action" id="tourBtn"><span data-icon="play"></span>Watch the story</button></section>
+ <main class="workspace">
+  <section class="universe" aria-label="Interactive fractal">
+   <div class="stage" id="stage">
+    <canvas id="canvas" tabindex="0" aria-label="Interactive fractal canvas. Scroll to zoom, drag to pan, or drag a visible corner to reshape. Use the adjacent buttons for keyboard controls.">Your browser needs Canvas support to draw the fractal.</canvas>
+    <div class="stage-head"><div><div class="eyebrow" id="stageEyebrow">01 / THE ORIGINAL CHAOS GAME</div><div class="stage-name" id="stageName">Sierpiński triangle</div></div><div class="live-tag"><span class="live-dot"></span><span id="runStatus">GROWING</span></div></div>
+    <div class="stage-sub"><span id="pointCount">0</span> points <span aria-hidden="true">·</span> <span id="stageRule">one random corner, halfway there</span></div>
+    <div class="zoom-tools"><button class="icon-btn" id="zoomIn" aria-label="Zoom in" title="Zoom in (+)"><span data-icon="plus"></span></button><button class="icon-btn" id="zoomOut" aria-label="Zoom out" title="Zoom out (−)"><span data-icon="minus"></span></button><span class="zoom-label" id="zoomLabel">1.0×</span><button class="icon-btn" id="fitBtn" aria-label="Fit fractal to view" title="Fit to view (0)"><span data-icon="fit"></span></button></div>
+    <div class="canvas-hint" id="canvasHint">SCROLL TO EXPLORE · DRAG A CORNER TO REIMAGINE</div><div class="story-badge" id="storyBadge"></div>
+    <div class="stage-toolbar"><div class="transport"><button class="action" id="playBtn" title="Play or pause (Space)"><span data-icon="pause"></span><span>Pause</span></button><button id="stepBtn" title="Pause and place exactly one dot">+1 dot</button><span class="divider"></span><button class="icon-btn" id="resetBtn" aria-label="Replay from the same seed" title="Replay (R)"><span data-icon="restart"></span></button><button class="icon-btn" id="reseedBtn" aria-label="Try a new random seed" title="New random seed (N)"><span data-icon="shuffle"></span></button></div><div class="view-actions"><button class="icon-btn" id="wanderBtn" aria-label="Wander through the collection" aria-pressed="false" title="Wander: visit another system every 25 seconds"><span data-icon="wander"></span></button><button class="icon-btn" id="exportBtn" aria-label="Save artwork as PNG" title="Save artwork as PNG"><span data-icon="camera"></span></button><button class="icon-btn" id="fullscreenBtn" aria-label="Enter fullscreen" title="Fullscreen (F)"><span data-icon="fullscreen"></span></button></div></div>
+   </div>
+   <div class="collection-head"><span>Choose a world</span><button class="quiet" id="surpriseBtn">Surprise me ↗</button></div>
+   <div class="gallery" id="gallery" aria-label="Fractal collection"></div>
+  </section>
+  <aside class="sidebar" id="sidebar" aria-label="Fractal controls and story">
+   <div class="tabs" role="tablist" aria-label="Sidebar"><button class="tab active" id="studioTab" role="tab" aria-selected="true" aria-controls="studioPanel">The studio</button><button class="tab" id="storyTab" role="tab" aria-selected="false" aria-controls="storyPanel" tabindex="-1">The story <span style="color:var(--gold)">↗</span></button></div>
+   <div class="panel" id="studioPanel" role="tabpanel" aria-labelledby="studioTab">
+    <section class="specimen"><div class="specimen-top"><div class="eyebrow">Current specimen</div><div class="specimen-number" id="specimenNumber">NO. 01</div></div><h2 class="specimen-title" id="specimenTitle">Sierpiński triangle</h2><p class="specimen-desc" id="specimenDesc"></p><div class="rule-pill" id="rulePill"></div><div class="stats"><div><div class="stat-value" id="statCount">0</div><div class="stat-label">dots laid down</div></div><div class="mini-chart" id="choiceChart" role="img" aria-label="Observed frequency of each random choice"></div></div></section>
+    <section class="section dynamics"><h3 class="section-title">Shape the experiment</h3><div class="field"><div class="label-line"><label for="speed">Pace</label><output for="speed" id="speedValue">8,000 / sec</output></div><input type="range" id="speed" min="0" max="5" step=".01" value="3.90309"><div class="range-ends"><span>ONE AT A TIME</span><span>A MILLION MOMENTS</span></div></div><div class="field"><div class="label-line"><label for="ruleSlider" id="ruleLabel">Distance toward a corner</label><output for="ruleSlider" id="ruleValue">50.0%</output></div><input type="range" id="ruleSlider" min=".2" max=".85" step=".001" value=".5"><small id="ruleHelp">Halfway is special. Nudge this and watch the gaps change.</small></div><div class="select-line"><label for="budget">Stop after</label><select id="budget"><option value="50000">50,000 dots</option><option value="250000" selected>250,000 dots</option><option value="1000000">1,000,000 dots</option></select></div><div class="checks"><label><input id="guides" type="checkbox" checked>Show corners</label><label><input id="trace" type="checkbox">Follow the dot</label></div></section>
+    <section class="section appearance"><h3 class="section-title">Light & color</h3><div class="palettes" id="palettes" aria-label="Color palettes"></div><div class="select-line"><label for="colorMode">Color by</label><select id="colorMode"><option value="journey">Journey</option><option value="choice">Last choice</option><option value="height">Height</option></select></div><div class="field"><div class="label-line"><label for="glow">Glow</label><output for="glow" id="glowValue">35%</output></div><input id="glow" type="range" min="0" max="100" step="1" value="35"></div><div class="field"><div class="label-line"><label for="dotSize">Dot size</label><output for="dotSize" id="dotValue">1.0 px</output></div><input id="dotSize" type="range" min=".5" max="3" step=".1" value="1"></div><div class="field"><div class="label-line"><label for="angle">Rotation</label><output for="angle" id="angleValue">0°</output></div><input id="angle" type="range" min="-180" max="180" step="1" value="0"></div></section>
+    <section class="section advanced"><h3 class="section-title">A different roll of the dice</h3><div class="seed-line"><input id="seedInput" type="text" maxlength="40" aria-label="Random seed" value="wonder"><button id="seedApply">Plant seed</button></div><div style="font-size:9px;color:var(--muted);margin-top:6px">Same seed, same journey. New seed, same underlying shape.</div></section>
+    <section class="math-details"><details id="mathDetails"><summary>What is actually happening?</summary><p id="mathCopy"></p><div class="formula" id="formula"></div><p id="mathFootnote"></p><p>Color and glow help you see the structure; they do not change the point positions. “Journey” blends the recent history of chosen maps.</p></details><details><summary>Further into the mathematics</summary><p>These are iterated function systems: repeatedly apply a small collection of transformations. Random sampling reveals their attractor. Changing the transformations changes the destination.</p><p class="reference-list"><a href="https://arxiv.org/abs/1005.0322" target="_blank" rel="noopener">Barnsley & Vince: the chaos game</a><br><a href="https://www.algorithm-archive.org/contents/barnsley/barnsley.html" target="_blank" rel="noopener">Explore the four fern transformations</a></p></details></section>
+   </div>
+   <div class="panel story-panel" id="storyPanel" role="tabpanel" aria-labelledby="storyTab" hidden>
+    <div class="story-topline"><span id="chapterLabel">A LITTLE JOURNEY INTO CHAOS</span><button class="voice-button" id="voiceBtn" aria-pressed="false"><span data-icon="sound"></span><span>Read aloud</span></button></div>
+    <div class="story-progress" id="storyProgress"></div><div class="story-hero"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2 22 20H2ZM12 11 7 20M12 11l5 9M7 11h10"/></svg></div>
+    <h2 class="story-heading" id="storyHeading">What if chance had a shape?</h2><p class="story-copy" id="storyCopy">At first, there are only dots. Stay a little longer, and a hidden architecture begins to appear. Watch it unfold, one random choice at a time.</p><div class="story-milestone"><b id="storyMetric">7 short chapters</b><span id="storyObservation">A live experiment, from one dot to a world.</span></div><div class="story-nav"><button id="storyBack" disabled>← Back</button><button class="primary" id="storyNext">Begin the story →</button></div><button class="quiet" id="storyExit" style="font-size:10px;padding-left:0">Return to the studio</button><div class="story-note"><p id="storyNote">Each scene is drawn live. Pause, step through a choice, or move forward at your own pace. Spoken narration is optional and uses your browser’s available voice.</p><p>The corners are chosen at random. Where each dot lands is determined by the rule. That distinction is the whole wonder.</p></div>
+   </div>
+  </aside>
+ </main>
+ <footer class="footer"><span>RANDOM CHOICES. REMARKABLE CONSEQUENCES.</span><span class="desktop-shortcuts"><kbd>Space</kbd> pause &nbsp; <kbd>R</kbd> replay &nbsp; <kbd>T</kbd> story &nbsp; <kbd>F</kbd> fullscreen</span><span>Made of moments, not images.</span></footer>
+</div>
+<div class="toast" id="toast" role="status" aria-live="polite"></div>
+<dialog id="helpDialog"><button class="close icon-btn" aria-label="Close help" data-close="helpDialog"><span data-icon="close"></span></button><h2>A universe in a small rule.</h2><p>Every mark you see is a computed point. Choose a world, change a rule, or let the story guide you from apparent disorder to intricate structure.</p><div class="shortcut-list"><span>Play / pause</span><kbd>Space</kbd><span>Replay the current seed</span><kbd>R</kbd><span>New random seed</span><kbd>N</kbd><span>Start the story</span><kbd>T</kbd><span>Fullscreen canvas</span><kbd>F</kbd><span>Zoom / fit</span><kbd>+ − / 0</kbd><span>Pan the view</span><kbd>Drag</kbd><span>Reshape a polygon</span><kbd>Drag a corner</kbd><span>Zoom on touch devices</span><kbd>Pinch</kbd></div><p style="font-size:11px">Points are retained when you resize or zoom. Replay clears the image and repeats your seed. The point budget bounds memory use; raise it to continue. Wander visits a new specimen every 25 seconds while running.</p><p style="font-size:11px">No installation or internet connection is needed. Narration depends on your browser’s voices; ambient sound starts only when you enable it.</p></dialog>
+<dialog id="shareDialog"><button class="close icon-btn" aria-label="Close sharing" data-close="shareDialog"><span data-icon="close"></span></button><h2>Pass on a little wonder.</h2><p id="shareDescription">This link preserves the world, seed, rules, colors and camera. It restarts the drawing so someone else can watch it emerge.</p><textarea id="shareText" rows="4" readonly aria-label="Share link or settings"></textarea><div class="story-nav"><button class="primary" id="copyShare">Copy link</button><button id="saveRecipe">Save settings</button><button id="loadRecipe">Load settings</button></div><input type="file" id="recipeFile" accept=".json,application/json" hidden></dialog>
+<script>
+/* Emergence: standalone, dependency-free Canvas 2D chaos-game studio.
+   Polygon maps: p' = (1-r)p + r*v. Here r is distance TOWARD a target,
+   not the retained scale. PRNG sequences are stable across frame rates.
+   Embeds: same-origin ancestor URL parameters are read at startup; cross-origin
+   parents may send {type:'emergence:configure',state:{...}} from their referrer
+   origin. State is validated. No external resources or network calls are made. */
+(()=>{'use strict';
+const $=id=>document.getElementById(id), clamp=(v,a,b)=>Math.max(a,Math.min(b,v)), TAU=Math.PI*2;
+const icons={play:'M8 5l11 7-11 7Z',pause:'M8 5v14M16 5v14',plus:'M12 5v14M5 12h14',minus:'M5 12h14',restart:'M4 10a8 8 0 1 1 1 8M4 4v6h6',shuffle:'M3 6h3c5 0 7 12 12 12h3M17 14l4 4-4 4M3 18h3c2 0 3-2 4-4M14 8c1-1 3-2 4-2h3M17 2l4 4-4 4',camera:'M4 7h4l2-3h4l2 3h4v13H4ZM16 13a4 4 0 1 1-8 0 4 4 0 0 1 8 0',fullscreen:'M4 9V4h5M15 4h5v5M20 15v5h-5M9 20H4v-5',fit:'M3 8V3h5M16 3h5v5M21 16v5h-5M8 21H3v-5M9 9h6v6H9Z',share:'M12 16V3M7 8l5-5 5 5M5 13v8h14v-8',sound:'M4 9h4l5-4v14l-5-4H4ZM17 8c3 2 3 6 0 8M20 5c5 4 5 10 0 14',info:'M12 11v6M12 7v.1M22 12a10 10 0 1 1-20 0 10 10 0 0 1 20 0',close:'M6 6l12 12M18 6 6 18',wander:'M19 5 15 15 5 19 9 9ZM9 9l6 6'};
+function icon(name){return '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="'+icons[name]+'"/></svg>'}
+document.querySelectorAll('[data-icon]').forEach(e=>{e.className='ico';e.innerHTML=icon(e.dataset.icon)});
+function rng(seed){let h=2166136261;for(let i=0;i<seed.length;i++){h^=seed.charCodeAt(i);h=Math.imul(h,16777619)}return()=>{h+=0x6D2B79F5;let t=h;t=Math.imul(t^t>>>15,t|1);t^=t+Math.imul(t^t>>>7,t|61);return((t^t>>>14)>>>0)/4294967296}}
+const poly=n=>Array.from({length:n},(_,i)=>[Math.sin(i*TAU/n),Math.cos(i*TAU/n)]);
+const square=[[-1,1],[1,1],[1,-1],[-1,-1]];
+const definitions=[
+ {id:'triangle',short:'Triangle',name:'Sierpiński triangle',tag:'The original chaos game',type:'polygon',anchors:poly(3),r:.5,palette:'aurora',desc:'Three corners. One tiny leap. An entire cathedral of triangles, hiding in plain sight.',rule:'3 corners · ½ of the distance',stageRule:'one random corner, halfway there',help:'Halfway is special. Nudge this and watch the gaps change.',math:'Choose one of three corners with equal probability. Move halfway from the current point to that corner, leave a dot, and repeat. Three smaller copies of the whole fit together, leaving a central gap.'},
+ {id:'fern',short:'Fern',name:'Barnsley fern',tag:'An echo of the living world',type:'fern',r:.04,palette:'botanical',desc:'No leaf is drawn by hand. Four small transformations grow a surprisingly botanical world.',rule:'4 affine maps · weighted chance',stageRule:'four transformations, one living silhouette',help:'Change the curl of the main frond. The other three maps stay fixed.',math:'Randomly choose one of four affine transformations: a stem map (1%), a main frond map (85%), and two side-frond maps (7% each). They scale, rotate, shear and translate the current point. This is a geometric model, not a simulation of plant growth.'},
+ {id:'carpet',short:'Carpet',name:'Sierpiński carpet',tag:'An architecture of absence',type:'polygon',anchors:[[-1,1],[0,1],[1,1],[-1,0],[1,0],[-1,-1],[0,-1],[1,-1]],r:2/3,palette:'ember',desc:'Eight destinations surround an empty center. Soon, windows open inside the windows.',rule:'8 targets · ⅔ of the distance',stageRule:'eight destinations, a center left empty',help:'At ⅔, each copy is one third as wide. Change it to close or widen the windows.',math:'Choose uniformly among the four corners and four side midpoints of a square. Move two thirds of the way toward the chosen target. The eight maps each retain one third of the original scale, leaving the middle ninth empty.'},
+ {id:'pentagon',short:'Pentagon',name:'Pentagonal lace',tag:'The golden-ratio world',type:'polygon',anchors:poly(5),r:(Math.sqrt(5)-1)/2,palette:'aurora',desc:'A golden-ratio jump opens fivefold lacework, with tiny pentagons around every turn.',rule:'5 corners · golden-ratio jump',stageRule:'five corners, a golden-ratio leap',help:'The preset jump is 1/φ ≈ 0.618034. Even a small change reshapes the lace.',math:'Choose a vertex of a regular pentagon and move 1/φ of the way toward it, where φ is the golden ratio. Each map retains a scale of 1/φ². The attractor is built from five smaller copies, with no central copy added.'},
+ {id:'dragon',short:'Dragon',name:'Heighway dragon',tag:'A fold that remembers itself',type:'dragon',r:0,palette:'violet',desc:'Two rotated, shrunken copies interlock into a dragon. Random dots reveal its folded geometry.',rule:'2 affine maps · equal chance',stageRule:'two turns, an interlocking dragon',help:'Twist both maps away from their classic angles to discover other attractors.',math:'Apply one of two affine maps with equal probability. Both shrink distances by 1/√2; they rotate by 45° and 135°, with the second translated right by one unit. At the default angles they generate the Heighway dragon attractor, also known from paper folding.'},
+ {id:'hexagon',short:'Hexaflake',name:'Hexaflake',tag:'A snowflake without winter',type:'polygon',anchors:[...poly(6),[0,0]],r:2/3,palette:'glacier',desc:'Six corners and a center become a crystalline world of seven smaller copies.',rule:'7 targets · ⅔ of the distance',stageRule:'six corners and a center, seven smaller worlds',help:'Seven one-third-scale hexagons fit at the preset distance of ⅔.',math:'Choose uniformly among the six vertices of a regular hexagon and its center. Move two thirds toward that target. The result consists of seven hexagonal copies, each one third the linear size of the whole.'},
+ {id:'vicsek',short:'Vicsek',name:'Vicsek cross',tag:'Connections inside connections',type:'polygon',anchors:[[-1,0],[1,0],[0,1],[0,-1],[0,0]],r:2/3,palette:'botanical',desc:'A center and four directions. Branches split into smaller branches, like a map of connections.',rule:'5 targets · ⅔ of the distance',stageRule:'four directions and a center',help:'The one-third-scale copies meet at their tips at the preset jump.',math:'Choose among the center and four arm endpoints of a cross. Move two thirds of the distance toward it. The five maps retain one third of the scale, producing the cross form of the Vicsek fractal.'},
+ {id:'square',short:'No repeats',name:'The forbidden repeat',tag:'What one extra rule can do',type:'polygon',anchors:square,r:.5,noRepeat:true,palette:'ember',desc:'A plain square becomes intricate when chance is given one constraint: never choose the same corner twice.',rule:'4 corners · ½ jump · no repeats',stageRule:'four corners; never the same one twice',help:'No consecutive repeats. Adjust the jump to explore this restricted chaos game.',math:'Start with four square corners and half-distance jumps, but exclude the corner chosen on the immediately preceding step. Every allowed corner remains equally likely. Without this restriction, the ordinary half-jump square fills in instead of leaving this pattern.'}
+];
+const palettes={aurora:{name:'Aurora',stops:['#60dbc8','#86bfee','#bf9cfa','#eeadbd']},ember:{name:'Ember',stops:['#f2cc81','#ea975e','#d36574','#bfa2e8']},botanical:{name:'Botanical',stops:['#8bd2a1','#5ac7a9','#c5db8b','#e4c77f']},glacier:{name:'Glacier',stops:['#517ecf','#61c6de','#a4e3df','#dedac1']},violet:{name:'Violet',stops:['#79bbdf','#968de0','#e294d1','#ecc2a1']}};
+const defaultSettings={preset:'triangle',seed:'wonder',r:.5,palette:'aurora',speed:8000,budget:250000,dotSize:1,glow:35,colorMode:'journey',guides:true,trace:false,angle:0};
+let cfg={...defaultSettings},def=definitions[0],anchors=def.anchors.map(a=>a.slice()),bounds={minX:-1,maxX:1,minY:-.5,maxY:1};
+const MAX=1000000, xs=new Float32Array(MAX),ys=new Float32Array(MAX),cs=new Uint8Array(MAX),ms=new Uint8Array(MAX);
+let count=0, rendered=0, x=0,y=0,hue=.5,lastMap=-1,random=rng(cfg.seed),counts=[],running=!matchMedia('(prefers-reduced-motion: reduce)').matches;
+let width=1,height=1,dpr=1,baseScale=1,view={zoom:1,x:0,y:0},needPaint=true,credit=0,lastTime=0,lastUI=0,pointTime=0;
+let previous=[0,0],lastTarget=[0,0],selectedCorner=-1,dirtyThumbs=true,tab='studio',wander=false,wanderTime=0,toastTimer=0;
+const canvas=$('canvas'),ctx=canvas.getContext('2d',{alpha:false}),layer=document.createElement('canvas'),lc=layer.getContext('2d');
+const bg=document.createElement('canvas'),bc=bg.getContext('2d',{alpha:false});
+let colors=[],rgbColors=[],story=null,voice=false,speechBusy=false,speechToken=0,speechTimeout=0;
+let sound=null,soundOn=false,lastNote=0,paintStamp=0;
+function makeColors(){const stops=palettes[cfg.palette].stops.map(c=>[1,3,5].map(i=>parseInt(c.slice(i,i+2),16)));colors=[];rgbColors=[];for(let i=0;i<128;i++){const v=i/127*(stops.length-1),n=Math.min(stops.length-2,Math.floor(v)),f=v-n;const c=stops[n].map((a,j)=>Math.round(a+(stops[n+1][j]-a)*f));colors.push('rgb('+c.join(',')+')');rgbColors.push(c)}document.querySelectorAll('.swatch').forEach(b=>{const a=b.dataset.palette===cfg.palette;b.classList.toggle('active',a);b.setAttribute('aria-pressed',a)})}
+function step(model,aa,rr,state,rand){let k,xx=state.x,yy=state.y;
+ if(model.type==='polygon'){k=Math.floor(rand()*(aa.length-(model.noRepeat&&state.last>=0?1:0)));if(model.noRepeat&&state.last>=0&&k>=state.last)k++;state.x=xx+(aa[k][0]-xx)*rr;state.y=yy+(aa[k][1]-yy)*rr}
+ else if(model.type==='fern'){const z=rand();k=z<.01?0:z<.86?1:z<.93?2:3;if(k===0){state.x=0;state.y=.16*yy}else if(k===1){state.x=.85*xx+rr*yy;state.y=-rr*xx+.85*yy+1.6}else if(k===2){state.x=.2*xx-.26*yy;state.y=.23*xx+.22*yy+1.6}else{state.x=-.15*xx+.28*yy;state.y=.26*xx+.24*yy+.44}}
+ else{ k=rand()<.5?0:1;const a=(k===0?45:135)+rr,co=Math.cos(a*Math.PI/180)*Math.SQRT1_2,si=Math.sin(a*Math.PI/180)*Math.SQRT1_2;state.x=co*xx-si*yy+(k===1?1:0);state.y=si*xx+co*yy; }
+ state.last=k;state.h=(state.h+k/Math.max(1,(model.type==='polygon'?aa.length:model.type==='fern'?4:2)-1))*.5;return k;
+}
+function measureBounds(){if(def.type==='polygon'){bounds={minX:Math.min(...anchors.map(a=>a[0])),maxX:Math.max(...anchors.map(a=>a[0])),minY:Math.min(...anchors.map(a=>a[1])),maxY:Math.max(...anchors.map(a=>a[1]))}}
+ else{const s={x:0,y:0,h:.5,last:-1},rnd=rng('measure');let minX=Infinity,minY=Infinity,maxX=-Infinity,maxY=-Infinity;for(let i=0;i<18000;i++){step(def,anchors,cfg.r,s,rnd);if(i>48){minX=Math.min(minX,s.x);maxX=Math.max(maxX,s.x);minY=Math.min(minY,s.y);maxY=Math.max(maxY,s.y)}}bounds={minX,maxX,minY,maxY}}
+ bounds.cx=(bounds.minX+bounds.maxX)/2;bounds.cy=(bounds.minY+bounds.maxY)/2;bounds.w=Math.max(.2,bounds.maxX-bounds.minX);bounds.h=Math.max(.2,bounds.maxY-bounds.minY);computeScale();
+}
+function computeScale(){const a=cfg.angle*Math.PI/180,bw=Math.abs(Math.cos(a))*bounds.w+Math.abs(Math.sin(a))*bounds.h,bh=Math.abs(Math.sin(a))*bounds.w+Math.abs(Math.cos(a))*bounds.h;baseScale=Math.max(1,Math.min((width-100)/bw,(height-148)/bh))*.93}
+function project(px,py){const a=cfg.angle*Math.PI/180,dx=px-bounds.cx,dy=py-bounds.cy,s=baseScale*view.zoom;return[width/2+view.x+(dx*Math.cos(a)-dy*Math.sin(a))*s,height/2+2+view.y-(dx*Math.sin(a)+dy*Math.cos(a))*s]}
+function unproject(px,py){const a=-cfg.angle*Math.PI/180,s=baseScale*view.zoom,dx=(px-width/2-view.x)/s,dy=-(py-height/2-2-view.y)/s;return[bounds.cx+dx*Math.cos(a)-dy*Math.sin(a),bounds.cy+dx*Math.sin(a)+dy*Math.cos(a)]}
+function reset({play=running,fit=false}={}){count=0;rendered=0;x=def.type==='polygon'?anchors[0][0]:0;y=def.type==='polygon'?anchors[0][1]:0;hue=.5;lastMap=-1;random=rng(cfg.seed);counts=Array(def.type==='polygon'?anchors.length:def.type==='fern'?4:2).fill(0);credit=0;previous=[x,y];lastTarget=[x,y];
+ if(def.type!=='polygon'){const s={x,y,h:.5,last:-1};for(let i=0;i<48;i++)step(def,anchors,cfg.r,s,random);x=s.x;y=s.y;hue=s.h;lastMap=s.last}
+ if(fit)view={zoom:1,x:0,y:0};lc.clearRect(0,0,width,height);running=play;needPaint=true;pointTime=performance.now();syncPlay();updateStats();
+}
+function generate(n){n=Math.min(n,MAX-count);const s={x,y,h:hue,last:lastMap};for(let i=0;i<n;i++){previous=[s.x,s.y];const k=step(def,anchors,cfg.r,s,random);if(!Number.isFinite(s.x)||!Number.isFinite(s.y)){running=false;toast('The coordinates became invalid. Replay to reset.');break}xs[count]=s.x;ys[count]=s.y;cs[count]=Math.round(s.h*127);ms[count]=k;counts[k]++;count++;if(def.type==='polygon')lastTarget=anchors[k];else lastTarget=[s.x,s.y]}
+ x=s.x;y=s.y;hue=s.h;lastMap=s.last;if(n>0){pointTime=performance.now();needPaint=true;if(soundOn&&performance.now()-lastNote>480){playNote(lastMap);lastNote=performance.now()}}
+}
+function replot(){rendered=0;lc.clearRect(0,0,width,height);needPaint=true}
+function plot(){if(rendered>=count)return;const end=Math.min(count,rendered+22000),a=cfg.angle*Math.PI/180,co=Math.cos(a),si=Math.sin(a),s=baseScale*view.zoom,ox=width/2+view.x,oy=height/2+2+view.y,size=cfg.dotSize;lc.globalAlpha=.76;let lastC=-1;
+ for(let i=rendered;i<end;i++){const dx=xs[i]-bounds.cx,dy=ys[i]-bounds.cy,px=ox+(dx*co-dy*si)*s,py=oy-(dx*si+dy*co)*s;if(px<0||py<0||px>width||py>height)continue;const c=cfg.colorMode==='choice'?Math.round(ms[i]/Math.max(1,counts.length-1)*127):cfg.colorMode==='height'?Math.round(clamp((ys[i]-bounds.minY)/bounds.h,0,1)*127):cs[i];if(c!==lastC){lc.fillStyle=colors[c];lastC=c}lc.fillRect(px-size/2,py-size/2,size,size)}
+ lc.globalAlpha=1;rendered=end;needPaint=true;
+}
+function background(){bc.setTransform(dpr,0,0,dpr,0,0);bc.fillStyle='#080f16';bc.fillRect(0,0,width,height);const g=bc.createRadialGradient(width*.48,height*.47,0,width*.5,height*.5,Math.max(width,height)*.65);g.addColorStop(0,'#12212a');g.addColorStop(.65,'#0a131b');g.addColorStop(1,'#070d13');bc.fillStyle=g;bc.fillRect(0,0,width,height);bc.strokeStyle='#24333d';bc.globalAlpha=.26;bc.lineWidth=.6;for(let xx=width/2%48;xx<width;xx+=48){bc.beginPath();bc.moveTo(xx,0);bc.lineTo(xx,height);bc.stroke()}for(let yy=height/2%48;yy<height;yy+=48){bc.beginPath();bc.moveTo(0,yy);bc.lineTo(width,yy);bc.stroke()}bc.globalAlpha=.35;for(let xx=width/2%144;xx<width;xx+=144)for(let yy=height/2%144;yy<height;yy+=144){bc.beginPath();bc.moveTo(xx-3,yy);bc.lineTo(xx+3,yy);bc.moveTo(xx,yy-3);bc.lineTo(xx,yy+3);bc.stroke()}bc.globalAlpha=1}
+function drawGuides(now){const showing=cfg.guides&&def.type==='polygon';if(showing){ctx.lineWidth=.7;ctx.strokeStyle='#b0d4ca';ctx.globalAlpha=.19;ctx.setLineDash([3,5]);if(def.id==='triangle'||def.id==='pentagon'||def.id==='square'||def.id==='hexagon'){ctx.beginPath();anchors.slice(0,def.id==='hexagon'?6:anchors.length).forEach((p,i)=>{const q=project(...p);if(i===0)ctx.moveTo(...q);else ctx.lineTo(...q)});ctx.closePath();ctx.stroke()}ctx.setLineDash([]);ctx.globalAlpha=1;anchors.forEach((p,i)=>{const [px,py]=project(...p),c=colors[Math.round(i/Math.max(1,anchors.length-1)*127)];ctx.strokeStyle=c;ctx.fillStyle=c;ctx.globalAlpha=.32;ctx.beginPath();ctx.arc(px,py,8,0,TAU);ctx.stroke();ctx.globalAlpha=.95;ctx.beginPath();ctx.arc(px,py,2.5,0,TAU);ctx.fill();if(width>470||story){ctx.font='9px '+getComputedStyle(document.documentElement).getPropertyValue('--mono');ctx.textAlign='center';ctx.fillStyle='#a5bcc3';ctx.fillText(String.fromCharCode(65+i),px,py+(p[1]>bounds.cy?-16:21))}});ctx.globalAlpha=1}
+ const follow=(cfg.trace||story&&story.chapter<=2)&&(count>0||story&&story.chapter===0);
+ if(follow){const p=project(x,y),old=project(...previous),tar=project(...lastTarget);ctx.strokeStyle='#d8c18e';ctx.lineWidth=1;ctx.globalAlpha=.45;if(def.type==='polygon'){ctx.setLineDash([4,5]);ctx.beginPath();ctx.moveTo(...old);ctx.lineTo(...tar);ctx.stroke();ctx.setLineDash([])}ctx.globalAlpha=.75;ctx.beginPath();ctx.arc(...p,6+(running?Math.sin((now-pointTime)/130)*1.5:0),0,TAU);ctx.stroke();ctx.fillStyle='#eff9df';ctx.beginPath();ctx.arc(...p,2.3,0,TAU);ctx.fill();ctx.globalAlpha=1}
+ if(story&&story.chapter===4){ctx.lineWidth=1.2;ctx.setLineDash([5,7]);anchors.forEach((target,k)=>{ctx.strokeStyle=colors[Math.round(k/2*127)];ctx.globalAlpha=.6;ctx.beginPath();anchors.forEach((p,i)=>{const q=project((p[0]+target[0])*.5,(p[1]+target[1])*.5);if(i===0)ctx.moveTo(...q);else ctx.lineTo(...q)});ctx.closePath();ctx.stroke()});ctx.globalAlpha=1;ctx.setLineDash([])}
+}
+function paint(now){ctx.setTransform(dpr,0,0,dpr,0,0);ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over';ctx.filter='none';ctx.drawImage(bg,0,0,width,height);if(cfg.glow>0&&rendered>0){ctx.globalCompositeOperation='screen';ctx.globalAlpha=cfg.glow/100*.8;ctx.filter='blur(5px)';ctx.drawImage(layer,0,0,width,height);ctx.filter='none';ctx.globalAlpha=1;ctx.globalCompositeOperation='source-over'}ctx.drawImage(layer,0,0,width,height);drawGuides(now);needPaint=false;paintStamp=now}
+function resize(){const r=$('stage').getBoundingClientRect(),nw=Math.max(1,Math.floor(r.width)),nh=Math.max(1,Math.floor(r.height)),nd=Math.min(2,devicePixelRatio||1);if(width===nw&&height===nh&&dpr===nd)return;width=nw;height=nh;dpr=nd;for(const c of[canvas,layer,bg]){c.width=Math.round(width*dpr);c.height=Math.round(height*dpr)}lc.setTransform(dpr,0,0,dpr,0,0);computeScale();background();replot()}
+function toast(message){$('toast').textContent=message;$('toast').classList.add('show');clearTimeout(toastTimer);toastTimer=setTimeout(()=>$('toast').classList.remove('show'),3800)}
+function syncPlay(){const done=count>=cfg.budget&&!story;$('playBtn').innerHTML=icon(running?'pause':'play')+'<span>'+(running?'Pause':done?'Replay':'Play')+'</span>';$('playBtn').setAttribute('aria-label',running?'Pause drawing':'Start drawing');$('runStatus').textContent=story?(running?'STORY PLAYING':'STORY PAUSED'):running?'GROWING':done?'COMPLETE':'PAUSED';$('runStatus').parentElement.style.color=running?'var(--mint)':'var(--gold)';$('wanderBtn').style.color=wander?'var(--mint)':'';$('wanderBtn').setAttribute('aria-pressed',wander)}
+function updateStats(){const formatted=count.toLocaleString('en-US');$('pointCount').textContent=formatted;$('statCount').textContent=formatted;$('zoomLabel').textContent=view.zoom.toFixed(1)+'×';if($('choiceChart').children.length!==counts.length){$('choiceChart').replaceChildren(...counts.map(()=>document.createElement('i')))}[...$('choiceChart').children].forEach((e,i)=>{e.style.height=Math.max(2,counts[i]/Math.max(1,...counts)*25)+'px';e.style.background=colors[Math.round(i/Math.max(1,counts.length-1)*127)];e.title='Choice '+(i+1)+': '+counts[i].toLocaleString()+' ('+(counts[i]/Math.max(1,count)*100).toFixed(1)+'%)'});$('choiceChart').setAttribute('aria-label',counts.map((n,i)=>'Choice '+(i+1)+': '+n+' dots').join(', '))}
+function syncControls(){for(const id of['glow','dotSize','angle','budget','colorMode'])$(id).value=cfg[id];$('speed').value=Math.log10(cfg.speed);$('speedValue').textContent=Math.round(cfg.speed).toLocaleString()+' / sec';$('glowValue').textContent=cfg.glow+'%';$('dotValue').textContent=cfg.dotSize.toFixed(1)+' px';$('angleValue').textContent=cfg.angle+'°';$('guides').checked=cfg.guides;$('guides').disabled=def.type!=='polygon';$('guides').parentElement.lastChild.textContent=def.type==='polygon'?'Show corners':'Affine maps';$('trace').checked=cfg.trace;$('seedInput').value=cfg.seed;const index=definitions.indexOf(def);$('specimenNumber').textContent='NO. '+String(index+1).padStart(2,'0');$('specimenTitle').textContent=def.name;$('specimenDesc').textContent=def.desc;$('stageName').textContent=def.name;$('stageEyebrow').textContent=String(index+1).padStart(2,'0')+' / '+def.tag.toUpperCase();
+ const moved=def.type==='polygon'&&anchors.some((p,i)=>p.some((v,j)=>Math.abs(v-def.anchors[i][j])>1e-8));const modified=Math.abs(cfg.r-def.r)>1e-7;const ruleText=def.type==='polygon'?(modified?anchors.length+' targets · '+(cfg.r*100).toFixed(1)+'% jump'+(def.noRepeat?' · no repeats':''):def.rule):modified?'Custom '+(def.type==='fern'?'fern curl':'fold angles'):def.rule;$('rulePill').textContent=ruleText+(moved?' · reshaped':'');$('stageRule').textContent=moved?'your corners, your world':modified?'a new rule, a different attractor':def.stageRule;
+ const sl=$('ruleSlider');sl.min=def.type==='polygon'?.2:def.type==='fern'?-.08:-25;sl.max=def.type==='polygon'?.85:def.type==='fern'?.08:25;sl.step=def.type==='polygon'?.001:def.type==='fern'?.001:1;sl.value=cfg.r;$('ruleLabel').textContent=def.type==='polygon'?'Distance toward a corner':def.type==='fern'?'Curl of the frond':'Twist the fold';$('ruleValue').textContent=def.type==='polygon'?(cfg.r*100).toFixed(1)+'%':def.type==='fern'?cfg.r.toFixed(3):(cfg.r>0?'+':'')+cfg.r+'°';$('ruleHelp').textContent=def.help;
+ $('mathCopy').textContent=def.math;$('formula').textContent=def.type==='polygon'?'p′ = (1 − r)p + rv\nr = '+cfg.r.toFixed(6)+(def.noRepeat?'\nchosen corner ≠ previous corner':''):def.type==='fern'?'p′ = Aᵢp + bᵢ\nprobabilities: 1%, 85%, 7%, 7%':'p′ = (1/√2) R(θᵢ)p + tᵢ\nθ = '+(45+cfg.r)+'°, '+(135+cfg.r)+'°';$('formula').style.whiteSpace='pre-line';$('mathFootnote').textContent=(modified||moved?'The description above refers to the preset. Your rule or corner positions are currently modified. ':'')+(def.type==='polygon'?'The first point starts at a target; all plotted jumps are counted.':'The first 48 settling steps are omitted before plotting.');$('canvasHint').textContent=def.type==='polygon'&&cfg.guides?'SCROLL TO EXPLORE · DRAG A CORNER TO REIMAGINE':'SCROLL OR PINCH TO ZOOM · DRAG TO EXPLORE';document.querySelectorAll('.preset').forEach(b=>{const active=b.dataset.preset===cfg.preset;b.classList.toggle('active',active);b.setAttribute('aria-pressed',active)});makeColors();syncPlay();updateStats();
+}
+function selectPreset(id,{keepStory=false,keepPalette=false}={}){const next=definitions.find(p=>p.id===id);if(!next)return;if(!keepStory)endStory(false);def=next;cfg.preset=id;cfg.r=def.r;cfg.angle=0;anchors=(def.anchors||[]).map(a=>a.slice());if(!keepPalette)cfg.palette=def.palette;measureBounds();reset({play:true,fit:true});syncControls();wanderTime=0;}
+function thumbnail(model,target){const c=target.getContext('2d'),w=target.width,h=target.height,pal=palettes[model.palette].stops;const rnd=rng('thumbnail-'+model.id),s={x:0,y:0,last:-1,h:.5},aa=model.anchors||[],pts=[];let mx=Infinity,MY=Infinity,Mx=-Infinity,My=-Infinity;for(let i=0;i<5000;i++){step(model,aa,model.r,s,rnd);if(i<48)continue;pts.push([s.x,s.y,s.h]);mx=Math.min(mx,s.x);MY=Math.min(MY,s.y);Mx=Math.max(Mx,s.x);My=Math.max(My,s.y)}const scale=Math.min((w-18)/Math.max(.1,Mx-mx),(h-8)/Math.max(.1,My-MY));c.clearRect(0,0,w,h);c.globalAlpha=.8;for(const p of pts){c.fillStyle=pal[Math.min(pal.length-1,Math.floor(p[2]*pal.length))];c.fillRect(w/2+(p[0]-(mx+Mx)/2)*scale,h/2-(p[1]-(MY+My)/2)*scale,.85,.85)}}
+definitions.forEach((model,i)=>{const b=document.createElement('button');b.className='preset';b.dataset.preset=model.id;b.title=model.name+' — '+model.rule;b.setAttribute('aria-label',model.name);b.innerHTML='<canvas width="180" height="84" aria-hidden="true"></canvas><span class="preset-caption"><span>'+model.short+'</span><span class="preset-number">'+String(i+1).padStart(2,'0')+'</span></span>';b.addEventListener('click',()=>{selectPreset(model.id);showTab('studio')});$('gallery').append(b);thumbnail(model,b.querySelector('canvas'))});
+Object.entries(palettes).forEach(([id,p])=>{const b=document.createElement('button');b.className='swatch';b.dataset.palette=id;b.title=p.name;b.setAttribute('aria-label',p.name+' palette');b.innerHTML='<span style="background:linear-gradient(90deg,'+p.stops.join(',')+')"></span>';b.onclick=()=>{cfg.palette=id;makeColors();replot()};$('palettes').append(b)});
+function showTab(which,focus=false){if(which==='studio'&&story)endStory(false);tab=which;for(const name of['studio','story']){$(name+'Panel').hidden=which!==name;$(name+'Tab').classList.toggle('active',which===name);$(name+'Tab').setAttribute('aria-selected',which===name);$(name+'Tab').tabIndex=which===name?0:-1}if(focus)$(which+'Tab').focus()}
+$('studioTab').onclick=()=>showTab('studio');$('storyTab').onclick=()=>showTab('story');document.querySelector('.tabs').addEventListener('keydown',e=>{if(e.key==='ArrowLeft'||e.key==='ArrowRight'){e.preventDefault();showTab(tab==='story'?'studio':'story',true)}});
+function newSeed(){cfg.seed='wonder-'+Math.random().toString(36).slice(2,9);$('seedInput').value=cfg.seed;reset({play:true})}
+function togglePlay(){if(count>=cfg.budget&&!story&&!running)reset({play:true});else{running=!running;credit=0;if(story){if(!running)stopSpeech();else speakChapter()}syncPlay()}}
+$('playBtn').onclick=togglePlay;$('resetBtn').onclick=()=>{endStory(false);reset({play:true})};$('reseedBtn').onclick=()=>{endStory(false);newSeed()};$('stepBtn').onclick=()=>{running=false;credit=0;stopSpeech();if(count<MAX)generate(1);syncPlay();updateStats()};
+$('speed').oninput=e=>{cfg.speed=Math.pow(10,+e.target.value);$('speedValue').textContent=Math.round(cfg.speed).toLocaleString()+' / sec'};
+$('ruleSlider').oninput=e=>{cfg.r=+e.target.value;measureBounds();reset({play:true,fit:true});syncControls()};
+$('budget').onchange=e=>{cfg.budget=+e.target.value;if(count>=cfg.budget)running=false;syncPlay()};
+for(const id of['glow','dotSize','angle'])$(id).oninput=e=>{cfg[id]=+e.target.value;$(id==='dotSize'?'dotValue':id+'Value').textContent=id==='dotSize'?cfg[id].toFixed(1)+' px':cfg[id]+(id==='angle'?'°':'%');if(id==='angle')computeScale();if(id!=='glow')replot();needPaint=true};
+$('colorMode').onchange=e=>{cfg.colorMode=e.target.value;replot()};$('guides').onchange=e=>{cfg.guides=e.target.checked;syncControls();needPaint=true};$('trace').onchange=e=>{cfg.trace=e.target.checked;needPaint=true;if(cfg.trace&&cfg.speed>30)toast('For a readable path, lower the pace to a few dots per second.')};
+$('seedApply').onclick=()=>{cfg.seed=$('seedInput').value.trim()||'wonder';reset({play:true});syncControls()};$('seedInput').onkeydown=e=>{if(e.key==='Enter')$('seedApply').click()};
+function zoom(f,px=width/2,py=height/2){const z=clamp(view.zoom*f,.4,40),ratio=z/view.zoom;view.x=px-width/2-(px-width/2-view.x)*ratio;view.y=py-height/2-2-(py-height/2-2-view.y)*ratio;view.zoom=z;replot();updateStats()}
+$('zoomIn').onclick=()=>zoom(1.35);$('zoomOut').onclick=()=>zoom(1/1.35);$('fitBtn').onclick=()=>{view={zoom:1,x:0,y:0};replot();updateStats()};canvas.addEventListener('wheel',e=>{e.preventDefault();const r=canvas.getBoundingClientRect();zoom(Math.exp(-clamp(e.deltaY,-150,150)*.003),e.clientX-r.left,e.clientY-r.top)},{passive:false});
+const pointers=new Map();let dragging=null,pinch=null;
+canvas.addEventListener('pointerdown',e=>{if(story&&story.chapter===5)return;const r=canvas.getBoundingClientRect(),p=[e.clientX-r.left,e.clientY-r.top];pointers.set(e.pointerId,p);canvas.setPointerCapture(e.pointerId);if(pointers.size===2){const a=[...pointers.values()];pinch={distance:Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]),mid:[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2]};dragging=null;return}let index=-1;if(cfg.guides&&def.type==='polygon'&&!story)anchors.forEach((v,i)=>{const q=project(...v);if(Math.hypot(p[0]-q[0],p[1]-q[1])<18)index=i});dragging={index,start:p,viewX:view.x,viewY:view.y};});
+canvas.addEventListener('pointermove',e=>{if(!pointers.has(e.pointerId))return;const r=canvas.getBoundingClientRect(),p=[e.clientX-r.left,e.clientY-r.top];pointers.set(e.pointerId,p);if(pointers.size===2&&pinch){const a=[...pointers.values()],d=Math.hypot(a[0][0]-a[1][0],a[0][1]-a[1][1]),mid=[(a[0][0]+a[1][0])/2,(a[0][1]+a[1][1])/2];zoom(d/Math.max(1,pinch.distance),...mid);view.x+=mid[0]-pinch.mid[0];view.y+=mid[1]-pinch.mid[1];pinch={distance:d,mid};return}if(!dragging)return;if(dragging.index>=0){const next=unproject(...p);anchors[dragging.index]=[clamp(next[0],-4,4),clamp(next[1],-4,4)];reset({play:true});$('stageRule').textContent='your corners, your world'}else{view.x=dragging.viewX+p[0]-dragging.start[0];view.y=dragging.viewY+p[1]-dragging.start[1];replot()}});
+function release(e){const reshaped=dragging&&dragging.index>=0;pointers.delete(e.pointerId);if(pointers.size<2)pinch=null;dragging=null;if(reshaped){measureBounds();reset({play:true,fit:true});syncControls()}}canvas.addEventListener('pointerup',release);canvas.addEventListener('pointercancel',release);canvas.addEventListener('lostpointercapture',release);
+async function fullscreen(){const stage=$('stage');if(document.fullscreenElement){await document.exitFullscreen().catch(()=>{});return}if(stage.classList.contains('immersive')){stage.classList.remove('immersive');resize();return}if(stage.requestFullscreen){try{await stage.requestFullscreen();return}catch{}}stage.classList.add('immersive');resize();toast('Immersive view. Press F or Escape to return.')}
+$('fullscreenBtn').onclick=fullscreen;document.addEventListener('fullscreenchange',()=>{resize();$('fullscreenBtn').setAttribute('aria-label',document.fullscreenElement?'Exit fullscreen':'Enter fullscreen')});
+$('wanderBtn').onclick=()=>{wander=!wander;wanderTime=0;if(wander){endStory(false);running=true;toast('Wandering: a new world every 25 seconds.')}syncPlay()};$('surpriseBtn').onclick=()=>{const choices=definitions.filter(d=>d.id!==cfg.preset);selectPreset(choices[Math.floor(Math.random()*choices.length)].id);newSeed();showTab('studio')};
+const chapters=[
+ {title:'Begin with almost nothing.',copy:'Three corners, and one starting point. No finished fractal is hidden in the canvas. We are about to let a very small rule make a very large decision.',observation:'The point starts at the top corner.',start:0,target:0,rate:0,time:6500,metric:'1 starting point'},
+ {title:'Choose. Move halfway. Repeat.',copy:'Choose a corner at random. Move <strong>halfway</strong> toward it. Leave a dot. Now do it again from that new position. The dashed line shows the choice; the bright ring shows where we land.',observation:'The choice is random. The halfway rule is exact.',start:0,target:9,rate:1,time:12000,metric:'One simple rule'},
+ {title:'For a while, it feels like noise.',copy:'The next corner is still unpredictable. A dot here, another over there. With only a handful of marks, there is too little evidence to recognize the larger structure.',observation:'Give randomness a little time.',start:9,target:90,rate:9,time:11000,metric:'Scattered moments'},
+ {title:'Then the emptiness takes shape.',copy:'Look at the spaces <em>between</em> the dots. A triangular opening is becoming visible. Smaller gaps begin to echo it. We never told the program to draw a hole. The halfway rule leaves it behind.',observation:'Structure appears in what is missing, too.',start:90,target:1600,rate:170,time:12000,metric:'The first revelation'},
+ {title:'A whole, made of smaller wholes.',copy:'Now the larger triangle is unmistakable. Each of its three regions contains a smaller version of the same pattern. And those smaller triangles contain smaller versions again. This is <strong>self-similarity</strong>.',observation:'The three outlines each frame a copy of the whole.',start:1600,target:18000,rate:1900,time:12000,metric:'Patterns within patterns'},
+ {title:'There is more world inside.',copy:'Let’s look closer at the upper triangle. The same architecture returns at another scale. The mathematical pattern continues indefinitely; our screen can reveal only the detail supported by its pixels and plotted points.',observation:'A closer look, not a newly drawn shape.',start:18000,target:75000,rate:5500,time:13000,metric:'Zoom into the echo'},
+ {title:'Change the rule. Change the world.',copy:'The choices remain random, but their consequences are shaped by the rules. A new seed changes the journey, while these same rules reveal the same underlying attractor. Other rules can reveal carpets, crystals, or even a fern.',observation:'Explore the collection to begin another world.',start:75000,target:110000,rate:5000,time:13000,metric:'Chance, with a structure'}
+];
+chapters.forEach((c,i)=>{const b=document.createElement('button');b.title='Chapter '+(i+1)+': '+c.title;b.setAttribute('aria-label',b.title);b.onclick=()=>{if(!story)startStory();setChapter(i,true)};$('storyProgress').append(b)});
+function startStory(){endStory(false);document.body.classList.add('story-mode');wander=false;story={chapter:0,elapsed:0,saved:{...cfg},savedAnchors:anchors.map(p=>p.slice()),finished:false};selectPreset('triangle',{keepStory:true});cfg.seed='the-first-wonder';cfg.guides=true;cfg.trace=false;cfg.dotSize=1.4;cfg.colorMode='journey';cfg.budget=250000;reset({play:true,fit:true});showTab('story');syncControls();setChapter(0,true);if(innerWidth<=860)$('stage').scrollIntoView({behavior:matchMedia('(prefers-reduced-motion: reduce)').matches?'instant':'smooth',block:'start'});}
+function setChapter(index,seek=false){if(!story)return;stopSpeech();index=clamp(index,0,6);story.chapter=index;story.elapsed=0;story.finished=false;const c=chapters[index];if(seek){reset({play:true,fit:true});generate(c.start)}else running=true;view={zoom:1,x:0,y:0};if(index===5){view.zoom=2.1;const upper=[anchors[0][0]*.5+bounds.cx*.5,anchors[0][1]*.5+bounds.cy*.5],q=project(...upper);view.x=width/2-q[0];view.y=height/2+2-q[1]}replot();$('chapterLabel').textContent='CHAPTER '+String(index+1).padStart(2,'0')+' / 07';$('storyHeading').textContent=c.title;$('storyCopy').innerHTML=c.copy;$('storyMetric').textContent=c.metric;$('storyObservation').textContent=c.observation;$('storyBack').disabled=index===0;$('storyNext').textContent=index===6?'Explore the collection →':'Next moment →';$('storyBadge').textContent=index===5?'SELF-SIMILARITY · 2.1×':index===4?'THREE COPIES OF THE WHOLE':'CHAPTER '+(index+1)+' / 7';[...$('storyProgress').children].forEach((b,i)=>{b.classList.toggle('current',i===index);b.classList.toggle('done',i<index);b.setAttribute('aria-current',i===index?'step':'false')});syncPlay();speakChapter();}
+function endStory(restore=false){if(!story)return;document.body.classList.remove('story-mode');stopSpeech();const saved=story.saved,aa=story.savedAnchors;story=null;$('storyBadge').textContent='';if(restore){cfg={...saved};def=definitions.find(d=>d.id===cfg.preset);anchors=aa;measureBounds();reset({play:true,fit:true});syncControls()}else{view={zoom:1,x:0,y:0};replot();syncPlay()}$('chapterLabel').textContent='A LITTLE JOURNEY INTO CHAOS';$('storyHeading').textContent='What if chance had a shape?';$('storyCopy').textContent='At first, there are only dots. Stay a little longer, and a hidden architecture begins to appear. Watch it unfold, one random choice at a time.';$('storyMetric').textContent='7 short chapters';$('storyObservation').textContent='A live experiment, from one dot to a world.';$('storyNext').textContent='Begin the story →';$('storyBack').disabled=true;[...$('storyProgress').children].forEach(b=>{b.classList.remove('current','done');b.removeAttribute('aria-current')})}
+$('tourBtn').onclick=startStory;$('storyNext').onclick=()=>{if(!story)startStory();else if(story.chapter===6){endStory(false);showTab('studio');cfg.dotSize=1;syncControls();replot();toast('Pick another world, or change the rules of this one.')}else setChapter(story.chapter+1,true)};$('storyBack').onclick=()=>{if(story)setChapter(story.chapter-1,true)};$('storyExit').onclick=()=>{endStory(true);showTab('studio')};
+function stopSpeech(){speechToken++;speechBusy=false;clearTimeout(speechTimeout);if('speechSynthesis'in window)speechSynthesis.cancel()}
+function speakChapter(){if(!voice||!story||!running||!('speechSynthesis'in window))return;stopSpeech();const token=speechToken,c=chapters[story.chapter],u=new SpeechSynthesisUtterance(c.title+' '+c.copy.replace(/<[^>]+>/g,''));const voices=speechSynthesis.getVoices();u.voice=voices.find(v=>/^en[-_]US$/i.test(v.lang)&&/natural|samantha|aria|jenny/i.test(v.name))||voices.find(v=>/^en/i.test(v.lang))||null;u.lang='en-US';u.rate=.94;u.pitch=1;u.volume=.9;speechBusy=true;const finish=()=>{if(speechToken===token)speechBusy=false};u.onend=finish;u.onerror=()=>{finish();toast('This browser could not play the voice. The on-screen story continues.')};speechTimeout=setTimeout(finish,40000);speechSynthesis.speak(u)}
+$('voiceBtn').onclick=()=>{if(!('speechSynthesis'in window)){toast('Spoken narration is unavailable here. The complete story is on screen.');return}voice=!voice;$('voiceBtn').setAttribute('aria-pressed',voice);$('voiceBtn').innerHTML=icon('sound')+'<span>'+(voice?'Voice on':'Read aloud')+'</span>';if(voice)speakChapter();else stopSpeech()};
+function initSound(){if(sound)return;const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;const ac=new AC(),master=ac.createGain();master.gain.value=0;master.connect(ac.destination);const pad=ac.createGain();pad.gain.value=.13;pad.connect(master);[130.81,196,261.63,293.66].forEach((hz,i)=>{const osc=ac.createOscillator(),g=ac.createGain();osc.type='sine';osc.frequency.value=hz;g.gain.value=.13/(i+1);osc.connect(g);g.connect(pad);osc.start()});sound={ac,master}}
+$('soundBtn').onclick=async()=>{try{initSound();if(!sound){toast('Ambient sound is unavailable in this browser.');return}soundOn=!soundOn;await sound.ac.resume();sound.master.gain.setTargetAtTime(soundOn?.4:0,sound.ac.currentTime,.5);$('soundBtn').setAttribute('aria-pressed',soundOn);$('soundBtn').querySelector('.button-text').textContent=soundOn?'Sound on':'Sound off'}catch{toast('Your browser could not start audio.')}};
+function playNote(k){if(!sound||!soundOn||document.hidden)return;const {ac,master}=sound,t=ac.currentTime,o=ac.createOscillator(),g=ac.createGain();o.type='sine';o.frequency.value=[261.63,293.66,329.63,392,440,523.25,587.33,659.25][Math.max(0,k)%8];g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.018,t+.02);g.gain.exponentialRampToValueAtTime(.0001,t+1.5);o.connect(g);g.connect(master);o.start(t);o.stop(t+1.6)}
+document.addEventListener('visibilitychange',()=>{lastTime=0;if(document.hidden){stopSpeech();if(sound)sound.ac.suspend()}else{if(sound&&soundOn)sound.ac.resume();if(story&&voice)speakChapter()}});
+function frame(now){requestAnimationFrame(frame);if(document.hidden){lastTime=now;return}const dt=lastTime?Math.min(80,now-lastTime):0;lastTime=now;
+ if(running&&rendered>=count){if(story){const ch=chapters[story.chapter];story.elapsed+=dt;credit+=ch.rate*dt/1000;const n=Math.min(Math.floor(credit),Math.max(0,ch.target-count),6000);if(n>0){generate(n);credit-=n}if(count>=ch.target)credit=0;if(story.elapsed>=ch.time&&count>=ch.target&&!speechBusy){if(story.chapter<6)setChapter(story.chapter+1);else if(!story.finished){story.finished=true;running=false;syncPlay();$('storyBadge').textContent='THE STORY CONTINUES WITH YOU'}}}else{credit+=cfg.speed*dt/1000;const n=Math.min(Math.floor(credit),Math.max(0,cfg.budget-count),7000);if(n>0){generate(n);credit-=n}if(count>=cfg.budget){running=false;syncPlay()}}}
+ if(wander&&!story){if(running||count>=cfg.budget)wanderTime+=dt;if(wanderTime>=25000){const i=(definitions.indexOf(def)+1)%definitions.length;selectPreset(definitions[i].id);newSeed();syncPlay()}}
+ plot();if(needPaint||(cfg.trace||story&&story.chapter<=2)&&running&&now-paintStamp>40)paint(now);if(now-lastUI>180){updateStats();lastUI=now}
+}
+function snapshot(){const center=unproject(width/2,height/2+2);return{version:1,...cfg,anchors:anchors.map(a=>a.slice()),view:{zoom:+view.zoom.toFixed(4),cx:+center[0].toFixed(5),cy:+center[1].toFixed(5)}}}
+function encode(s){const bytes=new TextEncoder().encode(JSON.stringify(s));let bin='';for(const b of bytes)bin+=String.fromCharCode(b);return btoa(bin).replace(/\+/g,'-').replace(/\//g,'_').replace(/=+$/,'')}
+function decode(s){if(s.length>12000)throw Error('Settings are too long');const bytes=Uint8Array.from(atob(s.replace(/-/g,'+').replace(/_/g,'/')),c=>c.charCodeAt(0));return JSON.parse(new TextDecoder().decode(bytes))}
+function applyState(state){if(!state||typeof state!=='object'||Array.isArray(state))throw Error('Invalid settings');const model=definitions.find(d=>d.id===state.preset);if(!model)throw Error('Unknown world');endStory(false);cfg={...defaultSettings,preset:model.id,r:model.r,palette:model.palette};def=model;anchors=(def.anchors||[]).map(a=>a.slice());if(typeof state.seed==='string')cfg.seed=state.seed.slice(0,40);const nums={speed:[1,100000],dotSize:[.5,3],glow:[0,100],angle:[-180,180],r:model.type==='polygon'?[.2,.85]:model.type==='fern'?[-.08,.08]:[-25,25]};for(const [key,[min,max]]of Object.entries(nums)){if(typeof state[key]==='number'&&Number.isFinite(state[key]))cfg[key]=clamp(state[key],min,max)}if([50000,250000,1000000].includes(state.budget))cfg.budget=state.budget;if(Object.hasOwn(palettes,state.palette))cfg.palette=state.palette;if(['journey','choice','height'].includes(state.colorMode))cfg.colorMode=state.colorMode;for(const k of['guides','trace'])if(typeof state[k]==='boolean')cfg[k]=state[k];if(model.type==='polygon'&&Array.isArray(state.anchors)&&state.anchors.length===anchors.length&&state.anchors.every(a=>Array.isArray(a)&&a.length===2&&a.every(v=>typeof v==='number'&&Number.isFinite(v)&&Math.abs(v)<=4)))anchors=state.anchors.map(a=>a.slice());measureBounds();reset({play:true,fit:true});if(state.view&&typeof state.view==='object'){const v=state.view;if([v.zoom,v.cx,v.cy].every(n=>typeof n==='number'&&Number.isFinite(n))){view.zoom=clamp(v.zoom,.4,40);const p=project(clamp(v.cx,-100,100),clamp(v.cy,-100,100));view.x=width/2-p[0];view.y=height/2+2-p[1]}}syncControls();replot()}
+function fromURL(url){const u=new URL(url),h=new URLSearchParams(u.hash.slice(1)),v=h.get('emergence')||u.searchParams.get('emergence');if(v)return decode(v);if(u.searchParams.has('preset')){const id=u.searchParams.get('preset'),d=definitions.find(x=>x.id===id);if(!d)return null;const state={preset:id,r:d.r,palette:d.palette};for(const k of['seed','palette','colorMode'])if(u.searchParams.has(k))state[k]=u.searchParams.get(k);for(const k of['r','speed','glow','dotSize','angle','budget'])if(u.searchParams.has(k))state[k]=Number(u.searchParams.get(k));return state}return null}
+let sharedState=null,shareURL='',shareLocal=false;
+$('shareBtn').onclick=()=>{sharedState=snapshot();shareLocal=location.protocol==='file:';let url=new URL(location.href);try{if(window.parent!==window&&parent.location.origin===location.origin)url=new URL(parent.location.href)}catch{}if(shareLocal){$('shareDescription').textContent='This file is running locally. Save or copy these settings, then load them into another copy of Emergence. Once hosted, this button creates a shareable link.';$('copyShare').textContent='Copy settings';shareURL=JSON.stringify(sharedState,null,2)}else{const hash=new URLSearchParams(url.hash.slice(1));hash.set('emergence',encode(sharedState));url.hash=hash.toString();shareURL=url.href;$('shareDescription').textContent='This link preserves the world, seed, rules, colors and camera. It restarts the drawing so someone else can watch it emerge.';$('copyShare').textContent='Copy link'}$('shareText').value=shareURL;$('shareDialog').showModal()};
+$('copyShare').onclick=async()=>{try{if(!navigator.clipboard)throw Error();await navigator.clipboard.writeText(shareURL);toast(shareLocal?'Settings copied.':'Link copied.')}catch{$('shareText').focus();$('shareText').select();let ok=false;try{ok=document.execCommand('copy')}catch{}toast(ok?'Copied.':'Select and copy the text above.')}};
+function download(blob,name){const u=URL.createObjectURL(blob),a=document.createElement('a');a.href=u;a.download=name;document.body.append(a);a.click();a.remove();setTimeout(()=>URL.revokeObjectURL(u),30000)}
+$('saveRecipe').onclick=()=>download(new Blob([JSON.stringify(sharedState||snapshot(),null,2)],{type:'application/json'}),'emergence-'+cfg.preset+'-settings.json');$('loadRecipe').onclick=()=>$('recipeFile').click();$('recipeFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{if(f.size>20000)throw Error('Settings files must be smaller than 20 KB');applyState(JSON.parse(await f.text()));$('shareDialog').close();toast('Your world is restored.')}catch(err){toast('Could not load settings: '+err.message)}e.target.value=''};
+$('exportBtn').onclick=()=>{const out=document.createElement('canvas'),scale=Math.min(3,Math.max(1,2400/width));out.width=Math.round(width*scale);out.height=Math.round(height*scale);const c=out.getContext('2d');c.scale(scale,scale);c.fillStyle='#080f16';c.fillRect(0,0,width,height);const a=cfg.angle*Math.PI/180,co=Math.cos(a),si=Math.sin(a),s=baseScale*view.zoom;let color=-1;c.globalAlpha=.85;for(let i=0;i<count;i++){const k=cfg.colorMode==='choice'?Math.round(ms[i]/Math.max(1,counts.length-1)*127):cfg.colorMode==='height'?Math.round(clamp((ys[i]-bounds.minY)/bounds.h,0,1)*127):cs[i];if(color!==k){c.fillStyle=colors[k];color=k}const dx=xs[i]-bounds.cx,dy=ys[i]-bounds.cy;c.fillRect(width/2+view.x+(dx*co-dy*si)*s,height/2+2+view.y-(dx*si+dy*co)*s,cfg.dotSize,cfg.dotSize)}c.globalAlpha=1;c.fillStyle='#b7d0ca';c.font='10px monospace';c.fillText('EMERGENCE / '+def.name.toUpperCase(),23,30);c.fillStyle='#7d939b';c.font='9px monospace';c.fillText(count.toLocaleString()+' POINTS · SEED '+cfg.seed,23,height-22);out.toBlob(blob=>{if(blob){download(blob,'emergence-'+cfg.preset+'.png');toast('Artwork saved as PNG.')}else toast('The image could not be saved.')},'image/png')};
+$('helpBtn').onclick=()=>$('helpDialog').showModal();document.querySelectorAll('[data-close]').forEach(b=>b.onclick=()=>$(b.dataset.close).close());document.querySelectorAll('dialog').forEach(d=>d.addEventListener('click',e=>{if(e.target===d){const r=d.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)d.close()}}));
+document.addEventListener('keydown',e=>{if(e.target.matches('input,textarea,select')||document.querySelector('dialog[open]'))return;const key=e.key.toLowerCase();if(key===' '){if(e.target.tagName==='BUTTON')return;e.preventDefault();togglePlay()}else if(key==='r')$('resetBtn').click();else if(key==='n')$('reseedBtn').click();else if(key==='t')startStory();else if(key==='f')fullscreen();else if(key==='+'||key==='=')zoom(1.35);else if(key==='-')zoom(1/1.35);else if(key==='0')$('fitBtn').click();else if(key==='escape'){$('stage').classList.remove('immersive');resize()}});
+let parentOrigin=null;try{if(document.referrer)parentOrigin=new URL(document.referrer).origin}catch{}window.addEventListener('message',e=>{if(e.source!==parent||window===parent||e.origin!==(parentOrigin||location.origin))return;if(e.data&&e.data.type==='emergence:configure'){try{applyState(e.data.state)}catch{toast('The shared settings could not be loaded.')}}});
+measureBounds();resize();reset();syncControls();new ResizeObserver(resize).observe($('stage'));
+try{let initial=fromURL(location.href);if(!initial&&parent!==window){try{initial=fromURL(parent.location.href)}catch{if(document.referrer)initial=fromURL(document.referrer)}}if(initial)applyState(initial)}catch{toast('The shared settings were invalid. Starting with the original triangle.')}
+if(parent!==window&&parentOrigin)parent.postMessage({type:'emergence:ready',version:1},parentOrigin);
+window.addEventListener('hashchange',()=>{try{const state=fromURL(location.href);if(state)applyState(state)}catch{toast('That share link could not be read.')}});
+window.addEventListener('pagehide',()=>{stopSpeech();if(sound)sound.ac.suspend()});
+requestAnimationFrame(frame);
+// Read-only observability for integration and mathematical verification.
+window.Emergence=Object.freeze({version:'1.0.0',getState:()=>snapshot(),getStats:()=>({count,rendered,running,choices:counts.slice(),bounds:{...bounds},chapter:story?story.chapter:null}),getPoint:i=>Number.isInteger(i)&&i>=0&&i<count?{x:xs[i],y:ys[i],choice:ms[i]}:null});
+})();
 </script>
+</body>
 </html>

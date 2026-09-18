@@ -1,6 +1,30 @@
 {
     "showcases":  [
       {
+        "title": "Emergence — Sierpiński Generator",
+        "description": "A small rule. A random choice. An unexpected universe. Explore eight living fractals in an interactive, narrated chaos-game studio.",
+        "href": "html_showcase/sierpinski_generator/index.html",
+        "image": "html_showcase/sierpinski_generator/thumb.png",
+        "category": "science",
+        "tags": ["mathematics", "fractal", "chaos game", "Sierpiński", "educational", "interactive"]
+      },
+      {
+        "title": "Paper Puppet",
+        "description": "A paper character, some real-world rules, and your move. Walk, jump, pose the skeleton, go limp, and dodge obstacles.",
+        "href": "html_showcase/paper_puppet/index.html",
+        "image": "html_showcase/paper_puppet/thumb.png",
+        "category": "game",
+        "tags": ["physics", "ragdoll", "game", "interactive", "playground"]
+      },
+      {
+        "title": "Spectra Shader",
+        "description": "A WebGL shader studio. Explore fractal and generative scenes, tune form, color, and motion, then share a frozen moment as a URL.",
+        "href": "html_showcase/spectra_shader/index.html",
+        "image": "html_showcase/spectra_shader/thumb.png",
+        "category": "graphics",
+        "tags": ["WebGL", "shaders", "generative", "interactive", "graphics"]
+      },
+      {
         "title": "PHASEFORM — Phased Antenna Array",
         "description": "Explore the anatomy of a phased-array antenna. Explode eight hardware layers, inspect every subsystem, and steer a beam through the physics of phase.",
         "href": "html_showcase/phased_antenna_array/index.html",
@@ -112,14 +136,6 @@
           "category": "graphics",
           "tags": ["3D", "WebGL", "FPS", "photos"]
       },        
-        {
-          "title": "Sierpinski Generator",
-          "description": "Learn how a series of random outcomes can generate a fractal pattern.",
-          "href": "html_showcase/sierpinski_generator/index.html",
-          "image": "html_showcase/sierpinski_generator/thumb.png",
-          "category": "science",
-          "tags": ["mathematics", "fractal", "interactive"]
-        },
         {
           "title": "Multi 3D Interactive PhotoCubes",
           "description": "A WebGL-powered Array of 3D photocubes with interactive controls and animations.",

@@ -15,6 +15,7 @@ import {
   type SimulationMeta,
 } from './simulation';
 import type { AccountYearSnapshot, SpendBreakdown } from './forensic';
+import type { SimulationEvent } from './events';
 import {
   createDefaultMarketCycle,
   type AccountType,
@@ -78,6 +79,8 @@ export interface FailureYearBeat {
   spend: SpendBreakdown;
   accountsStart: AccountYearSnapshot[];
   accountsEnd: AccountYearSnapshot[];
+  /** Key cashflow events for the year (growth ticks omitted). */
+  events?: SimulationEvent[];
 }
 
 export type PathKind = 'failure' | 'worst' | 'moonshot' | 'average';
@@ -695,6 +698,9 @@ export function analyzePath(
       },
       accountsStart: y.accountsStart ?? [],
       accountsEnd: y.accountsEnd ?? [],
+      events: (y.events ?? []).filter(
+        (e) => e.kind !== 'MarketGrowth' && e.kind !== 'Expense'
+      ),
     }));
 
   const recessionAges = regimes

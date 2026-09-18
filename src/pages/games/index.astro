@@ -1,0 +1,52 @@
+---
+import Layout from '../../layouts/Layout.astro';
+import GameSelect from '../../components/games/GameSelect.astro';
+import { showcases } from '../../config/showcases.json';
+import { gamesForIndex, type ShowcaseItem } from '../../lib/showcases';
+import { sliderStartIndex } from '../../config/catalog';
+
+const allGames = gamesForIndex(showcases as ShowcaseItem[]);
+const startIndex = sliderStartIndex(allGames.length, 0);
+const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.length} playable things`;
+---
+
+<Layout
+  title="Games | darrenhicks.dev"
+  description="Playable adventures, strategy campaigns, puzzles, and trainers. Today’s pick is on stage — browse with the arrow keys or pick a cabinet."
+>
+  <main class="pt-24 pb-16">
+    <section class="relative pt-16 pb-10 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900 overflow-hidden">
+      <div class="game-hero-grid" aria-hidden="true"></div>
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 relative">
+        <div class="max-w-3xl">
+          <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600 dark:text-primary-400 mb-3">
+            Player select
+          </p>
+          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
+            Games
+          </h1>
+          <p class="text-xl text-gray-600 dark:text-gray-300">
+            {countLabel}. Today’s pick is on stage — hover a cabinet to bring it forward, click or hit Enter to play.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <GameSelect games={allGames} startIndex={startIndex} />
+  </main>
+</Layout>
+
+<style>
+  .game-hero-grid {
+    position: absolute;
+    inset: 0;
+    background-image: radial-gradient(circle at 1px 1px, rgb(37 99 235 / 0.14) 1px, transparent 0);
+    background-size: 22px 22px;
+    mask-image: linear-gradient(to bottom, black 40%, transparent 100%);
+    pointer-events: none;
+  }
+
+  :global(.dark) .game-hero-grid {
+    background-image: radial-gradient(circle at 1px 1px, rgb(96 165 250 / 0.16) 1px, transparent 0);
+  }
+</style>

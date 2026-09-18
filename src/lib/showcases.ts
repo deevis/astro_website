@@ -1,6 +1,6 @@
 import fs from 'node:fs';
 import path from 'node:path';
-import { gameTitleKey, games } from '../config/catalog';
+import { gameTitleKey, games, type GameEntry, type GameGenre } from '../config/catalog';
 
 export interface ShowcaseItem {
     title: string;
@@ -15,26 +15,53 @@ export interface ShowcaseItem {
 }
 
 export function homeGameSlides(items: ShowcaseItem[]) {
+    return gamesForIndex(items).map((game) => ({
+        title: game.title,
+        tagline: game.tagline,
+        href: game.href,
+        image: game.image,
+    }));
+}
+
+function extraGameItems(items: ShowcaseItem[]) {
     const catalogKeys = new Set(games.map((game) => gameTitleKey(game.title)));
-    const extra = items.filter(
+    return items.filter(
         (item) =>
             (item.category === 'game' || item.tags?.includes('game')) &&
             !catalogKeys.has(gameTitleKey(item.title))
     );
+}
+
+function inferGameGenre(item: ShowcaseItem): GameGenre {
+    const tags = (item.tags ?? []).map((tag) => tag.toLowerCase());
+    if (tags.includes('adventure')) return 'adventure';
+    if (tags.includes('strategy')) return 'strategy';
+    if (tags.includes('puzzle') || tags.includes('logic')) return 'puzzle';
+    return 'trainer';
+}
+
+export function gamesForIndex(items: ShowcaseItem[]): GameEntry[] {
+    const extras = extraGameItems(items).map((item) => {
+        const title = item.title.replace(/:.*$/, '');
+        return {
+            id: showcaseSlug(item.href),
+            title,
+            tagline: item.description,
+            description: item.description,
+            href: playgroundHref(item.href),
+            image: cardAsset(item.image),
+            playLabel: `Play ${title}`,
+            bullets: [] as string[],
+            genre: inferGameGenre(item),
+        };
+    });
 
     return [
         ...games.map((game) => ({
-            title: game.title,
-            tagline: game.tagline,
-            href: game.href,
+            ...game,
             image: cardAsset(game.image),
         })),
-        ...extra.map((item) => ({
-            title: item.title.replace(/:.*$/, ''),
-            tagline: item.description,
-            href: playgroundHref(item.href),
-            image: cardAsset(item.image),
-        })),
+        ...extras,
     ];
 }
 
