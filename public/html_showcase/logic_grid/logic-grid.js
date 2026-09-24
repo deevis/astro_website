@@ -241,6 +241,11 @@
   let audioCtx = null;
   let pressTimer = null;
   let longFired = false;
+  let suppressClickUntil = 0;
+  let pressX = 0;
+  let pressY = 0;
+  let chipActing = false;
+  const TAP_MOVE_PX = 16;
   let stats = loadStats();
   let tutorialSavedDiff = null;
   let autoTutorialArmed = true;
@@ -1547,7 +1552,7 @@
               <button class="lg-btn ghost" id="lg-menu-win">Menu</button>
             </div>
           </div>
-          ` : `<p class="lg-play-hint">Tap to rule a possibility out. Hold to lock in an answer in that box. Hit Check when you think you’re done.</p>`}
+          ` : `<p class="lg-play-hint">Tap to rule a possibility out. Tap the last one left — or hold any option — to lock it in. Hit Check when you think you’re done.</p>`}
         </div>
         <div class="lg-toast"></div>
       </div>
@@ -1559,7 +1564,6 @@
   }
 
   function bindPlay() {
-    let pointerHandled = false;
     root.querySelector("#lg-quit")?.addEventListener("click", () => {
       if (isTutorial()) {
         leaveTutorial();
@@ -1609,9 +1613,13 @@
         if (e.pointerType === "mouse" && e.button !== 0) return;
         game.selected = { p, c };
         longFired = false;
+        pressX = e.clientX;
+        pressY = e.clientY;
         clearTimeout(pressTimer);
+        try { btn.setPointerCapture(e.pointerId); } catch { /* ignore */ }
         pressTimer = setTimeout(() => {
           longFired = true;
+          noteChipAction();
           confirmCell(p, c, v);
         }, 420);
       });
@@ -1619,18 +1627,50 @@
         clearTimeout(pressTimer);
         if (longFired) return;
         if (e.button && e.button !== 0) return;
-        pointerHandled = true;
-        toggleElim(p, c, v);
+        if (movedTooFar(e)) return;
+        noteChipAction();
+        activateChip(p, c, v);
       });
-      btn.addEventListener("click", () => {
-        if (pointerHandled) {
-          pointerHandled = false;
+      btn.addEventListener("click", (e) => {
+        if (Date.now() < suppressClickUntil) {
+          e.preventDefault();
+          e.stopPropagation();
           return;
         }
-        toggleElim(p, c, v);
+        activateChip(p, c, v);
       });
-      btn.addEventListener("pointercancel", () => clearTimeout(pressTimer));
+      btn.addEventListener("pointercancel", () => {
+        clearTimeout(pressTimer);
+      });
     });
+  }
+
+  function noteChipAction() {
+    suppressClickUntil = Date.now() + 700;
+  }
+
+  function movedTooFar(e) {
+    const x = e.clientX;
+    const y = e.clientY;
+    if (!Number.isFinite(x) || !Number.isFinite(y)) return false;
+    const dx = x - pressX;
+    const dy = y - pressY;
+    return dx * dx + dy * dy > TAP_MOVE_PX * TAP_MOVE_PX;
+  }
+
+  function activateChip(p, c, v) {
+    if (chipActing || !game || game.solved) return;
+    chipActing = true;
+    try {
+      const mask = localRemaining(p, c);
+      if ((mask & (1 << v)) && isSingleMask(mask)) {
+        confirmCell(p, c, v);
+        return;
+      }
+      toggleElim(p, c, v);
+    } finally {
+      chipActing = false;
+    }
   }
 
   function toggleElim(p, c, v) {
@@ -1664,15 +1704,13 @@
       return;
     }
     game.selected = { p, c };
+    if (game.confirmed[p][c] === v && isSingleMask(localRemaining(p, c))) return;
     if (!(localRemaining(p, c) & (1 << v))) {
-      toggleElim(p, c, v);
-      return;
+      pushUndo();
+      game.elim[p][c] &= ~(1 << v);
+    } else {
+      pushUndo();
     }
-    if (isSingleMask(localRemaining(p, c)) && (localRemaining(p, c) & (1 << v))) {
-      toggleElim(p, c, v);
-      return;
-    }
-    pushUndo();
     game.confirmed[p][c] = v;
     game.elim[p][c] = ALL & ~(1 << v);
     tone(320, 0.04, "sine", 0.04);
@@ -1972,7 +2010,7 @@
         },
         {
           title: "Lock an answer",
-          body: "Hold a remaining option to lock it in for that box only. You still have to cross that value off for everyone else.",
+          body: "When only one option is left, tap it to lock it in. You can also hold any remaining option. You still have to cross that value off for everyone else.",
           selector: (host) => {
             const open = [...host.querySelectorAll(".lg-chip")].find((el) =>
               !el.classList.contains("out") && !el.closest(".lg-cell")?.classList.contains("ready")

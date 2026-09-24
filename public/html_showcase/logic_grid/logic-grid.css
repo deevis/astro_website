@@ -657,10 +657,13 @@ button { cursor: pointer; }
   border-radius: 7px;
   user-select: none;
   -webkit-user-select: none;
+  -webkit-touch-callout: none;
   touch-action: manipulation;
 }
 
-.lg-chip:hover:not(:disabled) { background: rgba(28, 24, 18, 0.06); }
+@media (hover: hover) and (pointer: fine) {
+  .lg-chip:hover:not(:disabled) { background: rgba(28, 24, 18, 0.06); }
+}
 
 .lg-chip.out {
   color: var(--lg-ink-muted);
@@ -824,7 +827,7 @@ button { cursor: pointer; }
   .lg-board { gap: var(--lg-grid-gap); }
   .lg-who { font-size: 0.92rem; padding-right: 2px; }
   .lg-cell { padding: 6px 5px 5px; min-height: 84px; border-radius: 12px; }
-  .lg-chip { font-size: 12px; padding: 2px 4px; }
+  .lg-chip { font-size: 12px; padding: 6px 4px; min-height: 2rem; }
   .lg-clues { padding: 14px 12px 12px; }
   .lg-clues li { font-size: 14px; }
 }

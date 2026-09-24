@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Nonogram';
+const pageDescription = 'Picture-logic puzzles. Row and column numbers tell you which cells to fill — Easy 5×5 through Nightmare 20×20.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/nonogram/nonogram.css" />
+  <div class="ng-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="ng-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/nonogram/nonogram.js"></script>
+</Layout>

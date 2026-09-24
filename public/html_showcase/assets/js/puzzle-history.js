@@ -8,6 +8,21 @@
       apps: "/apps/logic-grid",
       showcase: "/html_showcase/logic_grid/index.html"
     },
+    "knights-journey": {
+      label: "Knights Journey",
+      apps: "/apps/knights-journey",
+      showcase: "/html_showcase/knights_journey/index.html"
+    },
+    nonogram: {
+      label: "Nonogram",
+      apps: "/apps/nonogram",
+      showcase: "/html_showcase/nonogram/index.html"
+    },
+    mastermind: {
+      label: "Mastermind",
+      apps: "/apps/mastermind",
+      showcase: "/html_showcase/mastermind/index.html"
+    },
     sudoku: {
       label: "Sudoku",
       apps: "/apps/sudoku",

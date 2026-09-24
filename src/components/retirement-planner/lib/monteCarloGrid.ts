@@ -21,7 +21,31 @@ export function bitcoinSellSplitLabel(brokeragePercent: number): string {
   return `Sell BTC - ${hysa}% HYSA ${brokerage}% Brokerage`;
 }
 
-export type GridInelasticAxis = 'bitcoin' | 'retirementAge' | 'spend';
+export type GridAxisId = 'bitcoin' | 'retirementAge' | 'spend' | 'ssClaimAge';
+/** @deprecated Use GridAxisId. Kept as an alias for a locked leftover axis. */
+export type GridInelasticAxis = GridAxisId;
+
+export const GRID_AXIS_IDS: GridAxisId[] = ['bitcoin', 'retirementAge', 'spend', 'ssClaimAge'];
+
+export const GRID_AXIS_LABELS: Record<GridAxisId, { long: string; short: string }> = {
+  bitcoin: { long: 'Bitcoin today', short: 'Bitcoin' },
+  retirementAge: { long: 'Retirement age', short: 'Age' },
+  spend: { long: 'Starting spend', short: 'Spend' },
+  ssClaimAge: { long: 'SS claim age', short: 'SS' },
+};
+
+export function lockedGridAxes(rowAxis: GridAxisId, colAxis: GridAxisId): GridAxisId[] {
+  return GRID_AXIS_IDS.filter((id) => id !== rowAxis && id !== colAxis);
+}
+
+export function lockedGridAxis(rowAxis: GridAxisId, colAxis: GridAxisId): GridAxisId {
+  return lockedGridAxes(rowAxis, colAxis)[0] ?? 'bitcoin';
+}
+
+export function primarySsClaimAge(plan: Pick<RetirementPlan, 'socialSecurity'>): number {
+  const age = plan.socialSecurity.find((s) => s.owner === 'primary')?.claimAge ?? 67;
+  return Math.min(70, Math.max(62, Math.round(age)));
+}
 
 export type BitcoinGridChoiceId =
   | 'hold'
@@ -66,18 +90,22 @@ export interface GridScenario {
   bitcoinId: BitcoinGridChoiceId;
   retirementAge: number;
   spendTarget: number;
+  /** Primary Social Security claim age. Spouse claim age is left as-is. */
+  ssClaimAge?: number;
+}
+
+export interface GridLockedAxis {
+  axis: GridAxisId;
+  label: string;
+  spendLines?: SpendLine[];
+  spendTotal?: number;
 }
 
 export interface GridSpec {
-  inelastic: GridInelasticAxis;
-  locked: {
-    axis: GridInelasticAxis;
-    label: string;
-    spendLines?: SpendLine[];
-    spendTotal?: number;
-  };
-  rowAxis: GridInelasticAxis;
-  colAxis: GridInelasticAxis;
+  inelastic: GridAxisId;
+  locked: GridLockedAxis[];
+  rowAxis: GridAxisId;
+  colAxis: GridAxisId;
   rows: GridAxisValue[];
   cols: GridAxisValue[];
   cells: { row: number; col: number; scenario: GridScenario }[];
@@ -115,13 +143,63 @@ export function spendGridTargets(baseSpend: number): number[] {
   return SPEND_DELTAS_USD.map((delta) => Math.max(0, base + delta));
 }
 
-export function gridAxisPair(inelastic: GridInelasticAxis): {
-  rowAxis: GridInelasticAxis;
-  colAxis: GridInelasticAxis;
+/**
+ * Six claim ages in [62, 70] around the plan target: two years before and three
+ * after when that fits. Unused slots on one side become extra years on the other.
+ */
+export function ssClaimAgeGridValues(targetAge: number): number[] {
+  const floor = 62;
+  const ceil = 70;
+  const target = Math.min(ceil, Math.max(floor, Math.round(targetAge)));
+  const before: number[] = [];
+  for (let yearsBefore = 2; yearsBefore >= 1; yearsBefore--) {
+    const age = target - yearsBefore;
+    if (age >= floor) before.push(age);
+  }
+  const after: number[] = [];
+  const afterWanted = GRID_SIZE - before.length - 1;
+  for (let i = 1; i <= afterWanted; i++) {
+    const age = target + i;
+    if (age > ceil) break;
+    after.push(age);
+  }
+  while (before.length + 1 + after.length < GRID_SIZE) {
+    const nextBefore = (before[0] ?? target) - 1;
+    if (nextBefore < floor) break;
+    before.unshift(nextBefore);
+  }
+  while (before.length + 1 + after.length < GRID_SIZE) {
+    const nextAfter = (after[after.length - 1] ?? target) + 1;
+    if (nextAfter > ceil) break;
+    after.push(nextAfter);
+  }
+  return [...before, target, ...after];
+}
+
+export function gridAxisPair(inelastic: GridAxisId): {
+  rowAxis: GridAxisId;
+  colAxis: GridAxisId;
 } {
-  if (inelastic === 'bitcoin') return { rowAxis: 'retirementAge', colAxis: 'spend' };
+  if (inelastic === 'bitcoin' || inelastic === 'ssClaimAge') {
+    return { rowAxis: 'retirementAge', colAxis: 'spend' };
+  }
   if (inelastic === 'retirementAge') return { rowAxis: 'bitcoin', colAxis: 'spend' };
   return { rowAxis: 'bitcoin', colAxis: 'retirementAge' };
+}
+
+export function resolveGridAxes(options: {
+  inelastic?: GridAxisId;
+  rowAxis?: GridAxisId;
+  colAxis?: GridAxisId;
+}): { rowAxis: GridAxisId; colAxis: GridAxisId; inelastic: GridAxisId } {
+  const rowAxis = options.rowAxis;
+  const colAxis = options.colAxis;
+  if (rowAxis && colAxis && rowAxis !== colAxis) {
+    return { rowAxis, colAxis, inelastic: lockedGridAxis(rowAxis, colAxis) };
+  }
+  const inelastic = options.inelastic ?? 'bitcoin';
+  const pair = gridAxisPair(inelastic);
+  return { ...pair, inelastic };
 }
 
 function moneyLabel(amount: number): string {
@@ -133,7 +211,7 @@ function moneyLabel(amount: number): string {
 }
 
 function valuesForAxis(
-  axis: GridInelasticAxis,
+  axis: GridAxisId,
   plan: RetirementPlan,
   lockedBitcoinId: BitcoinGridChoiceId
 ): GridAxisValue[] {
@@ -150,6 +228,15 @@ function valuesForAxis(
       id: `age-${age}`,
       label: `Retire at ${age}`,
       shortLabel: `Age ${age}`,
+      isDefault: age === target,
+    }));
+  }
+  if (axis === 'ssClaimAge') {
+    const target = primarySsClaimAge(plan);
+    return ssClaimAgeGridValues(target).map((age) => ({
+      id: `ss-${age}`,
+      label: `Claim SS at ${age}`,
+      shortLabel: `SS ${age}`,
       isDefault: age === target,
     }));
   }
@@ -172,20 +259,24 @@ function valuesForAxis(
 }
 
 function scenarioFromAxes(
-  rowAxis: GridInelasticAxis,
-  colAxis: GridInelasticAxis,
+  rowAxis: GridAxisId,
+  colAxis: GridAxisId,
   row: GridAxisValue,
   col: GridAxisValue,
   plan: RetirementPlan,
   lockedBitcoinId: BitcoinGridChoiceId
 ): GridScenario {
-  const pick = (axis: GridInelasticAxis, value: GridAxisValue | null): Partial<GridScenario> => {
+  const pick = (axis: GridAxisId, value: GridAxisValue | null): Partial<GridScenario> => {
     if (axis === 'bitcoin') {
       return { bitcoinId: (value?.id ?? lockedBitcoinId) as BitcoinGridChoiceId };
     }
     if (axis === 'retirementAge') {
       const age = value ? Number(value.id.replace('age-', '')) : plan.primary.retirementAge;
       return { retirementAge: age };
+    }
+    if (axis === 'ssClaimAge') {
+      const age = value ? Number(value.id.replace('ss-', '')) : primarySsClaimAge(plan);
+      return { ssClaimAge: age };
     }
     const base = nominalAnnualSpendAtAge(plan, plan.primary.currentAge).total;
     if (!value) return { spendTarget: base };
@@ -196,20 +287,46 @@ function scenarioFromAxes(
     bitcoinId: lockedBitcoinId,
     retirementAge: plan.primary.retirementAge,
     spendTarget: nominalAnnualSpendAtAge(plan, plan.primary.currentAge).total,
+    ssClaimAge: primarySsClaimAge(plan),
     ...pick(rowAxis, row),
     ...pick(colAxis, col),
+  };
+}
+
+function lockedAxisDetails(
+  axis: GridAxisId,
+  plan: RetirementPlan,
+  lockedBitcoinId: BitcoinGridChoiceId
+): GridLockedAxis {
+  if (axis === 'bitcoin') {
+    return { axis, label: bitcoinGridChoice(lockedBitcoinId).label };
+  }
+  if (axis === 'retirementAge') {
+    return { axis, label: `Retire at ${plan.primary.retirementAge}` };
+  }
+  if (axis === 'ssClaimAge') {
+    return { axis, label: `Claim SS at ${primarySsClaimAge(plan)}` };
+  }
+  const spendDetail = nominalAnnualSpendAtAge(plan, plan.primary.currentAge);
+  return {
+    axis,
+    label: `${moneyLabel(spendDetail.total)}/yr`,
+    spendLines: spendDetail.lines,
+    spendTotal: spendDetail.total,
   };
 }
 
 export function buildMonteCarloGrid(
   plan: RetirementPlan,
   options: {
-    inelastic: GridInelasticAxis;
+    inelastic?: GridAxisId;
+    rowAxis?: GridAxisId;
+    colAxis?: GridAxisId;
     lockedBitcoinId?: BitcoinGridChoiceId;
   }
 ): GridSpec {
   const lockedBitcoinId = options.lockedBitcoinId ?? 'hold';
-  const { rowAxis, colAxis } = gridAxisPair(options.inelastic);
+  const { rowAxis, colAxis, inelastic } = resolveGridAxes(options);
   const rows = valuesForAxis(rowAxis, plan, lockedBitcoinId);
   const cols = valuesForAxis(colAxis, plan, lockedBitcoinId);
   const cells: GridSpec['cells'] = [];
@@ -223,25 +340,13 @@ export function buildMonteCarloGrid(
     }
   }
 
-  const lockedChoice = bitcoinGridChoice(lockedBitcoinId);
-  const spendDetail = nominalAnnualSpendAtAge(plan, plan.primary.currentAge);
-  const baseSpend = spendDetail.total;
-  const lockedLabel =
-    options.inelastic === 'bitcoin'
-      ? lockedChoice.label
-      : options.inelastic === 'retirementAge'
-        ? `Retire at ${plan.primary.retirementAge}`
-        : `${moneyLabel(baseSpend)}/yr`;
+  const locked = lockedGridAxes(rowAxis, colAxis).map((axis) =>
+    lockedAxisDetails(axis, plan, lockedBitcoinId)
+  );
 
   return {
-    inelastic: options.inelastic,
-    locked: {
-      axis: options.inelastic,
-      label: lockedLabel,
-      ...(options.inelastic === 'spend'
-        ? { spendLines: spendDetail.lines, spendTotal: spendDetail.total }
-        : {}),
-    },
+    inelastic,
+    locked,
     rowAxis,
     colAxis,
     rows,
@@ -331,6 +436,12 @@ export function applySpendTarget(plan: RetirementPlan, targetTotal: number): Ret
 export function applyGridScenario(plan: RetirementPlan, scenario: GridScenario): RetirementPlan {
   let next = structuredClone(plan);
   next.primary = { ...next.primary, retirementAge: scenario.retirementAge };
+  if (scenario.ssClaimAge != null) {
+    const claimAge = Math.min(70, Math.max(62, Math.round(scenario.ssClaimAge)));
+    next.socialSecurity = next.socialSecurity.map((s) =>
+      s.owner === 'primary' ? { ...s, claimAge } : s
+    );
+  }
   next = syncRetirementDerivedFields(next);
   next = applySpendTarget(next, scenario.spendTarget);
   const choice = bitcoinGridChoice(scenario.bitcoinId);

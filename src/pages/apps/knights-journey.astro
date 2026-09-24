@@ -1,0 +1,18 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Knights Journey';
+const pageDescription = 'A knight’s tour on an 8×8 board. Hop only to unused squares. Score is how many stones you leave behind — 0 is perfect.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/knights_journey/knights-journey.css" />
+  <div class="kj-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="kj-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/assets/js/puzzle-tutorial.js"></script>
+  <script is:inline src="/html_showcase/knights_journey/knights-journey.js"></script>
+</Layout>

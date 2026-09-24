@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Mastermind';
+const pageDescription = 'Crack a hidden row of colored pegs. Red keys mark the right place, white keys mark the right color elsewhere — Easy through Nightmare.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/mastermind/mastermind.css" />
+  <div class="mm-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="mm-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/mastermind/mastermind.js"></script>
+</Layout>

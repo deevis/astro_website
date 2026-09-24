@@ -154,6 +154,54 @@ export const games: GameEntry[] = [
     genre: 'puzzle',
     bullets: ['Easy 8, Medium 7, Hard 6, Nightmare 5', 'Daily puzzle', 'Hats, stalls, bands, mascots, and more'],
   },
+  {
+    id: 'knights-journey',
+    title: 'Knights Journey',
+    tagline: 'Hop once. Never twice.',
+    description:
+      'A knight’s tour on an 8×8 board. Gobble every square you land on — leftover squares are your score, and 0 is perfect.',
+    href: '/apps/knights-journey',
+    image: '/html_showcase/knights_journey/thumb.png',
+    playLabel: 'Play Knights Journey',
+    genre: 'puzzle',
+    bullets: ['Easy marks hops, Normal does not', 'Stones and garden themes', 'Daily puzzle and share links'],
+  },
+  {
+    id: 'nonogram',
+    title: 'Nonogram',
+    tagline: 'Read the runs. Paint the picture.',
+    description:
+      'Picture-logic puzzles. Row and column numbers tell you which cells to fill — Easy 5×5 through Nightmare 20×20.',
+    href: '/apps/nonogram',
+    image: '/html_showcase/nonogram/thumb.png',
+    playLabel: 'Play Nonogram',
+    genre: 'puzzle',
+    bullets: ['5×5 through 20×20', 'Daily puzzle', 'Fill, mark, hint, and share'],
+  },
+  {
+    id: 'mastermind',
+    title: 'Mastermind',
+    tagline: 'Guess the code. Read the keys.',
+    description:
+      'Crack a hidden row of colored pegs. Red keys mark the right place, white keys mark the right color elsewhere — Easy through Nightmare.',
+    href: '/apps/mastermind',
+    image: '/html_showcase/mastermind/thumb.png',
+    playLabel: 'Play Mastermind',
+    genre: 'puzzle',
+    bullets: ['Classic 4-peg code through 5 pegs and 8 colors', 'Daily code', 'Keys, hints, and codes still possible'],
+  },
+  {
+    id: 'othello',
+    title: 'Othello',
+    tagline: 'Sandwich. Flip. Take the corners.',
+    description:
+      'Classic Othello against the computer. Black and white stones on a green board — Easy through Nightmare.',
+    href: '/apps/othello',
+    image: '/html_showcase/othello/thumb.png',
+    playLabel: 'Play Othello',
+    genre: 'strategy',
+    bullets: ['Play Black or White', 'Easy, Medium, Hard, Nightmare', 'Hints, undo, and flip animations'],
+  },
 ];
 
 export interface AppEntry {

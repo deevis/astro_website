@@ -11,11 +11,11 @@ const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.le
 ---
 
 <Layout
-  title="Games | darrenhicks.dev"
-  description="Playable adventures, strategy campaigns, puzzles, and trainers. Today’s pick is on stage — browse with the arrow keys or pick a cabinet."
+  title="Game Roulette | darrenhicks.dev"
+  description="Game Roulette. Pick a game, or spin for a new one."
 >
   <main class="pt-24 pb-16">
-    <section class="relative pt-16 pb-10 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900 overflow-hidden">
+    <section class="relative pt-8 md:pt-16 pb-8 md:pb-10 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900 overflow-hidden">
       <div class="game-hero-grid" aria-hidden="true"></div>
       <div class="container mx-auto px-4 md:px-6 lg:px-8 relative">
         <div class="max-w-3xl">
@@ -23,10 +23,10 @@ const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.le
             Player select
           </p>
           <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-            Games
+            Game Roulette
           </h1>
-          <p class="text-xl text-gray-600 dark:text-gray-300">
-            {countLabel}. Today’s pick is on stage — hover a cabinet to bring it forward, click or hit Enter to play.
+          <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300">
+            {countLabel}. Tap a game to inspect it, or hit Spin.
           </p>
         </div>
       </div>

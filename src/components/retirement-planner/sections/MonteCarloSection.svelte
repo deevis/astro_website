@@ -45,10 +45,13 @@
     applyGridScenario,
     BITCOIN_GRID_CHOICES,
     buildMonteCarloGrid,
+    GRID_AXIS_IDS,
+    GRID_AXIS_LABELS,
     GRID_CELL_COUNT,
+    lockedGridAxes,
     type BitcoinGridChoiceId,
+    type GridAxisId,
     type GridAxisValue,
-    type GridInelasticAxis,
     type GridScenario,
     type GridSpec,
   } from '../lib/monteCarloGrid';
@@ -97,7 +100,8 @@
   let confirmHysaPercent = 100;
   let policyComparison: PolicyComparisonResult | null = null;
   let runKind: 'single' | 'grid' | null = null;
-  let gridInelastic: GridInelasticAxis = 'bitcoin';
+  let gridRowAxis: GridAxisId = 'retirementAge';
+  let gridColAxis: GridAxisId = 'spend';
   let gridLockedBitcoinId: BitcoinGridChoiceId = 'hold';
   let gridSpec: GridSpec | null = null;
   let gridCells: GridCellView[] = [];
@@ -136,9 +140,12 @@
     Math.min($planStore.primary.medicareStartAge, $planStore.primary.lifeExpectancy) -
       Math.max($planStore.primary.currentAge, $planStore.primary.retirementAge)
   );
+  $: gridLockedAxes = lockedGridAxes(gridRowAxis, gridColAxis);
+  $: bitcoinLocked = gridLockedAxes.includes('bitcoin');
   $: gridPreview = planReady
     ? buildMonteCarloGrid($planStore, {
-        inelastic: gridInelastic,
+        rowAxis: gridRowAxis,
+        colAxis: gridColAxis,
         lockedBitcoinId: gridLockedBitcoinId,
       })
     : null;
@@ -381,8 +388,9 @@
     return `linear-gradient(165deg, rgba(74, 222, 128, ${top}), rgba(21, 128, 61, ${bot}))`;
   }
 
-  function baselineCaption(axis: GridInelasticAxis): string {
+  function baselineCaption(axis: GridAxisId): string {
     if (axis === 'retirementAge') return 'Target';
+    if (axis === 'ssClaimAge') return 'Plan';
     if (axis === 'spend') return 'Current';
     return '';
   }
@@ -454,16 +462,31 @@
   } | null {
     if (col.spendLines && col.spendLines.length) return col;
     if (row.spendLines && row.spendLines.length) return row;
-    if (displayGrid?.locked.spendLines?.length) return displayGrid.locked;
+    const lockedSpend = displayGrid?.locked.find((l) => l.spendLines?.length);
+    if (lockedSpend) return lockedSpend;
     return null;
   }
 
-  function setGridInelastic(axis: GridInelasticAxis) {
-    gridInelastic = axis;
-    if (!running) {
-      gridSpec = null;
-      gridCells = [];
+  function resetGridPreview() {
+    if (running) return;
+    gridSpec = null;
+    gridCells = [];
+  }
+
+  function setGridRowAxis(axis: GridAxisId) {
+    if (axis === gridColAxis) {
+      gridColAxis = gridRowAxis;
     }
+    gridRowAxis = axis;
+    resetGridPreview();
+  }
+
+  function setGridColAxis(axis: GridAxisId) {
+    if (axis === gridRowAxis) {
+      gridRowAxis = gridColAxis;
+    }
+    gridColAxis = axis;
+    resetGridPreview();
   }
 
   async function startGrid() {
@@ -475,7 +498,8 @@
     gridCollapsed = false;
     const plan = structuredClone(get(planStore));
     const spec = buildMonteCarloGrid(plan, {
-      inelastic: gridInelastic,
+      rowAxis: gridRowAxis,
+      colAxis: gridColAxis,
       lockedBitcoinId: gridLockedBitcoinId,
     });
     gridSpec = spec;
@@ -1189,47 +1213,62 @@
       <div>
         <h3 class="text-sm font-semibold text-gray-900 dark:text-white">Scenario grid</h3>
         <p class="mt-1 text-xs text-gray-500">
-          Lock one dimension. The other two become a {GRID_CELL_COUNT}-cell Monte Carlo
+          Choose the two dimensions that vary. The other two stay at the plan’s current values.
+          Primary Social Security claim age is the one that fluctuates when SS is selected.
+          That pair becomes a {GRID_CELL_COUNT}-cell Monte Carlo
           ({displayGrid.rows.length}×{displayGrid.cols.length} × {$planStore.assumptions.monteCarloRuns.toLocaleString()} paths,
           same random seed). Cells fill in as each run finishes. Sky highlighting marks the plan’s
-          target retirement age and current spend.
+          target retirement age, SS claim age, and current spend.
         </p>
       </div>
-      <fieldset class="space-y-2" disabled={running}>
+      <fieldset class="space-y-3" disabled={running}>
         <legend class="text-xs font-semibold uppercase tracking-wide text-gray-500">
-          Inelastic (locked) dimension
+          Fluctuating dimensions
         </legend>
-        <div class="flex flex-wrap gap-2">
-          <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm">
-            <input
-              type="radio"
-              name="grid-inelastic"
-              checked={gridInelastic === 'bitcoin'}
-              on:change={() => setGridInelastic('bitcoin')}
-            />
-            Bitcoin today
-          </label>
-          <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm">
-            <input
-              type="radio"
-              name="grid-inelastic"
-              checked={gridInelastic === 'retirementAge'}
-              on:change={() => setGridInelastic('retirementAge')}
-            />
-            Retirement age
-          </label>
-          <label class="inline-flex items-center gap-2 rounded-md border border-gray-200 dark:border-gray-700 px-3 py-1.5 text-sm">
-            <input
-              type="radio"
-              name="grid-inelastic"
-              checked={gridInelastic === 'spend'}
-              on:change={() => setGridInelastic('spend')}
-            />
-            Starting spend
-          </label>
+        <div class="grid gap-3 sm:grid-cols-2">
+          <div class="space-y-1.5">
+            <p class="text-[11px] font-medium text-gray-500">Rows</p>
+            <div class="flex flex-wrap gap-2">
+              {#each GRID_AXIS_IDS as axis}
+                <label
+                  class="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm {gridRowAxis === axis
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/40 text-primary-800 dark:text-primary-200'
+                    : 'border-gray-200 dark:border-gray-700'}"
+                >
+                  <input
+                    type="radio"
+                    name="grid-row-axis"
+                    checked={gridRowAxis === axis}
+                    on:change={() => setGridRowAxis(axis)}
+                  />
+                  {GRID_AXIS_LABELS[axis].long}
+                </label>
+              {/each}
+            </div>
+          </div>
+          <div class="space-y-1.5">
+            <p class="text-[11px] font-medium text-gray-500">Columns</p>
+            <div class="flex flex-wrap gap-2">
+              {#each GRID_AXIS_IDS as axis}
+                <label
+                  class="inline-flex items-center gap-2 rounded-md border px-3 py-1.5 text-sm {gridColAxis === axis
+                    ? 'border-primary-500 bg-primary-50 dark:bg-primary-950/40 text-primary-800 dark:text-primary-200'
+                    : 'border-gray-200 dark:border-gray-700'}"
+                >
+                  <input
+                    type="radio"
+                    name="grid-col-axis"
+                    checked={gridColAxis === axis}
+                    on:change={() => setGridColAxis(axis)}
+                  />
+                  {GRID_AXIS_LABELS[axis].long}
+                </label>
+              {/each}
+            </div>
+          </div>
         </div>
       </fieldset>
-      {#if gridInelastic === 'bitcoin'}
+      {#if bitcoinLocked}
         <label class="block text-sm" class:opacity-60={running}>
           <span class="text-xs font-semibold uppercase tracking-wide text-gray-500">Locked Bitcoin choice</span>
           <select
@@ -1250,27 +1289,17 @@
         </label>
       {/if}
       <p
-        class="text-xs text-gray-500 {displayGrid.locked.spendLines?.length ? 'cursor-help' : ''}"
-        on:mouseenter={(e) =>
-          displayGrid.locked.spendLines?.length &&
-          openSpendTip(
-            e,
-            displayGrid.locked.label,
-            displayGrid.locked.spendLines,
-            displayGrid.locked.spendTotal
-          )}
+        class="text-xs text-gray-500 {displayGrid.locked.some((l) => l.spendLines?.length) ? 'cursor-help' : ''}"
+        on:mouseenter={(e) => {
+          const lockedSpend = displayGrid.locked.find((l) => l.spendLines?.length);
+          lockedSpend?.spendLines?.length &&
+            openSpendTip(e, lockedSpend.label, lockedSpend.spendLines, lockedSpend.spendTotal);
+        }}
         on:mousemove={moveSpendTip}
         on:mouseleave={closeSpendTip}
       >
-        Locked: {displayGrid.locked.label}. Rows: {displayGrid.rowAxis === 'retirementAge'
-          ? 'retirement age'
-          : displayGrid.rowAxis === 'spend'
-            ? 'starting spend'
-            : 'Bitcoin today'}. Columns: {displayGrid.colAxis === 'retirementAge'
-          ? 'retirement age'
-          : displayGrid.colAxis === 'spend'
-            ? 'starting spend'
-            : 'Bitcoin today'}.
+        Locked: {displayGrid.locked.map((l) => l.label).join(' · ')}. Rows: {GRID_AXIS_LABELS[displayGrid.rowAxis].long.toLowerCase()}.
+        Columns: {GRID_AXIS_LABELS[displayGrid.colAxis].long.toLowerCase()}.
         {#if bitcoinHoldings.usd <= 0}
           No Bitcoin holdings — sell-today rows will match keep.
         {/if}
@@ -1281,11 +1310,7 @@
           <thead>
             <tr>
               <th class="sticky left-0 z-10 bg-white dark:bg-gray-900 px-2 py-1.5 text-left font-medium text-gray-500 border-b border-gray-200 dark:border-gray-700">
-                {displayGrid.rowAxis === 'retirementAge'
-                  ? 'Age'
-                  : displayGrid.rowAxis === 'spend'
-                    ? 'Spend'
-                    : 'Bitcoin'}
+                {GRID_AXIS_LABELS[displayGrid.rowAxis].short}
               </th>
               {#each displayGrid.cols as col}
                 <th

@@ -187,6 +187,38 @@
           "tags": ["game", "puzzle", "logic", "deduction", "interactive", "educational"]
         },
         {
+          "title": "Knights Journey",
+          "description": "A knight’s tour on an 8×8 board. Hop only to unused squares. Score is how many stones you leave behind — 0 is perfect.",
+          "href": "html_showcase/knights_journey/index.html",
+          "image": "html_showcase/knights_journey/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "chess", "knight", "interactive", "educational"]
+        },
+        {
+          "title": "Nonogram",
+          "description": "Picture-logic puzzles. Row and column numbers tell you which cells to fill — Easy 5×5 through Nightmare 20×20.",
+          "href": "html_showcase/nonogram/index.html",
+          "image": "html_showcase/nonogram/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "nonogram", "picross", "logic", "interactive"]
+        },
+        {
+          "title": "Mastermind",
+          "description": "Crack a hidden row of colored pegs. Red keys mark the right place, white keys mark the right color elsewhere — Easy through Nightmare.",
+          "href": "html_showcase/mastermind/index.html",
+          "image": "html_showcase/mastermind/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "mastermind", "logic", "deduction", "interactive"]
+        },
+        {
+          "title": "Othello",
+          "description": "Classic Othello against the computer. Black and white stones on a green board — Easy through Nightmare.",
+          "href": "html_showcase/othello/index.html",
+          "image": "html_showcase/othello/thumb.png",
+          "category": "game",
+          "tags": ["game", "strategy", "othello", "reversi", "interactive", "board game"]
+        },
+        {
           "title": "Massive Tree Viewer",
           "description": "Interactive particle system with physics simulation using Canvas API.",
           "href": "html_showcase/tree_viewer/index.html",

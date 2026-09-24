@@ -1,0 +1,16 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Othello';
+const pageDescription = 'Classic Othello against the computer. Black and white stones, Easy through Nightmare.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/othello/othello.css" />
+  <div class="ot-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="ot-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/othello/othello.js"></script>
+</Layout>

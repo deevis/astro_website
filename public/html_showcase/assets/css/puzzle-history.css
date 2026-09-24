@@ -1,19 +1,22 @@
 .lg-overlay.ph-overlay,
 .su-overlay.ph-overlay,
 .cq-overlay.ph-overlay,
+.kj-overlay.ph-overlay,
+.ng-overlay.ph-overlay,
+.mm-overlay.ph-overlay,
 .ph-overlay {
-  --ph-bg: var(--lg-elev, var(--su-elev, var(--cq-elev, #17202c)));
-  --ph-bg-2: var(--lg-bg-2, var(--su-bg-2, var(--cq-bg-2, #121a24)));
-  --ph-text: var(--lg-text, var(--su-text, var(--cq-text, #e8eef6)));
-  --ph-muted: var(--lg-muted, var(--su-muted, var(--cq-muted, #8b9bb0)));
-  --ph-faint: var(--lg-faint, var(--su-faint, var(--cq-faint, #66758a)));
-  --ph-border: var(--lg-border, var(--su-border, var(--cq-border, #2a384a)));
-  --ph-gold: var(--lg-gold, var(--su-gold, var(--cq-gold, #e0b84e)));
-  --ph-gold-deep: var(--lg-gold-deep, var(--su-gold-deep, var(--cq-gold-deep, #c4922a)));
-  --ph-teal: var(--lg-teal, var(--su-teal, var(--cq-teal, #5ec8c5)));
-  --ph-sans: var(--lg-sans, var(--su-sans, var(--cq-sans, "IBM Plex Sans", "Segoe UI", sans-serif)));
-  --ph-serif: var(--lg-serif, var(--su-serif, var(--cq-serif, Fraunces, Georgia, serif)));
-  --ph-shadow: var(--lg-shadow, var(--su-shadow, var(--cq-shadow, 0 22px 50px rgba(0, 0, 0, 0.42))));
+  --ph-bg: var(--mm-elev, var(--ng-elev, var(--kj-elev, var(--lg-elev, var(--su-elev, var(--cq-elev, #17202c))))));
+  --ph-bg-2: var(--mm-bg-2, var(--ng-bg-2, var(--kj-bg-2, var(--lg-bg-2, var(--su-bg-2, var(--cq-bg-2, #121a24))))));
+  --ph-text: var(--mm-text, var(--ng-text, var(--kj-text, var(--lg-text, var(--su-text, var(--cq-text, #e8eef6))))));
+  --ph-muted: var(--mm-muted, var(--ng-muted, var(--kj-muted, var(--lg-muted, var(--su-muted, var(--cq-muted, #8b9bb0))))));
+  --ph-faint: var(--mm-faint, var(--ng-faint, var(--kj-faint, var(--lg-faint, var(--su-faint, var(--cq-faint, #66758a))))));
+  --ph-border: var(--mm-border, var(--ng-border, var(--kj-border, var(--lg-border, var(--su-border, var(--cq-border, #2a384a))))));
+  --ph-gold: var(--mm-gold, var(--ng-gold, var(--kj-gold, var(--lg-gold, var(--su-gold, var(--cq-gold, #e0b84e))))));
+  --ph-gold-deep: var(--mm-gold-deep, var(--ng-gold-deep, var(--kj-gold-deep, var(--lg-gold-deep, var(--su-gold-deep, var(--cq-gold-deep, #c4922a))))));
+  --ph-teal: var(--mm-teal, var(--ng-teal, var(--kj-teal, var(--lg-teal, var(--su-teal, var(--cq-teal, #5ec8c5))))));
+  --ph-sans: var(--mm-sans, var(--ng-sans, var(--kj-sans, var(--lg-sans, var(--su-sans, var(--cq-sans, "IBM Plex Sans", "Segoe UI", sans-serif))))));
+  --ph-serif: var(--mm-serif, var(--ng-serif, var(--kj-serif, var(--lg-serif, var(--su-serif, var(--cq-serif, Fraunces, Georgia, serif))))));
+  --ph-shadow: var(--mm-shadow, var(--ng-shadow, var(--kj-shadow, var(--lg-shadow, var(--su-shadow, var(--cq-shadow, 0 22px 50px rgba(0, 0, 0, 0.42)))))));
   position: fixed;
   inset: 0;
   z-index: 40;
@@ -193,7 +196,10 @@
 
 .lg-splash-links,
 .su-splash-links,
-.cq-splash-links {
+.cq-splash-links,
+.kj-splash-links,
+.ng-splash-links,
+.mm-splash-links {
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
@@ -203,7 +209,10 @@
 
 .lg-splash-links .lg-how,
 .su-splash-links .su-how,
-.cq-splash-links .cq-how {
+.cq-splash-links .cq-how,
+.kj-splash-links .kj-how,
+.ng-splash-links .ng-how,
+.mm-splash-links .mm-how {
   width: auto;
   min-width: 140px;
 }
@@ -238,7 +247,10 @@
 .ph-overlay.ph-cal-overlay,
 .lg-overlay.ph-overlay.ph-cal-overlay,
 .su-overlay.ph-overlay.ph-cal-overlay,
-.cq-overlay.ph-overlay.ph-cal-overlay {
+.cq-overlay.ph-overlay.ph-cal-overlay,
+.kj-overlay.ph-overlay.ph-cal-overlay,
+.ng-overlay.ph-overlay.ph-cal-overlay,
+.mm-overlay.ph-overlay.ph-cal-overlay {
   position: fixed;
   inset: 0;
   z-index: 80;

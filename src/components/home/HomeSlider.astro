@@ -37,7 +37,7 @@ const isPoster = variant === 'poster';
 const slideWidth = isPoster ? 'w-[min(72vw,16.5rem)]' : 'w-[min(80vw,18rem)]';
 ---
 
-<section id={sectionId} class="py-10 scroll-mt-28" data-home-slider-section>
+<section id={sectionId} class="py-10 scroll-mt-28 min-w-0 overflow-hidden" data-home-slider-section>
   <div class="flex flex-col md:flex-row md:items-end md:justify-between gap-3 mb-5">
     <div>
       <h2 class="text-2xl md:text-3xl font-bold">{title}</h2>
@@ -48,7 +48,7 @@ const slideWidth = isPoster ? 'w-[min(72vw,16.5rem)]' : 'w-[min(80vw,18rem)]';
     )}
   </div>
 
-  <div class="relative">
+  <div class="relative min-w-0">
     <button
       type="button"
       class="home-slider-prev absolute left-0 top-1/2 -translate-y-1/2 -translate-x-1 md:-translate-x-3 z-10 hidden md:flex items-center justify-center w-10 h-10 rounded-full border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800 text-gray-700 dark:text-gray-200 hover:border-primary-400"
@@ -79,17 +79,18 @@ const slideWidth = isPoster ? 'w-[min(72vw,16.5rem)]' : 'w-[min(80vw,18rem)]';
                   alt=""
                   width="720"
                   height="480"
-                  class="home-slide-thumb w-full h-full object-cover transition-transform duration-300 group-hover:scale-[1.03]"
+                  class="home-slide-thumb w-full h-full object-cover"
                   loading={index < eagerCount ? 'eager' : 'lazy'}
                   fetchpriority={index < eagerCount ? 'high' : 'low'}
                   decoding="async"
                 />
                 <p class="home-slide-kicker absolute top-2 left-2 m-0 px-2 py-0.5 rounded-full bg-primary-600 text-white text-[10px] font-semibold uppercase tracking-[0.14em] empty:hidden"></p>
-                <div class="absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 group-hover:opacity-100 group-focus-visible:opacity-100 transition-opacity">
+                <div class="home-slide-overlay absolute inset-0 flex items-end p-3 bg-gradient-to-t from-black/80 via-black/40 to-transparent opacity-0 pointer-events-none">
                   <p class="text-sm text-white leading-snug">{item.tagline}</p>
                 </div>
               </div>
-              <h3 class="px-3 py-2.5 text-base font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+              <h3 class="px-3 pt-2.5 pb-1 text-base font-semibold text-gray-900 dark:text-white">{item.title}</h3>
+              <p class="home-slide-tagline px-3 pb-2.5 text-sm text-gray-600 dark:text-gray-300 leading-snug">{item.tagline}</p>
             </a>
           </article>
         ) : (
@@ -389,3 +390,27 @@ const slideWidth = isPoster ? 'w-[min(72vw,16.5rem)]' : 'w-[min(80vw,18rem)]';
 
   document.querySelectorAll<HTMLElement>('[data-home-slider-section]').forEach(setupSlider);
 </script>
+
+<style>
+  @media (hover: hover) and (pointer: fine) {
+    .home-slide a:hover .home-slide-thumb {
+      transform: scale(1.03);
+      transition: transform 0.3s ease;
+    }
+
+    .home-slide a:hover .home-slide-overlay,
+    .home-slide a:focus-visible .home-slide-overlay {
+      opacity: 1;
+    }
+
+    .home-slide-tagline {
+      display: none;
+    }
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .home-slide-overlay {
+      display: none;
+    }
+  }
+</style>

@@ -18,11 +18,11 @@ interface Props {
 const { items, caption = 'From the gallery' } = Astro.props;
 ---
 
-<aside class="gallery-accent rounded-2xl overflow-hidden border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800" data-gallery-accent>
+<aside class="gallery-accent min-w-0 w-full max-w-full rounded-2xl overflow-hidden border border-gray-200 dark:border-dark-700 bg-white dark:bg-dark-800" data-gallery-accent>
   <a class="gallery-accent-link block group" href="/gallery">
     <div class="relative overflow-hidden">
       <img
-        class="gallery-accent-thumb w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
+        class="gallery-accent-thumb w-full max-w-full aspect-[4/3] object-cover transition-transform duration-500 group-hover:scale-105"
         src={items[0]?.thumb}
         alt={items[0]?.title ?? 'Gallery'}
         loading="lazy"

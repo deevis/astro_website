@@ -16,8 +16,10 @@ import {
   BITCOIN_GRID_CHOICES,
   buildMonteCarloGrid,
   GRID_CELL_COUNT,
+  primarySsClaimAge,
   retirementAgeGridValues,
   spendGridTargets,
+  ssClaimAgeGridValues,
 } from './monteCarloGrid';
 import { computeAnnualTax, socialSecurityTaxableFraction } from './tax/federalTaxEngine';
 import { runMonteCarloBatch, runMonteCarloAsync, makeReturnSampler, createRng, summarizeEndingBalances, type FailureCase } from './monteCarloCore';
@@ -497,21 +499,28 @@ test('liquidating bitcoin creates missing HYSA and brokerage destinations', () =
  assert.ok(out.accounts.some(a=>a.type==='brokerage' && Math.abs(a.balance-30000)<0.02));
 });
 
-test('Monte Carlo grid is a 6×6 cartesian product with one locked axis', () => {
+test('Monte Carlo grid is a 6×6 cartesian product with two locked leftover axes', () => {
  const p=plan();
  p.primary.currentAge=50; p.primary.retirementAge=57;
  p.expenses[0].annualAmount=60000;
+ p.socialSecurity[0].claimAge=67;
  const ages=retirementAgeGridValues(57,50);
  assert.deepEqual(ages,[55,56,57,58,59,60]);
  assert.deepEqual(retirementAgeGridValues(57,56),[56,57,58,59,60,61]);
  assert.deepEqual(retirementAgeGridValues(57,57),[57,58,59,60,61,62]);
  assert.deepEqual(retirementAgeGridValues(57,60),[60,61,62,63,64,65]);
  assert.deepEqual(spendGridTargets(60000),[45000,50000,55000,60000,65000,70000]);
+ assert.deepEqual(ssClaimAgeGridValues(67),[65,66,67,68,69,70]);
+ assert.deepEqual(ssClaimAgeGridValues(62),[62,63,64,65,66,67]);
+ assert.deepEqual(ssClaimAgeGridValues(70),[65,66,67,68,69,70]);
+ assert.deepEqual(ssClaimAgeGridValues(63),[62,63,64,65,66,67]);
  const lockedBtc=buildMonteCarloGrid(p,{inelastic:'bitcoin',lockedBitcoinId:'hold'});
  assert.equal(lockedBtc.cells.length,GRID_CELL_COUNT);
  assert.equal(lockedBtc.rowAxis,'retirementAge');
  assert.equal(lockedBtc.colAxis,'spend');
+ assert.deepEqual(lockedBtc.locked.map((l)=>l.axis).sort(),['bitcoin','ssClaimAge']);
  assert.ok(lockedBtc.cells.every((c)=>c.scenario.bitcoinId==='hold'));
+ assert.ok(lockedBtc.cells.every((c)=>c.scenario.ssClaimAge===67));
  assert.deepEqual([...new Set(lockedBtc.cells.map((c)=>c.scenario.retirementAge))].sort((a,b)=>a-b),ages);
  const lockedAge=buildMonteCarloGrid(p,{inelastic:'retirementAge'});
  assert.ok(lockedAge.cells.every((c)=>c.scenario.retirementAge===57));
@@ -521,6 +530,21 @@ test('Monte Carlo grid is a 6×6 cartesian product with one locked axis', () => 
  assert.equal(new Set(lockedAge.cells.map((c)=>c.scenario.bitcoinId)).size,BITCOIN_GRID_CHOICES.length);
  const lockedSpend=buildMonteCarloGrid(p,{inelastic:'spend'});
  assert.ok(lockedSpend.cells.every((c)=>c.scenario.spendTarget===60000));
+ const swapped=buildMonteCarloGrid(p,{rowAxis:'spend',colAxis:'retirementAge',lockedBitcoinId:'hold'});
+ assert.equal(swapped.rowAxis,'spend');
+ assert.equal(swapped.colAxis,'retirementAge');
+ assert.equal(swapped.inelastic,'bitcoin');
+ assert.ok(swapped.cells.every((c)=>c.scenario.bitcoinId==='hold'));
+ const btcAge=buildMonteCarloGrid(p,{rowAxis:'bitcoin',colAxis:'retirementAge'});
+ assert.equal(btcAge.inelastic,'spend');
+ assert.ok(btcAge.cells.every((c)=>c.scenario.spendTarget===60000));
+ const ssSpend=buildMonteCarloGrid(p,{rowAxis:'ssClaimAge',colAxis:'spend',lockedBitcoinId:'hold'});
+ assert.equal(ssSpend.rowAxis,'ssClaimAge');
+ assert.equal(ssSpend.colAxis,'spend');
+ assert.ok(ssSpend.rows.find((r)=>r.id==='ss-67')?.isDefault);
+ assert.ok(ssSpend.cells.every((c)=>c.scenario.retirementAge===57));
+ assert.ok(ssSpend.cells.every((c)=>c.scenario.bitcoinId==='hold'));
+ assert.deepEqual([...new Set(ssSpend.cells.map((c)=>c.scenario.ssClaimAge))].sort((a,b)=>a-b),ssClaimAgeGridValues(67));
  const currentSpendCol=lockedBtc.cols.find((c)=>c.id==='spend:0');
  near(currentSpendCol?.spendTotal??0,60000);
  assert.ok(currentSpendCol?.isDefault);
@@ -530,7 +554,7 @@ test('Monte Carlo grid is a 6×6 cartesian product with one locked axis', () => 
  assert.ok(currentSpendCol?.spendLines?.some((l)=>l.label==='Living' && Math.abs(l.amount-60000)<0.02));
  const lowSpendCol=lockedBtc.cols.find((c)=>c.id==='spend:-15000');
  near(lowSpendCol?.spendTotal??0,45000);
- assert.ok(lockedSpend.locked.spendLines?.some((l)=>l.label==='Living'));
+ assert.ok(lockedSpend.locked.find((l)=>l.axis==='spend')?.spendLines?.some((l)=>l.label==='Living'));
 });
 
 test('start-of-plan spend breakdown lists housing and named expenses', () => {
@@ -564,21 +588,26 @@ test('grid spend targets reshape current-age expenses', () => {
  near(out.expenses[0].retirementAnnualAmount??0,37500);
 });
 
-test('grid scenarios apply retirement age, spend, and bitcoin sale independently', () => {
+test('grid scenarios apply retirement age, spend, bitcoin sale, and SS claim age independently', () => {
  const p=plan();
  p.primary.currentAge=50; p.primary.retirementAge=57; p.primary.lifeExpectancy=90;
  p.accounts=[btc(100000),account('hysa',10000),account('brokerage',10000,{costBasisUsd:10000})];
  p.accounts[0].costBasisUsd=100000;
  p.expenses=[{id:'living',label:'Living',annualAmount:60000,startAge:18,endAge:null,category:'general'}];
- const hold=applyGridScenario(p,{bitcoinId:'hold',retirementAge:59,spendTarget:55000});
+ p.socialSecurity=[{...p.socialSecurity[0],owner:'primary',claimAge:67},{...p.socialSecurity[0],owner:'spouse',claimAge:64}];
+ const hold=applyGridScenario(p,{bitcoinId:'hold',retirementAge:59,spendTarget:55000,ssClaimAge:70});
  assert.equal(hold.primary.retirementAge,59);
  assert.equal(hold.socialSecurity[0].futureWorkYears,9);
+ assert.equal(hold.socialSecurity.find((s)=>s.owner==='primary')?.claimAge,70);
+ assert.equal(hold.socialSecurity.find((s)=>s.owner==='spouse')?.claimAge,64);
  near(nominalAnnualSpendAtAge(hold,50).total,55000);
  assert.ok(hold.accounts.find((a)=>a.type==='bitcoin')!.balance>0);
  const sold=applyGridScenario(p,{bitcoinId:'sell-100',retirementAge:57,spendTarget:60000});
  assert.equal(sold.accounts.find((a)=>a.type==='bitcoin')!.balance,0);
  assert.ok(sold.accounts.find((a)=>a.type==='brokerage')!.balance>10000);
  assert.equal(p.accounts.find((a)=>a.type==='bitcoin')!.balance,100000);
+ assert.equal(p.socialSecurity.find((s)=>s.owner==='primary')?.claimAge,67);
+ assert.equal(primarySsClaimAge(p),67);
 });
 
 test('salary is prorated from today through the birth month in the retirement year', () => {
