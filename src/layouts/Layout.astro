@@ -9,6 +9,7 @@ import Footer from '../components/Footer.astro';
 import NewsTicker from '../components/NewsTicker.astro';
 import NewsModal from '../components/NewsModal.astro';
 import GoogleAnalytics from '../components/GoogleAnalytics.astro';
+import RecentGameTracker from '../components/games/RecentGameTracker.astro';
 
 interface Props {
   title: string;
@@ -52,6 +53,7 @@ const {
     <slot />
     <Footer />
     <NewsModal />
+    <RecentGameTracker />
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/prism.min.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-typescript.min.js"></script>
     <script is:inline src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-jsx.min.js"></script>

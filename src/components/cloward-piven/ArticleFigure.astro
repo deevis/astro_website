@@ -1,0 +1,156 @@
+---
+interface Props { kind: 'mechanism' | 'timeline' | 'fraud' | 'costs' | 'education' | 'family' | 'power' | 'interest'; }
+const { kind } = Astro.props;
+---
+
+{kind === 'mechanism' && (
+<figure class="figure" id="mechanism" aria-labelledby="mechanism-title">
+  <p class="eyebrow">01 / The proposed mechanism · 1966</p>
+  <h3 id="mechanism-title">The crisis was the mechanism.</h3>
+  <p class="deck">Cloward and Piven proposed using lawful benefit claims to force a political response.</p>
+  <ol class="flow">
+    <li><span class="number" aria-hidden="true">01</span><h4>Organize claims</h4><p>Help eligible people obtain assistance already available under law.</p></li>
+    <li><span class="number" aria-hidden="true">02</span><h4>Intensify strain</h4><p>Increase pressure on local administration and welfare budgets.</p></li>
+    <li><span class="number" aria-hidden="true">03</span><h4>Force a response</h4><p>Expose political conflicts and press national leaders to act.</p></li>
+    <li><span class="number" aria-hidden="true">04</span><h4>Change the system</h4><p>Seek a federal guaranteed annual income.</p></li>
+  </ol>
+  <div class="takeaway"><strong>The intended lever:</strong> obligations that local institutions could no longer comfortably contain.</div>
+  <figcaption class="caption">A diagram of the authors’ proposal, not a claim that subsequent policies implemented it. Source: <a href="https://www.thenation.com/article/archive/weight-poor-strategy-end-poverty/">The Weight of the Poor, May 2, 1966</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'timeline' && (
+<figure class="figure" id="timeline" aria-labelledby="timeline-title">
+  <p class="eyebrow">02 / Selected turning points · 1974–2023</p>
+  <h3 id="timeline-title">A changing system. A continuing bill.</h3>
+  <p class="deck">Federalization, restrictions, emergency support, and retrenchment all belong in the history.</p>
+  <ol class="timeline">
+    <li><span class="year">1974</span><div><span class="tag">Federalization</span><h4>SSI payments begin</h4><p>Federal assistance replaces earlier state-administered categories.</p></div></li>
+    <li><span class="year">1996</span><div><span class="tag">Restructuring</span><h4>TANF replaces AFDC</h4><p>Cash assistance moves to a different funding and eligibility framework.</p></div></li>
+    <li><span class="year">1998–<br>2001</span><div><span class="tag">Fiscal interruption</span><h4>Federal budget surpluses</h4><p>A break in the history of annual deficits.</p></div></li>
+    <li><span class="year">2006</span><div><span class="tag">Expansion</span><h4>Medicare Part D begins</h4><p>A new prescription-drug benefit takes effect.</p></div></li>
+    <li><span class="year">2020</span><div><span class="tag">Emergency response</span><h4>Pandemic benefits expand</h4><p>Rapid implementation tests administrative capacity.</p></div></li>
+    <li><span class="year">2023</span><div><span class="tag">Retrenchment</span><h4>SNAP supplements end</h4><p>Emergency allotments end after February.</p></div></li>
+  </ol>
+  <figcaption class="caption">Selected events, not equal-sized changes or a measured acceleration curve. Sources: <a href="https://www.ssa.gov/history/1972amend.html">SSA</a>, <a href="https://www.congress.gov/crs_external_products/IF/PDF/IF10036/IF10036.34.pdf">CRS</a>, <a href="https://fred.stlouisfed.org/data/FYFSD">OMB via FRED</a>, <a href="https://www.cms.gov/about-cms/who-we-are/history">CMS</a>, <a href="https://www.gao.gov/products/gao-23-106696">GAO</a>, <a href="https://www.ers.usda.gov/amber-waves/2024/june/snap-spending-rose-and-fell-with-pandemic-era-changes-to-benefit-amounts">USDA</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'fraud' && (
+<figure class="figure" id="fraud" aria-labelledby="fraud-title">
+  <p class="eyebrow">03 / Unemployment insurance · April 2020–May 2023</p>
+  <h3 id="fraud-title">The scale of failed safeguards.</h3>
+  <p class="deck">GAO estimated the scale of pandemic unemployment-insurance fraud using sampling and statistical methods.</p>
+  <div class="split">
+    <div><div class="big">$100–135B</div><p class="metric-label">GAO’s estimated fraud range</p><div class="range" aria-hidden="true"><div class="range-band"></div></div><div class="axis" aria-hidden="true"><span>$0</span><span>$50B</span><span>$100B</span><span>$150B</span></div></div>
+    <div class="aside"><div class="big">11–15%</div><p class="metric-label">Estimated share of UI benefits paid during the study period</p><p class="stat-note">This is an estimate of fraud, not a total established through convictions.</p></div>
+  </div>
+  <figcaption class="caption">Published September 12, 2023. The Labor Department disputed the methodology as likely overstating fraud; GAO defended its estimate. Improper payments and fraud are different measures. Source: <a href="https://www.gao.gov/products/gao-23-106696">GAO-23-106696</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'costs' && (
+<figure class="figure" id="costs" aria-labelledby="costs-title">
+  <p class="eyebrow">04 / The location of the burden</p>
+  <h3 id="costs-title">The bill lands somewhere.</h3>
+  <p class="deck">Different governments collect revenues and deliver services. Their fiscal results can diverge.</p>
+  <div class="ledger">
+    <div>
+      <p class="unit">State and local budgets · Calendar 2023<br>Direct effects of CBO’s defined immigration surge</p>
+      <div class="label"><span>Additional revenue</span><b>$10.1B</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:50.5%"></div></div>
+      <div class="label"><span>Additional spending</span><b>$19.3B</b></div><div class="bar-track" aria-hidden="true"><div class="bar cost" style="width:96.5%"></div></div>
+      <div class="axis" aria-hidden="true"><span>$0</span><span>$5B</span><span>$10B</span><span>$15B</span><span>$20B</span></div>
+      <div class="total"><span>Estimated direct net cost</span><strong>$9.2B</strong></div>
+      <p class="small">About 0.3% of aggregate state and local spending, net of federal grants; impacts vary by jurisdiction.</p>
+    </div>
+    <aside class="aside"><p class="unit">A separate federal projection<br>2024 report · Cumulative 2024–2034</p><div class="big">$0.9T</div><p class="metric-label">Projected reduction in federal deficits from that report’s immigration-surge scenario</p><p class="stat-note">The principal estimate excludes discretionary spending. This is a dated projection, not a 2026 result.</p></aside>
+  </div>
+  <figcaption class="caption">The two studies use different periods and population assumptions. These figures cannot be subtracted or treated as a consolidated balance sheet. Sources: <a href="https://www.cbo.gov/publication/61464">CBO local-budget study, 2025</a> and <a href="https://www.cbo.gov/publication/60165">CBO federal projection, 2024</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'education' && (
+<figure class="figure" id="education" aria-labelledby="education-title">
+  <p class="eyebrow">05 / Education · Measured outcomes</p>
+  <h3 id="education-title">The largest losses fell at the bottom.</h3>
+  <p class="deck">Twelfth-grade reading, 1992–2024. The national average conceals a much steeper retreat among lower-performing students.</p>
+  <div class="evidence-grid">
+    <div class="loss-chart">
+      <p class="unit">Decline in NAEP reading score · points</p>
+      <div class="label"><span>10th percentile</span><b>−24</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:96%"></div></div>
+      <div class="label"><span>25th percentile</span><b>−15</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:60%"></div></div>
+      <div class="label"><span>50th percentile</span><b>−8</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:32%"></div></div>
+      <div class="label"><span>75th percentile</span><b>−2</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:8%"></div></div>
+      <div class="axis" aria-hidden="true"><span>0</span><span>5</span><span>10</span><span>15</span><span>20</span><span>25</span></div>
+      <p class="loss-note">At the 90th percentile, the change was not statistically significant.</p>
+    </div>
+    <div class="evidence-aside">
+      <span class="badge">National average</span>
+      <div class="big">−10 pts</div>
+      <p>Across the same 1992–2024 period.</p>
+      <h4>Who bears the failure?</h4>
+      <p>The largest declines occurred at the lower end of the achievement distribution.</p>
+    </div>
+  </div>
+  <figcaption class="caption">National grade-12 assessment, including public and private schools. Bars show the magnitude of declines on the 0–500 reading scale. These are comparisons of student populations, not changes in the same children's scores. Source: <a href="https://www.nationsreportcard.gov/reports/reading/2024/g12/national-trends/">NAEP 2024 reading results</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'family' && (
+<figure class="figure" id="family" aria-labelledby="family-title">
+  <p class="eyebrow">06 / Family support · Survey estimates for 2022</p>
+  <h3 id="family-title">A promise of support is not a payment.</h3>
+  <p class="deck">Two distinct gaps: establishing a legal agreement and receiving what is due.</p>
+  <div class="support-grid">
+    <div>
+      <span class="badge">All custodial parents</span>
+      <div class="big">37.3%</div>
+      <h4>Had a legal support agreement</h4>
+      <div class="bar-track" aria-hidden="true"><div class="bar" style="width:37.3%"></div></div>
+      <div class="axis" aria-hidden="true"><span>0%</span><span>100%</span></div>
+    </div>
+    <div class="support-payments">
+      <span class="badge">Only parents due payments</span>
+      <h4>What actually arrived</h4>
+      <div class="support-stack" aria-hidden="true"><span class="support-full"></span><span class="support-part"></span><span class="support-none"></span></div>
+      <ul class="support-key">
+        <li><i aria-hidden="true"></i><span>Full payment</span><b>49.5%</b></li>
+        <li><i aria-hidden="true"></i><span>Partial payment</span><b>26.0%</b></li>
+        <li><i aria-hidden="true"></i><span>No payment</span><b>24.5%</b></li>
+      </ul>
+      <p class="small">Includes amounts due under formal and informal agreements.</p>
+    </div>
+  </div>
+  <figcaption class="caption">Different denominators; these panels cannot be added together. Partial receipt is calculated as 75.5% receiving any support minus 49.5% receiving all support. Noncash help is separate. Source: <a href="https://www2.census.gov/library/publications/2025/demo/p60-285.pdf">Census, Custodial Parents and Their Child Support: 2022</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'power' && (
+<figure class="figure" id="power" aria-labelledby="power-title">
+  <p class="eyebrow">07 / The political question · An analytical framework</p>
+  <h3 id="power-title">Rescue comes with terms.</h3>
+  <p class="deck">Follow the terms of intervention to understand what changes—and whether those changes endure.</p>
+  <div class="questions">
+    <div><span class="number">01</span><h4>Who pays?</h4><p>Trace appropriations, loans, transfers, and the conditions attached to assistance.</p></div>
+    <div><span class="number">02</span><h4>Who decides?</h4><p>Identify changes in oversight, eligibility rules, and control over spending.</p></div>
+    <div><span class="number">03</span><h4>For how long?</h4><p>Check expiration dates, renewal mechanisms, and whether authority returns.</p></div>
+  </div>
+  <div class="record"><div><span class="status">Documented</span><strong>A proposal to provoke crisis in 1966</strong><span>The original essay supplies direct evidence.</span></div><div><span class="status open">Not established by this research</span><strong>One continuous modern collapse operation</strong><span>That allegation requires evidence connecting actors, decisions, and purpose.</span></div></div>
+  <figcaption class="caption">The questions are the article’s framework, not a numerical score. Historical starting points: <a href="https://www.thenation.com/article/archive/weight-poor-strategy-end-poverty/">the 1966 proposal</a> and <a href="https://comptroller.nyc.gov/reports/a-stronger-fiscal-framework-for-new-york-city/">New York’s account of its fiscal controls</a>.</figcaption>
+</figure>
+)}
+
+{kind === 'interest' && (
+<figure class="figure" id="interest" aria-labelledby="interest-title">
+  <p class="eyebrow">08 / The fiscal outlook · CBO February 2026 projection</p>
+  <h3 id="interest-title">Yesterday’s borrowing claims tomorrow’s revenue.</h3>
+  <p class="deck">Across these endpoints, the deficit before interest narrows relative to GDP. The interest burden grows.</p>
+  <div class="forecast">
+    <div><h4>Primary deficit</h4><p class="unit">Excludes net interest · % of GDP</p><div class="label"><span>2026 · projected</span><b>2.6%</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:52%"></div></div><div class="label"><span>2036 · projected</span><b>2.1%</b></div><div class="bar-track" aria-hidden="true"><div class="bar" style="width:42%"></div></div><div class="axis" aria-hidden="true"><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span></div></div>
+    <div><h4>Net interest</h4><p class="unit">Federal interest costs · % of GDP</p><div class="label"><span>2026 · projected</span><b>3.3%</b></div><div class="bar-track" aria-hidden="true"><div class="bar cost" style="width:66%"></div></div><div class="label"><span>2036 · projected</span><b>4.6%</b></div><div class="bar-track" aria-hidden="true"><div class="bar cost" style="width:92%"></div></div><div class="axis" aria-hidden="true"><span>0%</span><span>1%</span><span>2%</span><span>3%</span><span>4%</span><span>5%</span></div></div>
+  </div>
+  <div class="debt"><div class="big">101% → 120%</div><p class="small">Federal debt held by the public, as a share of GDP<br>2026 → 2036 · Both values projected</p></div>
+  <details class="table-toggle"><summary>Read the chart values</summary><table><caption>February 2026 baseline; percentages of GDP</caption><thead><tr><th scope="col">Measure</th><th scope="col">2026</th><th scope="col">2036</th></tr></thead><tbody><tr><th scope="row">Primary deficit</th><td>2.6%</td><td>2.1%</td></tr><tr><th scope="row">Net interest</th><td>3.3%</td><td>4.6%</td></tr><tr><th scope="row">Debt held by the public</th><td>101%</td><td>120%</td></tr></tbody></table></details>
+  <figcaption class="caption">A conditional baseline incorporating laws through January 14, 2026. Values are selected endpoints, not a forecast of collapse or a complete annual series. Source: <a href="https://www.cbo.gov/publication/62105">CBO, The Budget and Economic Outlook: 2026 to 2036</a>.</figcaption>
+</figure>
+)}

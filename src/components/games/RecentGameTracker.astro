@@ -1,0 +1,21 @@
+---
+import { showcases } from '../../config/showcases.json';
+import { gamesForIndex, type ShowcaseItem } from '../../lib/showcases';
+
+const entries = gamesForIndex(showcases as ShowcaseItem[]).map((game) => ({
+  id: game.id,
+  href: game.href,
+}));
+---
+
+<script type="application/json" id="recent-game-entries" set:html={JSON.stringify(entries)} />
+<script>
+  import { matchGameId, rememberGame } from '../../lib/recent-games';
+
+  const dataEl = document.getElementById('recent-game-entries');
+  if (dataEl) {
+    const entries = JSON.parse(dataEl.textContent || '[]') as { id: string; href: string }[];
+    const id = matchGameId(entries, window.location.pathname);
+    if (id) rememberGame(id);
+  }
+</script>

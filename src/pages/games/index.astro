@@ -1,5 +1,6 @@
 ---
 import Layout from '../../layouts/Layout.astro';
+import GameCatalog from '../../components/games/GameCatalog.astro';
 import GameSelect from '../../components/games/GameSelect.astro';
 import { showcases } from '../../config/showcases.json';
 import { gamesForIndex, type ShowcaseItem } from '../../lib/showcases';
@@ -7,12 +8,12 @@ import { sliderStartIndex } from '../../config/catalog';
 
 const allGames = gamesForIndex(showcases as ShowcaseItem[]);
 const startIndex = sliderStartIndex(allGames.length, 0);
-const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.length} playable things`;
+const countLabel = allGames.length === 1 ? 'one game' : `${allGames.length} games`;
 ---
 
 <Layout
-  title="Game Roulette | darrenhicks.dev"
-  description="Game Roulette. Pick a game, or spin for a new one."
+  title="Games | darrenhicks.dev"
+  description="Play the games on darrenhicks.dev. Recently played sit first. Game Roulette is further down if you want a spin."
 >
   <main class="pt-24 pb-16">
     <section class="relative pt-8 md:pt-16 pb-8 md:pb-10 bg-gradient-to-br from-primary-50 to-white dark:from-dark-950 dark:to-dark-900 overflow-hidden">
@@ -20,19 +21,34 @@ const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.le
       <div class="container mx-auto px-4 md:px-6 lg:px-8 relative">
         <div class="max-w-3xl">
           <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600 dark:text-primary-400 mb-3">
-            Player select
+            Games
           </p>
           <h1 class="text-4xl md:text-5xl font-bold mb-4 text-gray-900 dark:text-white">
-            Game Roulette
+            Pick a game
           </h1>
           <p class="text-lg md:text-xl text-gray-600 dark:text-gray-300">
-            {countLabel}. Tap a game to inspect it, or hit Spin.
+            {countLabel}. Recently played, if you have any, sit up front.
           </p>
         </div>
       </div>
     </section>
 
-    <GameSelect games={allGames} startIndex={startIndex} />
+    <GameCatalog games={allGames} />
+
+    <section id="roulette" class="game-roulette-section scroll-mt-28">
+      <div class="container mx-auto px-4 md:px-6 lg:px-8 pt-16 md:pt-20 pb-6">
+        <p class="text-xs font-semibold uppercase tracking-[0.18em] text-primary-600 dark:text-primary-400 mb-3">
+          Can’t decide?
+        </p>
+        <h2 class="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white mb-2">
+          Game Roulette
+        </h2>
+        <p class="text-lg text-gray-600 dark:text-gray-300 max-w-2xl">
+          Scrolled past the shelf? Spin for something you weren’t already heading toward.
+        </p>
+      </div>
+      <GameSelect games={allGames} startIndex={startIndex} />
+    </section>
   </main>
 </Layout>
 
@@ -48,5 +64,16 @@ const countLabel = allGames.length === 1 ? 'one playable thing' : `${allGames.le
 
   :global(.dark) .game-hero-grid {
     background-image: radial-gradient(circle at 1px 1px, rgb(96 165 250 / 0.16) 1px, transparent 0);
+  }
+
+  .game-roulette-section {
+    margin-top: 2.5rem;
+    border-top: 1px solid rgb(229 231 235);
+    background: linear-gradient(to bottom, rgb(249 250 251), transparent);
+  }
+
+  :global(.dark) .game-roulette-section {
+    border-top-color: rgb(55 65 81);
+    background: linear-gradient(to bottom, rgb(17 24 39), transparent);
   }
 </style>

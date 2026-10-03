@@ -1,0 +1,22 @@
+---
+interface Props {
+  number: string;
+  name: string;
+  alt: string;
+  eyebrow: string;
+  title: string;
+  caption: string;
+}
+const { number, name, alt, eyebrow, title, caption } = Astro.props;
+const base = `/images/articles/life-3-0/${name}`;
+---
+<figure class="life-art not-prose" id={`life-figure-${number}`}>
+  <img src={`${base}.webp`} srcset={`${base}-small.webp 720w, ${base}.webp 1440w`}
+    sizes="(max-width: 700px) 100vw, 65vw" width="1440" height="960" alt={alt} loading="lazy" decoding="async" />
+  <figcaption>
+    <span class="lf-eyebrow"><span class="lf-number">{number}</span>{eyebrow}</span>
+    <h3>{title}</h3>
+    <p>{caption}</p>
+    <span class="lf-art-credit">Conceptual illustration · AI-generated</span>
+  </figcaption>
+</figure>

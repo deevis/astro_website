@@ -1,6 +1,22 @@
 {
     "showcases":  [
       {
+        "title": "One of You Did It",
+        "description": "A cozy murder mystery. Search a storm-bound manor, challenge four suspects, and reconstruct the last toast.",
+        "href": "html_showcase/one-of-you-did-it/index.html",
+        "image": "html_showcase/one-of-you-did-it/thumb.png",
+        "category": "game",
+        "tags": ["game", "mystery", "adventure", "deduction", "interactive"]
+      },
+      {
+        "title": "Polymath Studio",
+        "description": "Compose evolving polyrhythms with polygon voices, performance pads, a piano roll, and engraved scores. A self-contained music studio.",
+        "href": "html_showcase/polymath_studio/index.html",
+        "image": "html_showcase/polymath_studio/thumb.png",
+        "category": "graphics",
+        "tags": ["music", "polyrhythm", "synthesizer", "interactive", "audio"]
+      },
+      {
         "title": "Emergence — Sierpiński Generator",
         "description": "A small rule. A random choice. An unexpected universe. Explore eight living fractals in an interactive, narrated chaos-game studio.",
         "href": "html_showcase/sierpinski_generator/index.html",
@@ -209,6 +225,14 @@
           "image": "html_showcase/mastermind/thumb.png",
           "category": "game",
           "tags": ["game", "puzzle", "mastermind", "logic", "deduction", "interactive"]
+        },
+        {
+          "title": "Pipeflow",
+          "description": "Each day is twenty boards. Clear one to open the next — the grid grows from 4×4 to 8×8, and more colors join.",
+          "href": "html_showcase/pipeflow/index.html",
+          "image": "html_showcase/pipeflow/thumb.png",
+          "category": "game",
+          "tags": ["game", "puzzle", "pipes", "flow", "logic", "interactive"]
         },
         {
           "title": "Othello",

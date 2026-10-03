@@ -1,0 +1,123 @@
+---
+interface Props {
+  kind: 'paperwork' | 'classroom' | 'staircase' | 'rescue';
+}
+
+const { kind } = Astro.props;
+const scenes = {
+  paperwork: {
+    chapter: '01 / The waiting room',
+    title: 'The promise is immediate. The help is not.',
+    caption: 'An entitlement on paper still needs an institution capable of delivering it. People experience the gap as time they cannot get back.',
+    alt: 'Symbolic illustration of people waiting beneath towering walls of paperwork, facing a distant illuminated service counter.',
+  },
+  classroom: {
+    chapter: '02 / The classroom',
+    title: 'A bigger system. An unfinished education.',
+    caption: 'The machinery of reform can keep expanding while learning falls short. The measure that matters is what students take with them.',
+    alt: 'Symbolic illustration of an illuminated book on a school desk overshadowed by a wall of filing cabinets and administrative papers.',
+  },
+  staircase: {
+    chapter: '03 / The way out',
+    title: 'The next step should not be a penalty.',
+    caption: 'When an earnings increase triggers a larger loss of assistance, the route toward independence has a missing step.',
+    alt: 'Symbolic illustration of a worker facing a staircase with missing steps between the floor and an open, warmly lit doorway.',
+  },
+  rescue: {
+    chapter: '04 / The conditions',
+    title: 'Who holds the other end of the lifeline?',
+    caption: 'Emergency money can arrive with new powers attached. The terms of rescue determine who decides next—and when that authority ends.',
+    alt: 'Symbolic illustration of a life ring whose rope becomes an iron chain leading toward a monumental government building.',
+  },
+};
+const scene = scenes[kind];
+const imageRoot = `/images/articles/cloward-piven/${kind}`;
+---
+
+<figure class="cp-editorial not-prose" id={`image-${kind}`} aria-labelledby={`image-${kind}-title`}>
+  <img
+    src={`${imageRoot}-1200.webp`}
+    srcset={`${imageRoot}-640.webp 640w, ${imageRoot}-1200.webp 1200w, ${imageRoot}-1774.webp 1774w`}
+    sizes="(max-width: 540px) calc(100vw - 2rem), (max-width: 1128px) calc(100vw - 3rem), 1080px"
+    width="1774"
+    height="887"
+    alt={scene.alt}
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    <div class="cp-editorial-label">
+      <span>{scene.chapter}</span>
+      <span class="cp-editorial-credit">AI-generated allegory</span>
+    </div>
+    <div class="cp-editorial-copy">
+      <strong id={`image-${kind}-title`}>{scene.title}</strong>
+      <p>{scene.caption}</p>
+    </div>
+  </figcaption>
+</figure>
+
+<style>
+  .cp-editorial {
+    margin: 2.5rem 0 2.75rem;
+    overflow: hidden;
+    border: 1px solid #334456;
+    border-radius: 12px;
+    background: #0e1723;
+    color: #edf0f4;
+    scroll-margin-top: 6rem;
+  }
+  .cp-editorial img {
+    display: block;
+    width: 100%;
+    height: auto;
+    margin: 0;
+    border-radius: 0;
+  }
+  .cp-editorial figcaption {
+    display: grid;
+    grid-template-columns: 175px minmax(0, 1fr);
+    gap: 24px;
+    margin: 0;
+    padding: 25px 28px 28px;
+    border-top: 1px solid #334456;
+    text-align: left;
+  }
+  .cp-editorial-label {
+    padding-top: 4px;
+    font: 650 10px/1.6 system-ui, sans-serif;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #e7b66a;
+  }
+  .cp-editorial-label span { display: block; }
+  .cp-editorial-credit {
+    margin-top: 9px;
+    font-size: 10px;
+    font-weight: 400;
+    letter-spacing: .025em;
+    text-transform: none;
+    color: #a4b2c1;
+  }
+  .cp-editorial-copy strong {
+    display: block;
+    color: #f1ece2;
+    font: 500 clamp(22px, 2.8vw, 30px)/1.2 Georgia, serif;
+    text-wrap: balance;
+  }
+  .cp-editorial-copy p {
+    margin: 11px 0 0;
+    color: #b1bdcb;
+    font: 400 14px/1.7 system-ui, sans-serif;
+  }
+  @media (max-width: 640px) {
+    .cp-editorial { margin: 2rem 0; border-radius: 10px; }
+    .cp-editorial figcaption { grid-template-columns: 1fr; gap: 13px; padding: 19px 20px 22px; }
+    .cp-editorial-label { display: flex; flex-wrap: wrap; gap: 4px 14px; padding: 0; }
+    .cp-editorial-credit { margin-top: 0; }
+  }
+  @media print {
+    .cp-editorial { break-inside: avoid; background: white; border-color: #aaa; }
+    .cp-editorial-copy strong, .cp-editorial-copy p, .cp-editorial-label, .cp-editorial-credit { color: #222; }
+  }
+</style>

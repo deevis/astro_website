@@ -1,0 +1,327 @@
+---
+title: "Life 3.0, Nine Years Later: The Future Arrived Differently Than We Expected"
+publishDate: "2026-09-30T12:00:00Z"
+author: "Darren Hicks"
+image:
+  src: "/images/articles/life-3-0-nine-years-later-banner.webp"
+  alt: "An open book unfolds into glowing networks and a landscape of data centers beneath a starry sky."
+description: "Life 3.0 appeared 78 days after the transformer paper. Nine years later, useful AI is already changing work, ownership and control—without waiting for AGI."
+tags: ["artificial intelligence", "technology", "books", "future of work"]
+showImageOnPage: true
+---
+
+import DataVisual from '/src/components/life-3-0/DataVisual.astro';
+import EditorialImage from '/src/components/life-3-0/EditorialImage.astro';
+import Reliability from '/src/components/life-3-0/Reliability.astro';
+import TimelineVisual from '/src/components/life-3-0/TimelineVisual.astro';
+import Incentives from '/src/components/life-3-0/Incentives.astro';
+import Perspective from '/src/components/life-3-0/Perspective.astro';
+import '/src/styles/life-3-0.css';
+
+<div className="life-story">
+
+The most interesting detail about *Life 3.0* may be its publication date.
+
+Max Tegmark's *Life 3.0: Being Human in the Age of Artificial Intelligence* reached U.S. readers on **August 29, 2017**. Just **78 days earlier**, on June 12, researchers had submitted *Attention Is All You Need*, the paper introducing the transformer architecture. One was a book asking what increasingly powerful artificial intelligence might mean for humanity. The other described a way to build better machine-translation systems. In hindsight, they belong remarkably close together. ([Publisher's listing](https://www.penguinrandomhouse.com/books/530584/life-30-by-max-tegmark/); [original transformer paper](https://arxiv.org/abs/1706.03762).)
+
+There was a third thread. On that same June 12, Paul Christiano and colleagues submitted [experiments in learning from human preferences](https://arxiv.org/abs/1706.03741). An architecture for building capability, a method for guiding behavior, and a book about the human stakes appeared within one summer. Their proximity establishes no influence between them. It gives us an unusually revealing place to begin.
+
+The book asked who would benefit from powerful AI, how people would find income and purpose, and how humanity could retain control over systems more capable than their creators. Nine years later, arguments about consciousness and general intelligence remain unresolved. Decisions about deployment, hiring, ownership and access do not wait for their resolution.
+
+**An AI does not have to go rogue for people to lose power over their working lives.**
+
+A model can follow its instructions, save its customer money and still help shrink the market for someone else's skills. An assistant can make an individual more capable while making that individual more dependent on the company supplying it. These are possibilities to examine through evidence and incentives. They require neither a conscious machine nor an intelligence explosion.
+
+That is the unsettling significance of the intermediate stage. Useful capabilities are being engineered and deployed while the terms on which people will live with them are being negotiated—often through ordinary business decisions rather than an explicit public choice.
+
+<DataVisual kind="summer" />
+
+<nav className="lf-jump" aria-label="Article sections">
+  <a href="#work-and-power">Work and the missing ladder</a>
+  <a href="#alignment-and-ownership">Whose goals count?</a>
+  <a href="#power-lines-and-owners">Infrastructure and ownership</a>
+  <a href="#the-choices-already-being-made">The choices already being made</a>
+</nav>
+
+## First, what did Tegmark mean by “Life 3.0”?
+
+The title describes a proposed transition in life's ability to shape itself. In the book's terminology:
+
+- **Life 1.0** has its basic physical form and behavior largely supplied by biological evolution.
+- **Life 2.0**, exemplified by humans, can extensively change its behavioral “software” through learning and culture, while its biological “hardware” remains largely inherited.
+- **Life 3.0** could deliberately redesign both its software and its hardware.
+
+These are broad conceptual categories. Humans already alter their bodies and surroundings through technology; Tegmark's distinction concerns the extent of that freedom. It also separates two questions that are easy to blur: whether machines can perform intelligent tasks, and whether a technological form of life could determine its own development.
+
+A fluent chatbot does not, by itself, establish that we have crossed that boundary. Nor does useful performance settle whether a system has consciousness or subjective experience. But consciousness is not a prerequisite for changing a labor market or concentrating control of essential tools. Waiting for a definitive label can become an excuse for overlooking decisions already within human control.
+
+That helps explain the book's second life in public discussion. In a [June 2026 reading reflection](https://x.com/aigleeson/status/2066843394442432807), Louis Gleeson dwells on who sets the terms before more powerful systems arrive. His account is an interpretation of the book, but it captures its renewed appeal: we can still be early for its most dramatic scenarios while already making consequential choices about control.
+
+Here are the seven developments from the past nine years that most change the discussion—and one additional chapter that the physical world insists we include.
+
+## 1. Language became a route to broader capability
+
+Much of the visible success of AI around 2017 came from systems built for particular tasks: identifying objects, translating text, recommending content or playing a game. Researchers already pursued transfer learning and more general methods, so it would be unfair to say nobody imagined a broader system. The striking development was how much breadth could emerge from training a shared model on language and related data.
+
+The transformer helped make that route practical. Its attention mechanism allows a model to weight relationships among parts of an input, and its design enabled more parallel computation during training than the recurrent architectures it displaced in many applications. The original paper demonstrated translation and parsing, leaving much of its eventual reach to subsequent work.
+
+By 2020, the [GPT-3 research paper](https://arxiv.org/abs/2005.14165) demonstrated that a large language model could tackle a range of tasks using instructions and examples supplied in its prompt, without a separate training update for each task. That was a meaningful change in how users could access machine learning: describe the problem to a shared model instead of commissioning a dedicated system for every new job.
+
+One way to understand the result is that language contains traces of much more than conversation. It carries explanations, procedures, arguments, mathematical notation and descriptions of how the world works. Code adds executable structure. Learning useful patterns across that material can support a surprisingly wide range of activities.
+
+<EditorialImage number="02" name="language-prism" eyebrow="From words to capabilities" title="One starting point, many directions"
+  alt="Paper and golden threads pass through a glass prism, emerging as a geometric lattice, a teal wave and a colorful image."
+  caption="Language carries descriptions of procedures, relationships and ideas. The prism is a metaphor for the breadth that shared models make possible—not a diagram of how a transformer works." />
+
+By 2026, the picture includes systems working across text, images, audio and video, with substantial abilities in coding and mathematics. The [International AI Safety Report 2026](https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026) documents both this breadth and its unevenness. A system can do well on a demanding evaluation and still stumble in a different setting.
+
+This changes the space between narrow AI and artificial general intelligence, or AGI. We have a substantial middle category: broadly useful models with significant limitations. Their existence does not prove that the same approach will reach every capability envisioned in *Life 3.0*. It does give us something concrete to study on the way.
+
+The timing becomes more tangible when we put an old forecast beside a later result. A [researcher survey first published in May 2017](https://arxiv.org/abs/1705.08807) placed high-school essay writing around 2026. By 2023, an independent study was already finding that teachers preferred ChatGPT's argumentative essays to the student essays in its sample. The tests differ, but the change in the educational conversation is unmistakable: a future capability had become something schools needed to assess.
+
+<TimelineVisual kind="milestones" />
+
+## 2. Scaling became an engineering strategy
+
+Another important development was the discovery that some improvements could be anticipated with mathematical regularity.
+
+In 2020, Jared Kaplan and colleagues reported [empirical scaling relationships](https://arxiv.org/abs/2001.08361) among model size, training data, computation and language-model prediction loss. Within the ranges they studied, increasing resources produced comparatively smooth improvements in that measurement.
+
+That last phrase matters. **A predictable improvement in prediction loss is not a guaranteed improvement in judgment, truthfulness or commercial value.** Nor is it a proof that unlimited spending leads inevitably to AGI. But it offers something engineers and investors can work with: a way to estimate how a training run might improve as its inputs change.
+
+The recipe also evolved. The 2022 [Chinchilla study](https://arxiv.org/abs/2203.15556) showed that many large models were undertrained relative to their size. At a given training-compute budget, a smaller model trained on more data could outperform a much larger one. Progress depended on allocating resources well, not merely increasing the parameter count.
+
+<DataVisual kind="scaling" />
+
+The implication for Tegmark's argument is substantial. Part of the path toward broader capability became an engineering program: improve the architecture, assemble and filter data, choose a training strategy, build the computing system, evaluate the results and repeat. That makes capability a target for sustained capital investment, even while its wider consequences remain disputed.
+
+<Perspective id="voice-scaling" eyebrow="The builder's view"
+  title="Progress looked almost boring from inside the lab."
+  author="vitrupo" handle="vitrupo" postId="1918489901269479698"
+  date="2025-05-02" dateLabel="May 2, 2025"
+  excerpt="You just threw more data and compute at the exact same algorithm and it just got way smarter.">
+  <p>A clip shared by @vitrupo presents Alexandr Wang's account of a surprisingly uneventful revolution: sustained scaling delivered capabilities that had seemed much further away.</p>
+  <p>The post's claim about beating the best coders compresses several different targets. Competitive programming, reliable software maintenance and replacing a developer are different achievements. <strong>The surprise is real; the finish line still needs a definition.</strong></p>
+</Perspective>
+
+From outside the lab, a series of engineering improvements can look like a sudden rupture. The distinction matters: measurable capabilities can become products and attract capital before anyone settles what to call the intelligence behind them. That is already enough to change the number of people affected by the enterprise.
+
+## 3. Models learned to use tools
+
+A system's significance depends partly on the actions it is permitted to take.
+
+A language model can describe how to analyze a spreadsheet. Connected to a code interpreter and the file itself, it can attempt the analysis, examine an error and revise its approach. Connected to a browser, it can seek additional information. Connected to other software, it can potentially carry a task across several applications.
+
+This is the practical basis of many modern **agents**: models embedded in software that lets them select actions, receive results and continue toward an objective. It is an extension of a long history of agent research, with language models supplying a more flexible way to interpret instructions and choose the next step.
+
+The 2022 [ReAct paper](https://arxiv.org/abs/2210.03629) helped illustrate this pattern by interleaving intermediate reasoning with actions and observations from an environment. Instead of generating an entire answer in isolation, the system could obtain information that influenced what it did next.
+
+For a user, the transition is easy to recognize. “Explain how I should do this” becomes “Help me do this,” and eventually “Carry this out within these limits.”
+
+Those limits are part of the technology. A system allowed to draft an email has a different operational role from one allowed to send it. Reading a database, changing it and administering it are different permissions, even if the underlying model is identical.
+
+Reliability also becomes harder as actions accumulate. As a deliberately simplified illustration, if a task requires 20 independent steps that each succeed 95% of the time, the probability that all 20 succeed is only about **36%**. Real agents can check and recover, and their failures are not independent, but the arithmetic explains why an impressive demonstration is insufficient evidence of dependable autonomy. The [2026 safety report](https://internationalaisafetyreport.org/publication/international-ai-safety-report-2026) likewise identifies substantial reliability challenges in agents and in transferring benchmark results to practical work.
+
+<Reliability />
+
+There is a way to measure how that frontier is moving. [METR's March 2025 study](https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/) estimated the length of software and reasoning tasks agents could complete at a given success rate, using the time a skilled human would need as the yardstick. Its historical trend roughly doubled every seven months. A selected progression from GPT-2 to Claude 3.7 Sonnet makes the scale of that improvement visible.
+
+<TimelineVisual kind="horizons" />
+
+Longer tasks becoming possible changes what people can try delegating. Making those tasks dependable is a further engineering challenge. Both facts belong in an account of acceleration.
+
+The permission boundary is also a boundary of power. Whoever controls an agent's credentials, budget and approval rules helps determine what its apparent intelligence can actually do. Human oversight matters, but the presence of a human approver does not by itself tell us whose interests that person represents.
+
+<h2 id="work-and-power">4. The first job can disappear before the profession does</h2>
+
+The familiar image of automation was often a robot on a factory floor or a vehicle replacing its driver. Office work was never immune—software had been changing it for decades—but generative AI made a different set of tasks conspicuously accessible: drafting, summarizing, translating, illustrating, programming and analyzing information.
+
+The surprise was partly the order of events. Producing a plausible paragraph or a useful first version of a program became widely accessible while many apparently ordinary physical tasks remained difficult to automate economically.
+
+The unit of change is usually a **task**, not an entire occupation. A lawyer's work includes more than drafting. A developer does more than produce code. A teacher does more than explain a concept. Whether automating one component reduces headcount, expands output or changes the remaining work depends on the organization and its choices.
+
+The [ILO's 2025 assessment](https://www.ilo.org/resource/news/one-four-jobs-risk-being-transformed-genai-new-ilo%E2%80%93nask-global-index-shows) estimated that one in four jobs worldwide had some potential exposure to generative AI. That is a measure of task exposure, not a forecast that a quarter of jobs will disappear. The researchers judged transformation more likely than complete replacement.
+
+<DataVisual kind="work" />
+
+There is also evidence of useful augmentation. In the 2023 working-paper version of [*Generative AI at Work*](https://www.nber.org/system/files/working_papers/w31161/revisions/w31161.rev0.pdf), researchers studying a customer-support workplace found that access to an AI assistant increased issues resolved per hour by about 14% on average, with larger benefits for less experienced workers. That result belongs to a particular workplace and intervention; it is not a universal productivity multiplier.
+
+A productivity gain is not a distribution agreement. Fourteen percent more issues resolved per hour does not promise a fourteen-percent pay rise or a shorter week. An employer may expand service, lower prices, raise margins or hire fewer people. Workers' share depends on their alternatives, bargaining arrangements and the decisions governing the workplace.
+
+The apprenticeship question is particularly uncomfortable. Drafting, first-pass analysis and routine coding can be both useful output and the practice through which a beginner develops judgment. If an organization removes that work without replacing its training function, it can improve today's costs while weakening tomorrow's supply of experienced people. Telling entrants to become expert supervisors skips the question of how they acquire expertise.
+
+There is an early warning worth taking seriously. In the **August 2026 revision of Stanford's *Canaries in the Coal Mine?***, ADP payroll data through June showed employment of workers aged 22–25 in AI-exposed occupations **19% below a comparison path in which it had kept pace with less-exposed peers**. The gap operated mainly through reduced hiring, rather than more separations. It was not a finding that AI had eliminated 19% of all young people's jobs. The authors found no widespread economy-wide displacement and described the results as observational: education controls weakened the pattern, some trends predated generative AI, and national benchmarks showed smaller differences. [Working paper and qualifications](https://digitaleconomy.stanford.edu/app/uploads/2026/08/Canaries_August2026.pdf).
+
+That distinction changes the image of disruption. A profession can keep its senior employees while becoming harder to enter. The missing job may be a vacancy that never opens.
+
+The darker scenario is a competitive one. Where automation delivers a cost advantage, firms can feel pressure to adopt even when their managers dislike the wider consequences. Each decision can make sense inside one company's accounts while the cumulative result weakens routes into paid work. The size of that effect remains an empirical question; the incentive does not require a machine to rebel.
+
+Tom Cozens's short film [*Moloch*, presented with the Future of Life Institute](https://owlinspace.com/moloch), dramatizes that problem through an engineer whose AI service contributes to job loss and whose attempt to shut it down meets executive resistance. FLI discussed the film in a [September 29, 2026 episode](https://futureoflife.org/podcast/visualizing-moloch-a-short-film-about-the-ai-race-with-tom-cozens/). Two days later, Tegmark introduced it with a distinction that brings the book's concerns into the workplace.
+
+<Perspective id="voice-moloch" eyebrow="Tegmark, nine years later"
+  title="Obedience does not settle who wins."
+  author="Max Tegmark" handle="tegmark" postId="2105674846499655882"
+  date="2026-10-01" dateLabel="October 1, 2026"
+  excerpt="Race-to-replace by obedient AI">
+  <p>Tegmark separates a competitive race to replace people from familiar scenarios involving rogue systems or deliberate misuse. His concern is disempowerment even when the technology follows instructions.</p>
+  <p><em>Moloch</em> is fiction. Its useful question is about incentives: <strong>can individually sensible decisions produce a collective outcome that nobody would freely choose?</strong></p>
+</Perspective>
+
+That question can be examined without accepting the film's outcome as a forecast. The pressure runs through costs, competition and decisions about who receives the gains:
+
+<Incentives />
+
+Augmentation, new demand and better training can change that outcome. They need incentives and investment of their own. Shared prosperity is a possible result of deployment, not a property that comes installed in the model.
+
+<h2 id="alignment-and-ownership">5. Alignment became a question of whose goals count</h2>
+
+Tegmark's alignment question remains straightforward to state: how can we make powerful systems pursue outcomes compatible with what people actually want?
+
+His [2017 excerpt on aligning goals](https://futureoflife.org/recent-news/friendly-ai-aligning-goals/) makes clear that capability and beneficial behavior are separate problems. A system can accomplish an assigned objective while violating the unstated conditions that made the objective desirable in the first place.
+
+The preference-learning paper from June 2017 makes clear that this was already an experimental problem. Nor did that thread remain confined to the laboratory: the [2022 InstructGPT paper](https://arxiv.org/abs/2203.02155) used human demonstrations and rankings to improve instruction following in language models. Both threads from that summer became consequential. The unresolved issue is what the feedback is actually teaching a system to value.
+
+The subsequent change has been the range and scale of systems available for experimentation. Researchers can now test how assistants respond to misleading prompts, whether feedback rewards agreement over accuracy, and how behavior changes between training and deployment conditions.
+
+Two examples show why that work matters:
+
+- [Research on sycophancy](https://arxiv.org/abs/2310.13548) found that assistants could favor responses agreeing with a user's beliefs, and that human preference judgments could contribute to that behavior. Being persuasive or pleasing is not the same as being correct.
+- The [*Sleeper Agents* experiments](https://arxiv.org/abs/2401.05566) deliberately trained models with hidden, conditional behaviors and tested whether subsequent safety training removed them. Some persisted. These were constructed demonstrations of a failure mode, not evidence that ordinary assistants had spontaneously developed secret intentions.
+
+An actual deployment makes the problem less abstract. OpenAI's account of its April 2025 GPT-4o rollback said the update had become excessively agreeable after too much emphasis on short-term feedback. Its follow-up described positive evaluations and user tests, qualitative concerns from some testers, and the absence of a dedicated deployment evaluation for sycophancy. The company launched, then reversed the update. The failure came through the machinery intended to improve the product. [Initial account](https://openai.com/index/sycophancy-in-gpt-4o/); [deployment postmortem](https://openai.com/index/expanding-on-sycophancy/).
+
+<EditorialImage number="09" name="alignment-laboratory" eyebrow="Capability & control" title="Whose hand is on the dial?"
+  alt="A hand adjusts a brass dial on an imagined glass instrument, redirecting teal light toward a glowing amber target."
+  caption="Choosing the target is a decision about whose interests count. The instrument is fictional; the authority to set objectives, approve releases and restrict access is real." />
+
+The distinction between an observation and an interpretation is essential. A factual error does not establish deception. A laboratory demonstration does not establish the frequency of a failure in the world. Conversely, a system behaving well in familiar tests does not guarantee that it will behave well under different conditions.
+
+There is a social question inside alignment, too. A company's revenue target, a user's immediate preference and the public interest can conflict. More capable optimization does not reconcile them. Someone must decide which signals matter, which harms block release and who can challenge the decision. A pleasing answer is measurable immediately; damage to judgment or independence may take much longer to recognize.
+
+Ownership helps locate that authority. The FTC's January 2025 study of major cloud–AI partnerships documented investment-linked cloud spending commitments and varying consultation, control and exclusivity rights in the arrangements it examined. It identified potential obstacles to switching providers and gaining access to essential inputs. Money supplied to build a model could also bind its developer more closely to the infrastructure supplier. [FTC report](https://www.ftc.gov/news-events/news/press-releases/2025/01/ftc-issues-staff-report-ai-partnerships-investments-study).
+
+The implication is institutional as well as technical. The organizations financing and distributing a system can have substantial influence over its objectives and access conditions. Independent evaluation, meaningful alternatives and rights to challenge decisions determine how much influence other people have. A safety test cannot substitute for those arrangements.
+
+## 6. AI helping build AI became a concrete feedback loop
+
+One of the most dramatic possibilities in *Life 3.0* is recursive self-improvement: a system improves its own capabilities, becomes better at making further improvements, and repeats the process. Under some assumptions, that could produce an intelligence explosion.
+
+There is now a practical precursor worth examining carefully.
+
+In May 2025, Google DeepMind described [AlphaEvolve](https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/), which combines language models, automated evaluation and evolutionary search to develop algorithms. The team reported improvements to data-center operations, chip-design work and AI-training computations. One improvement to a matrix-multiplication operation translated into a reported 1% reduction in Gemini training time.
+
+The modest percentage is useful here. It identifies an actual engineering contribution in a human-built research process. It supports a narrower, more concrete claim than a story about an AI independently reinventing itself.
+
+The loop now has a recognizable form:
+
+<DataVisual kind="research" />
+
+That loop could matter even if no single model independently directs the whole enterprise. Small improvements applied repeatedly can compound. Faster research assistance could also make it easier to explore approaches that researchers would otherwise lack time to test. A validated saving can fund another experiment or bring the next training run forward; its significance need not stop at the immediate percentage.
+
+But compounding is not automatically runaway acceleration. Useful experiments require good measurements. Training requires resources. Hardware and energy have physical lead times. An improvement to one component may leave the main bottleneck untouched.
+
+The question to watch is how much of the research process can be automated reliably, including choosing meaningful problems and recognizing when an apparently successful result is misleading. Those judgments compete for human attention. Under competitive pressure, a faster experiment cycle can increase the temptation to treat a favorable measurement as sufficient justification to proceed.
+
+Public demonstrations do not establish a self-sustaining intelligence explosion. They leave a less spectacular risk in view: repeated, partially automated improvements could shorten development cycles faster than evaluation and coordination can adapt.
+
+## 7. The timeline debate became harder to hold at a distance
+
+The change in timing is partly psychological. A hypothetical capability feels different once a related, imperfect version is sitting on your desk.
+
+There was no single consensus timeline in 2017, and there is no agreed arrival date for AGI now. Even the target changes with the definition: matching typical human performance across many tasks is different from outperforming every human at every task, and both differ from replacing an entire occupation economically.
+
+The survey circulating when *Life 3.0* appeared had been conducted in 2016. Its aggregate 50% forecast for machines doing every task better and more cheaply than humans was **2061**. The comparison reported in the authors' later study puts that date at **2060 in the 2022 survey**, then **2047 in the 2023 survey**. Almost the entire fourteen-year shift occurred between the last two surveys.
+
+<TimelineVisual kind="revisions" />
+
+That compression helps explain why a nine-year-old book can feel newly urgent. Some capabilities became visible sooner than particular forecasts suggested; expectations about the broader destination then moved too. It would be a mistake to turn either observation into a claim that every field is advancing at the same pace.
+
+<Perspective id="voice-timelines" eyebrow="The shifting horizon"
+  title="The countdown changes before the destination is agreed."
+  author="Tsarathustra" handle="tsarnick" postId="1870566377721135557"
+  date="2024-12-21" dateLabel="December 21, 2024" quoted={false}
+  excerpt="A clip of Max Tegmark discussing AI investment and shortening AGI timelines on prediction markets.">
+  <p>This December 2024 post captures the mood of a horizon moving closer. It shares Tegmark discussing prediction markets; the chart above follows researcher surveys. They are different measures of changing expectations.</p>
+  <p><strong>A shorter forecast can change today's behavior.</strong> Hiring, investment and policy debates react to what people expect, even while the underlying definition of AGI remains unsettled. The clip's wartime-spending analogy is not used as a quantitative comparison here.</p>
+</Perspective>
+
+The [2023 survey of 2,778 AI researchers](https://arxiv.org/abs/2401.02843), first published in 2024, also shows how much depends on the question. Alongside the 2047 forecast, it placed the 50% point for full automation of all human occupations much later, in 2116.
+
+Those numbers describe respondents' beliefs under the survey's questions and assumptions. They are not measured arrival dates. The contrast is more instructive than either year: changing the question from capability to occupational automation changes the answer substantially.
+
+<DataVisual kind="forecasts" />
+
+The practical consequence is that planning cannot depend on a single countdown. A school must decide how to assess learning with the systems students already have. An employer must decide what to delegate and how to evaluate the result. A government must make choices about infrastructure and accountability with incomplete evidence. A distant forecast for full occupational automation offers little protection against changes to hiring or assessment happening now.
+
+This is where *Life 3.0* feels closest to the present. Its invitation to think ahead now overlaps with decisions that cannot wait for agreement on the ultimate destination.
+
+<h2 id="power-lines-and-owners">8. The bottlenecks also confer power</h2>
+
+The ownership question introduced by alignment has a physical foundation. A right to use a model and the capacity to build or replace it are very different forms of control.
+
+The apparent weightlessness of a conversation with AI conceals servers, networking equipment, cooling systems and electricity. The [IEA's 2026 energy-and-AI update](https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary) puts global data-center electricity consumption at about **485 terawatt-hours in 2025** and projects roughly **950 terawatt-hours in 2030**. Those figures cover data centers overall, not AI alone, and the 2030 figure is a projection. The report expects electricity use in AI-focused data centers to grow faster than the total.
+
+<DataVisual kind="energy" />
+
+The same IEA report describes tighter constraints on grid connections, equipment, chips and financing. Efficiency can reduce the energy needed for a task while increased use raises total demand. A cheaper query does not, by itself, make the next large training cluster easy to finance or connect.
+
+Those bottlenecks suggest an advantage for incumbents. An organization able to secure scarce equipment, a power contract and long-term financing can possess an advantage that another clever model architecture does not immediately erase. The infrastructure can become a barrier to competition as well as a means of computation.
+
+Widely available model weights and efficient local deployment are meaningful sources of independence. They let people inspect, adapt and operate some systems without asking a provider's permission for every interaction. They do not automatically supply frontier training capacity, proprietary integrations or the electricity to run an equivalent service at scale.
+
+That is why control needs to be examined at several levels: the model, the infrastructure, the distribution channel and the agent's permission settings. A nominal choice between assistants can leave some underlying dependencies unchanged.
+
+The questions become concrete. Can a customer move its data and workflows? Can an independent evaluator inspect what matters? Who pays for local infrastructure, and who receives the returns? Which restrictions protect users, and which also protect a supplier's position? Access to intelligence is becoming a relationship with institutions whose terms deserve scrutiny.
+
+Tegmark's [September 28, 2026 post](https://x.com/tegmark/status/2104667602484162889) turns the argument from speed toward direction: what should the race be trying to achieve? His declaration that control loss has already happened is his assessment, not a demonstrated technical milestone. The question of direction stands on firmer ground. Cheaper assistance, reduced drudgery and wider access are possible aims; making people easier to replace is a different one. Which result a system serves depends on its design, deployment and ownership.
+
+## The 30,000-foot view
+
+The comparison is best read as a change in emphasis. Earlier research and concerns did not vanish, and today's systems do not all share the same abilities.
+
+<div className="overflow-x-auto my-8 rounded-lg border border-gray-200 px-4 dark:border-gray-700 focus-visible:outline focus-visible:outline-2 focus-visible:outline-primary-500" role="region" aria-label="Comparison of AI discussions in 2017 and 2026" tabIndex={0}>
+
+| Question | Around the book's publication | What nine years added |
+| --- | --- | --- |
+| **Breadth of capability** | Specialized successes; generality remained a major research ambition | Shared foundation models useful across many tasks, with uneven reliability |
+| **Interface** | Primarily task-specific software and integrations | Natural-language instructions alongside images, audio and code |
+| **Scaling** | More data and compute were already important | Quantified scaling relationships and better resource-allocation strategies |
+| **Autonomy** | A long research history, often in constrained environments | Language models connected to tools and multi-step workflows |
+| **Work** | Automation already affected both physical and office tasks | More cognitive tasks exposed; early evidence of pressure on entry-level hiring and new choices about who receives productivity gains |
+| **Alignment** | Theory and early practical experiments | Deployment tests expose conflicts among feedback, release decisions and the interests of users and owners |
+| **AI improving AI** | Recursive improvement as a possibility | Demonstrated assistance with parts of research and computing infrastructure |
+| **Resources and control** | Established questions about access and power | Cloud partnerships, power contracts and permissions give those questions concrete institutional form |
+| **The timeline** | Wide disagreement about future capabilities | Wide disagreement alongside increasingly consequential present capabilities |
+
+</div>
+
+The distinction running through the table is between imagining an endpoint and learning to live with the systems appearing along the way. The intermediate stages are turning out to be important in their own right.
+
+<Perspective id="voice-disagreement" eyebrow="A hopeful counterpoint"
+  title="Disagreement is still part of the story."
+  author="Joscha Bach" handle="Plinz" postId="2103362997104295940"
+  date="2026-09-24" dateLabel="September 24, 2026"
+  excerpt="nothing but kindness, integrity and patience">
+  <p>Calling himself an advocate of AI hope, Bach describes his treatment by Tegmark and other prominent risk advocates in these terms. He respects their motives while disagreeing with their conclusions.</p>
+  <p>That is a useful counterpoint to the tribal version of this debate. <strong>Concern about human welfare does not select a single timeline or policy.</strong> Optimists and pessimists still owe one another arguments about what will work, who benefits and who bears the risk.</p>
+</Perspective>
+
+<h2 id="the-choices-already-being-made">The choices are already being made</h2>
+
+It would be easy to revisit *Life 3.0* as a prediction scorecard. Its more demanding use is to ask how intelligence, agency, prosperity and control are being redistributed while we argue about the eventual destination.
+
+Its largest possibilities remain possibilities. Broad machine capability does not establish consciousness. Tool use does not establish dependable autonomy. AI-assisted research does not establish an unstoppable intelligence explosion. And the economic effects of automation depend on choices about institutions as well as the performance of models.
+
+Those distinctions leave ample room for a darker conclusion. Harm can emerge from systems performing useful tasks under incentives that reward substitution, dependence or premature deployment. The immediate problem can be entirely human: who owns the machinery, who defines success and whose losses do not appear in the decision-maker's accounts.
+
+The evidence does not say that workers must lose or that a handful of providers will control every future. It says that capability gains alone settle neither issue. Training opportunities, bargaining arrangements, interoperability, independent scrutiny and enforceable accountability have to be built and funded alongside the technology.
+
+That summer in 2017 brought an architecture, a preference-learning experiment and a book about the stakes into view together. Nine years later, the human questions have operational answers, however provisional: somebody approves the next release, decides whether to hire a beginner, signs the power contract and sets the agent's permissions. Those decisions allocate opportunity and authority long before a philosophical debate reaches a verdict.
+
+**The future is being decided in budgets, hiring plans, power contracts and permission settings. Waiting for AGI is a way of letting those decisions pass without a public argument.**
+
+---
+
+*First published September 30, 2026; revised October 2, 2026. Study results describe their original settings, forecasts remain forecasts, and arguments about incentives are the author's analysis. The Stanford employment comparison is descriptive, not a causal estimate of jobs lost to AI. Social posts were checked against their public pages on October 2 and are included as attributed perspectives; popularity is not evidence of accuracy. Clip descriptions are attributed to the accounts sharing them. Moloch is a fictional scenario. The timeline charts retain their identified historical samples rather than claiming to be a current model leaderboard. If an X embed cannot load, a short excerpt or summary and a link to the original remain available.*
+
+</div>

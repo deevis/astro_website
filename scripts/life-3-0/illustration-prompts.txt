@@ -1,0 +1,30 @@
+In-article illustration prompts
+Generated using the built-in image_gen tool on 2026-09-30.
+Images have 1440px and 720px WebP versions for responsive delivery.
+
+LANGUAGE
+Asset: public/images/articles/life-3-0/language-prism.webp
+Small asset: public/images/articles/life-3-0/language-prism-small.webp
+Original: C:/Users/darre/.codex/generated_images/01a0f0ed-d831-72b3-83c6-a9218b8e188d/exec-54033743-7e44-4850-84fe-fbb6ff97d1ee.png
+
+Use case: stylized-concept
+Asset type: In-article editorial illustration, 3:2 landscape.
+Primary request: Visualize language becoming a bridge to many kinds of capability. An exquisite sculptural arrangement in a quiet dark gallery: ivory paper leaves and fine golden threads gather into a central translucent glass prism, and emerge as three elegant coherent forms—a precision geometric lattice, a flowing cyan sound wave, and a thin luminous plane of image-like color. A single connected structure, not a collage.
+Style/medium: Premium science-magazine conceptual photography mixed with tactile 3D sculpture; believable fine paper grain, optical glass, fine metalwork, soft atmospheric depth. Restrained and sophisticated.
+Composition/framing: Balanced broad landscape, important forms in the central 80 percent with breathing room, eye-level three-quarter view, ample depth and a clear main focal point. No typography within the image.
+Lighting/mood: Warm amber entering from the paper side, cool teal emerging from the glass, midnight navy backdrop, soft reflections and physically plausible shadows. Curious and thoughtful.
+Constraints: No words, letters, numerals, logos, readable code, watermark, people, robots, brains, floating app interfaces, or invented charts. This is an abstract illustration, not a technical diagram.
+
+ALIGNMENT
+Asset: public/images/articles/life-3-0/alignment-laboratory.webp
+Small asset: public/images/articles/life-3-0/alignment-laboratory-small.webp
+Original: C:/Users/darre/.codex/generated_images/01a0f0ed-d831-72b3-83c6-a9218b8e188d/exec-05b8bee8-58f1-4ca7-a7a2-0d1a22045de0.png
+
+Use case: stylized-concept
+Asset type: In-article editorial illustration, 3:2 landscape, companion to a warm amber and cool teal technology article.
+Primary request: A visual metaphor for AI alignment as careful experimental work: a beautifully crafted circular precision instrument on a dark research table. At its center, a small luminous amber sphere is the intended destination. A fine cyan beam travels through an intricate sculptural maze of glass and brushed-metal channels, and an adjustable optical mirror redirects it toward the sphere. A human hand at the edge of the frame gently adjusts a brass calibration dial, suggesting continuing human oversight. The mechanism is visibly elegant but not a real scientific apparatus.
+Style/medium: Premium science-magazine editorial conceptual photography; exquisite tactile materials, optical glass, matte graphite, brushed brass, tiny machined details, controlled shallow depth of field. Quiet, polished, physically believable.
+Composition/framing: Three-quarter overhead perspective, one cohesive instrument filling the central image with breathing room. The target sphere and two differently directed light paths are clearly visible. Single natural adult hand with anatomically correct fingers partially visible at the lower right edge, no face.
+Lighting/mood: Midnight navy studio environment, teal tracing light, warm amber target, soft directional pool of light. Thoughtful and precise, no threat or apocalypse.
+Constraints: No text, letters, numerals, labels, chart, logo or watermark. No robot, brain or humanoid AI. Abstract editorial metaphor, not a schematic or evidence of a real experiment.
+

@@ -1,0 +1,943 @@
+{
+  "refresh_date": "2026-10-01",
+  "run_id": "20261001T080222Z-b6fa7b64",
+  "started_at": "2026-10-01T08:02:22+00:00",
+  "finished_at": "2026-10-01T08:02:52+00:00",
+  "result": "completed_with_access_gaps",
+  "all_sources_processed": true,
+  "configured_sources": 19,
+  "status_counts": {
+    "parsed": 2,
+    "signals_only": 1,
+    "http_error": 10,
+    "host_backoff": 1,
+    "robots_unavailable": 5
+  },
+  "new_observation_counts": {
+    "unit": 8,
+    "floorplan": 15
+  },
+  "historical_observations_before": 120,
+  "historical_observations_after": 143,
+  "advertisement_changes": [
+    {
+      "property_id": "4th-west",
+      "source_id": "inventory",
+      "scope": "unit",
+      "listing_id": "142059",
+      "previous_observed_at": "2026-09-28T04:36:20+00:00",
+      "observed_at": "2026-10-01T08:02:24+00:00",
+      "type": "advertisement_changed",
+      "differences": {
+        "advertised_rent_min": {
+          "before": 1482.0,
+          "after": 1468.0
+        },
+        "base_rent": {
+          "before": 1482.0,
+          "after": 1468.0
+        },
+        "total_monthly_price": {
+          "before": 1563.0,
+          "after": 1549.0
+        },
+        "lease_months": {
+          "before": 12.0,
+          "after": 13.0
+        },
+        "lease_quotes": {
+          "before": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1971.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3630.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1728.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1687.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2766.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1588.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1539.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2597.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2312.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1482.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1482.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1504.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1498.0
+            }
+          ],
+          "after": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1968.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3626.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1723.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1680.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2759.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1579.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1530.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2587.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2300.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1469.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1468.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1489.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1482.0
+            }
+          ]
+        }
+      },
+      "comparison_quality": "context_unverified",
+      "note": "Website defaults may change term, move-in date, or price basis. Review before calling this a rent change.",
+      "unit_number": "5088",
+      "before_source_sha256": "dd348d384a782363d50d196dca44b32df9ba85453fa043247bcc5effbdcce4a8",
+      "after_source_sha256": "773ff1f02a1d3179b17929a873dff6e228c21f8be66361bd5bbf2f7be2882151",
+      "before_displayed_lease_months": 12.0,
+      "after_displayed_lease_months": 13.0,
+      "before_12_month_base_rent": 1482.0,
+      "after_12_month_base_rent": 1469.0
+    },
+    {
+      "property_id": "4th-west",
+      "source_id": "inventory",
+      "scope": "unit",
+      "listing_id": "142028",
+      "previous_observed_at": "2026-09-28T04:36:20+00:00",
+      "observed_at": "2026-10-01T08:02:24+00:00",
+      "type": "advertisement_changed",
+      "differences": {
+        "advertised_rent_min": {
+          "before": 1369.0,
+          "after": 1357.0
+        },
+        "base_rent": {
+          "before": 1369.0,
+          "after": 1357.0
+        },
+        "total_monthly_price": {
+          "before": 1450.0,
+          "after": 1438.0
+        },
+        "lease_quotes": {
+          "before": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1843.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3363.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1606.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1564.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2556.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1469.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1424.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2398.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2135.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1369.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1370.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1390.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1385.0
+            }
+          ],
+          "after": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1840.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3359.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1601.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1558.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2550.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1462.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1415.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2389.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2124.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1357.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1357.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1376.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1371.0
+            }
+          ]
+        }
+      },
+      "comparison_quality": "context_unverified",
+      "note": "Website defaults may change term, move-in date, or price basis. Review before calling this a rent change.",
+      "unit_number": "3021",
+      "before_source_sha256": "dd348d384a782363d50d196dca44b32df9ba85453fa043247bcc5effbdcce4a8",
+      "after_source_sha256": "773ff1f02a1d3179b17929a873dff6e228c21f8be66361bd5bbf2f7be2882151",
+      "before_displayed_lease_months": 12.0,
+      "after_displayed_lease_months": 12.0,
+      "before_12_month_base_rent": 1369.0,
+      "after_12_month_base_rent": 1357.0
+    },
+    {
+      "property_id": "4th-west",
+      "source_id": "inventory",
+      "scope": "unit",
+      "listing_id": "142032",
+      "previous_observed_at": "2026-09-28T04:36:20+00:00",
+      "observed_at": "2026-10-01T08:02:24+00:00",
+      "type": "advertisement_changed",
+      "differences": {
+        "advertised_rent_min": {
+          "before": 1397.0,
+          "after": 1385.0
+        },
+        "base_rent": {
+          "before": 1397.0,
+          "after": 1385.0
+        },
+        "total_monthly_price": {
+          "before": 1478.0,
+          "after": 1466.0
+        },
+        "lease_quotes": {
+          "before": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1871.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3420.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1633.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1592.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2603.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1498.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1452.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2443.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2176.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1397.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1399.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1419.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1414.0
+            }
+          ],
+          "after": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1868.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3416.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1628.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1586.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2596.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1490.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1443.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2433.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2165.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1385.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1386.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1405.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1399.0
+            }
+          ]
+        }
+      },
+      "comparison_quality": "context_unverified",
+      "note": "Website defaults may change term, move-in date, or price basis. Review before calling this a rent change.",
+      "unit_number": "3078",
+      "before_source_sha256": "dd348d384a782363d50d196dca44b32df9ba85453fa043247bcc5effbdcce4a8",
+      "after_source_sha256": "773ff1f02a1d3179b17929a873dff6e228c21f8be66361bd5bbf2f7be2882151",
+      "before_displayed_lease_months": 12.0,
+      "after_displayed_lease_months": 12.0,
+      "before_12_month_base_rent": 1397.0,
+      "after_12_month_base_rent": 1385.0
+    },
+    {
+      "property_id": "4th-west",
+      "source_id": "inventory",
+      "scope": "unit",
+      "listing_id": "142031",
+      "previous_observed_at": "2026-09-28T04:36:20+00:00",
+      "observed_at": "2026-10-01T08:02:24+00:00",
+      "type": "advertisement_changed",
+      "differences": {
+        "advertised_rent_min": {
+          "before": 1376.0,
+          "after": 1364.0
+        },
+        "base_rent": {
+          "before": 1376.0,
+          "after": 1364.0
+        },
+        "total_monthly_price": {
+          "before": 1457.0,
+          "after": 1445.0
+        },
+        "lease_quotes": {
+          "before": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1840.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3356.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1605.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1565.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2555.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1472.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1427.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2399.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2137.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1376.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1378.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1399.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1395.0
+            }
+          ],
+          "after": [
+            {
+              "lease_months": 3.0,
+              "base_rent": 1837.0
+            },
+            {
+              "lease_months": 4.0,
+              "base_rent": 3352.0
+            },
+            {
+              "lease_months": 5.0,
+              "base_rent": 1600.0
+            },
+            {
+              "lease_months": 6.0,
+              "base_rent": 1559.0
+            },
+            {
+              "lease_months": 7.0,
+              "base_rent": 2548.0
+            },
+            {
+              "lease_months": 8.0,
+              "base_rent": 1465.0
+            },
+            {
+              "lease_months": 9.0,
+              "base_rent": 1419.0
+            },
+            {
+              "lease_months": 10.0,
+              "base_rent": 2389.0
+            },
+            {
+              "lease_months": 11.0,
+              "base_rent": 2127.0
+            },
+            {
+              "lease_months": 12.0,
+              "base_rent": 1364.0
+            },
+            {
+              "lease_months": 13.0,
+              "base_rent": 1365.0
+            },
+            {
+              "lease_months": 14.0,
+              "base_rent": 1385.0
+            },
+            {
+              "lease_months": 15.0,
+              "base_rent": 1380.0
+            }
+          ]
+        }
+      },
+      "comparison_quality": "context_unverified",
+      "note": "Website defaults may change term, move-in date, or price basis. Review before calling this a rent change.",
+      "unit_number": "3077",
+      "before_source_sha256": "dd348d384a782363d50d196dca44b32df9ba85453fa043247bcc5effbdcce4a8",
+      "after_source_sha256": "773ff1f02a1d3179b17929a873dff6e228c21f8be66361bd5bbf2f7be2882151",
+      "before_displayed_lease_months": 12.0,
+      "after_displayed_lease_months": 12.0,
+      "before_12_month_base_rent": 1376.0,
+      "after_12_month_base_rent": 1364.0
+    }
+  ],
+  "captures": [
+    {
+      "property_id": "4th-west",
+      "property_name": "4th West",
+      "source_id": "inventory",
+      "url": "https://4thwest.com/floor-plans/",
+      "status": "parsed",
+      "http_status": 200,
+      "observed_at": "2026-10-01T08:02:24+00:00",
+      "raw_sha256": "773ff1f02a1d3179b17929a873dff6e228c21f8be66361bd5bbf2f7be2882151",
+      "observation_counts": {
+        "unit": 8
+      },
+      "inventory_completeness": "partial",
+      "robots": {
+        "url": "https://4thwest.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "dae46561bcc9d7b06e586ba4aae32f48bc811df5b697c1a43192d161e42b0a44",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "4th-west",
+      "property_name": "4th West",
+      "source_id": "specials",
+      "url": "https://4thwest.com/",
+      "status": "signals_only",
+      "http_status": 200,
+      "observed_at": "2026-10-01T08:02:26+00:00",
+      "raw_sha256": "5e4b8785406d918fb0b46d0392745e9c7612040c57b4b8072cd9f13ff94e6d35",
+      "observation_counts": {},
+      "inventory_completeness": "not_collected",
+      "robots": {
+        "url": "https://4thwest.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "dae46561bcc9d7b06e586ba4aae32f48bc811df5b697c1a43192d161e42b0a44",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "liberty-blvd",
+      "property_name": "Liberty Blvd",
+      "source_id": "inventory",
+      "url": "https://www.libertyblvd.com/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:29+00:00",
+      "raw_sha256": "f68f513bbfeafc3f15a60c158e68824953488d0866dd97a4d46d79ab486bc5cd",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.libertyblvd.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "32bc2688e7e17899d278976f8f022e3cea07dedc7d4cb06886d3045aa06add4e",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "liberty-blvd",
+      "property_name": "Liberty Blvd",
+      "source_id": "specials",
+      "url": "https://www.libertyblvd.com/",
+      "status": "host_backoff",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:29+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": null
+    },
+    {
+      "property_id": "gateway-505",
+      "property_name": "Gateway 505",
+      "source_id": "specials",
+      "url": "https://www.gateway505.com/",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:31+00:00",
+      "raw_sha256": "0db6462665d8553b3e3e6d329ad1d04a59fca900fa3cc5183e3793711c696eca",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.gateway505.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "603a8a5cd2abfb5972fb44b812a489838a6391354c24c4f7159cdab90d08d739",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "altitude-on-fifth",
+      "property_name": "Altitude on Fifth",
+      "source_id": "specials",
+      "url": "https://www.altitudeonfifthapartments.com/",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:33+00:00",
+      "raw_sha256": "bf367ee402df653308474cc6ef06f156fe766bdb245bcaf8f82a3c5bd016bd91",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.altitudeonfifthapartments.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "9e79a7ea67df857aa7f4b311109fa7c37928ef23f9b1ea4d8568fe207e289a67",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "bonneville",
+      "property_name": "The Bonneville",
+      "source_id": "specials",
+      "url": "https://www.the-bonneville.com/",
+      "status": "robots_unavailable",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:33+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.the-bonneville.com/robots.txt",
+        "http_status": 403,
+        "raw_sha256": "c865e67dd00b7098bf3456bdd31fd2d48b24a01b98f9cc0987547f3441603657",
+        "status": "unavailable"
+      }
+    },
+    {
+      "property_id": "current",
+      "property_name": "Current Apartments",
+      "source_id": "inventory",
+      "url": "https://www.currentaptsmurray.com/murray/current-apartments/conventional/",
+      "status": "robots_unavailable",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:34+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.currentaptsmurray.com/robots.txt",
+        "http_status": 403,
+        "raw_sha256": "66e03c353eb9ad07151996b56e3411999836593b91eacc8d882de6198a1e91b5",
+        "status": "unavailable"
+      }
+    },
+    {
+      "property_id": "clover-creek",
+      "property_name": "Clover Creek",
+      "source_id": "inventory",
+      "url": "https://www.clovercreekapts.com/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:36+00:00",
+      "raw_sha256": "ef607872369ba0cbb60b9ac33fefd19cd5af62d2152b0f7db205bb746a35b84c",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.clovercreekapts.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "eb045e2417bcc5db23af9d48f9f36b7a13b0d04e165ef6cd92bc084facbcd43b",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "lofts-at-7800",
+      "property_name": "Lofts at 7800",
+      "source_id": "inventory",
+      "url": "https://www.loftsat7800isyourhome.com/ut/midvale/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:38+00:00",
+      "raw_sha256": "80ffa2573f802d12f450b0c9249decb1eab531c7bf83a9f41fc9d1f92969c7ed",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.loftsat7800isyourhome.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "f244167506355c7cd483980c9bd677441d3517e5988c29e68e1579f410968ce2",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "san-moritz",
+      "property_name": "San Moritz",
+      "source_id": "inventory",
+      "url": "https://www.sanmoritzisyourhome.com/ut/midvale/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:40+00:00",
+      "raw_sha256": "8dd9eaf268234a23abf6e337aff80eae0ffbdc8e1985366f68b3719b8e74b8c7",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.sanmoritzisyourhome.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "d02472445234f96e5529b6c03133a82e05440b3df6c936b9acf88179b4391dc4",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "liberty-bend",
+      "property_name": "Liberty Bend",
+      "source_id": "inventory",
+      "url": "https://www.libertybendapartments.com/floorplans",
+      "status": "robots_unavailable",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:40+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.libertybendapartments.com/robots.txt",
+        "http_status": null,
+        "status": "unavailable"
+      }
+    },
+    {
+      "property_id": "liberty-bend",
+      "property_name": "Liberty Bend",
+      "source_id": "specials",
+      "url": "https://www.libertybendapartments.com/",
+      "status": "robots_unavailable",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:41+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.libertybendapartments.com/robots.txt",
+        "http_status": null,
+        "status": "unavailable"
+      }
+    },
+    {
+      "property_id": "parc-west",
+      "property_name": "Parc West",
+      "source_id": "inventory",
+      "url": "https://www.parcwestisyourhome.com/ut/draper/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:43+00:00",
+      "raw_sha256": "b6aeb12967a8a7e4035c0bb03ce7831e91b7d0322ffa42b38b2757f134ba5ae2",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.parcwestisyourhome.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "6f35736f116ef28a67249524336bfc01aaa6c7a816cc90922fe7c7f6139f6492",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "the-pearl",
+      "property_name": "thePEARL",
+      "source_id": "inventory",
+      "url": "https://meetthepearl.com/apartments/",
+      "status": "parsed",
+      "http_status": 200,
+      "observed_at": "2026-10-01T08:02:45+00:00",
+      "raw_sha256": "46c6e4fc27e6b5f1f9823e6b1a282793e0bea3a374025e04e2efb29189a7b6fa",
+      "observation_counts": {
+        "floorplan": 15
+      },
+      "inventory_completeness": "floorplans_only",
+      "robots": {
+        "url": "https://meetthepearl.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "b1a390fb8ffb892b342c82f4ce5af1f5b4cf012f00b9dc6193d80436763f0117",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "sunset-ridge",
+      "property_name": "Sunset Ridge",
+      "source_id": "inventory",
+      "url": "https://www.sunsetridgeaptsutah.com/availableunits",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:47+00:00",
+      "raw_sha256": "1e55b1c22f0e821bbd6c91cd12c60c495720956c0dbb115583870c2cbfcdd609",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.sunsetridgeaptsutah.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "9a26b0ad8562f3941138dd70f38d1175bbe3ccd16a8e51aaa551a9530cd82664",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "aspen-village",
+      "property_name": "Aspen Village Apartment Homes",
+      "source_id": "inventory",
+      "url": "https://www.aspenvillageutah.com/floorplans",
+      "status": "robots_unavailable",
+      "http_status": null,
+      "observed_at": "2026-10-01T08:02:47+00:00",
+      "raw_sha256": null,
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.aspenvillageutah.com/robots.txt",
+        "http_status": null,
+        "status": "unavailable"
+      }
+    },
+    {
+      "property_id": "bridgeside-landing",
+      "property_name": "Bridgeside Landing",
+      "source_id": "inventory",
+      "url": "https://www.bridgesideapartments.com/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:50+00:00",
+      "raw_sha256": "13d4d2a0c0e8f18fadd2202498df1e5cc2cc3410f70aa6189c954853bd9a95ba",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.bridgesideapartments.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "bac159d115c5a3e0933aa285b5a24cabd37a7121a9a1b24f4846ae24a1fbd286",
+        "status": "checked"
+      }
+    },
+    {
+      "property_id": "45-twelve",
+      "property_name": "45 Twelve Townhomes",
+      "source_id": "inventory",
+      "url": "https://www.45twelve.com/floorplans",
+      "status": "http_error",
+      "http_status": 403,
+      "observed_at": "2026-10-01T08:02:52+00:00",
+      "raw_sha256": "9164d3fec7fdd56c4596ab7a2aed71c33b2b67fe2d6c9907548663010fc8ccc7",
+      "observation_counts": {},
+      "inventory_completeness": null,
+      "robots": {
+        "url": "https://www.45twelve.com/robots.txt",
+        "http_status": 200,
+        "raw_sha256": "603a8a5cd2abfb5972fb44b812a489838a6391354c24c4f7159cdab90d08d739",
+        "status": "checked"
+      }
+    }
+  ],
+  "validation": {
+    "sqlite_integrity": "ok",
+    "old_observations_preserved": true,
+    "json_csv_row_counts_match": true,
+    "raw_archive_hashes_verified": 54
+  },
+  "interpretation": "Four observed advertisement changes; website-default quote context remains unverified. All eight previously captured 4th West units and all 15 thePEARL floorplans were matched. thePEARL had no changes in tracked fields. Failed sources have no new inventory observations; previous observations are historical only."
+}

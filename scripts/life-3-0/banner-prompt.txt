@@ -1,0 +1,14 @@
+Life 3.0 article banner
+Generated with the built-in image_gen tool on 2026-09-30.
+Site asset: public/images/articles/life-3-0-nine-years-later-banner.webp
+Source image: C:/Users/darre/.codex/generated_images/01a0f0ed-d831-72b3-83c6-a9218b8e188d/exec-a2532766-22cb-4d4b-9cc6-516f67377934.png
+Delivery: 1672 x 940, opaque WebP, quality 88.
+
+Final prompt:
+Use case: stylized-concept
+Asset type: Wide 16:9 editorial banner for a thoughtful technology article, 'Life 3.0, Nine Years Later: The Future Arrived Differently Than We Expected.'
+Primary request: An exquisite cinematic conceptual illustration of a book about the future opening into the real machinery of artificial intelligence. An open, unbranded clothbound book rests in the lower central foreground. Its ivory paper pages gracefully unfurl upward and become delicate luminous networks, then ordered silicon circuits and a distant landscape of data-center architecture. The transition from ideas on paper to engineered intelligence is the single visual story.
+Style/medium: Sophisticated editorial matte painting with believable tactile paper, finely detailed architectural forms, restrained luminous digital elements and atmospheric depth. Premium magazine art, beautiful and contemplative.
+Composition/framing: Landscape 16:9, all important elements in the central 70 percent so the scene works as a banner and cropped article thumbnail. Book at lower center but fully in frame. Sweeping page arcs lead the eye toward a softly lit horizon, with generous breathing room above. One coherent landscape rather than a collage.
+Lighting/mood: Warm amber light on the book gradually meeting cool teal light from the infrastructure, deep midnight navy shadows, a subtle star field suggesting the book's cosmic scale. Awe and curiosity without apocalypse.
+Constraints: No words, letters, numbers, logos, watermark or readable print; no recreation of an existing book cover; no humanoid robots, human faces, giant brains, floating interface panels or split-screen divider. Final image is opaque.

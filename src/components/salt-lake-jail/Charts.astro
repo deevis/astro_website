@@ -1,0 +1,165 @@
+---
+import data from '../../../public/articles/salt-lake-jail/data.json';
+import { lineChart, chargeBars, demographicSeries, format, dateLabel } from './charts.mjs';
+
+interface Props { view: 'trends' | 'explorer' | 'charges' }
+const { view } = Astro.props;
+const titles = {
+  trends: 'One subgroup grew. The broader picture shifted.',
+  explorer: 'Explore the demographic record',
+  charges: 'Same recorded code, different descriptions',
+};
+const monthly = (key: 'venezuela_pct' | 'us_pct') => data.article.months.map(row => ({ date: row.month + '-15', label: dateLabel(row.month), value: row[key] }));
+const initial = demographicSeries(data);
+const latest = initial.at(-1)!;
+const firstDate = data.runs[0].date;
+const lastDate = data.runs.at(-1)!.date;
+---
+
+<section class="jail-study not-prose" data-jail-chart={view} aria-label={titles[view]}>
+  <header class="jail-header">
+    <p class="jail-eyebrow">{view === 'trends' ? 'Figure 01 · Citizenship over time' : view === 'explorer' ? 'Interactive · The underlying snapshots' : 'Figure 02 · Charges over time'}</p>
+    <h3>{titles[view]}</h3>
+    <p>{view === 'trends' ? 'Monthly average share of all observed bookings · June 2023–February 2026' : view === 'explorer' ? '220 collected rosters. Recorded labels, with the gaps left visible.' : 'Share of observed bookings carrying recorded code 76-8-305 · Q4 2023 and Q4 2025'}</p>
+  </header>
+
+  {view === 'trends' && <>
+    <div class="jail-pair">
+      <figure>
+        <figcaption><strong>Venezuela</strong><span class="jail-stat">0.27% <span aria-hidden="true">→</span> 1.66%</span><small>Q4 2023 → Q4 2025 · Axis: 0–3%</small></figcaption>
+        <div data-series="venezuela_pct" set:html={lineChart(monthly('venezuela_pct'), { ceiling: 3, label: 'Venezuela citizenship share', highlightQ4: true })} />
+      </figure>
+      <figure>
+        <figcaption><strong>United States</strong><span class="jail-stat jail-blue">85.72% <span aria-hidden="true">→</span> 85.58%</span><small>Q4 2023 → Q4 2025 · Axis: 0–100%</small></figcaption>
+        <div data-series="us_pct" set:html={lineChart(monthly('us_pct'), { ceiling: 100, color: 'var(--jail-blue)', label: 'United States citizenship share', highlightQ4: true })} />
+      </figure>
+    </div>
+    <p class="jail-readout" data-readout aria-live="polite" aria-atomic="true">Hover or tap a point to inspect a month. Focus a chart and use the arrow keys to navigate.</p>
+    <p class="jail-note">Shaded bands mark the Q4 comparison periods. The line breaks at April 2025 because no rosters were collected. All bookings remain in the denominator; rosters with known coverage alerts are omitted.</p>
+    <details class="jail-details">
+      <summary>View the monthly data</summary>
+      <div class="jail-table-wrap" tabindex="0" role="region" aria-label="Monthly citizenship data">
+        <table><caption>Screened monthly means; a dash means no observations.</caption><thead><tr><th scope="col">Month</th><th scope="col">Rosters</th><th scope="col">Venezuela</th><th scope="col">United States</th></tr></thead>
+          <tbody>{data.article.months.map(row => <tr><th scope="row">{row.month}</th><td>{format(row.runs, 0)}</td><td>{row.venezuela_pct == null ? '—' : format(row.venezuela_pct) + '%'}</td><td>{row.us_pct == null ? '—' : format(row.us_pct) + '%'}</td></tr>)}</tbody>
+        </table>
+      </div>
+    </details>
+  </>}
+
+  {view === 'explorer' && <>
+    <div class="jail-controls">
+      <label>Source field<select data-control="field"><option value="citizen">Citizenship</option><option value="cob">COB / birthplace</option></select></label>
+      <label>Focus label<select data-focus-select><option value="label:VENEZUELA">VENEZUELA</option></select></label>
+      <label>Measure<select data-control="measure"><option value="share">Share of remaining bookings</option><option value="count">Observed bookings</option></select></label>
+    </div>
+    <div class="jail-controls jail-secondary">
+      <label>Start date<input type="date" data-control="start" value={firstDate} min={firstDate} max={lastDate} /></label>
+      <label>End date<input type="date" data-control="end" value={lastDate} min={firstDate} max={lastDate} /></label>
+      <label>Roster coverage<select data-control="quality"><option value="screened">Omit known coverage alerts</option><option value="all">Include all collected rosters</option></select></label>
+    </div>
+    <div class="jail-exclusions">
+      <div class="jail-actions"><button type="button" data-exclude-us>Exclude United States</button><button type="button" data-restore>Restore all labels</button></div>
+      <details class="jail-details">
+        <summary data-exclusion-count>Exclude labels (0 excluded)</summary>
+        <label class="jail-search">Find a label<input type="search" data-label-search placeholder="Filter this label list…" autocomplete="off" /></label>
+        <p class="jail-note">Check a label to remove it from both the chart and its denominator. Each field keeps its own exclusions.</p>
+        <div data-exclusion-list class="jail-labels" role="group" aria-label="Labels to exclude"></div>
+      </details>
+    </div>
+    <figure class="jail-explorer-figure">
+      <figcaption data-chart-unit>Citizenship · VENEZUELA · share of all bookings</figcaption>
+      <div data-series-chart set:html={lineChart(initial, { ceiling: 5, width: 1000, label: 'Venezuela citizenship share per roster' })} />
+    </figure>
+    <p class="jail-note">Each point is one collected roster. The vertical scale adapts to the selection; every axis starts at zero. Lines break across gaps longer than 35 days. Amber points flag coverage alerts when included.</p>
+    <div class="jail-roster-heading"><h4>Inside a snapshot</h4><label>Roster date<select data-roster>{initial.map(row => <option value={row.date} selected={row.date === lastDate}>{dateLabel(row.date)}</option>)}</select></label></div>
+    <p class="jail-readout" data-readout aria-live="polite" aria-atomic="true">{dateLabel(lastDate)} · VENEZUELA: {format(latest.matching, 0)} bookings · {format(latest.value)}% of all bookings</p>
+    <p class="jail-note" data-denominator>Full roster: {format(latest.full, 0)}. All bookings, including missing and ambiguous labels, remain in the denominator.</p>
+    <div class="jail-table-wrap" tabindex="0" role="region" aria-label="Selected roster demographic counts">
+      <table><caption>Select a label below to follow it over time.</caption><thead><tr><th scope="col">Recorded label</th><th scope="col">Bookings</th><th scope="col">Remaining share</th></tr></thead>
+        <tbody data-categories>{data.fields.citizen.categories.map((category, i) => ({ ...category, count: data.fields.citizen.counts[latest.index][i] })).filter(category => category.count > 0).sort((a, b) => b.count - a.count).map(category => <tr><td><button type="button" data-focus={category.key} aria-pressed={category.key === 'label:VENEZUELA'}>{category.label}</button></td><td>{format(category.count, 0)}</td><td>{format(category.count / latest.full * 100)}%</td></tr>)}</tbody>
+      </table>
+    </div>
+    <noscript><p class="jail-note">JavaScript enables filtering and point inspection. The unfiltered chart and final roster are shown here; the aggregate dataset is available to download below.</p></noscript>
+  </>}
+
+  {view === 'charges' && <>
+    <div class="jail-charge-tools"><div class="jail-legend"><span><i></i>Q4 2023</span><span><i class="late"></i>Q4 2025</span></div><label>Compare<select data-charge-mode><option value="all">All three views</option><option value="old_pct">Old description</option><option value="new_pct">New description</option><option value="pct">Combined recorded code</option></select></label></div>
+    <div data-bars set:html={chargeBars(data.article.charges)} />
+    <p class="jail-note">All bars share a 0–10% scale. Values use equal-month-weighted screened rosters. The combined code counts each booking once; description rows may overlap.</p>
+    <p class="jail-note" data-error role="status"></p>
+  </>}
+</section>
+
+<script>
+  import { mountCharts } from './charts.mjs';
+  mountCharts();
+</script>
+
+<style>
+  .jail-study { --jail-surface:#f7fafb; --jail-ink:#183443; --jail-muted:#516671; --jail-rule:#d5e0e5; --jail-teal:#087b70; --jail-blue:#366cc0; --jail-amber:#956000; --jail-band:#087b700c; --jail-input:#fff; margin:2rem 0 2.8rem; padding:clamp(1rem,3vw,2rem); border:1px solid var(--jail-rule); border-radius:1rem; color:var(--jail-ink); background:var(--jail-surface); font:400 15px/1.6 Inter,system-ui,sans-serif; min-width:0; }
+  :global(.dark) .jail-study { --jail-surface:#111e2c; --jail-ink:#e5eff4; --jail-muted:#a0b4c3; --jail-rule:#2b4052; --jail-teal:#65d9bf; --jail-blue:#89b6ff; --jail-amber:#f8c970; --jail-band:#65d9bf0d; --jail-input:#172839; }
+  .jail-header { margin-bottom:1.7rem; }
+  .jail-header h3 { font-size:clamp(1.25rem,2.4vw,1.65rem); line-height:1.3; letter-spacing:-.025em; font-weight:650; margin:.5rem 0; color:var(--jail-ink); }
+  .jail-header p { margin:.4rem 0; color:var(--jail-muted); }
+  .jail-header .jail-eyebrow { color:var(--jail-teal); text-transform:uppercase; font-size:.72rem; font-weight:700; letter-spacing:.13em; }
+  .jail-pair { display:grid; grid-template-columns:1fr 1fr; gap:1.75rem; }
+  figure { margin:0; min-width:0; }
+  figcaption strong,figcaption small,.jail-stat { display:block; }
+  figcaption strong { font-size:1rem; font-weight:650; }
+  figcaption small { font-size:.75rem; color:var(--jail-muted); margin:.3rem 0 1rem; }
+  .jail-stat { font-size:clamp(1.35rem,2.7vw,2rem); font-weight:650; color:var(--jail-teal); letter-spacing:-.04em; margin-top:.25rem; }
+  .jail-stat span { color:var(--jail-muted); font-weight:400; margin:0 .15em; }
+  .jail-blue { color:var(--jail-blue); }
+  :global(.jail-study svg) { display:block; width:100%; height:auto; overflow:visible; touch-action:pan-y; }
+  :global(.jail-study [data-point]) { cursor:crosshair; }
+  :global(.jail-study .selected .jail-point) { r:5; stroke-width:2; }
+  .jail-readout { padding:.8rem 1rem; border-left:3px solid var(--jail-teal); background:var(--jail-band); font-size:.85rem; margin:1rem 0; min-height:3.2rem; font-variant-numeric:tabular-nums; }
+  .jail-note { font-size:.78rem; color:var(--jail-muted); line-height:1.65; margin:.8rem 0; }
+  .jail-details { border-top:1px solid var(--jail-rule); padding-top:.8rem; margin-top:1rem; }
+  summary { cursor:pointer; font-size:.85rem; font-weight:600; padding:.25rem 0; }
+  .jail-table-wrap { max-height:340px; overflow:auto; margin-top:1rem; border:1px solid var(--jail-rule); border-radius:.4rem; }
+  :global(.jail-study table) { width:100%; border-collapse:collapse; font-size:.8rem; font-variant-numeric:tabular-nums; margin:0; }
+  :global(.jail-study caption) { text-align:left; padding:.7rem .85rem; color:var(--jail-muted); font-size:.75rem; }
+  :global(.jail-study th),:global(.jail-study td) { padding:.55rem .85rem; text-align:right; border-bottom:1px solid var(--jail-rule); }
+  :global(.jail-study th:first-child),:global(.jail-study td:first-child) { text-align:left; }
+  :global(.jail-study th) { font-weight:600; }
+  :global(.jail-study thead th) { position:sticky; top:0; background:var(--jail-input); z-index:1; white-space:nowrap; }
+  .jail-controls { display:grid; grid-template-columns:1fr 1.2fr 1.2fr; gap:1rem; margin:1rem 0; }
+  label { display:flex; flex-direction:column; font-size:.75rem; font-weight:600; gap:.4rem; min-width:0; }
+  select,input[type=date],input[type=search] { box-sizing:border-box; border:1px solid var(--jail-rule); border-radius:.35rem; min-height:42px; padding:.5rem .6rem; background:var(--jail-input); color:var(--jail-ink); font:400 .82rem/1.4 Inter,system-ui,sans-serif; width:100%; min-width:0; color-scheme:light; }
+  :global(.dark) select,:global(.dark) input { color-scheme:dark; }
+  :global(.jail-study button) { border:1px solid var(--jail-rule); border-radius:.35rem; padding:.5rem .75rem; min-height:40px; color:var(--jail-ink); background:var(--jail-input); font:500 .8rem/1.4 Inter,system-ui,sans-serif; cursor:pointer; text-align:left; }
+  :global(.jail-study button:hover),:global(.jail-study button[aria-pressed=true]) { border-color:var(--jail-teal); color:var(--jail-teal); }
+  :global(.jail-study button:disabled) { opacity:.5; cursor:default; }
+  :global(.jail-study :focus-visible) { outline:2px solid var(--jail-teal); outline-offset:3px; }
+  .jail-actions { display:flex; flex-wrap:wrap; gap:.6rem; }
+  .jail-exclusions { margin:1.2rem 0 2rem; }
+  .jail-search { max-width:24rem; margin:1rem 0 .5rem; }
+  .jail-labels { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:.4rem .8rem; max-height:220px; overflow:auto; padding:.4rem 0; }
+  :global(.jail-study .jail-labels label) { display:flex; flex-direction:row; align-items:center; gap:.6rem; min-height:36px; font-size:.75rem; font-weight:400; cursor:pointer; overflow-wrap:anywhere; }
+  :global(.jail-study .jail-labels label[hidden]) { display:none; }
+  :global(.jail-study input[type=checkbox]) { width:17px; height:17px; flex-shrink:0; accent-color:var(--jail-teal); }
+  .jail-explorer-figure figcaption { font-size:.82rem; color:var(--jail-muted); margin-bottom:.75rem; }
+  .jail-roster-heading { display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:1rem; border-top:1px solid var(--jail-rule); padding-top:1.25rem; margin-top:1.5rem; }
+  .jail-roster-heading h4 { font-size:1rem; margin:0; font-weight:650; }
+  .jail-roster-heading label { min-width:13rem; }
+  :global(.jail-study td button) { padding:.25rem .5rem; border-color:transparent; background:transparent; min-height:34px; }
+  :global(.jail-study td small) { display:block; font-size:.7rem; color:var(--jail-muted); margin-left:.5rem; }
+  .jail-charge-tools { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:1rem; margin:1.5rem 0; }
+  .jail-charge-tools label { min-width:14rem; }
+  .jail-legend { display:flex; flex-wrap:wrap; gap:1rem; font-size:.8rem; }
+  .jail-legend span { display:flex; align-items:center; gap:.5rem; }
+  .jail-legend i { width:.65rem; height:.65rem; border-radius:2px; background:var(--jail-blue); }
+  .jail-legend i.late { background:var(--jail-teal); }
+  :global(.jail-study .jail-charge-row) { padding:1.2rem 0; border-top:1px solid var(--jail-rule); }
+  :global(.jail-study .jail-charge-row h4) { font-size:.9rem; margin:0 0 .8rem; font-weight:600; }
+  :global(.jail-study .jail-bar-row) { display:grid; grid-template-columns:4.2rem 1fr 4rem; align-items:center; gap:1rem; margin:.6rem 0; font-size:.8rem; font-variant-numeric:tabular-nums; }
+  :global(.jail-study .jail-bar-track) { background:var(--jail-band); height:20px; border-right:1px solid var(--jail-rule); }
+  :global(.jail-study .jail-bar) { height:100%; background:var(--jail-blue); border-radius:0 3px 3px 0; }
+  :global(.jail-study .jail-bar.late) { background:var(--jail-teal); }
+  :global(.jail-study .jail-bar-row strong) { text-align:right; font-weight:600; }
+  :global(.jail-study .jail-empty) { padding:3rem 1rem; text-align:center; color:var(--jail-muted); }
+  @media(max-width:760px) { .jail-pair { grid-template-columns:1fr; gap:2rem; } .jail-controls { grid-template-columns:1fr; gap:.8rem; } .jail-labels { grid-template-columns:repeat(2,minmax(0,1fr)); } .jail-stat { font-size:1.65rem; } }
+  @media(max-width:430px) { .jail-labels { grid-template-columns:1fr; } :global(.jail-study .jail-bar-row) { gap:.5rem; grid-template-columns:3.8rem 1fr 3.7rem; } :global(.jail-study th),:global(.jail-study td) { padding:.5rem; } }
+  @media print { .jail-study { break-inside:avoid; background:white; color:black; } .jail-controls,.jail-exclusions,.jail-charge-tools select { display:none; } .jail-table-wrap { max-height:none; } }
+</style>

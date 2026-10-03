@@ -1,0 +1,59 @@
+{
+  "source": "https://metr.org/assets/benchmark_results_1_0.yaml",
+  "methodology": "https://metr.org/blog/2025-03-19-measuring-ai-ability-to-complete-long-tasks/",
+  "retrieved": "2026-09-30",
+  "benchmark": "METR-Horizon-v1.0",
+  "units": "human-expert minutes",
+  "threshold": 0.5,
+  "selection": "Six historical models, ending February 2025. Dates are the model-family release dates assigned by METR, not necessarily the release dates of the exact evaluated endpoints.",
+  "models": [
+    {
+      "id": "gpt2",
+      "name": "GPT-2",
+      "date": "2019-02-14",
+      "ci_high": 0.141825,
+      "ci_low": 0.009994,
+      "estimate": 0.053778
+    },
+    {
+      "id": "davinci_002",
+      "name": "GPT-3 / davinci-002",
+      "date": "2020-05-28",
+      "ci_high": 0.221209,
+      "ci_low": 0.093319,
+      "estimate": 0.144057
+    },
+    {
+      "id": "gpt_3_5_turbo_instruct",
+      "name": "GPT-3.5",
+      "date": "2022-03-15",
+      "ci_high": 1.115905,
+      "ci_low": 0.255148,
+      "estimate": 0.599247
+    },
+    {
+      "id": "gpt_4",
+      "name": "GPT-4",
+      "date": "2023-03-14",
+      "ci_high": 11.721889,
+      "ci_low": 2.768122,
+      "estimate": 6.024114
+    },
+    {
+      "id": "claude_3_5_sonnet_20241022",
+      "name": "Claude 3.5 Sonnet",
+      "date": "2024-10-22",
+      "ci_high": 60.891717,
+      "ci_low": 14.72191,
+      "estimate": 30.454555
+    },
+    {
+      "id": "claude_3_7_sonnet",
+      "name": "Claude 3.7 Sonnet",
+      "date": "2025-02-24",
+      "ci_high": 89.187313,
+      "ci_low": 28.87097,
+      "estimate": 55.258445
+    }
+  ]
+}

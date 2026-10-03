@@ -2,6 +2,7 @@
 import Layout from '../../layouts/Layout.astro';
 import { getCollection } from 'astro:content';
 import FootnotesList from '../../components/FootnotesList.astro';
+import '../../styles/article.css';
 
 // Generate static paths for all articles
 export async function getStaticPaths() {
@@ -25,52 +26,48 @@ const formattedDate = new Date(article.data.publishDate).toLocaleDateString('en-
 });
 ---
 
-<Layout title={`${article.data.title} | Professional Portfolio`}>
+<Layout title={`${article.data.title} | Professional Portfolio`} description={article.data.description}>
   <main class="pt-24 pb-16">
-    <div class="container mx-auto px-4 md:px-6 lg:px-8">
-      <article class="prose prose-xl max-w-none
-        [&>h1]:text-xl md:[&>h1]:text-2xl lg:[&>h1]:text-3xl
-        [&>h2]:text-lg md:[&>h2]:text-xl lg:[&>h2]:text-2xl
-        [&>h3]:text-base md:[&>h3]:text-lg lg:[&>h3]:text-xl
-        [&>p]:text-sm md:[&>p]:text-base lg:[&>p]:text-lg
-        [&>ul]:text-sm md:[&>ul]:text-base lg:[&>ul]:text-lg
-        [&>ol]:text-sm md:[&>ol]:text-base lg:[&>ol]:text-lg
-        prose-headings:font-bold 
-        prose-a:text-primary-600 
-        prose-img:rounded-xl
-        prose-code:text-primary-600
-        dark:prose-invert 
-        dark:prose-a:text-primary-400
-        dark:prose-code:text-primary-400">
-        {article.data.showImageOnPage !== false && (
-          <img 
-            src={article.data.image.src} 
-            alt={article.data.image.alt}
-            class="w-full aspect-video object-cover mb-4"
-          />
-        )}
-        {article.data.showTitleOnPage !== false && (
-          <h1 class="!text-2xl mb-2">{article.data.title}</h1>
-        )}
-        <div class={`flex items-center gap-2 text-xs text-gray-600 dark:text-gray-400 ${article.data.showTitleOnPage !== false ? '-mt-2' : 'mt-0'}`}>
-          <span>{article.data.author}</span>
-          <span>•</span>
-          <time datetime={article.data.publishDate}>{formattedDate}</time>
+    <div class="article-shell">
+      <article class="article-page">
+        <header class="article-header">
+          {article.data.showImageOnPage !== false && (
+            <img
+              src={article.data.image.src}
+              alt={article.data.image.alt}
+              class="article-banner"
+              decoding="async"
+              fetchpriority="high"
+            />
+          )}
+          {article.data.showTitleOnPage !== false && (
+            <h1 class="article-title">{article.data.title}</h1>
+          )}
+          <div class="article-meta text-gray-600 dark:text-gray-400">
+            <span>{article.data.author}</span>
+            <span aria-hidden="true">•</span>
+            <time datetime={article.data.publishDate}>{formattedDate}</time>
+          </div>
+          <div class="article-tags">
+            {article.data.tags.map(tag => (
+              <span class="bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full text-xs">
+                {tag}
+              </span>
+            ))}
+          </div>
+        </header>
+        <div class="article-body prose prose-xl max-w-none
+          prose-headings:font-bold prose-a:text-primary-600 prose-img:rounded-xl
+          prose-code:text-primary-600 dark:prose-invert
+          dark:prose-a:text-primary-400 dark:prose-code:text-primary-400">
+          <Content />
         </div>
-        <div class="flex gap-1 flex-wrap mt-2 mb-4">
-          {article.data.tags.map(tag => (
-            <span class="bg-gray-100 dark:bg-gray-800 px-2 py-0.5 rounded-full text-xs">
-              {tag}
-            </span>
-          ))}
-        </div>
-        <Content />
       </article>
       
       <!-- Footnotes List at Bottom -->
-      <div class="container mx-auto px-4 md:px-6 lg:px-8 mt-8">
+      <div class="article-footnotes">
         <FootnotesList />
       </div>
     </div>
   </main>
-</Layout> 
+</Layout>

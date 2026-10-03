@@ -1,0 +1,26 @@
+---
+interface Props {
+  number: string;
+  eyebrow: string;
+  title: string;
+  description?: string;
+  caption: string;
+  source?: string;
+  sourceLabel?: string;
+}
+const { number, eyebrow, title, description, caption, source, sourceLabel = 'Source' } = Astro.props;
+const id = `life-figure-${number}`;
+---
+<figure class="life-figure not-prose" aria-labelledby={`${id}-title`} aria-describedby={`${id}-caption`} id={id}>
+  <header class="lf-header">
+    <span class="lf-eyebrow"><span class="lf-number">{number}</span>{eyebrow}</span>
+    <h3 id={`${id}-title`}>{title}</h3>
+    {description && <p>{description}</p>}
+  </header>
+  <div class="lf-body"><slot /></div>
+  <figcaption class="lf-caption" id={`${id}-caption`}>
+    <p>{caption}</p>
+    {source && <a href={source}>{sourceLabel}<span aria-hidden="true"> ↗</span></a>}
+    <slot name="sources" />
+  </figcaption>
+</figure>

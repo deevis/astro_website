@@ -1,0 +1,79 @@
+---
+title: "A Nationwide Dive Into Forecasting Accuracy"
+publishDate: "2026-09-23T12:00:00Z"
+author: "Darren Hicks"
+image:
+  src: "/images/articles/forecast-accuracy-banner.webp"
+  alt: "Conceptual U.S. weather illustration with golden heat, icy blue states, rain clouds and snow"
+description: "Years of archived weather forecasts reveal a geographic pattern. Explore forecast lead times, seasonal bias, outliers and coverage in an interactive nationwide study."
+tags: ["weather", "data analysis", "forecasting", "interactive"]
+showImageOnPage: true
+---
+
+import StudyEmbed from '/src/components/forecast-accuracy/StudyEmbed.astro';
+
+I started collecting weather forecasts without being sure what I would find. Would a forecast made six days ahead become more dependable over the years? When it changed, did the earlier prediction tend to be too warm or too cool? Did that answer depend on the season—or on where you lived?
+
+Repeated collection eventually produced an archive of **101.9 million stored temperature predictions across 70 station histories**, spanning late 2020 through September 19, 2026. Station IDs run through 80, but they are not a count: there are gaps, and a second Salt Lake City record is deliberately excluded.
+
+The clearest pattern so far is geographic: **middle America generally appears harder to predict than coastal America.** The interactive map makes that visible. That is a finding about this archive, with some important limits on what “accuracy” means here.
+
+> **What we actually compare:** an older forecast against the stored near-term forecast for the same target hour. The near-term value is another forecast, not a sensor measurement. These charts measure how much the outlook changed. Shared errors in both forecasts would remain invisible.
+
+## A nationwide view
+
+For the station rankings, 68 histories have enough comparable data to share **33 calendar months across 2023–2025**. Each retained month receives equal weight, so a station that was collected more frequently does not automatically dominate. The map also includes **2026 year to date**, with an option to compare the same January–September cutoff across years.
+
+The six-day comparison gives a sense of the spread. Across the shared months, Hartrandt, Wyoming averages about **4.85°F** of absolute difference from the near-term forecast; Pierre, South Dakota and Bismarck, North Dakota are about **4.60°F** and **4.57°F**. Coronado, California is about **1.54°F**, and Miami about **1.48°F**. These are sampled stations, not statewide guarantees, and this contrast alone does not explain its cause.
+
+Try changing the lead from six days to one day, then switch the map between years. The state colors average the contributing stations equally. A state with one station is still represented by only that station; a blank state is not a perfect forecast.
+
+<StudyEmbed view="stations" />
+
+## Is the forecast getting better?
+
+A smaller difference means the earlier forecast ended up closer to the near-term outlook. It is tempting to read a falling line as improving accuracy, but the sampling has to support that claim.
+
+The archive contains gaps, changes in collection frequency and partial years. If one year's retained hours are mostly summer and another year's are mostly winter, the comparison mixes forecasting changes with a different set of weather. The explorer therefore shows sample counts and uncertainty intervals, and offers a **same-hours-across-all-leads** setting when comparing forecast horizons.
+
+Every target hour contributes at most one forecast at each nominal lead: **24, 48, 72, 96, 120 or 144 hours**, choosing the nearest saved forecast within **±4 hours**. Missing forecasts stay missing. We do not interpolate a convenient value to fill a chart.
+
+## When forecasts disagree, which way do they lean?
+
+Mean absolute difference describes the size of a change; it loses the direction. Signed difference preserves it:
+
+- **Positive:** the earlier forecast was warmer than the near-term forecast.
+- **Negative:** the earlier forecast was cooler.
+- **Near zero:** warm and cool differences may cancel, even when individual differences are large.
+
+The seasonal chart asks whether that direction changes by month. Its year selector can show all selected years or one year. The next grid puts **months in columns and years in rows**, with its own forecast-lead selector, initially set to six days. Both use paired-hour-weighted means.
+
+The explorer includes **daily summary statistics for all 70 retained stations**. Salt Lake City and Oak Ridge remain convenient starting points; use the station selectors to explore or compare any two histories. The summaries come from the real archive. Original forecast temperatures and individual hourly records are not included. Change the quality setting or select a seasonal cell to focus the rest of the study.
+
+<StudyEmbed view="explorer" />
+
+## Strange readings deserve an audit
+
+An extreme value can be an error, a genuine event or a problem in how a forecast was stored. Simply deleting everything unusual would make the results look better without necessarily making them more truthful.
+
+The default screen flags values more than two sample standard deviations from a station's month-and-local-hour baseline, alongside broad temperature bounds and sharp jumps between adjacent reference hours. Flagged inputs are excluded in the default view; the quality selector can include their contribution to the summary statistics. The original readings and per-reading audit logs remain in the source archive and are not distributed with this article. The screen can exclude real extremes, which is why the included/excluded comparison matters.
+
+A station-level outlier is a different question. The nationwide page compares station summaries with their peers and identifies unusually large scores for further investigation. Those labels are exploratory; they are not proof of bad data or formal significance tests corrected for every comparison.
+
+## Coverage is part of the result
+
+A coverage cell tells you the fraction of tracked hours that have a stored near-term temperature forecast. **25% coverage means a reference exists for one in four tracked hours.** It does not mean that a forecast was correct a quarter of the time.
+
+The denominator includes gaps within a station's tracking interval. The first and last months may be partial. A reference still needs a matching historical forecast at the selected lead before it can contribute a comparison pair.
+
+Use the information button beside the coverage grid for examples, the color scale and an explanation of blank cells. The final daily chart compares mean differences and sample counts across all six leads for a selected date, using only aggregate statistics.
+
+## What this study can—and cannot—tell us
+
+The archive supports a useful picture of forecast revision: how much the outlook changes with lead time, whether changes lean warmer or cooler, and where those patterns vary by season and geography. It also shows why collection coverage belongs alongside the headline result.
+
+The strongest next step is to pair these histories with independent observations. Until then, “closer to the near-term forecast” is the claim the data supports. The geographic pattern is worth investigating; a definitive claim about improved weather accuracy needs that additional reference.
+
+**About this edition:** this is a fixed snapshot through **September 19, 2026**, not a live feed. Nationwide summaries cover all 70 retained histories, with 68 in the completed-year peer comparison. Every retained station has daily summaries for the interactive explorer, including seasonal, year-by-year, quality and coverage views. The published dataset contains no original forecast temperatures, hourly pairs or individual audit records.
+
+[Download the summary dataset and methodology](/articles/forecast-accuracy/dataset.html). The chart panels provide CSV exports, sample counts and their calculation notes.

@@ -41,3 +41,10 @@ tmp/
 astro-website.tar
 .tmp-astro-website.tar*
 
+# Rent research: raw evidence and the append-only local archive are not site assets.
+/data/rent-tracker/
+/scripts/rent-tracker/**/__pycache__/
+
+# Grid research: raw EIA evidence and revision history stay outside site assets.
+/data/grid-tracker/
+/scripts/grid-tracker/**/__pycache__/

@@ -1,0 +1,194 @@
+---
+import { gameGenres, type GameEntry } from '../../config/catalog';
+
+interface Props {
+  games: GameEntry[];
+}
+
+const { games } = Astro.props;
+const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre.label]));
+---
+
+<section id="game-catalog" class="container mx-auto px-4 md:px-6 lg:px-8 pb-8" aria-label="All games">
+  <p data-recent-hint class="hidden text-sm text-gray-500 dark:text-gray-400 mb-5">
+    Recently played first.
+  </p>
+  <div data-game-grid class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
+    {games.map((game, index) => (
+      <article class="game-card" data-game-id={game.id}>
+        <a href={game.href} class="game-card-link">
+          <div class="game-card-art">
+            <img
+              src={game.image}
+              alt=""
+              width="720"
+              height="405"
+              loading={index < 6 ? 'eager' : 'lazy'}
+              decoding="async"
+            />
+            <span data-recent-badge class="game-card-recent hidden">Recently played</span>
+          </div>
+          <div class="game-card-body">
+            <p class="game-card-kicker">{genreLabel[game.genre]}</p>
+            <h2 class="game-card-title">{game.title}</h2>
+            <p class="game-card-tagline">{game.tagline}</p>
+          </div>
+        </a>
+      </article>
+    ))}
+  </div>
+</section>
+
+<style>
+  .game-card {
+    min-width: 0;
+  }
+
+  .game-card-link {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+    overflow: hidden;
+    border-radius: 0.85rem;
+    border: 1px solid rgb(229 231 235);
+    background: white;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 160ms ease, box-shadow 160ms ease, transform 160ms ease;
+  }
+
+  :global(.dark) .game-card-link {
+    border-color: rgb(55 65 81);
+    background: rgb(31 41 55);
+  }
+
+  .game-card-link:hover {
+    border-color: rgb(96 165 250);
+    box-shadow: 0 12px 28px rgb(15 23 42 / 0.1);
+    transform: translateY(-2px);
+  }
+
+  :global(.dark) .game-card-link:hover {
+    border-color: rgb(59 130 246);
+    box-shadow: 0 12px 28px rgb(0 0 0 / 0.28);
+  }
+
+  .game-card-art {
+    position: relative;
+    overflow: hidden;
+    aspect-ratio: 3 / 2;
+    background: rgb(243 244 246);
+  }
+
+  :global(.dark) .game-card-art {
+    background: rgb(17 24 39);
+  }
+
+  .game-card-art img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: center top;
+    display: block;
+    transition: transform 280ms ease;
+  }
+
+  .game-card-link:hover img {
+    transform: scale(1.04);
+  }
+
+  .game-card-recent {
+    position: absolute;
+    top: 0.7rem;
+    left: 0.7rem;
+    margin: 0;
+    padding: 0.28rem 0.6rem;
+    border-radius: 999px;
+    background: rgb(37 99 235);
+    color: white;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  .game-card-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 0.95rem 1rem 1.1rem;
+  }
+
+  .game-card-kicker {
+    margin: 0;
+    font-size: 11px;
+    font-weight: 600;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: rgb(37 99 235);
+  }
+
+  :global(.dark) .game-card-kicker {
+    color: rgb(147 197 253);
+  }
+
+  .game-card-title {
+    margin: 0;
+    font-size: 1.125rem;
+    font-weight: 700;
+    line-height: 1.25;
+    color: rgb(17 24 39);
+  }
+
+  :global(.dark) .game-card-title {
+    color: white;
+  }
+
+  .game-card-tagline {
+    margin: 0.15rem 0 0;
+    font-size: 0.9rem;
+    line-height: 1.4;
+    color: rgb(75 85 99);
+  }
+
+  :global(.dark) .game-card-tagline {
+    color: rgb(156 163 175);
+  }
+</style>
+
+<script>
+  import { loadRecentGameIds, rememberGame } from '../../lib/recent-games';
+
+  const root = document.getElementById('game-catalog');
+  const grid = root?.querySelector<HTMLElement>('[data-game-grid]');
+  const hint = root?.querySelector<HTMLElement>('[data-recent-hint]');
+  if (root && grid) {
+    const recents = loadRecentGameIds();
+    const cards = [...grid.querySelectorAll<HTMLElement>('.game-card')];
+    const byId = new Map(cards.map((card) => [card.dataset.gameId, card]));
+    const seen = new Set<string>();
+    const ordered: HTMLElement[] = [];
+
+    for (const id of recents) {
+      const card = byId.get(id);
+      if (!card || seen.has(id)) continue;
+      seen.add(id);
+      card.querySelector('[data-recent-badge]')?.classList.remove('hidden');
+      ordered.push(card);
+    }
+    for (const card of cards) {
+      const id = card.dataset.gameId;
+      if (!id || seen.has(id)) continue;
+      ordered.push(card);
+    }
+
+    if (ordered.length) grid.append(...ordered);
+    if (hint && seen.size) hint.classList.remove('hidden');
+
+    grid.addEventListener('click', (event) => {
+      const card = (event.target as HTMLElement | null)?.closest<HTMLElement>('.game-card');
+      const id = card?.dataset.gameId;
+      if (id) rememberGame(id);
+    });
+  }
+</script>

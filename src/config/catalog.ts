@@ -35,6 +35,22 @@ export interface GameEntry {
 
 export const games: GameEntry[] = [
   {
+    id: 'one-of-you-did-it',
+    title: 'One of You Did It',
+    tagline: 'A storm. A toast. A killer in the house.',
+    description:
+      'A cozy murder mystery. Search a storm-bound manor, challenge four suspects, and reconstruct the last toast.',
+    href: '/playground/one-of-you-did-it',
+    image: '/html_showcase/one-of-you-did-it/thumb.png',
+    playLabel: 'Play One of You Did It',
+    genre: 'adventure',
+    bullets: [
+      'Search five rooms of Ashcroft House',
+      'Connect clues into deductions, then challenge alibis',
+      'Rebuild the blackout, then name the killer',
+    ],
+  },
+  {
     id: 'paper-puppet',
     title: 'Paper Puppet',
     tagline: 'Pull a few strings.',
@@ -189,6 +205,18 @@ export const games: GameEntry[] = [
     playLabel: 'Play Mastermind',
     genre: 'puzzle',
     bullets: ['Classic 4-peg code through 5 pegs and 8 colors', 'Daily code', 'Keys, hints, and codes still possible'],
+  },
+  {
+    id: 'pipeflow',
+    title: 'Pipeflow',
+    tagline: 'Drag ring to ring. Fill the grid.',
+    description:
+      'Each day is twenty boards. Clear one to open the next — the grid grows from 4×4 to 8×8, and more colors join.',
+    href: '/apps/pipeflow',
+    image: '/html_showcase/pipeflow/thumb.png',
+    playLabel: 'Play Pipeflow',
+    genre: 'puzzle',
+    bullets: ['20 daily boards, each one harder', '4×4 through 8×8', 'Two colors through five'],
   },
   {
     id: 'othello',

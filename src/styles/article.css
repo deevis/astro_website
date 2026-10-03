@@ -1,0 +1,68 @@
+/* The banner, title, prose and figures share the same content width. */
+.article-shell {
+  --article-reading-width: 100%;
+  width: min(100% - 3rem, 1080px);
+  margin-inline: auto;
+}
+
+.article-page { min-width: 0; }
+
+.article-header { margin-bottom: 2.25rem; }
+
+.article-banner {
+  display: block;
+  width: 100%;
+  height: clamp(180px, 22vw, 280px);
+  object-fit: cover;
+  object-position: center 60%;
+  border-radius: 12px;
+  margin: 0 0 1.75rem;
+}
+
+.article-title {
+  max-width: 100%;
+  margin: 0 0 1rem;
+  font-size: clamp(1.65rem, 2.8vw, 2.5rem);
+  font-weight: 700;
+  line-height: 1.18;
+  letter-spacing: -.035em;
+  text-wrap: pretty;
+}
+
+.article-meta {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: .35rem .6rem;
+  font-size: .875rem;
+  line-height: 1.5;
+}
+
+.article-tags { display: flex; flex-wrap: wrap; gap: .35rem; margin-top: .85rem; }
+
+.article-body > :is(h1, h2, h3, h4, h5, h6, p, ul, ol, blockquote, hr),
+.article-footnotes {
+  max-width: var(--article-reading-width);
+  margin-left: 0;
+  margin-right: 0;
+}
+
+.article-body > :is(p, ul, ol),
+.article-body > :is(ul, ol) > li,
+.article-body > blockquote > p {
+  font-size: clamp(1rem, 1.4vw, 1.125rem);
+  line-height: 1.8;
+}
+
+.article-body > :is(h1, h2) { font-size: clamp(1.4rem, 2.2vw, 1.875rem); line-height: 1.3; }
+.article-body > h3 { font-size: clamp(1.15rem, 1.8vw, 1.4rem); line-height: 1.4; }
+.article-body > :first-child { margin-top: 0; }
+.article-footnotes { margin-top: 2rem; }
+
+@media (max-width: 540px) {
+  .article-shell { width: calc(100% - 2rem); }
+  .article-banner { height: 180px; margin-bottom: 1.25rem; border-radius: 10px; }
+  .article-header { margin-bottom: 1.75rem; }
+  .article-title { font-size: 1.65rem; line-height: 1.25; }
+  .article-meta { font-size: .8rem; }
+}

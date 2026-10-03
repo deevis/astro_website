@@ -1,0 +1,84 @@
+---
+import Figure from './Figure.astro';
+const pressures = [
+  ['A task gets cheaper', 'Useful automation changes the cost of producing an answer, a design or a service.'],
+  ['Competitors respond', 'A real cost advantage can put pressure on other firms to follow.'],
+  ['People set the terms', 'Management, workers and institutions determine what happens to the gains.'],
+];
+---
+
+<Figure number="08" eyebrow="The competitive pressure · an analytical framework"
+  title="The model can obey. The bargain can still get worse."
+  description="A possible route from useful capability to weaker bargaining power—without a machine rebelling."
+  caption="This diagram describes incentives, not an inevitable sequence or a measured forecast. New demand can expand employment. Training, work design, bargaining arrangements and policy help determine the outcome. The two paths can coexist across a firm or an economy.">
+  <ol class="lf-pressure-path">
+    {pressures.map(([title, description], i) => <li>
+      <span class="lf-pressure-number">0{i + 1}</span>
+      <h4>{title}</h4>
+      <p>{description}</p>
+      {i < pressures.length - 1 && <span class="lf-pressure-arrow" aria-hidden="true">→</span>}
+    </li>)}
+  </ol>
+  <div class="lf-pressure-choice">
+    <span class="lf-choice-label">The decision that changes the outcome</span>
+    <div class="lf-pressure-branches">
+      <div>
+        <h4>Build on people's capabilities</h4>
+        <p>Expand services, train entrants, improve working conditions and share productivity gains.</p>
+      </div>
+      <div class="lf-pressure-risk">
+        <h4>Make fewer people necessary</h4>
+        <p>Reduce hiring, remove junior tasks and retain the savings. The first loss may be an opening that never appears.</p>
+      </div>
+    </div>
+  </div>
+</Figure>
+
+<style>
+  .lf-pressure-path {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 25px;
+  }
+  .lf-pressure-path li {
+    position: relative;
+    margin: 0;
+    padding: 20px;
+    border-top: 2px solid var(--lf-amber);
+    background: var(--lf-panel);
+  }
+  .lf-pressure-number {
+    display: block;
+    margin-bottom: 18px;
+    color: var(--lf-amber);
+    font: 400 30px/1 Georgia, serif;
+  }
+  .lf-pressure-path h4, .lf-pressure-branches h4 {
+    margin: 0 0 12px;
+    color: var(--lf-ink);
+    font: 650 16px/1.35 system-ui, sans-serif;
+  }
+  .lf-pressure-path p, .lf-pressure-branches p { font-size: 14px; }
+  .lf-pressure-arrow {
+    position: absolute;
+    right: -21px;
+    top: 60px;
+    color: var(--lf-amber);
+    font-size: 21px;
+  }
+  .lf-pressure-choice { margin-top: 26px; padding-top: 20px; border-top: 1px solid var(--lf-line); }
+  .lf-choice-label { display: block; margin-bottom: 17px; font-size: 11px; letter-spacing: .09em; text-transform: uppercase; color: var(--lf-muted); }
+  .lf-pressure-branches { display: grid; grid-template-columns: 1fr 1fr; gap: 28px; }
+  .lf-pressure-branches > div { border-left: 3px solid var(--lf-teal); padding-left: 17px; }
+  .lf-pressure-branches .lf-pressure-risk { border-left-color: var(--lf-amber); }
+  @media (max-width: 700px) {
+    .lf-pressure-path { grid-template-columns: 1fr; gap: 24px; }
+    .lf-pressure-path li { padding: 16px 18px; }
+    .lf-pressure-number { margin-bottom: 10px; font-size: 25px; }
+    .lf-pressure-arrow { top: auto; bottom: -27px; right: auto; left: 22px; transform: rotate(90deg); }
+    .lf-pressure-branches { grid-template-columns: 1fr; gap: 22px; }
+  }
+</style>

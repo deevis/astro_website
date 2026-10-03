@@ -1,0 +1,234 @@
+---
+type Props = {
+  id: string;
+  title: string;
+  category: string;
+  author: string;
+} & (
+  | { kind: 'x'; postId: string; handle: string }
+  | { kind: 'youtube'; videoId: string; relatedUrl?: string; relatedLabel?: string }
+);
+
+const props = Astro.props;
+const { id, title, category, author, kind } = props;
+const url = kind === 'x'
+  ? `https://x.com/${props.handle}/status/${props.postId}`
+  : `https://www.youtube.com/watch?v=${props.videoId}`;
+---
+
+<aside class:list={['cp-media', 'not-prose', `cp-media-${kind}`]} id={id} aria-labelledby={`${id}-title`}>
+  <div class="cp-media-context">
+    <span class="cp-media-label">{category} <span aria-hidden="true">/</span> {kind === 'x' ? 'X post' : 'Video'}</span>
+    <h3 id={`${id}-title`}>{title}</h3>
+    <p class="cp-media-author">{author}</p>
+    <div class="cp-media-caption"><slot /></div>
+    <a class="cp-media-source" href={url} target="_blank" rel="noopener noreferrer">
+      {kind === 'x' ? 'Read the original on X' : 'Watch on YouTube'} <span aria-hidden="true">↗</span>
+    </a>
+    {kind === 'youtube' && props.relatedUrl && (
+      <a class="cp-media-source" href={props.relatedUrl} target="_blank" rel="noopener noreferrer">
+        {props.relatedLabel ?? 'Related video'} <span aria-hidden="true">↗</span>
+      </a>
+    )}
+  </div>
+  {kind === 'x' ? (
+    <cp-x-post class="cp-media-post" data-post-id={props.postId}>
+      <div class="cp-media-fallback">
+        <span class="cp-media-label">Original post</span>
+        <strong>{author}</strong>
+        <span class="cp-media-handle">@{props.handle}</span>
+        <p>The post can also be read directly on X.</p>
+        <a class="cp-media-source" href={url} target="_blank" rel="noopener noreferrer">Open original post <span aria-hidden="true">↗</span></a>
+      </div>
+      <div class="cp-media-mount"></div>
+    </cp-x-post>
+  ) : (
+    <div class="cp-media-video">
+      <iframe
+        src={`https://www.youtube-nocookie.com/embed/${props.videoId}`}
+        title={`${title} — ${author}`}
+        loading="lazy"
+        referrerpolicy="strict-origin-when-cross-origin"
+        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+        allowfullscreen
+      ></iframe>
+    </div>
+  )}
+</aside>
+
+<script>
+  type XWidgets = {
+    widgets: {
+      createTweet: (id: string, target: HTMLElement, options: Record<string, unknown>) => Promise<HTMLElement | undefined>;
+    };
+  };
+  const xWindow = window as Window & { twttr?: XWidgets };
+  let widgetsPromise: Promise<XWidgets> | undefined;
+
+  function loadWidgets(): Promise<XWidgets> {
+    if (xWindow.twttr?.widgets?.createTweet) return Promise.resolve(xWindow.twttr);
+    if (!widgetsPromise) {
+      widgetsPromise = new Promise((resolve, reject) => {
+        const existing = document.querySelector<HTMLScriptElement>('script[src="https://platform.twitter.com/widgets.js"]');
+        const script = existing ?? document.createElement('script');
+        const timer = window.setTimeout(() => reject(new Error('X widgets unavailable')), 12000);
+        script.addEventListener('load', () => {
+          window.clearTimeout(timer);
+          if (xWindow.twttr?.widgets?.createTweet) resolve(xWindow.twttr);
+          else reject(new Error('X widgets unavailable'));
+        }, { once: true });
+        script.addEventListener('error', () => {
+          window.clearTimeout(timer);
+          reject(new Error('X widgets unavailable'));
+        }, { once: true });
+        if (!existing) {
+          script.src = 'https://platform.twitter.com/widgets.js';
+          script.async = true;
+          document.head.append(script);
+        }
+      });
+    }
+    return widgetsPromise;
+  }
+
+  class CPXPost extends HTMLElement {
+    observer?: IntersectionObserver;
+    themeObserver?: MutationObserver;
+    generation = 0;
+    started = false;
+    theme = '';
+
+    connectedCallback() {
+      if (this.observer || this.started) return;
+      const start = () => {
+        this.started = true;
+        this.observer?.disconnect();
+        void this.renderPost();
+        this.themeObserver = new MutationObserver(() => {
+          if (this.currentTheme() !== this.theme) void this.renderPost();
+        });
+        this.themeObserver.observe(document.documentElement, { attributes: true, attributeFilter: ['class'] });
+      };
+      if (!('IntersectionObserver' in window)) { start(); return; }
+      this.observer = new IntersectionObserver(entries => {
+        if (entries.some(entry => entry.isIntersecting)) start();
+      }, { rootMargin: '400px' });
+      this.observer.observe(this);
+    }
+
+    disconnectedCallback() {
+      this.generation++;
+      this.observer?.disconnect();
+      this.observer = undefined;
+      this.themeObserver?.disconnect();
+      this.started = false;
+    }
+
+    currentTheme() {
+      return document.documentElement.classList.contains('dark') ? 'dark' : 'light';
+    }
+
+    async renderPost() {
+      const generation = ++this.generation;
+      this.theme = this.currentTheme();
+      const fallback = this.querySelector<HTMLElement>('.cp-media-fallback')!;
+      const previousMount = this.querySelector<HTMLElement>('.cp-media-mount')!;
+      const mount = previousMount.cloneNode(false) as HTMLElement;
+      previousMount.replaceWith(mount);
+      fallback.hidden = false;
+      this.dataset.state = 'loading';
+      let timer: number | undefined;
+      try {
+        const api = await loadWidgets();
+        if (generation !== this.generation || !this.isConnected) return;
+        const widget = await Promise.race([
+          api.widgets.createTweet(this.dataset.postId!, mount, {
+            theme: this.theme, dnt: true, conversation: 'none', align: 'center', width: 550,
+          }),
+          new Promise<undefined>(resolve => { timer = window.setTimeout(() => resolve(undefined), 15000); }),
+        ]);
+        if (generation !== this.generation || !this.isConnected) return;
+        if (!widget) throw new Error('Post unavailable');
+        fallback.hidden = true;
+        this.dataset.state = 'loaded';
+      } catch {
+        if (generation !== this.generation || !this.isConnected) return;
+        // Detach the target so a late widget cannot obscure the fallback.
+        mount.replaceWith(mount.cloneNode(false));
+        this.dataset.state = 'fallback';
+      } finally {
+        window.clearTimeout(timer);
+      }
+    }
+  }
+
+  if (!customElements.get('cp-x-post')) customElements.define('cp-x-post', CPXPost);
+</script>
+
+<style>
+  .cp-media {
+    --media-ink: #172332;
+    --media-muted: #4d5d70;
+    --media-line: #d3dbe4;
+    --media-paper: #f3f5f7;
+    --media-accent: #80571e;
+    --media-link: #24646a;
+    display: grid;
+    grid-template-columns: minmax(0, .85fr) minmax(0, 1.15fr);
+    gap: clamp(24px, 3vw, 40px);
+    align-items: center;
+    margin: 2.8rem 0;
+    padding: clamp(20px, 3vw, 32px);
+    border: 1px solid var(--media-line);
+    border-top: 3px solid var(--media-accent);
+    border-radius: 14px;
+    background: var(--media-paper);
+    color: var(--media-ink);
+    scroll-margin-top: 7rem;
+  }
+  :global(.dark) .cp-media {
+    --media-ink: #edf0f4;
+    --media-muted: #b1bdcb;
+    --media-line: #334456;
+    --media-paper: #101b29;
+    --media-accent: #e7b66a;
+    --media-link: #84cec9;
+  }
+  .cp-media-youtube { grid-template-columns: minmax(0, .75fr) minmax(0, 1.25fr); }
+  .cp-media-context, .cp-media-post { min-width: 0; }
+  .cp-media-label { display: block; color: var(--media-accent); font: 700 10px/1.8 system-ui, sans-serif; letter-spacing: .12em; text-transform: uppercase; }
+  .cp-media-label span { margin: 0 .35em; }
+  .cp-media h3 { margin: 14px 0 10px; color: var(--media-ink); font: 650 clamp(22px, 2.4vw, 29px)/1.25 system-ui, sans-serif; letter-spacing: -.025em; text-wrap: balance; }
+  .cp-media-author { margin: 0 0 16px; color: var(--media-muted); font-size: 12px; line-height: 1.6; }
+  .cp-media-caption :global(p) { margin: 0 0 12px; color: var(--media-muted); font-size: 15px; line-height: 1.75; }
+  .cp-media-source { display: block; width: fit-content; margin-top: 12px; color: var(--media-link); font-size: 12px; line-height: 1.7; text-decoration: underline; text-underline-offset: 4px; }
+  .cp-media a:focus-visible { outline: 2px solid var(--media-accent); outline-offset: 5px; }
+  .cp-media-post { display: block; position: relative; container-type: inline-size; }
+  .cp-media-fallback { padding: 26px; border: 1px solid var(--media-line); border-radius: 12px; }
+  .cp-media-fallback[hidden] { display: none; }
+  .cp-media-fallback strong { display: block; margin-top: 16px; color: var(--media-ink); font-size: 20px; line-height: 1.4; }
+  .cp-media-handle { display: block; margin-top: 5px; color: var(--media-muted); font-size: 13px; overflow-wrap: anywhere; }
+  .cp-media-fallback p { margin: 20px 0 0; color: var(--media-muted); font-size: 14px; line-height: 1.6; }
+  .cp-media-mount { width: 100%; }
+  .cp-media-post:not([data-state='loaded']) .cp-media-mount { position: absolute; inset: 0 0 auto; visibility: hidden; }
+  .cp-media-mount :global(.twitter-tweet) { margin: 0 auto !important; max-width: 100% !important; }
+  .cp-media-video { min-width: 0; aspect-ratio: 16 / 9; border-radius: 9px; overflow: hidden; background: #080e17; }
+  .cp-media-video iframe { display: block; width: 100%; height: 100%; border: 0; }
+  @media (max-width: 760px) {
+    .cp-media { grid-template-columns: minmax(0, 1fr); gap: 22px; }
+  }
+  @media (max-width: 420px) {
+    .cp-media { padding: 14px; }
+    .cp-media-fallback { padding: 20px; }
+  }
+  /* X requires a 300px frame; retain the source link on narrower screens. */
+  @container (max-width: 299px) {
+    .cp-media-mount { display: none; }
+    .cp-media-fallback[hidden] { display: block; }
+  }
+  @media print {
+    .cp-media { display: block; break-inside: avoid; background: white !important; color: #111; border-color: #aaa; }
+    .cp-media :is(h3, p, a, .cp-media-label) { color: #222 !important; }
+    .cp-media-post, .cp-media-video { display: none; }
+  }
+</style>

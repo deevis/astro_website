@@ -13,7 +13,17 @@
     "generate-thumbnails": "node scripts/generate-thumbnails.js",
     "optimize-article-images": "node scripts/optimize-article-images.js",
     "optimize-carousel-thumbs": "node scripts/optimize-carousel-thumbs.js",
-    "test:retirement": "node scripts/test-retirement-planner.mjs"
+    "test:retirement": "node scripts/test-retirement-planner.mjs",
+    "rent:list": "python scripts/rent-tracker/track.py list",
+    "rent:collect": "python scripts/rent-tracker/track.py collect",
+    "rent:report": "python scripts/rent-tracker/track.py report",
+    "rent:export": "python scripts/rent-tracker/track.py export",
+    "test:rent": "python scripts/rent-tracker/tests/test_tracker.py",
+    "grid:list": "python scripts/grid-tracker/track.py list",
+    "grid:collect": "python scripts/grid-tracker/track.py collect",
+    "grid:report": "python scripts/grid-tracker/track.py report",
+    "grid:export": "python scripts/grid-tracker/track.py export",
+    "test:grid": "python scripts/grid-tracker/tests/test_tracker.py"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.2.3",

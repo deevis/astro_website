@@ -1,0 +1,16 @@
+{
+  "focus": "PACE",
+  "regions": [
+    {"code": "PACE", "name": "PacifiCorp East", "role": "Utah-focused starting point; not a Utah state total"},
+    {"code": "PACW", "name": "PacifiCorp West", "role": "Same utility, different operating area"},
+    {"code": "IPCO", "name": "Idaho Power", "role": "Reported PACE interchange counterparty"},
+    {"code": "NEVP", "name": "Nevada Power", "role": "Reported PACE interchange counterparty"},
+    {"code": "SWPW", "name": "Southwest Power Pool West", "role": "Reported PACE counterparty; boundary break in April 2026"},
+    {"code": "CISO", "name": "California Independent System Operator", "role": "Western comparison; not assumed to connect directly to PACE"},
+    {"code": "BPAT", "name": "Bonneville Power Administration", "role": "Western comparison"},
+    {"code": "ERCO", "name": "Electric Reliability Council of Texas", "role": "Contrasting system; not part of a combined Western total"}
+  ],
+  "boundary_notes": [
+    {"date": "2026-04-01", "codes": ["SWPW", "WACM", "WAUW", "PSCO", "BHBA"], "note": "SPP West consolidation and transfers change the reporting footprint. Do not splice predecessor and successor demand or interchange as an unchanged area.", "source": "https://spp.org/documents/75997/2026%20rtoe%20swpw%20transition%20plan%20%E2%80%93%20market%20participant.pdf"}
+  ]
+}

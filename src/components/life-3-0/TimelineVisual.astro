@@ -1,0 +1,97 @@
+---
+import Figure from './Figure.astro';
+import horizons from '../../data/life-3-0-horizons.json';
+
+interface Props { kind: 'milestones' | 'horizons' | 'revisions'; }
+const { kind } = Astro.props;
+const originalSurvey = 'https://arxiv.org/html/1705.08807v3';
+const revisedSurvey = 'https://arxiv.org/html/2401.02843v1';
+const milestones = [
+  {
+    name: 'Competitive StarCraft II', observed: 2019, forecast: 2022,
+    result: 'AlphaStar reached Grandmaster level, above 99.8% of ranked players.',
+    source: 'https://deepmind.google/blog/alphastar-grandmaster-level-in-starcraft-ii-using-multi-agent-reinforcement-learning/',
+    sourceLabel: 'AlphaStar results',
+    boundary: 'The survey required beating the best players using screen video. AlphaStar used a structured game interface; Grandmaster rank does not establish that full target.',
+  },
+  {
+    name: 'High-school essay writing', observed: 2023, forecast: 2026,
+    result: 'Teachers rated ChatGPT’s argumentative essays above the student essays in one study.',
+    source: 'https://pmc.ncbi.nlm.nih.gov/articles/PMC10616290/',
+    sourceLabel: 'Essay comparison study',
+    boundary: 'The survey specified high-grade history essays that pass plagiarism checks. The later study tested argumentative writing, so it is related evidence rather than the same test.',
+  },
+];
+const milestonePosition = (year: number) => (year - 2017) / 11 * 100;
+const revisions = [
+  { year: 2016, forecast: 2061, label: 'The view published in 2017', detail: '2016 survey', tone: 'original' },
+  { year: 2022, forecast: 2060, label: 'Six years later', detail: '2022 survey', tone: 'middle' },
+  { year: 2023, forecast: 2047, label: 'After the generative-AI leap', detail: '2023 survey', tone: 'latest' },
+];
+const forecastPosition = (year: number) => (year - 2025) / 40 * 100;
+const horizonPosition = (minutes: number) => Math.log(minutes / (0.5 / 60)) / Math.log(120 / (0.5 / 60)) * 100;
+const horizonTicks = [{minutes:1/60,label:'1 sec'},{minutes:1/6,label:'10 sec'},{minutes:1,label:'1 min'},{minutes:10,label:'10 min'},{minutes:60,label:'1 hr'}];
+const duration = (minutes: number) => minutes < 1 ? `${(minutes * 60).toFixed(1)} sec` : `${minutes.toFixed(1)} min`;
+const dateLabel = (date: string) => new Date(`${date}T00:00:00Z`).toLocaleDateString('en-US', { month: 'short', year: 'numeric', timeZone: 'UTC' });
+---
+
+{kind === 'milestones' && <Figure number="03" eyebrow="Then forecast / later evidence" title="The breakthroughs arrived before the forecast dates"
+  description="Two examples from the research survey released in 2017. Later results brought related capabilities into view before the survey’s 50% forecast dates."
+  caption="Forecasts came from a 2016 survey, first published in May 2017. Dates are rounded aggregate 50% probability points: 2016 + 6 years for StarCraft, and 2016 + 9.6 years for essays. These are selected comparisons, not a forecast-accuracy scorecard; neither result verifies every condition of the original target."
+  source={originalSurvey} sourceLabel="Original survey · Table S5">
+  <div class="lf-timeline-legend"><span><i class="lf-observed-key" aria-hidden="true"></i>Related result reported</span><span><i class="lf-predicted-key" aria-hidden="true"></i>Original 50% forecast</span></div>
+  <div class="lf-milestones">
+    {milestones.map(item => <section class="lf-milestone">
+      <h4>{item.name}</h4>
+      <div class="lf-milestone-plot" role="img" aria-label={`${item.name}: related result reported in ${item.observed}; original forecast ${item.forecast}. The result and forecast have different conditions.`}>
+        {[2017,2020,2024,2028].map(year => <span class="lf-time-grid" style={`left:${milestonePosition(year)}%`}></span>)}
+        <span class="lf-time-connector" style={`left:${milestonePosition(item.observed)}%;width:${milestonePosition(item.forecast)-milestonePosition(item.observed)}%`}></span>
+        <span class="lf-timed-mark lf-observed-mark" style={`left:${milestonePosition(item.observed)}%`}><b>{item.observed}</b><i></i><small>Reported</small></span>
+        <span class="lf-timed-mark lf-predicted-mark" style={`left:${milestonePosition(item.forecast)}%`}><b>{item.forecast}</b><i></i><small>Forecast</small></span>
+      </div>
+      <div class="lf-calendar-axis" aria-hidden="true">{[2017,2020,2024,2028].map(year => <span style={`left:${milestonePosition(year)}%`}>{year}</span>)}</div>
+      <p class="lf-milestone-result"><a href={item.source}>{item.sourceLabel} ↗</a> {item.result}</p>
+      <p class="lf-comparison-note"><strong>What differs:</strong> {item.boundary}</p>
+    </section>)}
+  </div>
+</Figure>}
+
+{kind === 'horizons' && <Figure number="06" eyebrow="Measured progress · historical benchmark" title="From seconds to nearly an hour in six years"
+  description="The human task duration at which an AI agent succeeds about half the time, in METR’s software and reasoning evaluations."
+  caption="Six selected models from METR’s v1.0 data, ending February 2025. Dots show fitted 50% task horizons; whiskers show 95% confidence intervals. The horizontal scale is logarithmic. Dates follow METR’s model-family chronology. This is human-equivalent task length, not AI runtime, and 50% success is not dependable autonomy."
+  source={horizons.source} sourceLabel="METR v1.0 · source data">
+  <div class="lf-horizon-intro"><div><strong>~1,000×</strong><span>longer task horizon</span></div><p>From about 3 seconds for GPT-2 to 55 minutes for Claude 3.7 Sonnet in this historical slice.</p></div>
+  <p class="lf-chart-unit">Task length in human time · logarithmic scale</p>
+  <div class="lf-horizon-chart">
+    {horizons.models.map(model => <div class="lf-horizon-row">
+      <div class="lf-horizon-label"><strong>{model.name}</strong><small>{dateLabel(model.date)}</small></div>
+      <div class="lf-horizon-plot" role="img" aria-label={`${model.name}: ${duration(model.estimate)}, 95% confidence interval ${duration(model.ci_low)} to ${duration(model.ci_high)}.`}>
+        {horizonTicks.map(tick => <span class="lf-time-grid" style={`left:${horizonPosition(tick.minutes)}%`}></span>)}
+        <span class="lf-horizon-whisker" style={`left:${horizonPosition(model.ci_low)}%;width:${horizonPosition(model.ci_high)-horizonPosition(model.ci_low)}%`}></span>
+        <span class="lf-horizon-dot" style={`left:${horizonPosition(model.estimate)}%`}></span>
+      </div>
+      <strong class="lf-horizon-value">{duration(model.estimate)}</strong>
+    </div>)}
+    <div class="lf-horizon-axis-row" aria-hidden="true"><div class="lf-calendar-axis">{horizonTicks.map(tick => <span style={`left:${horizonPosition(tick.minutes)}%`}>{tick.label}</span>)}</div></div>
+  </div>
+  <p class="lf-chart-note">The <a href={horizons.methodology}>March 2025 study</a> reported a roughly seven-month doubling time across its historical trend. This chart stops at measured models; it adds no future projection.</p>
+</Figure>}
+
+{kind === 'revisions' && <Figure number="11" eyebrow="How expectations moved · 2016 → 2023" title="The experts’ horizon moved 14 years closer"
+  description="The same broad question: when could unaided machines do every task better and more cheaply than human workers? Each diamond marks the aggregate forecast’s 50% probability year."
+  caption="These are survey beliefs, not measured arrival dates or Tegmark’s predictions. The 2016 survey was published in 2017. Dates follow the 2023 paper’s harmonized comparison, which revised the 2022 estimate to 2060 after data-cleaning and code changes. Survey samples differ; uncertainty intervals are omitted."
+  source={revisedSurvey} sourceLabel="Grace et al. · §3.2.1">
+  <div class="lf-revision-stat"><strong>2061 <span aria-hidden="true">→</span> 2047</strong><span>14 calendar years earlier</span></div>
+  <div class="lf-revisions">
+    {revisions.map(item => <div class:list={['lf-revision-row', `lf-revision-${item.tone}`]}>
+      <div class="lf-revision-label"><strong>{item.label}</strong><small>{item.detail}</small></div>
+      <div class="lf-revision-plot" role="img" aria-label={`${item.year} survey: aggregate 50% forecast of ${item.forecast}.`}>
+        {[2025,2035,2045,2055,2065].map(year => <span class="lf-time-grid" style={`left:${forecastPosition(year)}%`}></span>)}
+        <span class="lf-survey-mark" style={`left:${forecastPosition(item.forecast)}%`}><b>{item.forecast}</b><i></i></span>
+      </div>
+    </div>)}
+    <div class="lf-revision-axis-row" aria-hidden="true"><div class="lf-calendar-axis">{[2025,2035,2045,2055,2065].map(year => <span style={`left:${forecastPosition(year)}%`}>{year}</span>)}</div></div>
+  </div>
+  <div class="lf-revision-takeaways"><p><strong>2016 → 2022</strong> Six years passed; the forecast moved one year earlier.</p><p><strong>2022 → 2023</strong> One year passed; the forecast moved thirteen years earlier.</p></div>
+  <p class="lf-chart-note">That is a sharp change in expectations. It does not establish that the remaining timeline will keep shrinking at the same rate.</p>
+</Figure>}

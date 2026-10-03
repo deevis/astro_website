@@ -339,7 +339,8 @@
       draft: game.draft,
       known: game.known,
       elapsed: game.elapsed,
-      hints: game.hints
+      hints: game.hints,
+      hintRound: game.hintRound
     }));
   }
 
@@ -553,6 +554,7 @@
       draft,
       known,
       hints: saved?.hints || 0,
+      hintRound: Number.isFinite(saved?.hintRound) ? saved.hintRound : -1,
       elapsed: saved?.elapsed || 0,
       phase: "play",
       left: 0,
@@ -623,6 +625,10 @@
   function selectSlot(slot) {
     if (!game || game.phase !== "play") return;
     if (game.known[slot] != null) return;
+    if (activeSlot === slot && game.draft[slot] != null) {
+      game.draft[slot] = null;
+      persistProgress();
+    }
     activeSlot = slot;
     rerenderPlay();
   }
@@ -693,14 +699,28 @@
     rerenderPlay();
   }
 
+  function canHint() {
+    if (!game || game.phase !== "play") return false;
+    if (game.guesses.length < 4) return false;
+    if (game.hintRound === game.guesses.length) return false;
+    return game.known.some((color) => color == null);
+  }
+
+  function hintReason() {
+    if (!game || game.phase !== "play") return "";
+    if (game.guesses.length < 4) return "Hints open after 4 guesses.";
+    if (game.hintRound === game.guesses.length) return "One hint per row.";
+    if (game.known.every((color) => color != null)) return "Every peg is already revealed.";
+    return "Reveal one hole. Costs 10 on the score.";
+  }
+
   function giveHint() {
-    if (!game || game.phase !== "play") return;
-    const open = [];
-    for (let i = 0; i < game.known.length; i++) if (game.known[i] == null) open.push(i);
-    if (!open.length) {
-      toast("Every peg is already revealed.");
+    if (!canHint()) {
+      toast(hintReason() || "Hint is not available.");
       return;
     }
+    const open = [];
+    for (let i = 0; i < game.known.length; i++) if (game.known[i] == null) open.push(i);
     const slot = open[(Math.random() * open.length) | 0];
     const color = game.code[slot];
     game.known[slot] = color;
@@ -711,6 +731,7 @@
       }
     }
     game.hints += 1;
+    game.hintRound = game.guesses.length;
     focusPlay();
     game.left = countPossible(game);
     tone(660, 0.07, "sine", 0.04);
@@ -958,7 +979,7 @@
               <div class="mm-hud-item"><span class="lbl">Still possible</span><span class="val" id="mm-left">${game.left.toLocaleString("en-US")}</span></div>
               <div class="mm-hud-item"><span class="lbl">Time</span><span class="val" id="mm-time">${formatTime(currentElapsed())}</span></div>
               <div class="mm-toolbar">
-                <button class="mm-btn" id="mm-hint" ${game.phase === "play" ? "" : "disabled"}>${ICONS.hint} Hint</button>
+                <button class="mm-btn" id="mm-hint" ${canHint() ? "" : "disabled"} title="${hintReason()}">${ICONS.hint} Hint</button>
                 <button class="mm-btn ghost" id="mm-menu">Menu</button>
               </div>
             </div>
@@ -1100,7 +1121,7 @@
           <li>A red key means one peg is the right color in the right hole. A white key means one peg is the right color in the wrong hole.</li>
           <li>The keys are only counts. They are not lined up under the peg they describe.</li>
           <li>A repeated color scores only as many times as it appears in the code.</li>
-          <li>The number on the board is how many codes still agree with every key so far. A hint locks one hole to its true color.</li>
+          <li>The number on the board is how many codes still agree with every key so far. After four guesses, you may take one hint per row. Each hint costs 10 on the score and locks one hole to its true color.</li>
         </ol>
         <div class="mm-modal-actions">
           <button class="mm-btn gold" id="mm-help-examples">Solved examples</button>

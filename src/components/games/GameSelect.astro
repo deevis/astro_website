@@ -400,6 +400,8 @@ const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre
 </style>
 
 <script>
+  import { rememberGame } from '../../lib/recent-games';
+
   type GameGenre = 'adventure' | 'strategy' | 'puzzle' | 'trainer';
 
   type GameRecord = {
@@ -444,9 +446,14 @@ const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
     const hashId = window.location.hash.replace(/^#/, '');
-    if (hashId) {
+    if (hashId && hashId !== 'roulette') {
       const hashed = games.findIndex((game) => game.id === hashId);
-      if (hashed >= 0) selected = hashed;
+      if (hashed >= 0) {
+        selected = hashed;
+        window.requestAnimationFrame(() => {
+          document.getElementById('roulette')?.scrollIntoView({ block: 'start' });
+        });
+      }
     }
 
     function layoutIcons(scrollIntoView = false) {
@@ -503,10 +510,6 @@ const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre
         bulletsEl.classList.toggle('hidden', game.bullets.length === 0);
       }
 
-      const nextHash = `#${game.id}`;
-      if (window.location.hash !== nextHash) {
-        history.replaceState(null, '', nextHash);
-      }
     }
 
     function select(index: number, instant = false) {
@@ -562,6 +565,11 @@ const genreLabel = Object.fromEntries(gameGenres.map((genre) => [genre.id, genre
         if (spinning) return;
         select(Number(icon.dataset.index));
       });
+    });
+
+    playEl?.addEventListener('click', () => {
+      const game = games[selected];
+      if (game) rememberGame(game.id);
     });
 
     spinBtn?.addEventListener('click', () => {

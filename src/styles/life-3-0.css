@@ -1,0 +1,244 @@
+/* Scoped to the Life 3.0 article; figures share one editorial visual language. */
+.life-story {
+  --lf-paper: #f8fafb;
+  --lf-panel: #ffffff;
+  --lf-ink: #172c3c;
+  --lf-muted: #526575;
+  --lf-line: #d7e1e7;
+  --lf-teal: #0d776d;
+  --lf-amber: #94601b;
+  --lf-fill: #149587;
+  --lf-quiet: #d2dee5;
+  --lf-track: #edf2f5;
+}
+.dark .life-story {
+  --lf-paper: #0e1b29;
+  --lf-panel: #122333;
+  --lf-ink: #e7eff5;
+  --lf-muted: #adbecc;
+  --lf-line: #2a4051;
+  --lf-teal: #70dfce;
+  --lf-amber: #f0c478;
+  --lf-fill: #57cdbb;
+  --lf-quiet: #2d4759;
+  --lf-track: #1b3042;
+}
+.life-story > :is(p, ul, ol, h2, blockquote) { max-width: var(--article-reading-width, 100%); margin-left: 0; margin-right: 0; }
+.life-story > p, .life-story > ul, .life-story > ol { font-size: clamp(.95rem, 1.35vw, 1.125rem); line-height: 1.85; }
+.life-story > h2 { font-size: clamp(1.3rem, 2.3vw, 1.75rem); line-height: 1.35; margin-top: 3.5rem; margin-bottom: 1.2rem; scroll-margin-top: 7rem; }
+.life-story > p:first-child { font-size: clamp(1.15rem, 2vw, 1.45rem); line-height: 1.6; margin-top: 0; }
+.life-story > ul li { font-size: inherit; line-height: 1.7; }
+.life-story .lf-jump { display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin:1.5rem 0 2.5rem; padding-bottom:1.25rem; border-bottom:1px solid var(--lf-line); font-size:.8rem; line-height:1.6; }
+.life-story .lf-jump a { color:var(--lf-teal); text-underline-offset:4px; }
+.life-story > hr { max-width: var(--article-reading-width, 100%); margin: 3rem 0; }
+.life-story :is(.life-figure, .life-art) { margin: 2.75rem 0 3.25rem; max-width: 100%; color: var(--lf-ink); background: var(--lf-paper); border: 1px solid var(--lf-line); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 36px rgb(0 0 0 / .055); scroll-margin-top: 7rem; }
+.life-story .lf-header { padding: 1.75rem 2rem 0; }
+.life-story .lf-eyebrow { display: flex; align-items: center; gap: .65rem; color: var(--lf-teal); font-size: .67rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; line-height: 1.6; }
+.life-story .lf-number { font-variant-numeric: tabular-nums; letter-spacing: .02em; border: 1px solid var(--lf-line); border-radius: 50%; display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; flex-shrink: 0; }
+.life-story .life-figure h3, .life-story .life-art h3 { color: var(--lf-ink); font-size: clamp(1.2rem, 2.4vw, 1.7rem); line-height: 1.3; font-weight: 650; margin: .85rem 0 .55rem; letter-spacing: -.025em; }
+.life-story .life-figure p, .life-story .life-art p { font-size: .925rem; line-height: 1.65; color: var(--lf-muted); margin: 0; }
+.life-story .lf-body { padding: 1.8rem 2rem 2rem; }
+.life-story .lf-caption { display: flex; justify-content: space-between; align-items: flex-start; gap: 1.5rem; border-top: 1px solid var(--lf-line); padding: 1.1rem 2rem; }
+.life-story .lf-caption p { font-size: .77rem; line-height: 1.65; max-width: 85ch; }
+.life-story :is(.lf-caption, .lf-date-card) a { color: var(--lf-teal); text-decoration: underline; text-underline-offset: 3px; }
+.life-story .lf-caption a { font-size: .75rem; line-height: 1.6; flex: 0 0 155px; }
+.life-story a:focus-visible, .life-story input:focus-visible { outline: 2px solid var(--lf-teal); outline-offset: 5px; }
+.life-story .life-art { display: grid; grid-template-columns: 1.7fr 1fr; }
+.life-story .life-art img { display: block; width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; aspect-ratio: 3 / 2; }
+.life-story .life-art figcaption { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.25rem, 3vw, 2.5rem); }
+.life-story .life-art h3 { margin: 1rem 0; }
+.life-story .lf-art-credit { color: var(--lf-muted); font-size: .64rem; letter-spacing: .035em; margin-top: 1.5rem; }
+.life-story .lf-summer { display: grid; grid-template-columns: 1fr 110px 1fr; align-items: center; }
+.life-story .lf-date-card { border: 1px solid var(--lf-line); border-radius: 12px; background: var(--lf-panel); padding: 1.5rem; align-self: stretch; }
+.life-story .lf-date-card time { display: block; color: var(--lf-teal); font-size: .9rem; }
+.life-story .lf-date-card time strong { font-weight: 700; }
+.life-story .lf-date-card h4, .life-story .lf-process h4 { font-size: 1.1rem; color: var(--lf-ink); margin: .6rem 0 .9rem; font-weight: 650; line-height: 1.35; }
+.life-story .lf-date-card p + p { margin-top: .9rem; }
+.life-story .lf-date-card p { font-size: .83rem; }
+.life-story .lf-date-book { border-top: 3px solid var(--lf-amber); }
+.life-story .lf-date-book time { color: var(--lf-amber); }
+.life-story .lf-interval { text-align: center; display: flex; flex-direction: column; align-items: center; color: var(--lf-amber); }
+.life-story .lf-interval > span:first-child { font-size: 2.5rem; letter-spacing: -.06em; font-weight: 650; line-height: 1.2; }
+.life-story .lf-interval small { color: var(--lf-muted); font-size: .7rem; }
+.life-story .lf-arrow { font-size: 2rem; line-height: 1.5; }
+.life-story .lf-data-split { display: grid; grid-template-columns: minmax(0, 2fr) minmax(170px, 1fr); align-items: center; gap: 2.5rem; }
+.life-story .lf-insight { padding: 1.5rem; border-radius: 12px; background: var(--lf-panel); border-left: 3px solid var(--lf-teal); }
+.life-story .lf-big { display: block; color: var(--lf-teal); font-size: clamp(2.5rem, 5vw, 3.6rem); font-weight: 650; letter-spacing: -.065em; line-height: 1.1; font-variant-numeric: tabular-nums; margin-bottom: .6rem; }
+.life-story .lf-insight strong { display: block; color: var(--lf-ink); font-size: .86rem; line-height: 1.4; margin-bottom: .7rem; }
+.life-story .lf-insight p { font-size: .8rem; }
+.life-story .lf-amber { color: var(--lf-amber); }
+.life-story .lf-unit { margin: 0 0 1.3rem; color: var(--lf-muted); font-size: .72rem; }
+.life-story .lf-bar-row + .lf-bar-row { margin-top: 1.6rem; }
+.life-story .lf-bar-label { display: flex; justify-content: space-between; align-items: baseline; gap: 1rem; font-size: .9rem; margin-bottom: .55rem; color: var(--lf-ink); }
+.life-story .lf-bar-label strong { font-variant-numeric: tabular-nums; white-space: nowrap; }
+.life-story .lf-bar-label small { color: var(--lf-muted); font-size: .66rem; margin-left: .4rem; }
+.life-story .lf-track { background: var(--lf-track); border-radius: 3px; height: 34px; }
+.life-story .lf-fill { background: var(--lf-fill); height: 100%; border-radius: 3px; }
+.life-story .lf-muted-fill { background: #708da0; }
+.life-story .lf-projected { background: repeating-linear-gradient(135deg, transparent, transparent 5px, color-mix(in srgb, var(--lf-amber) 35%, transparent) 5px, color-mix(in srgb, var(--lf-amber) 35%, transparent) 10px); border: 1.5px dashed var(--lf-amber); }
+.life-story .lf-axis { display: flex; justify-content: space-between; margin-top: .6rem; padding-top: .4rem; border-top: 1px solid var(--lf-line); color: var(--lf-muted); font-size: .65rem; font-variant-numeric: tabular-nums; }
+.life-story .lf-waffle { display: grid; grid-template-columns: repeat(20, 1fr); gap: 5px; }
+.life-story .lf-square { display: block; aspect-ratio: 1; border-radius: 3px; background: var(--lf-quiet); }
+.life-story .lf-square.is-exposed { background: var(--lf-fill); }
+.life-story .lf-legend { display: flex; gap: .7rem 1.2rem; flex-wrap: wrap; margin-top: 1rem; font-size: .68rem; color: var(--lf-muted); }
+.life-story .lf-legend > span { display: flex; align-items: center; gap: .4rem; }
+.life-story .lf-swatch { display: inline-block; width: 9px; height: 9px; border-radius: 2px; background: var(--lf-fill); flex-shrink: 0; }
+.life-story .lf-swatch-muted { background: var(--lf-quiet); }
+.life-story .lf-process { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; list-style: none; padding: 0; margin: 0; }
+.life-story .lf-process li { position: relative; margin: 0; padding: 1.1rem; border-radius: 10px; border: 1px solid var(--lf-line); background: var(--lf-panel); }
+.life-story .lf-process h4 { font-size: .95rem; }
+.life-story .lf-process p { font-size: .8rem; }
+.life-story .lf-step { font-size: .7rem; color: var(--lf-teal); font-weight: 700; letter-spacing: .1em; }
+.life-story .lf-step-arrow { position: absolute; right: -1.25rem; top: 45%; color: var(--lf-teal); font-size: 1.05rem; }
+.life-story .lf-return { border: 1px dashed var(--lf-line); border-top: 0; border-radius: 0 0 12px 12px; margin: 0 1.5rem; padding: .75rem 1rem; text-align: center; color: var(--lf-teal); font-size: .77rem; }
+.life-story .lf-return span { margin-right: .4rem; font-size: 1.1rem; }
+.life-story .lf-process-note { font-size: .76rem; margin-top: 1rem; text-align: center; }
+.life-story .lf-forecast-rows { padding: .3rem .5rem; }
+.life-story .lf-forecast-row + .lf-forecast-row { margin-top: 1.8rem; }
+.life-story .lf-date-track { height: 30px; position: relative; background: linear-gradient(var(--lf-line), var(--lf-line)) center / 100% 1px no-repeat; }
+.life-story .lf-date-dot { display: block; width: 16px; height: 16px; background: var(--lf-fill); border: 3px solid var(--lf-paper); box-shadow: 0 0 0 1px var(--lf-teal); border-radius: 50%; position: absolute; top: 7px; transform: translateX(-50%); }
+.life-story .lf-forecast-amber .lf-date-dot { background: var(--lf-amber); box-shadow: 0 0 0 1px var(--lf-amber); }
+.life-story .lf-date-axis { border-top: 0; }
+.life-story .lf-controls:not([hidden]) { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; border-bottom: 1px solid var(--lf-line); padding-bottom: 1.25rem; margin-bottom: 1.5rem; }
+.life-story .lf-controls label { display: block; font-size: .83rem; }
+.life-story .lf-controls label > span { display: flex; justify-content: space-between; gap: 1rem; }
+.life-story .lf-controls output { color: var(--lf-teal); font-weight: 700; font-variant-numeric: tabular-nums; }
+.life-story .lf-controls input { display: block; width: 100%; height: 30px; margin: .5rem 0 0; accent-color: var(--lf-fill); cursor: pointer; }
+.life-story .lf-range-ends { color: var(--lf-muted); }
+.life-story .lf-range-ends small { font-size: .65rem; }
+.life-story .lf-reliability-layout { display: grid; grid-template-columns: minmax(0, 2.7fr) minmax(155px, 1fr); gap: 1.5rem; align-items: center; }
+.life-story .lf-line-chart { width: 100%; display: block; overflow: visible; }
+.life-story .lf-line-panel .lf-unit { margin-bottom: .5rem; }
+.life-story .lf-gridline { stroke: var(--lf-line); stroke-width: 1; }
+.life-story .lf-axis-text { fill: var(--lf-muted); font: 12px Inter, system-ui, sans-serif; }
+.life-story .lf-selected-line { fill: none; stroke: var(--lf-teal); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.life-story .lf-reference-line { fill: none; stroke: var(--lf-amber); stroke-width: 2; stroke-dasharray: 6 5; }
+.life-story .lf-marker { fill: var(--lf-teal); stroke: var(--lf-paper); stroke-width: 2; }
+.life-story .lf-marker-line { stroke: var(--lf-teal); opacity: .6; stroke-dasharray: 3 4; }
+.life-story .lf-line-key { width: 17px; border-top: 2px solid var(--lf-teal); }
+.life-story .lf-reference-key { border-color: var(--lf-amber); border-top-style: dashed; }
+.life-story .lf-formula { display: block; font: .75rem ui-monospace, monospace; color: var(--lf-muted); margin-top: 1rem; }
+/* Distinct shapes separate observed results from forecast dates. */
+.life-story .lf-timeline-legend { display: flex; flex-wrap: wrap; gap: .65rem 1.5rem; color: var(--lf-muted); font-size: .76rem; margin-bottom: 1.7rem; }
+.life-story .lf-timeline-legend > span { display: flex; align-items: center; gap: .55rem; }
+.life-story .lf-observed-key, .life-story .lf-predicted-key { display: inline-block; width: 11px; height: 11px; flex-shrink: 0; }
+.life-story .lf-observed-key { border-radius: 50%; background: var(--lf-teal); }
+.life-story .lf-predicted-key { border: 2px solid var(--lf-amber); transform: rotate(45deg); }
+.life-story .lf-milestones { display: grid; gap: 2rem; }
+.life-story .lf-milestone + .lf-milestone { padding-top: 1.5rem; border-top: 1px solid var(--lf-line); }
+.life-story .lf-milestone h4 { color: var(--lf-ink); font-size: 1rem; line-height: 1.4; font-weight: 650; margin: 0 0 1.2rem; }
+.life-story .lf-milestone-plot { position: relative; height: 88px; margin: 0 16px; background: linear-gradient(var(--lf-line), var(--lf-line)) 0 45px / 100% 1px no-repeat; }
+.life-story .lf-time-grid { position: absolute; top: 0; bottom: 0; width: 1px; background: var(--lf-line); opacity: .6; }
+.life-story .lf-time-connector { position: absolute; top: 44px; border-top: 3px solid var(--lf-teal); opacity: .65; }
+.life-story .lf-timed-mark { position: absolute; top: 0; transform: translateX(-50%); display: flex; align-items: center; flex-direction: column; gap: 10px; color: var(--lf-teal); }
+.life-story .lf-timed-mark b { font-size: 1.15rem; line-height: 1.3; font-weight: 650; font-variant-numeric: tabular-nums; }
+.life-story .lf-timed-mark i { display: block; width: 16px; height: 16px; border: 3px solid var(--lf-paper); border-radius: 50%; background: var(--lf-teal); }
+.life-story .lf-timed-mark small { font-size: .68rem; line-height: 1.2; }
+.life-story .lf-predicted-mark { color: var(--lf-amber); }
+.life-story .lf-predicted-mark i { border: 2px solid var(--lf-amber); background: var(--lf-paper); border-radius: 1px; transform: rotate(45deg); }
+.life-story .lf-calendar-axis { height: 30px; position: relative; color: var(--lf-muted); font-size: .68rem; line-height: 1.3; font-variant-numeric: tabular-nums; }
+.life-story .lf-calendar-axis span { position: absolute; top: 6px; transform: translateX(-50%); white-space: nowrap; }
+.life-story .lf-milestone > .lf-calendar-axis { margin: 0 16px 1rem; }
+.life-story .life-figure .lf-milestone-result { color: var(--lf-ink); font-size: .85rem; }
+.life-story .lf-milestone-result a, .life-story .lf-chart-note a { color: var(--lf-teal); text-decoration: underline; text-underline-offset: 3px; }
+.life-story .lf-milestone-result a { font-weight: 650; margin-right: .3rem; }
+.life-story .life-figure .lf-comparison-note { margin-top: .65rem; font-size: .77rem; line-height: 1.65; }
+.life-story .lf-comparison-note strong { color: var(--lf-ink); }
+.life-story .lf-horizon-intro { display: grid; grid-template-columns: auto 1fr; gap: 2rem; align-items: center; padding: 1.3rem 1.5rem; margin-bottom: 1.8rem; background: var(--lf-panel); border-left: 3px solid var(--lf-teal); border-radius: 10px; }
+.life-story .lf-horizon-intro > div { display: flex; flex-direction: column; }
+.life-story .lf-horizon-intro strong { color: var(--lf-teal); font-size: clamp(2rem, 5vw, 3rem); font-weight: 650; line-height: 1.15; letter-spacing: -.05em; }
+.life-story .lf-horizon-intro span { font-size: .75rem; margin-top: .3rem; color: var(--lf-ink); }
+.life-story .lf-horizon-intro p { font-size: .85rem; max-width: 47ch; }
+.life-story .life-figure .lf-chart-unit { font-size: .7rem; margin-bottom: 1rem; }
+.life-story .lf-horizon-row { display: grid; grid-template-columns: 180px minmax(0, 1fr) 74px; gap: 1.2rem; align-items: center; padding: .7rem 0; border-top: 1px solid var(--lf-line); }
+.life-story .lf-horizon-label { display: flex; flex-direction: column; gap: .2rem; }
+.life-story .lf-horizon-label strong { font-size: .8rem; font-weight: 600; line-height: 1.4; }
+.life-story .lf-horizon-label small { font-size: .67rem; color: var(--lf-muted); }
+.life-story .lf-horizon-plot { height: 40px; position: relative; }
+.life-story .lf-horizon-whisker { position: absolute; top: 19px; height: 2px; background: var(--lf-teal); }
+.life-story .lf-horizon-whisker::before, .life-story .lf-horizon-whisker::after { content: ''; position: absolute; top: -5px; height: 12px; width: 2px; background: var(--lf-teal); }
+.life-story .lf-horizon-whisker::after { right: 0; }
+.life-story .lf-horizon-dot { position: absolute; top: 13px; width: 14px; height: 14px; border: 2px solid var(--lf-paper); border-radius: 50%; background: var(--lf-teal); transform: translateX(-50%); }
+.life-story .lf-horizon-value { text-align: right; font-size: .82rem; color: var(--lf-teal); white-space: nowrap; font-variant-numeric: tabular-nums; }
+.life-story .lf-horizon-axis-row { padding: 0 calc(74px + 1.2rem) 0 calc(180px + 1.2rem); }
+.life-story .life-figure .lf-chart-note { font-size: .77rem; margin-top: 1.25rem; line-height: 1.65; }
+.life-story .lf-revision-stat { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.2rem 1.5rem; border: 1px solid var(--lf-line); background: var(--lf-panel); border-radius: 12px; margin-bottom: 1.8rem; }
+.life-story .lf-revision-stat > strong { font-size: clamp(1.8rem, 4.4vw, 3rem); color: var(--lf-teal); font-weight: 650; letter-spacing: -.04em; line-height: 1.2; white-space: nowrap; }
+.life-story .lf-revision-stat strong span { display: inline-block; color: var(--lf-muted); margin: 0 .4rem; font-weight: 400; }
+.life-story .lf-revision-stat > span { color: var(--lf-ink); font-size: .83rem; }
+.life-story .lf-revision-row { display: grid; grid-template-columns: 215px minmax(0, 1fr); gap: 1.5rem; align-items: center; }
+.life-story .lf-revision-label { display: flex; flex-direction: column; gap: .3rem; }
+.life-story .lf-revision-label strong { font-size: .82rem; line-height: 1.5; font-weight: 600; }
+.life-story .lf-revision-label small { font-size: .7rem; color: var(--lf-muted); }
+.life-story .lf-revision-plot { height: 80px; margin: 0 16px; position: relative; background: linear-gradient(var(--lf-line), var(--lf-line)) 0 52px / 100% 1px no-repeat; }
+.life-story .lf-survey-mark { position: absolute; top: 7px; transform: translateX(-50%); display: flex; align-items: center; flex-direction: column; gap: 13px; color: var(--lf-amber); }
+.life-story .lf-survey-mark b { font-size: 1.15rem; line-height: 1.3; }
+.life-story .lf-survey-mark i { width: 14px; height: 14px; border: 2px solid currentColor; background: var(--lf-paper); transform: rotate(45deg); }
+.life-story .lf-revision-middle .lf-survey-mark { color: var(--lf-muted); }
+.life-story .lf-revision-latest .lf-survey-mark { color: var(--lf-teal); }
+.life-story .lf-revision-axis-row { margin: 0 16px 0 calc(215px + 1.5rem + 16px); }
+.life-story .lf-revision-takeaways { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; border-top: 1px solid var(--lf-line); margin-top: 1.3rem; padding-top: 1.25rem; }
+.life-story .lf-revision-takeaways p { font-size: .82rem; }
+.life-story .lf-revision-takeaways strong { display: block; color: var(--lf-ink); margin-bottom: .4rem; }
+@media (max-width: 800px) {
+  .life-story .lf-axis-text { font-size: 16px; }
+  .life-story .lf-data-split, .life-story .lf-reliability-layout { grid-template-columns: 1fr; gap: 1.5rem; }
+  .life-story .lf-insight { display: grid; grid-template-columns: auto 1fr; column-gap: 1.2rem; align-items: center; }
+  .life-story .lf-insight .lf-big { grid-row: span 2; font-size: 2.8rem; margin: 0; }
+  .life-story .lf-insight strong { margin-bottom: .4rem; }
+  .life-story .lf-formula { grid-column: 2; margin-top: .5rem; }
+  .life-story .lf-process { grid-template-columns: 1fr 1fr; }
+  .life-story .lf-step-arrow { display: none; }
+  .life-story .lf-summer { grid-template-columns: 1fr 80px 1fr; }
+  .life-story .lf-date-card { padding: 1.1rem; }
+}
+@media (max-width: 700px) {
+  .life-story .lf-horizon-row { grid-template-columns: 145px minmax(0, 1fr) 68px; gap: .75rem; }
+  .life-story .lf-horizon-axis-row { padding: 0 calc(68px + .75rem) 0 calc(145px + .75rem); }
+  .life-story .lf-revision-row { grid-template-columns: 160px minmax(0, 1fr); gap: 1rem; }
+  .life-story .lf-revision-axis-row { margin-left: calc(160px + 1rem + 16px); }
+  .life-story .life-art { grid-template-columns: 1fr; }
+  .life-story .life-art img { height: auto; }
+  .life-story .life-art figcaption { padding: 1.5rem; }
+  .life-story .life-art h3 { margin: .8rem 0; }
+  .life-story .lf-art-credit { margin-top: 1rem; }
+}
+@media (max-width: 540px) {
+  .life-story .lf-horizon-intro { grid-template-columns: 1fr; gap: .8rem; padding: 1rem; }
+  .life-story .lf-horizon-row { grid-template-columns: minmax(0, 1fr) auto; gap: .4rem .75rem; padding: .8rem 0 .5rem; }
+  .life-story .lf-horizon-label { flex-direction: row; flex-wrap: wrap; align-items: baseline; gap: .2rem .6rem; }
+  .life-story .lf-horizon-label strong { font-size: .78rem; }
+  .life-story .lf-horizon-value { grid-column: 2; grid-row: 1; font-size: .8rem; }
+  .life-story .lf-horizon-plot { grid-column: 1 / -1; grid-row: 2; }
+  .life-story .lf-horizon-axis-row { padding: 0; }
+  .life-story .lf-calendar-axis { font-size: .64rem; }
+  .life-story .lf-revision-stat { flex-direction: column; align-items: flex-start; gap: .6rem; padding: 1rem; }
+  .life-story .lf-revision-stat > strong { font-size: 2.05rem; }
+  .life-story .lf-revision-stat > span { font-size: .78rem; }
+  .life-story .lf-revision-row { grid-template-columns: 1fr; gap: .3rem; }
+  .life-story .lf-revision-row + .lf-revision-row { margin-top: .75rem; }
+  .life-story .lf-revision-label { flex-direction: row; flex-wrap: wrap; gap: .2rem .6rem; align-items: baseline; }
+  .life-story .lf-revision-label strong { font-size: .8rem; }
+  .life-story .lf-revision-axis-row { margin-left: 16px; }
+  .life-story .lf-revision-takeaways { grid-template-columns: 1fr; gap: 1rem; }
+  .life-story .lf-axis-text { font-size: 22px; }
+  .life-story :is(.life-figure, .life-art) { border-radius: 12px; margin-top: 2rem; margin-bottom: 2.5rem; }
+  .life-story .lf-header { padding: 1.25rem 1.1rem 0; }
+  .life-story .lf-body { padding: 1.3rem 1.1rem; }
+  .life-story .lf-caption { flex-direction: column; gap: .65rem; padding: .9rem 1.1rem; }
+  .life-story .lf-caption a { flex: auto; }
+  .life-story .lf-summer { grid-template-columns: 1fr; }
+  .life-story .lf-interval { flex-direction: row; justify-content: center; gap: .6rem; padding: .65rem; }
+  .life-story .lf-interval > span:first-child { font-size: 1.8rem; }
+  .life-story .lf-arrow { transform: rotate(90deg); font-size: 1.5rem; }
+  .life-story .lf-insight { display: block; padding: 1.1rem; }
+  .life-story .lf-insight .lf-big { margin-bottom: .6rem; }
+  .life-story .lf-waffle { grid-template-columns: repeat(10, 1fr); gap: 5px; max-width: 320px; }
+  .life-story .lf-controls:not([hidden]) { grid-template-columns: 1fr; gap: 1rem; }
+  .life-story .lf-bar-label { font-size: .8rem; }
+  .life-story .lf-bar-label small { display: block; margin-left: 0; }
+  .life-story .lf-process { grid-template-columns: 1fr; gap: .65rem; }
+  .life-story .lf-process li { padding: 1rem; }
+  .life-story .lf-process h4 { margin: .3rem 0 .5rem; }
+  .life-story .lf-eyebrow { letter-spacing: .1em; font-size: .61rem; }
+}

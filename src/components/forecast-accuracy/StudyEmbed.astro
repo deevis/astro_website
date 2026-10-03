@@ -1,0 +1,34 @@
+---
+interface Props {
+  view: 'stations' | 'explorer';
+}
+const { view } = Astro.props;
+const nationwide = view === 'stations';
+const title = nationwide ? 'Explore the nationwide pattern' : 'Follow stations through time';
+const url = '/articles/forecast-accuracy/' + (nationwide ? 'stations.html' : 'index.html');
+---
+<section class="forecast-embed not-prose" aria-label={title}>
+  <div class="forecast-embed-heading">
+    <div>
+      <span class="forecast-label">INTERACTIVE STUDY</span>
+      <h3>{title}</h3>
+      <p>{nationwide ? 'Select a state, year or forecast lead. Scroll within the panel for rankings and station comparisons.' : 'Choose any station, compare two histories, or explore warm and cool bias by month and year.'}</p>
+    </div>
+    <a href={url} target="_blank" rel="noopener">Open full view <span aria-hidden="true">↗</span></a>
+  </div>
+  <iframe src={url} title={title} loading="lazy" allowfullscreen></iframe>
+  <p class="forecast-embed-caption">Recorded forecasts through September 19, 2026. The panels use stored near-term forecasts as their reference. <a href="/articles/forecast-accuracy/dataset.html" target="_blank" rel="noopener">Snapshot &amp; downloads</a></p>
+</section>
+<style>
+  .forecast-embed { margin: 2rem 0; border: 1px solid #334155; border-radius: 1rem; overflow: hidden; background: #0b1523; color: #e9f0f6; }
+  .forecast-embed-heading { padding: 1.25rem 1.5rem; display: flex; gap: 1.5rem; justify-content: space-between; align-items: center; border-bottom: 1px solid #29374a; }
+  .forecast-label { font-size: .7rem; letter-spacing: .16em; color: #57dbc0; font-weight: 700; }
+  .forecast-embed h3 { margin: .35rem 0; font-size: 1.25rem; font-weight: 600; line-height: 1.3; color: #e9f0f6; }
+  .forecast-embed p { margin: 0; font-size: .875rem; line-height: 1.6; color: #b7c7d8; }
+  .forecast-embed a { color: #57dbc0; font-size: .875rem; text-decoration: underline; text-underline-offset: 3px; }
+  .forecast-embed-heading > a { flex-shrink: 0; }
+  .forecast-embed a:focus-visible { outline: 2px solid #57dbc0; outline-offset: 5px; }
+  .forecast-embed iframe { display: block; width: 100%; height: 900px; height: min(1100px, 85svh); min-height: 650px; border: 0; background: #0b1523; }
+  .forecast-embed .forecast-embed-caption { padding: .85rem 1.5rem; border-top: 1px solid #29374a; font-size: .75rem; }
+  @media (max-width: 640px) { .forecast-embed-heading { align-items: flex-start; flex-direction: column; gap: .75rem; padding: 1rem; } .forecast-embed iframe { min-height: 650px; } .forecast-embed .forecast-embed-caption { padding: .85rem 1rem; } }
+</style>

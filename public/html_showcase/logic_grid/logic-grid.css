@@ -515,7 +515,7 @@ button { cursor: pointer; }
 
 /* ---------- Clues ---------- */
 .lg-clues {
-  grid-column: 2 / -1;
+  grid-column: 1 / -1;
   background:
     linear-gradient(180deg, rgba(255, 255, 255, 0.35), transparent 28%),
     var(--lg-paper);
@@ -813,28 +813,61 @@ button { cursor: pointer; }
 }
 
 @media (max-width: 720px) {
+  .lg-page-wrap { padding-top: 6.5rem; padding-bottom: 2.5rem; }
+  .lg-page-wrap > .container {
+    padding-left: 8px;
+    padding-right: 8px;
+  }
   .lg-seg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lg-stats-row { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-  .lg-header { padding: 10px 12px; }
-  .lg-view { padding: 16px 12px 20px; }
+  .lg-header { padding: 8px 10px; }
+  .lg-view { padding: 10px 8px 16px; }
+  .lg-hud { margin-bottom: 8px; }
   .lg-toolbar { margin-left: 0; width: 100%; }
-  .lg-hud-item { min-width: 72px; padding: 7px 10px; }
+  .lg-hud-item { min-width: 72px; padding: 6px 8px; }
   .lg-play-stack,
   .lg-board {
-    --lg-name-col: minmax(3.4rem, 4.6rem);
-    --lg-grid-gap: 6px;
+    --lg-name-col: minmax(3.1rem, 4.2rem);
+    --lg-grid-gap: 5px;
   }
+  .lg-play-stack { row-gap: 8px; }
   .lg-board { gap: var(--lg-grid-gap); }
-  .lg-who { font-size: 0.92rem; padding-right: 2px; }
-  .lg-cell { padding: 6px 5px 5px; min-height: 84px; border-radius: 12px; }
-  .lg-chip { font-size: 12px; padding: 6px 4px; min-height: 2rem; }
-  .lg-clues { padding: 14px 12px 12px; }
-  .lg-clues li { font-size: 14px; }
+  .lg-who { font-size: 0.88rem; padding-right: 2px; }
+  .lg-cell {
+    padding: 2px 3px;
+    min-height: 0;
+    border-radius: 10px;
+    justify-content: flex-start;
+  }
+  .lg-chip {
+    font-size: 12px;
+    line-height: 1.2;
+    padding: 1px 3px;
+    min-height: 0;
+    border-radius: 5px;
+  }
+  .lg-clues {
+    padding: 8px 8px 6px;
+    border-radius: 12px;
+  }
+  .lg-clues ol { gap: 2px; }
+  .lg-clues li {
+    font-size: 13px;
+    line-height: 1.3;
+    padding: 1px 2px;
+    gap: 4px;
+    grid-template-columns: 1.35rem minmax(0, 1fr);
+  }
+  .lg-clue-hint { margin: 4px 0 0; font-size: 10px; }
+  .lg-play-hint { margin-top: 8px; }
 }
 
 @media (max-width: 420px) {
   .lg-seg { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   .lg-play-stack,
-  .lg-board { --lg-grid-gap: 5px; }
-  .lg-chip { font-size: 11.5px; }
+  .lg-board { --lg-grid-gap: 4px; }
+  .lg-view { padding: 8px 4px 12px; }
+  .lg-chip { font-size: 11.5px; padding: 0 2px; }
+  .lg-cell { padding: 1px 2px; }
+  .lg-clues { padding: 6px 6px 4px; }
 }

@@ -1,0 +1,71 @@
+---
+import Figure from './Figure.astro';
+const x = (step: number) => 48 + step / 50 * 604;
+const y = (probability: number) => 22 + (1 - probability) * 226;
+const points = (rate: number) => Array.from({length:51}, (_, n) => `${x(n)},${y((rate / 100) ** n)}`).join(' ');
+---
+<Figure number="05" eyebrow="Try it yourself · illustrative model" title="Small error rates add up"
+  description="Change the per-step success rate and the length of the task to see what happens when every step must succeed."
+  caption="Illustration only: success = pⁿ, assuming independent steps, a constant per-step success rate, and no retries or recovery. This is not a benchmark of any AI system. Real workflows can detect errors, retry and fail in correlated ways.">
+  <div class="lf-reliability" data-reliability>
+    <div class="lf-controls" hidden>
+      <label for="life-success-rate"><span>Success per step <output id="life-rate-value" for="life-success-rate">95.0%</output></span><input id="life-success-rate" type="range" min="90" max="99.9" step="0.1" value="95" /><span class="lf-range-ends"><small>90%</small><small>99.9%</small></span></label>
+      <label for="life-step-count"><span>Steps in the task <output id="life-step-value" for="life-step-count">20</output></span><input id="life-step-count" type="range" min="1" max="50" step="1" value="20" /><span class="lf-range-ends"><small>1 step</small><small>50 steps</small></span></label>
+    </div>
+    <div class="lf-reliability-layout">
+      <div class="lf-line-panel">
+        <p class="lf-unit">Chance that every step succeeds</p>
+        <svg class="lf-line-chart" viewBox="0 0 680 292" role="img" aria-labelledby="life-reliability-title life-reliability-desc">
+          <title id="life-reliability-title">How success probability changes with task length</title>
+          <desc id="life-reliability-desc">At 95% success per step, all 20 steps succeed about 35.8% of the time. The dashed comparison curve shows 99% success per step.</desc>
+          {[0,25,50,75,100].map(p => <g><line class="lf-gridline" x1="48" x2="652" y1={y(p/100)} y2={y(p/100)} /><text class="lf-axis-text" x="37" y={y(p/100)+4} text-anchor="end">{p}%</text></g>)}
+          {[0,10,20,30,40,50].map(n => <text class="lf-axis-text" x={x(n)} y="270" text-anchor="middle">{n}</text>)}
+          <polyline class="lf-reference-line" points={points(99)} />
+          <polyline class="lf-selected-line" data-curve points={points(95)} />
+          <line class="lf-marker-line" data-marker-line x1={x(20)} x2={x(20)} y1={y(.95 ** 20)} y2="248" />
+          <circle class="lf-marker" data-marker cx={x(20)} cy={y(.95 ** 20)} r="6" />
+          <text class="lf-axis-text" x="350" y="290" text-anchor="middle">Number of steps</text>
+        </svg>
+        <div class="lf-legend"><span><i class="lf-line-key"></i><span data-selected-label>Selected: 95.0% per step</span></span><span><i class="lf-line-key lf-reference-key"></i>Reference: 99% per step</span></div>
+      </div>
+      <aside class="lf-insight" aria-live="polite" aria-atomic="true"><span class="lf-big" data-result>35.8%</span><strong>chance every step succeeds</strong><p data-summary>With 95.0% success per step across 20 steps.</p><span class="lf-formula" data-formula>0.95²⁰ ≈ 0.358</span></aside>
+    </div>
+    <noscript><p class="lf-process-note">This chart shows the 95%-per-step, 20-step example. Enable JavaScript to change the assumptions.</p></noscript>
+  </div>
+</Figure>
+<script>
+  function initializeReliability() {
+    document.querySelectorAll<HTMLElement>('[data-reliability]').forEach(root => {
+      if (root.dataset.initialized) return;
+      const rate = root.querySelector<HTMLInputElement>('#life-success-rate')!;
+      const steps = root.querySelector<HTMLInputElement>('#life-step-count')!;
+      const text = (selector: string, value: string) => { root.querySelector(selector)!.textContent = value; };
+      function update() {
+        const p = Number(rate.value) / 100;
+        const n = Number(steps.value);
+        const success = p ** n;
+        const x = 48 + n / 50 * 604;
+        const y = 22 + (1 - success) * 226;
+        text('#life-rate-value', `${Number(rate.value).toFixed(1)}%`);
+        text('#life-step-value', `${n}`);
+        text('[data-result]', `${(success * 100).toFixed(1)}%`);
+        text('[data-summary]', `With ${Number(rate.value).toFixed(1)}% success per step across ${n} ${n === 1 ? 'step' : 'steps'}.`);
+        text('[data-formula]', `${Number(p.toFixed(3))} ^ ${n} ≈ ${success.toFixed(3)}`);
+        text('[data-selected-label]', `Selected: ${Number(rate.value).toFixed(1)}% per step`);
+        text('#life-reliability-desc', `At ${rate.value}% success per step, all ${n} steps succeed ${(success * 100).toFixed(1)}% of the time. The dashed comparison curve shows 99% success per step.`);
+        root.querySelector('[data-curve]')!.setAttribute('points', Array.from({length:51}, (_, i) => `${48 + i / 50 * 604},${22 + (1 - p ** i) * 226}`).join(' '));
+        const marker = root.querySelector('[data-marker]')!;
+        marker.setAttribute('cx', `${x}`); marker.setAttribute('cy', `${y}`);
+        const line = root.querySelector('[data-marker-line]')!;
+        line.setAttribute('x1', `${x}`); line.setAttribute('x2', `${x}`); line.setAttribute('y1', `${y}`);
+      }
+      rate.addEventListener('input', update);
+      steps.addEventListener('input', update);
+      root.querySelector<HTMLElement>('.lf-controls')!.hidden = false;
+      root.dataset.initialized = 'true';
+      update();
+    });
+  }
+  initializeReliability();
+  document.addEventListener('astro:page-load', initializeReliability);
+</script>

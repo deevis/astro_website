@@ -1,0 +1,34 @@
+---
+const milestones = [
+  { year: '1972', title: 'Stockholm', label: 'An international environmental home', href: '#before-agenda-2030', detail: 'The environmental conference leads to UNEP and a continuing international policy process.' },
+  { year: '1976', title: 'Habitat I', label: 'Land and human settlements', href: '#before-agenda-2030', detail: 'Vancouver adopts principles and recommendations for housing, planning, and public control of land use.' },
+  { year: '1987', title: 'Our Common Future', label: 'Development and environment together', href: '#before-agenda-2030', detail: 'The Brundtland report supplies a broad organizing principle for sustainable development.' },
+  { year: '1992', title: 'Agenda 21', label: 'Global goals, local implementation', href: '#agenda-21-goes-local', detail: 'Rio adopts an action plan that invites municipalities to develop their own Local Agenda 21.' },
+  { year: '2000–12', title: 'MDGs, Johannesburg, Rio+20', label: 'Two policy tracks converge', href: '#a-universal-agenda', detail: 'The development goals, renewed Agenda 21 commitments in 2002, and the Rio+20 process feed into the SDGs.' },
+  { year: '2015', title: 'The 2030 Agenda', label: 'Seventeen goals for every country', href: '#a-universal-agenda', detail: 'The new agenda becomes a universal framework, with national implementation and voluntary review.' },
+  { year: '2016', title: 'New Urban Agenda', label: 'The settlements strand continues', href: '#the-next-name', detail: 'Habitat III connects the urban agenda with the SDGs; the older policy strand joins the newer framework.' },
+  { year: '2019–20', title: 'Partnership and metrics', label: 'Corporate participation expands', href: '#finance-joins-the-framework', detail: 'The UN–WEF partnership and stakeholder-capitalism metrics create further avenues for cooperation.' },
+  { year: '2024', title: 'Pact for the Future', label: 'Another layer, with digital governance', href: '#the-next-name', detail: 'The Pact renews SDG commitments and includes a Global Digital Compact.' },
+];
+---
+
+<figure class="agenda-timeline" aria-labelledby="agenda-timeline-title">
+  <div class="agenda-timeline-heading">
+    <span class="agenda-eyebrow">An accumulating framework · 1972–2024</span>
+    <h2 id="agenda-timeline-title">The names change.<br />The institutions carry on.</h2>
+    <p>Open a milestone to see what it added. Follow its link to the evidence in the article.</p>
+  </div>
+  <div class="agenda-milestones">
+    {milestones.map((item) => (
+      <details class="agenda-milestone">
+        <summary>
+          <span class="agenda-year">{item.year}</span>
+          <span class="agenda-milestone-text"><strong>{item.title}</strong><span>{item.label}</span></span>
+          <span class="agenda-expand" aria-hidden="true">+</span>
+        </summary>
+        <div class="agenda-milestone-body"><p>{item.detail}</p><a href={item.href}>Read this part of the history <span aria-hidden="true">↗</span></a></div>
+      </details>
+    ))}
+  </div>
+  <figcaption>Selected milestones in overlapping policy traditions. These are different instruments, with different purposes and legal effects. Sources appear in the linked sections.</figcaption>
+</figure>

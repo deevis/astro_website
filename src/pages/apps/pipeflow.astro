@@ -1,0 +1,17 @@
+---
+import Layout from '../../layouts/Layout.astro';
+
+const pageTitle = 'Pipeflow';
+const pageDescription = 'Each day is twenty boards. Clear one to open the next — the grid grows from 4×4 to 8×8, and more colors join.';
+---
+
+<Layout title={pageTitle} description={pageDescription}>
+  <link rel="stylesheet" href="/html_showcase/pipeflow/pipeflow.css?v=4" />
+  <div class="pf-page-wrap">
+    <div class="container mx-auto px-4">
+      <div id="pf-root"></div>
+    </div>
+  </div>
+  <script is:inline src="/html_showcase/assets/js/puzzle-history.js"></script>
+  <script is:inline src="/html_showcase/pipeflow/pipeflow.js?v=4"></script>
+</Layout>

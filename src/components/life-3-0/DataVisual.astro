@@ -1,0 +1,88 @@
+---
+import Figure from './Figure.astro';
+interface Props { kind: 'summer' | 'scaling' | 'work' | 'research' | 'forecasts' | 'energy'; }
+const { kind } = Astro.props;
+const steps = [
+  ['Set the question', 'People choose a useful problem and define what success means.'],
+  ['Propose candidates', 'AI helps write code, design algorithms or suggest experiments.'],
+  ['Test and review', 'Evaluators and researchers check performance and failure cases.'],
+  ['Use what works', 'Validated improvements inform the next system or research cycle.'],
+];
+---
+{kind === 'summer' && <Figure number="01" eyebrow="A moment in time" title="One summer. Two research threads. A book about the stakes."
+  caption="The architecture and the alignment experiment were first submitted on the same day. The book's U.S. release followed 78 days later. The proximity is a historical coincidence, not a claim of influence.">
+  <div class="lf-summer">
+    <div class="lf-date-card"><time datetime="2017-06-12">June 12, <strong>2017</strong></time>
+      <h4>The technical foundations</h4>
+      <p><a href="https://arxiv.org/abs/1706.03762">Attention Is All You Need</a><br />A new transformer architecture.</p>
+      <p><a href="https://arxiv.org/abs/1706.03741">Learning from human preferences</a><br />An experiment in guiding behavior.</p>
+    </div>
+    <div class="lf-interval"><span>78</span><small>days apart</small><span class="lf-arrow" aria-hidden="true">→</span></div>
+    <div class="lf-date-card lf-date-book"><time datetime="2017-08-29">August 29, <strong>2017</strong></time>
+      <h4>The human questions</h4>
+      <p><a href="https://www.penguinrandomhouse.com/books/530584/life-30-by-max-tegmark/">Life 3.0 reaches U.S. readers</a></p>
+      <p>Who benefits, who decides, and how do we keep increasingly capable AI working toward desirable ends?</p>
+    </div>
+  </div>
+</Figure>}
+
+{kind === 'scaling' && <Figure number="04" eyebrow="Research in perspective · 2022" title="A smaller model can be the better-trained model"
+  description="Chinchilla challenged the idea that progress simply means adding more parameters."
+  caption="At the same training-compute budget, Chinchilla used about four times as much training data and outperformed Gopher across many evaluations. Parameter count measures model size, not intelligence. Bars share a zero baseline."
+  source="https://arxiv.org/abs/2203.15556" sourceLabel="Hoffmann et al., 2022">
+  <div class="lf-data-split">
+    <div>
+      <p class="lf-unit">Model parameters · billions</p>
+      <div class="lf-bar-row"><div class="lf-bar-label"><span>Gopher</span><strong>280B</strong></div><div class="lf-track"><div class="lf-fill lf-muted-fill" style="width:93.333333%"></div></div></div>
+      <div class="lf-bar-row"><div class="lf-bar-label"><span>Chinchilla</span><strong>70B</strong></div><div class="lf-track"><div class="lf-fill" style="width:23.333333%"></div></div></div>
+      <div class="lf-axis"><span>0</span><span>150</span><span>300B</span></div>
+    </div>
+    <aside class="lf-insight"><span class="lf-big">¼</span><strong>the parameters</strong><p>More training data changed what the same computing budget could accomplish.</p></aside>
+  </div>
+</Figure>}
+
+{kind === 'work' && <Figure number="07" eyebrow="Work & exposure · 2025" title="Exposure is a spectrum of tasks"
+  description="About one in four jobs worldwide has some potential exposure to generative AI, according to the ILO–NASK assessment."
+  caption="Each square represents one percentage point in this rounded illustration of the global estimate. Highlighted squares show potential exposure, not observed job losses or full automation. Occupations contain mixtures of tasks."
+  source="https://www.ilo.org/resource/news/one-four-jobs-risk-being-transformed-genai-new-ilo%E2%80%93nask-global-index-shows" sourceLabel="ILO–NASK, 2025">
+  <div class="lf-data-split">
+    <div><div class="lf-waffle" role="img" aria-label="100 squares, with 25 highlighted to illustrate roughly one quarter of global jobs having some generative AI exposure.">{Array.from({length:100}, (_, i) => <span class:list={['lf-square', { 'is-exposed': i < 25 }]}></span>)}</div>
+      <div class="lf-legend"><span><i class="lf-swatch"></i>Some exposure</span><span><i class="lf-swatch lf-swatch-muted"></i>Outside the exposure groups</span></div>
+    </div>
+    <aside class="lf-insight"><span class="lf-big">1 in 4</span><strong>jobs potentially exposed</strong><p>A task can become easier to automate while the surrounding occupation changes rather than disappears.</p></aside>
+  </div>
+</Figure>}
+
+{kind === 'research' && <Figure number="10" eyebrow="A feedback loop" title="AI helps build the next generation of AI"
+  caption="A conceptual research workflow, not a measurement of autonomy. AlphaEvolve offers a concrete example of models proposing improvements that automated evaluations can test; it does not establish runaway self-improvement."
+  source="https://deepmind.google/blog/alphaevolve-a-gemini-powered-coding-agent-for-designing-advanced-algorithms/" sourceLabel="DeepMind's AlphaEvolve report">
+  <ol class="lf-process">{steps.map(([title, description], i) => <li><span class="lf-step">0{i+1}</span><h4>{title}</h4><p>{description}</p>{i < 3 && <span class="lf-step-arrow" aria-hidden="true">→</span>}</li>)}</ol>
+  <div class="lf-return"><span aria-hidden="true">↶</span> Evidence from one cycle informs the next.</div>
+  <p class="lf-process-note">The loop still depends on meaningful evaluations, human choices, computing resources and physical infrastructure.</p>
+</Figure>}
+
+{kind === 'forecasts' && <Figure number="12" eyebrow="A survey of expectations · 2023" title="Different questions produce very different timelines"
+  description="The 50% probability points in the survey's aggregate forecasts. These are beliefs about the future, not scheduled milestones."
+  caption="The same survey asked about unaided machines outperforming humans in every possible task and about full automation of all human occupations. The dots locate two aggregate forecast dates; they are not confidence intervals or a prediction made by this article."
+  source="https://arxiv.org/abs/2401.02843" sourceLabel="Grace et al., survey first published in 2024">
+  <div class="lf-forecast-rows">
+    <div class="lf-forecast-row"><div class="lf-bar-label"><span>Outperform humans in every task</span><strong>2047</strong></div><div class="lf-date-track"><span class="lf-date-dot" style="left:22%"></span></div></div>
+    <div class="lf-forecast-row lf-forecast-amber"><div class="lf-bar-label"><span>Fully automate all occupations</span><strong>2116</strong></div><div class="lf-date-track"><span class="lf-date-dot" style="left:91%"></span></div></div>
+    <div class="lf-axis lf-date-axis"><span>2025</span><span>2050</span><span>2075</span><span>2100</span><span>2125</span></div>
+  </div>
+</Figure>}
+
+{kind === 'energy' && <Figure number="13" eyebrow="The physical footprint" title="The cloud has an electricity bill"
+  description="Worldwide data-center electricity consumption, including AI and other computing workloads."
+  caption="The IEA's 2026 update estimates 485 TWh for 2025 and projects roughly 950 TWh in 2030. The striped bar is a forecast, not a measured outcome. These totals cover all data centers; they must not be read as AI-only consumption."
+  source="https://www.iea.org/reports/key-questions-on-energy-and-ai/executive-summary" sourceLabel="IEA, 2026 · CC BY 4.0">
+  <div class="lf-data-split">
+    <div>
+      <p class="lf-unit">Electricity use · terawatt-hours per year</p>
+      <div class="lf-bar-row"><div class="lf-bar-label"><span>2025 <small>Estimate</small></span><strong>485 TWh</strong></div><div class="lf-track"><div class="lf-fill" style="width:48.5%"></div></div></div>
+      <div class="lf-bar-row"><div class="lf-bar-label"><span>2030 <small>Projection</small></span><strong>950 TWh</strong></div><div class="lf-track"><div class="lf-fill lf-projected" style="width:95%"></div></div></div>
+      <div class="lf-axis"><span>0</span><span>500</span><span>1,000 TWh</span></div>
+    </div>
+    <aside class="lf-insight"><span class="lf-big lf-amber">~2×</span><strong>the electricity demand</strong><p>The projected increase makes grid connections, equipment and energy supply part of the AI story.</p></aside>
+  </div>
+</Figure>}

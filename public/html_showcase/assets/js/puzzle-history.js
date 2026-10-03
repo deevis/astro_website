@@ -23,6 +23,11 @@
       apps: "/apps/mastermind",
       showcase: "/html_showcase/mastermind/index.html"
     },
+    pipeflow: {
+      label: "Pipeflow",
+      apps: "/apps/pipeflow",
+      showcase: "/html_showcase/pipeflow/index.html"
+    },
     sudoku: {
       label: "Sudoku",
       apps: "/apps/sudoku",

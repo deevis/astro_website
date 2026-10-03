@@ -1,0 +1,35 @@
+---
+interface Props {
+  stage: string;
+  file: string;
+  period: string;
+  title: string;
+  alt: string;
+  scope: string;
+  caption: string;
+}
+
+const { stage, file, period, title, alt, scope, caption } = Astro.props;
+---
+
+<figure class="agenda-illustration" aria-labelledby={`agenda-image-${stage}`}>
+  <div class="agenda-illustration-heading">
+    <span class="agenda-image-number" aria-hidden="true">{stage}</span>
+    <div>
+      <span class="agenda-eyebrow">{period}</span>
+      <h3 id={`agenda-image-${stage}`}>{title}</h3>
+    </div>
+  </div>
+  <img
+    src={`/images/articles/agenda-2030/${file}.webp`}
+    alt={alt}
+    width="1600"
+    height="800"
+    loading="lazy"
+    decoding="async"
+  />
+  <figcaption>
+    <span class="agenda-image-scope">{scope}</span>
+    <p>{caption}</p>
+  </figcaption>
+</figure>

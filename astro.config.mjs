@@ -7,7 +7,8 @@ import svelte from '@astrojs/svelte';
 export default defineConfig({
   integrations: [tailwind(), mdx(), svelte()],
   redirects: {
-    '/showcase': '/playground'
+    '/showcase': '/playground',
+    '/articles/agenda-2030-the-paperwork-is-the-achievement': '/articles/agenda-2030-permission-required'
   },
   server: {
     host: '0.0.0.0',

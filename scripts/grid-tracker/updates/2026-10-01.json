@@ -1,0 +1,451 @@
+{
+  "refresh_date": "2026-10-01",
+  "run_id": 3,
+  "started_at": "2026-10-01T08:02:23Z",
+  "finished_at": "2026-10-01T08:03:05Z",
+  "status": "success",
+  "start_utc_inclusive": "2026-07-02T00:00:00Z",
+  "end_utc_exclusive": "2026-10-01T00:00:00Z",
+  "regions": [
+    "PACE",
+    "PACW",
+    "IPCO",
+    "NEVP",
+    "SWPW",
+    "CISO",
+    "BPAT",
+    "ERCO"
+  ],
+  "counts": {
+    "balance_rows": 17472,
+    "interchange_rows": 137191,
+    "observation_versions": 155233
+  },
+  "new_and_revised": [
+    {
+      "kind": "BALANCE",
+      "new_logical_rows": 576,
+      "revised_rows": 563,
+      "versions_added": 1139
+    },
+    {
+      "kind": "INTERCHANGE",
+      "new_logical_rows": 4608,
+      "revised_rows": 7,
+      "versions_added": 4615
+    }
+  ],
+  "coverage": {
+    "PACE": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2167,
+      "complete_balance_hours": 2167,
+      "ranking_eligible_hours": 2166,
+      "complete_balance_percent": 99.22,
+      "complete_but_excluded_hours": 1,
+      "quality_flag_counts": {
+        "eia_adjusted_demand_mw_differs": 1,
+        "eia_adjusted_generation_mw_differs": 1,
+        "missing_reported_balance": 17
+      },
+      "hours_with_any_reported_fuel": 2167,
+      "hours_with_counterparty_rows": 2143,
+      "latest_complete_balance_hour": "2026-09-30T06:00:00Z",
+      "maximum_absolute_balance_residual_mw": 0.0
+    },
+    "PACW": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2168,
+      "complete_balance_hours": 2168,
+      "ranking_eligible_hours": 2168,
+      "complete_balance_percent": 99.27,
+      "complete_but_excluded_hours": 0,
+      "quality_flag_counts": {
+        "missing_reported_balance": 16
+      },
+      "hours_with_any_reported_fuel": 2168,
+      "hours_with_counterparty_rows": 2144,
+      "latest_complete_balance_hour": "2026-09-30T07:00:00Z",
+      "maximum_absolute_balance_residual_mw": 0.0
+    },
+    "IPCO": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2168,
+      "complete_balance_hours": 2168,
+      "ranking_eligible_hours": 2168,
+      "complete_balance_percent": 99.27,
+      "complete_but_excluded_hours": 0,
+      "quality_flag_counts": {
+        "missing_reported_balance": 16
+      },
+      "hours_with_any_reported_fuel": 2168,
+      "hours_with_counterparty_rows": 2144,
+      "latest_complete_balance_hour": "2026-09-30T07:00:00Z",
+      "maximum_absolute_balance_residual_mw": 0.0
+    },
+    "NEVP": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2168,
+      "complete_balance_hours": 2168,
+      "ranking_eligible_hours": 1648,
+      "complete_balance_percent": 99.27,
+      "complete_but_excluded_hours": 520,
+      "quality_flag_counts": {
+        "balance_does_not_reconcile": 518,
+        "eia_adjusted_generation_mw_differs": 26,
+        "eia_adjusted_demand_mw_differs": 1,
+        "nonpositive_demand": 1,
+        "missing_reported_balance": 16
+      },
+      "hours_with_any_reported_fuel": 2168,
+      "hours_with_counterparty_rows": 2144,
+      "latest_complete_balance_hour": "2026-09-30T07:00:00Z",
+      "maximum_absolute_balance_residual_mw": 6030.0
+    },
+    "SWPW": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2166,
+      "complete_balance_hours": 2166,
+      "ranking_eligible_hours": 2152,
+      "complete_balance_percent": 99.18,
+      "complete_but_excluded_hours": 14,
+      "quality_flag_counts": {
+        "balance_does_not_reconcile": 14,
+        "missing_reported_balance": 18
+      },
+      "hours_with_any_reported_fuel": 2166,
+      "hours_with_counterparty_rows": 2142,
+      "latest_complete_balance_hour": "2026-09-30T05:00:00Z",
+      "maximum_absolute_balance_residual_mw": 705.0
+    },
+    "CISO": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2168,
+      "complete_balance_hours": 2168,
+      "ranking_eligible_hours": 102,
+      "complete_balance_percent": 99.27,
+      "complete_but_excluded_hours": 2066,
+      "quality_flag_counts": {
+        "balance_does_not_reconcile": 2066,
+        "missing_reported_balance": 16
+      },
+      "hours_with_any_reported_fuel": 2168,
+      "hours_with_counterparty_rows": 2144,
+      "latest_complete_balance_hour": "2026-09-30T07:00:00Z",
+      "maximum_absolute_balance_residual_mw": 20787.0
+    },
+    "BPAT": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2168,
+      "complete_balance_hours": 2168,
+      "ranking_eligible_hours": 2080,
+      "complete_balance_percent": 99.27,
+      "complete_but_excluded_hours": 88,
+      "quality_flag_counts": {
+        "eia_adjusted_net_exports_mw_differs": 85,
+        "balance_does_not_reconcile": 3,
+        "missing_reported_balance": 16
+      },
+      "hours_with_any_reported_fuel": 2168,
+      "hours_with_counterparty_rows": 2144,
+      "latest_complete_balance_hour": "2026-09-30T07:00:00Z",
+      "maximum_absolute_balance_residual_mw": 1254.0
+    },
+    "ERCO": {
+      "expected_hours": 2184,
+      "balance_rows": 2184,
+      "hours_with_demand": 2166,
+      "complete_balance_hours": 2166,
+      "ranking_eligible_hours": 2166,
+      "complete_balance_percent": 99.18,
+      "complete_but_excluded_hours": 0,
+      "quality_flag_counts": {
+        "missing_reported_balance": 18
+      },
+      "hours_with_any_reported_fuel": 2166,
+      "hours_with_counterparty_rows": 2142,
+      "latest_complete_balance_hour": "2026-09-30T05:00:00Z",
+      "maximum_absolute_balance_residual_mw": 8.0
+    }
+  },
+  "latest_counterparty_hour_by_area": {
+    "BPAT": "2026-09-29T07:00:00Z",
+    "CISO": "2026-09-29T07:00:00Z",
+    "ERCO": "2026-09-29T05:00:00Z",
+    "IPCO": "2026-09-29T07:00:00Z",
+    "NEVP": "2026-09-29T07:00:00Z",
+    "PACE": "2026-09-29T06:00:00Z",
+    "PACW": "2026-09-29T07:00:00Z",
+    "SWPW": "2026-09-29T05:00:00Z"
+  },
+  "pace_september_25_spike_revisions": [
+    {
+      "revision": 1,
+      "fetch_id": 2,
+      "reported_demand_mw": "36258",
+      "reported_wind_mw": "30496"
+    },
+    {
+      "revision": 2,
+      "fetch_id": 8,
+      "reported_demand_mw": "7046",
+      "reported_wind_mw": "1300"
+    }
+  ],
+  "pace_highest_eligible_demand_hour": {
+    "ba": "PACE",
+    "hour_ending_utc": "2026-07-20T23:00:00Z",
+    "basis": "reported",
+    "local_hour_label_from_source": "07/20/2026 5:00:00 PM",
+    "demand_mw": 10173.0,
+    "forecast_mw": 10006.0,
+    "generation_mw": 9031.0,
+    "net_exports_mw": -1142.0,
+    "net_imports_mw": 1142.0,
+    "balance_residual_mw": 0.0,
+    "fuel_mw": {
+      "All Petroleum Products": null,
+      "Battery Storage": null,
+      "Coal": 3590.0,
+      "Geothermal": null,
+      "Hydropower Excluding Pumped Storage": 187.0,
+      "Natural Gas": 1675.0,
+      "Nuclear": null,
+      "Other Energy Storage": null,
+      "Other Fuel Sources": 105.0,
+      "Pumped Storage": null,
+      "Solar with Integrated Battery Storage": null,
+      "Solar without Integrated Battery Storage": 2355.0,
+      "Unknown Energy Storage": null,
+      "Unknown Fuel Sources": null,
+      "Wind with Integrated Battery Storage": null,
+      "Wind without Integrated Battery Storage": 1119.0
+    },
+    "reported_fuel_subtotal_mw": 9031.0,
+    "fuel_residual_mw": 0.0,
+    "forecast_error_mw": 167.0,
+    "quality_flags": [],
+    "eia_adjusted_reference_mw": {
+      "demand_mw": 10173.0,
+      "generation_mw": 9031.0,
+      "net_exports_mw": -1142.0
+    },
+    "revision": 1,
+    "last_seen_at": "2026-10-01T08:02:30Z",
+    "source_url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_BALANCE_2026_Jul_Dec.csv",
+    "source_sha256": "965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc",
+    "change_from_previous_hour": {
+      "demand_mw": 194.0,
+      "generation_mw": 378.0,
+      "net_imports_mw": -184.0,
+      "fuel_mw": {
+        "All Petroleum Products": null,
+        "Battery Storage": null,
+        "Coal": 48.0,
+        "Geothermal": null,
+        "Hydropower Excluding Pumped Storage": 0.0,
+        "Natural Gas": 60.0,
+        "Nuclear": null,
+        "Other Energy Storage": null,
+        "Other Fuel Sources": 2.0,
+        "Pumped Storage": null,
+        "Solar with Integrated Battery Storage": null,
+        "Solar without Integrated Battery Storage": -277.0,
+        "Unknown Energy Storage": null,
+        "Unknown Fuel Sources": null,
+        "Wind with Integrated Battery Storage": null,
+        "Wind without Integrated Battery Storage": 545.0
+      }
+    },
+    "counterparty_net_imports_mw": {
+      "AZPS": 398.0,
+      "BHBA": -111.0,
+      "IPCO": -382.0,
+      "LDWP": 411.0,
+      "NEVP": 358.0,
+      "NWMT": 301.0,
+      "SWPW": 167.0
+    },
+    "reported_counterparty_sum_mw": 1142.0,
+    "counterparty_residual_mw": 0.0
+  },
+  "pace_highest_eligible_net_import_hour": {
+    "ba": "PACE",
+    "hour_ending_utc": "2026-07-03T00:00:00Z",
+    "basis": "reported",
+    "local_hour_label_from_source": "07/02/2026 6:00:00 PM",
+    "demand_mw": 8317.0,
+    "forecast_mw": 8609.0,
+    "generation_mw": 6151.0,
+    "net_exports_mw": -2166.0,
+    "net_imports_mw": 2166.0,
+    "balance_residual_mw": 0.0,
+    "fuel_mw": {
+      "All Petroleum Products": null,
+      "Battery Storage": null,
+      "Coal": 1853.0,
+      "Geothermal": null,
+      "Hydropower Excluding Pumped Storage": 206.0,
+      "Natural Gas": 1390.0,
+      "Nuclear": null,
+      "Other Energy Storage": null,
+      "Other Fuel Sources": 99.0,
+      "Pumped Storage": null,
+      "Solar with Integrated Battery Storage": null,
+      "Solar without Integrated Battery Storage": 1963.0,
+      "Unknown Energy Storage": null,
+      "Unknown Fuel Sources": null,
+      "Wind with Integrated Battery Storage": null,
+      "Wind without Integrated Battery Storage": 640.0
+    },
+    "reported_fuel_subtotal_mw": 6151.0,
+    "fuel_residual_mw": 0.0,
+    "forecast_error_mw": -292.0,
+    "quality_flags": [],
+    "eia_adjusted_reference_mw": {
+      "demand_mw": 8317.0,
+      "generation_mw": 6151.0,
+      "net_exports_mw": -2166.0
+    },
+    "revision": 1,
+    "last_seen_at": "2026-10-01T08:02:30Z",
+    "source_url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_BALANCE_2026_Jul_Dec.csv",
+    "source_sha256": "965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc",
+    "change_from_previous_hour": {
+      "demand_mw": 310.0,
+      "generation_mw": -164.0,
+      "net_imports_mw": 474.0,
+      "fuel_mw": {
+        "All Petroleum Products": null,
+        "Battery Storage": null,
+        "Coal": -45.0,
+        "Geothermal": null,
+        "Hydropower Excluding Pumped Storage": -2.0,
+        "Natural Gas": 119.0,
+        "Nuclear": null,
+        "Other Energy Storage": null,
+        "Other Fuel Sources": 4.0,
+        "Pumped Storage": null,
+        "Solar with Integrated Battery Storage": null,
+        "Solar without Integrated Battery Storage": -213.0,
+        "Unknown Energy Storage": null,
+        "Unknown Fuel Sources": null,
+        "Wind with Integrated Battery Storage": null,
+        "Wind without Integrated Battery Storage": -27.0
+      }
+    },
+    "counterparty_net_imports_mw": {
+      "AZPS": 488.0,
+      "BHBA": -115.0,
+      "IPCO": 188.0,
+      "LDWP": 653.0,
+      "NEVP": 407.0,
+      "NWMT": 291.0,
+      "SWPW": 254.0
+    },
+    "reported_counterparty_sum_mw": 2166.0,
+    "counterparty_residual_mw": 0.0
+  },
+  "pace_highest_reported_demand_needing_review": {
+    "ba": "PACE",
+    "hour_ending_utc": "2026-09-29T22:00:00Z",
+    "basis": "reported",
+    "local_hour_label_from_source": "09/29/2026 4:00:00 PM",
+    "demand_mw": 35979.0,
+    "forecast_mw": 6612.0,
+    "generation_mw": 35559.0,
+    "net_exports_mw": -420.0,
+    "net_imports_mw": 420.0,
+    "balance_residual_mw": 0.0,
+    "fuel_mw": {
+      "All Petroleum Products": null,
+      "Battery Storage": null,
+      "Coal": 2069.0,
+      "Geothermal": null,
+      "Hydropower Excluding Pumped Storage": 63.0,
+      "Natural Gas": 1422.0,
+      "Nuclear": null,
+      "Other Energy Storage": null,
+      "Other Fuel Sources": 145.0,
+      "Pumped Storage": null,
+      "Solar with Integrated Battery Storage": null,
+      "Solar without Integrated Battery Storage": 1620.0,
+      "Unknown Energy Storage": null,
+      "Unknown Fuel Sources": null,
+      "Wind with Integrated Battery Storage": null,
+      "Wind without Integrated Battery Storage": 30240.0
+    },
+    "reported_fuel_subtotal_mw": 35559.0,
+    "fuel_residual_mw": 0.0,
+    "forecast_error_mw": 29367.0,
+    "quality_flags": [
+      "eia_adjusted_demand_mw_differs",
+      "eia_adjusted_generation_mw_differs"
+    ],
+    "eia_adjusted_reference_mw": {
+      "demand_mw": 6612.0,
+      "generation_mw": 6103.0,
+      "net_exports_mw": -420.0
+    },
+    "revision": 1,
+    "last_seen_at": "2026-10-01T08:02:30Z",
+    "source_url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_BALANCE_2026_Jul_Dec.csv",
+    "source_sha256": "965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc"
+  },
+  "sources": [
+    {
+      "url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_File_List_Meta.csv",
+      "sha256": "e9024f89371252e714989433ccc907f7f9a09f6758ad4f31363d852e018e1c9d",
+      "archive_path": "raw/e9024f89371252e714989433ccc907f7f9a09f6758ad4f31363d852e018e1c9d.csv.gz",
+      "fetched_at": "2026-10-01T08:02:25Z"
+    },
+    {
+      "url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_BALANCE_2026_Jul_Dec.csv",
+      "sha256": "965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc",
+      "archive_path": "raw/965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc.csv.gz",
+      "fetched_at": "2026-10-01T08:02:30Z"
+    },
+    {
+      "url": "https://www.eia.gov/electricity/gridmonitor/sixMonthFiles/EIA930_INTERCHANGE_2026_Jul_Dec.csv",
+      "sha256": "6c5eac8a548943eb5e6bc24c08a6435bd398e0eaa72df964fbfb3487d4cfb84b",
+      "archive_path": "raw/6c5eac8a548943eb5e6bc24c08a6435bd398e0eaa72df964fbfb3487d4cfb84b.csv.gz",
+      "fetched_at": "2026-10-01T08:02:50Z"
+    }
+  ],
+  "collection_details": {
+    "errors": [],
+    "files": [
+      {
+        "fetch_id": 8,
+        "file": "EIA930_BALANCE_2026_Jul_Dec.csv",
+        "new_or_revised": 1139,
+        "selected_rows": 17472,
+        "sha256": "965994f991fad5f2c4b6e454786ca03597dde30f1619e535e608e42969ea30bc",
+        "withdrawn": 0
+      },
+      {
+        "fetch_id": 9,
+        "file": "EIA930_INTERCHANGE_2026_Jul_Dec.csv",
+        "new_or_revised": 4615,
+        "selected_rows": 137191,
+        "sha256": "6c5eac8a548943eb5e6bc24c08a6435bd398e0eaa72df964fbfb3487d4cfb84b",
+        "withdrawn": 0
+      }
+    ],
+    "run_id": 3
+  },
+  "validation": {
+    "sqlite_integrity": "ok",
+    "old_versions_preserved": true,
+    "csv_database_counts_match": true,
+    "raw_archive_hashes_verified": 6
+  },
+  "interpretation": "Latest available published data, with series-specific lag. The September 25 source spike was revised downward, while a September 29 spike remains flagged. Initial eligible peak and net-import examples remain unchanged. CISO has substantial accounting exclusions; do not use its raw series for unqualified regional comparisons."
+}

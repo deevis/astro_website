@@ -1,0 +1,308 @@
+{
+  "research_local_date": "2026-09-27",
+  "timezone": "America/Denver",
+  "latest_run_id": "20260928T043618Z-a709c36d",
+  "latest_run_started_at": "2026-09-28T04:36:18+00:00",
+  "latest_run_status_counts": {
+    "parsed": 6,
+    "signals_only": 4,
+    "robots_unavailable": 5,
+    "http_error": 4
+  },
+  "latest_run_observation_counts": {
+    "unit": 8,
+    "floorplan": 42
+  },
+  "latest_run_all_sources_attempted": true,
+  "pilot_unique_listing_counts": {
+    "floorplan": 45,
+    "unit": 25
+  },
+  "pilot_runs": 3,
+  "sources": [
+    {
+      "property_id": "4th-west",
+      "property_name": "4th West",
+      "city": "Salt Lake City",
+      "source_id": "inventory",
+      "url": "https://4thwest.com/floor-plans/",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:20+00:00",
+      "observation_counts": {
+        "unit": 8
+      },
+      "raw_sha256": "dd348d384a782363d50d196dca44b32df9ba85453fa043247bcc5effbdcce4a8",
+      "last_success_at": "2026-09-28T04:36:20+00:00",
+      "last_success_observation_count": 8,
+      "last_success_inventory_completeness": "partial"
+    },
+    {
+      "property_id": "4th-west",
+      "property_name": "4th West",
+      "city": "Salt Lake City",
+      "source_id": "specials",
+      "url": "https://4thwest.com/",
+      "status": "signals_only",
+      "observed_at": "2026-09-28T04:36:22+00:00",
+      "observation_counts": {},
+      "raw_sha256": "5e4b8785406d918fb0b46d0392745e9c7612040c57b4b8072cd9f13ff94e6d35",
+      "last_success_at": "2026-09-28T04:36:22+00:00",
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": "not_collected"
+    },
+    {
+      "property_id": "liberty-blvd",
+      "property_name": "Liberty Blvd",
+      "city": "Salt Lake City",
+      "source_id": "inventory",
+      "url": "https://www.libertyblvd.com/floorplans",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:26+00:00",
+      "observation_counts": {
+        "floorplan": 14
+      },
+      "raw_sha256": "90d6af2f270e30144bc09d8a555b69adbcad7166e6aae209638fbc70633b2877",
+      "last_success_at": "2026-09-28T04:36:26+00:00",
+      "last_success_observation_count": 14,
+      "last_success_inventory_completeness": "floorplans_only"
+    },
+    {
+      "property_id": "liberty-blvd",
+      "property_name": "Liberty Blvd",
+      "city": "Salt Lake City",
+      "source_id": "specials",
+      "url": "https://www.libertyblvd.com/",
+      "status": "signals_only",
+      "observed_at": "2026-09-28T04:36:27+00:00",
+      "observation_counts": {},
+      "raw_sha256": "b9229911a3403c388403ac31e3446feec15c4ef08a22f7309cecf6c3462ee5c3",
+      "last_success_at": "2026-09-28T04:36:27+00:00",
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": "not_collected"
+    },
+    {
+      "property_id": "gateway-505",
+      "property_name": "Gateway 505",
+      "city": "Salt Lake City",
+      "source_id": "specials",
+      "url": "https://www.gateway505.com/",
+      "status": "signals_only",
+      "observed_at": "2026-09-28T04:36:30+00:00",
+      "observation_counts": {},
+      "raw_sha256": "eca459756c38df589d8c5fbb5d0ef29997e997e47a14a2150bbc2437e4d950e1",
+      "last_success_at": "2026-09-28T04:36:30+00:00",
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": "not_collected"
+    },
+    {
+      "property_id": "altitude-on-fifth",
+      "property_name": "Altitude on Fifth",
+      "city": "Salt Lake City",
+      "source_id": "specials",
+      "url": "https://www.altitudeonfifthapartments.com/",
+      "status": "signals_only",
+      "observed_at": "2026-09-28T04:36:33+00:00",
+      "observation_counts": {},
+      "raw_sha256": "537fac42bfcf3f3e39529e0f1d02c90aca0a7608b06ac67253c5c65f26e29cf6",
+      "last_success_at": "2026-09-28T04:36:33+00:00",
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": "not_collected"
+    },
+    {
+      "property_id": "bonneville",
+      "property_name": "The Bonneville",
+      "city": "Salt Lake City",
+      "source_id": "specials",
+      "url": "https://www.the-bonneville.com/",
+      "status": "robots_unavailable",
+      "observed_at": "2026-09-28T04:36:33+00:00",
+      "observation_counts": {},
+      "raw_sha256": null,
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "current",
+      "property_name": "Current Apartments",
+      "city": "Murray",
+      "source_id": "inventory",
+      "url": "https://www.currentaptsmurray.com/murray/current-apartments/conventional/",
+      "status": "robots_unavailable",
+      "observed_at": "2026-09-28T04:36:33+00:00",
+      "observation_counts": {},
+      "raw_sha256": null,
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "clover-creek",
+      "property_name": "Clover Creek",
+      "city": "Murray",
+      "source_id": "inventory",
+      "url": "https://www.clovercreekapts.com/floorplans",
+      "status": "http_error",
+      "observed_at": "2026-09-28T04:36:35+00:00",
+      "observation_counts": {},
+      "raw_sha256": "2bf2e27c43af33ed2c904aec63ea6941e54ca730070f5749e9e067f8595d9d6c",
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "lofts-at-7800",
+      "property_name": "Lofts at 7800",
+      "city": "Midvale",
+      "source_id": "inventory",
+      "url": "https://www.loftsat7800isyourhome.com/ut/midvale/floorplans",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:38+00:00",
+      "observation_counts": {
+        "floorplan": 4
+      },
+      "raw_sha256": "364b0a9b54f1fa864c4f241846b6d9f3bb16448b2ea3007522b090eae3c3c0ac",
+      "last_success_at": "2026-09-28T04:36:38+00:00",
+      "last_success_observation_count": 4,
+      "last_success_inventory_completeness": "floorplans_only"
+    },
+    {
+      "property_id": "san-moritz",
+      "property_name": "San Moritz",
+      "city": "Midvale",
+      "source_id": "inventory",
+      "url": "https://www.sanmoritzisyourhome.com/ut/midvale/floorplans",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:41+00:00",
+      "observation_counts": {
+        "floorplan": 8
+      },
+      "raw_sha256": "dfe078fbb1c4364b8af15db5cce36d79e142ef3175d83f6a0e36ca7354373fa9",
+      "last_success_at": "2026-09-28T04:36:41+00:00",
+      "last_success_observation_count": 8,
+      "last_success_inventory_completeness": "floorplans_only"
+    },
+    {
+      "property_id": "liberty-bend",
+      "property_name": "Liberty Bend",
+      "city": "Sandy",
+      "source_id": "inventory",
+      "url": "https://www.libertybendapartments.com/floorplans",
+      "status": "robots_unavailable",
+      "observed_at": "2026-09-28T04:36:42+00:00",
+      "observation_counts": {},
+      "raw_sha256": null,
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "liberty-bend",
+      "property_name": "Liberty Bend",
+      "city": "Sandy",
+      "source_id": "specials",
+      "url": "https://www.libertybendapartments.com/",
+      "status": "robots_unavailable",
+      "observed_at": "2026-09-28T04:36:42+00:00",
+      "observation_counts": {},
+      "raw_sha256": null,
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "parc-west",
+      "property_name": "Parc West",
+      "city": "Draper",
+      "source_id": "inventory",
+      "url": "https://www.parcwestisyourhome.com/ut/draper/floorplans",
+      "status": "http_error",
+      "observed_at": "2026-09-28T04:36:44+00:00",
+      "observation_counts": {},
+      "raw_sha256": "151a8807c1d7c5132ed14e7249cb915053813dc739e1dcb7576640db8c2bd9fd",
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "the-pearl",
+      "property_name": "thePEARL",
+      "city": "South Jordan",
+      "source_id": "inventory",
+      "url": "https://meetthepearl.com/apartments/",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:46+00:00",
+      "observation_counts": {
+        "floorplan": 15
+      },
+      "raw_sha256": "2305d66efd044ae7c4e00673cefc8b56a60220490a8a04408f1eb39c2798409f",
+      "last_success_at": "2026-09-28T04:36:46+00:00",
+      "last_success_observation_count": 15,
+      "last_success_inventory_completeness": "floorplans_only"
+    },
+    {
+      "property_id": "sunset-ridge",
+      "property_name": "Sunset Ridge",
+      "city": "West Jordan",
+      "source_id": "inventory",
+      "url": "https://www.sunsetridgeaptsutah.com/availableunits",
+      "status": "http_error",
+      "observed_at": "2026-09-28T04:36:48+00:00",
+      "observation_counts": {},
+      "raw_sha256": "fdc4facf88ef71afc39d8ece3fcc4fca6c8224b6f1b19ac6e3d5143dde9408a8",
+      "last_success_at": "2026-09-28T04:30:56+00:00",
+      "last_success_observation_count": 17,
+      "last_success_inventory_completeness": "unknown"
+    },
+    {
+      "property_id": "aspen-village",
+      "property_name": "Aspen Village Apartment Homes",
+      "city": "West Valley City",
+      "source_id": "inventory",
+      "url": "https://www.aspenvillageutah.com/floorplans",
+      "status": "robots_unavailable",
+      "observed_at": "2026-09-28T04:36:48+00:00",
+      "observation_counts": {},
+      "raw_sha256": null,
+      "last_success_at": null,
+      "last_success_observation_count": 0,
+      "last_success_inventory_completeness": null
+    },
+    {
+      "property_id": "bridgeside-landing",
+      "property_name": "Bridgeside Landing",
+      "city": "Taylorsville",
+      "source_id": "inventory",
+      "url": "https://www.bridgesideapartments.com/floorplans",
+      "status": "http_error",
+      "observed_at": "2026-09-28T04:36:51+00:00",
+      "observation_counts": {},
+      "raw_sha256": "52a3648154252dcd763ab0335b433cfa912ebeee68398a4a9127f4aec0b2e92c",
+      "last_success_at": "2026-09-28T04:31:00+00:00",
+      "last_success_observation_count": 3,
+      "last_success_inventory_completeness": "floorplans_only"
+    },
+    {
+      "property_id": "45-twelve",
+      "property_name": "45 Twelve Townhomes",
+      "city": "Millcreek",
+      "source_id": "inventory",
+      "url": "https://www.45twelve.com/floorplans",
+      "status": "parsed",
+      "observed_at": "2026-09-28T04:36:54+00:00",
+      "observation_counts": {
+        "floorplan": 1
+      },
+      "raw_sha256": "309f62680d93f6c89a314c2e6ac94f5a03d8287d4ea2c182e7b1e037620e66c4",
+      "last_success_at": "2026-09-28T04:36:54+00:00",
+      "last_success_observation_count": 1,
+      "last_success_inventory_completeness": "floorplans_only"
+    }
+  ],
+  "notes": [
+    "Distinct listings across all pilot runs, not a count of currently available apartments. Floorplan records include unpriced plans.",
+    "HTTP and robots failures varied across requests. Earlier good observations remain available but are not carried forward as current listings.",
+    "4th West has a partial first page. No vacancy or effective-rent index has been calculated.",
+    "The scheduler wrapper is prepared; no recurring task has been installed."
+  ]
+}

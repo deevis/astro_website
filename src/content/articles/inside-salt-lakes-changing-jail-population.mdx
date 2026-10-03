@@ -1,0 +1,106 @@
+---
+title: "Inside Salt Lake’s Changing Jail Population"
+publishDate: "2026-09-24T12:00:00Z"
+author: "Darren Hicks"
+image:
+  src: "/images/articles/salt-lake-jail-banner.webp"
+  alt: "Conceptual illustration of Salt Lake City and the Wasatch Mountains framed by jail-window bars, public records and abstract data points"
+description: "Three years of jail snapshots reveal a changing citizenship mix, a trap in charge descriptions, and the loss of demographic detail in 2026. Explore the aggregate evidence."
+tags: ["Salt Lake County", "data analysis", "public records", "public safety", "interactive"]
+showImageOnPage: true
+---
+
+import Charts from '/src/components/salt-lake-jail/Charts.astro';
+
+Residents deserve evidence about the policies that shape public safety. I began this archive with a local concern: could Salt Lake City’s approach to immigration enforcement be contributing to crime or growth in the jail population?
+
+That question sits within a contested “sanctuary city” debate. [The city rejects the label](https://www.slc.gov/access-belonging/immigration-questions-from-our-community/), while saying its police do not participate in immigration-enforcement actions and do cooperate in violent-crime investigations. To examine what can actually be observed, I preserved repeated snapshots of the **county jail’s public roster**.
+
+The archive now spans **247 collected rosters from June 3, 2023 through September 18, 2026**. It reveals a change within the citizenship mix. It does not establish that city policy caused that change, or that the city became less safe. A county jail roster captures bookings across jurisdictions and at different stages of the justice process.
+
+> **The main finding:** Venezuela-labelled bookings grew from **0.27% to 1.66%** of sampled rosters between Q4 2023 and Q4 2025. The United States-labelled share was similar at those endpoints. Then, between February 24 and March 1, 2026, the source stopped publishing Citizen and COB in the collected lookup records.
+
+## A small share, a substantial increase
+
+In October–December 2023, an average of **5.1 bookings** on the sampled rosters carried a VENEZUELA citizenship label. In the same months of 2025, that figure was **34.0**. Its average share of all bookings increased by **1.39 percentage points**.
+
+The United States-labelled share was **85.72% and 85.58%** at the two endpoints, with a decline and rebound in between. Its Q4 2024 average was 82.25%, so describing it as constant throughout the series would miss part of the story. Meanwhile, the average observed roster size grew about 7%, from 1,917.3 to 2,050.5 bookings.
+
+The figure below follows the monthly means. Hover, tap or use the arrow keys on either chart to inspect a month. Both axes start at zero, but they use different scales so that the subgroup change and the broader context remain visible.
+
+<Charts view="trends" />
+
+## The wider mix matters
+
+Mexico and Honduras shares fell in the same comparison. The findings point to a change within the citizenship mix, rather than a broad increase in the non-United-States share at these two endpoints.
+
+| Recorded citizenship | Q4 2023 | Q4 2025 | Change |
+| --- | ---: | ---: | ---: |
+| United States | 85.72% | 85.58% | −0.14 percentage points |
+| Mexico | 6.87% | 6.03% | −0.84 percentage points |
+| Honduras | 2.10% | 1.43% | −0.67 percentage points |
+| Venezuela | 0.27% | 1.66% | +1.39 percentage points |
+
+These are selected labels, not an exhaustive breakdown. All observed bookings—including blank and ambiguous values—remain in the denominator.
+
+The increase also appears in the source’s **COB** field: average Venezuela-labelled bookings rose from **5.2 to 33.9**. Agreement between two fields in the same administrative source is a consistency check, rather than independent verification of citizenship or birthplace. COB includes both state and country labels in this archive.
+
+A separate check counted **25 distinct Venezuela-labelled booking IDs** observed in screened Q4 2023 rosters and **77 in Q4 2025**. The change is broader than repeated sightings of just a few bookings. It is still not a complete admissions count: brief stays can fall between collection dates, and one person can have multiple bookings.
+
+### Explore the labels behind the trend
+
+Switch between citizenship and COB, compare counts with shares, or exclude United States—or any other label—to look more closely at the remaining population. **Exclusions change the denominator.** A share among remaining bookings should not be read as a share of the full jail roster. The panel shows both denominators and retains the source’s unknown and ambiguous categories.
+
+This explorer uses the 220 individual roster snapshots collected through February 24, 2026. Its points are individual rosters; the first figure above uses monthly averages. Neither chart carries older labels forward beyond the reporting cutoff.
+
+<Charts view="explorer" />
+
+## A new charge label can look like a new trend
+
+Charge descriptions need the same care as demographic labels. For recorded code **76-8-305**, “Interference with arresting officer” was prevalent in the early period; “Interfering with a peace officer” dominates the later period.
+
+Following only the newer wording would suggest a sharp increase. Following bookings with the recorded code across all descriptions gives a decline, from **9.58% to 7.49%**. This is why analysis of changing charges needs to track codes and review their legal meaning over time. The data does not establish when or why the wording changed.
+
+<Charts view="charges" />
+
+The combined-code count counts each booking once. Description rows can overlap, so adding their shares can double-count a booking. These are listed charges, not convictions.
+
+## Then the demographic window closed
+
+Citizen and COB were present in the **February 24, 2026** scrape and absent in the next one, on **March 1**. The retained archive contains no later source observations with either field present. This bounds the change between two collection dates; it does not identify the exact day of removal.
+
+| Date | What the evidence establishes |
+| --- | --- |
+| February 24, 2026 | Last collected lookup records containing Citizen and COB. |
+| March 1, 2026 | First subsequent collected roster without those fields. |
+| March 24, 2026 | Council minutes record Sheriff Rivera’s privacy-compliance explanation. |
+
+The [Sheriff’s Office attributes the removal to privacy requirements](https://www.saltlakecounty.gov/sheriff/corrections/rosters/) under Utah’s Government Data Privacy Act and County Policy 2022. The [March 24 council minutes, page 5](https://saltlakecounty.api.civicclerk.com/v1/Meetings/GetMeetingFileStream%28fileId%3D9640%2CplainText%3Dfalse%29#page=5), record Sheriff Rosie Rivera explaining the changes as compliance with state law and a countywide policy adopted September 23, 2025.
+
+[Policy 2022](https://www.saltlakecounty.gov/globalassets/1-site-files/policiesordinances/countywide/2022.pdf?v=10072025140047) assigns responsibilities across several offices. The public sources reviewed do not establish who approved each omission, whether every removed field was legally required to disappear, or an intention to conceal demographic change.
+
+> The historical record survives. Continuing the same directly observed demographic series does not.
+
+Older values can sometimes be linked to later bookings through exact identifiers, but that produces a selective historical record, not a fresh measurement. For people without earlier records, citizenship remains unknown. This analysis does not infer it from names.
+
+## How the comparison was made
+
+The headline comparison uses **27 screened rosters in Q4 2023 and 14 in Q4 2025**. I compare October–December in both years to hold the season constant. Available rosters without known coverage alerts are averaged within each month, then the three months receive equal weight. This reduces the influence of changing collection frequency.
+
+Keeping flagged runs and pooling snapshots gives similar endpoint shares: Venezuela, **0.26% to 1.64%**; United States, **85.70% to 85.46%**. This sensitivity check supports the descriptive pattern. Unflagged rosters are not certified complete.
+
+Scrapes were collected manually, lately about once a week. **April 2025 has no scrapes**, and chart lines break across that missing month. Short stays can be missed, and repeated observations of the same booking are correlated. Jail occupancy reflects admissions, releases, length of custody, enforcement and collection coverage; it is not a direct measure of community crime rates.
+
+These comparisons are exploratory and descriptive. No statistical-significance test or causal estimate of city policy is asserted. Establishing a policy effect would require verified policy dates, arresting jurisdictions, admissions and release data, local demographic denominators and a defensible comparison group. Citizenship, birthplace and immigration status are distinct measures.
+
+**About this edition:** the archive ends September 18, 2026; the direct demographic series ends February 24, 2026. Context sources were reviewed September 20. The article’s numerical comparisons are fixed and do not change when the embedded explorer is filtered. The published data contains aggregate counts and shares only: no names, booking numbers, individual records or raw scrapes.
+
+[Download the aggregate data](/articles/salt-lake-jail/data.json) · [Dataset definitions and provenance](/articles/salt-lake-jail/METHODS.md)
+
+## Sources and further reading
+
+- [Salt Lake City: immigration questions from our community](https://www.slc.gov/access-belonging/immigration-questions-from-our-community/) — the city’s stated policy and its distinction between immigration enforcement and violent-crime cooperation.
+- [KPCW, October 2, 2025](https://www.kpcw.org/state-regional/2025-10-02/ice-recruiting-commercial-targets-salt-lake-city-during-monday-night-football) — an ICE advertisement’s sanctuary framing and the city’s response.
+- [KSL, January 14, 2026](https://www.ksl.com/article/news/utah/politics/protesters-rally-against-ice-coming-to-utah-want-clarification-on-slc-policy/51589594) — residents seeking clearer city policy.
+- [Reddit: the January 13 council meeting](https://www.reddit.com/r/SaltLakeCity/comments/1qc0i95/tonight_jan_13th_7_pm_slc_council_meeting_lets/) and [discussion of the council’s ICE response](https://www.reddit.com/r/SaltLakeCity/comments/1qk8x03/salt_lake_city_council_in_hot_water_over_lukewarm/) — examples of competing public expectations, not a representative opinion sample.
+- Phil Lyman’s [March 2024](https://twitter.com/phil_lyman/status/1763626735780905230) and [April 2024](https://twitter.com/phil_lyman/status/1775587192578199554) X posts argued that Utah functioned as a sanctuary state. Their content was corroborated through [March reporting](https://www.newsfromthestates.com/article/cox-anyone-claiming-utah-sanctuary-state-using-fear-and-divisiveness-gain-power) and [April reporting](https://utahnewsdispatch.com/2024/04/05/utah-sheriffs-fed-up-with-sanctuary-state-debate/), which also describe officials’ disagreement; direct X retrieval failed during the review. Those statewide claims are distinct from Salt Lake City policy.
