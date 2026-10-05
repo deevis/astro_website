@@ -1,0 +1,17 @@
+PAPER PUPPET v32
+
+Extract the whole ZIP before opening the game. Keep index.html and assets/ together.
+
+WINDOWS: Double-click Start-Paper-Puppet.bat. It uses Node.js or Python 3; install either if the launcher says neither is available.
+MAC / LINUX: Open a terminal in this folder and run node server.mjs or python3 server.py.
+
+The launcher serves only this computer and opens the browser automatically. Keep its window open. Ctrl+C stops it.
+FOR YOUR OWN HOST: Upload index.html and the complete assets/ folder together. No Node.js, Python or build step is required on the web host. Root paths and subfolders both work.
+
+Character images, backgrounds and audio are separate files. The game works locally without an internet connection; YouTube backgrounds and online share links require internet.
+Share links use the domain and folder where the game is hosted. When sharing from the local launcher, enter your Published page URL. All text lines and their timing are included directly in the link; no sharing service is needed.
+
+DEFAULT CAST: Moigletroy, NatFerg, Penguino, DadFunky. Haaland, Trump, Obama, Biden and Elon Musk are available in the character and Cast pickers. Martin and Hamzah remain last in the list.
+SHARE: Enter Dance mode, choose Share dance, and copy the configured link. The recipient clicks Start dance for sound and fullscreen.
+
+See Read-Me.md for the complete controls.

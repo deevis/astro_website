@@ -1,0 +1,136 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1200" viewBox="0 0 1800 1200" role="img" aria-labelledby="title desc">
+<title id="title">More languages. A different kind of complexity.</title><desc id="desc">Six-language comparison. Separate directed pairwise models require thirty models: twenty existing and ten added for Korean. One shared multilingual model expands to include Korean, illustrated with twelve directed connections to a common hub. Connection counts are audited.</desc>
+<defs>
+<pattern id="grid-small" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M 16 0 H 0 V 16" fill="none" stroke="#124265" stroke-width="0.5" opacity="0.42"/></pattern>
+<pattern id="grid-large" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="url(#grid-small)"/><path d="M 80 0 H 0 V 80" fill="none" stroke="#185479" stroke-width="0.8" opacity="0.35"/></pattern>
+<radialGradient id="node-fill"><stop offset="0" stop-color="#0B3354"/><stop offset="1" stop-color="#061B30"/></radialGradient>
+<radialGradient id="hub-fill"><stop offset="0" stop-color="#124269"/><stop offset="1" stop-color="#06203A"/></radialGradient>
+
+<marker id="arrow-cyan" viewBox="0 -5 11 10" refX="10" refY="0" markerWidth="11" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,-4.5 L10,0 L0,4.5 L2.5,0 Z" fill="#42D8FF"/></marker>
+<marker id="arrow-amber" viewBox="0 -5 11 10" refX="10" refY="0" markerWidth="11" markerHeight="10" markerUnits="userSpaceOnUse" orient="auto"><path d="M0,-4.5 L10,0 L0,4.5 L2.5,0 Z" fill="#FFBA50"/></marker>
+</defs><g font-family="DejaVu Sans, sans-serif">
+<rect width="1800" height="1200" fill="#04172B"/><rect width="1800" height="1200" fill="url(#grid-large)"/>
+<text x="900" y="92" fill="#F5F8FF" font-size="59" font-weight="700" text-anchor="middle" >More languages. A different kind of complexity.</text>
+<line x1="900" y1="148" x2="900" y2="1090" stroke="#277797" stroke-width="1.5"/>
+<text x="455" y="176" fill="#F5F8FF" font-size="37" font-weight="700" text-anchor="middle" >Separate pairwise models</text>
+<text x="455" y="215" fill="#ACD6EB" font-size="23" font-weight="400" text-anchor="middle" >One dedicated model per translation direction.</text>
+<text x="1345" y="176" fill="#F5F8FF" font-size="37" font-weight="700" text-anchor="middle" >One shared multilingual model</text>
+<text x="1345" y="215" fill="#ACD6EB" font-size="23" font-weight="400" text-anchor="middle" >Shared learned representations across languages.</text>
+<g id="pairwise-connections">
+<path class="directed-connection" data-panel="pairwise" data-source="EN" data-target="ES" d="M 397.009,311.934 Q 337.412,331.331 290.814,373.246" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="EN" data-target="FR" d="M 502.991,329.254 Q 549.588,371.169 609.186,390.566" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="EN" data-target="DE" d="M 415.746,337.991 Q 328.993,462.250 264.758,599.509" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="EN" data-target="JA" d="M 476.934,347.991 Q 541.170,485.250 627.922,609.509" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="EN" data-target="KO" d="M 445.000,351.188 Q 432.000,535.000 445.000,718.812" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="ES" data-target="EN" d="M 300.814,390.566 Q 360.412,371.169 407.009,329.254" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="ES" data-target="FR" d="M 304.012,422.500 Q 455.000,435.500 605.988,422.500" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="ES" data-target="DE" d="M 232.824,473.688 Q 219.824,535.000 232.824,596.312" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="ES" data-target="JA" d="M 290.814,451.754 Q 443.500,554.919 609.186,635.566" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="ES" data-target="KO" d="M 264.758,470.491 Q 328.993,607.750 415.746,732.009" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="FR" data-target="EN" d="M 619.186,373.246 Q 572.588,331.331 512.991,311.934" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="FR" data-target="ES" d="M 605.988,402.500 Q 455.000,389.500 304.012,402.500" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="FR" data-target="DE" d="M 609.186,434.434 Q 443.500,515.081 290.814,618.246" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="FR" data-target="JA" d="M 657.176,473.688 Q 644.176,535.000 657.176,596.312" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="FR" data-target="KO" d="M 627.922,460.491 Q 541.170,584.750 476.934,722.009" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="DE" data-target="EN" d="M 282.078,609.509 Q 368.830,485.250 433.066,347.991" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="DE" data-target="ES" d="M 252.824,596.312 Q 265.824,535.000 252.824,473.688" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="DE" data-target="FR" d="M 300.814,635.566 Q 466.500,554.919 619.186,451.754" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="DE" data-target="JA" d="M 304.012,667.500 Q 455.000,680.500 605.988,667.500" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="DE" data-target="KO" d="M 290.814,696.754 Q 337.412,738.669 397.009,758.066" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="JA" data-target="EN" d="M 645.242,599.509 Q 581.007,462.250 494.254,337.991" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="JA" data-target="ES" d="M 619.186,618.246 Q 466.500,515.081 300.814,434.434" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="JA" data-target="FR" d="M 677.176,596.312 Q 690.176,535.000 677.176,473.688" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="JA" data-target="DE" d="M 605.988,647.500 Q 455.000,634.500 304.012,647.500" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="JA" data-target="KO" d="M 609.186,679.434 Q 549.588,698.831 502.991,740.746" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="KO" data-target="EN" d="M 465.000,718.812 Q 478.000,535.000 465.000,351.188" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="KO" data-target="ES" d="M 433.066,722.009 Q 368.830,584.750 282.078,460.491" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="KO" data-target="FR" d="M 494.254,732.009 Q 581.007,607.750 645.242,470.491" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="KO" data-target="DE" d="M 407.009,740.746 Q 360.412,698.831 300.814,679.434" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="pairwise" data-source="KO" data-target="JA" d="M 512.991,758.066 Q 572.588,738.669 619.186,696.754" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+</g><g id="shared-connections">
+<path class="directed-connection" data-panel="shared" data-source="EN" data-target="hub" d="M 1334.000,351.016 Q 1334.000,412.500 1334.000,416.509" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="EN" d="M 1356.000,416.509 Q 1356.000,412.500 1356.000,351.016" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="FR" data-target="hub" d="M 1498.834,433.482 Q 1445.588,464.224 1442.116,466.228" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="FR" d="M 1453.116,485.281 Q 1456.588,483.276 1509.834,452.534" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="JA" data-target="hub" d="M 1509.834,617.466 Q 1456.588,586.724 1453.116,584.719" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="JA" d="M 1442.116,603.772 Q 1445.588,605.776 1498.834,636.518" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="KO" data-target="hub" d="M 1356.000,718.984 Q 1356.000,657.500 1356.000,653.491" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="KO" d="M 1334.000,653.491 Q 1334.000,657.500 1334.000,718.984" fill="none" stroke="#FFBA50" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-amber)"/>
+<path class="directed-connection" data-panel="shared" data-source="DE" data-target="hub" d="M 1191.166,636.518 Q 1244.412,605.776 1247.884,603.772" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="DE" d="M 1236.884,584.719 Q 1233.412,586.724 1180.166,617.466" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="ES" data-target="hub" d="M 1180.166,452.534 Q 1233.412,483.276 1236.884,485.281" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+<path class="directed-connection" data-panel="shared" data-source="hub" data-target="ES" d="M 1247.884,466.228 Q 1244.412,464.224 1191.166,433.482" fill="none" stroke="#42D8FF" stroke-width="2.25" opacity="0.96" marker-end="url(#arrow-cyan)"/>
+</g>
+<circle cx="455.000" cy="290.000" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="455.000" cy="290.000" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="455.0" y="293.0" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >EN</text>
+<text x="455.0" y="318.0" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >English</text>
+<circle cx="667.176" cy="412.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="667.176" cy="412.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="667.176" y="415.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >FR</text>
+<text x="667.176" y="440.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >French</text>
+<circle cx="667.176" cy="657.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="667.176" cy="657.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="667.176" y="660.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >JA</text>
+<text x="667.176" y="685.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >Japanese</text>
+<circle cx="455.000" cy="780.000" r="55" fill="url(#node-fill)" stroke="#FFBA50" stroke-width="3"/>
+<circle cx="455.000" cy="780.000" r="59" fill="none" stroke="#FFBA50" stroke-width="1" opacity="0.18"/>
+<text x="455.0" y="783.0" fill="#FFBA50" font-size="32" font-weight="700" text-anchor="middle" >KO</text>
+<text x="455.0" y="808.0" fill="#FFBA50" font-size="16" font-weight="400" text-anchor="middle" >Korean</text>
+<circle cx="242.824" cy="657.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="242.824" cy="657.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="242.824" y="660.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >DE</text>
+<text x="242.824" y="685.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >German</text>
+<circle cx="242.824" cy="412.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="242.824" cy="412.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="242.824" y="415.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >ES</text>
+<text x="242.824" y="440.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >Spanish</text>
+<circle cx="1345.000" cy="290.000" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1345.000" cy="290.000" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="1345.0" y="293.0" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >EN</text>
+<text x="1345.0" y="318.0" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >English</text>
+<circle cx="1557.176" cy="412.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1557.176" cy="412.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="1557.176" y="415.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >FR</text>
+<text x="1557.176" y="440.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >French</text>
+<circle cx="1557.176" cy="657.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1557.176" cy="657.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="1557.176" y="660.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >JA</text>
+<text x="1557.176" y="685.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >Japanese</text>
+<circle cx="1345.000" cy="780.000" r="55" fill="url(#node-fill)" stroke="#FFBA50" stroke-width="3"/>
+<circle cx="1345.000" cy="780.000" r="59" fill="none" stroke="#FFBA50" stroke-width="1" opacity="0.18"/>
+<text x="1345.0" y="783.0" fill="#FFBA50" font-size="32" font-weight="700" text-anchor="middle" >KO</text>
+<text x="1345.0" y="808.0" fill="#FFBA50" font-size="16" font-weight="400" text-anchor="middle" >Korean</text>
+<circle cx="1132.824" cy="657.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1132.824" cy="657.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="1132.824" y="660.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >DE</text>
+<text x="1132.824" y="685.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >German</text>
+<circle cx="1132.824" cy="412.500" r="55" fill="url(#node-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1132.824" cy="412.500" r="59" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.18"/>
+<text x="1132.824" y="415.5" fill="#F5F8FF" font-size="32" font-weight="700" text-anchor="middle" >ES</text>
+<text x="1132.824" y="440.5" fill="#ACD6EB" font-size="16" font-weight="400" text-anchor="middle" >Spanish</text>
+<circle cx="1345" cy="535" r="110" fill="url(#hub-fill)" stroke="#42D8FF" stroke-width="3"/>
+<circle cx="1345" cy="535" r="103" fill="none" stroke="#42D8FF" stroke-width="1" opacity="0.25"/>
+<text x="1345" y="506" fill="#F5F8FF" font-size="23" font-weight="700" text-anchor="middle" >Shared learned</text>
+<text x="1345" y="538" fill="#F5F8FF" font-size="23" font-weight="700" text-anchor="middle" >representations</text>
+<text x="1345" y="578" fill="#42D8FF" font-size="15" font-weight="600" text-anchor="middle" letter-spacing="2">ONE MODEL</text>
+<rect x="70" y="886" width="760" height="190" rx="20" fill="#04172B" stroke="#3287B3" stroke-width="1.5"/>
+<line x1="106" y1="1006" x2="794" y2="1006" stroke="#397D9B" stroke-width="1"/>
+<rect x="970" y="886" width="760" height="190" rx="20" fill="#04172B" stroke="#3287B3" stroke-width="1.5"/>
+<line x1="1006" y1="1006" x2="1694" y2="1006" stroke="#397D9B" stroke-width="1"/>
+<text x="117" y="934" fill="#F5F8FF" font-size="29" font-weight="400" text-anchor="start" >5 languages:</text>
+<text x="350" y="934" fill="#42D8FF" font-size="30" font-weight="700" text-anchor="start" >20 models</text>
+<text x="117" y="982" fill="#F5F8FF" font-size="29" font-weight="400" text-anchor="start" >6 languages:</text>
+<text x="350" y="982" fill="#FFBA50" font-size="30" font-weight="700" text-anchor="start" >30 models</text>
+<text x="450" y="1050" fill="#FFBA50" font-size="26" font-weight="600" text-anchor="middle" >+10 directional models</text>
+<text x="1017" y="934" fill="#F5F8FF" font-size="29" font-weight="400" text-anchor="start" >5 languages:</text>
+<text x="1250" y="934" fill="#42D8FF" font-size="30" font-weight="700" text-anchor="start" >1 shared model</text>
+<text x="1017" y="982" fill="#F5F8FF" font-size="29" font-weight="400" text-anchor="start" >6 languages:</text>
+<text x="1250" y="982" fill="#FFBA50" font-size="30" font-weight="700" text-anchor="start" >1 expanded model</text>
+<text x="1350" y="1050" fill="#ACD6EB" font-size="26" font-weight="600" text-anchor="middle" >New data, training and evaluation</text>
+<circle cx="630" cy="1122" r="6" fill="#42D8FF"/>
+<text x="646" y="1128" fill="#ACD6EB" font-size="19" font-weight="400" text-anchor="start" >Existing languages</text>
+<circle cx="935" cy="1122" r="6" fill="#FFBA50"/>
+<text x="951" y="1128" fill="#ACD6EB" font-size="19" font-weight="400" text-anchor="start" >Added language (KO)</text>
+<text x="900" y="1170" fill="#ACD6EB" font-size="19" font-weight="400" text-anchor="middle" >Illustrative comparison: one model per directed pair. Counts are not compute costs or quality guarantees.</text>
+</g></svg>

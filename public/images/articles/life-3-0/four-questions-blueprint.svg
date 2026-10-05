@@ -1,0 +1,61 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1800" height="1250" viewBox="0 0 1800 1250" role="img" aria-labelledby="title desc">
+<title id="title">A universal language inside AI?</title><desc id="desc">Four questions about shared representations: preserving nuance, encoding knowledge, model preference, and efficiency. Each distinguishes what can be said today from evidence to test in future.</desc>
+<defs><pattern id="small" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M16 0H0V16" fill="none" stroke="#124265" stroke-width="0.5" opacity="0.42"/></pattern><pattern id="grid" width="80" height="80" patternUnits="userSpaceOnUse"><rect width="80" height="80" fill="url(#small)"/><path d="M80 0H0V80" fill="none" stroke="#185479" stroke-width="0.8" opacity="0.35"/></pattern></defs>
+<rect width="1800" height="1250" fill="#04172B"/><rect width="1800" height="1250" fill="url(#grid)"/><g font-family="DejaVu Sans, sans-serif">
+<text x="900" y="99" fill="#F5F8FF" font-size="61" font-weight="700" text-anchor="middle">A universal language inside AI?</text>
+<text x="900" y="155" fill="#ACD6EB" font-size="30" font-weight="400" text-anchor="middle">Four questions to keep asking</text>
+<g id="question-1"><rect x="70" y="216" width="814" height="390" rx="18" fill="#061C31" stroke="#3287B3" stroke-width="1.5"/>
+<circle cx="127" cy="275" r="24" fill="#0B3354" stroke="#42D8FF" stroke-width="1.5"/>
+<text x="127" y="283" fill="#42D8FF" font-size="22" font-weight="700" text-anchor="middle">01</text>
+<text x="168" y="281" fill="#F5F8FF" font-size="35" font-weight="700" >Can it preserve</text>
+<text x="168" y="321" fill="#F5F8FF" font-size="35" font-weight="700" >every nuance?</text>
+<line x1="104" y1="343" x2="850" y2="343" stroke="#215876"/>
+<text x="104" y="377" fill="#42D8FF" font-size="19" font-weight="700" letter-spacing="2">TODAY</text>
+<text x="104" y="418" fill="#F5F8FF" font-size="28" font-weight="400" >Shared concepts exist. Complete preservation</text>
+<text x="104" y="454" fill="#F5F8FF" font-size="28" font-weight="400" >of meaning is unproven.</text>
+<text x="104" y="508" fill="#FFBA50" font-size="19" font-weight="700" letter-spacing="2">WHAT TO TEST</text>
+<text x="104" y="548" fill="#ACD6EB" font-size="28" font-weight="400" >Ambiguity, culture and context across</text>
+<text x="104" y="584" fill="#ACD6EB" font-size="28" font-weight="400" >diverse languages.</text>
+</g>
+<g id="question-2"><rect x="916" y="216" width="814" height="390" rx="18" fill="#061C31" stroke="#3287B3" stroke-width="1.5"/>
+<circle cx="973" cy="275" r="24" fill="#0B3354" stroke="#42D8FF" stroke-width="1.5"/>
+<text x="973" y="283" fill="#42D8FF" font-size="22" font-weight="700" text-anchor="middle">02</text>
+<text x="1014" y="281" fill="#F5F8FF" font-size="35" font-weight="700" >Is it pure knowledge?</text>
+<line x1="950" y1="343" x2="1696" y2="343" stroke="#215876"/>
+<text x="950" y="377" fill="#42D8FF" font-size="19" font-weight="700" letter-spacing="2">TODAY</text>
+<text x="950" y="418" fill="#F5F8FF" font-size="28" font-weight="400" >It can encode facts, errors</text>
+<text x="950" y="454" fill="#F5F8FF" font-size="28" font-weight="400" >and biases alike.</text>
+<text x="950" y="508" fill="#FFBA50" font-size="19" font-weight="700" letter-spacing="2">WHAT TO TEST</text>
+<text x="950" y="548" fill="#ACD6EB" font-size="28" font-weight="400" >Truth, grounding and generalization</text>
+<text x="950" y="584" fill="#ACD6EB" font-size="28" font-weight="400" >beyond familiar examples.</text>
+</g>
+<g id="question-3"><rect x="70" y="632" width="814" height="390" rx="18" fill="#061C31" stroke="#3287B3" stroke-width="1.5"/>
+<circle cx="127" cy="691" r="24" fill="#0B3354" stroke="#42D8FF" stroke-width="1.5"/>
+<text x="127" y="699" fill="#42D8FF" font-size="22" font-weight="700" text-anchor="middle">03</text>
+<text x="168" y="697" fill="#F5F8FF" font-size="35" font-weight="700" >Is it the model’s</text>
+<text x="168" y="737" fill="#F5F8FF" font-size="35" font-weight="700" >preferred language?</text>
+<line x1="104" y1="759" x2="850" y2="759" stroke="#215876"/>
+<text x="104" y="793" fill="#42D8FF" font-size="19" font-weight="700" letter-spacing="2">TODAY</text>
+<text x="104" y="834" fill="#F5F8FF" font-size="28" font-weight="400" >Internal numerical activity is not</text>
+<text x="104" y="870" fill="#F5F8FF" font-size="28" font-weight="400" >evidence of a preference.</text>
+<text x="104" y="924" fill="#FFBA50" font-size="19" font-weight="700" letter-spacing="2">WHAT TO TEST</text>
+<text x="104" y="964" fill="#ACD6EB" font-size="28" font-weight="400" >Which features are shared, and which</text>
+<text x="104" y="1000" fill="#ACD6EB" font-size="28" font-weight="400" >depend on language or training?</text>
+</g>
+<g id="question-4"><rect x="916" y="632" width="814" height="390" rx="18" fill="#061C31" stroke="#3287B3" stroke-width="1.5"/>
+<circle cx="973" cy="691" r="24" fill="#0B3354" stroke="#42D8FF" stroke-width="1.5"/>
+<text x="973" y="699" fill="#42D8FF" font-size="22" font-weight="700" text-anchor="middle">04</text>
+<text x="1014" y="697" fill="#F5F8FF" font-size="35" font-weight="700" >Is it denser or faster?</text>
+<line x1="950" y1="759" x2="1696" y2="759" stroke="#215876"/>
+<text x="950" y="793" fill="#42D8FF" font-size="19" font-weight="700" letter-spacing="2">TODAY</text>
+<text x="950" y="834" fill="#F5F8FF" font-size="28" font-weight="400" >Reusing representations does not</text>
+<text x="950" y="870" fill="#F5F8FF" font-size="28" font-weight="400" >establish compression or speed.</text>
+<text x="950" y="924" fill="#FFBA50" font-size="19" font-weight="700" letter-spacing="2">WHAT TO TEST</text>
+<text x="950" y="964" fill="#ACD6EB" font-size="28" font-weight="400" >Bits, compute and accuracy</text>
+<text x="950" y="1000" fill="#ACD6EB" font-size="28" font-weight="400" >at comparable tasks.</text>
+</g>
+<path d="M70 1057 H1730" stroke="#3287B3" stroke-width="1.5"/>
+<text x="900" y="1109" fill="#F5F8FF" font-size="31" font-weight="700" text-anchor="middle">Shared representations are powerful.</text>
+<text x="900" y="1151" fill="#FFBA50" font-size="30" font-weight="600" text-anchor="middle">Universality, truth and efficiency are separate claims.</text>
+<text x="900" y="1214" fill="#ACD6EB" font-size="20" font-weight="400" text-anchor="middle">Research context: Google multilingual NMT (2016/2017) · Wendler et al. (2024)</text>
+</g></svg>

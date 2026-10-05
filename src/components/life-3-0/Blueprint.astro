@@ -1,0 +1,18 @@
+---
+interface Props {
+  src: string;
+  alt: string;
+  width: number;
+  height: number;
+  label: string;
+}
+const { src, alt, width, height, label } = Astro.props;
+---
+<figure class="life-blueprint not-prose">
+  <div class="lf-blueprint-scroll" role="region" aria-label={label} tabindex="0">
+    <img src={src} alt={alt} width={width} height={height} loading="lazy" decoding="async" />
+  </div>
+  <figcaption class="lf-caption">
+    <slot />
+  </figcaption>
+</figure>

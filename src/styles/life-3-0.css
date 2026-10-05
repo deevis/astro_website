@@ -31,7 +31,7 @@
 .life-story .lf-jump { display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; margin:1.5rem 0 2.5rem; padding-bottom:1.25rem; border-bottom:1px solid var(--lf-line); font-size:.8rem; line-height:1.6; }
 .life-story .lf-jump a { color:var(--lf-teal); text-underline-offset:4px; }
 .life-story > hr { max-width: var(--article-reading-width, 100%); margin: 3rem 0; }
-.life-story :is(.life-figure, .life-art) { margin: 2.75rem 0 3.25rem; max-width: 100%; color: var(--lf-ink); background: var(--lf-paper); border: 1px solid var(--lf-line); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 36px rgb(0 0 0 / .055); scroll-margin-top: 7rem; }
+.life-story :is(.life-figure, .life-art, .life-blueprint) { margin: 2.75rem 0 3.25rem; max-width: 100%; color: var(--lf-ink); background: var(--lf-paper); border: 1px solid var(--lf-line); border-radius: 18px; overflow: hidden; box-shadow: 0 12px 36px rgb(0 0 0 / .055); scroll-margin-top: 7rem; }
 .life-story .lf-header { padding: 1.75rem 2rem 0; }
 .life-story .lf-eyebrow { display: flex; align-items: center; gap: .65rem; color: var(--lf-teal); font-size: .67rem; font-weight: 700; letter-spacing: .15em; text-transform: uppercase; line-height: 1.6; }
 .life-story .lf-number { font-variant-numeric: tabular-nums; letter-spacing: .02em; border: 1px solid var(--lf-line); border-radius: 50%; display: inline-grid; place-items: center; width: 1.7rem; height: 1.7rem; flex-shrink: 0; }
@@ -43,6 +43,11 @@
 .life-story :is(.lf-caption, .lf-date-card) a { color: var(--lf-teal); text-decoration: underline; text-underline-offset: 3px; }
 .life-story .lf-caption a { font-size: .75rem; line-height: 1.6; flex: 0 0 155px; }
 .life-story a:focus-visible, .life-story input:focus-visible { outline: 2px solid var(--lf-teal); outline-offset: 5px; }
+.life-story .lf-blueprint-scroll { overflow-x: auto; overscroll-behavior-x: contain; background: #04172b; }
+.life-story .lf-blueprint-scroll:focus-visible { outline: 2px solid var(--lf-teal); outline-offset: -2px; }
+.life-story .lf-blueprint-scroll img { display: block; width: 100%; min-width: 960px; max-width: none; height: auto; margin: 0; border-radius: 0; }
+.life-story .life-blueprint .lf-caption { display: block; background: var(--lf-paper); }
+.life-story .life-blueprint .lf-caption a { flex: none; }
 .life-story .life-art { display: grid; grid-template-columns: 1.7fr 1fr; }
 .life-story .life-art img { display: block; width: 100%; height: 100%; object-fit: cover; margin: 0; border-radius: 0; aspect-ratio: 3 / 2; }
 .life-story .life-art figcaption { display: flex; flex-direction: column; justify-content: center; padding: clamp(1.25rem, 3vw, 2.5rem); }
@@ -222,7 +227,7 @@
   .life-story .lf-revision-axis-row { margin-left: 16px; }
   .life-story .lf-revision-takeaways { grid-template-columns: 1fr; gap: 1rem; }
   .life-story .lf-axis-text { font-size: 22px; }
-  .life-story :is(.life-figure, .life-art) { border-radius: 12px; margin-top: 2rem; margin-bottom: 2.5rem; }
+  .life-story :is(.life-figure, .life-art, .life-blueprint) { border-radius: 12px; margin-top: 2rem; margin-bottom: 2.5rem; }
   .life-story .lf-header { padding: 1.25rem 1.1rem 0; }
   .life-story .lf-body { padding: 1.3rem 1.1rem; }
   .life-story .lf-caption { flex-direction: column; gap: .65rem; padding: .9rem 1.1rem; }
